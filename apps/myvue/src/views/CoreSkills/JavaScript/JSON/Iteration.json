@@ -1,0 +1,74 @@
+[
+  {
+    "id": "for-loop",
+    "title": "传统For循环",
+    "scene": "需要索引访问、复杂循环控制",
+    "code": "for (let i = 0; i < array.length; i++) {}注意将array.length赋值给一个变量以提高性能",
+    "pros": ["完全控制循环流程", "支持break/continue"],
+    "cons": ["代码相对冗长", "容易引入索引错误"]
+  },
+  {
+    "id": "while",
+    "title": "while循环",
+    "scene": "在满足条件时重复执行",
+    "code": "while (condition) {}",
+    "pros": ["灵活的循环条件", "可以在循环前后进行条件判断"],
+    "cons": ["可能导致无限循环", "需要手动管理循环变量"]
+  },
+  {
+    "id": "do-while",
+    "title": "do...while循环",
+    "scene": "至少执行一次的循环",
+    "code": "do {} while (condition);",
+    "pros": ["至少执行一次", "灵活的循环条件"],
+    "cons": ["可能导致无限循环", "需要手动管理循环变量"]
+  },
+  {
+    "id": "for-of",
+    "title": "for...of循环",
+    "scene": "遍历可迭代对象（String，Array, Map, Set，有迭代器的对象）",
+    "code": "for (const item of iterable) {}",
+    "pros": ["语法简洁", "直接访问元素值", "for…of 只返回数组的下标对应的属性值"],
+    "cons": ["不支持普通对象遍历", "无法直接获取索引"]
+  },
+  {
+    "id": "for-in",
+    "title": "for...in循环",
+    "scene": "遍历对象的可枚举属性",
+    "code": "for (const key in object) {}",
+    "pros": ["可以遍历对象属性"],
+    "cons": ["会遍历到原型链上的属性"]
+  },
+  {
+    "id": "forEach",
+    "title": "forEach方法",
+    "scene": "遍历数组",
+    "code": "array.forEach((item) => {})",
+    "pros": ["语法简洁", "不需要手动管理索引"],
+    "cons": ["无法使用break/continue"]
+  },
+  {
+    "id": "map",
+    "title": "map方法",
+    "scene": "创建新数组，数组中的每个元素为调用一次提供的函数后的返回值",
+    "code": "const newArray = array.map((item) => {})",
+    "pros": ["返回新数组", "不修改原数组"],
+    "cons": ["不适合副作用操作"]
+  },
+  {
+    "id": "filter",
+    "title": "filter方法",
+    "scene": "创建新数组，包含所有通过测试的元素",
+    "code": "const newArray = array.filter((item) => {})",
+    "pros": ["返回新数组", "不修改原数组"],
+    "cons": ["可能会返回空数组"]
+  },
+  {
+    "id": "reduce",
+    "title": "reduce方法",
+    "scene": "对数组中的每个元素执行一个函数，返回单个值",
+    "code": "const result = array.reduce((accumulator, item) => {})",
+    "pros": ["可以实现复杂的聚合操作"],
+    "cons": ["语法较复杂"]
+  }
+]

@@ -1,0 +1,595 @@
+[
+  {
+    "id": "static",
+    "type": "static",
+    "name": "静态方法",
+    "description": "Array 静态方法 主要提供数组创建、判断、转换等操作",
+    "methods": [
+      {
+        "id": "Array.from",
+        "name": "Array.from",
+        "since": "ES6",
+        "description": "从类数组或可迭代对象创建一个新的数组实例。",
+        "usage": "Array.from(arrayLike[, mapFn[, thisArg]])",
+        "codeExample": "// 字符串转数组\nArray.from('foo'); // ['f', 'o', 'o']\n// Set转数组\nArray.from(new Set([1,2,3])); // [1,2,3]\n// Map转数组\nArray.from(new Map([[1, 'a'], [2, 'b']])); // [[1, 'a'], [2, 'b']]\n// arguments转数组\nfunction fn() { return Array.from(arguments); }\nfn(1,2,3); // [1,2,3]\n// 使用mapFn参数\nArray.from([1,2,3], x => x * 2); // [2,4,6]",
+        "scene": [
+          "将类数组对象（如 arguments、NodeList）转换为真正的数组",
+          "对可迭代对象进行快速转换"
+        ],
+        "note": ["可选 mapFn 用于对每个元素进行处理", "返回新数组，不影响原对象"],
+        "extendExpand": 1,
+        "extend": [
+          {
+            "id": "Array.from1",
+            "description": "Array.from设定固定长度的数组",
+            "codeExample": "Array.from({length:10},(_,i)=>i); // [0,1,2,3,4,5,6,7,8,9]"
+          },
+          {
+            "id": "Array.from2",
+            "description": "Array.from转化string,set,map,arrayBuffer为数组",
+            "codeExample": "Array.from('foo'); // ['f', 'o', 'o']\nArray.from(new Set([1,2,3])); // [1,2,3]\nArray.from(new Map([[1,2],[3,4]])); // [[1,2],[3,4]]"
+          }
+        ]
+      },
+      {
+        "id": "Array.isArray",
+        "name": "Array.isArray",
+        "since": "ES5",
+        "description": "判断传递的值是否为一个数组。",
+        "usage": "Array.isArray(value)",
+        "codeExample": "Array.isArray([1,2,3]); // true\nArray.isArray('abc'); // false\nArray.isArray({length:2}); // false",
+        "scene": ["判断变量是否为数组"],
+        "note": ["返回布尔值"]
+      },
+      {
+        "id": "Array.of",
+        "name": "Array.of",
+        "since": "ES6",
+        "description": "根据一组参数创建一个新的数组实例。",
+        "usage": "Array.of(element0[, element1[, ...[, elementN]]])",
+        "codeExample": "Array.of(1,2,3); // [1,2,3]\nArray.of(5); // [5]\nArray.of(); // []\nArray(5); // [ <5 empty items> ] // 注意与Array构造函数区别",
+        "scene": ["创建包含任意数量参数的新数组"],
+        "note": ["与 Array 构造函数不同，单参数时不会创建指定长度的空数组"]
+      }
+    ]
+  },
+  {
+    "id": "iterator",
+    "type": "iterator",
+    "name": "原型迭代方法",
+    "description": "遍历数组元素并执行操作，不改变原数组(对象数组会改变，引用类型的原因)",
+    "route": "AchieveArrayMethods",
+    "methods": [
+      {
+        "id": "forEach",
+        "name": "forEach",
+        "since": "ES5",
+        "description": "对数组中的每个元素执行一次给定的函数。",
+        "usage": "array.forEach(callback(currentValue, index, array))",
+        "codeExample": "const arr = [1,2,3];\narr.forEach((item, idx) => console.log(idx, item));\n// 输出: 0 1\n//      1 2\n//      2 3\n// 修改原数组元素\narr.forEach((v, i, a) => a[i] = v * 2);\nconsole.log(arr); // [2,4,6]",
+        "scene": ["遍历数组执行操作", "替代简单的 for 循环", "不需要创建新数组的迭代"],
+        "note": [
+          "不能使用 break 或 return 中断循环",
+          "对空数组不执行任何操作",
+          "不改变原数组，但回调函数可修改元素（引用类型）"
+        ],
+        "complexity": ["时间复杂度O(n)", "空间复杂度O(1)"]
+      },
+      {
+        "id": "map",
+        "name": "map",
+        "since": "ES5",
+        "description": "创建一个新数组，其结果是该数组中的每个元素调用一次提供的函数后的返回值。",
+        "usage": "array.map(callback(currentValue, index, array))",
+        "codeExample": "const arr = [1,2,3];\nconst doubled = arr.map(x => x * 2); // [2,4,6]\n// 提取对象数组中的属性\nconst users = [{name:'a'},{name:'b'}];\nusers.map(u => u.name); // ['a','b']",
+        "scene": ["转换数组元素格式", "提取对象数组中的特定属性", "创建基于原数组的新数组"],
+        "note": ["返回新数组，原数组不变", "不会对空数组执行回调", "回调函数必须返回一个值"],
+        "complexity": ["时间复杂度O(n)", "空间复杂度O(n)"]
+      },
+      {
+        "id": "filter",
+        "name": "filter",
+        "since": "ES5",
+        "description": "创建一个新数组，包含所有通过测试的元素。",
+        "usage": "array.filter(callback(currentValue, index, array))",
+        "codeExample": "const arr = [1,2,3,4];\nconst evens = arr.filter(x => x % 2 === 0); // [2,4]\n// 过滤对象数组\nconst users = [{age:18},{age:25}];\nusers.filter(u => u.age >= 20); // [{age:25}]",
+        "scene": ["筛选符合条件的元素", "过滤数组内容"],
+        "note": ["返回新数组，原数组不变", "不会对空数组执行回调", "回调函数必须返回布尔值"],
+        "complexity": ["时间复杂度O(n)", "空间复杂度O(n)"]
+      },
+      {
+        "id": "some",
+        "name": "some",
+        "since": "ES5",
+        "description": "测试数组中是否至少有一个元素通过了提供的函数测试。",
+        "usage": "array.some(callback(currentValue, index, array))",
+        "codeExample": "const arr = [1,2,3];\narr.some(x => x > 2); // true\narr.some(x => x < 0); // false",
+        "scene": ["判断数组中是否存在符合条件的元素"],
+        "note": ["返回布尔值", "遇到第一个返回 true 的元素后停止遍历"],
+        "complexity": ["时间复杂度O(n)", "空间复杂度O(1)"]
+      },
+      {
+        "id": "every",
+        "name": "every",
+        "since": "ES5",
+        "description": "测试数组中的所有元素是否都通过了提供的函数。",
+        "usage": "array.every(callback(currentValue, index, array))",
+        "codeExample": "const arr = [1,2,3];\narr.every(x => x > 0); // true\narr.every(x => x > 2); // false",
+        "scene": ["判断数组所有元素是否都符合条件"],
+        "note": ["返回布尔值", "遇到第一个返回 false 的元素后停止遍历"],
+        "complexity": ["时间复杂度O(n)", "空间复杂度O(1)"]
+      },
+      {
+        "id": "reduce",
+        "name": "reduce",
+        "since": "ES5",
+        "description": "对数组中的每个元素执行 reducer 函数，最终计算为一个值。",
+        "usage": "array.reduce(callback(accumulator, currentValue, index, array), initialValue)",
+        "codeExample": "// 求和\n[1,2,3].reduce((sum, x) => sum + x, 0); // 6\n// 求最大值\n[1,5,3].reduce((max, x) => x > max ? x : max, -Infinity); // 5\n// 求最小值\n[1,5,3].reduce((min, x) => x < min ? x : min, Infinity); // 1\n// 转对象\n['a','b'].reduce((obj, k, i) => { obj[k] = i; return obj; }, {}); // {a:0, b:1}",
+        "scene": ["数组求和、累加、合并等操作"],
+        "note": ["返回累计处理的结果", "可指定初始值"],
+        "complexity": ["时间复杂度O(n)", "空间复杂度O(1)"],
+        "extendExpand": 1,
+        "extend": [
+          {
+            "id": "reduce1",
+            "description": "求和，求最大值，求最小值，求平均值。。。",
+            "codeExample": "//求和\n[1,2,3].reduce((acc, item) => acc + item, 0); // 6\n//求最大值\n[1,2,3].reduce((acc, item) => acc>item?acc:item, -Infinity); // 3\n//求最小值\n[1,2,3].reduce((acc, item) => acc<item?acc:item, Infinity); // 1\n//求平均值\n[1,2,3].reduce((acc, item, idx, arr) => if(idx === arr.length - 1) {return acc / arr.length} else {return acc + item }, 0); // 2",
+            "scene": ["求和，求最大值，求最小值，求平均值。。。"],
+            "complexity": ["时间复杂度O(n)", "空间复杂度O(1)"]
+          },
+          {
+            "id": "reduce2",
+            "description": "利用对象唯一键值特性去重，对象的键值是数组元素，值是1",
+            "codeExample": "const obj= {};['a','b','a'].reduce((arr, k, i) => { if(!obj[i]) {obj[i] = 1; arr.push(k)}; return arr; }, []); // ['a','b']",
+            "scene": ["去重", "复杂度O(n)"],
+            "complexity": ["时间复杂度O(n)", "空间复杂度O(n)"]
+          },
+          {
+            "id": "reduce3",
+            "description": "利用map 唯一键值特性去重，map的键值是数组元素，值是1，map.has(k) 判断是否存在，map.set(k, 1) 设置键值对，map.get(k) 获取键值",
+            "codeExample": "const map= new Map() ['a','b','a'].reduce((arr, k, i) => { if(!map.has(k)) {map.set(k, 1); arr.push(k)}; return arr; }, []); // ['a','b']",
+            "scene": ["去重", "复杂度O(n)"],
+            "complexity": ["时间复杂度O(n)", "空间复杂度O(n)"]
+          },
+          {
+            "id": "reduce4",
+            "description": "还可以利用indexOf、includes、findIndex、findLastIndex、find、findLast等方法去重",
+            "codeExample": "const arr = ['a','b','a'];\nconst newArr = arr.reduce((arr, k, i) => { if(arr.indexOf(k) === i) {arr.push(k)}; return arr; }, []); // ['a','b']",
+            "scene": ["去重", "复杂度O(n^2)"],
+            "complexity": ["时间复杂度O(n^2)", "空间复杂度O(n)"]
+          }
+        ]
+      },
+      {
+        "id": "reduceRight",
+        "name": "reduceRight",
+        "since": "ES5",
+        "description": "从右到左对数组中的每个元素执行 reducer 函数，最终计算为一个值。",
+        "usage": "array.reduceRight(callback(accumulator, currentValue, index, array), initialValue)",
+        "codeExample": "// 字符串拼接\n['a','b','c'].reduceRight((acc, x) => acc + x, ''); // 'cba'\n// 数组扁平化\n[[0,1],[2,3],[4,5]].reduceRight((acc, cur) => acc.concat(cur), []); // [4,5,2,3,0,1]",
+        "scene": ["从右向左累加、合并等操作"],
+        "note": ["与 reduce 类似，但方向相反"],
+        "complexity": ["时间复杂度O(n)", "空间复杂度O(1)"]
+      },
+      {
+        "id": "find",
+        "name": "find",
+        "since": "ES6",
+        "description": "返回数组中满足提供的测试函数的第一个元素的值，否则返回 undefined。",
+        "usage": "array.find(callback(currentValue, index, array))",
+        "codeExample": "const arr = [5,12,8,130,44];\narr.find(x => x > 10); // 12\narr.find(x => x > 200); // undefined",
+        "scene": ["查找数组中的元素"],
+        "note": ["返回第一个符合条件的元素", "未找到返回 undefined"],
+        "complexity": ["时间复杂度O(n)", "空间复杂度O(1)"]
+      },
+      {
+        "id": "findLast",
+        "name": "findLast",
+        "since": "ES2022",
+        "description": "返回数组中满足提供的测试函数的最后一个元素的值，否则返回 undefined。",
+        "usage": "array.findLast(callback(currentValue, index, array))",
+        "codeExample": "const arr = [5,12,8,130,44];\narr.findLast(x => x > 10); // 130\narr.findLast(x => x > 200); // undefined",
+        "scene": ["查找数组中的元素"],
+        "note": ["返回最后一个符合条件的元素", "未找到返回 undefined", "兼容问题可能需要polyfill"],
+        "complexity": ["时间复杂度O(n)", "空间复杂度O(1)"]
+      },
+      {
+        "id": "findIndex",
+        "name": "findIndex",
+        "since": "ES6",
+        "description": "返回数组中满足提供的测试函数的第一个元素的索引，否则返回 -1。",
+        "usage": "array.findIndex(callback(currentValue, index, array))",
+        "codeExample": "const arr = [5,12,8,130,44];\narr.findIndex(x => x > 10); // 1\narr.findIndex(x => x > 200); // -1",
+        "scene": ["查找元素索引"],
+        "note": ["返回第一个符合条件的元素索引", "未找到返回 -1"],
+        "complexity": ["时间复杂度O(n)", "空间复杂度O(1)"]
+      },
+      {
+        "id": "findLastIndex",
+        "name": "findLastIndex",
+        "since": "ES2022",
+        "description": "返回数组中满足提供的测试函数的最后一个元素的索引，否则返回 -1。",
+        "usage": "array.findLastIndex(callback(currentValue, index, array))",
+        "codeExample": "const arr = [5,12,8,130,44];\narr.findLastIndex(x => x > 10); // 3\narr.findLastIndex(x => x > 200); // -1",
+        "scene": ["查找元素索引"],
+        "note": ["返回最后一个符合条件的元素索引", "未找到返回 -1", "兼容问题可能需要polyfill"],
+        "complexity": ["时间复杂度O(n)", "空间复杂度O(1)"]
+      },
+      {
+        "id": "flat",
+        "name": "flat",
+        "since": "ES2019",
+        "description": "按照指定深度递归遍历数组，并将所有元素与子数组中的元素合并为一个新数组。",
+        "usage": "array.flat([depth])",
+        "codeExample": "[1, [2, [3, [4]]]].flat(); // [1,2,[3,[4]]]\n[1, [2, [3, [4]]]].flat(2); // [1,2,3,[4]]\n[1, [2, [3, [4]]]].flat(Infinity); // [1,2,3,4]",
+        "scene": ["数组扁平化"],
+        "note": ["默认深度为1"],
+        "complexity": ["时间复杂度O(n)", "空间复杂度O(n)"]
+      },
+      {
+        "id": "flatMap",
+        "name": "flatMap",
+        "since": "ES2019",
+        "description": "首先对数组的每个元素执行映射函数，然后将结果压缩成一个新数组。",
+        "usage": "array.flatMap(callback(currentValue, index, array))",
+        "codeExample": "[1,2,3].flatMap(x => [x, x*2]); // [1,2,2,4,3,6]\n['a b', 'c d'].flatMap(str => str.split(' ')); // ['a','b','c','d']",
+        "scene": ["映射并扁平化数组"],
+        "note": ["相当于 map 后接 flat(1)"],
+        "complexity": ["时间复杂度O(n)", "空间复杂度O(n)"]
+      },
+      {
+        "id": "entries",
+        "name": "entries",
+        "since": "ES6",
+        "description": "返回一个新的 Array Iterator 对象，该对象包含数组中每个索引的键值对。",
+        "usage": "array.entries()",
+        "codeExample": "const arr = ['a', 'b', 'c'];\nfor (const [i, v] of arr.entries()) {\n  console.log(i, v);\n}\n// 输出: 0 'a' 1 'b' 2 'c'",
+        "scene": ["遍历索引和值"],
+        "note": ["返回迭代器"],
+        "complexity": ["时间复杂度O(n)", "空间复杂度O(1)"]
+      },
+      {
+        "id": "keys",
+        "name": "keys",
+        "since": "ES6",
+        "description": "返回一个新的 Array Iterator 对象，该对象包含数组中每个索引的键。",
+        "usage": "array.keys()",
+        "codeExample": "const arr = ['a', 'b', 'c'];\nfor (const i of arr.keys()) {\n  console.log(i);\n}\n// 输出: 0 1 2",
+        "scene": ["遍历索引"],
+        "note": ["返回迭代器"],
+        "complexity": ["时间复杂度O(n)", "空间复杂度O(1)"]
+      },
+      {
+        "id": "values",
+        "name": "values",
+        "since": "ES2017",
+        "description": "返回一个新的 Array Iterator 对象，该对象包含数组中每个索引的值。",
+        "usage": "array.values()",
+        "codeExample": "const arr = ['a', 'b', 'c'];\nfor (const v of arr.values()) {\n  console.log(v);\n}\n// 输出: 'a' 'b' 'c'",
+        "scene": ["遍历值"],
+        "note": ["返回迭代器"],
+        "complexity": ["时间复杂度O(n)", "空间复杂度O(1)"]
+      }
+    ]
+  },
+  {
+    "id": "mutator",
+    "type": "mutator",
+    "name": "原型修改方法",
+    "description": "修改数组元素，改变原数组(截取、替换、删除、插入、反转、排序、填充、复制、替换)",
+    "methods": [
+      {
+        "id": "push",
+        "name": "push",
+        "since": "ES3",
+        "description": "向数组末尾添加一个或多个元素，并返回新的长度。",
+        "usage": "array.push(element1, ..., elementN)",
+        "codeExample": "const arr = [1,2];\narr.push(3); // 3, arr变为[1,2,3]\narr.push(4,5); // 5, arr变为[1,2,3,4,5]",
+        "scene": ["向数组末尾添加元素"],
+        "note": ["改变原数组"],
+        "complexity": ["时间复杂度O(1)", "空间复杂度O(1)"]
+      },
+      {
+        "id": "pop",
+        "name": "pop",
+        "since": "ES3",
+        "description": "移除数组的最后一个元素，并返回该元素的值。",
+        "usage": "array.pop()",
+        "codeExample": "const arr = [1,2,3];\narr.pop(); // 3, arr变为[1,2]\narr.pop(); // 2, arr变为[1]",
+        "scene": ["移除数组末尾元素"],
+        "note": ["改变原数组"],
+        "complexity": ["时间复杂度O(1)", "空间复杂度O(1)"]
+      },
+      {
+        "id": "shift",
+        "name": "shift",
+        "since": "ES3",
+        "description": "移除数组的第一个元素，并返回该元素的值。",
+        "usage": "array.shift()",
+        "codeExample": "const arr = [1,2,3];\narr.shift(); // 1, arr变为[2,3]\narr.shift(); // 2, arr变为[3]",
+        "scene": ["移除数组开头元素"],
+        "note": ["改变原数组"],
+        "complexity": ["时间复杂度O(n)", "空间复杂度O(1)"]
+      },
+      {
+        "id": "unshift",
+        "name": "unshift",
+        "since": "ES3",
+        "description": "向数组开头添加一个或多个元素，并返回新的长度。",
+        "usage": "array.unshift(element1, ..., elementN)",
+        "codeExample": "const arr = [2,3];\narr.unshift(1); // 3, arr变为[1,2,3]\narr.unshift(-1,0); // 5, arr变为[-1,0,1,2,3]",
+        "scene": ["向数组开头添加元素"],
+        "note": ["改变原数组"],
+        "complexity": ["时间复杂度O(n)", "空间复杂度O(1)"]
+      },
+      {
+        "id": "splice",
+        "name": "splice",
+        "since": "ES3",
+        "description": "通过删除或替换现有元素和/或添加新元素来修改数组。",
+        "usage": "array.splice(start[, deleteCount[, item1[, item2[, ...]]]])",
+        "codeExample": "const arr = [1,2,3,4];\narr.splice(1,2); // [2,3], arr变为[1,4]\narr.splice(1,0,'a','b'); // [], arr变为[1,'a','b',4]\narr.splice(2,1,'x'); // ['b'], arr变为[1,'a','x',4]",
+        "scene": ["删除、替换或插入元素"],
+        "note": ["改变原数组", "返回被删除的元素组成的数组"],
+        "complexity": ["时间复杂度O(n)", "空间复杂度O(1)"]
+      },
+      {
+        "id": "reverse",
+        "name": "reverse",
+        "since": "ES3",
+        "description": "反转数组中元素的顺序。",
+        "usage": "array.reverse()",
+        "codeExample": "const arr = [1,2,3];\narr.reverse(); // [3,2,1], arr变为[3,2,1]",
+        "scene": ["反转数组"],
+        "note": ["改变原数组"],
+        "complexity": ["时间复杂度O(n)", "空间复杂度O(1)"]
+      },
+      {
+        "id": "sort",
+        "name": "sort",
+        "since": "ES3",
+        "description": "对数组的元素进行排序并返回数组。底层是快速排序，时间复杂度O(nlogn)\n助记:a-b 升序，b-a 降序。可以看作 原本正常排序为123,1-2为负数即为正序，2-1为正数即为倒序\n注意: 对象数组排序，需要传入排序函数，否则会按照字符串Unicode顺序排序",
+        "usage": "array.sort([compareFunction])",
+        "codeExample": "const arr = [3,1,2];\narr.sort(); // [1,2,3], arr变为[1,2,3]\nconst arr2 = ['b','a','c'];\narr2.sort(); // ['a','b','c']\nconst arr3 = [10,2,30];\narr3.sort((a,b)=>a-b); // [2,10,30]",
+        "scene": ["对数组排序"],
+        "note": ["改变原数组", "默认按字符串Unicode顺序排序"],
+        "complexity": ["时间复杂度O(nlogn)", "空间复杂度O(1)"],
+        "extendExpand": 1,
+        "extend": [
+          {
+            "id": "sort1",
+            "description": "利用sort 打乱数组",
+            "codeExample": "const arr = [1,2,3];\narr.sort(()=>Math.random()-0.5); // [2,1,3] 或 [3,1,2] 或 [1,3,2] 等",
+            "scene": ["打乱数组"],
+            "complexity": ["时间复杂度O(nlogn)", "空间复杂度O(1)"]
+          },
+          {
+            "id": "sort2",
+            "description": "升序",
+            "codeExample": "const arr = [3,1,2];\narr.sort((a,b)=>a-b); // [1,2,3]",
+            "scene": ["升序"],
+            "complexity": ["时间复杂度O(nlogn)", "空间复杂度O(1)"]
+          },
+          {
+            "id": "sort3",
+            "description": "降序",
+            "codeExample": "const arr = [3,1,2];\narr.sort((a,b)=>b-a); // [3,2,1]",
+            "scene": ["降序"],
+            "complexity": ["时间复杂度O(nlogn)", "空间复杂度O(1)"]
+          },
+          {
+            "id": "sort4",
+            "description": "对象数组复杂排序",
+            "codeExample": "const arr = [{age:12},{age:10},{age:11}];\narr.sort((a,b)=>a.age-b.age); // [{age:10},{age:11},{age:12}]",
+            "scene": ["对象数组复杂排序"],
+            "complexity": ["时间复杂度O(nlogn)", "空间复杂度O(1)"]
+          }
+        ]
+      },
+      {
+        "id": "fill",
+        "name": "fill",
+        "since": "ES6",
+        "description": "用一个固定值填充数组中从起始索引到终止索引的全部元素。",
+        "usage": "array.fill(value[, start[, end]])",
+        "codeExample": "const arr = [1,2,3,4,5];\narr.fill(0); // [0,0,0,0,0]\narr.fill(9,1,3); // [0,9,9,0,0]",
+        "scene": ["批量赋值"],
+        "note": ["改变原数组"],
+        "complexity": ["时间复杂度O(n)", "空间复杂度O(1)"]
+      },
+      {
+        "id": "copyWithin",
+        "name": "copyWithin",
+        "since": "ES6",
+        "description": "浅复制数组的一部分到同一数组中的另一个位置，并返回它，不会改变原数组的长度。",
+        "usage": "array.copyWithin(target, start[, end])",
+        "codeExample": "const arr = [1,2,3,4,5];\narr.copyWithin(0,3); // [4,5,3,4,5]\narr.copyWithin(1,2,4); // [4,3,4,4,5]",
+        "scene": ["数组内部复制"],
+        "note": ["改变原数组"],
+        "complexity": ["时间复杂度O(n)", "空间复杂度O(1)"]
+      },
+      {
+        "id": "with",
+        "name": "with",
+        "since": "ES2022",
+        "description": "返回一个新数组，其中指定索引的元素被替换为新值。",
+        "usage": "array.with(index, value)",
+        "codeExample": "const arr = [3,1,2];\nconst newArr = arr.with(1,9); // [3,9,2]\nconst arr2 = [1,2,3];\nconst newArr2 = arr2.with(1,9); // [1,9,3]",
+        "scene": ["替换数组中的元素"],
+        "note": ["返回新数组", "兼容问题可能需要polyfill"],
+        "complexity": ["时间复杂度O(1)", "空间复杂度O(1)"]
+      },
+      {
+        "id": "at",
+        "name": "at",
+        "since": "ES2022",
+        "description": "返回数组中指定索引的元素。",
+        "usage": "array.at(index)",
+        "codeExample": "const arr = [1,2,3];\narr.at(1); // 2\narr.at(-1); // 3",
+        "scene": ["获取数组中的元素"],
+        "note": ["返回指定索引的元素"],
+        "complexity": ["时间复杂度O(1)", "空间复杂度O(1)"]
+      }
+    ]
+  },
+  {
+    "id": "accessor",
+    "type": "accessor",
+    "name": "原型访问方法",
+    "description": "访问数组元素，不改变原数组(判断、查找、转换)",
+    "methods": [
+      {
+        "id": "includes",
+        "name": "includes",
+        "since": "ES7",
+        "description": "判断数组是否包含某个指定的值。",
+        "usage": "array.includes(valueToFind[, fromIndex])",
+        "codeExample": "const arr = [1,2,3];\narr.includes(2); // true\narr.includes(4); // false\narr.includes(1,1); // false",
+        "scene": ["判断数组中是否存在某个值"],
+        "note": ["返回布尔值"],
+        "complexity": ["时间复杂度O(n)", "空间复杂度O(1)"]
+      },
+      {
+        "id": "indexOf",
+        "name": "indexOf",
+        "since": "ES5",
+        "description": "返回在数组中可以找到一个给定元素的第一个索引，如果不存在，则返回 -1。",
+        "usage": "array.indexOf(searchElement[, fromIndex])",
+        "codeExample": "const arr = [1,2,3,2];\narr.indexOf(2); // 1\narr.indexOf(2,2); // 3\narr.indexOf(5); // -1",
+        "scene": ["查找元素索引"],
+        "note": ["返回第一个匹配元素的索引"],
+        "complexity": ["时间复杂度O(n)", "空间复杂度O(1)"]
+      },
+      {
+        "id": "lastIndexOf",
+        "name": "lastIndexOf",
+        "since": "ES5",
+        "description": "返回指定元素在数组中的最后一个的索引，如果不存在则返回 -1。",
+        "usage": "array.lastIndexOf(searchElement[, fromIndex])",
+        "codeExample": "const arr = [1,2,3,2];\narr.lastIndexOf(2); // 3\narr.lastIndexOf(2,2); // 1\narr.lastIndexOf(5); // -1",
+        "scene": ["查找元素最后出现的位置"],
+        "note": ["返回最后一个匹配元素的索引"],
+        "complexity": ["时间复杂度O(n)", "空间复杂度O(1)"]
+      },
+      {
+        "id": "join",
+        "name": "join",
+        "since": "ES3",
+        "description": "将数组中的所有元素连接成一个字符串。",
+        "usage": "array.join([separator])",
+        "codeExample": "const arr = [1,2,3];\narr.join(); // '1,2,3'\narr.join('-'); // '1-2-3'\n['a','b','c'].join(''); // 'abc'",
+        "scene": ["数组转字符串"],
+        "note": ["不改变原数组"],
+        "complexity": ["时间复杂度O(n)", "空间复杂度O(1)"]
+      },
+      {
+        "id": "toString",
+        "name": "toString",
+        "since": "ES3",
+        "description": "返回一个表示指定数组及其元素的字符串。",
+        "usage": "array.toString()",
+        "codeExample": "const arr = [1,2,3];\narr.toString(); // '1,2,3'\n['a','b','c'].toString(); // 'a,b,c'",
+        "scene": ["数组转字符串"],
+        "note": ["不改变原数组"],
+        "complexity": ["时间复杂度O(n)", "空间复杂度O(1)"]
+      },
+      {
+        "id": "toLocaleString",
+        "name": "toLocaleString",
+        "since": "ES3",
+        "description": "返回一个字符串，表示数组中的元素。元素使用各自的 toLocaleString 方法转换成字符串后，用本地的分隔符隔开。",
+        "usage": "array.toLocaleString([locales[, options]])",
+        "codeExample": "const arr = [123456.789, new Date('2020-01-01')];\narr.toLocaleString('en-US'); // '123,456.789,1/1/2020, 12:00:00 AM'\narr.toLocaleString('zh-CN'); // '123,456.789,2020/1/1 上午12:00:00'",
+        "scene": ["本地化数组字符串"],
+        "note": ["不改变原数组"],
+        "complexity": ["时间复杂度O(n)", "空间复杂度O(1)"]
+      },
+      {
+        "id": "slice",
+        "name": "slice",
+        "since": "ES3",
+        "description": "返回一个新的数组对象，这一对象是一个由 start 和 end 决定的原数组的浅拷贝（包括 start，不包括 end）。",
+        "usage": "array.slice([start[, end]])",
+        "codeExample": "const arr = [1,2,3,4,5];\narr.slice(1,3); // [2,3]\narr.slice(-2); // [4,5]\narr.slice(); // [1,2,3,4,5]",
+        "scene": ["数组浅拷贝", "截取数组部分"],
+        "note": ["不改变原数组"],
+        "complexity": ["时间复杂度O(n)", "空间复杂度O(1)"]
+      },
+      {
+        "id": "concat",
+        "name": "concat",
+        "since": "ES3",
+        "description": "合并两个或多个数组。此方法不会更改现有数组，而是返回一个新数组。",
+        "usage": "array.concat(value1[, value2[, ...[, valueN]]])",
+        "codeExample": "const arr = [1,2];\narr.concat([3,4]); // [1,2,3,4]\narr.concat(5, [6,7]); // [1,2,5,6,7]",
+        "scene": ["合并数组"],
+        "note": ["不改变原数组"],
+        "complexity": ["时间复杂度O(n)", "空间复杂度O(1)"]
+      },
+      {
+        "id": "at",
+        "name": "at",
+        "since": "ES2022",
+        "description": "接收一个整数值并返回该索引对应的元素，允许正数和负数。",
+        "usage": "array.at(index)",
+        "codeExample": "const arr = [10,20,30,40];\narr.at(1); // 20\narr.at(-1); // 40\narr.at(-2); // 30",
+        "scene": ["获取数组指定位置的元素"],
+        "note": ["不改变原数组", "兼容问题可能需要polyfill"],
+        "complexity": ["时间复杂度O(1)", "空间复杂度O(1)"]
+      }
+    ]
+  },
+  {
+    "id": "patch",
+    "type": "patch",
+    "name": "原型修改方法的修补方法",
+    "description": "修改数组元素，不改变原数组(排序、反转、删除、插入、替换)",
+    "methods": [
+      {
+        "id": "toSorted",
+        "name": "toSorted",
+        "since": "ES2023",
+        "description": "返回一个新数组，其中元素按升序排列。",
+        "usage": "array.toSorted([compareFunction])",
+        "codeExample": "const arr = [3,1,2];\nconst sorted = arr.toSorted(); // [1,2,3], arr未变\nconst desc = arr.toSorted((a,b)=>b-a); // [3,2,1]",
+        "scene": ["排序数组"],
+        "note": ["不改变原数组", "兼容问题可能需要polyfill"],
+        "complexity": ["时间复杂度O(nlogn)", "空间复杂度O(1)"]
+      },
+      {
+        "id": "toReversed",
+        "name": "toReversed",
+        "since": "ES2023",
+        "description": "返回一个新数组，其中元素按降序排列。",
+        "usage": "array.toReversed()",
+        "codeExample": "const arr = [1,2,3];\nconst reversed = arr.toReversed(); // [3,2,1], arr未变",
+        "scene": ["反转数组"],
+        "note": ["不改变原数组", "兼容问题可能需要polyfill"],
+        "complexity": ["时间复杂度O(n)", "空间复杂度O(1)"]
+      },
+      {
+        "id": "toSpliced",
+        "name": "toSpliced",
+        "since": "ES2023",
+        "description": "返回一个新数组，其中元素按降序排列。",
+        "usage": "array.toSpliced(start, deleteCount, item1[, item2[, ...]])",
+        "codeExample": "const arr = [1,2,3,4];\nconst newArr = arr.toSpliced(1,2,'a','b'); // [1,'a','b',4], arr未变",
+        "scene": ["删除、替换或插入元素"],
+        "note": ["不改变原数组", "兼容问题可能需要polyfill"],
+        "complexity": ["时间复杂度O(n)", "空间复杂度O(1)"]
+      },
+      {
+        "id": "toReversed",
+        "name": "toReversed",
+        "since": "ES2023",
+        "description": "返回一个新数组，其中元素按降序排列。",
+        "usage": "array.toReversed()",
+        "codeExample": "const arr = [1,2,3];\nconst reversed = arr.toReversed(); // [3,2,1], arr未变",
+        "scene": ["反转数组"],
+        "note": ["不改变原数组", "兼容问题可能需要polyfill"],
+        "complexity": ["时间复杂度O(n)", "空间复杂度O(1)"]
+      }
+    ]
+  }
+]

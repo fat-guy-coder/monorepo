@@ -1,0 +1,68 @@
+[
+  {
+    "name": "防抖节流",
+    "description": "利用闭包实现防抖节流",
+    "degreeOfHeat": 1,
+    "code": "function debounce(func, delay) {\nlet timer = null;\nreturn function(...args) {\nclearTimeout(timer);\ntimer = setTimeout(() => func.apply(this, args), delay);\n}\n}"
+  },
+  {
+    "name": "柯里化",
+    "description": "利用闭包实现柯里化",
+    "degreeOfHeat": 2,
+    "code": "function curry(fn) {\n    return function curried(...args) {\n    if (args.length >= fn.length) {\n    return fn.apply(this, args);\n    }\n    return function(...args2) {\n    return curried.apply(this, [...args, ...args2]);\n    };\n    };\n  }"
+  },
+  {
+    "name": "闭包计数器",
+    "description": "利用闭包实现计数器",
+    "degreeOfHeat": 3,
+    "code": "function createCounter() {\nlet count = 0;\nreturn {\nincrement() { count++ },\n}\n}"
+  },
+  {
+    "name": "私有变量",
+    "description": "利用闭包实现私有变量",
+    "degreeOfHeat": 4,
+    "code": "function createSecretHolder(secret) {\n    return {\n    getSecret: () => secret,\n    setSecret: (newSecret) => { secret = newSecret; }\n    };\n  }"
+  },
+  {
+    "name": "模块模式",
+    "description": "利用闭包实现模块模式",
+    "degreeOfHeat": 5,
+    "code": "const module = (() => {\n    const privateVar = 42;\n    return {\n    get: () => privateVar\n    }\n  })();"
+  },
+  {
+    "name": "绑定多个事件",
+    "description": "利用闭包实现绑定多个事件",
+    "degreeOfHeat": 6,
+    "code": "buttons.forEach((btn, i) => {\n    btn.onclick = () => {\n    console.log(\"i\", i);\n    };\n  });"
+  },
+  {
+    "name": "循环中的计时器",
+    "description": "利用闭包实现循环中的计时器",
+    "degreeOfHeat": 7,
+    "code": "for (var i = 0; i < 5; i++) {\n    (function (i) {\n    setTimeout(function () {\n      console.log(lis[i].innerHTML);\n    }, 3000);\n    })(i);\n  }"
+  },
+  {
+    "name": "函数工厂",
+    "description": "利用闭包实现函数工厂",
+    "degreeOfHeat": 8,
+    "code": "function makeCounter() {\n    let count = 0;\n    return function() {\n    count++;\n    return count;\n    };\n  }"
+  },
+  {
+    "name": "迭代器",
+    "description": "利用闭包实现迭代器",
+    "degreeOfHeat": 9,
+    "code": "function createIterator(array) {\n    let index = 0;\n    return {\n    next: () => {\n    return index < array.length ? { value: array[index++], done: false } : { done: true };\n    }\n    };\n  }"
+  },
+  {
+    "name": "惰性函数",
+    "description": "利用闭包实现惰性函数",
+    "degreeOfHeat": 10,
+    "code": "function createLazyFunction(fn) {\n    return function(...args) {\n    return fn.apply(this, args);\n    };\n  }"
+  },
+  {
+    "name": "链式调用",
+    "description": "利用闭包实现链式调用(计算器)",
+    "degreeOfHeat": 11,
+    "code": "function createChainableFunction(fn) {\n    return function(...args) {\n    return fn.apply(this, args);\n    };\n  }"
+  }
+]

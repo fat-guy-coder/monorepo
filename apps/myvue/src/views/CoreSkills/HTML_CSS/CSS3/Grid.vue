@@ -1,0 +1,444 @@
+<template>
+  <div class="grid-container">
+    <h1 class="main-title">CSS Grid 交互指南</h1>
+
+    <h2> Grid布局是一种强大的CSS布局系统，允许开发者创建复杂的网页布局。通过定义行和列，开发者可以精确控制元素的排列和对齐，使得网页设计更加灵活和响应式。</h2>
+
+    <h3>详细的Grid布局教程还是看阮一峰老师的<a href="https://ruanyifeng.com/blog/2019/03/grid-layout-tutorial.html" target="_blank"
+        rel="noopener noreferrer">阮一峰的CSS Grid教程</a></h3>
+
+    <section class="trigger-section">
+      <h3>触发条件</h3>
+      <p>
+        当一个元素的display属性设置为grid时，该元素就变成了一个网格容器，其子元素将成为网格项目。
+      </p>
+      <pre><code>.container {
+  display: grid;
+}</code></pre>
+      <h3>关于display: inline-grid;</h3>
+      <p>
+        默认情况下，网格容器是块级元素，但可以通过设置display: inline-grid来将其变成行内元素。
+      </p>
+      <pre><code>.container {
+  display: inline-grid;
+}</code></pre>
+    </section>
+
+    <!-- 演示区域 -->
+    <div class="demo-grid" :style="{
+      gridTemplateColumns: gridOptions.templateColumns,
+      gridTemplateRows: gridOptions.templateRows,
+      justifyContent: gridOptions.justifyContent,
+      alignItems: gridOptions.alignItems,
+      gap: `${gridOptions.gap}px`,
+    }">
+      <div v-for="(item, index) in gridItems" :key="index" class="grid-item" :style="{
+        gridColumn: item.gridColumn,
+        gridRow: item.gridRow,
+        alignSelf: item.alignSelf,
+        backgroundColor: itemColors[index],
+      }">
+        <div class="item-label">
+          <span>项目 {{ index + 1 }}</span>
+          <div v-if="item.gridColumn !== 'auto'">列: {{ item.gridColumn }}</div>
+          <div v-if="item.gridRow !== 'auto'">行: {{ item.gridRow }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 代码展示 -->
+    <div class="code-preview">
+      <pre><code>.grid-container {
+  display: grid;
+  grid-template-columns: {{ gridOptions.templateColumns }};
+  grid-template-rows: {{ gridOptions.templateRows }};
+  gap: {{ gridOptions.gap }}px;
+  justify-content: {{ gridOptions.justifyContent }};
+  align-items: {{ gridOptions.alignItems }};
+}</code></pre>
+    </div>
+
+    <div class="controls-section">
+      <!-- 容器属性控制 -->
+      <div class="control-group">
+        <h2 class="control-title">容器属性</h2>
+        <div class="control-item">
+          <h3>grid-template-columns</h3>
+          <button v-for="col in columnPresets" :key="col.value" @click="gridOptions.templateColumns = col.value"
+            :class="{ active: gridOptions.templateColumns === col.value }">
+            {{ col.label }}
+          </button>
+        </div>
+
+        <div class="control-item">
+          <h3>grid-template-rows</h3>
+          <button v-for="row in rowPresets" :key="row.value" @click="gridOptions.templateRows = row.value"
+            :class="{ active: gridOptions.templateRows === row.value }">
+            {{ row.label }}
+          </button>
+        </div>
+
+        <div class="control-item">
+          <h3>对齐方式</h3>
+          <button v-for="align in alignPresets" :key="align.value"
+            @click="updateGridOption(align.type as 'justifyContent' | 'alignItems', align.value)" :class="{
+              active: gridOptions[align.type as 'justifyContent' | 'alignItems'] === align.value,
+            }">
+            {{ align.label }}
+          </button>
+        </div>
+
+        <div class="control-item">
+          <h3>间距 (gap)</h3>
+          <div class="slider-container">
+            <input type="range" min="0" max="40" v-model="gridOptions.gap" class="gap-slider" />
+            <span>{{ gridOptions.gap }}px</span>
+          </div>
+          <h4>gap其实是row-gap和column-gap的缩写</h4>
+          <pre class="code-preview"><code>.container {
+gap: 10px;//行间距和列间距
+row-gap: 20px;//行间距
+column-gap: 30px;//列间距
+}</code></pre>
+        </div>
+      </div>
+
+      <!-- 子项属性控制 -->
+      <div class="control-group">
+        <h2 class="control-title">子项属性</h2>
+        <div class="item-selector">
+          <button v-for="(_, index) in gridItems" :key="index" @click="selectedItem = index"
+            :class="{ active: selectedItem === index }">
+            项目 {{ index + 1 }}
+          </button>
+        </div>
+
+        <div class="control-item">
+          <h3>grid-column</h3>
+          <button v-for="col in columnSpanPresets" :key="col.value"
+            @click="updateItemProperty('gridColumn', col.value)">
+            {{ col.label }}
+          </button>
+        </div>
+
+        <div class="control-item">
+          <h3>grid-row</h3>
+          <button v-for="row in rowSpanPresets" :key="row.value" @click="updateItemProperty('gridRow', row.value)">
+            {{ row.label }}
+          </button>
+        </div>
+
+        <div class="control-item">
+          <h3>对齐覆盖</h3>
+          <button v-for="align in selfAlignPresets" :key="align.value"
+            @click="updateItemProperty('alignSelf', align.value)">
+            {{ align.label }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Repeat and fr Section -->
+    <div class="grid-introduction">
+      <h2>repeat、fr关键字、auto关键字</h2>
+      <p>
+        CSS Grid 布局中的 <code>repeat()</code> 函数允许开发者以更简洁的方式定义列或行的重复模式。例如，<code>repeat(3, 1fr)</code> 表示创建三列，每列占据相等的可用空间。
+      </p>
+      <div>
+        <h2>repeat的参数</h2>
+        <p>
+          repeat的参数可以是一个数字，也可以是一个范围，也可以是auto-fill或者auto-fit。
+        </p>
+        <p>
+          数字：
+        <pre class="code-preview"><code>repeat(3, 1fr)</code></pre> 表示创建三列，每列占据相等的可用空间。
+        </p>
+        <p>
+          范围：
+        <pre class="code-preview"><code>repeat(minmax(auto, 2), minmax(100px, 1fr))</code></pre>
+        表示创建两列或者自动，每列的宽度在100px到1fr之间。
+        </p>
+        <p><b>auto-fill</b>:有时，单元格的大小是固定的，但是容器的大小不确定。如果希望每一行（或每一列）容纳尽可能多的单元格，这时可以使用auto-fill关键字表示自动填充</p>
+        <p>
+          自动填充：
+        <pre class="code-preview"><code>repeat(auto-fill, 1fr)</code></pre> 表示根据容器宽度自动填充列，每列占据相等的可用空间。
+        </p>
+        <p><b>auto-fit</b>:auto-fit和auto-fill类似，但是不同的是，auto-fit会根据容器宽度自动填充列，每列占据相等的可用空间。</p>
+        <p>
+          自动填充：
+        <pre class="code-preview"><code>repeat(auto-fit, 1fr)</code></pre> 表示根据容器宽度自动填充列，每列占据相等的可用空间。
+        </p>
+      </div>
+      <div>
+        <h2>
+          fr 是一个单位，表示可用空间的比例。如果两列的宽度分别为1fr和2fr，就表示后者是前者的两倍。
+        </h2>
+        <pre class="code-preview"><code>.container {
+ grid-template-columns: 1fr 2fr 3fr;//表示三列，第一列占据1份，第二列占据2份，第三列占据3份
+}
+        </code></pre>
+      </div>
+      <div>
+        <h2>auto关键字</h2>
+        <p>
+          auto关键字表示自动填充，如果一列的宽度为auto，就表示这列的宽度为内容宽度。
+        </p>
+        <pre
+          class="code-preview"><code>grid-template-columns: 1fr auto 200px;//表示三列，第一列占据1份，第二列占据内容宽度，第三列占据200px</code></pre>
+      </div>
+    </div>
+    <section class="sub-grid-introduction">
+      <h2>子网格介绍</h2>
+      <p>
+        子网格是CSS
+        Grid布局中的一种强大功能，允许在主网格内创建独立的网格布局。通过对子网格的控制，可以实现更复杂的布局结构。
+      </p>
+      <p>
+        使用子网格可以更好地管理和组织内容，使得布局更加灵活和响应式。您可以在子网格中定义自己的列和行，从而实现更精细的控制。
+      </p>
+    </section>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref, reactive } from 'vue'
+
+interface GridOptions {
+  templateColumns: string
+  templateRows: string
+  justifyContent: string
+  alignItems: string
+  gap: number
+}
+
+interface GridItem {
+  gridColumn: string
+  gridRow: string
+  alignSelf: string
+}
+
+const gridOptions = reactive<{
+  templateColumns: string
+  templateRows: string
+  justifyContent: string
+  alignItems: string
+  gap: number
+}>({
+  templateColumns: 'repeat(3, 1fr)',
+  templateRows: 'repeat(2, 100px)',
+  justifyContent: 'start',
+  alignItems: 'stretch',
+  gap: 10,
+})
+
+const gridItems = reactive<GridItem[]>(
+  Array(6).fill({
+    gridColumn: 'auto',
+    gridRow: 'auto',
+    alignSelf: 'auto',
+  }),
+)
+
+const selectedItem = ref(0)
+const itemColors = ['#3498db', '#2ecc71', '#9b59b6', '#e67e22', '#e74c3c', '#1abc9c']
+
+const columnPresets = [
+  { label: '3等分', value: 'repeat(3, 1fr)' },
+  { label: '固定+自适应', value: '200px auto 1fr' },
+  { label: '混合尺寸', value: '100px 1fr 2fr' },
+]
+
+const rowPresets = [
+  { label: '固定高度', value: 'repeat(2, 100px)' },
+  { label: '自动高度', value: 'auto' },
+  { label: '混合高度', value: '50px 1fr' },
+]
+
+const alignPresets = [
+  { type: 'justifyContent', label: '左对齐', value: 'start' },
+  { type: 'justifyContent', label: '居中', value: 'center' },
+  { type: 'justifyContent', label: '右对齐', value: 'end' },
+  { type: 'alignItems', label: '顶部对齐', value: 'start' },
+  { type: 'alignItems', label: '垂直居中', value: 'center' },
+  { type: 'alignItems', label: '底部对齐', value: 'end' },
+]
+
+const columnSpanPresets = [
+  { label: '1列', value: 'auto' },
+  { label: '跨2列', value: 'span 2' },
+  { label: '指定列', value: '1 / 3' },
+]
+
+const rowSpanPresets = [
+  { label: '1行', value: 'auto' },
+  { label: '跨2行', value: 'span 2' },
+  { label: '指定行', value: '1 / 3' },
+]
+
+const selfAlignPresets = [
+  { label: '默认', value: 'auto' },
+  { label: '顶部', value: 'start' },
+  { label: '居中', value: 'center' },
+]
+
+const updateGridOption = (type: 'justifyContent' | 'alignItems', value: string) => {
+  gridOptions[type] = value
+}
+
+const updateItemProperty = (prop: keyof GridItem, value: string) => {
+  gridItems[selectedItem.value][prop] = value
+}
+</script>
+
+<style scoped>
+.trigger-section {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1rem;
+}
+
+.grid-introduction {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1rem;
+}
+
+.sub-grid-introduction {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1rem;
+}
+
+.grid-container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 2rem;
+  font-family: 'Segoe UI', system-ui;
+}
+
+.main-title {
+  text-align: center;
+  font-size: 2.5rem;
+  color: #2c3e50;
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+
+.controls-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.control-group {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.control-title {
+  color: #2c3e50;
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1.2em;
+}
+
+.control-item {
+  margin-bottom: 1.5rem;
+}
+
+.control-item h3 {
+  color: #7f8c8d;
+  margin: 0 0 0.5rem;
+  font-size: 0.9em;
+}
+
+button {
+  padding: 0.6rem 1rem;
+  margin: 0.2rem;
+  border: 2px solid #3498db;
+  border-radius: 6px;
+  background: white;
+  color: #3498db;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+button.active {
+  background: #3498db;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 3px 8px rgba(52, 152, 219, 0.3);
+}
+
+.item-selector {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.demo-grid {
+  min-height: 500px;
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  display: grid;
+  border: 2px dashed #bdc3c7;
+  margin-bottom: 2rem;
+}
+
+.grid-item {
+  padding: 1.5rem;
+  border-radius: 8px;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.item-label {
+  background: rgba(255, 255, 255, 0.9);
+  padding: 0.5rem;
+  border-radius: 4px;
+  color: #2c3e50;
+  text-align: center;
+  font-size: 0.9em;
+}
+
+.code-preview {
+  background: #2c3e50;
+  color: white;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  border-radius: 12px;
+  font-family: Monaco, monospace;
+}
+
+pre {
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+.gap-slider {
+  width: 200px;
+  margin-right: 1rem;
+}
+
+.slider-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+</style>

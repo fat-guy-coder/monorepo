@@ -1,0 +1,360 @@
+[
+  {
+    "id": "dir",
+    "name": "dir",
+    "category": "file",
+    "description": "显示目录中的文件和子目录列表",
+    "usage": "dir [路径] [选项]",
+    "options": [
+      { "flag": "/s", "description": "列出指定目录和所有子目录中的文件" },
+      { "flag": "/b", "description": "使用简单格式（无标题信息或摘要）" },
+      { "flag": "/w", "description": "使用宽列表格式" },
+      { "flag": "/p", "description": "每次显示一屏后暂停" },
+      { "flag": "/a", "description": "显示具有指定属性的文件" },
+      { "flag": "/o", "description": "按指定顺序列出文件" }
+    ],
+    "examples": [
+      { "command": "dir", "description": "列出当前目录的内容" },
+      { "command": "dir /s C:\\Windows", "description": "递归列出C:\\Windows目录及其子目录" },
+      { "command": "dir /b *.txt", "description": "仅显示当前目录中的.txt文件（简单格式）" }
+    ]
+  },
+  {
+    "id": "cd",
+    "name": "cd",
+    "category": "file",
+    "description": "显示当前目录名或更改当前目录",
+    "usage": "cd [/d] [路径]",
+    "options": [
+      { "flag": "/d", "description": "更改当前驱动器及其目录" },
+      { "flag": "..", "description": "移动到父目录" }
+    ],
+    "examples": [
+      { "command": "cd", "description": "显示当前目录路径" },
+      { "command": "cd Documents", "description": "切换到当前目录下的Documents子目录" },
+      { "command": "cd /d D:\\Projects", "description": "切换到D盘的Projects目录" }
+    ]
+  },
+  {
+    "id": "copy",
+    "name": "copy",
+    "category": "file",
+    "description": "复制一个或多个文件到另一个位置",
+    "usage": "copy [源] [目标] [选项]",
+    "options": [
+      { "flag": "/v", "description": "验证新文件写入是否正确" },
+      { "flag": "/y", "description": "禁止提示确认覆盖现有文件" },
+      { "flag": "/-y", "description": "提示确认覆盖现有文件" },
+      { "flag": "/z", "description": "在可重启模式下复制网络文件" }
+    ],
+    "examples": [
+      { "command": "copy file.txt backup.txt", "description": "复制文件并重命名" },
+      { "command": "copy *.txt D:\\Backup", "description": "复制所有.txt文件到D:\\Backup" },
+      { "command": "copy report.txt + data.txt combined.txt", "description": "合并两个文件" }
+    ]
+  },
+  {
+    "id": "del",
+    "name": "del",
+    "category": "file",
+    "description": "删除一个或多个文件",
+    "usage": "del [名称] [选项]",
+    "options": [
+      { "flag": "/p", "description": "删除每个文件之前提示确认" },
+      { "flag": "/f", "description": "强制删除只读文件" },
+      { "flag": "/s", "description": "从所有子目录删除指定文件" },
+      { "flag": "/q", "description": "安静模式，删除时不要求确认" }
+    ],
+    "examples": [
+      { "command": "del temp.txt", "description": "删除temp.txt文件" },
+      { "command": "del /s /q *.tmp", "description": "递归删除所有.tmp文件（安静模式）" },
+      { "command": "del /p *.*", "description": "删除当前目录所有文件（需确认）" }
+    ]
+  },
+  {
+    "id": "md",
+    "name": "md",
+    "category": "file",
+    "description": "创建目录",
+    "usage": "md [路径]",
+    "options": [],
+    "examples": [
+      { "command": "md NewFolder", "description": "创建名为NewFolder的目录" },
+      { "command": "md \"Project Files\"", "description": "创建带空格的目录" },
+      { "command": "md D:\\Backup\\2023", "description": "在D盘创建多级目录" }
+    ]
+  },
+  {
+    "id": "ipconfig",
+    "name": "ipconfig",
+    "category": "network",
+    "description": "显示所有TCP/IP网络配置值",
+    "usage": "ipconfig [选项]",
+    "options": [
+      { "flag": "/all", "description": "显示完整配置信息" },
+      { "flag": "/release", "description": "释放指定适配器的IPv4地址" },
+      { "flag": "/renew", "description": "更新指定适配器的IPv4地址" },
+      { "flag": "/flushdns", "description": "清除DNS解析器缓存" },
+      { "flag": "/displaydns", "description": "显示DNS解析器缓存的内容" }
+    ],
+    "examples": [
+      { "command": "ipconfig", "description": "显示基本网络配置" },
+      { "command": "ipconfig /all", "description": "显示所有网络适配器的完整配置" },
+      { "command": "ipconfig /flushdns", "description": "清除DNS缓存" }
+    ]
+  },
+  {
+    "id": "ping",
+    "name": "ping",
+    "category": "network",
+    "description": "测试网络连接",
+    "usage": "ping [目标] [选项]",
+    "options": [
+      { "flag": "-t", "description": "持续ping直到手动停止(Ctrl+C)" },
+      { "flag": "-n", "description": "发送指定次数的回显请求" },
+      { "flag": "-l", "description": "发送指定大小的缓冲区" },
+      { "flag": "-f", "description": "在数据包中设置\"不分段\"标志" },
+      { "flag": "-w", "description": "等待每次回复的超时时间(毫秒)" }
+    ],
+    "examples": [
+      { "command": "ping google.com", "description": "测试与Google的连接" },
+      { "command": "ping 8.8.8.8 -n 5", "description": "向8.8.8.8发送5个ping请求" },
+      { "command": "ping localhost -t", "description": "持续ping本地主机" }
+    ]
+  },
+  {
+    "id": "tracert",
+    "name": "tracert",
+    "category": "network",
+    "description": "跟踪数据包到达目标所经过的路由",
+    "usage": "tracert [目标] [选项]",
+    "options": [
+      { "flag": "-d", "description": "不将地址解析为主机名" },
+      { "flag": "-h", "description": "指定搜索目标的最大跃点数" },
+      { "flag": "-w", "description": "等待每次回复的超时时间(毫秒)" }
+    ],
+    "examples": [
+      { "command": "tracert google.com", "description": "跟踪到Google的路由" },
+      { "command": "tracert -d 8.8.8.8", "description": "跟踪到8.8.8.8的路由（不解析主机名）" },
+      { "command": "tracert -h 30 example.com", "description": "最多跟踪30个跃点" }
+    ]
+  },
+  {
+    "id": "netstat",
+    "name": "netstat",
+    "category": "network",
+    "description": "显示网络连接、路由表、接口统计等",
+    "usage": "netstat [选项]",
+    "options": [
+      { "flag": "-a", "description": "显示所有连接和侦听端口" },
+      { "flag": "-b", "description": "显示创建每个连接或侦听端口的可执行文件" },
+      { "flag": "-e", "description": "显示以太网统计信息" },
+      { "flag": "-f", "description": "显示外部地址的完全限定域名" },
+      { "flag": "-n", "description": "以数字形式显示地址和端口号" },
+      { "flag": "-o", "description": "显示拥有的与每个连接关联的进程ID" }
+    ],
+    "examples": [
+      { "command": "netstat -a", "description": "显示所有活动连接" },
+      { "command": "netstat -b", "description": "显示创建连接的程序" },
+      { "command": "netstat -ano | findstr :80", "description": "查找使用80端口的进程" }
+    ]
+  },
+  {
+    "id": "tasklist",
+    "name": "tasklist",
+    "category": "process",
+    "description": "显示当前运行的进程列表",
+    "usage": "tasklist [选项]",
+    "options": [
+      { "flag": "/m", "description": "显示每个进程加载的DLL模块" },
+      { "flag": "/v", "description": "显示详细任务信息" },
+      { "flag": "/fi", "description": "应用筛选器以选择一组任务" },
+      { "flag": "/fo", "description": "指定输出格式（TABLE, LIST, CSV）" },
+      { "flag": "/nh", "description": "在输出中不显示列标题" }
+    ],
+    "examples": [
+      { "command": "tasklist", "description": "显示所有运行中的进程" },
+      { "command": "tasklist /fi \"STATUS eq RUNNING\"", "description": "仅显示正在运行的进程" },
+      {
+        "command": "tasklist /v /fo csv > processes.csv",
+        "description": "导出详细进程信息到CSV文件"
+      }
+    ]
+  },
+  {
+    "id": "taskkill",
+    "name": "taskkill",
+    "category": "process",
+    "description": "终止运行中的进程",
+    "usage": "taskkill [选项]",
+    "options": [
+      { "flag": "/f", "description": "强制终止进程" },
+      { "flag": "/t", "description": "终止指定进程及其启动的任何子进程" },
+      { "flag": "/im", "description": "按映像名称指定要终止的进程" },
+      { "flag": "/pid", "description": "按进程ID指定要终止的进程" },
+      { "flag": "/fi", "description": "应用筛选器以选择一组任务" }
+    ],
+    "examples": [
+      { "command": "taskkill /im notepad.exe", "description": "终止所有记事本进程" },
+      { "command": "taskkill /pid 1234 /f", "description": "强制终止PID为1234的进程" },
+      {
+        "command": "taskkill /fi \"USERNAME eq SYSTEM\" /im malware.exe",
+        "description": "终止系统用户运行的恶意软件"
+      }
+    ]
+  },
+  {
+    "id": "systeminfo",
+    "name": "systeminfo",
+    "category": "info",
+    "description": "显示详细的系统配置信息",
+    "usage": "systeminfo [选项]",
+    "options": [
+      { "flag": "/s", "description": "指定要连接的远程系统" },
+      { "flag": "/u", "description": "指定用户上下文" },
+      { "flag": "/p", "description": "指定密码" },
+      { "flag": "/fo", "description": "指定输出格式（TABLE, LIST, CSV）" }
+    ],
+    "examples": [
+      { "command": "systeminfo", "description": "显示本地系统信息" },
+      { "command": "systeminfo /fo list", "description": "以列表格式显示信息" },
+      {
+        "command": "systeminfo | findstr /B /C:\"OS Name\" /C:\"OS Version\"",
+        "description": "仅显示操作系统名称和版本"
+      }
+    ]
+  },
+  {
+    "id": "chkdsk",
+    "name": "chkdsk",
+    "category": "disk",
+    "description": "检查磁盘并显示状态报告",
+    "usage": "chkdsk [卷:][[路径]文件名] [选项]",
+    "options": [
+      { "flag": "/f", "description": "修复磁盘上的错误" },
+      { "flag": "/r", "description": "查找坏扇区并恢复可读信息" },
+      { "flag": "/x", "description": "如果必要，强制卸载卷" },
+      { "flag": "/scan", "description": "在NTFS卷上运行在线扫描" }
+    ],
+    "examples": [
+      { "command": "chkdsk C:", "description": "检查C盘状态" },
+      { "command": "chkdsk D: /f", "description": "检查D盘并修复错误" },
+      { "command": "chkdsk /scan", "description": "在NTFS卷上运行在线扫描" }
+    ]
+  },
+  {
+    "id": "format",
+    "name": "format",
+    "category": "disk",
+    "description": "格式化磁盘以供Windows使用",
+    "usage": "format 卷: [选项]",
+    "options": [
+      { "flag": "/fs", "description": "指定文件系统类型（FAT, FAT32, NTFS）" },
+      { "flag": "/q", "description": "执行快速格式化" },
+      { "flag": "/v", "description": "指定卷标" },
+      { "flag": "/a", "description": "指定分配单元大小" }
+    ],
+    "examples": [
+      { "command": "format D: /fs:NTFS", "description": "将D盘格式化为NTFS文件系统" },
+      { "command": "format E: /q /v:Backup", "description": "快速格式化E盘并设置卷标为\"Backup\"" },
+      {
+        "command": "format F: /fs:FAT32 /a:4096",
+        "description": "将F盘格式化为FAT32，分配单元大小为4096字节"
+      }
+    ]
+  },
+  {
+    "id": "sfc",
+    "name": "sfc",
+    "category": "system",
+    "description": "扫描和修复系统文件",
+    "usage": "sfc [选项]",
+    "options": [
+      { "flag": "/scannow", "description": "立即扫描所有受保护的系统文件" },
+      { "flag": "/verifyonly", "description": "扫描但不修复" },
+      { "flag": "/scanfile", "description": "扫描指定文件并修复" },
+      { "flag": "/offbootdir", "description": "指定脱机启动目录位置" }
+    ],
+    "examples": [
+      { "command": "sfc /scannow", "description": "扫描并修复所有受保护的系统文件" },
+      {
+        "command": "sfc /verifyfile=c:\\windows\\system32\\kernel32.dll",
+        "description": "验证特定系统文件"
+      },
+      {
+        "command": "sfc /scannow /offbootdir=d:\\ /offwindir=d:\\windows",
+        "description": "在脱机Windows安装上运行扫描"
+      }
+    ]
+  },
+  {
+    "id": "shutdown",
+    "name": "shutdown",
+    "category": "system",
+    "description": "关闭、重启或注销计算机",
+    "usage": "shutdown [选项]",
+    "options": [
+      { "flag": "/s", "description": "关闭计算机" },
+      { "flag": "/r", "description": "完全关闭并重启计算机" },
+      { "flag": "/l", "description": "注销当前用户" },
+      { "flag": "/t", "description": "设置超时时间（秒）" },
+      { "flag": "/c", "description": "设置关闭原因注释" },
+      { "flag": "/f", "description": "强制关闭正在运行的应用程序而不警告" }
+    ],
+    "examples": [
+      { "command": "shutdown /s /t 60", "description": "60秒后关闭计算机" },
+      { "command": "shutdown /r /f /t 0", "description": "立即重启计算机（强制关闭应用）" },
+      { "command": "shutdown /l", "description": "注销当前用户" }
+    ]
+  },
+  {
+    "id": "echo",
+    "name": "echo",
+    "category": "batch",
+    "description": "显示消息或打开/关闭命令回显",
+    "usage": "echo [消息]",
+    "options": [
+      { "flag": "on", "description": "启用命令回显" },
+      { "flag": "off", "description": "禁用命令回显" }
+    ],
+    "examples": [
+      { "command": "echo Hello World", "description": "显示\"Hello World\"消息" },
+      { "command": "echo %PATH%", "description": "显示PATH环境变量的内容" },
+      { "command": "@echo off", "description": "在批处理文件中禁用命令回显" }
+    ]
+  },
+  {
+    "id": "set",
+    "name": "set",
+    "category": "batch",
+    "description": "显示、设置或删除环境变量",
+    "usage": "set [变量=[字符串]]",
+    "options": [],
+    "examples": [
+      { "command": "set", "description": "显示所有环境变量" },
+      { "command": "set PATH", "description": "显示PATH变量的值" },
+      { "command": "set MYVAR=Hello", "description": "设置MYVAR变量的值为\"Hello\"" }
+    ]
+  },
+  {
+    "id": "cls",
+    "name": "cls",
+    "category": "other",
+    "description": "清除命令提示符窗口",
+    "usage": "cls",
+    "options": [],
+    "examples": [{ "command": "cls", "description": "清除屏幕内容" }]
+  },
+  {
+    "id": "help",
+    "name": "help",
+    "category": "other",
+    "description": "提供系统命令的帮助信息",
+    "usage": "help [命令]",
+    "options": [],
+    "examples": [
+      { "command": "help", "description": "显示可用命令列表" },
+      { "command": "help dir", "description": "显示dir命令的帮助信息" }
+    ]
+  }
+]

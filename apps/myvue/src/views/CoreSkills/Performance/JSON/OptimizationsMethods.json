@@ -1,0 +1,164 @@
+{
+  "resourceOptimizations": [
+    {
+      "name": "懒加载 (Lazy Loading)",
+      "description": "延迟加载非关键资源，当需要时再加载",
+      "scenarios": ["长页面中的图片/组件", "非首屏内容", "条件渲染的模块"]
+    },
+    {
+      "name": "预加载 (Preload)",
+      "description": "提前加载关键资源，减少后续等待时间",
+      "scenarios": ["首屏关键资源", "字体文件", "重要图片"]
+    },
+    {
+      "name": "资源压缩",
+      "description": "减小JS/CSS/图片等资源的体积",
+      "scenarios": ["所有静态资源", "生产环境构建"]
+    },
+    {
+      "name": "CDN加速",
+      "description": "使用内容分发网络加速资源加载",
+      "scenarios": ["全球用户访问", "静态资源分发"]
+    },
+    {
+      "name": "HTTP/2推送",
+      "description": "服务器主动推送关键资源",
+      "scenarios": ["关键CSS/JS", "首屏优化"]
+    }
+  ],
+  "renderingOptimizations": [
+    {
+      "name": "虚拟列表 (Virtual List)",
+      "description": "只渲染可视区域内的列表项",
+      "scenarios": ["长列表渲染", "大数据表格"]
+    },
+    {
+      "name": "CSS Containment",
+      "description": "限制浏览器重绘/重排范围",
+      "scenarios": ["复杂组件隔离", "频繁更新的UI"]
+    },
+    {
+      "name": "GPU加速",
+      "description": "利用GPU渲染合成层",
+      "scenarios": ["动画效果", "复杂视觉处理"]
+    },
+    {
+      "name": "减少重绘重排",
+      "description": "优化DOM操作减少布局抖动",
+      "scenarios": ["频繁DOM更新", "动态内容区域"]
+    },
+    {
+      "name": "离屏渲染",
+      "description": "提前渲染不可见内容",
+      "scenarios": ["复杂动画准备", "快速切换视图"]
+    }
+  ],
+  "jsOptimizations": [
+    {
+      "name": "代码分割 (Code Splitting)",
+      "description": "将代码拆分成多个按需加载的块",
+      "scenarios": ["大型单页应用", "多路由项目"]
+    },
+    {
+      "name": "Tree Shaking",
+      "description": "消除未使用的代码",
+      "scenarios": ["ES模块项目", "第三方库优化"]
+    },
+    {
+      "name": "Web Workers",
+      "description": "将耗时任务放到后台线程",
+      "scenarios": ["复杂计算", "大数据处理"]
+    },
+    {
+      "name": "防抖节流 (Debounce/Throttle)",
+      "description": "控制高频事件触发频率",
+      "scenarios": ["滚动/输入事件", "窗口大小调整"]
+    },
+    {
+      "name": "内存管理",
+      "description": "避免内存泄漏和过度消耗",
+      "scenarios": ["长时间运行的SPA", "数据密集型应用"]
+    }
+  ],
+  "networkOptimizations": [
+    {
+      "name": "缓存策略",
+      "description": "合理设置HTTP缓存头",
+      "scenarios": ["静态资源", "API响应"]
+    },
+    {
+      "name": "资源预取 (Prefetch/Preconnect)",
+      "description": "提前建立连接或获取资源",
+      "scenarios": ["预测用户行为", "跨域资源"]
+    },
+    {
+      "name": "压缩传输",
+      "description": "使用Gzip/Brotli压缩",
+      "scenarios": ["文本资源传输", "API数据"]
+    },
+    {
+      "name": "HTTP/2",
+      "description": "多路复用和头部压缩",
+      "scenarios": ["高并发请求", "现代浏览器"]
+    },
+    {
+      "name": "服务端渲染 (SSR)",
+      "description": "首屏服务端生成HTML",
+      "scenarios": ["SEO敏感页面", "慢速网络环境"]
+    }
+  ],
+  "uxOptimizations": [
+    {
+      "name": "骨架屏 (Skeleton Screen)",
+      "description": "内容加载前的占位预览",
+      "scenarios": ["异步数据加载", "慢网络环境"]
+    },
+    {
+      "name": "渐进式加载",
+      "description": "逐步显示更高质量内容",
+      "scenarios": ["图片加载", "数据分页"]
+    },
+    {
+      "name": "过渡动画",
+      "description": "平滑的状态变化效果",
+      "scenarios": ["路由切换", "数据更新"]
+    },
+    {
+      "name": "优先内容显示",
+      "description": "关键内容优先加载渲染",
+      "scenarios": ["内容型页面", "媒体网站"]
+    },
+    {
+      "name": "离线体验",
+      "description": "Service Worker缓存",
+      "scenarios": ["PWA应用", "不稳定网络"]
+    }
+  ],
+  "buildOptimizations": [
+    {
+      "name": "生产模式构建",
+      "description": "启用所有优化选项",
+      "scenarios": ["生产环境部署"]
+    },
+    {
+      "name": "持久化缓存",
+      "description": "基于内容hash的文件命名",
+      "scenarios": ["长期缓存策略"]
+    },
+    {
+      "name": "依赖优化",
+      "description": "外部化/按需引入依赖",
+      "scenarios": ["大型第三方库"]
+    },
+    {
+      "name": "Bundle分析",
+      "description": "可视化分析包内容",
+      "scenarios": ["构建优化诊断"]
+    },
+    {
+      "name": "现代模式构建",
+      "description": "生成现代和传统两种包",
+      "scenarios": ["渐进式增强"]
+    }
+  ]
+}

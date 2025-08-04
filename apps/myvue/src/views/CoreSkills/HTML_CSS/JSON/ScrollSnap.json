@@ -1,0 +1,180 @@
+[
+  {
+    "name": "scroll-snap-type",
+    "index": "scrollSnapType",
+    "desc": "定义容器滚动捕捉行为",
+    "content": "none | [ x | y | block | inline | both ] [ mandatory | proximity ]",
+    "type": "select",
+    "hiddenInList": true,
+    "values": [
+      {
+        "value": "none",
+        "label": "不启用滚动捕捉"
+      },
+      {
+        "value": "x",
+        "label": "根据x轴滚动"
+      },
+      {
+        "value": "y",
+        "label": "根据y轴滚动"
+      },
+      {
+        "value": "block",
+        "label": "根据块级滚动"
+      },
+      {
+        "value": "inline",
+        "label": "根据行内滚动"
+      },
+      {
+        "value": "both",
+        "label": "根据块级和行内滚动"
+      }
+    ],
+    "example": ".container {\n scroll-snap-type: y mandatory;\n}",
+    "tip": "mandatory表示强制吸附，proximity根据滚动距离决定"
+  },
+  {
+    "name": "scrollSnapTypeAxis",
+    "index": "scrollSnapTypeAxis",
+    "desc": "定义滚动轴",
+    "type": "select",
+    "hidden": true,
+    "content": "x | y | block | inline | both",
+    "values": [
+      {
+        "value": "none",
+        "label": "不启用滚动捕捉"
+      },
+      {
+        "value": "x",
+        "label": "根据x轴滚动"
+      },
+      {
+        "value": "y",
+        "label": "根据y轴滚动"
+      },
+      {
+        "value": "block",
+        "label": "根据块级滚动"
+      },
+      {
+        "value": "inline",
+        "label": "根据行内滚动"
+      },
+      {
+        "value": "both",
+        "label": "根据块级和行内滚动"
+      }
+    ]
+  },
+  {
+    "name": "scrollSnapTypeAttachment",
+    "index": "scrollSnapTypeAttachment",
+    "desc": "定义吸附方式",
+    "type": "select",
+    "hidden": true,
+    "content": "mandatory | proximity",
+    "values": [
+      {
+        "value": "mandatory",
+        "label": "强制吸附，必须停在指定位置"
+      },
+      {
+        "value": "proximity",
+        "label": "根据滚动距离决定是否吸附"
+      }
+    ]
+  },
+  {
+    "name": "scroll-padding",
+    "index": "scrollPadding",
+    "desc": "调整容器内边距",
+    "type": "input",
+    "content": "<length>值，类似padding",
+    "values": [
+      {
+        "value": "50px",
+        "label": "50px内边距"
+      }
+    ],
+    "example": ".container {\n scroll-padding: 50px;\n}",
+    "tip": "为固定导航栏预留空间"
+  },
+  {
+    "name": "scroll-behavior",
+    "index": "scrollBehavior",
+    "desc": "定义滚动行为",
+    "type": "select",
+    "content": "smooth | auto",
+    "values": [
+      {
+        "value": "smooth",
+        "label": "平滑滚动"
+      },
+      {
+        "value": "auto",
+        "label": "自动滚动"
+      }
+    ],
+    "example": ".container {\n scroll-behavior: smooth;\n}",
+    "tip": "为滚动容器添加平滑滚动效果"
+  },
+  {
+    "name": "scroll-margin",
+    "index": "scrollMargin",
+    "desc": "调整吸附区域外边距",
+    "content": "<length>值，类似margin",
+    "type": "input",
+    "values": [
+      {
+        "value": "20px",
+        "label": "20px外边距"
+      }
+    ],
+    "example": ".item {\n scroll-margin: 20px;\n}",
+    "tip": "用于处理固定定位元素遮挡问题"
+  },
+  {
+    "name": "scroll-snap-align",
+    "index": "scrollSnapAlign",
+    "desc": "定义子元素对齐方式",
+    "type": "select",
+    "content": "start | center | end",
+    "values": [
+      {
+        "value": "start",
+        "label": "对齐开始位置"
+      },
+      {
+        "value": "center",
+        "label": "对齐中心位置"
+      },
+      {
+        "value": "end",
+        "label": "对齐结束位置"
+      }
+    ],
+    "tip": "通常用于子元素，需要与容器类型配合"
+  },
+  {
+    "name": "scroll-snap-stop",
+    "index": "scrollSnapStop",
+    "desc": "是否允许滚动跳过元素",
+    "type": "select",
+    "content": "normal | always",
+    "values": [
+      {
+        "value": "normal",
+        "label": "允许滚动跳过元素"
+      },
+      {
+        "value": "always",
+        "label": "不允许滚动跳过元素"
+      }
+    ],
+    "example": ".item {\n scroll-snap-stop: always;\n}",
+    "tip": "适合需要严格按步骤停留的场景"
+  }
+]

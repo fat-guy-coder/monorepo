@@ -1,0 +1,395 @@
+[
+  {
+    "label": "字体",
+    "value": "font",
+    "description": "设置字体样式",
+    "children": [
+      {
+        "label": "字体",
+        "value": "fontFamily",
+        "description": "设置字体样式",
+        "type": "select",
+        "options": [
+          {
+            "label": "Arial",
+            "value": "Arial"
+          },
+          {
+            "label": "Georgia",
+            "value": "Georgia"
+          },
+          {
+            "label": "Courier New",
+            "value": "Courier New"
+          }
+        ]
+      },
+      {
+        "label": "字号",
+        "value": "fontSize",
+        "description": "设置字体大小",
+        "type": "string"
+      },
+      {
+        "label": "字重",
+        "value": "fontWeight",
+        "description": "设置字体粗细",
+        "type": "select-number",
+        "options": [
+          {
+            "label": "正常",
+            "value": "normal"
+          },
+          {
+            "label": "粗体",
+            "value": "bold"
+          },
+          {
+            "label": "细体",
+            "value": "lighter"
+          },
+          {
+            "label": "加粗",
+            "value": "bolder"
+          }
+        ]
+      },
+      {
+        "label": "斜体",
+        "value": "fontStyle",
+        "description": "设置字体倾斜",
+        "type": "select",
+        "options": [
+          {
+            "label": "正常",
+            "value": "normal"
+          },
+          {
+            "label": "斜体",
+            "value": "italic"
+          },
+          {
+            "label": "倾斜",
+            "value": "oblique"
+          }
+        ]
+      },
+      {
+        "label": "字形",
+        "value": "fontVariant",
+        "description": "设置字体字形",
+        "type": "select",
+        "options": [
+          {
+            "label": "正常",
+            "value": "normal"
+          },
+          {
+            "label": "小型大写字母",
+            "value": "small-caps"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "label": "文本装饰",
+    "value": "textDecoration",
+    "description": "设置文本装饰",
+    "children": [
+      {
+        "label": "文本装饰",
+        "value": "textDecoration",
+        "description": "设置文本装饰",
+        "type": "select",
+        "options": [
+          {
+            "label": "正常",
+            "value": "normal"
+          },
+          {
+            "label": "下划线",
+            "value": "underline"
+          },
+          {
+            "label": "上划线",
+            "value": "overline"
+          },
+          {
+            "label": "删除线",
+            "value": "line-through"
+          }
+        ]
+      },
+      {
+        "label": "文本阴影",
+        "value": "textShadow",
+        "description": "设置文本阴影",
+        "type": "select",
+        "options": [
+          {
+            "label": "正常",
+            "value": "none"
+          },
+          {
+            "label": "阴影",
+            "value": "shadow"
+          }
+        ]
+      },
+      {
+        "label": "大小写转换",
+        "value": "textTransform",
+        "description": "设置文本大小写转换",
+        "type": "select",
+        "options": [
+          {
+            "label": "正常",
+            "value": "normal"
+          },
+          {
+            "label": "大写",
+            "value": "uppercase"
+          },
+          {
+            "label": "小写",
+            "value": "lowercase"
+          },
+          {
+            "label": "首字母大写",
+            "value": "capitalize"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "label": "文本换行",
+    "value": "textWrap",
+    "description": "设置文本换行",
+    "children": [
+      {
+        "label": "换行",
+        "value": "wordWrap",
+        "description": "设置文本换行",
+        "type": "select",
+        "options": [
+          {
+            "label": "正常",
+            "value": "normal"
+          },
+          {
+            "label": "换行",
+            "value": "break-all"
+          },
+          {
+            "label": "保持",
+            "value": "keep-all"
+          },
+          {
+            "label": "断字",
+            "value": "break-word"
+          },
+          {
+            "label": "继承",
+            "value": "inherit"
+          }
+        ]
+      },
+      {
+        "label": "换行方式",
+        "value": "wordBreak",
+        "description": "设置文本换行方式",
+        "type": "select",
+        "options": [
+          {
+            "label": "正常",
+            "value": "normal"
+          },
+          {
+            "label": "强制换行",
+            "value": "break-all"
+          },
+          {
+            "label": "保持",
+            "value": "keep-all"
+          },
+          {
+            "label": "断字",
+            "value": "break-word"
+          }
+        ]
+      },
+      {
+        "label": "空白处理",
+        "value": "whiteSpace",
+        "type": "select",
+        "options": [
+          {
+            "label": "正常",
+            "value": "normal"
+          },
+          {
+            "label": "不换行",
+            "value": "nowrap"
+          },
+          {
+            "label": "预格式化",
+            "value": "pre"
+          },
+          {
+            "label": "换行",
+            "value": "pre-wrap"
+          },
+          {
+            "label": "换行",
+            "value": "pre-line"
+          },
+          {
+            "label": "继承",
+            "value": "inherit"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "label": "布局控制",
+    "value": "layout",
+    "description": "设置布局控制",
+    "children": [
+      {
+        "label": "文本对齐",
+        "value": "textAlign",
+        "description": "设置文本对齐",
+        "type": "select",
+        "options": [
+          {
+            "label": "正常",
+            "value": "normal"
+          },
+          {
+            "label": "居左",
+            "value": "left"
+          },
+          {
+            "label": "居右",
+            "value": "right"
+          },
+          {
+            "label": "居中",
+            "value": "center"
+          },
+          {
+            "label": "两端对齐",
+            "value": "justify"
+          }
+        ]
+      },
+      {
+        "label": "行高",
+        "value": "lineHeight",
+        "description": "设置行高",
+        "type": "string",
+        "notice": "行高是文本行之间的距离，通常以像素为单位。也可以是百分比或倍数(1.5倍相对于字体大小)。"
+      },
+      {
+        "label": "文本缩进",
+        "value": "textIndent",
+        "description": "设置文本缩进",
+        "type": "string"
+      },
+      {
+        "label": "字间距",
+        "value": "letterSpacing",
+        "description": "设置字间距",
+        "type": "string"
+      },
+      {
+        "label": "词间距",
+        "value": "wordSpacing",
+        "description": "设置词间距",
+        "type": "string"
+      }
+    ]
+  },
+  {
+    "label": "文本溢出",
+    "value": "textOverflow",
+    "description": "设置文本溢出",
+    "children": [
+      {
+        "label": "文本溢出",
+        "value": "textOverflow",
+        "description": "设置文本溢出",
+        "type": "select",
+        "options": [
+          {
+            "label": "正常",
+            "value": "normal"
+          },
+          {
+            "label": "溢出",
+            "value": "overflow"
+          },
+          {
+            "label": "隐藏",
+            "value": "hidden"
+          },
+          {
+            "label": "显示省略号",
+            "value": "ellipsis"
+          }
+        ]
+      },
+      {
+        "label": "溢出",
+        "value": "overflow",
+        "description": "设置文本溢出",
+        "type": "select",
+        "options": [
+          {
+            "label": "正常",
+            "value": "normal"
+          },
+          {
+            "label": "溢出",
+            "value": "overflow"
+          },
+          {
+            "label": "隐藏",
+            "value": "hidden"
+          },
+          {
+            "label": "显示省略号",
+            "value": "ellipsis"
+          }
+        ]
+      },
+      {
+        "label": "显示方式",
+        "value": "display",
+        "description": "设置文本显示方式",
+        "type": "select",
+        "options": [
+          {
+            "label": "正常",
+            "value": "normal"
+          },
+          {
+            "label": "块级",
+            "value": "block"
+          },
+          {
+            "label": "内联",
+            "value": "inline"
+          },
+          {
+            "label": "内联块级",
+            "value": "inline-block"
+          }
+        ]
+      }
+    ]
+  }
+]

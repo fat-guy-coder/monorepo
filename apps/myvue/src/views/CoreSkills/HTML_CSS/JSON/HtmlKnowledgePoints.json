@@ -1,0 +1,177 @@
+[
+  {
+    "title": "📜 基础标签与结构",
+    "id": 1,
+    "items": [
+      {
+        "title": "HTML5文档类型声明",
+        "id": 101,
+        "description": "<!DOCTYPE html>的作用与必要性",
+        "priority": 1,
+        "frequency": 3
+      },
+      {
+        "title": "常用标签语义化使用",
+        "id": 102,
+        "description": "header, footer, main, article等语义化标签的应用场景",
+        "priority": 1,
+        "frequency": 3
+      },
+      {
+        "title": "HTML元素嵌套规则",
+        "id": 103,
+        "description": "块级/行内元素嵌套限制与最佳实践",
+        "priority": 1,
+        "frequency": 3
+      },
+      {
+        "title": "字符实体与特殊符号",
+        "id": 104,
+        "description": "&amp;、&lt;、&copy;等符号的转义与使用",
+        "priority": 2,
+        "frequency": 2
+      }
+    ]
+  },
+  {
+    "title": "🎭 语义化与可访问性",
+    "id": 2,
+    "items": [
+      {
+        "title": "ARIA角色与属性",
+        "id": 201,
+        "description": "role、aria-label等属性的无障碍适配",
+        "priority": 1,
+        "frequency": 3
+      },
+      {
+        "title": "语义化表单标签",
+        "id": 202,
+        "description": "label与input的关联、fieldset分组",
+        "priority": 1,
+        "frequency": 3
+      },
+      {
+        "title": "Landmark区域标记",
+        "id": 203,
+        "description": "banner、navigation等Landmark角色的使用",
+        "priority": 2,
+        "frequency": 2
+      }
+    ]
+  },
+  {
+    "title": "📝 表单与输入控制",
+    "id": 3,
+    "items": [
+      {
+        "title": "表单验证属性",
+        "id": 301,
+        "description": "required、pattern、min/max等原生验证规则",
+        "priority": 1,
+        "frequency": 3
+      },
+      {
+        "title": "input类型扩展",
+        "id": 302,
+        "description": "email、tel、date等类型与浏览器兼容性",
+        "priority": 1,
+        "frequency": 3
+      },
+      {
+        "title": "表单数据提交与编码",
+        "id": 303,
+        "description": "enctype属性与multipart/form-data的应用",
+        "priority": 2,
+        "frequency": 2
+      }
+    ]
+  },
+  {
+    "title": "🌐 元数据与SEO优化",
+    "id": 4,
+    "items": [
+      {
+        "title": "meta标签配置",
+        "id": 401,
+        "description": "charset、viewport、description等关键元数据定义",
+        "priority": 1,
+        "frequency": 3
+      },
+      {
+        "title": "结构化数据 (Schema)",
+        "id": 402,
+        "description": "JSON-LD格式的富文本标记实现",
+        "priority": 2,
+        "frequency": 2
+      },
+      {
+        "title": "Canonical URL与重定向",
+        "id": 403,
+        "description": "避免重复内容与301/302状态码配置",
+        "priority": 2,
+        "frequency": 2
+      }
+    ]
+  },
+  {
+    "title": "📊 表格与列表",
+    "id": 5,
+    "items": [
+      {
+        "title": "复杂表格结构",
+        "id": 501,
+        "description": "colspan/rowspan合并单元格与表头分组",
+        "priority": 2,
+        "frequency": 2
+      },
+      {
+        "title": "有序/无序列表嵌套",
+        "id": 502,
+        "description": "ol/ul/li的层级控制与样式重置",
+        "priority": 2,
+        "frequency": 1
+      }
+    ]
+  },
+  {
+    "title": "🎥 多媒体嵌入",
+    "id": 6,
+    "items": [
+      {
+        "title": "响应式图片与srcset",
+        "id": 601,
+        "description": "picture标签与分辨率/视口适配",
+        "priority": 1,
+        "frequency": 3
+      },
+      {
+        "title": "video/audio控制属性",
+        "id": 602,
+        "description": "autoplay、loop、preload等行为配置",
+        "priority": 2,
+        "frequency": 2
+      }
+    ]
+  },
+  {
+    "title": "🛠️ Web组件与API",
+    "id": 7,
+    "items": [
+      {
+        "title": "自定义元素 (Web Components)",
+        "id": 701,
+        "description": "Shadow DOM与Custom Elements的实现",
+        "priority": 2,
+        "frequency": 2
+      },
+      {
+        "title": "模板标签 (template)",
+        "id": 702,
+        "description": "HTML模板的动态渲染与复用",
+        "priority": 2,
+        "frequency": 1
+      }
+    ]
+  }
+]

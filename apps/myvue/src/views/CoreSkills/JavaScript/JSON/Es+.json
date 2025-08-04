@@ -1,0 +1,422 @@
+[
+  {
+    "year": "5",
+    "features": [
+      {
+        "name": "严格模式",
+        "description": "限制不安全的语法，使代码更安全",
+        "code": "\"use strict\";\nx = 3.14; // 报错 (未声明变量)",
+        "route": "StrictMode"
+      },
+      {
+        "name": "JSON 支持",
+        "description": "原生JSON解析和序列化",
+        "code": "JSON.parse('{\"name\":\"John\"}');\nJSON.stringify({name: 'John'});",
+        "route": "JSON"
+      },
+      {
+        "name": "数组方法",
+        "description": "新增forEach/map/filter等数组方法",
+        "code": "[1,2,3].map(x => x*2); // [2,4,6]",
+        "route": "Array"
+      },
+      {
+        "name": "对象方法",
+        "description": "新增Object.defineProperty/Object.getOwnPropertyDescriptor等方法",
+        "code": "Object.defineProperty(obj, 'name', {value: 'John', writable: false});",
+        "route": "Object2"
+      },
+      {
+        "name": "函数方法",
+        "description": "新增Function.prototype.bind等方法",
+        "code": "const boundFunc = func.bind(context, arg1, arg2); // 绑定this和参数",
+        "route": "ThisBinding"
+      },
+      {
+        "name": "字符串方法",
+        "description": "新增String.prototype.trim等方法",
+        "code": "const str = '  hello  ';\nstr.trim(); // 'hello'",
+        "route": "String"
+      },
+      {
+        "name": "数字方法",
+        "description": "新增Number.isFinite/isNaN等方法",
+        "code": "Number.isFinite(123); // true\nNumber.isNaN(NaN); // true",
+        "route": "Number"
+      },
+      {
+        "name": "日期方法",
+        "description": "新增Date.now/Date.parse等方法",
+        "code": "Date.now(); // 当前时间戳\nDate.parse('2025-01-01'); // 时间戳",
+        "route": "Date"
+      }
+    ]
+  },
+  {
+    "year": "2015 (ES6)",
+    "features": [
+      {
+        "name": "let/const",
+        "description": "块级作用域变量声明",
+        "code": "let x = 1;\nconst PI = 3.14;",
+        "route": "letConst"
+      },
+      {
+        "name": "箭头函数",
+        "description": "更简洁的函数语法，自动绑定this",
+        "code": "const sum = (a, b) => a + b;",
+        "route": "ArrowFunction"
+      },
+      {
+        "name": "模板字符串",
+        "description": "多行字符串和变量插值",
+        "code": "const name = 'John';\n`Hello ${name}!`",
+        "route": "TemplateString"
+      },
+      {
+        "name": "解构赋值",
+        "description": "从数组或对象中提取数据",
+        "code": "const [a, b] = [1, 2];\nconst {name} = {name: 'Alice'};",
+        "route": "Destructuring"
+      },
+      {
+        "name": "类(Class)",
+        "description": "基于原型的面向对象编程语法糖",
+        "code": "class Person {\n  constructor(name) { this.name = name }\n  greet() { return `Hello, ${this.name}!` }\n}",
+        "route": "Class"
+      },
+      {
+        "name": "模块化",
+        "description": "原生支持的模块系统",
+        "code": "// export.js\nexport const name = 'module';\n// import.js\nimport { name } from './module'",
+        "route": "Modules"
+      },
+      {
+        "name": "Promise",
+        "description": "异步编程的解决方案",
+        "code": "new Promise((resolve) => {\n  setTimeout(() => resolve('done'), 1000)\n})",
+        "route": "Promise"
+      },
+      {
+        "name": "Symbol",
+        "description": "唯一且不可变的数据类型",
+        "code": "const sym = Symbol('key');",
+        "route": "Symbol"
+      },
+      {
+        "name": "迭代器与生成器",
+        "description": "定义迭代协议和生成器函数",
+        "code": "function* gen() { yield 1; yield 2; }",
+        "route": "Generator"
+      },
+      {
+        "name": "ArrayBuffer",
+        "description": "二进制数据缓冲区",
+        "code": "const buffer = new ArrayBuffer(8); // 8字节",
+        "route": "BinaryArray"
+      }
+    ]
+  },
+  {
+    "year": "2016",
+    "features": [
+      {
+        "name": "指数运算符",
+        "description": "数学指数运算的简便写法",
+        "code": "2 ** 3 // 8",
+        "route": "Math"
+      },
+      {
+        "name": "Array.includes",
+        "description": "检查数组是否包含某元素",
+        "code": "[1,2,3].includes(2) // true",
+        "route": "Array"
+      }
+    ]
+  },
+  {
+    "year": "2017",
+    "features": [
+      {
+        "name": "async/await",
+        "description": "异步代码同步写法",
+        "code": "async function fetchData() {\n  const res = await fetch(url);\n}",
+        "route": "AsyncAwait"
+      },
+      {
+        "name": "Object.values/entries",
+        "description": "获取对象的值和键值对",
+        "code": "Object.values({a:1,b:2}); // [1,2]\nObject.entries({a:1}) // [['a',1]]",
+        "route": "Object2"
+      },
+      {
+        "name": "共享内存与Atomics",
+        "description": "多线程编程的基础API",
+        "code": "const buffer = new SharedArrayBuffer(16);\nconst view = new Int32Array(buffer);",
+        "route": "SharedArrayBuffer"
+      }
+    ]
+  },
+  {
+    "year": "2018",
+    "features": [
+      {
+        "name": "Promise.finally",
+        "description": "无论Promise成功失败都执行",
+        "code": "fetch(url)\n  .then()\n  .catch()\n  .finally(() => {})",
+        "route": "Promise"
+      },
+      {
+        "name": "Rest/Spread 属性",
+        "description": "对象解构和展开",
+        "code": "const {a, ...rest} = {a:1,b:2};\nconst obj = {...rest, c:3};",
+        "route": "Destructuring"
+      },
+      {
+        "name": "异步迭代器",
+        "description": "支持异步遍历数据源（如流、异步数据）",
+        "code": "for await (const line of readLines(filePath)) {\n  console.log(line);\n}",
+        "route": "AsyncIterator"
+      },
+      {
+        "name": "正则表达式命名捕获组",
+        "description": "正则表达式支持命名分组，提升可读性",
+        "code": "const re = /(?<year>\\d{4})-(?<month>\\d{2})-(?<day>\\d{2})/;\nconst result = re.exec('2024-06-01');\nconsole.log(result.groups.year); // '2024'",
+        "route": "RegExp"
+      },
+      {
+        "name": "正则表达式dotAll模式",
+        "description": "s修饰符让.可以匹配换行符",
+        "code": "/foo.bar/s.test('foo\\nbar') // true",
+        "route": "RegExp"
+      },
+      {
+        "name": "对象展开运算符",
+        "description": "对象的解构和合并更方便",
+        "code": "const obj1 = {a:1, b:2};\nconst obj2 = {...obj1, c:3}; // {a:1, b:2, c:3}",
+        "route": "Destructuring"
+      },
+      {
+        "name": "Symbol.prototype.description",
+        "description": "直接获取Symbol的描述字符串",
+        "code": "const s = Symbol('foo');\ns.description // 'foo'",
+        "route": "Symbol"
+      }
+    ]
+  },
+  {
+    "year": "2019",
+    "features": [
+      {
+        "name": "Array.flat/flatMap",
+        "description": "数组扁平化处理",
+        "code": "[1,[2]].flat(); // [1,2]\n[1,2].flatMap(x => [x*2]) // [2,4]",
+        "route": "Array"
+      },
+      {
+        "name": "可选catch绑定",
+        "description": "可省略catch参数",
+        "code": "try {} catch {}",
+        "route": "OptionalCatch"
+      },
+      {
+        "name": "BigInt",
+        "description": "大整数数据类型",
+        "code": "const bigNum = 9007199254740991n;\nbigNum + 1n // 9007199254740992n",
+        "route": "BigInt"
+      },
+      {
+        "name": "Symbol.prototype.description",
+        "description": "直接获取Symbol的描述字符串",
+        "code": "const s = Symbol('foo');\ns.description // 'foo'",
+        "route": "Symbol"
+      },
+      {
+        "name": "Object.fromEntries",
+        "description": "将键值对数组转换为对象",
+        "code": "Object.fromEntries([['a', 1], ['b', 2]]) // {a:1, b:2}",
+        "route": "Object2"
+      },
+      {
+        "name": "String.prototype.trimStart/trimEnd",
+        "description": "去除字符串开头或结尾的空白",
+        "code": "'  hello '.trimStart() // 'hello '\n'  hello '.trimEnd() // '  hello'",
+        "route": "String"
+      }
+    ]
+  },
+  {
+    "year": "2020",
+    "features": [
+      {
+        "name": "可选链操作符",
+        "description": "安全访问嵌套属性",
+        "code": "obj?.prop?.subProp",
+        "route": "OptionalChain"
+      },
+      {
+        "name": "空值合并",
+        "description": "提供默认值的更优方式",
+        "code": "const val = input ?? 'default'",
+        "route": "NullishCoalescing"
+      },
+      {
+        "name": "动态导入",
+        "description": "按需加载模块",
+        "code": "const module = await import('./module.js')",
+        "route": "DynamicImport"
+      },
+      {
+        "name": "全局This",
+        "description": "在任何环境下都能用的全局this",
+        "code": "console.log(globalThis);",
+        "route": "GlobalThis"
+      },
+      {
+        "name": "Promise.allSettled",
+        "description": "等待所有Promise完成（无论成功或失败）",
+        "code": "Promise.allSettled([p1, p2]).then(results => console.log(results));",
+        "route": "Promise"
+      },
+      {
+        "name": "import.meta",
+        "description": "模块元信息访问",
+        "code": "console.log(import.meta.url);",
+        "route": "Modules"
+      }
+    ]
+  },
+  {
+    "year": "2021",
+    "features": [
+      {
+        "name": "String.replaceAll和matchAll",
+        "description": "全局替换字符串和匹配所有",
+        "code": "'aabb'.replaceAll('a', 'c') // 'ccbb'\n'aabb'.matchAll(/a/g) // [['a', 'a'], ['a', 'a']]",
+        "route": "StringMatchAllAndReplaceAll"
+      },
+      {
+        "name": "逻辑赋值运算符",
+        "description": "简化逻辑操作赋值",
+        "code": "a ||= b;  // a = a || b\na &&= b; // a = a && b",
+        "route": "LogicalAssignment"
+      },
+      {
+        "name": "WeakRef",
+        "description": "对象的弱引用",
+        "code": "const ref = new WeakRef(obj);\nref.deref() // 获取原对象",
+        "route": "WeakRef"
+      },
+      {
+        "name": "FinalizationRegistry",
+        "description": "对象垃圾回收回调",
+        "code": "const registry = new FinalizationRegistry(heldValue => {\n  // 清理逻辑\n});",
+        "route": "FinalizationRegistry"
+      }
+    ]
+  },
+  {
+    "year": "2022",
+    "features": [
+      {
+        "name": "顶层await",
+        "description": "在模块顶层使用await",
+        "code": "const data = await fetch(url);",
+        "route": "TopLevelAwait"
+      },
+      {
+        "name": "Array.at",
+        "description": "支持负索引访问元素",
+        "code": "[1,2,3].at(-1) // 3",
+        "route": "Array"
+      },
+      {
+        "name": "类静态块",
+        "description": "类静态初始化块",
+        "code": "class C {\n  static {\n    // 静态初始化代码\n  }\n}",
+        "route": "Class"
+      },
+      {
+        "name": "FinalizationRegistry",
+        "description": "对象垃圾回收回调",
+        "code": "const registry = new FinalizationRegistry(heldValue => {\n  // 清理逻辑\n});",
+        "route": "FinalizationRegistry"
+      }
+    ]
+  },
+  {
+    "year": "2023",
+    "features": [
+      {
+        "name": "Array.findLast",
+        "description": "从数组末尾查找元素",
+        "code": "[1,2,3].findLast(x => x > 1) // 3",
+        "route": "Array"
+      },
+      {
+        "name": "Hashbang 语法",
+        "description": "支持Unix风格的脚本解释器指令",
+        "code": "#!/usr/bin/env node\nconsole.log('Hello')",
+        "route": "Hashbang"
+      },
+      {
+        "name": "Symbol作为WeakMap键",
+        "description": "扩展WeakMap的键类型",
+        "code": "const weakMap = new WeakMap();\nconst key = Symbol('ref');\nweakMap.set(key, value);",
+        "route": "WeakMap"
+      }
+    ]
+  },
+  {
+    "year": "2024 (预计)",
+    "features": [
+      {
+        "name": "Record 和 Tuple",
+        "description": "不可变的复合数据类型",
+        "code": "const record = #{ a: 1, b: 2 };\nconst tuple = #[1, 2, 3];",
+        "route": "RecordAndTuple"
+      },
+      {
+        "name": "管道操作符",
+        "description": "函数调用链式语法",
+        "code": "x |> f |> g |> h  // 等价于 h(g(f(x)))",
+        "route": "PipeOperator"
+      },
+      {
+        "name": "装饰器元数据",
+        "description": "标准化的装饰器元数据",
+        "code": "@metadata('info')\nclass Decorated {}",
+        "route": "Decorator"
+      }
+    ]
+  },
+  {
+    "year": "2025 (提案)",
+    "features": [
+      {
+        "name": "模式匹配",
+        "description": "强大的条件分支处理",
+        "code": "match (value) {\n  case 1 => 'one'\n  case _ => 'other'\n}",
+        "route": "PatternMatching"
+      },
+      {
+        "name": "装饰器标准",
+        "description": "元编程的标准化实现",
+        "code": "@log class MyClass {\n  @memo method() {}\n}",
+        "route": "Decorator"
+      },
+      {
+        "name": "显式资源管理",
+        "description": "使用块作用域管理资源",
+        "code": "using resource = new Resource();\n// 自动释放资源",
+        "route": "Resource"
+      },
+      {
+        "name": "类型注解(提案)",
+        "description": "可选的类型语法",
+        "code": "function greet(name: string): string {\n  return `Hello ${name}`\n}",
+        "route": "TypeAnnotation"
+      }
+    ]
+  }
+]

@@ -1,0 +1,290 @@
+[
+  {
+    "id": 1,
+    "title": "JSX原理",
+    "description": "JSX编译过程、与createElement的关系及底层实现",
+    "category": "fundamentals",
+    "importance": 5,
+    "keywords": ["jsx", "语法糖"]
+  },
+  {
+    "id": 2,
+    "title": "虚拟DOM",
+    "description": "虚拟DOM概念、diff算法及协调过程",
+    "category": "fundamentals",
+    "importance": 5,
+    "keywords": ["vdom", "diff"]
+  },
+  {
+    "id": 3,
+    "title": "组件生命周期",
+    "description": "类组件生命周期方法及执行顺序",
+    "category": "fundamentals",
+    "importance": 4,
+    "keywords": ["lifecycle", "mount", "update"]
+  },
+  {
+    "id": 4,
+    "title": "受控组件 vs 非受控组件",
+    "description": "两种组件形式的区别、使用场景及最佳实践",
+    "category": "fundamentals",
+    "importance": 4,
+    "keywords": ["controlled", "uncontrolled"]
+  },
+  {
+    "id": 5,
+    "title": "Context API",
+    "description": "跨组件数据传递的实现原理及优化策略",
+    "category": "fundamentals",
+    "importance": 4,
+    "keywords": ["context", "provider", "consumer"]
+  },
+
+  {
+    "id": 6,
+    "title": "useState",
+    "description": "状态管理Hook，闭包陷阱及函数式更新",
+    "category": "hooks",
+    "importance": 5,
+    "keywords": ["state", "hook"]
+  },
+  {
+    "id": 7,
+    "title": "useEffect",
+    "description": "副作用处理，依赖数组优化及清除机制",
+    "category": "hooks",
+    "importance": 5,
+    "keywords": ["effect", "side effect"]
+  },
+  {
+    "id": 8,
+    "title": "useRef",
+    "description": "引用DOM元素及存储可变值而不触发渲染",
+    "category": "hooks",
+    "importance": 4,
+    "keywords": ["ref", "dom"]
+  },
+  {
+    "id": 9,
+    "title": "useMemo/useCallback",
+    "description": "性能优化Hooks，缓存值与函数",
+    "category": "hooks",
+    "importance": 4,
+    "keywords": ["memoization", "optimization"]
+  },
+  {
+    "id": 10,
+    "title": "自定义Hooks",
+    "description": "逻辑复用模式，抽象组件逻辑",
+    "category": "hooks",
+    "importance": 4,
+    "keywords": ["custom hook", "reusability"]
+  },
+
+  {
+    "id": 11,
+    "title": "组件通信模式",
+    "description": "父子、兄弟、跨层级组件通信方案",
+    "category": "components",
+    "importance": 5,
+    "keywords": ["props", "event", "callback"]
+  },
+  {
+    "id": 12,
+    "title": "高阶组件(HOC)",
+    "description": "组件增强模式，逻辑复用技术",
+    "category": "components",
+    "importance": 4,
+    "keywords": ["hoc", "composition"]
+  },
+  {
+    "id": 13,
+    "title": "Render Props",
+    "description": "组件间代码共享的技术",
+    "category": "components",
+    "importance": 3,
+    "keywords": ["render prop", "sharing"]
+  },
+  {
+    "id": 14,
+    "title": "组合与继承",
+    "description": "React中的组合模型与继承限制",
+    "category": "components",
+    "importance": 3,
+    "keywords": ["composition", "inheritance"]
+  },
+  {
+    "id": 15,
+    "title": "错误边界",
+    "description": "捕获子组件错误的React组件",
+    "category": "components",
+    "importance": 4,
+    "keywords": ["error", "boundary", "catch"]
+  },
+
+  {
+    "id": 16,
+    "title": "Redux核心概念",
+    "description": "Store、Reducer、Action、Middleware",
+    "category": "state",
+    "importance": 5,
+    "keywords": ["redux", "flux"]
+  },
+  {
+    "id": 17,
+    "title": "Redux中间件",
+    "description": "异步处理、日志、副作用管理",
+    "category": "state",
+    "importance": 4,
+    "keywords": ["middleware", "thunk", "saga"]
+  },
+  {
+    "id": 18,
+    "title": "Context+useReducer模式",
+    "description": "轻量级状态管理替代方案",
+    "category": "state",
+    "importance": 4,
+    "keywords": ["context", "reducer"]
+  },
+  {
+    "id": 19,
+    "title": "状态管理库对比",
+    "description": "Redux vs MobX vs Recoil vs Zustand",
+    "category": "state",
+    "importance": 4,
+    "keywords": ["comparison", "libraries"]
+  },
+
+  {
+    "id": 20,
+    "title": "React.memo",
+    "description": "组件记忆化，避免不必要的渲染",
+    "category": "performance",
+    "importance": 5,
+    "keywords": ["memo", "optimization"]
+  },
+  {
+    "id": 21,
+    "title": "懒加载与代码分割",
+    "description": "React.lazy + Suspense实现按需加载",
+    "category": "performance",
+    "importance": 4,
+    "keywords": ["lazy", "suspense", "split"]
+  },
+  {
+    "id": 22,
+    "title": "useMemo/useCallback应用",
+    "description": "避免重复计算和不必要的重渲染",
+    "category": "performance",
+    "importance": 5,
+    "keywords": ["memoization", "callback"]
+  },
+  {
+    "id": 23,
+    "title": "虚拟化长列表",
+    "description": "react-window/react-virtualized原理",
+    "category": "performance",
+    "importance": 4,
+    "keywords": ["virtualization", "list"]
+  },
+
+  {
+    "id": 24,
+    "title": "React Router原理",
+    "description": "路由匹配算法、导航机制",
+    "category": "routing",
+    "importance": 5,
+    "keywords": ["router", "navigation"]
+  },
+  {
+    "id": 25,
+    "title": "路由守卫",
+    "description": "实现路由权限控制和重定向",
+    "category": "routing",
+    "importance": 4,
+    "keywords": ["guard", "authentication"]
+  },
+  {
+    "id": 26,
+    "title": "动态路由",
+    "description": "基于文件的路由方案(Next.js)",
+    "category": "routing",
+    "importance": 4,
+    "keywords": ["dynamic", "route"]
+  },
+
+  {
+    "id": 27,
+    "title": "Fiber架构",
+    "description": "React核心算法，可中断渲染机制",
+    "category": "advanced",
+    "importance": 5,
+    "keywords": ["fiber", "architecture"]
+  },
+  {
+    "id": 28,
+    "title": "并发模式(Concurrent Mode)",
+    "description": "可中断渲染、Suspense、useTransition",
+    "category": "advanced",
+    "importance": 4,
+    "keywords": ["concurrent", "mode"]
+  },
+  {
+    "id": 29,
+    "title": "Suspense数据获取",
+    "description": "实验性特性，声明式数据加载",
+    "category": "advanced",
+    "importance": 3,
+    "keywords": ["suspense", "data"]
+  },
+
+  {
+    "id": 30,
+    "title": "渲染流程",
+    "description": "React元素到DOM节点的转换过程",
+    "category": "rendering",
+    "importance": 4,
+    "keywords": ["render", "process"]
+  },
+  {
+    "id": 31,
+    "title": "Commit阶段",
+    "description": "DOM更新阶段的具体操作",
+    "category": "rendering",
+    "importance": 4,
+    "keywords": ["commit", "phase"]
+  },
+  {
+    "id": 32,
+    "title": "批处理(Batching)",
+    "description": "setState异步更新与自动批处理",
+    "category": "rendering",
+    "importance": 5,
+    "keywords": ["batching", "setstate"]
+  },
+
+  {
+    "id": 33,
+    "title": "测试策略",
+    "description": "单元测试、集成测试与E2E测试",
+    "category": "testing",
+    "importance": 4,
+    "keywords": ["testing", "strategy"]
+  },
+  {
+    "id": 34,
+    "title": "React测试库",
+    "description": "React Testing Library使用模式",
+    "category": "testing",
+    "importance": 4,
+    "keywords": ["rtl", "testing"]
+  },
+  {
+    "id": 35,
+    "title": "调试工具",
+    "description": "React DevTools高级用法",
+    "category": "testing",
+    "importance": 3,
+    "keywords": ["devtools", "debug"]
+  }
+]

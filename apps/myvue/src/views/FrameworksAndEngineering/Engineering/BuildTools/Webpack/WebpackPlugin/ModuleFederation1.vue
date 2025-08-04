@@ -1,0 +1,7 @@
+<template>
+  <div>🔧 模块联邦 ⭐⭐⭐</div>
+</template>
+<script lang="ts" setup>
+</script>
+<style scoped>
+</style>

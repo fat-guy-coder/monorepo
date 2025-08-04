@@ -1,0 +1,12 @@
+packages:
+  # 包含 packages 目录下所有子目录
+  - 'packages/**'
+
+  # 包含 apps 目录下所有子目录
+  - 'apps/*'
+
+  # 排除 test 目录
+  - '!**/test/**'
+
+  # 包含根目录下的单个包
+  - 'common'

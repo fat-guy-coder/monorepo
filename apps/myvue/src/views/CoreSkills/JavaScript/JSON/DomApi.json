@@ -1,0 +1,476 @@
+[
+  {
+    "name": "getBoundingClientRect()",
+    "type": "方法",
+    "category": "dimensions",
+    "description": "获取元素相对于视口的位置和尺寸信息",
+    "parameters": [],
+    "return": {
+      "type": "DOMRect",
+      "description": "包含元素位置和尺寸信息的对象"
+    },
+    "example": "const rect = element.getBoundingClientRect();\nconsole.log('元素宽度:', rect.width);\nconsole.log('元素高度:', rect.height);\nconsole.log('距离视口顶部:', rect.top);\nconsole.log('距离视口左侧:', rect.left);",
+    "useCases": [
+      "检测元素是否在视口中可见",
+      "实现拖拽功能时获取元素位置",
+      "计算元素相对于视口的精确位置",
+      "实现滚动动画效果"
+    ],
+    "tags": ["布局", "位置", "尺寸"]
+  },
+  {
+    "name": "classList",
+    "type": "属性",
+    "category": "styles",
+    "description": "提供用于操作元素类名的方法，比className更灵活",
+    "example": "// 添加类\n element.classList.add('active', 'highlight');\n\n// 移除类\n element.classList.remove('inactive');\n\n// 切换类\n element.classList.toggle('visible');\n\n// 检查是否包含类\n if (element.classList.contains('selected')) {\n  // 执行操作\n }",
+    "parameters": [],
+    "useCases": [
+      "动态改变元素样式",
+      "实现主题切换功能",
+      "响应式设计中切换布局",
+      "实现交互效果（如菜单展开/收起）"
+    ],
+    "tags": ["CSS", "样式", "类名"],
+    "details": [
+      {
+        "name": "classList.add()",
+        "description": "添加一个或多个类名到元素的classList中",
+        "parameters": [
+          { "name": "classes", "type": "string | string[]", "description": "要添加的类名" }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "classList.remove()",
+    "type": "方法",
+    "category": "styles",
+    "description": "从元素的classList中移除一个或多个类名",
+    "parameters": [
+      { "name": "classes", "type": "string | string[]", "description": "要移除的类名" }
+    ],
+    "example": "element.classList.remove('active', 'highlight');",
+    "useCases": [
+      "动态改变元素样式",
+      "实现主题切换功能",
+      "响应式设计中切换布局",
+      "实现交互效果（如菜单展开/收起）"
+    ],
+    "tags": ["CSS", "样式", "类名"],
+    "details": [
+      {
+        "name": "classList.remove()",
+        "description": "从元素的classList中移除一个或多个类名",
+        "parameters": [
+          { "name": "classes", "type": "string | string[]", "description": "要移除的类名" }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "addEventListener()",
+    "type": "方法",
+    "category": "events",
+    "description": "为元素绑定事件监听器，用于响应用户交互或其他事件",
+    "parameters": [
+      {
+        "name": "type",
+        "type": "string",
+        "description": "事件类型（如 \"click\", \"mouseover\"）"
+      },
+      { "name": "listener", "type": "Function", "description": "事件触发时执行的回调函数" },
+      {
+        "name": "options",
+        "type": "Object | boolean",
+        "description": "可选的配置对象或useCapture标志"
+      }
+    ],
+    "example": "const button = document.getElementById('myButton');\n\nfunction handleClick(event) {\n  console.log('按钮被点击了!');\n  event.stopPropagation();\n}\n\nbutton.addEventListener('click', handleClick, { once: true });",
+    "useCases": [
+      "响应用户点击、悬停等交互",
+      "监听表单输入变化",
+      "实现自定义事件处理",
+      "键盘快捷键支持"
+    ],
+    "tags": ["事件", "交互", "监听"],
+    "details": [
+      {
+        "name": "addEventListener()",
+        "description": "为元素绑定事件监听器，用于响应用户交互或其他事件",
+        "parameters": [
+          {
+            "name": "type",
+            "type": "string",
+            "description": "事件类型（如 \"click\", \"mouseover\"）"
+          },
+          { "name": "listener", "type": "Function", "description": "事件触发时执行的回调函数" },
+          {
+            "name": "options",
+            "type": "Object | boolean",
+            "description": "可选的配置对象或useCapture标志"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "querySelector()",
+    "type": "方法",
+    "category": "traversal",
+    "description": "在元素的后代中选择匹配CSS选择器的第一个元素",
+    "parameters": [{ "name": "selectors", "type": "string", "description": "CSS选择器字符串" }],
+    "return": {
+      "type": "Element | null",
+      "description": "匹配的元素或null（未找到）"
+    },
+    "example": "const container = document.getElementById('app');\n\n// 查找容器内第一个按钮\n const button = container.querySelector('.btn-primary');\n\n// 查找第一个段落\n const paragraph = document.querySelector('p');",
+    "useCases": [
+      "在特定元素内查找子元素",
+      "查找满足特定条件的第一个元素",
+      "组件内精确查找DOM元素",
+      "替代getElementById()获取更灵活的选择"
+    ],
+    "tags": ["选择器", "查找", "遍历"],
+    "details": [
+      {
+        "name": "querySelector()",
+        "description": "在元素的后代中选择匹配CSS选择器的第一个元素",
+        "parameters": [{ "name": "selectors", "type": "string", "description": "CSS选择器字符串" }]
+      }
+    ]
+  },
+  {
+    "name": "querySelectorAll()",
+    "type": "方法",
+    "category": "traversal",
+    "description": "在元素的后代中选择所有匹配CSS选择器的元素",
+    "parameters": [{ "name": "selectors", "type": "string", "description": "CSS选择器字符串" }],
+    "return": {
+      "type": "NodeList",
+      "description": "包含所有匹配元素的NodeList集合"
+    },
+    "example": "// 获取所有具有 'highlight' 类的元素\n const highlights = document.querySelectorAll('.highlight');\n\n// 获取所有表格行\n const tableRows = document.querySelectorAll('table tr');\n\n// 遍历结果\n highlights.forEach(el => {\n  el.style.backgroundColor = 'yellow';\n});",
+    "useCases": [
+      "批量操作多个元素",
+      "表单中获取所有输入字段",
+      "表格处理行和列",
+      "实现复杂的选择器查询"
+    ],
+    "tags": ["选择器", "查找", "集合"],
+    "details": [
+      {
+        "name": "querySelectorAll()",
+        "description": "在元素的后代中选择所有匹配CSS选择器的元素",
+        "parameters": [{ "name": "selectors", "type": "string", "description": "CSS选择器字符串" }]
+      }
+    ]
+  },
+  {
+    "name": "innerHTML",
+    "type": "属性",
+    "category": "properties",
+    "description": "获取或设置元素的HTML内容，包括所有子元素的HTML标记",
+    "example": "// 设置元素内容\n element.innerHTML = '<div class=\"alert\">警告信息</div>';\n\n// 获取元素内容\n const content = element.innerHTML;\n\n// 追加内容\n element.innerHTML += '<p>追加的段落</p>';",
+    "useCases": [
+      "动态渲染HTML片段",
+      "从服务器加载并注入HTML内容",
+      "创建复杂的DOM结构",
+      "实现富文本编辑器"
+    ],
+    "tags": ["内容", "HTML", "渲染"],
+    "details": [
+      {
+        "name": "innerHTML",
+        "description": "获取或设置元素的HTML内容，包括所有子元素的HTML标记",
+        "parameters": []
+      }
+    ]
+  },
+  {
+    "name": "textContent",
+    "type": "属性",
+    "category": "properties",
+    "description": "获取或设置元素及其后代的文本内容，不包含HTML标记",
+    "example": "// 设置元素文本内容\n element.textContent = '纯文本内容';\n\n// 获取元素文本内容\n const text = element.textContent;\n\n// 比较 innerHTML 和 textContent\n const elem = document.getElementById('example');\n console.log('HTML内容:', elem.innerHTML);\n console.log('文本内容:', elem.textContent);",
+    "useCases": [
+      "安全地设置文本内容（防止XSS攻击）",
+      "提取元素的纯文本内容",
+      "替换元素的文本内容而不改变结构",
+      "处理用户输入时避免HTML注入"
+    ],
+    "tags": ["内容", "文本", "安全"],
+    "details": [
+      {
+        "name": "textContent",
+        "description": "获取或设置元素及其后代的文本内容，不包含HTML标记",
+        "parameters": []
+      }
+    ]
+  },
+  {
+    "name": "style",
+    "type": "属性",
+    "category": "styles",
+    "description": "访问元素的内联样式属性，用于动态修改样式",
+    "example": "// 设置单个样式属性\n element.style.color = 'blue';\n element.style.backgroundColor = '#f0f0f0';\n\n// 设置多个样式属性\n Object.assign(element.style, {\n  fontSize: '16px',\n  fontWeight: 'bold',\n  padding: '10px'\n });\n\n// 获取样式值（仅内联样式）\n const displayValue = element.style.display;",
+    "parameters": [],
+    "useCases": ["动态修改元素样式", "实现动画效果", "响应式调整布局", "高亮交互元素"],
+    "tags": ["样式", "CSS", "内联"],
+    "details": [
+      {
+        "name": "style",
+        "description": "访问元素的内联样式属性，用于动态修改样式",
+        "parameters": []
+      }
+    ]
+  },
+  {
+    "name": "appendChild()",
+    "type": "方法",
+    "category": "methods",
+    "description": "将一个节点添加到指定父节点的子节点列表末尾",
+    "parameters": [{ "name": "child", "type": "Node", "description": "要添加的子节点" }],
+    "return": {
+      "type": "Node",
+      "description": "被添加的子节点"
+    },
+    "example": "// 创建新元素\n const newDiv = document.createElement('div');\n newDiv.textContent = '我是新添加的元素';\n\n// 添加到容器末尾\n const container = document.getElementById('container');\n container.appendChild(newDiv);\n\n// 移动现有元素\n const existingElement = document.getElementById('item');\n container.appendChild(existingElement);",
+    "useCases": [
+      "动态添加新元素到DOM",
+      "重新排序元素列表",
+      "将元素移动到新位置",
+      "构建复杂的DOM结构"
+    ],
+    "tags": ["操作", "添加", "子元素"],
+    "details": [
+      {
+        "name": "appendChild()",
+        "description": "将一个节点添加到指定父节点的子节点列表末尾",
+        "parameters": [{ "name": "child", "type": "Node", "description": "要添加的子节点" }]
+      }
+    ]
+  },
+  {
+    "name": "removeChild()",
+    "type": "方法",
+    "category": "methods",
+    "description": "从DOM中移除指定的子节点",
+    "parameters": [{ "name": "child", "type": "Node", "description": "要移除的子节点" }],
+    "return": {
+      "type": "Node",
+      "description": "被移除的子节点"
+    },
+    "example": "const parent = document.getElementById('list');\nconst child = document.getElementById('item5');\n\n// 移除子节点\n const removedNode = parent.removeChild(child);\n\n// 另一种用法（推荐）\n if (child.parentNode) {\n  child.parentNode.removeChild(child);\n }",
+    "useCases": [
+      "动态移除DOM元素",
+      "清理不再需要的界面元素",
+      "实现列表项删除功能",
+      "组件卸载时清理DOM"
+    ],
+    "tags": ["操作", "移除", "清理"],
+    "details": [
+      {
+        "name": "removeChild()",
+        "description": "从DOM中移除指定的子节点",
+        "parameters": [{ "name": "child", "type": "Node", "description": "要移除的子节点" }]
+      }
+    ]
+  },
+  {
+    "name": "setAttribute()",
+    "type": "方法",
+    "category": "methods",
+    "description": "设置元素的指定属性值，如果属性已存在则更新其值",
+    "parameters": [
+      { "name": "name", "type": "string", "description": "属性名称" },
+      { "name": "value", "type": "string", "description": "属性值" }
+    ],
+    "example": "// 设置属性\n element.setAttribute('id', 'main-content');\n element.setAttribute('data-user-id', '12345');\n\n// 设置自定义属性\n element.setAttribute('aria-expanded', 'true');\n\n// 设置布尔属性\n element.setAttribute('disabled', 'disabled');",
+    "useCases": [
+      "动态设置元素属性",
+      "存储自定义数据（data-*）",
+      "实现无障碍属性",
+      "改变元素状态（如disabled）"
+    ],
+    "tags": ["属性", "设置", "数据"],
+    "details": [
+      {
+        "name": "setAttribute()",
+        "description": "设置元素的指定属性值，如果属性已存在则更新其值",
+        "parameters": [
+          { "name": "name", "type": "string", "description": "属性名称" },
+          { "name": "value", "type": "string", "description": "属性值" }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "getAttribute()",
+    "type": "方法",
+    "category": "methods",
+    "description": "获取元素指定属性的值，如果属性不存在则返回null",
+    "parameters": [{ "name": "name", "type": "string", "description": "要获取的属性名称" }],
+    "return": {
+      "type": "string | null",
+      "description": "属性值或null"
+    },
+    "example": "// 获取属性值\n const id = element.getAttribute('id');\n const userId = element.getAttribute('data-user-id');\n\n// 检查属性存在\n if (element.hasAttribute('disabled')) {\n  const isDisabled = element.getAttribute('disabled') !== null;\n }",
+    "useCases": ["检索元素属性值", "读取自定义数据属性", "检查元素状态", "实现数据绑定"],
+    "tags": ["属性", "读取", "数据"],
+    "details": [
+      {
+        "name": "getAttribute()",
+        "description": "获取元素指定属性的值，如果属性不存在则返回null",
+        "parameters": [{ "name": "name", "type": "string", "description": "要获取的属性名称" }]
+      }
+    ]
+  },
+  {
+    "name": "focus()",
+    "type": "方法",
+    "category": "methods",
+    "description": "设置当前元素为焦点元素，使其可以接收键盘事件",
+    "parameters": [],
+    "example": "// 页面加载后将焦点设置到搜索框\n window.addEventListener('load', () => {\n  const searchInput = document.getElementById('search');\n  searchInput.focus();\n });\n\n// 表单验证失败后聚焦到错误字段\n if (!usernameInput.value) {\n  usernameInput.focus();\n }",
+    "useCases": [
+      "提高表单可用性",
+      "引导用户到特定输入字段",
+      "表单验证后重新聚焦",
+      "实现自定义键盘导航"
+    ],
+    "tags": ["焦点", "表单", "交互"],
+    "details": [
+      {
+        "name": "focus()",
+        "description": "设置当前元素为焦点元素，使其可以接收键盘事件",
+        "parameters": []
+      }
+    ]
+  },
+  {
+    "name": "clientWidth / clientHeight",
+    "type": "属性",
+    "category": "dimensions",
+    "description": "获取元素的内部宽度/高度（包含内边距但不包含边框、滚动条和外边距）",
+    "example": "const width = element.clientWidth;\n const height = element.clientHeight;\n\n console.log('元素内部宽度:', width);\n console.log('元素内部高度:', height);\n\n // 响应式调整\n function checkElementSize() {\n  if (element.clientWidth < 600) {\n   // 应用移动端样式\n  }\n }",
+    "useCases": ["响应式布局计算", "实现自适应组件", "计算可用内容区域", "检测容器大小变化"],
+    "tags": ["尺寸", "布局", "响应式"],
+    "details": [
+      {
+        "name": "clientWidth / clientHeight",
+        "description": "获取元素的内部宽度/高度（包含内边距但不包含边框、滚动条和外边距）",
+        "parameters": []
+      }
+    ]
+  },
+  {
+    "name": "scrollIntoView()",
+    "type": "方法",
+    "category": "dimensions",
+    "description": "将元素滚动到浏览器窗口的可视区域内",
+    "parameters": [
+      {
+        "name": "options",
+        "type": "Object | boolean",
+        "description": "配置对象或布尔值（true：元素顶部对齐视口顶部，false：元素底部对齐视口底部）"
+      }
+    ],
+    "example": "// 基本用法\n document.getElementById('section-5').scrollIntoView();\n\n// 平滑滚动\n element.scrollIntoView({ behavior: 'smooth' });\n\n// 对齐方式\n element.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' });",
+
+    "useCases": [
+      "实现页面内导航",
+      "表单验证错误时滚动到错误字段",
+      "阅读应用中的章节定位",
+      "聊天应用滚动到最新消息"
+    ],
+    "tags": ["滚动", "导航", "定位"],
+    "details": [
+      {
+        "name": "scrollIntoView()",
+        "description": "将元素滚动到浏览器窗口的可视区域内",
+        "parameters": [
+          {
+            "name": "options",
+            "type": "Object | boolean",
+            "description": "配置对象或布尔值（true：元素顶部对齐视口顶部，false：元素底部对齐视口底部）"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "createElement()",
+    "type": "方法",
+    "category": "methods",
+    "description": "创建一个具有指定标签名的HTML元素",
+    "parameters": [
+      { "name": "tagName", "type": "string", "description": "要创建的元素标签名" },
+      { "name": "options", "type": "Object", "description": "可选的配置对象（如设置is属性）" }
+    ],
+    "return": {
+      "type": "Element",
+      "description": "新创建的元素"
+    },
+    "example": "// 创建简单的元素\n const div = document.createElement('div');\n div.className = 'alert';\n div.textContent = '欢迎使用本应用!';\n\n// 创建带有属性的元素\n const img = document.createElement('img');\n img.src = 'logo.png';\n img.alt = '公司标志';\n\n// 创建自定义元素\n const customElement = document.createElement('my-component', { is: 'custom-element' });",
+    "useCases": ["动态构建UI组件", "渲染动态内容", "创建DOM元素用于模板", "实现虚拟DOM操作"],
+    "tags": ["创建", "元素", "生成"],
+    "details": [
+      {
+        "name": "createElement()",
+        "description": "创建一个具有指定标签名的HTML元素",
+        "parameters": [
+          { "name": "tagName", "type": "string", "description": "要创建的元素标签名" },
+          { "name": "options", "type": "Object", "description": "可选的配置对象（如设置is属性）" }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "offsetWidth / offsetHeight",
+    "type": "属性",
+    "category": "dimensions",
+    "description": "获取元素的布局宽度/高度（包含元素内容、内边距、边框和滚动条）",
+    "example": "const width = element.offsetWidth;\n const height = element.offsetHeight;\n\n console.log('元素布局宽度:', width);\n console.log('元素布局高度:', height);\n\n // 检测元素尺寸变化\n let lastWidth = element.offsetWidth;\n window.addEventListener('resize', () => {\n  if (element.offsetWidth !== lastWidth) {\n   lastWidth = element.offsetWidth;\n   // 响应尺寸变化\n  }\n });",
+
+    "useCases": ["获取元素整体尺寸", "计算元素占用空间", "响应式调整相邻元素", "检测元素尺寸变化"],
+    "tags": ["尺寸", "布局", "边界"],
+    "details": [
+      {
+        "name": "offsetWidth / offsetHeight",
+        "description": "获取元素的布局宽度/高度（包含元素内容、内边距、边框和滚动条）",
+        "parameters": []
+      }
+    ]
+  },
+  {
+    "name": "removeEventListener()",
+    "type": "方法",
+    "category": "events",
+    "description": "移除元素上使用addEventListener()添加的事件监听器",
+    "parameters": [
+      { "name": "type", "type": "string", "description": "事件类型" },
+      { "name": "listener", "type": "Function", "description": "要移除的事件处理函数" },
+      { "name": "options", "type": "Object | boolean", "description": "添加监听器时使用的选项" }
+    ],
+    "example": "function handleClick() {\n  console.log('按钮被点击');\n}\n\n// 添加事件监听器\n button.addEventListener('click', handleClick);\n\n// 移除事件监听器\n button.removeEventListener('click', handleClick);",
+    "useCases": [
+      "清理不再需要的事件监听器",
+      "防止内存泄漏",
+      "临时禁用事件处理",
+      "组件卸载时清理事件"
+    ],
+    "tags": ["事件", "清理", "内存管理"],
+    "details": [
+      {
+        "name": "removeEventListener()",
+        "description": "移除元素上使用addEventListener()添加的事件监听器",
+        "parameters": [
+          { "name": "type", "type": "string", "description": "事件类型" },
+          { "name": "listener", "type": "Function", "description": "要移除的事件处理函数" },
+          { "name": "options", "type": "Object | boolean", "description": "添加监听器时使用的选项" }
+        ]
+      }
+    ]
+  }
+]

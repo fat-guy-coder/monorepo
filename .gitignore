@@ -10,8 +10,10 @@ lerna-debug.log*
 node_modules/
 apps/myvue/node_modules/
 apps/myvue/cypress/
+apps/myvue/src/menu/subMenu/
 apps/svelte/node_modules/
 apps/express/node_modules/
+apps/express/dist/
 static/
 .DS_Store
 coverage/

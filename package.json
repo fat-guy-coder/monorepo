@@ -1,0 +1,52 @@
+{
+  "name": "json",
+  "version": "1.0.0",
+  "description": "我的项目啊",
+  "main": "main.js",
+  "type": "module",
+  "devDependencies": {
+    "@types/node": "^22.13.4",
+    "chalk": "^5.4.1",
+    "commander": "^14.0.0",
+    "husky": "^9.1.7",
+    "inquirer": "^12.9.0",
+    "ora": "^8.2.0",
+    "turbo": "^2.5.5",
+    "vite": "^7.0.6",
+    "vite-plugin-compression2": "^2.2.0"
+  },
+  "bin": {
+    "gen": "./bin/cli.js"
+  },
+  "scripts": {
+    "test": "test",
+    "build": "pnpm -r run build",
+    "turbo": "turbo -r run build",
+    "turbo:graph": "pnpm dlx turbo run build --graph",
+    "turbo:dry": "pnpm dlx turbo run build --dry=json",
+    "turbo:clear": "pnpm dlx turbo prune",
+    "dev": "pnpm -r run dev",
+    "turbo:myvue": "turbo -F myvue run build ",
+    "vite:myvue": "pnpm -F myvue build --config  vite.config.ts",
+    "hello": "pnpm -F myvue hello",
+    "myvue": "pnpm -F myvue run dev",
+    "g": "pnpm -F myvue generate",
+    "svelte": "pnpm -F svelte dev",
+    "build:svelte": "pnpm -F svelte build",
+    "preview:svelte": "pnpm -F svelte preview",
+    "build:express": "pnpm -F express run build-only",
+    "turbo:express": "turbo -F express run build-only",
+    "express": "pnpm -F express run dev"
+  },
+  "keywords": [
+    "前端学习网站",
+    "视效介绍网站"
+  ],
+  "author": "嗨嗨嗨",
+  "license": "ISC",
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
+  }
+}

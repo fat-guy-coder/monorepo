@@ -1,0 +1,4760 @@
+[
+  {
+    "label": "🎯 基础核心能力 ⭐⭐⭐",
+    "name": "CoreSkills",
+    "children": [
+      {
+        "label": "🌐 HTML & CSS ⭐⭐⭐",
+        "name": "HTML_CSS",
+        "children": [
+          {
+            "label": "📄 HTML ⭐⭐⭐",
+            "name": "HTML",
+            "children": [
+              {
+                "label": "❓ 什么是HTML ⭐⭐⭐",
+                "name": "WhatIsHtml"
+              },
+              {
+                "label": "🏷️ 常用标签 ⭐⭐⭐",
+                "name": "CommonUseTags"
+              },
+              {
+                "label": "📋 DOCTYPE ⭐⭐⭐",
+                "name": "DOCTYPE"
+              },
+              {
+                "label": "📝 Meta与Title ⭐⭐⭐",
+                "name": "MetaAndTitle"
+              },
+              {
+                "label": "🔗 href与src的区别 ⭐⭐⭐",
+                "name": "HrefAndSrc"
+              },
+              {
+                "label": "🖼️ 图片加载 ⭐⭐⭐",
+                "name": "ImageLoad"
+              },
+              {
+                "label": "📊 图片格式 ⭐⭐⭐",
+                "name": "ImageFormat"
+              },
+              {
+                "label": "🎥 视频格式 ⭐⭐",
+                "name": "VideoFormat"
+              },
+              {
+                "label": "🖼️ iframe ⭐⭐",
+                "name": "Iframe"
+              },
+              {
+                "label": "🔄 link标签 ⭐⭐⭐",
+                "name": "LinkTag"
+              }
+            ]
+          },
+          {
+            "label": "🎨 CSS ⭐⭐⭐",
+            "name": "CSS",
+            "children": [
+              {
+                "label": "📘 什么是css ⭐⭐⭐",
+                "name": "CSSProfile"
+              },
+              {
+                "label": "🎯 css选择器 ⭐⭐⭐",
+                "name": "CSSSelectors"
+              },
+              {
+                "label": "📏 css单位 ⭐⭐⭐",
+                "name": "CSSUnits"
+              },
+              {
+                "label": "🔲 css像素 ⭐⭐⭐",
+                "name": "CSSPX"
+              },
+              {
+                "label": "🌈 css颜色 ⭐⭐⭐",
+                "name": "CSSColors"
+              },
+              {
+                "label": "⚙️ css常用基础属性 ⭐⭐⭐",
+                "name": "CSSBasicAttibutes",
+                "children": [
+                  {
+                    "label": "↔️ 间距(margin) ⭐⭐⭐",
+                    "name": "Margin"
+                  },
+                  {
+                    "label": "↕️ 内边距(padding) ⭐⭐⭐",
+                    "name": "Padding"
+                  },
+                  {
+                    "label": "🔲 边框(border) ⭐⭐⭐",
+                    "name": "Border"
+                  },
+                  {
+                    "label": "🔤 字体相关(font) ⭐⭐⭐",
+                    "name": "Font"
+                  },
+                  {
+                    "label": "🖼️ 背景相关(background) ⭐⭐⭐",
+                    "name": "Background"
+                  },
+                  {
+                    "label": "📝 文本相关(text) ⭐⭐⭐",
+                    "name": "Text"
+                  },
+                  {
+                    "label": "💧 透明度(opacity) ⭐⭐⭐",
+                    "name": "Opacity"
+                  },
+                  {
+                    "label": "📦 溢出(overflow) ⭐⭐⭐",
+                    "name": "Overflow"
+                  },
+                  {
+                    "label": "📋 列表(list-style) ⭐⭐⭐",
+                    "name": "ListStyle"
+                  },
+                  {
+                    "label": "👆 光标(cursor) ⭐⭐⭐",
+                    "name": "Cursor"
+                  },
+                  {
+                    "label": "⭕ 轮廓(outline) ⭐⭐⭐",
+                    "name": "Outline"
+                  }
+                ]
+              },
+              {
+                "label": "📐 css布局 ⭐⭐⭐",
+                "name": "CSSLayout",
+                "children": [
+                  {
+                    "label": "📦 介绍BFC,IFC,GFC,FFC,IFC ⭐⭐",
+                    "name": "BFC_IFC"
+                  },
+                  {
+                    "label": "🔢 display属性 ⭐⭐⭐",
+                    "name": "DisplayProperty"
+                  },
+                  {
+                    "label": "📦 css盒模型 ⭐⭐⭐",
+                    "name": "CSSBoxModel"
+                  },
+                  {
+                    "label": "📍 css定位 ⭐⭐⭐",
+                    "name": "CSSPositioning"
+                  },
+                  {
+                    "label": "🌊 css浮动 ⭐⭐⭐",
+                    "name": "CSSFloat"
+                  },
+                  {
+                    "label": "📚 css层叠上下文(z-index) ⭐⭐⭐",
+                    "name": "CSSZIndex"
+                  },
+                  {
+                    "label": "↔️ 居中 ⭐⭐⭐",
+                    "name": "CSSCenter"
+                  },
+                  {
+                    "label": "🏗️ 两栏布局和三栏布局 ⭐⭐⭐",
+                    "name": "TwoColumnAndThreeColumnLayout"
+                  }
+                ]
+              },
+              {
+                "label": "🙈 css隐藏元素方法 ⭐⭐⭐",
+                "name": "CSSHideElements"
+              },
+              {
+                "label": "📜 cssAt规则 ⭐⭐",
+                "name": "CSSAtRules"
+              },
+              {
+                "label": "🛠️ css处理器 ⭐⭐",
+                "name": "CSSPreprocessors"
+              },
+              {
+                "label": "🏷️ css命名规范 ⭐⭐",
+                "name": "CSSNaming"
+              },
+              {
+                "label": "⚡ css性能优化 ⭐⭐",
+                "name": "CSSPerformance"
+              },
+              {
+                "label": "🧰 css工具 ⭐",
+                "name": "CSSTools"
+              },
+              {
+                "label": "🧰 css动画库 ⭐⭐",
+                "name": "CSSAnimationLibrary"
+              },
+              {
+                "label": "🔍 css原子化 ⭐⭐",
+                "name": "CSSAtomic",
+                "children": [
+                  {
+                    "label": "🔍 css原子化介绍 ⭐⭐",
+                    "name": "CSSAtomicIntroduce"
+                  },
+                  {
+                    "label": "🔍 Tailwind CSS ⭐⭐",
+                    "name": "TailwindCSS"
+                  }
+                ]
+              },
+              {
+                "label": "🔮 纯CSS实现效果 ⭐",
+                "name": "PureCSSEffects",
+                "children": [
+                  {
+                    "label": "🧩 基础实现 ⭐",
+                    "name": "BasicImplementation"
+                  },
+                  {
+                    "label": "⏳ loading效果 ⭐",
+                    "name": "LoadingEffect"
+                  },
+                  {
+                    "label": "🌊 波浪 🌟",
+                    "name": "Wave"
+                  },
+                  {
+                    "label": "🔄 视差滚动 ⭐",
+                    "name": "ParallaxScrolling"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "label": "✨ CSS3 ⭐⭐⭐",
+            "name": "CSS3",
+            "children": [
+              {
+                "label": "📏 Flexbox ⭐⭐⭐",
+                "name": "Flexbox"
+              },
+              {
+                "label": "🔲 Grid ⭐⭐⭐",
+                "name": "Grid"
+              },
+              {
+                "label": "📚 多列布局(Multi-column Layout) ⭐⭐",
+                "name": "MultiColumnLayout"
+              },
+              {
+                "label": "📱 媒体查询 ⭐⭐⭐",
+                "name": "MediaQueries"
+              },
+              {
+                "label": "⏱️ 过渡(Transition) ⭐⭐⭐",
+                "name": "Transition"
+              },
+              {
+                "label": "🎬 动画(Animation) ⭐⭐⭐",
+                "name": "Animation"
+              },
+              {
+                "label": "🔄 变换(Transform) ⭐⭐⭐",
+                "name": "Transform"
+              },
+              {
+                "label": "➗ CSS函数 ⭐⭐⭐",
+                "name": "CSSFunctions"
+              },
+              {
+                "label": "🌈 渐变(gradient) ⭐⭐⭐",
+                "name": "Gradient"
+              },
+              {
+                "label": "🌈 重复渐变(repeating-gradient) ⭐⭐⭐",
+                "name": "RepeatingGradient"
+              },
+              {
+                "label": "🔍 滤镜(Filter) ⭐⭐",
+                "name": "Filter"
+              },
+              {
+                "label": "🌟 阴影(Box Shadow、Text Shadow) ⭐⭐⭐",
+                "name": "BoxShadow"
+              },
+              {
+                "label": "⭕ 边框圆角(Border-radius) ⭐⭐⭐",
+                "name": "BorderRadius"
+              },
+              {
+                "label": "🖼️ 边框图片(border-image) ⭐⭐",
+                "name": "BordersImage"
+              },
+              {
+                "label": "✂️ 剪裁(Clip Path) ⭐⭐",
+                "name": "ClipPath"
+              },
+              {
+                "label": "🎭 混合模式(Blend Modes) ⭐",
+                "name": "BlendModes"
+              },
+              {
+                "label": "🎭 mask-image ⭐⭐⭐",
+                "name": "MaskImage"
+              },
+              {
+                "label": "📐 对象适应和对象位置(Object Fit & Object Position) ⭐⭐",
+                "name": "ObjectFit"
+              },
+              {
+                "label": "🔷 形状(Shapes) ⭐",
+                "name": "Shapes"
+              },
+              {
+                "label": "📜 滚动捕捉(Scroll Snap) ⭐",
+                "name": "ScrollSnap"
+              },
+              {
+                "label": "📦 容器查询(Container Queries) 🌟",
+                "name": "ContainerQueries"
+              },
+              {
+                "label": "📏 宽高比(Aspect Ratio) ⭐⭐",
+                "name": "AspectRatio"
+              },
+              {
+                "label": "📦 contain(独立渲染) ⭐",
+                "name": "Contain"
+              },
+              {
+                "label": "👁️ content-visibility 🌟",
+                "name": "ContentVisibility"
+              },
+              {
+                "label": "🔮 will-change(将要改变的属性) ⭐",
+                "name": "WillChange"
+              },
+              {
+                "label": "🛤️ 路径动画(animateMotion) 🌟",
+                "name": "AnimateMotion"
+              },
+              {
+                "label": "🔧 自定义属性@property 🌟",
+                "name": "CustomProperty"
+              },
+              {
+                "label": "🎨 相对色系(relative-color-scheme) 🌟",
+                "name": "RelativeColorScheme"
+              },
+              {
+                "label": "📜 Scroll-Linked Animations 🌟",
+                "name": "ScrollLinkedAnimations"
+              },
+              {
+                "label": "📚 CSS Nesting 🌟",
+                "name": "CSSNesting"
+              }
+            ]
+          },
+          {
+            "label": "🚀 HTML5 ⭐⭐⭐",
+            "name": "HTML5",
+            "children": [
+              {
+                "label": "🏛️ 语义化标签 ⭐⭐⭐",
+                "name": "SemanticTags"
+              },
+              {
+                "label": "📝 表单元素 ⭐⭐⭐",
+                "name": "FormElements"
+              },
+              {
+                "label": "🎨 Canvas ⭐⭐",
+                "name": "Canvas"
+              },
+              {
+                "label": "📐 SVG ⭐⭐",
+                "name": "SVG"
+              },
+              {
+                "label": "🎵 音视频 ⭐⭐",
+                "name": "AudioVideo"
+              },
+              {
+                "label": "📍 地理定位 ⭐",
+                "name": "Geolocation"
+              },
+              {
+                "label": "🤚 拖放 ⭐⭐",
+                "name": "DragDrop"
+              },
+              {
+                "label": "👷 Web Worker ⭐⭐",
+                "name": "WebWorker"
+              },
+              {
+                "label": "🔄 sharedWorker ⭐⭐⭐",
+                "name": "SharedWorker"
+              },
+              {
+                "label": "🔄 BroadcastChannel ⭐⭐⭐",
+                "name": "BroadcastChannel"
+              },
+              {
+                "label": "💾 Web Storage ⭐⭐⭐",
+                "name": "WebStorage"
+              },
+              {
+                "label": "🗄️ IndexDB ⭐⭐⭐",
+                "name": "IndexDB"
+              },
+              {
+                "label": "🔌 Web Socket ⭐⭐",
+                "name": "WebSocket"
+              },
+              {
+                "label": "⏳ lazyload ⭐⭐⭐",
+                "name": "LazyLoad"
+              },
+              {
+                "label": "🔍 SEO：title、meta、语义化标签 ⭐⭐⭐",
+                "name": "SEO"
+              },
+              {
+                "label": "📱 移动端适配：viewport、rem ⭐⭐⭐",
+                "name": "MobileAdaptation"
+              },
+              {
+                "label": "🎨 画中画浮窗(Doc PiP) 🌟",
+                "name": "PictureInPicture"
+              },
+              {
+                "label": "🔢 更强大的file API 🌟",
+                "name": "FileAPI"
+              },
+              {
+                "label": "🎨 取色器(Eye Dropper) 🌟",
+                "name": "EyeDropper"
+              },
+              {
+                "label": "🎨 蓝牙 Web Bluetooth 🌟",
+                "name": "WebBluetooth"
+              },
+              {
+                "label": "🎨 近场通信 Web NFC 🌟",
+                "name": "WebNFC"
+              },
+              {
+                "label": "🎨 加密 WebCrypto APIs 🌟",
+                "name": "WebCryptoAPIs"
+              },
+              {
+                "label": "🎨 生物识别 WebAuthn 🌟",
+                "name": "WebAuthn"
+              }
+            ]
+          },
+          {
+            "label": "📋 HTML(5)知识点 ⭐⭐⭐",
+            "name": "HtmlKnowledgepPoints"
+          },
+          {
+            "label": "📋 CSS知识点 ⭐⭐⭐",
+            "name": "CssKnowledgepPoints"
+          }
+        ]
+      },
+      {
+        "label": "📜 JavaScript ⭐⭐⭐",
+        "name": "JavaScript",
+        "children": [
+          {
+            "label": "📚 基础 ⭐⭐⭐",
+            "name": "Basics",
+            "children": [
+              {
+                "label": "❓ 什么是JS ⭐⭐⭐",
+                "name": "WhatIsJS"
+              },
+              {
+                "label": "🔍 JS的加载方式具体对比 ⭐⭐⭐",
+                "name": "JSLoad"
+              },
+              {
+                "label": "📦 变量：var、let、const ⭐⭐⭐",
+                "name": "Variables"
+              },
+              {
+                "label": "🔢 数据类型 ⭐⭐⭐",
+                "name": "DataTypes",
+                "children": [
+                  {
+                    "label": "🔠 基本数据类型 ⭐⭐⭐",
+                    "name": "PrimitiveTypes"
+                  },
+                  {
+                    "label": "🔢 浮点数精度问题与解决方案 ⭐⭐⭐",
+                    "name": "FloatingPointPrecisionAndSolution"
+                  },
+                  {
+                    "label": "📦 引用数据类型 ⭐⭐⭐",
+                    "name": "ReferenceTypes",
+                    "children": [
+                      {
+                        "label": "📝 引用数据介绍 ⭐⭐⭐",
+                        "name": "ReferenceTypesIntroduce"
+                      },
+                      {
+                        "label": "🧩 Object ⭐⭐⭐",
+                        "name": "Object1"
+                      },
+                      {
+                        "label": "🧩 创建对象的几种方式 ⭐⭐⭐",
+                        "name": "CreateObject"
+                      },
+                      {
+                        "label": "🏛️ 面向对象编程 ⭐⭐⭐",
+                        "name": "FaceObjectProgramming"
+                      },
+                      {
+                        "label": "🔍 对象描述符 ⭐⭐⭐",
+                        "name": "ObjectDescriptor"
+                      },
+                      {
+                        "label": "📊 Array ⭐⭐⭐",
+                        "name": "Array1"
+                      },
+                      {
+                        "label": "🔧 Function ⭐⭐⭐",
+                        "name": "Function",
+                        "redirect": {
+                          "name": "Functions"
+                        }
+                      },
+                      {
+                        "label": "📅 Date ⭐⭐⭐",
+                        "name": "Date1"
+                      },
+                      {
+                        "label": "🔍 RegExp ⭐⭐⭐",
+                        "name": "RegExp1"
+                      }
+                    ]
+                  },
+                  {
+                    "label": "📝 深拷贝与浅拷贝 ⭐⭐⭐",
+                    "name": "DeepCopyShallowCopy"
+                  },
+                  {
+                    "label": "⚠️ 特殊数据类型：NaN、Infinity、-Infinity ⭐⭐",
+                    "name": "SpecialDataTypes"
+                  },
+                  {
+                    "label": "🔎 数据类型判断 ⭐⭐⭐",
+                    "name": "TypeChecking"
+                  },
+                  {
+                    "label": "🔄 类型转换：隐式转换、显式转换 ⭐⭐⭐",
+                    "name": "TypeConversion"
+                  },
+                  {
+                    "label": "⚖️ 类型比较：== vs === ⭐⭐⭐",
+                    "name": "TypeComparison"
+                  },
+                  {
+                    "label": "🔬 类型检测：isNaN、isFinite、Number.isNaN、Number.isFinite ⭐⭐",
+                    "name": "TypeDetection"
+                  }
+                ]
+              },
+              {
+                "label": "➕ 运算符 ⭐⭐⭐",
+                "name": "Operators"
+              },
+              {
+                "label": "🔢 运算符优先级和运算符进阶使用 ⭐⭐⭐",
+                "name": "OperatorPriorityAndAdvancedUsage"
+              },
+              {
+                "label": "🔢 位运算 ⭐",
+                "name": "BitwiseOperators"
+              },
+              {
+                "label": "🔀 流程控制：if、switch、for、while ⭐⭐⭐",
+                "name": "FlowControl"
+              },
+              {
+                "label": "🔄 迭代和循环(iteration) ⭐⭐⭐",
+                "name": "Iteration"
+              },
+              {
+                "label": "📜 迭代器与协议 ⭐⭐",
+                "name": "IteratorAndProtocol"
+              },
+              {
+                "label": "⚙️ 生成器与协程 ⭐⭐",
+                "name": "GeneratorAndCoroutine"
+              },
+              {
+                "label": "🔗 函数式编程 ⭐⭐⭐",
+                "name": "FunctionProgramming",
+                "children": [
+                  {
+                    "label": "📜 函数式编程介绍 ⭐⭐⭐",
+                    "name": "FunctionProgrammingIntroduce"
+                  },
+                  {
+                    "label": "🔧 函数：声明、表达式、箭头函数 ⭐⭐⭐",
+                    "name": "Functions"
+                  },
+                  {
+                    "label": "🔧 参数默认值、rest参数、arguments对象,形参和实参 ⭐⭐⭐",
+                    "name": "DefaultAndRestParameters"
+                  },
+                  {
+                    "label": "🌿 纯函数与偏函数 ⭐⭐⭐",
+                    "name": "PureFunction"
+                  },
+                  {
+                    "label": "🍛 柯里化 ⭐⭐⭐",
+                    "name": "Currying"
+                  },
+                  {
+                    "label": "🧩 函数组合 ⭐⭐⭐",
+                    "name": "FunctionComposition"
+                  },
+                  {
+                    "label": "🚀 高阶函数 ⭐⭐⭐",
+                    "name": "HigherOrderFunction"
+                  }
+                ]
+              },
+              {
+                "label": "🔧 eval和with ⭐⭐⭐",
+                "name": "EvalAndWith"
+              },
+              {
+                "label": "🎯 作用域：全局作用域、函数作用域、块级作用域、作用域链 ⭐⭐⭐",
+                "name": "Scope"
+              },
+              {
+                "label": "👉 this 指向 ⭐⭐⭐",
+                "name": "ThisBinding"
+              },
+              {
+                "label": "🔒 闭包：定义、作用 ⭐⭐⭐",
+                "name": "Closure"
+              },
+              {
+                "label": "🔗 原型：原型链、继承 ⭐⭐⭐",
+                "name": "Prototype1"
+              },
+              {
+                "label": "🌐 BOM(浏览器对象模型) ⭐⭐⭐",
+                "name": "BOM",
+                "children": [
+                  {
+                    "label": "🔄 window、navigator、screen常用方法和属性 ⭐⭐⭐",
+                    "name": "WindowNavigatorScreenCommonMethodsAndAttributes"
+                  },
+                  {
+                    "label": "🔄 window常用方法和属性 ⭐⭐⭐",
+                    "name": "WindowCommonMethodsAndAttributes"
+                  },
+                  {
+                    "label": "🔄 window类接口 ⭐⭐⭐",
+                    "name": "WindowClassInterface"
+                  },
+                  {
+                    "label": "🔄 js获取设备信息 ⭐⭐⭐",
+                    "name": "GetDeviceInformation"
+                  }
+                ]
+              },
+              {
+                "label": "🌳 DOM(文档对象模型) ⭐⭐⭐",
+                "name": "DOM",
+                "children": [
+                  {
+                    "label": "🔄 DOM增删改查 ⭐⭐⭐",
+                    "name": "DOMAddDeleteModifyQuery"
+                  },
+                  {
+                    "label": "🔄 元素位置与尺寸 ⭐⭐⭐",
+                    "name": "ElementPositionAndSize"
+                  },
+                  {
+                    "label": "🔄 元素常用方法 ⭐⭐⭐",
+                    "name": "ElementCommonMethods"
+                  }
+                ]
+              },
+              {
+                "label": "📢 事件：事件绑定、事件冒泡、事件代理 ⭐⭐⭐",
+                "name": "Events"
+              },
+              {
+                "label": "📢 加载事件 ⭐⭐⭐",
+                "name": "LoadEvent"
+              },
+              {
+                "label": "📢 常用事件 ⭐⭐⭐",
+                "name": "CommonEvents",
+                "children": [
+                  {
+                    "label": "📢 常用事件列表 ⭐⭐⭐",
+                    "name": "CommonEventsList"
+                  },
+                  {
+                    "label": "📢 scroll ⭐⭐⭐",
+                    "name": "ScrollEvent"
+                  },
+                  {
+                    "label": "📢 resize ⭐⭐⭐",
+                    "name": "ResizeEvent"
+                  },
+                  {
+                    "label": "📢 mouse相关 ⭐⭐⭐",
+                    "name": "MouseMoveEvent"
+                  },
+                  {
+                    "label": "📢 touch ⭐⭐⭐",
+                    "name": "TouchEvent"
+                  }
+                ]
+              },
+              {
+                "label": "💡 自定义事件 ⭐⭐⭐",
+                "name": "CustomEvent"
+              },
+              {
+                "label": "⏳ 异步编程：Event Loop(事件循环) ⭐⭐⭐",
+                "name": "AsyncProgramming"
+              },
+              {
+                "label": "⚙️ JS的解析与编译与执行 ⭐⭐⭐",
+                "name": "JSPAndCAndE"
+              },
+              {
+                "label": "⚠️ 错误处理机制 ⭐⭐",
+                "name": "ErrorHandling"
+              },
+              {
+                "label": "📜 use strict ⭐⭐⭐",
+                "name": "UseStrict"
+              },
+              {
+                "label": "🚫 保留关键字 ⭐⭐⭐",
+                "name": "ReservedKeywords"
+              }
+            ]
+          },
+          {
+            "label": "📈 ES+ ⭐⭐⭐",
+            "name": "ES",
+            "children": [
+              {
+                "label": "📜 ES+概览 ⭐⭐⭐",
+                "name": "ES+Overview"
+              },
+              {
+                "label": "📦 let-const(变量声明) ⭐⭐⭐",
+                "name": "LetConst"
+              },
+              {
+                "label": "🔗 解构赋值(Destructuring Assignment) ⭐⭐⭐",
+                "name": "Destructuring"
+              },
+              {
+                "label": "➡️ 箭头函数(Arrow Function) ⭐⭐⭐",
+                "name": "ArrowFunction"
+              },
+              {
+                "label": "📜 严格模式 ⭐⭐",
+                "name": "StrictMode"
+              },
+              {
+                "label": "📊 Array(数组) ⭐⭐⭐",
+                "name": "Array"
+              },
+              {
+                "label": "🧩 Object(对象) ⭐⭐⭐",
+                "name": "Object2"
+              },
+
+              {
+                "label": "📝 String(字符串) ⭐⭐⭐",
+                "name": "String"
+              },
+              {
+                "label": "📝 模板字符串 ⭐⭐⭐",
+                "name": "TemplateString"
+              },
+              {
+                "label": "🔍 RegExp(正则表达式) ⭐⭐⭐",
+                "name": "RegExp"
+              },
+              {
+                "label": "🔎 MatchAll and ReplaceAll(字符串匹配全部和替换全部) ⭐⭐⭐",
+                "name": "StringMatchAllAndReplaceAll"
+              },
+              {
+                "label": "📋 JSON(JavaScript 对象表示法) ⭐⭐⭐",
+                "name": "JSON"
+              },
+              {
+                "label": "🔢 Number(数字) ⭐⭐⭐",
+                "name": "Number"
+              },
+              {
+                "label": "🔢 Numeric Separators(数字分隔符) ⭐⭐⭐",
+                "name": "NumericSeparators"
+              },
+              {
+                "label": "💯 BigInt(大整数) ⭐⭐⭐",
+                "name": "BigInt"
+              },
+              {
+                "label": "📐 Math(数学) ⭐⭐",
+                "name": "Math"
+              },
+              {
+                "label": "📅 Date(日期) ⭐⭐",
+                "name": "Date"
+              },
+              {
+                "label": "🏛️ Class(类) ⭐⭐⭐",
+                "name": "Class"
+              },
+              {
+                "label": "🔒 Private Class Fields(私有类字段) ⭐⭐",
+                "name": "PrivateClassFields"
+              },
+              {
+                "label": "🔖 Symbol(符号) ⭐⭐⭐",
+                "name": "Symbol"
+              },
+              {
+                "label": "🤝 Promise(承诺) ⭐⭐⭐",
+                "name": "Promise"
+              },
+              {
+                "label": "🔍 Promise进阶 ⭐⭐⭐",
+                "name": "PromiseAdvanced"
+              },
+              {
+                "label": "⚙️ Generator(生成器) ⭐⭐",
+                "name": "Generator"
+              },
+              {
+                "label": "📜 Iterator(迭代器) ⭐⭐",
+                "name": "Iterator1"
+              },
+              {
+                "label": "🔍 异步迭代器 ⭐⭐⭐",
+                "name": "AsyncIterator"
+              },
+              {
+                "label": "⏳ async-await(异步-等待) ⭐⭐⭐",
+                "name": "AsyncAwait"
+              },
+              {
+                "label": "⏳ Top-level await(顶层 await) ⭐⭐",
+                "name": "TopLevelAwait"
+              },
+              {
+                "label": "📦 Modules(模块化) ⭐⭐⭐",
+                "name": "Modules"
+              },
+              {
+                "label": "📥 Dynamic Import(动态导入) ⭐⭐⭐",
+                "name": "DynamicImport"
+              },
+              {
+                "label": "🏷️ Import Attributes(导入属性) ⭐⭐",
+                "name": "ImportAttributes"
+              },
+              {
+                "label": "🛡️ Proxy(代理) ⭐⭐⭐",
+                "name": "Proxy2"
+              },
+              {
+                "label": "🔍 Reflect(反射) ⭐⭐",
+                "name": "Reflect"
+              },
+              {
+                "label": "🗺️ Set-Map(集合-映射) ⭐⭐⭐",
+                "name": "SetMap"
+              },
+              {
+                "label": "🔗 WeakRef(弱引用) ⭐",
+                "name": "WeakRef"
+              },
+              {
+                "label": "🎨 Decorator(装饰器) ⭐",
+                "name": "Decorator1"
+              },
+              {
+                "label": "🔢 ArrayBuffer(二进制数组) ⭐⭐",
+                "name": "BinaryArray"
+              },
+              {
+                "label": "🔢 Atomics(原子操作) ⭐⭐",
+                "name": "Atomics"
+              },
+              {
+                "label": "⚡ 可选catch ⭐⭐⭐",
+                "name": "OptionalCatch"
+              },
+              {
+                "label": "⛓️ Optional Chaining(可选链) ⭐⭐⭐",
+                "name": "OptionalChaining"
+              },
+              {
+                "label": "❓ Nullish Coalescing(空值合并) ⭐⭐⭐",
+                "name": "NullishCoalescing"
+              },
+              {
+                "label": "➕ Logical Assignment Operators(逻辑赋值运算符) ⭐⭐⭐",
+                "name": "LogicalAssignment"
+              },
+              {
+                "label": "🔍 hashbang(hashbang) ⭐⭐",
+                "name": "Hashbang"
+              },
+              {
+                "label": "⏰ Temporal(时间日期) 🌟",
+                "name": "Temporal"
+              },
+              {
+                "label": "📑 Record & Tuple 🌟",
+                "name": "RecordAndTuple"
+              },
+              {
+                "label": "➡️ Pipeline Operator(管道运算符) 🌟",
+                "name": "PipelineOperator"
+              }
+            ]
+          },
+          {
+            "label": "💡 JS小技巧 ⭐⭐⭐",
+            "name": "JSSmallTips"
+          },
+          {
+            "label": "🔧 JS技巧 ⭐⭐",
+            "name": "JSTips",
+            "children": [
+              {
+                "label": "🎬 requestAnimationFrame(制作动画) ⭐⭐",
+                "name": "RequestAnimationFrame"
+              },
+              {
+                "label": "👷 利用requestIdleCallback实现时间切片 ⭐⭐",
+                "name": "RequestIdleCallbackTimeSlice"
+              },
+              {
+                "label": "📊 performance(监控性能) ⭐⭐",
+                "name": "PerformanceTuning"
+              },
+              {
+                "label": "👁️ IntersectionObserver(视口监听) ⭐⭐",
+                "name": "IntersectionObserverApi"
+              },
+              {
+                "label": "🔄 MutationObserver(元素变化监听) ⭐⭐",
+                "name": "MutationObserverApi"
+              },
+              {
+                "label": "🔄 ResizeObserver(视口尺寸变化监听) ⭐",
+                "name": "ResizeObserverApi"
+              }
+            ]
+          },
+
+          {
+            "label": "🗑️ 垃圾回收 ⭐⭐",
+            "name": "GarbageCollection",
+            "children": [
+              {
+                "label": "🗑️ 垃圾回收算法 ⭐⭐",
+                "name": "GarbageCollectionAlgorithm"
+              },
+              {
+                "label": "🗑️ 内存泄漏 ⭐⭐",
+                "name": "MemoryLeak"
+              },
+              {
+                "label": "🗑️ 内存管理 ⭐⭐",
+                "name": "MemoryManagement1"
+              }
+            ]
+          },
+          {
+            "label": "📦 模块化 ⭐⭐⭐",
+            "name": "Modularization",
+            "children": [
+              {
+                "label": "🔄 模块化概览 ⭐⭐⭐",
+                "name": "ModularizationOverview"
+              },
+              {
+                "label": "🔄 ES Module ⭐⭐⭐",
+                "name": "ESModule"
+              },
+              {
+                "label": "🔄 ES Module加载原理 ⭐⭐⭐",
+                "name": "ESModuleLoadingPrinciple"
+              },
+              {
+                "label": "🔄 CommonJS ⭐⭐⭐",
+                "name": "CommonJS"
+              },
+              {
+                "label": "🔄 关于模块加载引用类型 ⭐⭐⭐",
+                "name": "ModuleLoadingReferenceType"
+              },
+              {
+                "label": "🔄 AMD-CMD ⭐⭐⭐",
+                "name": "AMD-CMD"
+              },
+              {
+                "label": "🔄 UMD ⭐⭐⭐",
+                "name": "UMD"
+              },
+              {
+                "label": "🔄 bundleless ⭐⭐⭐",
+                "name": "bundleless"
+              }
+            ]
+          },
+          {
+            "label": "🌊 前端数据流格式 ⭐⭐",
+            "name": "FrontendDataStreamFormat",
+            "children": [
+              {
+                "label": "🔄 数据流格式概览 ⭐⭐⭐",
+                "name": "DataStreamFormatOverview"
+              },
+              {
+                "label": "🔄 blob ⭐⭐⭐",
+                "name": "Blob"
+              },
+              {
+                "label": "🔄 file ⭐⭐⭐",
+                "name": "File"
+              },
+              {
+                "label": "🔄 dataURL ⭐⭐⭐",
+                "name": "DataURL"
+              },
+              {
+                "label": "🔄 canvas数据格式 ⭐⭐⭐",
+                "name": "CanvasDataFormat"
+              },
+              {
+                "label": "🔄 arrayBuffer ⭐⭐⭐",
+                "name": "ArrayBufferDataFormat",
+                "redirect": {
+                  "name": "BinaryArray"
+                }
+              },
+              {
+                "label": "🔄 MIME类型 ⭐⭐⭐",
+                "name": "MIMEType"
+              }
+            ]
+          },
+          {
+            "label": "✍️ 手写代码 ⭐⭐⭐",
+            "name": "HandwrittenCode",
+            "children": [
+              {
+                "label": "🔧 原生方法实现 ⭐⭐⭐",
+                "name": "NativeMethodsImplementation",
+                "children": [
+                  {
+                    "label": "🔄 实现原生方法列表 ⭐⭐⭐",
+                    "name": "NativeMethodsList"
+                  },
+                  {
+                    "label": "📝 深拷贝(Deep Copy) ⭐⭐⭐",
+                    "name": "DeepCopy"
+                  },
+                  {
+                    "label": "🔨 实现new操作符(new) ⭐⭐⭐",
+                    "name": "AchieveNew"
+                  },
+                  {
+                    "label": "➡️ 实现箭头函数 ⭐⭐⭐",
+                    "name": "AchieveArrowFunction"
+                  },
+                  {
+                    "label": "🔍 实现instanceof ⭐⭐⭐",
+                    "name": "AchieveInstanceof"
+                  },
+                  {
+                    "label": "📊 实现数组原生方法 ⭐⭐⭐",
+                    "name": "AchieveArrayMethods"
+                  },
+                  {
+                    "label": "📞 call,apply,bind实现 ⭐⭐⭐",
+                    "name": "CallAndApplyAndBind"
+                  },
+                  {
+                    "label": "🔄 模板字符串实现 ⭐⭐⭐",
+                    "name": "TemplateStringImplementation"
+                  },
+                  {
+                    "label": "🤝 Promise 实现 ⭐⭐",
+                    "name": "PromiseImplementation"
+                  }
+                ]
+              },
+              {
+                "label": "⚙️ 功能实现 ⭐⭐⭐",
+                "name": "FunImplementation",
+                "children": [
+                  {
+                    "label": "🔄 判断空对象 ⭐⭐⭐",
+                    "name": "JudgeEmptyObject"
+                  },
+                  {
+                    "label": "⏳ 防抖节流(Debounce/Throttle) ⭐⭐⭐",
+                    "name": "DebounceThrottle"
+                  },
+                  {
+                    "label": "🔄 实现双向绑定 ⭐⭐",
+                    "name": "AchieveBidirectionalBind"
+                  },
+                  {
+                    "label": "🍛 实现柯里化 ⭐⭐",
+                    "name": "AchieveCurry"
+                  },
+                  {
+                    "label": "🧭 实现前端路由 ⭐⭐",
+                    "name": "AchieveFrontendRouter"
+                  }
+                ]
+              },
+              {
+                "label": "📐 设计模式实现 ⭐⭐",
+                "name": "DesignPatternImplementation",
+                "children": [
+                  {
+                    "label": "👤 单例模式实现 ⭐⭐",
+                    "name": "SingletonPattern"
+                  },
+                  {
+                    "label": "👁️ 观察者模式实现 ⭐⭐",
+                    "name": "ObserverPattern"
+                  },
+                  {
+                    "label": "📢 发布订阅模式实现 ⭐⭐",
+                    "name": "PublishSubscribe"
+                  },
+                  {
+                    "label": "🔄 工厂模式实现 ⭐⭐",
+                    "name": "FactoryPattern"
+                  },
+                  {
+                    "label": "🔄 代理模式实现 ⭐⭐",
+                    "name": "ProxyPattern"
+                  },
+                  {
+                    "label": "🔄 装饰器模式实现 ⭐⭐",
+                    "name": "DecoratorPattern"
+                  },
+                  {
+                    "label": "🔄 适配器模式实现 ⭐⭐",
+                    "name": "AdapterPattern"
+                  },
+                  {
+                    "label": "🔄 策略模式实现 ⭐⭐",
+                    "name": "StrategyPattern"
+                  }
+                ]
+              },
+              {
+                "label": "📊 数据相关 ⭐⭐⭐",
+                "name": "DataRelated",
+                "children": [
+                  {
+                    "label": "🔢 手写基础算法 ⭐⭐⭐",
+                    "name": "HandwrittenBasicAlgorithm",
+                    "children": [
+                      {
+                        "label": "🔢 排序算法实现 ⭐⭐",
+                        "name": "SortingAlgorithms",
+                        "redirect": { "name": "SortingAlgorithm" }
+                      },
+                      {
+                        "label": "🗑️ 数组去重 ⭐⭐⭐",
+                        "name": "Deduplication"
+                      },
+                      {
+                        "label": "🔄 链表反转(Reverse Linked List) ⭐⭐",
+                        "name": "ReverseLinkedList"
+                      },
+                      {
+                        "label": "🔄 反转字符串(Reverse String) ⭐⭐⭐",
+                        "name": "ReverseString"
+                      },
+                      {
+                        "label": "🥞 数组扁平化(Array Flattening) ⭐⭐⭐",
+                        "name": "ArrayFlattening"
+                      },
+                      {
+                        "label": "🔍 二分查找 ⭐⭐",
+                        "name": "BinarySearch"
+                      },
+                      {
+                        "label": "🔢 斐波那契数列 ⭐⭐",
+                        "name": "Fibonacci"
+                      }
+                    ]
+                  },
+                  {
+                    "label": "🔄 数据结构的实现(Data Structure Implementation) ⭐⭐",
+                    "name": "DataStructureImplementation",
+                    "children": [
+                      {
+                        "label": "📚 栈、队列、链表的实现(Stack, Queue, Linked List Implementation) ⭐⭐",
+                        "name": "StackImplementation"
+                      },
+                      {
+                        "label": "🔄 树的实现(Binary Tree Implementation) ⭐⭐",
+                        "name": "BinaryTreeImplementation"
+                      },
+                      {
+                        "label": "🔄 图的实现(Binary Tree Implementation) ⭐⭐",
+                        "name": "BinaryTreeImplementation"
+                      },
+                      {
+                        "label": "📚 哈希表的实现(Hash Table Implementation) ⭐⭐",
+                        "name": "HashTableImplementation"
+                      },
+                      {
+                        "label": "🔄 堆的实现(Heap Implementation) ⭐⭐",
+                        "name": "HeapImplementation"
+                      }
+                    ]
+                  },
+                  {
+                    "label": "✖️ 阶乘(Factorial) ⭐⭐",
+                    "name": "Factorial"
+                  },
+                  {
+                    "label": "➕ 求和(Sum)，求积(Product)，求差(Difference)，求交(Intersection)，求并(Union)，求补(Complement) ⭐⭐⭐",
+                    "name": "Sum"
+                  },
+                  {
+                    "label": "📈 求最大值(Max)，求最小值(Min)，求平均值(Average)，求中位数(Median)，求众数(Mode)，求方差(Variance)，求标准差(Standard Deviation) ⭐⭐⭐",
+                    "name": "Max"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "label": "📚 JS知识点 ⭐⭐⭐",
+            "name": "JSKnowledgepPoints"
+          },
+          {
+            "label": "📜 js代码规范 ⭐⭐⭐",
+            "name": "JSCodeSpecification"
+          },
+          {
+            "label": "💡 代码注释与说明 ⭐⭐⭐",
+            "name": "CodeCommentAndDescription"
+          },
+          {
+            "label": "🔄 js库 ⭐⭐⭐",
+            "name": "JSLibrary"
+          }
+        ]
+      },
+      {
+        "label": "🔵 TypeScript ⭐⭐⭐",
+        "name": "TypeScript",
+        "children": [
+          {
+            "label": "❓ 什么是TypeScript ⭐⭐⭐",
+            "name": "WhatIsTypeScript"
+          },
+          {
+            "label": "🏷️ 基础类型 ⭐⭐⭐",
+            "name": "BasicType"
+          },
+          {
+            "label": "🤝 interface与type ⭐⭐⭐",
+            "name": "InterfaceAndType"
+          },
+          {
+            "label": "📦 枚举和元组 ⭐⭐⭐",
+            "name": "EnumAndTuple"
+          },
+          {
+            "label": "🔒 可选属性和只读属性和可选参数和默认参数 ⭐⭐⭐",
+            "name": "OptionalPropertiesAndParametersAndReadonlyProperties"
+          },
+          {
+            "label": "🔧 函数类型 ⭐⭐⭐",
+            "name": "FunctionType"
+          },
+          {
+            "label": "🏛️ 类class ⭐⭐⭐",
+            "name": "ClassInterface"
+          },
+          {
+            "label": "🔄 泛型 ⭐⭐⭐",
+            "name": "Generic"
+          },
+          {
+            "label": "📈 高级类型 ⭐⭐⭐",
+            "name": "AdvancedType",
+            "children": [
+              {
+                "label": "🤝 交叉类型和联合类型 ⭐⭐⭐",
+                "name": "IntersectionTypeAndUnionType"
+              },
+              {
+                "label": "🏷️ 类型别名 ⭐⭐⭐",
+                "name": "TypeAlias"
+              },
+              {
+                "label": "🔍 类型断言和类型索引和确定赋值断言 ⭐⭐⭐",
+                "name": "TypeAssertionAndTypeIndex"
+              },
+              {
+                "label": "🗺️ 映射类型 与条件类型⭐⭐⭐",
+                "name": "MappedTypeAndConditionalType"
+              },
+              {
+                "label": "🔑 索引访问类型和动态扩展对象 ⭐⭐⭐",
+                "name": "IndexAccessTypeAndDynamicExtensionObject"
+              },
+              {
+                "label": "🗣️ 类型谓词 ⭐⭐⭐",
+                "name": "TypePredicate"
+              },
+              {
+                "label": "📚 函数重载和声明合并 ⭐⭐⭐",
+                "name": "FunctionOverloadingAndDeclarationMerging"
+              }
+            ]
+          },
+          {
+            "label": "🛠️ 内置的类型工具 ⭐⭐⭐",
+            "name": "BuiltInTypeTools"
+          },
+          {
+            "label": "🎨 TS装饰器 ⭐⭐",
+            "name": "TSDecorator"
+          },
+          {
+            "label": "🔄 TS的协变、逆变、双变和抗变 ⭐⭐",
+            "name": "TSVarianceAndContravarianceAndBivarianceAndInvariance"
+          },
+          {
+            "label": "⚙️ tsconfig ⭐⭐",
+            "name": "Tsconfig"
+          },
+          {
+            "label": "📦 模块与命名空间与三斜线指令 ⭐⭐",
+            "name": "ModuleAndNamespaceAndTripleSlashDirective"
+          },
+          {
+            "label": "📜 声明文件 ⭐⭐⭐",
+            "name": "DeclarationFile"
+          },
+          {
+            "label": "📜 TS代码规范 ⭐⭐⭐",
+            "name": "TSCodeSpecification"
+          },
+          {
+            "label": "🔄 TS 5+ 新特性 ⭐⭐",
+            "name": "TS5"
+          }
+        ]
+      },
+      {
+        "label": "💻 计算机基础知识 ⭐⭐⭐",
+        "name": "ComputerBasicKnowledge",
+        "children": [
+          {
+            "label": "🖥️ 计算机组成原理 ⭐⭐",
+            "name": "ComputerComposition",
+            "children": [
+              {
+                "label": "📜 计算机发展史 ⭐⭐",
+                "name": "ComputerHistory"
+              },
+              {
+                "label": "🔄 计算机组成概览 ⭐⭐",
+                "name": "ComputerCompositionOverview"
+              },
+              {
+                "label": "🔄 组成部件 ⭐⭐",
+                "name": "ComputerCompositionParts",
+                "children": [
+                  {
+                    "label": "🧠 CPU ⭐⭐",
+                    "name": "cpu"
+                  },
+                  {
+                    "label": "💾 内存 ⭐⭐",
+                    "name": "Memory"
+                  },
+                  {
+                    "label": "💽 硬盘 ⭐⭐",
+                    "name": "HardDisk"
+                  },
+                  {
+                    "label": "🔌 主板 ⭐⭐",
+                    "name": "MainBoard"
+                  },
+                  {
+                    "label": "⌨️ I/O设备 ⭐⭐",
+                    "name": "IO"
+                  },
+                  {
+                    "label": "🖥️ 显卡 ⭐⭐",
+                    "name": "GraphicsCard"
+                  }
+                ]
+              },
+              {
+                "label": "🔄 进制转换 ⭐⭐",
+                "name": "BinaryConversion"
+              },
+              {
+                "label": "🔄 数字逻辑(整数、浮点数、负数) ⭐⭐",
+                "name": "DigitalLogic"
+              }
+            ]
+          },
+          {
+            "label": "⚙️ 操作系统 ⭐⭐",
+            "name": "OperatingSystem",
+            "children": [
+              {
+                "label": "🌐 各类操作系统 ⭐⭐⭐",
+                "name": "OperatingSystems"
+              },
+              {
+                "label": "🧵 进程和线程 ⭐⭐",
+                "name": "ProcessAndThread"
+              },
+              {
+                "label": "🤝 进程间通信 ⭐⭐",
+                "name": "InterProcessCommunication"
+              },
+              {
+                "label": "🚦 进程调度 ⭐⭐",
+                "name": "ProcessScheduling"
+              },
+              {
+                "label": "📅 进程调度算法 ⭐⭐",
+                "name": "ProcessSchedulingAlgorithm"
+              }
+            ]
+          },
+          {
+            "label": "📜 编译原理 ⭐⭐",
+            "name": "CompilerPrinciple"
+          },
+          {
+            "label": "📜 汇编语言介绍 ⭐⭐",
+            "name": "AssemblyLanguage"
+          },
+          {
+            "label": "🔤 字符编码 ⭐⭐⭐",
+            "name": "CharacterEncoding"
+          },
+          {
+            "label": "🧮 基础算法 ⭐⭐⭐",
+            "name": "BasicAlgorithm",
+            "children": [
+              {
+                "label": "🔄 排序算法 ⭐⭐⭐",
+                "name": "SortingAlgorithm1",
+                "redirect": { "name": "SortingAlgorithm" }
+              },
+              {
+                "label": "🔄 查找算法 ⭐⭐⭐",
+                "name": "SearchAlgorithm1",
+                "redirect": { "name": "SearchAlgorithm" }
+              },
+              {
+                "label": "🔄 递归算法 ⭐⭐⭐",
+                "name": "RecursiveAlgorithm1",
+                "redirect": { "name": "RecursiveAlgorithm" }
+              },
+              {
+                "label": "🔄 动态规划 ⭐⭐⭐",
+                "name": "DynamicProgramming1",
+                "redirect": { "name": "DynamicProgramming" }
+              },
+              {
+                "label": "🔄 贪心算法 ⭐⭐⭐",
+                "name": "GreedyAlgorithm1",
+                "redirect": { "name": "GreedyAlgorithm" }
+              },
+              {
+                "label": "🔄 分治算法 ⭐⭐⭐",
+                "name": "DivideAndConquer1",
+                "redirect": { "name": "DivideAndConquer" }
+              },
+              {
+                "label": "🔄 回溯算法 ⭐⭐⭐",
+                "name": "BacktrackingAlgorithm1",
+                "redirect": { "name": "BacktrackingAlgorithm" }
+              },
+              {
+                "label": "🔄 分支限界算法 ⭐⭐⭐",
+                "name": "BranchAndBoundAlgorithm1",
+                "redirect": { "name": "BranchAndBoundAlgorithm" }
+              }
+            ]
+          },
+          {
+            "label": "📊 数据结构基础 ⭐⭐⭐",
+            "name": "DataStructureBasic",
+            "children": [
+              {
+                "label": "🔄 数组 ⭐⭐⭐",
+                "name": "Array2"
+              },
+              {
+                "label": "🔄 链表 ⭐⭐⭐",
+                "name": "LinkedList1",
+                "redirect": {
+                  "name": "LinkedListBasic"
+                }
+              },
+              {
+                "label": "🔄 栈 ⭐⭐⭐",
+                "name": "Stack1"
+              },
+              {
+                "label": "🔄 队列 ⭐⭐⭐",
+                "name": "Queue1",
+                "redirect": {
+                  "name": "Queue"
+                }
+              },
+              {
+                "label": "🔄 树 ⭐⭐⭐",
+                "name": "Tree1",
+                "redirect": {
+                  "name": "TreeClassification"
+                }
+              },
+              {
+                "label": "🔄 图 ⭐⭐⭐",
+                "name": "Graph1"
+              },
+              {
+                "label": "🔄 堆 ⭐⭐⭐",
+                "name": "Heap1"
+              },
+              {
+                "label": "🔄 哈希表 ⭐⭐⭐",
+                "name": "HashTable1",
+                "redirect": {
+                  "name": "HashTableIntroduction"
+                }
+              }
+            ]
+          },
+          {
+            "label": "⌨️ CMD命令 ⭐⭐⭐",
+            "name": "CMDCommand"
+          }
+        ]
+      },
+      {
+        "label": "🌐 浏览器 ⭐⭐⭐",
+        "name": "Browser",
+        "children": [
+          {
+            "label": "🔄 渲染流程 ⭐⭐⭐",
+            "name": "XLLC",
+            "children": [
+              {
+                "label": "🔗 网络过程 ⭐⭐⭐",
+                "name": "NetworkProcess"
+              },
+              {
+                "label": "📦 资源加载过程 ⭐⭐⭐",
+                "name": "ResourceLoadingProcess"
+              },
+              {
+                "label": "🎨 渲染过程 ⭐⭐⭐",
+                "name": "RenderProcess"
+              },
+              {
+                "label": "🔄 浏览器渲染具体过程 ⭐⭐⭐",
+                "name": "BrowserRenderProcess"
+              }
+            ]
+          },
+          {
+            "label": "🎨 重绘 vs 回流(触发场景与优化) ⭐⭐⭐",
+            "name": "ZW1Z"
+          },
+          {
+            "label": "🚀 V8 ⭐⭐",
+            "name": "V8Engine",
+            "children": [
+              {
+                "label": "🔄 V8引擎基础介绍 ⭐⭐⭐",
+                "name": "V8EngineIntroduction"
+              },
+              {
+                "label": "🔄 V8垃圾回收算法 ⭐⭐",
+                "name": "V8GarbageCollection"
+              },
+              {
+                "label": "🔄 V8的一些机制 ⭐⭐⭐",
+                "name": "V8SomeMechanism"
+              }
+            ]
+          },
+          {
+            "label": "⚙️ 浏览器进程与线程 ⭐⭐",
+            "name": "BrowserProcessandThread"
+          },
+          {
+            "label": "🖼️ 浏览器渲染图层 ⭐⭐",
+            "name": "BrowserRenderingLayer"
+          }
+        ]
+      },
+      {
+        "label": "📡 网络基础 ⭐⭐⭐",
+        "name": "NetworkBasic",
+        "children": [
+          {
+            "label": "📤 前端请求 ⭐⭐⭐",
+            "name": "FrontRequest",
+            "children": [
+              {
+                "label": "🔄 异步请求 ⭐⭐⭐",
+                "name": "AsyncRequest",
+                "children": [
+                  {
+                    "label": "🐶 Fetch ⭐⭐⭐",
+                    "name": "Fetch"
+                  },
+                  {
+                    "label": "🏛️ AJAX ⭐⭐⭐",
+                    "name": "Ajax"
+                  },
+                  {
+                    "label": "🔗 axios ⭐⭐⭐",
+                    "name": "Axios"
+                  },
+                  {
+                    "label": "⚙️ axios请求配置 ⭐⭐⭐",
+                    "name": "RequestConfiguration"
+                  },
+                  {
+                    "label": "🆚 Fectch vs AJAX vs Axios ⭐⭐⭐",
+                    "name": "FetchAndAjaxAndAxios"
+                  },
+                  {
+                    "label": "🔄 AbortController ⭐⭐⭐",
+                    "name": "AbortController"
+                  }
+                ]
+              },
+              {
+                "label": "ራስ 请求头 ⭐⭐⭐",
+                "name": "RequestHeader"
+              },
+              {
+                "label": "📦 请求体 ⭐⭐⭐",
+                "name": "RequestBody"
+              },
+              {
+                "label": "📤 上传控制 ⭐⭐⭐",
+                "name": "UploadControl"
+              },
+              {
+                "label": "🔄 分片上传与断点续传 ⭐⭐⭐",
+                "name": "ChunkUploadAndBreakpointContinuation"
+              },
+              {
+                "label": "📥 文件下载 ⭐⭐⭐",
+                "name": "FileDownload"
+              },
+              {
+                "label": "🚦 状态码 ⭐⭐⭐",
+                "name": "StatusCode"
+              },
+              {
+                "label": "🌐 跨域 ⭐⭐⭐",
+                "name": "CORS"
+              },
+              {
+                "label": "🔄 get与post的区别 ⭐⭐⭐",
+                "name": "GetAndPost"
+              },
+              {
+                "label": "🔄 Restful风格 ⭐⭐⭐",
+                "name": "Restful"
+              },
+              {
+                "label": "🔄 GraphQL 🌟",
+                "name": "GraphQL"
+              },
+              {
+                "label": "🔒 会话管理Cookie、Session、Token ⭐⭐⭐",
+                "name": "CookieSessionToken"
+              },
+              {
+                "label": "🔒 安全控制 ⭐⭐⭐",
+                "name": "SecurityControl",
+                "children": [
+                  {
+                    "label": "🍪 cookie的使用 ⭐⭐⭐",
+                    "name": "CookieUsage"
+                  },
+                  {
+                    "label": "🔖 token的使用 ⭐⭐⭐",
+                    "name": "TokenUsage"
+                  },
+                  {
+                    "label": "🔒 前端密码加密 ⭐⭐⭐",
+                    "name": "FrontPasswordEncryption"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "label": "🔗 HTTP ⭐⭐⭐",
+            "name": "HttpOverview",
+            "children": [
+              {
+                "label": "🌐 HTTP ⭐⭐⭐",
+                "name": "Http"
+              },
+              {
+                "label": "🔒 HTTPS ⭐⭐⭐",
+                "name": "Https"
+              },
+              {
+                "label": "🚀 HTTP-2 ⭐⭐⭐",
+                "name": "HTTP2"
+              },
+              {
+                "label": "🔄 HTTP队头阻塞 ⭐⭐⭐",
+                "name": "HTTPHeadOfLineBlocking"
+              },
+              {
+                "label": "🔄 SSE介绍 ⭐⭐",
+                "name": "SSEOverview",
+                "redirect": { "name": "SSE" }
+              },
+              {
+                "label": "🔄 HTTP-2(多路复用) ⭐⭐",
+                "name": "HTTP2Multiplex"
+              },
+              {
+                "label": "🚀 HTTP-3(QUIC) ⭐⭐",
+                "name": "HTTP3"
+              }
+            ]
+          },
+          {
+            "label": "📜 其他应用层协议 ⭐⭐",
+            "name": "OtherApplicationLayerProtocols"
+          },
+          {
+            "label": "🔄 TCP/IP/UDP ⭐⭐",
+            "name": "TCP1"
+          },
+          {
+            "label": "🔄 TCP拥塞和拥塞控制 ⭐⭐",
+            "name": "CongestionControl"
+          },
+          {
+            "label": "📚 网络7层模型 ⭐⭐",
+            "name": "Network7Layers"
+          },
+          {
+            "label": "🔒 TLS/SSL ⭐⭐",
+            "name": "TLS1"
+          },
+          {
+            "label": "🌍 DNS域名分发 ⭐⭐",
+            "name": "DNSDomain"
+          },
+          {
+            "label": "📡 CDN内容分发网络 ⭐⭐",
+            "name": "CDN"
+          },
+          {
+            "label": "🗄️ 缓存机制 ⭐⭐⭐",
+            "name": "HCJZ",
+            "children": [
+              {
+                "label": "📚 强缓存、协商缓存、ServiceWorker概览⭐⭐⭐",
+                "name": "CacheProfile"
+              },
+              {
+                "label": "💪 强缓存 ⭐⭐⭐",
+                "name": "StrongCache"
+              },
+              {
+                "label": "🤝 协商缓存 ⭐⭐⭐",
+                "name": "NegotiateCache"
+              },
+              {
+                "label": "👷 ServiceWorker ⭐⭐⭐",
+                "name": "ServiceWorker"
+              }
+            ]
+          },
+          {
+            "label": "🔄 代理与反向代理 ⭐⭐",
+            "name": "ProxyAndReverseProxy"
+          },
+          {
+            "label": "⚖️ 负载均衡 ⭐",
+            "name": "LoadBalance"
+          },
+          {
+            "label": "🔗 cURL 🌟",
+            "name": "cURL"
+          },
+          {
+            "label": "🔄 服务器介绍 ⭐⭐⭐",
+            "name": "ServerIntroduction"
+          },
+          {
+            "label": "🔄 Ngginx介绍以及配置 🌟",
+            "name": "Nginx"
+          }
+        ]
+      },
+      {
+        "label": "📐 设计模式 ⭐⭐⭐",
+        "name": "DesignPatterns",
+        "children": [
+          {
+            "label": "📜 设计模式概览 ⭐⭐",
+            "name": "DesignPatternsOverview"
+          },
+          {
+            "label": "👤 单例模式 ⭐⭐",
+            "name": "Singleton"
+          },
+          {
+            "label": "🏭 工厂模式 ⭐⭐",
+            "name": "Factory"
+          },
+          {
+            "label": "🏛️ 抽象工厂模式 ⭐⭐",
+            "name": "AbstractFactory"
+          },
+          {
+            "label": "👁️ 观察者模式 ⭐⭐",
+            "name": "Observer"
+          },
+          {
+            "label": "📢 发布订阅模式 ⭐⭐",
+            "name": "PublishSubscribe"
+          },
+          {
+            "label": "📢 发布订阅与观察者模式区别 ⭐⭐",
+            "name": "PublishSubscribeAndObserverDifference"
+          },
+          {
+            "label": "♟️ 策略模式 ⭐⭐⭐",
+            "name": "Strategy"
+          },
+          {
+            "label": "🔌 适配器模式 ⭐⭐",
+            "name": "Adapter"
+          },
+          {
+            "label": "🎨 装饰者模式 ⭐⭐",
+            "name": "Decorator"
+          },
+          {
+            "label": "🛡️ 代理模式 ⭐⭐",
+            "name": "Proxy"
+          },
+          {
+            "label": "🔗 责任链模式 ⭐⭐",
+            "name": "ChainOfResponsibility"
+          },
+          {
+            "label": "📜 命令模式 ⭐⭐",
+            "name": "Command"
+          },
+          {
+            "label": "🚦 状态模式 ⭐⭐",
+            "name": "State"
+          },
+          {
+            "label": "📋 模板方法模式 ⭐⭐",
+            "name": "TemplateMethod"
+          },
+          {
+            "label": "🔄 迭代器模式 ⭐⭐",
+            "name": "Iterator"
+          },
+          {
+            "label": "🌳 组合模式 ⭐⭐",
+            "name": "Composite"
+          },
+          {
+            "label": "💡 享元模式 ⭐⭐",
+            "name": "Flyweight"
+          },
+
+          {
+            "label": "📝 备忘录模式 ⭐⭐",
+            "name": "Memento"
+          },
+          {
+            "label": "📦 原型模式 ⭐⭐",
+            "name": "Prototype"
+          },
+          {
+            "label": "🚪 拦截过滤器模式 ⭐⭐",
+            "name": "InterceptorFilter"
+          },
+          {
+            "label": "🏛️ MVC、MVP、MVVM ⭐⭐⭐",
+            "name": "MVC"
+          }
+        ]
+      },
+      {
+        "label": "⚡ 性能优化 ⭐⭐⭐",
+        "name": "Performance",
+        "children": [
+          {
+            "label": "📜 性能优化概览 ⭐⭐⭐",
+            "name": "PerformanceOverview"
+          },
+          {
+            "label": "📊 性能指标 ⭐⭐",
+            "name": "PerformanceMetrics"
+          },
+          {
+            "label": "⏱️ 性能监控测量 ⭐⭐",
+            "name": "PerformanceWatch",
+            "children": [
+              {
+                "label": "💻 代码层面(performance相关api) ⭐⭐",
+                "name": "Code",
+                "children": [
+                  {
+                    "label": "📊 performance相关api ⭐⭐",
+                    "name": "PerformanceApi"
+                  },
+                  {
+                    "label": "👁️ performanceObserver相关api ⭐⭐",
+                    "name": "PerformanceObserver"
+                  },
+                  {
+                    "label": "🆚 performance与performanceObserver的区别 ⭐⭐",
+                    "name": "PerformanceAndPerformanceObserver"
+                  },
+                  {
+                    "label": "🔄 web-vitals ⭐⭐",
+                    "name": "WebVitals"
+                  },
+                  {
+                    "label": "🔄 利用MutationObserver实现性能监控 ⭐⭐",
+                    "name": "MutationObserverWatchPerformance"
+                  }
+                ]
+              },
+              {
+                "label": "🛠️ 工具层面(chrome devtools) ⭐⭐",
+                "name": "ToolAspect",
+                "children": [
+                  {
+                    "label": "🛠️ 谷歌开发者工具 ⭐⭐",
+                    "name": "ChromeDevTools"
+                  },
+                  {
+                    "label": "💡 Lighthouse ⭐⭐",
+                    "name": "Lighthouse"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "label": "🌐 网络层面 ⭐⭐⭐",
+            "name": "NetworkAspect",
+            "children": [
+              {
+                "label": "🗄️ 前端缓存 ⭐⭐⭐",
+                "name": "FrontCache"
+              },
+              {
+                "label": "🚀 开启CDN加速⭐⭐⭐",
+                "name": "CDNAcceleration"
+              },
+              {
+                "label": "⚡ 开启SSE ⭐⭐⭐",
+                "name": "SSE"
+              }
+            ]
+          },
+          {
+            "label": "💻 代码层面 ⭐⭐⭐",
+            "name": "CodeAspect",
+            "children": [
+              {
+                "label": "🎨 CSS性能优化 ⭐⭐⭐",
+                "name": "CssPerformanceOptimization",
+                "children": [
+                  {
+                    "label": "🎯 css选择器优化 ⭐⭐⭐",
+                    "name": "CssSelectorOptimization"
+                  },
+                  {
+                    "label": "⚙️ css硬件(gpu)加速 ⭐⭐⭐",
+                    "name": "CssHardwareAcceleration"
+                  },
+                  {
+                    "label": "🔄 减少重排和重绘 ⭐⭐⭐",
+                    "name": "ReduceRepaint"
+                  },
+                  {
+                    "label": "🎬 CSS动画 ⭐⭐⭐",
+                    "name": "CSSAnimation"
+                  },
+                  {
+                    "label": "🖼️ 雪碧图 ⭐⭐⭐",
+                    "name": "SpriteImage"
+                  }
+                ]
+              },
+              {
+                "label": "📜 JS代码优化 ⭐⭐⭐",
+                "name": "JsCodeOptimization",
+                "children": [
+                  {
+                    "label": "🔄 算法优化 ⭐⭐⭐",
+                    "name": "AlgorithmOptimization",
+                    "redirect": {
+                      "name": "AlgorithmIntroduction"
+                    }
+                  },
+                  {
+                    "label": "🔄 内存方面 ⭐⭐⭐",
+                    "name": "MemoryManagement2",
+                    "children": [
+                      {
+                        "label": "🔄 内存管理 ⭐⭐⭐",
+                        "name": "MemoryManagement3"
+                      },
+                      {
+                        "label": "🗑️ 无用引用的清除 ⭐⭐⭐",
+                        "name": "UnusedReferenceClear"
+                      },
+                      {
+                        "label": "🔄 weakMap和weakSet和weakRef ⭐⭐⭐",
+                        "name": "WeakMapAndWeakSetAndWeakRef",
+                        "redirect": {
+                          "name": "WeakRef"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "label": "🔄 减少重排和重绘 ⭐⭐⭐",
+                    "name": "ReduceRepaint2"
+                  },
+                  {
+                    "label": "🖱️ 事件委托 ⭐⭐⭐",
+                    "name": "EventDelegation"
+                  },
+                  {
+                    "label": "⏳ 防抖节流 ⭐⭐⭐",
+                    "name": "DebounceAndThrottle"
+                  },
+                  {
+                    "label": "꼬리 尾调用和尾递归 ⭐⭐",
+                    "name": "TailCall"
+                  },
+
+                  {
+                    "label": "🌳 代码层面合理利用tree-shaking ⭐⭐",
+                    "name": "TreeShaking"
+                  },
+                  {
+                    "label": "👷 webworker处理耗时任务 ⭐⭐",
+                    "name": "WebWorkerDeal"
+                  },
+                  {
+                    "label": "👷 利用时间切片 ⭐⭐",
+                    "name": "TimeSliceOptimization"
+                  },
+                  {
+                    "label": "📜 虚拟滚动列表 ⭐⭐⭐",
+                    "name": "VirtualScrollList"
+                  },
+                  {
+                    "label": "🎬 利用requestAnimationFrame优化动画 ⭐⭐⭐",
+                    "name": "RequestAnimationFrame2"
+                  }
+                ]
+              },
+              {
+                "label": "📥 加载优化 ⭐⭐⭐",
+                "name": "LoadOptimization",
+                "children": [
+                  {
+                    "label": "⏳ 懒加载,预加载,滚动加载 ⭐⭐⭐",
+                    "name": "LazyLoadAndpreLoad"
+                  },
+                  {
+                    "label": "✂️ 代码分割 ⭐⭐⭐",
+                    "name": "CodeSplit"
+                  },
+                  {
+                    "label": "🖼️ 图片加载优化 ⭐⭐⭐",
+                    "name": "ImageLoadOptimization"
+                  },
+                  {
+                    "label": "💀 骨架屏与过渡动画 ⭐⭐⭐",
+                    "name": "SkeletonScreenAndTransitionAnimation"
+                  },
+                  {
+                    "label": "🖋️ 使用字体图标 ⭐⭐⭐",
+                    "name": "FontIcon"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "label": "⚙️ 工程配置层面 ⭐",
+            "name": "ProgramManageAspect",
+            "children": [
+              {
+                "label": "📦 开启gzip压缩 ⭐⭐",
+                "name": "GzipCompression"
+              },
+              {
+                "label": "📦 开启brotli压缩 ⭐⭐",
+                "name": "BrotliCompression"
+              },
+              {
+                "label": "🖥️ 使用SSR ⭐⭐⭐",
+                "name": "SSR"
+              },
+              {
+                "label": "🖥️ 使用SSG ⭐⭐⭐",
+                "name": "SSG"
+              },
+              {
+                "label": "🖥️ 使用ISR(同构) ⭐⭐⭐",
+                "name": "ISR"
+              },
+              {
+                "label": "♟️ 打包策略 ⭐⭐⭐",
+                "name": "PackingStrategy"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "label": "💡 功能实现⭐⭐",
+        "name": "FunctionImplementation",
+        "children": [
+          {
+            "label": "🎨 展示相关⭐⭐⭐",
+            "name": "StyleRelated",
+            "children": [
+              {
+                "label": "🎨 网站主题切换 ⭐⭐⭐",
+                "name": "WebsiteThemeSwitch"
+              },
+              {
+                "label": "🌍 网站语言切换(国际化) ⭐⭐⭐",
+                "name": "WebsiteLanguageSwitch"
+              },
+              {
+                "label": "📈 网站加载进度条 ⭐⭐⭐",
+                "name": "WebsiteLoadingProgress"
+              },
+              {
+                "label": "📜 无限滚动 ⭐⭐⭐",
+                "name": "InfiniteScroll"
+              },
+              {
+                "label": "📄 pdf预览 ⭐⭐⭐",
+                "name": "PdfPreview"
+              },
+              {
+                "label": "💧 水印 ⭐⭐⭐",
+                "name": "Watermark"
+              },
+              {
+                "label": "🔄 轮播图 ⭐⭐⭐",
+                "name": "Carousel"
+              }
+            ]
+          },
+          {
+            "label": "🖱️ 用户操作相关⭐⭐⭐",
+            "name": "UserOperationRelated",
+            "children": [
+              {
+                "label": "🔗 表单联动方案 ⭐⭐⭐",
+                "name": "FormLinkage"
+              },
+              {
+                "label": "🔑 单点登录 ⭐⭐⭐",
+                "name": "SingleSignOn1",
+                "redirect": {
+                  "name": "SingleSignOn"
+                }
+              },
+              {
+                "label": "🔍 站内搜索 ⭐⭐⭐",
+                "name": "SiteSearch"
+              },
+              {
+                "label": "✂️ 划词选择的文本上添加右键菜单 ⭐⭐⭐",
+                "name": "RightClickMenu"
+              },
+              {
+                "label": "📤 图片上传 ⭐⭐⭐",
+                "name": "ImageUpload"
+              },
+              {
+                "label": "📝 富文本编辑器 ⭐⭐⭐",
+                "name": "RichTextEditor"
+              },
+              {
+                "label": "🚫 禁止用户操作 ⭐⭐⭐",
+                "name": "DisableUserOperation"
+              },
+              {
+                "label": "🔄 上拉加载与下拉刷新 ⭐⭐⭐",
+                "name": "PullUpAndPullDown"
+              }
+            ]
+          },
+          {
+            "label": "📊 数据相关⭐⭐⭐",
+            "name": "DataRelated2",
+            "children": [
+              {
+                "label": "🔄 SEO原理及优化 ⭐⭐⭐",
+                "name": "SeoAndOptimization",
+                "redirect": {
+                  "name": "SeoAndOptimization2"
+                }
+              },
+              {
+                "label": "🔄 数据(采集)埋点 ⭐⭐⭐",
+                "name": "DataTracking"
+              },
+              {
+                "label": "📈 数据可视化 ⭐⭐⭐",
+                "name": "DataVisualization"
+              },
+              {
+                "label": "⚠️ 资源加载失败处理 ⭐⭐⭐",
+                "name": "ResourceLoadFailure"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "label": "🐞 前端调试 ⭐⭐⭐",
+        "name": "FrontendDebug",
+        "children": [
+          {
+            "label": "📜 前端调试概览 ⭐⭐⭐",
+            "name": "FrontendDebugOverview"
+          },
+          {
+            "label": "🐞 console ⭐⭐⭐",
+            "name": "Console"
+          },
+          {
+            "label": "🐛 断点调试 ⭐⭐⭐",
+            "name": "BreakpointDebug"
+          },
+          {
+            "label": "🔄 devtools调试 ⭐⭐⭐",
+            "name": "DevtoolsDebugTool"
+          },
+          {
+            "label": "🗺️ source map ⭐⭐⭐",
+            "name": "SourceMap1"
+          }
+        ]
+      },
+      {
+        "label": "🤝 团队协作GIT ⭐⭐⭐",
+        "name": "TeamCollaboration",
+        "children": [
+          {
+            "label": "📚 Git基础 ⭐⭐⭐",
+            "name": "GitBase"
+          },
+          {
+            "label": "🔄 git 工作流 ⭐⭐⭐",
+            "name": "GitWorkflow"
+          },
+          {
+            "label": "🔄 .gitignore ⭐⭐⭐",
+            "name": "GitIgnore"
+          },
+          {
+            "label": "🗺️ Git命令缩略图 ⭐⭐⭐",
+            "name": "GitCommand"
+          },
+          {
+            "label": "⚔️ Git冲突解决 ⭐⭐⭐",
+            "name": "GitConflict"
+          },
+          {
+            "label": "🌿 Git分支管理 ⭐⭐⭐",
+            "name": "GitBranch"
+          },
+          {
+            "label": "🔄 reset 和 restore 和 revert ⭐⭐⭐",
+            "name": "ResetAndRestoreAndRevert",
+            "children": [
+              {
+                "label": "🔄 reset 介绍 ⭐⭐⭐",
+                "name": "Reset"
+              },
+              {
+                "label": "🔄 revert 介绍 ⭐⭐⭐",
+                "name": "Revert"
+              },
+              {
+                "label": "🔄 restore 介绍 ⭐⭐⭐",
+                "name": "Restore"
+              },
+              {
+                "label": "🔄 reset 和 restore 和 revert 总结 ⭐⭐⭐",
+                "name": "ResetAndRestoreAndRevertSummary"
+              }
+            ]
+          },
+          {
+            "label": "📜 log 与 reflog ⭐⭐⭐",
+            "name": "LogAndReflog"
+          },
+          {
+            "label": "🔄 git cherry-pick ⭐⭐⭐",
+            "name": "GitCherryPick"
+          },
+          {
+            "label": "🔄 rebase ⭐⭐",
+            "name": "Rebase"
+          },
+          {
+            "label": "🔄 git stash ⭐⭐⭐",
+            "name": "GitStash"
+          },
+          {
+            "label": "🔄 git submodule ⭐⭐⭐",
+            "name": "GitSubmodule"
+          },
+          {
+            "label": "🔄 git tag 和 git alias ⭐⭐⭐",
+            "name": "GitTagAndGitAlias"
+          },
+          {
+            "label": "🔄 husky ⭐⭐⭐",
+            "name": "Husky1",
+            "redirect": {
+              "name": "Husky"
+            }
+          },
+          {
+            "label": "🔄 feature branch 和 trunk-based ⭐⭐⭐",
+            "name": "FeatureBranchAndTrunkBased"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "label": "🏗️ 框架与工程化 ⭐⭐⭐",
+    "name": "FrameworksAndEngineering",
+    "children": [
+      {
+        "label": "📜 SPA介绍及优化 ⭐⭐⭐",
+        "name": "SPAIntroductionAndOptimization"
+      },
+      {
+        "label": "🔄 Signals ⭐⭐⭐",
+        "name": "Signals"
+      },
+      {
+        "label": "🔄 MVVM和MVC和MVP ⭐⭐⭐",
+        "name": "MVVMAndMVCAndMVP"
+      },
+      {
+        "label": "⚛️ React ⭐⭐⭐",
+        "name": "React",
+        "children": [
+          {
+            "label": "🔄 React介绍 ⭐⭐⭐",
+            "name": "ReactProfile"
+          },
+          {
+            "label": "📚 React基础知识 ⭐⭐⭐",
+            "name": "ReactBasicKnowledge",
+            "children": [
+              {
+                "label": "🪝 函数式组件与类组件对比 ⭐⭐⭐",
+                "name": "FunctionComponentsAndClassComponents"
+              },
+              {
+                "label": "🪝 Hooks ⭐⭐⭐",
+                "name": "Hooks",
+                "children": [
+                  {
+                    "label": "🪝 Hooks ⭐⭐⭐",
+                    "name": "HooksIntroduction"
+                  },
+                  {
+                    "label": "🪝 useEffect和useLayoutEffect ⭐⭐⭐",
+                    "name": "useEffectAnduseLayoutEffect"
+                  },
+                  {
+                    "label": "🪝 useInsertionEffect ⭐⭐⭐",
+                    "name": "useInsertionEffect"
+                  },
+                  {
+                    "label": "🪝 useRef和useImperativeHandle ⭐⭐⭐",
+                    "name": "useRefAnduseImperativeHandle"
+                  },
+                  {
+                    "label": "🪝 useMemo和useCallback ⭐⭐⭐",
+                    "name": "useMemoAnduseCallback"
+                  },
+                  {
+                    "label": "🪝 useSyncExternalStore ⭐⭐⭐",
+                    "name": "useSyncExternalStore"
+                  },
+                  {
+                    "label": "🪝 自定义Hooks ⭐⭐⭐",
+                    "name": "CustomHooks2"
+                  }
+                ]
+              },
+              {
+                "label": "🔄 组件通信 ⭐⭐⭐",
+                "name": "ComponentCommunication1"
+              },
+              {
+                "label": "🔄 生命周期 ⭐⭐⭐",
+                "name": "ReactLifeCycle"
+              },
+              {
+                "label": "🔄 函数式组件的生命周期 ⭐⭐⭐",
+                "name": "FunctionComponentsReactLifeCycle"
+              },
+              {
+                "label": "🔄 高级组件 ⭐⭐⭐",
+                "name": "HOC"
+              },
+              {
+                "label": "🔄 react内置组件 ⭐⭐⭐",
+                "name": "ReactBuiltInComponents"
+              },
+              {
+                "label": "🔄 原子设计 ⭐⭐⭐",
+                "name": "AtomicDesign"
+              },
+              {
+                "label": "🔄 react动画方案 ⭐⭐⭐",
+                "name": "ReactAnimation"
+              },
+              {
+                "label": "🔄 react的css方案 ⭐⭐⭐",
+                "name": "ReactCss"
+              },
+              {
+                "label": "🔄 react的错误处理 ⭐⭐⭐",
+                "name": "ReactErrorHandling"
+              }
+            ]
+          },
+          {
+            "label": "🔄 React18新特性 ⭐⭐⭐",
+            "name": "React18NewFeatures"
+          },
+          {
+            "label": "🔧 React底层原理 ⭐⭐⭐",
+            "name": "ReactUnderlyingPrinciples",
+            "children": [
+              {
+                "label": "🔧 react原理概览 ⭐⭐⭐",
+                "name": "ReactPrincipleOverview"
+              },
+              {
+                "label": "🔧 hooks原理 ⭐⭐⭐",
+                "name": "HooksPrinciple"
+              },
+              {
+                "label": "🔧 实现useState ⭐⭐⭐",
+                "name": "ImplementUseState"
+              },
+              {
+                "label": "🔧 实现useEffect ⭐⭐⭐",
+                "name": "ImplementUseEffect"
+              },
+              {
+                "label": "🔧 setState为什么是异步的 ⭐⭐⭐",
+                "name": "SetStateWhyIsAsync"
+              },
+              {
+                "label": "🔧 setState原理 ⭐⭐⭐",
+                "name": "SetStatePrinciple"
+              },
+              {
+                "label": "🌳 虚拟DOM ⭐⭐⭐",
+                "name": "ReactVirtualDOM"
+              },
+              {
+                "label": "🔧 虚拟dom的利与弊 ⭐⭐⭐",
+                "name": "VirtualDOMProsAndCons"
+              },
+              {
+                "label": "🔍 dom-diff算法 ⭐⭐⭐",
+                "name": "DomDiffAlgorithm"
+              },
+              {
+                "label": "🔄 react为什么只能在顶层使用hooks ⭐⭐⭐",
+                "name": "ReactHooksWhyOnlyAtTopLevel"
+              },
+              {
+                "label": "🖥️ react事件机制 ⭐⭐",
+                "name": "ReactEvent"
+              }
+            ]
+          },
+          {
+            "label": "⚡ React性能优化 ⭐⭐",
+            "name": "ReactPerformanceOptimization",
+            "children": [
+              {
+                "label": "📜 React性能优化概览 ⭐⭐",
+                "name": "ReactPerformanceOptimizationOverview"
+              },
+              {
+                "label": "📜 React性能测量 ⭐⭐",
+                "name": "ReactPerformanceMeasurement"
+              },
+              {
+                "label": "📜 纯组件 ⭐⭐",
+                "name": "ReactMemoAndPureComponent"
+              },
+              {
+                "label": "🔄 react fiber ⭐⭐⭐",
+                "name": "ReactFiber"
+              }
+            ]
+          },
+          {
+            "label": "🌳 生态 ⭐⭐",
+            "name": "ReactEcosystem",
+            "children": [
+              {
+                "label": "🚦 React状态管理 ⭐⭐",
+                "name": "ReactStateManagementOverview"
+              },
+              {
+                "label": "🧭 React路由 ⭐⭐",
+                "name": "ReactComponentCommunication"
+              },
+              {
+                "label": "🚀 React脚手架 ⭐⭐",
+                "name": "ReactScaffolding"
+              },
+              {
+                "label": "🖼️ React UI框架 ⭐⭐⭐",
+                "name": "ReactUIFramework"
+              },
+              {
+                "label": "🔄 Next.js(SSR) ⭐⭐⭐",
+                "name": "Nextjs"
+              }
+            ]
+          },
+          {
+            "label": "📝 React知识点总结 ⭐",
+            "name": "ReactKnowledgeSummary"
+          },
+          {
+            "label": "📜 React项目的代码规范 ⭐⭐",
+            "name": "ReactProjectCodeStandard"
+          }
+        ]
+      },
+      {
+        "label": "💚 Vue ⭐⭐⭐",
+        "name": "Vue",
+        "children": [
+          {
+            "label": "📜 Vue介绍 ⭐⭐⭐",
+            "name": "VueProfile"
+          },
+          {
+            "label": "📚 vue基础知识 ⭐⭐⭐",
+            "name": "VueBasicKnowledge",
+            "children": [
+              {
+                "label": "🔄 生命周期 ⭐⭐⭐",
+                "name": "LifeCycle"
+              },
+              {
+                "label": "🔄 组件通信 ⭐⭐⭐",
+                "name": "ComponentCommunication"
+              },
+              {
+                "label": "🔄 vue修饰符 ⭐⭐⭐",
+                "name": "VueModifier"
+              },
+              {
+                "label": "🔄 $nextTick ⭐⭐⭐",
+                "name": "NextTick"
+              },
+
+              {
+                "label": "🔄 自定义指令 ⭐⭐⭐",
+                "name": "CustomDirective"
+              },
+              {
+                "label": "🔄 项目中一些实用的自定义指令 ⭐⭐⭐",
+                "name": "CustomDirective2"
+              },
+              {
+                "label": "🔄 watch和watchEffect和computed的区别 ⭐⭐⭐",
+                "name": "WatchAndWatchEffectAndComputed"
+              },
+              {
+                "label": "🆚 Composition API vs Options API ⭐⭐⭐",
+                "name": "CompositionApiVsOptionsApi"
+              },
+              {
+                "label": "🔄 自定义hooks(组合式函数) ⭐⭐⭐",
+                "name": "CustomHooks"
+              },
+              {
+                "label": "🔄 vue的data为什么是函数 ⭐",
+                "name": "VueDataWhyIsFunction"
+              },
+              {
+                "label": "🔄 vue插件 ⭐⭐⭐",
+                "name": "VuePlugin"
+              },
+              {
+                "label": "🔧 ref和reactive的区别 ⭐⭐⭐",
+                "name": "RefAndReactiveDifference"
+              },
+              {
+                "label": "🔄 vue自定义渲染器 ⭐⭐⭐",
+                "name": "VueCustomRenderer"
+              },
+              {
+                "label": "🔄 keep-alive和常见问题 ⭐⭐⭐",
+                "name": "KeepAliveAndCommonProblems"
+              },
+              {
+                "label": "🔄 vue项目的权限控制",
+                "name": "VuePermission"
+              },
+              {
+                "label": "🔄 vue异步组件",
+                "name": "VueAsyncComponent"
+              },
+              {
+                "label": "🔄 vue错误处理",
+                "name": "VueErrorProcess"
+              },
+              {
+                "label": "🔄 observable",
+                "name": "VueObservable"
+              },
+              {
+                "label": "🔄 TransitionAndTransitionGroup",
+                "name": "TransitionAndTransitionGroup"
+              }
+            ]
+          },
+          {
+            "label": "🔧 vue底层原理 ⭐⭐⭐",
+            "name": "VueUnderlyingPrinciples",
+            "children": [
+              {
+                "label": "🔄 vue原理概览 ⭐⭐⭐",
+                "name": "VuePrincipleOverview"
+              },
+              {
+                "label": "🔄 响应式原理 ⭐⭐⭐",
+                "name": "ReactivePrinciple"
+              },
+              {
+                "label": "🔄 vue的更新流程 ⭐⭐⭐",
+                "name": "VueUpdateProcess"
+              },
+              {
+                "label": "🆚 proxy与defineProperty的区别 ⭐⭐⭐",
+                "name": "ProxyAndDefineProperty"
+              },
+              {
+                "label": "🔄 vue的依赖收集 ⭐⭐⭐",
+                "name": "VueDependencyCollection"
+              },
+              {
+                "label": "🌳 虚拟DOM ⭐⭐⭐",
+                "name": "VirtualDOM"
+              },
+              {
+                "label": "🔍 vue2的diff算法 ⭐⭐⭐",
+                "name": "Vue2DiffAlgorithm"
+              },
+              {
+                "label": "🔍 vue3的diff算法 ⭐⭐⭐",
+                "name": "Vue3DiffAlgorithm2"
+              },
+              {
+                "label": "🔍 vue2与vue3的diff算法区别 ⭐⭐⭐",
+                "name": "Vue2AndVue3DiffAlgorithmDifference"
+              },
+              {
+                "label": "🌳 最长递增子序列 ⭐⭐⭐",
+                "name": "LongestIncreasingSubsequence",
+                "redirect": {
+                  "name": "LongestIncreasingSubsequence2"
+                }
+              },
+              {
+                "label": "⏳ 异步更新 ⭐⭐⭐",
+                "name": "AsyncUpdate"
+              },
+              {
+                "label": "🔄 vue的scheduler ⭐⭐⭐",
+                "name": "VueScheduler"
+              },
+              {
+                "label": "🌳 computed原理 ⭐⭐⭐",
+                "name": "ComputedPrinciple"
+              },
+              {
+                "label": "🔄 watch原理 ⭐⭐⭐",
+                "name": "WatchPrinciple"
+              },
+              {
+                "label": "🌳 keep-alive原理 ⭐⭐⭐",
+                "name": "KeepAlivePrinciple"
+              },
+              {
+                "label": "🌳 vif与vfor为什么不建议在同一标签上使用 ⭐⭐⭐",
+                "name": "VifAndVforNotRecommended"
+              },
+              {
+                "label": "🔄 vue3的setup语法糖 ⭐⭐⭐",
+                "name": "Vue3SetupSyntaxSugar"
+              },
+              {
+                "label": "🔄 vue style scoped ⭐⭐⭐",
+                "name": "VueStyleScoped"
+              }
+            ]
+          },
+          {
+            "label": "⚡ vue性能优化 ⭐⭐",
+            "name": "VuePerformanceOptimization",
+            "children": [
+              {
+                "label": "📜 vue性能优化概览 ⭐⭐",
+                "name": "VuePerformanceOptimizationOverview"
+              },
+              {
+                "label": "🔑 列表的key⭐⭐",
+                "name": "ListKey"
+              }
+            ]
+          },
+          {
+            "label": "📜 Vue3与Vue2的区别 ⭐⭐⭐",
+            "name": "Vue3AndVue2Difference"
+          },
+          {
+            "label": "🔄 vue的生态⭐⭐⭐",
+            "name": "VueEcosystem",
+            "children": [
+              {
+                "label": "🔄 vue的路由 ⭐⭐⭐",
+                "name": "VueRoute",
+                "children": [
+                  {
+                    "label": "🔄 vue路由的使用 ⭐⭐⭐",
+                    "name": "VueRouteUse"
+                  },
+                  {
+                    "label": "🔄 vue路由守卫 ⭐⭐⭐",
+                    "name": "VueRouteGuard"
+                  },
+                  {
+                    "label": "🔄 vue路由的原理 ⭐⭐⭐",
+                    "name": "VueRoutePrinciple"
+                  }
+                ]
+              },
+              {
+                "label": "🔄 pinia ⭐⭐⭐",
+                "name": "Pinia"
+              },
+              {
+                "label": "🖼️ vue UI框架 ⭐⭐⭐",
+                "name": "VueUIFramework"
+              },
+              {
+                "label": "🔄 vue SSR ⭐⭐⭐",
+                "name": "VueSSR"
+              }
+            ]
+          },
+          {
+            "label": "📝 vue知识点总结 ⭐",
+            "name": "HighFrequencyVue"
+          },
+          {
+            "label": "📜 vue项目的代码规范 ⭐⭐",
+            "name": "VueProjectCodeStandard"
+          },
+          {
+            "label": "🔧 Vapor ⭐⭐⭐",
+            "name": "Vapor"
+          },
+          {
+            "label": "🔧 Vapor更新原理 ⭐⭐⭐",
+            "name": "VaporUpdatePrinciple"
+          }
+        ]
+      },
+      {
+        "label": "🔄 React vs Vue ⭐⭐⭐",
+        "name": "ReactVsVue"
+      },
+      {
+        "label": "🔄 Svelte ⭐",
+        "name": "Svelte"
+      },
+      {
+        "label": "🔄 Solid 🌟",
+        "name": "Solid"
+      },
+      {
+        "label": "🔄 angular 🌟",
+        "name": "Angular"
+      },
+      {
+        "label": "🔄 htmlxjs 🌟",
+        "name": "Htmlxjs"
+      },
+      {
+        "label": "💚 SSR框架 ⭐",
+        "name": "SSRFramework",
+        "children": [
+          {
+            "label": "🔄 SSR与CSR与SSG与ISR ⭐",
+            "name": "SSRCSRSSGISR"
+          },
+          {
+            "label": "🔄 注水与脱水 ⭐",
+            "name": "HydrationAndDehydration"
+          },
+          {
+            "label": "🔄 Nuxt.js ⭐",
+            "name": "Nuxt"
+          },
+          {
+            "label": "🔄 Next.js ⭐",
+            "name": "Nextjs"
+          }
+        ]
+      },
+      {
+        "label": "⚙️ 工程化 ⭐⭐⭐",
+        "name": "Engineering",
+        "children": [
+          {
+            "label": "🔧 构建工具 ⭐⭐⭐",
+            "name": "BuildTools",
+            "children": [
+              {
+                "label": "📦 Webpack ⭐⭐⭐",
+                "name": "Webpack",
+                "children": [
+                  {
+                    "label": "📚 webpack基础知识 ⭐⭐⭐",
+                    "name": "WebpackBasicKnowledge"
+                  },
+                  {
+                    "label": "⚙️ webpack配置 ⭐⭐⭐",
+                    "name": "WebpackConfiguration",
+                    "children": [
+                      {
+                        "label": "🔧 webpack基本配置 ⭐⭐⭐",
+                        "name": "WebpackBasicConfiguration"
+                      },
+                      {
+                        "label": "🔧 Webpack Entry配置 ⭐⭐⭐",
+                        "name": "WebpackEntry"
+                      },
+                      {
+                        "label": "🔧 Webpack Output配置 ⭐⭐⭐",
+                        "name": "WebpackOutput"
+                      },
+                      {
+                        "label": "🔧 Webpack Externals配置 ⭐⭐⭐",
+                        "name": "WebpackExternals"
+                      },
+                      {
+                        "label": "🔧 Webpack DevServer配置 ⭐⭐⭐",
+                        "name": "WebpackDevServer"
+                      },
+                      {
+                        "label": "🔧 Webpack resolve配置 ⭐⭐⭐",
+                        "name": "WebpackResolve"
+                      },
+                      {
+                        "label": "🔧 Webpack library配置 ⭐⭐⭐",
+                        "name": "WebpackLibrary"
+                      },
+                      {
+                        "label": "🔧 Webpack cache配置 ⭐⭐⭐",
+                        "name": "WebpackCache"
+                      }
+                    ]
+                  },
+                  {
+                    "label": "🔧 webpackloader ⭐⭐⭐",
+                    "name": "WebpackLoader",
+                    "children": [
+                      {
+                        "label": "🔧 asset modules ⭐⭐⭐",
+                        "name": "AssetModules"
+                      },
+                      {
+                        "label": "🔄 webpack常见loader ⭐⭐⭐",
+                        "name": "WebpackCommonLoader"
+                      },
+                      {
+                        "label": "📜 babel-loader ⭐⭐⭐",
+                        "name": "BabelLoader"
+                      },
+                      {
+                        "label": "🔧 babel-runtime ⭐⭐⭐",
+                        "name": "BabelRuntime"
+                      },
+                      {
+                        "label": "✍️ 怎么实现一个loader ⭐⭐⭐",
+                        "name": "HowToImplementALoader"
+                      }
+                    ]
+                  },
+                  {
+                    "label": "🔧 webpackplugin ⭐⭐⭐",
+                    "name": "WebpackPlugin",
+                    "children": [
+                      {
+                        "label": "🔄 webpack常见plugin ⭐⭐⭐",
+                        "name": "WebpackCommonPlugin"
+                      },
+                      {
+                        "label": "🔧 terser-webpack-plugin ⭐⭐⭐",
+                        "name": "TerserWebpackPlugin"
+                      },
+                      {
+                        "label": "🔧 compression-webpack-plugin ⭐⭐⭐",
+                        "name": "CompressionWebpackPlugin"
+                      },
+                      {
+                        "label": "🔧 BundleAnalyzerPlugin ⭐⭐⭐",
+                        "name": "BundleAnalyzerPlugin"
+                      },
+                      {
+                        "label": "🔧 ProvidePlugin ⭐⭐⭐",
+                        "name": "ProvidePlugin"
+                      },
+                      {
+                        "label": "🔧 workbox-webpack-plugin ⭐⭐⭐",
+                        "name": "WorkboxWebpackPlugin"
+                      },
+                      {
+                        "label": "🔧 DllPlugin ⭐⭐⭐",
+                        "name": "DllPlugin"
+                      },
+                      {
+                        "label": "🔧 ModuleFederationPlugin ⭐⭐⭐",
+                        "name": "ModuleFederationPlugin"
+                      },
+                      {
+                        "label": "🔧 模块联邦 ⭐⭐⭐",
+                        "name": "ModuleFederation1",
+                        "redirect": {
+                          "name": "ModuleFederation"
+                        }
+                      },
+                      {
+                        "label": "✍️ 怎么实现一个plugin ⭐⭐⭐",
+                        "name": "HowToImplementAPlugin"
+                      }
+                    ]
+                  },
+                  {
+                    "label": "🆚    loader与plugin的区别 ⭐⭐⭐",
+                    "name": "LoaderAndPluginDifference"
+                  },
+                  {
+                    "label": "🔧 webpack source map ⭐⭐⭐",
+                    "name": "WebpackSourceMap"
+                  },
+                  {
+                    "label": "🔧 optimization ⭐⭐⭐",
+                    "name": "WebpackOptimization",
+                    "children": [
+                      {
+                        "label": "🔧 optimization配置 ⭐⭐⭐",
+                        "name": "WebpackOptimizationConfiguration"
+                      },
+                      {
+                        "label": "⚡ webpack优化前端性能 ⭐⭐",
+                        "name": "WebpackPerformanceOptimization"
+                      },
+                      {
+                        "label": "🔧 webpack代码分割 ⭐⭐⭐",
+                        "name": "WebpackCodeSeparation"
+                      },
+                      {
+                        "label": "🔧 splitChunks⭐⭐",
+                        "name": "SplitChunks"
+                      },
+                      {
+                        "label": "🚀 webpack优化构建性能 ⭐⭐",
+                        "name": "WebpackBuildPerformanceOptimization"
+                      }
+                    ]
+                  },
+                  {
+                    "label": "🔧 webpack底层原理 ⭐⭐",
+                    "name": "WebpackUnderlyingPrinciples",
+                    "children": [
+                      {
+                        "label": "💡 webpack实现思想 ⭐⭐⭐",
+                        "name": "WebpackImplementationIdea"
+                      },
+                      {
+                        "label": "🔄 Tapable ⭐",
+                        "name": "Tapable"
+                      },
+                      {
+                        "label": "🔥 热更新 ⭐⭐⭐",
+                        "name": "HotUpdate"
+                      },
+                      {
+                        "label": "🗺️ Source Map ⭐⭐⭐",
+                        "name": "SourceMap"
+                      },
+                      {
+                        "label": "🌳 tree shaking ⭐⭐⭐",
+                        "name": "TreeShaking2"
+                      },
+                      {
+                        "label": "🔧 contenthash⭐⭐",
+                        "name": "ContentHash"
+                      }
+                    ]
+                  },
+                  {
+                    "label": "❓ webpack高频问题 ⭐⭐",
+                    "name": "WebpackHighFrequencyIssues"
+                  }
+                ]
+              },
+              {
+                "label": "⚡ Vite ⭐⭐",
+                "name": "Vite",
+                "children": [
+                  {
+                    "label": "📚 vite基础知识 ⭐⭐⭐",
+                    "name": "ViteBasicKnowledge"
+                  },
+                  {
+                    "label": "🔧 vite配置 ⭐⭐⭐",
+                    "name": "ViteConfiguration"
+                  },
+                  {
+                    "label": "🔧 vite优化 ⭐⭐⭐",
+                    "name": "ViteOptimization"
+                  },
+                  {
+                    "label": "🔧 vite底层原理 ⭐⭐⭐",
+                    "name": "ViteUnderlyingPrinciples"
+                  }
+                ]
+              },
+              {
+                "label": "🆚  webpack与vite的区别 ⭐⭐⭐",
+                "name": "WebpackAndViteDifference"
+              },
+              {
+                "label": "🔧 ESBuild ⭐⭐⭐",
+                "name": "ESBuild"
+              },
+              {
+                "label": "🔧 Roolup ⭐⭐",
+                "name": "Rollup"
+              },
+              {
+                "label": "🔧 Gulp ⭐⭐",
+                "name": "Gulp"
+              }
+            ]
+          },
+          {
+            "label": "📜 代码规范 ⭐⭐",
+            "name": "CodeStandards",
+            "children": [
+              {
+                "label": "✅ ESLint ⭐⭐⭐",
+                "name": "ESLint"
+              },
+              {
+                "label": "🔧 Prettier ⭐⭐⭐",
+                "name": "Prettier"
+              },
+              {
+                "label": "🔧 Husky ⭐⭐⭐",
+                "name": "Husky"
+              },
+              {
+                "label": "🔧 Husky详细配置 ⭐⭐⭐",
+                "name": "HuskyConfiguration"
+              }
+            ]
+          },
+          {
+            "label": "📦 Monorepo ⭐",
+            "name": "Monorepo",
+            "children": [
+              {
+                "label": "🔄 Monorepo介绍 ⭐⭐⭐",
+                "name": "MonorepoIntroduction"
+              },
+              {
+                "label": "🔄 workspace ⭐⭐",
+                "name": "Workspace",
+                "children": [
+                  {
+                    "label": "🔄 workspace介绍 ⭐⭐⭐",
+                    "name": "WorkspaceIntroduction"
+                  },
+                  {
+                    "label": "🔄 workspace配置 ⭐",
+                    "name": "WorkspaceConfiguration"
+                  },
+                  {
+                    "label": "🔄 pnpm-workspace.yaml ⭐",
+                    "name": "PnpmWorkspaceYaml"
+                  }
+                ]
+              },
+              {
+                "label": "🚀 Turborepo ⭐",
+                "name": "Turborepo"
+              },
+              {
+                "label": "🔄 Turborepo配置详细介绍 ⭐",
+                "name": "TurborepoConfiguration"
+              },
+              {
+                "label": "📜 Lerna ⭐",
+                "name": "Lerna"
+              },
+              {
+                "label": "🔄 rush ⭐",
+                "name": "rush"
+              },
+              {
+                "label": "🔄 monorepo工具对比 ⭐",
+                "name": "MonorepoToolsComparison"
+              }
+            ]
+          },
+          {
+            "label": "💡 micro frontends ⭐",
+            "name": "MicroFront",
+            "children": [
+              {
+                "label": "💡 微前端架构实现方案 ⭐⭐⭐",
+                "name": "MicroFrontImplementation"
+              },
+              {
+                "label": "💡 微前端库 ⭐⭐⭐",
+                "name": "MicroFrontLibrary"
+              },
+              {
+                "label": "💡 ifame沙箱 ⭐⭐⭐",
+                "name": "IframeSandbox"
+              },
+              {
+                "label": "💡 webComponent ⭐⭐⭐",
+                "name": "WebComponent",
+                "children": [
+                  {
+                    "label": "💡 webComponent介绍 ⭐⭐⭐",
+                    "name": "WebComponentIntroduction"
+                  },
+                  {
+                    "label": "💡 webComponent进阶 ⭐⭐⭐",
+                    "name": "WebComponentAdvanced"
+                  }
+                ]
+              },
+              {
+                "label": "💡 模块联邦 ⭐⭐⭐",
+                "name": "ModuleFederation"
+              },
+              {
+                "label": "💡 模块联邦原理 ⭐⭐⭐",
+                "name": "ModuleFederationPrinciple"
+              },
+              {
+                "label": "💡 乾坤 ⭐⭐⭐",
+                "name": "QianKun",
+                "children": [
+                  {
+                    "label": "💡 乾坤介绍 ⭐⭐⭐",
+                    "name": "QianKunIntroduction"
+                  },
+                  {
+                    "label": "💡 乾坤原理 ⭐⭐⭐",
+                    "name": "QianKunPrinciple"
+                  },
+                  {
+                    "label": "💡 import-html-entry及其原理 ⭐⭐⭐",
+                    "name": "ImportHtmlEntry"
+                  },
+                  {
+                    "label": "💡 vite和乾坤一起使用 ⭐⭐⭐",
+                    "name": "ViteAndQianKun"
+                  }
+                ]
+              },
+              {
+                "label": "💡 沙箱 ⭐⭐⭐",
+                "name": "Sandbox",
+                "children": [
+                  {
+                    "label": "💡 沙箱介绍 ⭐⭐⭐",
+                    "name": "SandboxIntroduction"
+                  },
+                  {
+                    "label": "💡 沙箱库 ⭐⭐⭐",
+                    "name": "SandboxLibrary"
+                  },
+                  {
+                    "label": "💡 沙箱实现 ⭐⭐⭐",
+                    "name": "SandboxImplementation"
+                  },
+                  {
+                    "label": "💡 沙箱逃逸 ⭐⭐⭐",
+                    "name": "SandboxEscape"
+                  },
+                  {
+                    "label": "💡 CSS隔离实现 ⭐⭐⭐",
+                    "name": "CSSIsolationImplementation"
+                  }
+                ]
+              },
+              {
+                "label": "💡 其他微前端方案 ⭐⭐⭐",
+                "name": "OtherMicroFront"
+              }
+            ]
+          },
+          {
+            "label": "🧪 前端测试 ⭐⭐",
+            "name": "Testing",
+            "children": [
+              {
+                "label": "🔄 前端测试概览 ⭐⭐⭐",
+                "name": "FrontendTestingOverview"
+              },
+              {
+                "label": "🔄 前端测试的利与弊 ⭐⭐⭐",
+                "name": "FrontendTestingBenefitsAndDrawbacks"
+              },
+              {
+                "label": "🔄 单元测试 ⭐⭐⭐",
+                "name": "UnitTesting"
+              },
+              {
+                "label": "🔄 集成测试 ⭐⭐⭐",
+                "name": "IntegrationTesting"
+              },
+              {
+                "label": "🔄 端到端测试 ⭐⭐⭐",
+                "name": "EndToEndTesting"
+              },
+              {
+                "label": "🔄 Jest ⭐⭐⭐",
+                "name": "Jest",
+                "children": [
+                  {
+                    "label": "🔄 Jest基础知识 ⭐⭐⭐",
+                    "name": "JestBasicKnowledge"
+                  },
+                  {
+                    "label": "🔄 Jest的api ⭐⭐⭐",
+                    "name": "JestApi"
+                  }
+                ]
+              },
+              {
+                "label": "🔄 Vitest ⭐⭐⭐",
+                "name": "Vitest",
+                "children": [
+                  {
+                    "label": "🔄 Vitest基础知识 ⭐⭐⭐",
+                    "name": "VitestBasicKnowledge"
+                  },
+                  {
+                    "label": "🔄 Vitest的api ⭐⭐⭐",
+                    "name": "VitestApi"
+                  }
+                ]
+              },
+              {
+                "label": "🔄 Cypress ⭐⭐⭐",
+                "name": "Cypress"
+              }
+            ]
+          },
+          {
+            "label": "🔄 接口调试 ⭐⭐⭐",
+            "name": "InterfaceDebugging",
+            "children": [
+              {
+                "label": "🔄 接口文档 ⭐⭐",
+                "name": "InterfaceDocumentation"
+              },
+              {
+                "label": "🔄 接口调试工具对比 ⭐⭐",
+                "name": "InterfaceDebuggingToolsComparison"
+              },
+              {
+                "label": "🔄 postman ⭐⭐",
+                "name": "Postman"
+              },
+              {
+                "label": "🔄 api-fox ⭐⭐",
+                "name": "ApiFox"
+              },
+              {
+                "label": "🔄 swagger ⭐⭐",
+                "name": "Swagger"
+              },
+              {
+                "label": "🔄 MOCK ⭐",
+                "name": "Mock",
+                "children": [
+                  {
+                    "label": "🔄 Mock工具对比 ⭐⭐⭐",
+                    "name": "MockToolsComparison"
+                  },
+
+                  {
+                    "label": "🔄 Mock.js ⭐⭐⭐",
+                    "name": "MockJs"
+                  },
+                  {
+                    "label": "🔄 MSW ⭐⭐",
+                    "name": "MSW"
+                  },
+                  {
+                    "label": "🔄 JSON Server ⭐",
+                    "name": "JSONServer"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "label": "🔄 CI/CD ⭐",
+            "name": "CIAndCD",
+            "children": [
+              {
+                "label": "🔄 CI/CD介绍 ⭐⭐⭐",
+                "name": "CIAndCDIntroduction"
+              },
+              {
+                "label": "🔄 gitlab ⭐⭐⭐",
+                "name": "Gitlab"
+              },
+              {
+                "label": "🔄 jenkins ⭐⭐⭐",
+                "name": "Jenkins"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "label": "🧠 算法与数据结构 ⭐⭐",
+    "name": "AlgorithmsAndDataStructures",
+    "children": [
+      {
+        "label": "🧭 前端要掌握的算法和数据结构 ⭐⭐⭐",
+        "name": "FrontAlgorithms",
+        "children": [
+          {
+            "label": "📜 前端要掌握的算法概览 ⭐⭐⭐",
+            "name": "FrontAlgorithmsOverview"
+          },
+          {
+            "label": "🔄 前端要掌握的数据结构 ⭐⭐⭐",
+            "name": "FrontDataStructures"
+          },
+          {
+            "label": "🌳 树型结构数据处理 ⭐⭐⭐",
+            "name": "TreeStructureDataProcessing"
+          }
+        ]
+      },
+      {
+        "label": "🧱 数据结构 ⭐⭐⭐",
+        "name": "DataStructures",
+        "children": [
+          {
+            "label": "🔢 数组 ⭐⭐⭐",
+            "name": "ArrayOperations",
+            "children": [
+              { "label": "🔢 数组基础 ⭐⭐⭐", "name": "ArrayBasic" },
+              { "label": "🔢 数组进阶 ⭐⭐⭐", "name": "ArrayAdvanced" }
+            ]
+          },
+          {
+            "label": "🔗 链表 ⭐⭐⭐",
+            "name": "LinkedList",
+            "children": [
+              { "label": "🔗 链表介绍 ⭐⭐⭐", "name": "LinkedListBasic" },
+              { "label": "🔗 链表的九个基本操作 ⭐⭐⭐", "name": "LinkedListBasicOperations" },
+              { "label": "🔗 链表的基本算法 ⭐⭐⭐", "name": "LinkedListBasicAlgorithm" },
+              {
+                "label": "🔗 链表的算法列表 ⭐⭐⭐",
+                "name": "LinkedListAlgorithmList"
+              }
+            ]
+          },
+          {
+            "label": "📚 栈 ⭐⭐",
+            "name": "Stack",
+            "children": [
+              { "label": "📚 栈基础介绍 ⭐⭐⭐", "name": "StackBase" },
+              { "label": "📚 栈的相关算法 ⭐⭐⭐", "name": "StackAlgorithm" }
+            ]
+          },
+          {
+            "label": "🔄 队列 ⭐⭐",
+            "name": "Queue",
+            "children": [
+              {
+                "label": "🔄 队列基础介绍 ⭐⭐⭐",
+                "name": "QueueBase"
+              },
+              {
+                "label": "🔄 队列的相关算法 ⭐⭐⭐",
+                "name": "QueueAlgorithm"
+              }
+            ]
+          },
+          {
+            "label": "🌳 树⭐⭐⭐",
+            "name": "Trees",
+            "children": [
+              { "label": "🌳 树的分类 ⭐⭐⭐", "name": "TreeClassification" },
+              { "label": "🌳 树的遍历 ⭐⭐⭐", "name": "TreeTraversal" }
+            ]
+          },
+          {
+            "label": "🌐 图 ⭐⭐",
+            "name": "Graph",
+            "children": [
+              { "label": "🌐 图介绍 ⭐⭐", "name": "GraphBasic" },
+              { "label": "🌐 图相关算法 ⭐⭐", "name": "GraphAlgorithm1" }
+            ]
+          },
+          {
+            "label": "🔺 堆 ⭐⭐",
+            "name": "Heap",
+            "children": [
+              { "label": "🔺 堆介绍 ⭐⭐", "name": "HeapIntroduction" },
+              { "label": "🔺 堆的实现 ⭐⭐", "name": "HeapImplementation" }
+            ]
+          },
+          {
+            "label": "🔑 哈希表 ⭐⭐",
+            "name": "HashTable",
+            "children": [
+              { "label": "🔑 哈希表介绍 ⭐⭐", "name": "HashTableIntroduction" },
+              { "label": "🔑 哈希表实现 ⭐⭐", "name": "HashTableImplementation" },
+              { "label": "🔑 哈希表的相关算法 ⭐⭐", "name": "HashTableAlgorithm" }
+            ]
+          },
+          {
+            "label": "🔑 桶 ⭐⭐",
+            "name": "Bucket",
+            "children": [
+              { "label": "🔑 桶介绍 ⭐⭐", "name": "BucketIntroduction" },
+              { "label": "🔑 桶相关算法 ⭐⭐", "name": "BucketAlgorithm" }
+            ]
+          },
+          {
+            "label": "🔑 其他数据结构 ⭐⭐⭐",
+            "name": "OtherDataStructures",
+            "children": [{ "label": "🔑 布隆过滤器 ⭐⭐⭐", "name": "BloomFilter" }]
+          }
+        ]
+      },
+      {
+        "label": "🧮 算法 ⭐⭐⭐",
+        "name": "Algorithms",
+        "children": [
+          {
+            "label": "🧮 算法介绍 ⭐⭐⭐",
+            "name": "AlgorithmIntroduction"
+          },
+          {
+            "label": "📚 算法基础 ⭐⭐⭐",
+            "name": "AlgorithmBasic",
+            "children": [
+              {
+                "label": "⏱️ 复杂度 ⭐⭐⭐",
+                "name": "Complexity"
+              },
+              {
+                "label": "🔄 递归 ⭐⭐⭐",
+                "name": "Recursion",
+                "redirect": {
+                  "name": "RecursionAlgorithmBasic"
+                }
+              },
+              {
+                "label": "🔄 排序算法 ⭐⭐⭐",
+                "name": "SortingAlgorithm3",
+                "redirect": {
+                  "name": "SortingAlgorithm"
+                }
+              },
+              {
+                "label": "🤑 贪心算法介绍 ⭐⭐⭐",
+                "name": "GreedyAlgorithmIntroduction"
+              },
+              {
+                "label": "🔙 回溯算法介绍 ⭐⭐⭐",
+                "name": "BacktrackingAlgorithmIntroduction"
+              },
+              {
+                "label": "➗ 分治算法 ⭐⭐⭐",
+                "name": "DivideAndConquerAlgorithm"
+              },
+              {
+                "label": "🔍 搜索算法介绍 ⭐⭐⭐",
+                "name": "SearchAlgorithmIntroduction"
+              },
+              {
+                "label": "🔄 动态规划基础介绍 ⭐⭐⭐",
+                "name": "DynamicProgramming1"
+              }
+            ]
+          },
+          {
+            "label": "🗂️ 算法分类 ⭐⭐⭐",
+            "name": "AlgorithmClassification",
+            "children": [
+              {
+                "label": "🔢 排序算法 ⭐⭐⭐",
+                "name": "SortingAlgorithm"
+              },
+              {
+                "label": "🔍 递归算法 ⭐⭐⭐",
+                "name": "RecursionAlgorithm",
+                "children": [
+                  {
+                    "label": "🔍 递归算法 ⭐⭐⭐",
+                    "name": "RecursionAlgorithmBasic"
+                  },
+                  {
+                    "label": "🔍 递归算法题目 ⭐⭐⭐",
+                    "name": "RecursionAlgorithmProblem"
+                  }
+                ]
+              },
+              {
+                "label": "📈 动态规划 ⭐⭐⭐",
+                "name": "DynamicProgramming",
+                "children": [
+                  {
+                    "label": "📈 状态定义和状态转移方程 ⭐⭐⭐",
+                    "name": "DynamicProgrammingStateDefinitionAndStateTransitionEquation"
+                  },
+                  {
+                    "label": "📈 动态规划分类 ⭐⭐⭐",
+                    "name": "DynamicProgrammingClassification",
+                    "children": [
+                      {
+                        "label": "📈 动态规划分类概览 ⭐⭐⭐",
+                        "name": "DynamicProgrammingClassificationOverview"
+                      },
+                      {
+                        "label": "📈 背包问题 ⭐⭐⭐",
+                        "name": "DynamicProgrammingKnapsackProblem"
+                      },
+                      {
+                        "label": "📈 线性DP ⭐⭐⭐",
+                        "name": "DynamicProgrammingLinearDP"
+                      },
+                      {
+                        "label": "📈 区间DP ⭐⭐⭐",
+                        "name": "DynamicProgrammingIntervalDP"
+                      },
+                      {
+                        "label": "📈 树形DP ⭐⭐⭐",
+                        "name": "DynamicProgrammingTreeDP"
+                      },
+                      {
+                        "label": "📈 状态压缩DP ⭐⭐⭐",
+                        "name": "DynamicProgrammingStateCompressionDP"
+                      },
+                      {
+                        "label": "📈 具体DP题 ⭐⭐⭐",
+                        "name": "DynamicProgrammingSpecificDP",
+                        "children": [
+                          {
+                            "label": "📈 打家劫舍 ⭐⭐⭐",
+                            "name": "Robbery"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "label": "📈 动态规划题目 ⭐⭐⭐",
+                    "name": "DynamicProgrammingProblem",
+                    "children": [
+                      {
+                        "label": "📈 简单DP ⭐⭐⭐",
+                        "name": "DynamicProgrammingSimpleDP"
+                      },
+                      {
+                        "label": "📈 中等DP ⭐⭐⭐",
+                        "name": "DynamicProgrammingMediumDP"
+                      },
+                      {
+                        "label": "📈 困难DP ⭐⭐⭐",
+                        "name": "DynamicProgrammingHardDP"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "label": "🔍 搜索算法 ⭐⭐⭐",
+                "name": "SearchAlgorithm",
+                "children": [
+                  {
+                    "label": "🔍 深度优先搜索 ⭐⭐⭐",
+                    "name": "DepthFirstSearch"
+                  },
+                  {
+                    "label": "🔍 广度优先搜索 ⭐⭐⭐",
+                    "name": "BreadthFirstSearch"
+                  },
+                  {
+                    "label": "🔍 二分查找 ⭐⭐⭐",
+                    "name": "BinarySearch"
+                  },
+                  {
+                    "label": "🔍 回溯算法 ⭐⭐⭐",
+                    "name": "BacktrackingAlgorithm"
+                  }
+                ]
+              },
+
+              {
+                "label": "🌐 图算法 ⭐⭐⭐",
+                "name": "GraphAlgorithm"
+              },
+              {
+                "label": "🔄 贪心算法 ⭐⭐⭐",
+                "name": "GreedyAlgorithm",
+                "children": [
+                  {
+                    "label": "🔄 贪心算法常见题 ⭐⭐⭐",
+                    "name": "GreedyAlgorithmProblem"
+                  },
+                  {
+                    "label": "🔄 Dijkstra算法 ⭐⭐⭐",
+                    "name": "DijkstraAlgorithm"
+                  }
+                ]
+              },
+              {
+                "label": "🔄 其他算法 ⭐⭐⭐",
+                "name": "OtherAlgorithm",
+                "children": [
+                  {
+                    "label": "🔄 分治算法 ⭐⭐⭐",
+                    "name": "DivideAndConquerAlgorithm2"
+                  },
+                  {
+                    "label": "🔄 窗口算法 ⭐⭐⭐",
+                    "name": "SlidingWindowAlgorithm",
+                    "children": [
+                      {
+                        "label": "🔄 LRU算法 ⭐⭐⭐",
+                        "name": "LRUAlgorithm"
+                      }
+                    ]
+                  },
+                  {
+                    "label": "🔄 映射算法 ⭐⭐⭐",
+                    "name": "MappingAlgorithm",
+                    "children": [
+                      {
+                        "label": "🔄 LZ77算法 ⭐⭐⭐",
+                        "name": "LZ77Algorithm"
+                      },
+                      {
+                        "label": "💡 hash算法 ⭐",
+                        "name": "HashAlgorithm"
+                      },
+                      {
+                        "label": "🔄 抽样hash ⭐⭐⭐",
+                        "name": "BitOpe"
+                      }
+                    ]
+                  },
+                  {
+                    "label": "📈 最长递增子序列 ⭐⭐⭐",
+                    "name": "LongestIncreasingSubsequence2"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "label": "🔢 高频算法 ⭐⭐⭐",
+            "name": "HighFrequencyAlgorithms",
+            "children": [
+              {
+                "label": "🔢 生产中高频算法 ⭐⭐⭐",
+                "name": "ProductionHighFrequencyAlgorithms",
+                "children": [
+                  {
+                    "label": "🔢 生产中高频算法列表 ⭐⭐⭐",
+                    "name": "ProductionHighFrequencyAlgorithmsList"
+                  },
+                  {
+                    "label": "🔢 两数之和 ⭐⭐⭐",
+                    "name": "TwoSum"
+                  }
+                ]
+              },
+              {
+                "label": "🔢 面试高频算法 ⭐⭐⭐",
+                "name": "InterviewHighFrequencyAlgorithms"
+              }
+            ]
+          },
+          {
+            "label": "🔢 算法题库 ⭐⭐⭐",
+            "name": "AlgorithmProblemLibrary"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "label": "🚀 进阶技能 ⭐",
+    "name": "AdvancedSkills",
+    "children": [
+      {
+        "label": "🟢 Node.js ⭐⭐",
+        "name": "NodeJS",
+        "children": [
+          {
+            "label": "📚 基础知识 ⭐⭐",
+            "name": "NodeJSBasicKnowledge"
+          },
+          {
+            "label": "📚 Node知识路线 ⭐⭐",
+            "name": "NodeJSKnowledgeRoadmap"
+          },
+          {
+            "label": "🌍 全局变量 ⭐⭐",
+            "name": "GlobalVariables"
+          },
+          {
+            "label": "📦常用模块 ⭐⭐",
+            "name": "NodeModules",
+            "children": [
+              {
+                "label": "📁 fs(文件系统) ⭐⭐⭐",
+                "name": "FileSystem"
+              },
+              {
+                "label": "🌐 http(HTTP模块) ⭐⭐⭐",
+                "name": "HTTP"
+              },
+              {
+                "label": "🛤️ path(路径处理) ⭐⭐⭐",
+                "name": "Path"
+              },
+              {
+                "label": "🔄 buffer(缓冲区) ⭐⭐⭐",
+                "name": "Buffer"
+              },
+              {
+                "label": "🔒 crypto(加密) ⭐⭐⭐",
+                "name": "Crypto"
+              },
+              {
+                "label": "🔄 crypto进阶(加密) ⭐⭐⭐",
+                "name": "cryptoAdvanced"
+              },
+              {
+                "label": "🔄 cluster(集群) ⭐⭐⭐",
+                "name": "Cluster"
+              },
+              {
+                "label": "🔄 child_process(子进程) ⭐⭐⭐",
+                "name": "ChildProcess"
+              },
+              {
+                "label": "🔄 process(进程) ⭐⭐⭐",
+                "name": "Process"
+              },
+              {
+                "label": "🔧 process.nextTick ⭐⭐⭐",
+                "name": "ProcessNextTick"
+              },
+              {
+                "label": "📄 readline(逐行读取) ⭐⭐",
+                "name": "Readline"
+              },
+              {
+                "label": "🌊 stream(流) ⭐⭐",
+                "name": "Stream"
+              },
+              {
+                "label": "🖥️ os(操作系统) ⭐",
+                "name": "OS"
+              },
+              {
+                "label": "📅 events(事件处理) ⭐",
+                "name": "Events2"
+              },
+              {
+                "label": "🛠️ util(实用工具) ⭐",
+                "name": "Util"
+              },
+              {
+                "label": "👶 child_process(子进程) ⭐",
+                "name": "ChildProcess"
+              },
+              {
+                "label": "📦 vm(虚拟机) ⭐",
+                "name": "VM"
+              },
+              {
+                "label": "📦 assert(断言) ⭐",
+                "name": "Assert"
+              },
+              {
+                "label": "📦 zlib(压缩) ⭐",
+                "name": "Zlib"
+              },
+              {
+                "label": "📦 querystring(查询字符串) ⭐",
+                "name": "QueryString"
+              },
+              {
+                "label": "📦 url(网址解析) ⭐",
+                "name": "URL"
+              }
+            ]
+          },
+          {
+            "label": "🚀 进阶模块 ⭐",
+            "name": "NodeAdvancedModules",
+            "children": [
+              {
+                "label": "📦 cluster(集群) ⭐",
+                "name": "Cluster"
+              },
+              {
+                "label": "🌐 dns(域名解析) ⭐",
+                "name": "DNS"
+              },
+              {
+                "label": "🌐 net(网络) ⭐",
+                "name": "Net"
+              },
+              {
+                "label": "🔒 tls(安全) ⭐",
+                "name": "TLS"
+              }
+            ]
+          },
+          {
+            "label": "📦 包管理工具 ⭐⭐",
+            "name": "PackageManager",
+            "children": [
+              {
+                "label": "📦 npm ⭐⭐",
+                "name": "Npm",
+                "children": [
+                  {
+                    "label": "📜 npm基础知识 ⭐⭐",
+                    "name": "NpmBasicKnowledge"
+                  },
+                  {
+                    "label": "📜 npm常用命令 ⭐⭐",
+                    "name": "NpmCommonCommands"
+                  },
+                  {
+                    "label": "📜 npx ⭐⭐",
+                    "name": "Npx"
+                  },
+                  {
+                    "label": "📄 package.json ⭐⭐",
+                    "name": "PackageJson"
+                  },
+                  {
+                    "label": "🔒 package-lock.json ⭐⭐",
+                    "name": "PackageLockJson"
+                  },
+                  {
+                    "label": "🔒 .npmrc文件 ⭐⭐",
+                    "name": "NpmrcFile"
+                  }
+                ]
+              },
+              {
+                "label": "🧶 yarn ⭐⭐",
+                "name": "Yarn",
+                "children": [
+                  {
+                    "label": "📚 yarn基础知识 ⭐⭐",
+                    "name": "YarnBasicKnowledge"
+                  },
+                  {
+                    "label": "📜 yarn常用命令 ⭐⭐",
+                    "name": "YarnCommonCommands"
+                  }
+                ]
+              },
+              {
+                "label": "📦 pnpm ⭐⭐",
+                "name": "Pnpm",
+                "children": [
+                  {
+                    "label": "📚 pnpm基础知识 ⭐⭐",
+                    "name": "PnpmBasicKnowledge"
+                  },
+                  {
+                    "label": "📜 pnpm常用命令 ⭐⭐",
+                    "name": "PnpmCommonCommands"
+                  }
+                ]
+              },
+              {
+                "label": "🆚 包管理工具对比 ⭐⭐",
+                "name": "PackageManagerComparison"
+              },
+              {
+                "label": "🔄 硬链接和符号链接 ⭐⭐",
+                "name": "HardLinkAndSoftLinkAndSymbolLink"
+              },
+              {
+                "label": "📤 上传自己的包 ⭐⭐",
+                "name": "UploadPackage"
+              }
+            ]
+          },
+          {
+            "label": "🖼️ NodeJs框架 ⭐",
+            "name": "NodeJsFramework",
+            "children": [
+              {
+                "label": "🚀 框架对比 ⭐",
+                "name": "FrameworkComparison"
+              },
+              {
+                "label": "🚀 Express ⭐",
+                "name": "Express"
+              },
+              {
+                "label": "🚀 Nest 🌟",
+                "name": "Nest"
+              },
+              {
+                "label": "🚀 Koa 🌟",
+                "name": "Koa"
+              }
+            ]
+          },
+          {
+            "label": "🚀 其他 ⭐",
+            "name": "NodeOther",
+            "children": [
+              {
+                "label": "🚀 自己写一个命令行工具 ⭐",
+                "name": "WriteCommandLineTool",
+                "children": [
+                  {
+                    "label": "🚀 概览 ⭐",
+                    "name": "CommandLineToolOverview"
+                  },
+                  {
+                    "label": "🚀 commander ⭐",
+                    "name": "Commander"
+                  },
+                  {
+                    "label": "🚀 inquirer ⭐",
+                    "name": "Inquirer"
+                  },
+                  {
+                    "label": "🚀 chalk ⭐",
+                    "name": "Chalk"
+                  },
+                  {
+                    "label": "🚀 ora ⭐",
+                    "name": "Ora"
+                  },
+                  {
+                    "label": "🚀 enquirer和yargs ⭐",
+                    "name": "EnquirerAndYargs"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "label": "🖼️ 图形相关 ⭐⭐",
+        "name": "GraphicRelated",
+        "children": [
+          {
+            "label": "🎨canvas ⭐",
+            "name": "Canvas2",
+            "children": [
+              {
+                "label": "📚 canvas基础 ⭐",
+                "name": "CanvasBase",
+                "children": [
+                  {
+                    "label": "🔄 canvas基础图形 ⭐⭐⭐",
+                    "name": "CanvasBaseShape"
+                  },
+                  {
+                    "label": "🔄 canvas中的贝塞尔曲线 ⭐⭐⭐",
+                    "name": "CanvasBezierCurve"
+                  },
+                  {
+                    "label": "🔄 save和restore ⭐⭐⭐",
+                    "name": "CanvasSaveAndRestore"
+                  }
+                ]
+              },
+              {
+                "label": "🚀 canvas进阶 ⭐",
+                "name": "CanvasAdvanced",
+                "children": [
+                  {
+                    "label": "🔄 数字图像处理 ⭐⭐⭐",
+                    "name": "DigitalImageProcessing"
+                  },
+                  {
+                    "label": "🔄 图像识别 ⭐⭐⭐",
+                    "name": "ImageRecognition"
+                  },
+                  {
+                    "label": "🔄 绘制图形 ⭐⭐⭐",
+                    "name": "DrawShape"
+                  },
+                  {
+                    "label": "🔄 事件处理 ⭐⭐⭐",
+                    "name": "CanvasEventHandling"
+                  }
+                ]
+              },
+              {
+                "label": "📚 canvas库 ⭐",
+                "name": "CanvasLibrary",
+                "children": [
+                  {
+                    "label": "🧊 WebGL ⭐",
+                    "name": "WebGL",
+                    "children": [
+                      {
+                        "label": "📚 WebGL基础 ⭐",
+                        "name": "WebGLBase"
+                      },
+                      {
+                        "label": "🔄 顶点着色器 ⭐",
+                        "name": "WebGLVertexShader"
+                      },
+                      {
+                        "label": "🔄 片元着色器 ⭐",
+                        "name": "WebGLFragmentShader"
+                      },
+                      {
+                        "label": "🔄 纹理 ⭐",
+                        "name": "WebGLTexture"
+                      },
+                      {
+                        "label": "🔄 缓冲区 ⭐",
+                        "name": "WebGLBuffer"
+                      },
+                      {
+                        "label": "🔄 帧缓冲区 ⭐",
+                        "name": "WebGLFrameBuffer"
+                      }
+                    ]
+                  },
+                  {
+                    "label": "📊 echarts ⭐",
+                    "name": "Echarts"
+                  },
+                  {
+                    "label": "🧊 three.js ⭐",
+                    "name": "ThreeJs",
+                    "children": [
+                      {
+                        "label": "🔄 three.js介绍 ⭐⭐⭐",
+                        "name": "ThreeJsIntroduction"
+                      },
+                      {
+                        "label": "🔄 three.js基础 ⭐⭐⭐",
+                        "name": "ThreeJsBase"
+                      }
+                    ]
+                  },
+                  {
+                    "label": "🚀 g6 ⭐",
+                    "name": "G6"
+                  },
+                  {
+                    "label": "🚀 fabric ⭐",
+                    "name": "FabricJs"
+                  },
+                  {
+                    "label": "🚀 konva ⭐",
+                    "name": "Konva"
+                  },
+                  {
+                    "label": "🚀 d3 ⭐",
+                    "name": "D3js"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "label": "📐 svg ⭐",
+            "name": "SvgOpearation",
+            "children": [
+              {
+                "label": "🔄 svg介绍 ⭐⭐⭐",
+                "name": "SvgIntroduction"
+              },
+              {
+                "label": "📚 svg基础 ⭐",
+                "name": "SvgBase",
+                "children": [
+                  {
+                    "label": "🔷 svg基础图形 ⭐",
+                    "name": "SvgBaseShape"
+                  },
+                  {
+                    "label": "🛤️ Path ⭐",
+                    "name": "SvgPath"
+                  },
+                  {
+                    "label": "🎨 填充和边框 ⭐",
+                    "name": "FillAndStroke"
+                  },
+                  {
+                    "label": "🔧 定义和使用 ⭐",
+                    "name": "DefineAndUse"
+                  },
+                  {
+                    "label": "svg元素表 ⭐",
+                    "name": "SvgElementTable"
+                  }
+                ]
+              },
+              {
+                "label": "📚 svg库 ⭐",
+                "name": "SvgLibrary",
+                "children": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "label": "📹 视频处理 ⭐",
+        "name": "VideoProcessing",
+        "children": []
+      },
+      {
+        "label": "🔍 动画相关 ⭐⭐⭐",
+        "name": "AnimationRelated",
+        "children": [
+          {
+            "label": "🔍 CSS动画与JS动画对比 ⭐⭐⭐",
+            "name": "CSSAnimationVsJSAnimation"
+          },
+          {
+            "label": "🔍 动画库 ⭐⭐⭐",
+            "name": "AnimationLibrary",
+            "children": [
+              {
+                "label": "🔍 GASP ⭐⭐⭐",
+                "name": "GASP"
+              },
+              {
+                "label": "🔍 motion ⭐⭐⭐",
+                "name": "Motion"
+              },
+              {
+                "label": "🔍 anime.js ⭐⭐⭐",
+                "name": "AnimeJs"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "label": "🛡️ 前端安全 ⭐",
+        "name": "FrontendSecurity",
+        "children": [
+          {
+            "label": "📜 前端安全概览 ⭐",
+            "name": "SecurityOverview"
+          },
+          {
+            "label": "⚔️ XSS(跨站脚本攻击) ⭐",
+            "name": "XSS"
+          },
+          {
+            "label": "🛡️ CSRF(跨站请求伪造) ⭐",
+            "name": "CSRF"
+          },
+          {
+            "label": "📜 CSP ⭐",
+            "name": "CSP"
+          },
+          {
+            "label": "💉 SQL注入 ⭐",
+            "name": "SQLInjection"
+          },
+          {
+            "label": "🖱️ 点击劫持 ⭐",
+            "name": "ClickJacking"
+          },
+          {
+            "label": "👥 中间人攻击 ⭐",
+            "name": "ManInTheMiddleAttack"
+          },
+          {
+            "label": "📦 依赖性利用 ⭐",
+            "name": "DependencyExploitation"
+          },
+          {
+            "label": "🚫 拒绝服务攻击 ⭐",
+            "name": "DenialOfServiceAttack"
+          },
+          {
+            "label": "🔒 integrity ⭐",
+            "name": "integrity"
+          }
+        ]
+      },
+      {
+        "label": "💡 前端(2020-2025)新技术⭐⭐⭐",
+        "name": "NewTechnology",
+        "children": [
+          {
+            "label": "🔄 新技术列表 ⭐⭐⭐",
+            "name": "NewTechnologyList"
+          },
+          {
+            "label": "💡 WebGPU ⭐⭐⭐",
+            "name": "WebGPU",
+            "children": [
+              {
+                "label": "🔄 WebGPU介绍 ⭐⭐⭐",
+                "name": "WebGPUIntroduction"
+              }
+            ]
+          },
+          {
+            "label": "💡 WebAssembly ⭐⭐⭐",
+            "name": "WebAssembly1",
+            "redirect": {
+              "name": "WebAssembly"
+            }
+          },
+          {
+            "label": "📞 WebRTC ⭐⭐",
+            "name": "WebRTC"
+          }
+        ]
+      },
+      {
+        "label": "📱 其他端 🌟",
+        "name": "OtherEnd",
+        "children": [
+          {
+            "label": "💡 PWA ⭐⭐⭐",
+            "name": "PWA"
+          },
+          {
+            "label": "📱 移动端 ⭐",
+            "name": "MobileEnd",
+            "children": [
+              {
+                "label": "📚 移动端html5适配方案 ⭐",
+                "name": "MobileHtml5Adaptation"
+              },
+              {
+                "label": "🔄 arkjs 🌟",
+                "name": "Arkjs"
+              }
+            ]
+          },
+          {
+            "label": "🖥️ Electron ⭐",
+            "name": "Electron",
+            "children": [
+              {
+                "label": "📦 核心概念 ⭐",
+                "name": "CoreConcepts"
+              },
+              {
+                "label": "🔄 核心功能和接口 ⭐⭐⭐",
+                "name": "CoreFeaturesAndInterfaces"
+              },
+              {
+                "label": "🔄 生命周期 ⭐⭐⭐",
+                "name": "ElectronLifeCycle"
+              },
+              {
+                "label": "🔄 Native API ⭐⭐⭐",
+                "name": "NativeAPI"
+              },
+              {
+                "label": "🤝 IPC(进程间通信) ⭐",
+                "name": "IPC"
+              },
+              {
+                "label": "🔄 相关生态与工具 ⭐⭐⭐",
+                "name": "RelatedEcosystemAndTools"
+              },
+              {
+                "label": "📦 打包与发布 ⭐",
+                "name": "PackagingAndPublishing"
+              },
+              {
+                "label": "🔒 安全性 ⭐",
+                "name": "Security"
+              }
+            ]
+          },
+          {
+            "label": "📱 小程序 🌟",
+            "name": "MiniProgram",
+            "children": [
+              {
+                "label": "📚 小程序基础知识 ⭐",
+                "name": "MiniProgramBasicKnowledge"
+              },
+              {
+                "label": "📚 小程序常用组件 ⭐",
+                "name": "WeChatCommonComponents"
+              },
+              {
+                "label": "📚 小程序常用API ⭐",
+                "name": "WeChatCommonAPI"
+              },
+              {
+                "label": "� 小程序高阶组件与API ⭐",
+                "name": "WeChatHighOrderComponentsAndAPI"
+              },
+              {
+                "label": "🔧 小程序框架 uni-app ⭐",
+                "name": "UniApp"
+              }
+            ]
+          },
+          {
+            "label": "🐧 linux系统 ⭐",
+            "name": "LinuxSystem",
+            "children": [
+              {
+                "label": "🐧 linux基础介绍 ⭐⭐⭐",
+                "name": "LinuxBasicIntroduction"
+              },
+              {
+                "label": "🐧 linux命令概览 ⭐⭐⭐",
+                "name": "LinuxCommandOverview"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "label": "💡 其他语言🌟",
+        "name": "OtherLanguage"
+      }
+    ]
+  },
+  {
+    "label": "🤝 项目与软技能 ⭐",
+    "name": "ProjectsAndSoftSkills",
+    "children": [
+      {
+        "label": "📈 业务场景及相应实现 ⭐",
+        "name": "businessAndImplementation",
+        "children": [
+          {
+            "label": "🖱️ 用户操作相关 ⭐",
+            "name": "UserOperation",
+            "children": [
+              {
+                "label": "🔄 全站搜索 ⭐",
+                "name": "FullSiteSearch"
+              },
+              {
+                "label": "🔄 二维码登录 ⭐",
+                "name": "QRCodeLogin"
+              },
+              {
+                "label": "🔄 单点登录 ⭐⭐⭐",
+                "name": "SingleSignOn"
+              },
+              {
+                "label": "🔄 无障碍 ⭐⭐⭐",
+                "name": "Accessibility"
+              },
+              {
+                "label": "🔄 通知用户刷新 ⭐⭐⭐",
+                "name": "NotifyUserRefresh"
+              },
+              {
+                "label": "🔄 文件预览 ⭐⭐⭐",
+                "name": "FilePreview",
+                "children": [
+                  {
+                    "label": "🔄 图片预览 ⭐⭐⭐",
+                    "name": "ImagePreview"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "label": "📐 数据相关 ⭐",
+            "name": "DataRelated2",
+            "children": [
+              {
+                "label": "🔄 请求大规模并发处理 ⭐",
+                "name": "RequestLargeScaleConcurrentProcessing"
+              },
+              {
+                "label": "🔄 大文件上传 ⭐⭐⭐",
+                "name": "LargeFileUpload"
+              },
+              {
+                "label": "🔄 实现截图 ⭐⭐⭐",
+                "name": "Screenshot"
+              },
+              {
+                "label": "🔄 数据采集 ⭐⭐⭐",
+                "name": "DataCollection"
+              }
+            ]
+          },
+          {
+            "label": "🔄 适配相关 ⭐⭐⭐",
+            "name": "AdaptationRelated",
+            "children": [
+              {
+                "label": "🔄 移动端适配方案 ⭐⭐⭐",
+                "name": "MobileAdaptation2"
+              },
+              {
+                "label": "🔄 国际化方案 ⭐⭐⭐",
+                "name": "WebsiteLanguageScheme"
+              }
+            ]
+          },
+          {
+            "label": "🔄 监控 ⭐⭐⭐",
+            "name": "Monitoring",
+            "children": [
+              {
+                "label": "🔢 性能监控实现 ⭐⭐⭐",
+                "name": "PerformanceMonitoring"
+              }
+            ]
+          },
+          {
+            "label": "🔄 项目相关 ⭐⭐⭐",
+            "name": "ProjectRelated",
+            "children": [
+              {
+                "label": "🔄 SEO原理及优化 ⭐⭐⭐",
+                "name": "SeoAndOptimization2"
+              },
+              {
+                "label": "🔄 项目复用 ⭐⭐⭐",
+                "name": "ProjectReuse"
+              },
+              {
+                "label": "🔄 接口自动生成类型文件 ⭐⭐⭐",
+                "name": "InterfaceAutoGenerateTypeFile"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "label": "📋 项目梳理 ⭐",
+        "name": "ProjectOrganization",
+        "children": [
+          {
+            "label": "⭐ STAR 法则：背景 → 任务 → 行动 → 结果 ⭐",
+            "name": "STAR"
+          },
+          {
+            "label": "🔧 技术难点：性能优化、复杂组件设计 ⭐",
+            "name": "TechnicalChallenges"
+          },
+          {
+            "label": "🔍 复盘思考：如何改进架构？ ⭐",
+            "name": "Reflection"
+          }
+        ]
+      },
+
+      {
+        "label": "📈 技术趋势 ⭐",
+        "name": "TechTrends",
+        "children": [
+          {
+            "label": "💡 WebAssembly(WASM) ⭐",
+            "name": "WebAssembly"
+          },
+          {
+            "label": "📦 低代码 ⭐",
+            "name": "LessCode",
+            "children": [
+              {
+                "label": "🔧 低代码介绍 ⭐⭐⭐",
+                "name": "LowCodeIntroduction"
+              },
+              {
+                "label": "🔧 低代码平台 ⭐⭐⭐",
+                "name": "LowCodePlatform"
+              },
+              {
+                "label": "🔧 retool ⭐⭐⭐",
+                "name": "ReTool"
+              },
+              {
+                "label": "🔧 无代码 ⭐⭐⭐",
+                "name": "NoCode"
+              }
+            ]
+          },
+          {
+            "label": "🔧 表单设计器(引擎) ⭐⭐⭐",
+            "name": "FormDesigner"
+          }
+        ]
+      },
+      {
+        "label": "🔧 团队基建 ⭐⭐⭐",
+        "name": "TeamInfrastructure",
+        "children": []
+      },
+      {
+        "label": "🔄 工具编写 ⭐⭐⭐",
+        "name": "ToolCompile",
+        "children": [
+          {
+            "label": "🔄 代码生成器 ⭐⭐⭐",
+            "name": "CodeGenerator"
+          },
+          {
+            "label": "🔄 子资源完整性插件 ⭐⭐⭐",
+            "name": "SubResourceIntegrityPlugin"
+          },
+          {
+            "label": "🔄 工程生成器 ⭐⭐⭐",
+            "name": "ProjectGenerator"
+          },
+          {
+            "label": "🔄 国际化自动工具 ⭐⭐⭐",
+            "name": "InternationalizationAutoTool"
+          },
+          {
+            "label": "🔄 html代码注释器 ⭐⭐⭐",
+            "name": "HtmlCodeCommenter"
+          }
+        ]
+      },
+      {
+        "label": "🔧 遇到的技术难题 ⭐⭐⭐",
+        "name": "TechnicalDifficulties",
+        "children": [
+          {
+            "label": "🔄 框架层面 ⭐⭐⭐",
+            "name": "FrameworkAspect",
+            "children": [
+              {
+                "label": "🔄 动态路由加懒加载 ⭐⭐⭐",
+                "name": "FrameworkAspect1"
+              }
+            ]
+          },
+          {
+            "label": "🔄 技术难题列表 ⭐⭐⭐",
+            "name": "TechnicalDifficultiesList"
+          },
+          {
+            "label": "🔄 大数据下菜单组件的渲染 ⭐⭐⭐",
+            "name": "TreeComponentRendering"
+          },
+          {
+            "label": "🔄 异步滚动 ⭐⭐⭐",
+            "name": "AsyncScroll"
+          }
+        ]
+      },
+      {
+        "label": "🔄 一些坑 ⭐",
+        "name": "SomePitfalls",
+        "children": [
+          {
+            "label": "🔄 js原生 ⭐⭐⭐",
+            "name": "JsNative",
+            "children": [
+              {
+                "label": "引用类型的坑",
+                "name": "ReferenceTypesPitFalls"
+              },
+              {
+                "label": "🔄 element.scroll在元素scrollTop过大时(>3000px)，会自动滚动到顶部 ⭐⭐⭐",
+                "name": "ElementScroll"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "label": "📚 学习 ⭐",
+    "name": "LearningAbility",
+    "children": [
+      {
+        "label": "🗺️ 学习路线 ⭐",
+        "name": "LearningRoutes"
+      },
+      {
+        "label": "🔗 学习网站推荐 ⭐",
+        "name": "RecommendedWebsites"
+      }
+    ]
+  },
+  {
+    "label": "🤖 AI ⭐⭐⭐",
+    "name": "AI",
+    "children": [
+      {
+        "label": "🤖 怎么使用AI协助开发 ⭐⭐⭐",
+        "name": "HowToUseAIToHelpDevelop"
+      },
+      {
+        "label": "🤖 概念介绍 ⭐⭐⭐",
+        "name": "ConceptIntroduction",
+        "children": [
+          {
+            "label": "🤖 区块链⭐⭐⭐",
+            "name": "Blockchain"
+          },
+          {
+            "label": "🤖 大模型⭐⭐⭐",
+            "name": "LargeModel"
+          },
+          {
+            "label": "🤖 多模态⭐⭐⭐",
+            "name": "MultiModal"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "label": "🔧 工具 ⭐",
+    "name": "Tools",
+    "children": [
+      {
+        "label": "🔧 实用工具 ⭐⭐⭐",
+        "name": "UsefulTools"
+      },
+      {
+        "label": "🔧 奇奇怪怪的工具 🌟 ",
+        "name": "WeirdTools"
+      }
+    ]
+  },
+  {
+    "label": "⌨️ VSCODE快捷键 ⭐",
+    "name": "VSCodeShortcuts"
+  }
+]

@@ -1,0 +1,1488 @@
+[
+  {
+    "name": "文件与目录操作",
+    "commands": [
+      {
+        "name": "ls",
+        "description": "列出目录内容",
+        "category": "文件与目录操作",
+        "priority": "高",
+        "priorityNum": 1,
+        "example": "ls -l"
+      },
+      {
+        "name": "cd",
+        "description": "改变当前工作目录",
+        "category": "文件与目录操作",
+        "priority": "高",
+        "priorityNum": 1,
+        "example": "cd /home/user"
+      },
+      {
+        "name": "pwd",
+        "description": "打印当前工作目录",
+        "category": "文件与目录操作",
+        "priority": "高",
+        "priorityNum": 1,
+        "example": "pwd -L"
+      },
+      {
+        "name": "cp",
+        "description": "复制文件或目录",
+        "category": "文件与目录操作",
+        "priority": "高",
+        "priorityNum": 1,
+        "example": "cp file.txt backup/"
+      },
+      {
+        "name": "mv",
+        "description": "移动或重命名文件",
+        "category": "文件与目录操作",
+        "priority": "高",
+        "priorityNum": 1,
+        "example": "mv old.txt new.txt"
+      },
+      {
+        "name": "rm",
+        "description": "删除文件或目录",
+        "category": "文件与目录操作",
+        "priority": "高",
+        "priorityNum": 1,
+        "example": "rm -rf directory"
+      },
+      {
+        "name": "mkdir",
+        "description": "创建目录",
+        "category": "文件与目录操作",
+        "priority": "高",
+        "priorityNum": 1,
+        "example": "mkdir new_folder"
+      },
+      {
+        "name": "rmdir",
+        "description": "删除空目录",
+        "category": "文件与目录操作",
+        "priority": "中"
+      },
+      {
+        "name": "touch",
+        "description": "创建空文件或更新文件时间戳",
+        "category": "文件与目录操作",
+        "priority": "高",
+        "priorityNum": 1,
+        "example": "touch newfile.txt"
+      },
+      {
+        "name": "ln",
+        "description": "创建文件链接",
+        "category": "文件与目录操作",
+        "priority": "中",
+        "priorityNum": 2,
+        "example": "ln -s target link_name"
+      },
+      {
+        "name": "find",
+        "description": "在目录中搜索文件",
+        "category": "文件与目录操作",
+        "priority": "中",
+        "priorityNum": 2,
+        "example": "find . -name '*.txt'"
+      },
+      {
+        "name": "locate",
+        "description": "快速查找文件",
+        "category": "文件与目录操作",
+        "priority": "中",
+        "priorityNum": 2,
+        "example": "locate file.txt"
+      },
+      {
+        "name": "whereis",
+        "description": "定位命令的二进制、源码和手册页位置",
+        "category": "文件与目录操作",
+        "priority": "低",
+        "priorityNum": 3,
+        "example": "whereis ls"
+      },
+      {
+        "name": "which",
+        "description": "显示命令的完整路径",
+        "category": "文件与目录操作",
+        "priority": "中",
+        "priorityNum": 2,
+        "example": "which ls"
+      },
+      {
+        "name": "tree",
+        "description": "以树状图列出目录内容",
+        "category": "文件与目录操作",
+        "priority": "中",
+        "priorityNum": 2,
+        "example": "tree ."
+      },
+      {
+        "name": "file",
+        "description": "确定文件类型",
+        "category": "文件与目录操作",
+        "priority": "中",
+        "priorityNum": 2,
+        "example": "file file.txt"
+      },
+      {
+        "name": "rename",
+        "description": "批量重命名文件",
+        "category": "文件与目录操作",
+        "priority": "低",
+        "priorityNum": 3,
+        "example": "rename '*.txt' '*.log'"
+      },
+      {
+        "name": "mktemp",
+        "description": "创建临时文件或目录",
+        "category": "文件与目录操作",
+        "priority": "低",
+        "priorityNum": 3,
+        "example": "mktemp -d"
+      },
+      {
+        "name": "realpath",
+        "description": "打印解析的绝对路径",
+        "category": "文件与目录操作",
+        "priority": "低",
+        "priorityNum": 3,
+        "example": "realpath /usr/bin/ls"
+      }
+    ]
+  },
+  {
+    "name": "文件内容查看与处理",
+    "commands": [
+      {
+        "name": "cat",
+        "description": "连接文件并打印到标准输出",
+        "category": "文件内容查看与处理",
+        "priority": "高",
+        "priorityNum": 1,
+        "example": "cat file.txt"
+      },
+      {
+        "name": "less",
+        "description": "分页显示文件内容",
+        "category": "文件内容查看与处理",
+        "priority": "高",
+        "priorityNum": 1,
+        "example": "less largefile.log"
+      },
+      {
+        "name": "head",
+        "description": "显示文件开头部分",
+        "category": "文件内容查看与处理",
+        "priority": "高",
+        "priorityNum": 1,
+        "example": "head -n 10 file.txt"
+      },
+      {
+        "name": "tail",
+        "description": "显示文件结尾部分",
+        "category": "文件内容查看与处理",
+        "priority": "高",
+        "priorityNum": 1,
+        "example": "tail -f logfile.log"
+      },
+      {
+        "name": "grep",
+        "description": "文本搜索工具",
+        "category": "文件内容查看与处理",
+        "priority": "高",
+        "priorityNum": 1,
+        "example": "grep 'error' *.log"
+      },
+      {
+        "name": "sed",
+        "description": "流编辑器，用于文本转换",
+        "category": "文件内容查看与处理",
+        "priority": "中",
+        "priorityNum": 2,
+        "example": "sed 's/old/new/g' file.txt"
+      },
+      {
+        "name": "awk",
+        "description": "文本处理语言",
+        "category": "文件内容查看与处理",
+        "priority": "中"
+      },
+      {
+        "name": "sort",
+        "description": "对文本行排序",
+        "category": "文件内容查看与处理",
+        "priority": "中",
+        "priorityNum": 2,
+        "example": "sort file.txt"
+      },
+      {
+        "name": "uniq",
+        "description": "报告或忽略重复行",
+        "category": "文件内容查看与处理",
+        "priority": "中",
+        "priorityNum": 2,
+        "example": "uniq sorted.txt"
+      },
+      {
+        "name": "wc",
+        "description": "统计文件的行数、单词数和字节数",
+        "category": "文件内容查看与处理",
+        "priority": "中",
+        "priorityNum": 2,
+        "example": "wc -l file.txt"
+      },
+      {
+        "name": "diff",
+        "description": "比较文件差异",
+        "category": "文件内容查看与处理",
+        "priority": "中",
+        "priorityNum": 2,
+        "example": "diff file1.txt file2.txt"
+      },
+      {
+        "name": "cmp",
+        "description": "比较两个文件字节级别差异",
+        "category": "文件内容查看与处理",
+        "priority": "低"
+      },
+      {
+        "name": "cut",
+        "description": "从文件中删除部分内容",
+        "category": "文件内容查看与处理",
+        "priority": "中",
+        "priorityNum": 2,
+        "example": "cut -d: -f1 /etc/passwd"
+      },
+      {
+        "name": "tr",
+        "description": "替换或删除字符",
+        "category": "文件内容查看与处理",
+        "priority": "中",
+        "priorityNum": 2,
+        "example": "tr 'a-z' 'A-Z'"
+      },
+      {
+        "name": "tee",
+        "description": "从标准输入读取并写入标准输出和文件",
+        "category": "文件内容查看与处理",
+        "priority": "中",
+        "priorityNum": 2,
+        "example": "ls | tee output.txt"
+      },
+      {
+        "name": "paste",
+        "description": "合并文件的行",
+        "category": "文件内容查看与处理",
+        "priority": "低"
+      },
+      {
+        "name": "join",
+        "description": "基于共同字段连接两个文件",
+        "category": "文件内容查看与处理",
+        "priority": "低"
+      },
+      {
+        "name": "split",
+        "description": "将文件分割成多个部分",
+        "category": "文件内容查看与处理",
+        "priority": "低"
+      },
+      {
+        "name": "xxd",
+        "description": "创建十六进制转储",
+        "category": "文件内容查看与处理",
+        "priority": "低"
+      },
+      {
+        "name": "strings",
+        "description": "显示文件中的可打印字符串",
+        "category": "文件内容查看与处理",
+        "priority": "低"
+      }
+    ]
+  },
+  {
+    "name": "系统信息与进程管理",
+    "commands": [
+      {
+        "name": "ps",
+        "description": "显示当前进程状态",
+        "category": "系统信息与进程管理",
+        "priority": "高",
+        "priorityNum": 1,
+        "example": "ps aux"
+      },
+      {
+        "name": "top",
+        "description": "实时显示进程动态",
+        "category": "系统信息与进程管理",
+        "priority": "高"
+      },
+      {
+        "name": "htop",
+        "description": "交互式进程查看器",
+        "category": "系统信息与进程管理",
+        "priority": "中"
+      },
+      {
+        "name": "kill",
+        "description": "终止进程",
+        "category": "系统信息与进程管理",
+        "priority": "高",
+        "priorityNum": 1,
+        "example": "kill -9 1234"
+      },
+      {
+        "name": "pkill",
+        "description": "通过名称终止进程",
+        "category": "系统信息与进程管理",
+        "priority": "中"
+      },
+      {
+        "name": "killall",
+        "description": "按名称终止所有匹配进程",
+        "category": "系统信息与进程管理",
+        "priority": "中"
+      },
+      {
+        "name": "bg",
+        "description": "将作业放到后台运行",
+        "category": "系统信息与进程管理",
+        "priority": "中"
+      },
+      {
+        "name": "fg",
+        "description": "将作业放到前台运行",
+        "category": "系统信息与进程管理",
+        "priority": "中"
+      },
+      {
+        "name": "jobs",
+        "description": "列出活动的作业",
+        "category": "系统信息与进程管理",
+        "priority": "中"
+      },
+      {
+        "name": "free",
+        "description": "显示内存使用情况",
+        "category": "系统信息与进程管理",
+        "priority": "中",
+        "priorityNum": 2,
+        "example": "free -h"
+      },
+      {
+        "name": "df",
+        "description": "显示磁盘空间使用情况",
+        "category": "系统信息与进程管理",
+        "priority": "高",
+        "priorityNum": 1,
+        "example": "df -h"
+      },
+      {
+        "name": "du",
+        "description": "估算文件/目录的磁盘使用空间",
+        "category": "系统信息与进程管理",
+        "priority": "高",
+        "priorityNum": 1,
+        "example": "du -sh *"
+      },
+      {
+        "name": "uname",
+        "description": "显示系统信息",
+        "category": "系统信息与进程管理",
+        "priority": "中",
+        "priorityNum": 2,
+        "example": "uname -a"
+      },
+      {
+        "name": "uptime",
+        "description": "显示系统运行时间",
+        "category": "系统信息与进程管理",
+        "priority": "中"
+      },
+      {
+        "name": "who",
+        "description": "显示已登录用户",
+        "category": "系统信息与进程管理",
+        "priority": "中"
+      },
+      {
+        "name": "w",
+        "description": "显示已登录用户及其活动",
+        "category": "系统信息与进程管理",
+        "priority": "中"
+      },
+      {
+        "name": "last",
+        "description": "显示用户登录历史",
+        "category": "系统信息与进程管理",
+        "priority": "中"
+      },
+      {
+        "name": "dmesg",
+        "description": "显示内核环形缓冲区消息",
+        "category": "系统信息与进程管理",
+        "priority": "中"
+      },
+      {
+        "name": "vmstat",
+        "description": "报告虚拟内存统计",
+        "category": "系统信息与进程管理",
+        "priority": "低"
+      },
+      {
+        "name": "iostat",
+        "description": "报告CPU统计和输入/输出统计",
+        "category": "系统信息与进程管理",
+        "priority": "低"
+      },
+      {
+        "name": "mpstat",
+        "description": "报告处理器相关统计",
+        "category": "系统信息与进程管理",
+        "priority": "低"
+      },
+      {
+        "name": "sar",
+        "description": "收集、报告或保存系统活动信息",
+        "category": "系统信息与进程管理",
+        "priority": "低"
+      },
+      {
+        "name": "lsof",
+        "description": "列出打开的文件",
+        "category": "系统信息与进程管理",
+        "priority": "中"
+      },
+      {
+        "name": "strace",
+        "description": "跟踪系统调用和信号",
+        "category": "系统信息与进程管理",
+        "priority": "低"
+      },
+      {
+        "name": "ltrace",
+        "description": "跟踪库函数调用",
+        "category": "系统信息与进程管理",
+        "priority": "低"
+      },
+      {
+        "name": "time",
+        "description": "测量命令执行时间",
+        "category": "系统信息与进程管理",
+        "priority": "中"
+      },
+      {
+        "name": "nohup",
+        "description": "运行命令，忽略挂断信号",
+        "category": "系统信息与进程管理",
+        "priority": "中"
+      },
+      {
+        "name": "watch",
+        "description": "定期执行程序并全屏显示结果",
+        "category": "系统信息与进程管理",
+        "priority": "中",
+        "priorityNum": 2,
+        "example": "watch -n 1 free -h"
+      }
+    ]
+  },
+  {
+    "name": "网络操作",
+    "commands": [
+      {
+        "name": "ping",
+        "description": "测试网络连接",
+        "category": "网络操作",
+        "priority": "高",
+        "priorityNum": 1,
+        "example": "ping example.com"
+      },
+      {
+        "name": "traceroute",
+        "description": "跟踪数据包到目标主机的路径",
+        "category": "网络操作",
+        "priority": "中"
+      },
+      {
+        "name": "mtr",
+        "description": "网络诊断工具",
+        "category": "网络操作",
+        "priority": "中"
+      },
+      {
+        "name": "ifconfig",
+        "description": "配置网络接口",
+        "category": "网络操作",
+        "priority": "高"
+      },
+      {
+        "name": "ip",
+        "description": "显示/操作路由、设备、策略路由和隧道",
+        "category": "网络操作",
+        "priority": "高"
+      },
+      {
+        "name": "netstat",
+        "description": "显示网络连接、路由表、接口统计等",
+        "category": "网络操作",
+        "priority": "中",
+        "priorityNum": 2,
+        "example": "netstat -tuln"
+      },
+      {
+        "name": "ss",
+        "description": "调查套接字的工具",
+        "category": "网络操作",
+        "priority": "中"
+      },
+      {
+        "name": "dig",
+        "description": "DNS查询工具",
+        "category": "网络操作",
+        "priority": "中",
+        "priorityNum": 2,
+        "example": "dig example.com"
+      },
+      {
+        "name": "nslookup",
+        "description": "查询域名服务器",
+        "category": "网络操作",
+        "priority": "中"
+      },
+      {
+        "name": "host",
+        "description": "DNS查找实用程序",
+        "category": "网络操作",
+        "priority": "中"
+      },
+      {
+        "name": "whois",
+        "description": "查询域名信息",
+        "category": "网络操作",
+        "priority": "中"
+      },
+      {
+        "name": "wget",
+        "description": "从网络下载文件",
+        "category": "网络操作",
+        "priority": "高",
+        "priorityNum": 1,
+        "example": "wget https://example.com/file.zip"
+      },
+      {
+        "name": "curl",
+        "description": "传输数据的命令行工具",
+        "category": "网络操作",
+        "priority": "高",
+        "priorityNum": 1,
+        "example": "curl -O https://example.com/file.zip"
+      },
+      {
+        "name": "scp",
+        "description": "安全复制文件",
+        "category": "网络操作",
+        "priority": "高",
+        "priorityNum": 1,
+        "example": "scp file.txt user@remote:/path"
+      },
+      {
+        "name": "rsync",
+        "description": "远程文件同步工具",
+        "category": "网络操作",
+        "priority": "中",
+        "priorityNum": 2,
+        "example": "rsync -avz local/ user@remote:backup/"
+      },
+      {
+        "name": "ssh",
+        "description": "安全远程登录",
+        "category": "网络操作",
+        "priority": "高",
+        "priorityNum": 1,
+        "example": "ssh user@remotehost"
+      },
+      {
+        "name": "telnet",
+        "description": "使用TELNET协议连接主机",
+        "category": "网络操作",
+        "priority": "中"
+      },
+      {
+        "name": "nc",
+        "description": "任意TCP和UDP连接和监听",
+        "category": "网络操作",
+        "priority": "中"
+      },
+      {
+        "name": "nmap",
+        "description": "网络探测和安全审计",
+        "category": "网络操作",
+        "priority": "中"
+      },
+      {
+        "name": "tcpdump",
+        "description": "网络流量捕获工具",
+        "category": "网络操作",
+        "priority": "中"
+      },
+      {
+        "name": "iptables",
+        "description": "IP包过滤管理工具",
+        "category": "网络操作",
+        "priority": "中"
+      },
+      {
+        "name": "ufw",
+        "description": "简单的防火墙配置工具",
+        "category": "网络操作",
+        "priority": "中"
+      },
+      {
+        "name": "route",
+        "description": "显示/操作IP路由表",
+        "category": "网络操作",
+        "priority": "中"
+      },
+      {
+        "name": "arp",
+        "description": "操作系统的ARP缓存",
+        "category": "网络操作",
+        "priority": "低"
+      },
+      {
+        "name": "host name",
+        "description": "显示或设置系统主机名",
+        "category": "网络操作",
+        "priority": "中"
+      }
+    ]
+  },
+  {
+    "name": "权限管理",
+    "commands": [
+      {
+        "name": "chmod",
+        "description": "更改文件权限",
+        "category": "权限管理",
+        "priority": "高",
+        "priorityNum": 1,
+        "example": "chmod 755 script.sh"
+      },
+      {
+        "name": "chown",
+        "description": "更改文件所有者和所属组",
+        "category": "权限管理",
+        "priority": "高",
+        "priorityNum": 1,
+        "example": "chown user:group file.txt"
+      },
+      {
+        "name": "chgrp",
+        "description": "更改文件所属组",
+        "category": "权限管理",
+        "priority": "中"
+      },
+      {
+        "name": "sudo",
+        "description": "以超级用户权限执行命令",
+        "category": "权限管理",
+        "priority": "高",
+        "priorityNum": 1,
+        "example": "sudo apt update"
+      },
+      {
+        "name": "su",
+        "description": "切换用户身份",
+        "category": "权限管理",
+        "priority": "高",
+        "priorityNum": 1,
+        "example": "su - user"
+      },
+      {
+        "name": "passwd",
+        "description": "更改用户密码",
+        "category": "权限管理",
+        "priority": "中"
+      },
+      {
+        "name": "umask",
+        "description": "设置文件创建时的权限掩码",
+        "category": "权限管理",
+        "priority": "中"
+      },
+      {
+        "name": "getfacl",
+        "description": "获取文件访问控制列表",
+        "category": "权限管理",
+        "priority": "低"
+      },
+      {
+        "name": "setfacl",
+        "description": "设置文件访问控制列表",
+        "category": "权限管理",
+        "priority": "低"
+      },
+      {
+        "name": "id",
+        "description": "显示用户身份信息",
+        "category": "权限管理",
+        "priority": "中",
+        "priorityNum": 2,
+        "example": "id user"
+      },
+      {
+        "name": "whoami",
+        "description": "显示当前用户名",
+        "category": "权限管理",
+        "priority": "中"
+      },
+      {
+        "name": "groups",
+        "description": "显示用户所属的组",
+        "category": "权限管理",
+        "priority": "中"
+      },
+      {
+        "name": "newgrp",
+        "description": "登录到新组",
+        "category": "权限管理",
+        "priority": "低"
+      },
+      {
+        "name": "visudo",
+        "description": "安全地编辑sudoers文件",
+        "category": "权限管理",
+        "priority": "低"
+      }
+    ]
+  },
+  {
+    "name": "压缩与归档",
+    "commands": [
+      {
+        "name": "tar",
+        "description": "打包和解包文件",
+        "category": "压缩与归档",
+        "priority": "高",
+        "priorityNum": 1,
+        "example": "tar -czvf archive.tar.gz folder/"
+      },
+      {
+        "name": "gzip",
+        "description": "压缩文件",
+        "category": "压缩与归档",
+        "priority": "中",
+        "priorityNum": 2,
+        "example": "gzip file.txt"
+      },
+      {
+        "name": "gunzip",
+        "description": "解压缩gzip文件",
+        "category": "压缩与归档",
+        "priority": "中"
+      },
+      {
+        "name": "bzip2",
+        "description": "块排序文件压缩器",
+        "category": "压缩与归档",
+        "priority": "中"
+      },
+      {
+        "name": "bunzip2",
+        "description": "解压缩bzip2文件",
+        "category": "压缩与归档",
+        "priority": "中"
+      },
+      {
+        "name": "zip",
+        "description": "打包和压缩文件",
+        "category": "压缩与归档",
+        "priority": "中",
+        "priorityNum": 2,
+        "example": "zip archive.zip file1 file2"
+      },
+      {
+        "name": "unzip",
+        "description": "解压缩zip文件",
+        "category": "压缩与归档",
+        "priority": "中"
+      },
+      {
+        "name": "rar",
+        "description": "RAR压缩文件管理",
+        "category": "压缩与归档",
+        "priority": "低"
+      },
+      {
+        "name": "unrar",
+        "description": "解压缩RAR文件",
+        "category": "压缩与归档",
+        "priority": "低"
+      },
+      {
+        "name": "7z",
+        "description": "7-Zip文件归档器",
+        "category": "压缩与归档",
+        "priority": "低"
+      },
+      {
+        "name": "zcat",
+        "description": "查看压缩文件内容",
+        "category": "压缩与归档",
+        "priority": "中"
+      },
+      {
+        "name": "zless",
+        "description": "分页查看压缩文件",
+        "category": "压缩与归档",
+        "priority": "中"
+      },
+      {
+        "name": "zcmp",
+        "description": "比较压缩文件",
+        "category": "压缩与归档",
+        "priority": "低"
+      },
+      {
+        "name": "zdiff",
+        "description": "比较压缩文件差异",
+        "category": "压缩与归档",
+        "priority": "低"
+      }
+    ]
+  },
+  {
+    "name": "包管理",
+    "commands": [
+      {
+        "name": "apt",
+        "description": "Debian/Ubuntu包管理工具",
+        "category": "包管理",
+        "priority": "高",
+        "priorityNum": 1,
+        "example": "apt install package"
+      },
+      {
+        "name": "apt-get",
+        "description": "APT包处理实用程序",
+        "category": "包管理",
+        "priority": "高"
+      },
+      {
+        "name": "apt-cache",
+        "description": "查询APT缓存",
+        "category": "包管理",
+        "priority": "中"
+      },
+      {
+        "name": "dpkg",
+        "description": "Debian包管理器",
+        "category": "包管理",
+        "priority": "中"
+      },
+      {
+        "name": "yum",
+        "description": "RHEL/CentOS包管理器",
+        "category": "包管理",
+        "priority": "高"
+      },
+      {
+        "name": "dnf",
+        "description": "新一代RPM包管理器",
+        "category": "包管理",
+        "priority": "高"
+      },
+      {
+        "name": "rpm",
+        "description": "RPM包管理器",
+        "category": "包管理",
+        "priority": "中"
+      },
+      {
+        "name": "zypper",
+        "description": "SUSE包管理器",
+        "category": "包管理",
+        "priority": "中"
+      },
+      {
+        "name": "pacman",
+        "description": "Arch Linux包管理器",
+        "category": "包管理",
+        "priority": "高"
+      },
+      {
+        "name": "snap",
+        "description": "Snap包管理工具",
+        "category": "包管理",
+        "priority": "中"
+      },
+      {
+        "name": "flatpak",
+        "description": "Flatpak包管理工具",
+        "category": "包管理",
+        "priority": "中"
+      },
+      {
+        "name": "pip",
+        "description": "Python包安装器",
+        "category": "包管理",
+        "priority": "中"
+      },
+      {
+        "name": "npm",
+        "description": "Node.js包管理器",
+        "category": "包管理",
+        "priority": "中"
+      },
+      {
+        "name": "gem",
+        "description": "Ruby包管理器",
+        "category": "包管理",
+        "priority": "低"
+      },
+      {
+        "name": "cargo",
+        "description": "Rust包管理器",
+        "category": "包管理",
+        "priority": "低"
+      }
+    ]
+  },
+  {
+    "name": "用户与组管理",
+    "commands": [
+      {
+        "name": "useradd",
+        "description": "创建新用户",
+        "category": "用户与组管理",
+        "priority": "中"
+      },
+      {
+        "name": "adduser",
+        "description": "创建新用户（更友好的界面）",
+        "category": "用户与组管理",
+        "priority": "中"
+      },
+      {
+        "name": "userdel",
+        "description": "删除用户账户",
+        "category": "用户与组管理",
+        "priority": "中"
+      },
+      {
+        "name": "usermod",
+        "description": "修改用户账户",
+        "category": "用户与组管理",
+        "priority": "中"
+      },
+      {
+        "name": "groupadd",
+        "description": "创建新组",
+        "category": "用户与组管理",
+        "priority": "中"
+      },
+      {
+        "name": "groupdel",
+        "description": "删除组",
+        "category": "用户与组管理",
+        "priority": "中"
+      },
+      {
+        "name": "groupmod",
+        "description": "修改组定义",
+        "category": "用户与组管理",
+        "priority": "中"
+      },
+      {
+        "name": "gpasswd",
+        "description": "管理/etc/group文件",
+        "category": "用户与组管理",
+        "priority": "中"
+      },
+      {
+        "name": "newusers",
+        "description": "批量更新/创建新用户",
+        "category": "用户与组管理",
+        "priority": "低"
+      },
+      {
+        "name": "chpasswd",
+        "description": "批量更新密码",
+        "category": "用户与组管理",
+        "priority": "低"
+      },
+      {
+        "name": "chage",
+        "description": "更改用户密码过期信息",
+        "category": "用户与组管理",
+        "priority": "低"
+      },
+      {
+        "name": "pwck",
+        "description": "验证密码文件的完整性",
+        "category": "用户与组管理",
+        "priority": "低"
+      },
+      {
+        "name": "grpck",
+        "description": "验证组文件的完整性",
+        "category": "用户与组管理",
+        "priority": "低"
+      }
+    ]
+  },
+  {
+    "name": "磁盘管理",
+    "commands": [
+      {
+        "name": "fdisk",
+        "description": "磁盘分区表操作工具",
+        "category": "磁盘管理",
+        "priority": "中"
+      },
+      {
+        "name": "parted",
+        "description": "磁盘分区工具",
+        "category": "磁盘管理",
+        "priority": "中"
+      },
+      {
+        "name": "gparted",
+        "description": "图形化分区工具",
+        "category": "磁盘管理",
+        "priority": "中"
+      },
+      {
+        "name": "mkfs",
+        "description": "在分区上创建文件系统",
+        "category": "磁盘管理",
+        "priority": "中"
+      },
+      {
+        "name": "mount",
+        "description": "挂载文件系统",
+        "category": "磁盘管理",
+        "priority": "高",
+        "priorityNum": 1,
+        "example": "mount /dev/sdb1 /mnt"
+      },
+      {
+        "name": "umount",
+        "description": "卸载文件系统",
+        "category": "磁盘管理",
+        "priority": "高"
+      },
+      {
+        "name": "fsck",
+        "description": "检查并修复Linux文件系统",
+        "category": "磁盘管理",
+        "priority": "中"
+      },
+      {
+        "name": "badblocks",
+        "description": "查找磁盘上的坏块",
+        "category": "磁盘管理",
+        "priority": "低"
+      },
+      {
+        "name": "partprobe",
+        "description": "通知操作系统分区表变化",
+        "category": "磁盘管理",
+        "priority": "低"
+      },
+      {
+        "name": "swapoff",
+        "description": "禁用设备和文件的交换",
+        "category": "磁盘管理",
+        "priority": "低"
+      },
+      {
+        "name": "swapon",
+        "description": "启用设备和文件的交换",
+        "category": "磁盘管理",
+        "priority": "低"
+      },
+      {
+        "name": "blkid",
+        "description": "定位/打印块设备属性",
+        "category": "磁盘管理",
+        "priority": "中"
+      },
+      {
+        "name": "lsblk",
+        "description": "列出块设备信息",
+        "category": "磁盘管理",
+        "priority": "中"
+      },
+      {
+        "name": "hdparm",
+        "description": "获取/设置硬盘参数",
+        "category": "磁盘管理",
+        "priority": "低"
+      },
+      {
+        "name": "lshw",
+        "description": "列出硬件配置信息",
+        "category": "磁盘管理",
+        "priority": "低"
+      }
+    ]
+  },
+  {
+    "name": "文本编辑",
+    "commands": [
+      {
+        "name": "vi",
+        "description": "经典的文本编辑器",
+        "category": "文本编辑",
+        "priority": "高"
+      },
+      {
+        "name": "vim",
+        "description": "改进的vi编辑器",
+        "category": "文本编辑",
+        "priority": "高"
+      },
+      {
+        "name": "nano",
+        "description": "简单易用的文本编辑器",
+        "category": "文本编辑",
+        "priority": "高"
+      },
+      {
+        "name": "emacs",
+        "description": "可扩展的文本编辑器",
+        "category": "文本编辑",
+        "priority": "中"
+      },
+      {
+        "name": "sed",
+        "description": "流编辑器",
+        "category": "文本编辑",
+        "priority": "中"
+      },
+      {
+        "name": "awk",
+        "description": "模式扫描和处理语言",
+        "category": "文本编辑",
+        "priority": "中"
+      },
+      {
+        "name": "ed",
+        "description": "行编辑器",
+        "category": "文本编辑",
+        "priority": "低"
+      },
+      {
+        "name": "ex",
+        "description": "行编辑器",
+        "category": "文本编辑",
+        "priority": "低"
+      },
+      {
+        "name": "joe",
+        "description": "用户友好的文本编辑器",
+        "category": "文本编辑",
+        "priority": "低"
+      },
+      {
+        "name": "pico",
+        "description": "简单文本编辑器",
+        "category": "文本编辑",
+        "priority": "低"
+      }
+    ]
+  },
+  {
+    "name": "Shell与脚本",
+    "commands": [
+      {
+        "name": "bash",
+        "description": "Bourne Again Shell",
+        "category": "Shell与脚本",
+        "priority": "高"
+      },
+      {
+        "name": "sh",
+        "description": "Bourne Shell",
+        "category": "Shell与脚本",
+        "priority": "中"
+      },
+      {
+        "name": "zsh",
+        "description": "Z Shell",
+        "category": "Shell与脚本",
+        "priority": "中"
+      },
+      {
+        "name": "fish",
+        "description": "友好的交互式Shell",
+        "category": "Shell与脚本",
+        "priority": "中"
+      },
+      {
+        "name": "tcsh",
+        "description": "C Shell的增强版本",
+        "category": "Shell与脚本",
+        "priority": "低"
+      },
+      {
+        "name": "csh",
+        "description": "C Shell",
+        "category": "Shell与脚本",
+        "priority": "低"
+      },
+      {
+        "name": "ksh",
+        "description": "Korn Shell",
+        "category": "Shell与脚本",
+        "priority": "低"
+      },
+      {
+        "name": "source",
+        "description": "在当前Shell中执行脚本",
+        "category": "Shell与脚本",
+        "priority": "中"
+      },
+      {
+        "name": "alias",
+        "description": "创建命令别名",
+        "category": "Shell与脚本",
+        "priority": "中"
+      },
+      {
+        "name": "unalias",
+        "description": "删除别名",
+        "category": "Shell与脚本",
+        "priority": "中"
+      },
+      {
+        "name": "history",
+        "description": "显示命令历史",
+        "category": "Shell与脚本",
+        "priority": "中"
+      },
+      {
+        "name": "export",
+        "description": "设置环境变量",
+        "category": "Shell与脚本",
+        "priority": "中"
+      },
+      {
+        "name": "env",
+        "description": "在修改的环境中运行程序",
+        "category": "Shell与脚本",
+        "priority": "中"
+      },
+      {
+        "name": "set",
+        "description": "设置或显示Shell变量",
+        "category": "Shell与脚本",
+        "priority": "中"
+      },
+      {
+        "name": "unset",
+        "description": "删除Shell变量",
+        "category": "Shell与脚本",
+        "priority": "中"
+      },
+      {
+        "name": "echo",
+        "description": "显示一行文本",
+        "category": "Shell与脚本",
+        "priority": "高",
+        "priorityNum": 1,
+        "example": "echo $PATH"
+      },
+      {
+        "name": "printf",
+        "description": "格式化输出",
+        "category": "Shell与脚本",
+        "priority": "中"
+      },
+      {
+        "name": "read",
+        "description": "从标准输入读取一行",
+        "category": "Shell与脚本",
+        "priority": "中"
+      },
+      {
+        "name": "test",
+        "description": "检查文件类型和比较值",
+        "category": "Shell与脚本",
+        "priority": "中"
+      },
+      {
+        "name": "expr",
+        "description": "计算表达式",
+        "category": "Shell与脚本",
+        "priority": "中"
+      },
+      {
+        "name": "let",
+        "description": "计算算术表达式",
+        "category": "Shell与脚本",
+        "priority": "中"
+      }
+    ]
+  },
+  {
+    "name": "其他实用工具",
+    "commands": [
+      {
+        "name": "man",
+        "description": "显示命令手册页",
+        "category": "其他实用工具",
+        "priority": "高",
+        "priorityNum": 1,
+        "example": "man ls"
+      },
+      {
+        "name": "info",
+        "description": "阅读Info格式文档",
+        "category": "其他实用工具",
+        "priority": "中"
+      },
+      {
+        "name": "whatis",
+        "description": "显示手册页的简要描述",
+        "category": "其他实用工具",
+        "priority": "中"
+      },
+      {
+        "name": "apropos",
+        "description": "搜索手册页名称和描述",
+        "category": "其他实用工具",
+        "priority": "中"
+      },
+      {
+        "name": "clear",
+        "description": "清除终端屏幕",
+        "category": "其他实用工具",
+        "priority": "高"
+      },
+      {
+        "name": "reset",
+        "description": "重置终端",
+        "category": "其他实用工具",
+        "priority": "中"
+      },
+      {
+        "name": "cal",
+        "description": "显示日历",
+        "category": "其他实用工具",
+        "priority": "中"
+      },
+      {
+        "name": "date",
+        "description": "显示或设置系统日期和时间",
+        "category": "其他实用工具",
+        "priority": "中",
+        "priorityNum": 2,
+        "example": "date '+%Y-%m-%d'"
+      },
+      {
+        "name": "bc",
+        "description": "任意精度计算器语言",
+        "category": "其他实用工具",
+        "priority": "低"
+      },
+      {
+        "name": "dc",
+        "description": "桌面计算器",
+        "category": "其他实用工具",
+        "priority": "低"
+      },
+      {
+        "name": "sleep",
+        "description": "暂停指定时间",
+        "category": "其他实用工具",
+        "priority": "中"
+      },
+      {
+        "name": "yes",
+        "description": "重复输出一个字符串直到停止",
+        "category": "其他实用工具",
+        "priority": "低"
+      },
+      {
+        "name": "seq",
+        "description": "打印数字序列",
+        "category": "其他实用工具",
+        "priority": "中"
+      },
+      {
+        "name": "factor",
+        "description": "分解整数因子",
+        "category": "其他实用工具",
+        "priority": "低"
+      },
+      {
+        "name": "base64",
+        "description": "Base64编码/解码",
+        "category": "其他实用工具",
+        "priority": "低"
+      },
+      {
+        "name": "sha1sum",
+        "description": "计算并检查SHA1消息摘要",
+        "category": "其他实用工具",
+        "priority": "中"
+      },
+      {
+        "name": "md5sum",
+        "description": "计算并检查MD5消息摘要",
+        "category": "其他实用工具",
+        "priority": "中"
+      },
+      {
+        "name": "crontab",
+        "description": "维护crontab文件",
+        "category": "其他实用工具",
+        "priority": "中"
+      },
+      {
+        "name": "at",
+        "description": "在指定时间执行命令",
+        "category": "其他实用工具",
+        "priority": "中"
+      },
+      {
+        "name": "batch",
+        "description": "在系统负载允许时执行命令",
+        "category": "其他实用工具",
+        "priority": "低"
+      },
+      {
+        "name": "wall",
+        "description": "向所有用户发送消息",
+        "category": "其他实用工具",
+        "priority": "低"
+      },
+      {
+        "name": "write",
+        "description": "向另一个用户发送消息",
+        "category": "其他实用工具",
+        "priority": "低"
+      },
+      {
+        "name": "mesg",
+        "description": "控制终端写入权限",
+        "category": "其他实用工具",
+        "priority": "低"
+      },
+      {
+        "name": "talk",
+        "description": "与其他用户交谈",
+        "category": "其他实用工具",
+        "priority": "低"
+      }
+    ]
+  }
+]

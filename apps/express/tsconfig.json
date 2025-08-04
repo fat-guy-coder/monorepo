@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "outDir": "build",
+    "target": "ES6",
+    "module": "commonjs",
+     "declaration": true,
+    "declarationDir": "types",
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "skipLibCheck": true
+  },
+  "include": ["src/**/*","routes/**/*","config/**/*"],
+  "exclude": ["**/*.js"]
+}

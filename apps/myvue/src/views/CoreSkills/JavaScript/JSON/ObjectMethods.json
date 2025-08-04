@@ -1,0 +1,267 @@
+[
+  {
+    "name": "生成对象的方法",
+    "id": "CreateObjectMethods",
+    "children": [
+      {
+        "id": "literal",
+        "name": "对象字面量",
+        "desc": "使用对象字面量创建一个新对象。",
+        "example": "const obj = { a: 1, b: 2 };\nobj; // { a: 1, b: 2 }",
+        "output": "{ a: 1, b: 2 }"
+      },
+      {
+        "id": "objectCreate",
+        "name": "Object.create()",
+        "desc": "使用指定的原型对象和属性创建一个新对象。",
+        "example": "const proto = { a: 1 };\nconst obj = Object.create(proto);\nobj.a; // 1",
+        "output": "1"
+      },
+      {
+        "id": "constructor",
+        "name": "构造函数",
+        "desc": "使用构造函数创建一个新对象。",
+        "example": "function Person(name) {\n  this.name = name;\n}\nconst person = new Person('Alice');\nperson.name; // 'Alice'",
+        "output": "Alice"
+      },
+      {
+        "id": "class",
+        "name": "类",
+        "desc": "使用类创建一个新对象。",
+        "example": "class Person {\n  constructor(name) {\n    this.name = name;\n  }\n}\nconst person = new Person('Bob');\nperson.name; // 'Bob'",
+        "output": "Bob"
+      },
+      {
+        "id": "factory",
+        "name": "工厂函数",
+        "desc": "工厂函数是一种创建对象的函数，它可以根据参数返回不同的对象。",
+        "example": "function createPerson(name) {\n  return { name };\n}\nconst person = createPerson('Bob');\nperson.name; // 'Bob'",
+        "output": "Bob"
+      },
+      {
+        "id": "constructorAndPrototype",
+        "name": "构造函数和原型(寄生组合)",
+        "desc": "构造函数和原型是创建对象的另一种方式。",
+        "example": "function Person(name) {\n  this.name = name;\n}\nPerson.prototype.sayHello = function() {\n  console.log('Hello, ' + this.name);\n};\nconst person = new Person('Bob');\nperson.sayHello(); // 'Hello, Bob'",
+        "output": "Bob"
+      },
+      {
+        "id": "objectAssign",
+        "name": "Object.assign()",
+        "desc": "合并多个对象的可枚举属性到目标对象。",
+        "example": "const target = { a: 1 };\nconst source = { b: 2 };\nconst obj = Object.assign(target, source);\nobj; // { a: 1, b: 2 }",
+        "output": "{ a: 1, b: 2 }"
+      },
+      {
+        "id": "fromEntries",
+        "name": "Object.fromEntries()",
+        "desc": "将键值对数组转换为对象。",
+        "example": "const entries = [['a', 1], ['b', 2]];\nconst obj = Object.fromEntries(entries);\nobj; // { a: 1, b: 2 }",
+        "output": "{ a: 1, b: 2 }"
+      }
+    ]
+  },
+  {
+    "name": "Object原型方法",
+    "id": "prototypeMethods",
+    "children": [
+      {
+        "id": "hasOwnProperty",
+        "name": "Object.prototype.hasOwnProperty()",
+        "desc": "判断对象是否具有指定的自身属性。常用于检查属性是否存在于对象自身而不是原型链上。",
+        "example": "const obj = { a: 1 };\nobj.hasOwnProperty('a'); // true",
+        "output": "true"
+      },
+      {
+        "id": "isPrototypeOf",
+        "name": "Object.prototype.isPrototypeOf()",
+        "desc": "判断对象是否存在于另一个对象的原型链中。常用于检查原型链关系。",
+        "example": "function A() {}\nfunction B() {}\nB.prototype = Object.create(A.prototype);\nconst b = new B();\nA.prototype.isPrototypeOf(b); // true"
+      },
+      {
+        "id": "propertyIsEnumerable",
+        "name": "Object.prototype.propertyIsEnumerable()",
+        "desc": "判断对象的指定属性是否可枚举。常用于检查属性的可枚举性。",
+        "example": "const obj = { a: 1 };\nobj.propertyIsEnumerable('a'); // true"
+      },
+      {
+        "id": "toLocaleString",
+        "name": "Object.prototype.toLocaleString()",
+        "desc": "返回对象的本地化字符串表示。常用于本地化显示对象。",
+        "example": "const date = new Date();\ndate.toLocaleString(); // 2025/2/25 下午3:00:00"
+      }
+    ]
+  },
+  {
+    "name": "Object静态方法",
+    "id": "objectStaicMethods",
+    "children": [
+      {
+        "id": "staticAssign",
+        "name": "Object.assign()",
+        "desc": "合并多个对象的可枚举属性到目标对象。常用于对象的浅拷贝和合并。",
+        "example": "const target = { a: 1 };\nconst source = { b: 2 };\nObject.assign(target, source);\n// target → { a:1, b:2 }",
+        "output": "{ a:1, b:2 }"
+      },
+      {
+        "id": "keys",
+        "name": "Object.keys()",
+        "desc": "返回对象自身可枚举属性的键数组。常用于遍历对象的属性。",
+        "example": "const obj = { a:1, b:2 };\nObject.keys(obj); // ['a', 'b']"
+      },
+      {
+        "id": "values",
+        "name": "Object.values()",
+        "desc": "返回对象自身可枚举属性的值数组。常用于获取对象属性的值。",
+        "example": "const obj = { a:1, b:2 };\nObject.values(obj); // [1, 2]"
+      },
+      {
+        "id": "entries",
+        "name": "Object.entries()",
+        "desc": "返回对象自身可枚举属性的键值对数组。常用于将对象转换为键值对数组。",
+        "example": "const obj = { a:1, b:2 };\nObject.entries(obj); // [['a', 1], ['b', 2]]"
+      },
+      {
+        "id": "freeze",
+        "name": "Object.freeze()",
+        "desc": "冻结对象，防止修改其属性。常用于创建不可变对象。",
+        "example": "const obj = { a:1 };\nObject.freeze(obj);\nobj.a = 2; // 无效\nobj; // { a:1 }",
+        "output": "{ a:1 }"
+      },
+      {
+        "id": "seal",
+        "name": "Object.seal()",
+        "desc": "密封对象，防止添加或删除属性。常用于限制对象的修改。但是可以修改属性值",
+        "example": "const obj = { a:1 };\nObject.seal(obj);\ndelete obj.a; // 无效\nobj.a = 2; // 有效\nobj; // { a:2 }",
+        "output": "{ a:2 }"
+      },
+      {
+        "id": "create",
+        "name": "Object.create()",
+        "desc": "使用指定的原型对象和属性创建一个新对象。常用于继承和创建新对象。",
+        "example": "const proto = { a:1 };\nconst obj = Object.create(proto);\nobj.a; // 1",
+        "output": "1"
+      },
+      {
+        "id": "fromEntriesStatic",
+        "name": "Object.fromEntries()",
+        "desc": "将键值对数组转换为对象。常用于将 Map 或其他键值对数据结构转换为对象。",
+        "example": "const entries = [['a', 1], ['b', 2]];\nconst obj = Object.fromEntries(entries);\nobj; // { a:1, b:2 }",
+        "output": "{ a:1, b:2 }"
+      },
+      {
+        "id": "is",
+        "name": "Object.is()",
+        "desc": "比较两个值是否相同。常用于精确比较两个值。",
+        "example": "Object.is(25, 25); // true\nObject.is(NaN, NaN); // true\nObject.is(0, -0); // false"
+      },
+      {
+        "id": "getPrototypeOf",
+        "name": "Object.getPrototypeOf()",
+        "desc": "返回对象的原型。常用于获取对象的原型链。",
+        "example": "const obj = {};\nObject.getPrototypeOf(obj); // Object.prototype"
+      },
+      {
+        "id": "setPrototypeOf",
+        "name": "Object.setPrototypeOf()",
+        "desc": "设置对象的原型。常用于修改对象的原型链。",
+        "example": "const proto = {};\nconst obj = {};\nObject.setPrototypeOf(obj, proto);\nObject.getPrototypeOf(obj) === proto; // true"
+      },
+      {
+        "id": "defineProperty",
+        "name": "Object.defineProperty()",
+        "desc": "定义对象的新属性或修改现有属性。常用于精确控制对象属性的行为。",
+        "example": "const obj = {};\nObject.defineProperty(obj, 'a', { value: 1, writable: false });\nobj.a; // 1\nobj.a = 2; // 无效",
+        "output": "1"
+      },
+      {
+        "id": "defineProperties",
+        "name": "Object.defineProperties()",
+        "desc": "定义对象的多个新属性或修改现有属性。常用于一次性定义多个属性。",
+        "example": "const obj = {};\nObject.defineProperties(obj, {\n  a: { value: 1, writable: false },\n  b: { value: 2, writable: true }\n});\nobj.a; // 1\nobj.b; // 2",
+        "output": "{ a:1, b:2 }"
+      },
+      {
+        "id": "getOwnPropertyDescriptor",
+        "name": "Object.getOwnPropertyDescriptor()",
+        "desc": "返回对象自身属性的描述符。常用于获取属性的详细信息。",
+        "example": "const obj = { a:1 };\nObject.getOwnPropertyDescriptor(obj, 'a'); // { value: 1, writable: true, enumerable: true, configurable: true }"
+      },
+      {
+        "id": "getOwnPropertyDescriptors",
+        "name": "Object.getOwnPropertyDescriptors()",
+        "desc": "返回对象自身所有属性的描述符。常用于获取对象所有属性的详细信息。",
+        "example": "const obj = { a:1, b:2 };\nObject.getOwnPropertyDescriptors(obj);\n// { a: { value: 1, writable: true, enumerable: true, configurable: true },\n//   b: { value: 2, writable: true, enumerable: true, configurable: true } }"
+      },
+      {
+        "id": "getOwnPropertyNames",
+        "name": "Object.getOwnPropertyNames()",
+        "desc": "返回对象自身所有属性的键数组，包括不可枚举属性。常用于获取对象所有属性的键。",
+        "example": "const obj = { a:1 };\nObject.getOwnPropertyNames(obj); // ['a']"
+      },
+      {
+        "id": "getOwnPropertySymbols",
+        "name": "Object.getOwnPropertySymbols()",
+        "desc": "返回对象自身所有符号属性的键数组。常用于获取对象所有符号属性的键。",
+        "example": "const sym = Symbol('a');\nconst obj = { [sym]: 1 };\nObject.getOwnPropertySymbols(obj); // [Symbol(a)]"
+      },
+      {
+        "id": "preventExtensions",
+        "name": "Object.preventExtensions()",
+        "desc": "防止对象扩展，不能添加新属性。常用于限制对象的扩展。",
+        "example": "const obj = { a:1 };\nObject.preventExtensions(obj);\nobj.b = 2; // 无效\nobj; // { a:1 }",
+        "output": "{ a:1 }"
+      },
+      {
+        "id": "isExtensible",
+        "name": "Object.isExtensible()",
+        "desc": "判断对象是否可扩展。常用于检查对象是否可以添加新属性。",
+        "example": "const obj = {};\nObject.isExtensible(obj); "
+      },
+      {
+        "id": "isFrozen",
+        "name": "Object.isFrozen()",
+        "desc": "判断对象是否被冻结。常用于检查对象是否不可修改。",
+        "example": "const obj = Object.freeze({});\nObject.isFrozen(obj); // true"
+      },
+      {
+        "id": "isSealed",
+        "name": "Object.isSealed()",
+        "desc": "判断对象是否被密封。常用于检查对象是否不可添加或删除属性。",
+        "example": "const obj = Object.seal({});\nObject.isSealed(obj); // true"
+      }
+    ]
+  },
+
+  {
+    "name": "Object原型属性",
+    "id": "objectPrototypeProperties",
+    "children": [
+      {
+        "id": "constructor",
+        "name": "Object.prototype.constructor",
+        "desc": "返回创建实例对象的构造函数的引用。",
+        "example": "const obj = {};\nobj.constructor === Object; // true",
+        "output": "true"
+      },
+      {
+        "id": "proto",
+        "name": "Object.prototype.__proto__",
+        "desc": "指向对象的原型。常用于访问对象的原型。",
+        "example": "const obj = {};\nobj.__proto__ === Object.prototype; // true"
+      },
+      {
+        "id": "toString",
+        "name": "Object.prototype.toString",
+        "desc": "返回对象的字符串表示。常用于调试和日志记录。",
+        "example": "const obj = {};\nobj.toString(); // [object Object]"
+      },
+      {
+        "id": "valueOf",
+        "name": "Object.prototype.valueOf",
+        "desc": "返回对象的原始值。常用于对象的比较和计算。",
+        "example": "const obj = {};\nobj.valueOf() === obj; // true"
+      }
+    ]
+  }
+]

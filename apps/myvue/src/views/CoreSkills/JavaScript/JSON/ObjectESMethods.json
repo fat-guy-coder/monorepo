@@ -1,0 +1,212 @@
+[
+  {
+    "name": "groupBy",
+    "title": "Object.groupBy()",
+    "description": "根据指定条件对对象进行分组",
+    "since": "ES2022",
+    "id": "groupBy",
+    "code": "const data = [\n{ id: 1, category: 'fruit', name: 'apple' },\n{ id: 2, category: 'fruit', name: 'banana' },\n{ id: 3, category: 'vegetable', name: 'carrot' },\n];\n\n// 根据类别分组\nconst grouped = Object.groupBy(data, item => item.category);\nconsole.log(grouped);\n// {\n//   fruit: [{ id: 1, name: 'apple' }, { id: 2, name: 'banana' }],\n//   vegetable: [{ id: 3, name: 'carrot' }]\n// }",
+    "advantage": ["便于数据处理", "简化分组逻辑"],
+    "attention": "需要支持的环境"
+  },
+  {
+    "name": "assign",
+    "title": "Object.assign()",
+    "description": "合并多个对象",
+    "since": "ES2015",
+    "id": "assign",
+    "code": "const target = { a: 1 };\nconst source = { b: 2 };\n\n// 合并对象\nconst result = Object.assign(target, source);\nconsole.log(result); // { a: 1, b: 2 }\n\n// 创建浅拷贝\nconst clone = Object.assign({}, target);",
+    "advantage": ["语义更清晰", "支持第二个参数（起始位置）"],
+    "attention": "区分大小写，可用toLowerCase()统一大小写"
+  },
+  {
+    "name": "entries",
+    "title": "Object.entries()",
+    "description": "获取对象的键值对",
+    "since": "ES2015",
+    "id": "entries",
+    "code": "const obj = { foo: 'bar', baz: 42 };\n\n// 获取键值对数组\nconsole.log(Object.entries(obj));\n// [ ['foo', 'bar'], ['baz', 42] ]",
+    "advantage": ["便于迭代", "与Map配合使用"],
+    "attention": "只返回可枚举的自身属性"
+  },
+  {
+    "name": "hasOwn",
+    "title": "Object.hasOwn()",
+    "description": "检查对象是否具有指定属性",
+    "since": "ES2022",
+    "id": "hasOwn",
+    "code": "// 新方式（更安全）\nif (Object.hasOwn(obj, 'prop')) {\n// ...\n}",
+    "advantage": ["更安全", "避免原型链问题"],
+    "attention": "与hasOwnProperty()的区别,hasOwn()是ES2022新增的,而hasOwnProperty()是ES5新增的\n;hasOwn()会将属性值为undefined或者null的属性也返回true,而hasOwnProperty()会返回false"
+  },
+  {
+    "name": "keys",
+    "title": "Object.keys()",
+    "description": "获取对象的所有键",
+    "since": "ES2015",
+    "id": "keys",
+    "code": "const obj = { a: 1, b: 2 };\n\n// 获取对象的键\nconsole.log(Object.keys(obj)); // ['a', 'b']",
+    "advantage": ["简单易用", "获取键集合"],
+    "attention": "只返回可枚举的自身属性"
+  },
+  {
+    "name": "values",
+    "title": "Object.values()",
+    "description": "获取对象的所有值",
+    "since": "ES2015",
+    "id": "values",
+    "code": "const obj = { a: 1, b: 2 };\n\n// 获取对象的值\nconsole.log(Object.values(obj)); // [1, 2]",
+    "advantage": ["获取值集合", "便于处理"],
+    "attention": "只返回可枚举的自身属性"
+  },
+  {
+    "name": "fromEntries",
+    "title": "Object.fromEntries()",
+    "description": "将键值对数组转换为对象",
+    "since": "ES2019",
+    "id": "fromEntries",
+    "code": "const entries = [['foo', 'bar'], ['baz', 42]];\n\n// 转换为对象\nconst obj = Object.fromEntries(entries);\nconsole.log(obj); // { foo: 'bar', baz: 42 }",
+    "advantage": ["简化对象创建", "与entries()配合使用"],
+    "attention": "输入必须是可迭代的键值对"
+  },
+  {
+    "name": "getOwnPropertyDescriptors",
+    "title": "Object.getOwnPropertyDescriptors()",
+    "description": "获取对象所有自身属性的描述符",
+    "since": "ES2015",
+    "id": "getOwnPropertyDescriptors",
+    "code": "const obj = { a: 1 };\n\n// 获取属性描述符\nconst descriptors = Object.getOwnPropertyDescriptors(obj);\nconsole.log(descriptors);",
+    "advantage": ["获取详细属性信息", "便于调试"],
+    "attention": "只返回自身属性的描述符"
+  },
+  {
+    "name": "is",
+    "title": "Object.is()",
+    "description": "判断两个值是否相同",
+    "since": "ES2015",
+    "id": "is",
+    "code": "console.log(Object.is(1, 1)); // true",
+    "advantage": ["精确比较", "处理特殊值"],
+    "attention": "与===的区别: 处理NaN和-0"
+  },
+  {
+    "name": "freeze",
+    "title": "Object.freeze()",
+    "description": "冻结对象，使其不可变",
+    "since": "ES2015",
+    "id": "freeze",
+    "code": "const obj = { a: 1 }; Object.freeze(obj);",
+    "advantage": ["防止修改", "性能优化"],
+    "attention": "无法添加、删除或修改属性"
+  },
+  {
+    "name": "seal",
+    "title": "Object.seal()",
+    "description": "密封对象，防止添加新属性",
+    "since": "ES2015",
+    "id": "seal",
+    "code": "const obj = { a: 1 }; Object.seal(obj);",
+    "advantage": ["防止添加新属性", "性能优化"],
+    "attention": "无法添加、删除或修改属性"
+  },
+  {
+    "name": "preventExtensions",
+    "title": "Object.preventExtensions()",
+    "description": "防止对象扩展",
+    "since": "ES2015",
+    "id": "preventExtensions",
+    "code": "const obj = { a: 1 }; Object.preventExtensions(obj);",
+    "advantage": ["防止扩展", "性能优化"],
+    "attention": "无法添加、删除或修改属性"
+  },
+  {
+    "name": "getPrototypeOf",
+    "title": "Object.getPrototypeOf()",
+    "description": "获取对象的原型",
+    "since": "ES2015",
+    "id": "getPrototypeOf",
+    "code": "const obj = {}; console.log(Object.getPrototypeOf(obj));",
+    "advantage": ["获取原型", "便于处理继承关系"],
+    "attention": "返回对象的直接原型"
+  },
+  {
+    "name": "setPrototypeOf",
+    "title": "Object.setPrototypeOf()",
+    "description": "设置对象的原型",
+    "since": "ES2015",
+    "id": "setPrototypeOf",
+    "code": "const obj = {}; Object.setPrototypeOf(obj, Array.prototype);",
+    "advantage": ["设置原型", "便于处理继承关系"],
+    "attention": "返回设置后的对象"
+  },
+  {
+    "name": "hasOwnProperty",
+    "title": "Object.hasOwnProperty()",
+    "description": "检查对象是否具有指定属性",
+    "since": "ES5",
+    "id": "hasOwnProperty",
+    "code": "const obj = { prop: 'value' }; console.log(obj.hasOwnProperty('prop'));",
+    "advantage": ["检查自身属性", "避免原型链问题"],
+    "attention": "只检查对象自身属性,不检查原型链"
+  },
+  {
+    "name": "isExtensible",
+    "title": "Object.isExtensible()",
+    "description": "检查对象是否可扩展",
+    "since": "ES2015",
+    "id": "isExtensible",
+    "code": "const obj = {}; console.log(Object.isExtensible(obj));",
+    "advantage": ["检查可扩展性", "便于处理继承关系"],
+    "attention": "返回对象是否可扩展"
+  },
+  {
+    "name": "isFrozen",
+    "title": "Object.isFrozen()",
+    "description": "检查对象是否被冻结",
+    "since": "ES2015",
+    "id": "isFrozen",
+    "code": "const obj = Object.freeze({}); console.log(Object.isFrozen(obj));",
+    "advantage": ["检查冻结状态", "便于处理继承关系"],
+    "attention": "返回对象是否被冻结"
+  },
+  {
+    "name": "isSealed",
+    "title": "Object.isSealed()",
+    "description": "检查对象是否被密封",
+    "since": "ES2015",
+    "id": "isSealed",
+    "code": "const obj = Object.seal({}); console.log(Object.isSealed(obj));",
+    "advantage": ["检查密封状态", "便于处理继承关系"],
+    "attention": "返回对象是否被密封"
+  },
+  {
+    "name": "create",
+    "title": "Object.create()",
+    "description": "创建一个新对象",
+    "since": "ES5",
+    "id": "create",
+    "code": "const obj = Object.create(null);",
+    "advantage": ["创建新对象", "便于处理继承关系"],
+    "attention": "返回新创建的对象"
+  },
+  {
+    "name": "defineProperty",
+    "title": "Object.defineProperty()",
+    "description": "定义对象的属性",
+    "since": "ES5",
+    "id": "defineProperty",
+    "code": "const obj = {}; Object.defineProperty(obj, 'prop', { value: 42 });",
+    "advantage": ["定义属性", "便于处理继承关系"],
+    "attention": "返回对象"
+  },
+  {
+    "name": "defineProperties",
+    "title": "Object.defineProperties()",
+    "description": "定义多个对象的属性",
+    "since": "ES5",
+    "id": "defineProperties",
+    "code": "const obj = {}; Object.defineProperties(obj, { prop1: { value: 1 }, prop2: { value: 2 } });",
+    "advantage": ["定义多个属性", "便于处理继承关系"],
+    "attention": "返回对象"
+  }
+]

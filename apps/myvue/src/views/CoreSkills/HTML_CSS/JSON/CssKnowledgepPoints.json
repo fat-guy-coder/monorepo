@@ -1,0 +1,534 @@
+[
+  {
+    "name": "📦 布局",
+    "id": "layout",
+    "children": [
+      {
+        "name": "盒模型计算 (content-box/border-box)",
+        "id": "box-model",
+        "description": "标准盒模型 vs 怪异盒模型，掌握content-box和border-box的区别",
+        "priority": 1,
+        "frequency": 3
+      },
+      {
+        "name": "Flex布局 (容器属性/项目属性)",
+        "id": "flex",
+        "description": "弹性布局容器与项目的核心属性配置",
+        "priority": 1,
+        "frequency": 3
+      },
+      {
+        "name": "Grid布局 (轨道定义/网格项定位)",
+        "id": "grid",
+        "description": "网格布局系统与项目定位方法",
+        "priority": 1,
+        "frequency": 3
+      },
+      {
+        "name": "浮动布局与清除浮动 (clearfix)",
+        "id": "float",
+        "description": "浮动布局原理与清除浮动解决方案",
+        "priority": 2,
+        "frequency": 2
+      },
+      {
+        "name": "圣杯布局/双飞翼布局",
+        "id": "holy-grail",
+        "description": "经典三栏布局实现方案",
+        "priority": 2,
+        "frequency": 2
+      },
+      {
+        "name": "多列布局 (column-count/gap)",
+        "id": "multi-column",
+        "description": "多列文本流布局实现",
+        "priority": 2,
+        "frequency": 1
+      },
+      {
+        "name": "CSS表格布局 (display: table)",
+        "id": "table",
+        "description": "表格布局的现代替代方案",
+        "priority": 2,
+        "frequency": 1
+      },
+      {
+        "name": "定位布局综合应用",
+        "id": "position",
+        "description": "position属性组合布局技巧",
+        "priority": 2,
+        "frequency": 2
+      },
+      {
+        "name": "CSS Shapes布局",
+        "id": "css-shapes",
+        "description": "非矩形布局与文本环绕",
+        "priority": 2,
+        "frequency": 1
+      },
+      {
+        "name": "subgrid嵌套网格布局",
+        "id": "subgrid",
+        "description": "网格布局的嵌套继承方案",
+        "priority": 2,
+        "frequency": 1
+      }
+    ]
+  },
+  {
+    "name": "🎯 定位与层叠",
+    "id": "positioning",
+    "children": [
+      {
+        "name": "position定位 (sticky定位应用)",
+        "id": "sticky",
+        "description": "粘性定位的实现与应用场景",
+        "priority": 1,
+        "frequency": 3
+      },
+      {
+        "name": "z-index层叠规则",
+        "id": "z-index",
+        "description": "层叠上下文与z-index工作原理",
+        "priority": 1,
+        "frequency": 3
+      },
+      {
+        "name": "BFC创建与应用 (解决margin塌陷)",
+        "id": "bfc",
+        "description": "块级格式化上下文的创建与布局应用",
+        "priority": 1,
+        "frequency": 3
+      },
+      {
+        "name": "IFC行内格式化上下文",
+        "id": "ifc",
+        "description": "行内元素的布局规则",
+        "priority": 2,
+        "frequency": 2
+      },
+      {
+        "name": "层叠上下文创建条件",
+        "id": "stacking-context",
+        "description": "触发层叠上下文的属性列表",
+        "priority": 2,
+        "frequency": 2
+      },
+      {
+        "name": "CSS contain属性优化",
+        "id": "contain",
+        "description": "布局性能优化属性",
+        "priority": 2,
+        "frequency": 2
+      },
+      {
+        "name": "isolation隔离模式",
+        "id": "isolation",
+        "description": "创建新的层叠上下文",
+        "priority": 2,
+        "frequency": 1
+      },
+      {
+        "name": "层叠顺序 (stacking order)",
+        "id": "stacking-order",
+        "description": "元素默认层叠优先级规则",
+        "priority": 2,
+        "frequency": 2
+      },
+      {
+        "name": "position: fixed穿透问题",
+        "id": "fixed-penetration",
+        "description": "解决fixed定位层级问题",
+        "priority": 2,
+        "frequency": 2
+      },
+      {
+        "name": "粘性定位边界条件",
+        "id": "sticky-boundary",
+        "description": "sticky定位失效场景分析",
+        "priority": 2,
+        "frequency": 2
+      }
+    ]
+  },
+  {
+    "name": "🎨 样式与渲染",
+    "id": "style-rendering",
+    "children": [
+      {
+        "name": "选择器优先级计算 (权重系统)",
+        "id": "selector-priority",
+        "description": "!important > 行内 > ID > Class > 标签 > 通配符",
+        "priority": 1,
+        "frequency": 3
+      },
+      {
+        "name": "CSS继承机制 (inherit/unset/revert)",
+        "id": "css-inheritance",
+        "description": "属性继承规则与全局控制",
+        "priority": 1,
+        "frequency": 3
+      },
+      {
+        "name": "伪类选择器 (:where/:has)",
+        "id": "pseudo-classes",
+        "description": "现代伪类选择器的高级用法",
+        "priority": 2,
+        "frequency": 2
+      },
+      {
+        "name": "CSS变量 (自定义属性作用域)",
+        "id": "css-variables",
+        "description": "变量作用域管理与动态更新",
+        "priority": 2,
+        "frequency": 2
+      },
+      {
+        "name": "CSS计算函数 (calc/min/max/clamp)",
+        "id": "css-functions",
+        "description": "动态计算值的响应式应用",
+        "priority": 2,
+        "frequency": 3
+      },
+      {
+        "name": "盒阴影高级应用 (多层阴影)",
+        "id": "box-shadow",
+        "description": "实现复杂立体效果",
+        "priority": 2,
+        "frequency": 1
+      },
+      {
+        "name": "渐变实现复杂图形 (conic-gradient)",
+        "id": "conic-gradient",
+        "description": "锥形渐变创建饼图/雷达图",
+        "priority": 2,
+        "frequency": 1
+      },
+      {
+        "name": "文本截断与多行省略",
+        "id": "text-truncate",
+        "description": "单行/多行文本截断方案",
+        "priority": 2,
+        "frequency": 2
+      },
+      {
+        "name": "字体图标与iconfont优化",
+        "id": "iconfont",
+        "description": "矢量图标性能优化策略",
+        "priority": 2,
+        "frequency": 2
+      },
+      {
+        "name": "CSS Houdini特性",
+        "id": "houdini",
+        "description": "底层API扩展CSS能力",
+        "priority": 2,
+        "frequency": 1
+      }
+    ]
+  },
+  {
+    "name": "📱 响应式设计",
+    "id": "responsive-design",
+    "children": [
+      {
+        "name": "媒体查询 (设备方向/分辨率检测)",
+        "id": "media-query",
+        "description": "响应式断点与设备特性检测",
+        "priority": 1,
+        "frequency": 3
+      },
+      {
+        "name": "视口单位 (vw/vh/vmin/vmax)",
+        "id": "viewport-units",
+        "description": "视口比例单位适配方案",
+        "priority": 1,
+        "frequency": 3
+      },
+      {
+        "name": "rem适配方案 (动态根字体)",
+        "id": "rem-adaptation",
+        "description": "移动端REM动态缩放布局",
+        "priority": 1,
+        "frequency": 3
+      },
+      {
+        "name": "移动端1px解决方案",
+        "id": "mobile-1px",
+        "description": "物理像素与CSS像素适配",
+        "priority": 2,
+        "frequency": 2
+      },
+      {
+        "name": "响应式图片 (srcset/sizes)",
+        "id": "responsive-image",
+        "description": "自适应图片加载优化",
+        "priority": 2,
+        "frequency": 2
+      },
+      {
+        "name": "安全区域适配 (env(safe-area-inset))",
+        "id": "safe-area-inset",
+        "description": "刘海屏/全面屏安全区域处理",
+        "priority": 2,
+        "frequency": 2
+      },
+      {
+        "name": "动态rem+vw混合方案",
+        "id": "dynamic-rem-vw",
+        "description": "复合响应式布局策略",
+        "priority": 2,
+        "frequency": 1
+      },
+      {
+        "name": "设备像素比适配 (dpr适配)",
+        "id": "dpr-adaptation",
+        "description": "高分辨率屏幕适配方案",
+        "priority": 2,
+        "frequency": 1
+      },
+      {
+        "name": "横竖屏差异化样式",
+        "id": "orientation-styles",
+        "description": "屏幕方向检测与样式适配",
+        "priority": 2,
+        "frequency": 1
+      },
+      {
+        "name": "CSS容器查询 (container-type)",
+        "id": "container-type",
+        "description": "基于容器尺寸的响应式设计",
+        "priority": 2,
+        "frequency": 1
+      }
+    ]
+  },
+  {
+    "name": "🚀 动画与性能",
+    "id": "animation-performance",
+    "children": [
+      {
+        "name": "Transition过渡曲线 (cubic-bezier)",
+        "id": "cubic-bezier",
+        "description": "自定义缓动函数实现平滑动画",
+        "priority": 1,
+        "frequency": 3
+      },
+      {
+        "name": "关键帧动画性能优化",
+        "id": "keyframe-optimization",
+        "description": "复合层优化与帧率控制",
+        "priority": 1,
+        "frequency": 3
+      },
+      {
+        "name": "硬件加速原理 (transform/paint)",
+        "id": "hardware-acceleration",
+        "description": "GPU加速触发条件与副作用",
+        "priority": 1,
+        "frequency": 3
+      },
+      {
+        "name": "重排/重绘优化策略",
+        "id": "layout-optimization",
+        "description": "减少布局抖动与绘制区域优化",
+        "priority": 1,
+        "frequency": 3
+      },
+      {
+        "name": "will-change属性使用规范",
+        "id": "will-change",
+        "description": "预优化提示与内存管理",
+        "priority": 2,
+        "frequency": 2
+      },
+      {
+        "name": "动画帧率检测与优化",
+        "id": "raf-optimization",
+        "description": "RAF优化与卡顿监控",
+        "priority": 2,
+        "frequency": 2
+      },
+      {
+        "name": "CSS动画暂停/重启控制",
+        "id": "animation-play-state",
+        "description": "animation-play-state应用",
+        "priority": 2,
+        "frequency": 1
+      },
+      {
+        "name": "滚动驱动动画 (scroll-timeline)",
+        "id": "scroll-timeline",
+        "description": "基于滚动进度的动画控制",
+        "priority": 2,
+        "frequency": 1
+      },
+      {
+        "name": "GPU加速副作用管理",
+        "id": "gpu-acceleration",
+        "description": "内存泄漏与层爆炸预防",
+        "priority": 2,
+        "frequency": 1
+      },
+      {
+        "name": "分层渲染优化 (layer)",
+        "id": "layer",
+        "description": "显式层声明提升性能",
+        "priority": 2,
+        "frequency": 1
+      }
+    ]
+  },
+  {
+    "name": "💡 高级特性",
+    "id": "advanced-features",
+    "children": [
+      {
+        "name": "clip-path图形裁剪",
+        "id": "clip-path",
+        "description": "自定义形状裁剪与动画",
+        "priority": 2,
+        "frequency": 2
+      },
+      {
+        "name": "filter滤镜链式操作",
+        "id": "filter-chain",
+        "description": "多重滤镜叠加效果",
+        "priority": 2,
+        "frequency": 1
+      },
+      {
+        "name": "混合模式 (mix-blend-mode)",
+        "id": "mix-blend-mode",
+        "description": "元素混合效果实现",
+        "priority": 2,
+        "frequency": 1
+      },
+      {
+        "name": "遮罩与蒙版 (mask/composite)",
+        "id": "mask-composite",
+        "description": "图像遮罩与合成控制",
+        "priority": 2,
+        "frequency": 1
+      },
+      {
+        "name": "CSS自定义滚动条",
+        "id": "custom-scrollbar",
+        "description": "::-webkit-scrollbar样式定制",
+        "priority": 2,
+        "frequency": 1
+      },
+      {
+        "name": "backdrop-filter毛玻璃效果",
+        "id": "backdrop-filter",
+        "description": "背景模糊与滤镜叠加",
+        "priority": 2,
+        "frequency": 1
+      },
+      {
+        "name": "CSS三角函数 (sin/cos)",
+        "id": "css-trigonometry",
+        "description": "动态计算角度与坐标",
+        "priority": 2,
+        "frequency": 1
+      },
+      {
+        "name": "嵌套规则 (@nest)",
+        "id": "nested-rules",
+        "description": "CSS原生嵌套语法",
+        "priority": 2,
+        "frequency": 1
+      },
+      {
+        "name": "CSS逻辑属性 (inline-size)",
+        "id": "inline-size",
+        "description": "流式布局方向无关性",
+        "priority": 2,
+        "frequency": 1
+      },
+      {
+        "name": "颜色空间 (lch/oklch)",
+        "id": "color-space",
+        "description": "现代色彩空间管理",
+        "priority": 2,
+        "frequency": 1
+      }
+    ]
+  },
+  {
+    "name": "⚙️ 工程化实践",
+    "id": "engineering-practice",
+    "children": [
+      {
+        "name": "CSS Modules作用域隔离",
+        "id": "css-modules",
+        "description": "类名局部化与编译优化",
+        "priority": 2,
+        "frequency": 2
+      },
+      {
+        "name": "PostCSS插件体系",
+        "id": "postcss",
+        "description": "自动化前缀与语法降级",
+        "priority": 2,
+        "frequency": 2
+      },
+      {
+        "name": "CSS-in-JS性能优化",
+        "id": "css-in-js",
+        "description": "运行时性能与SSR优化",
+        "priority": 2,
+        "frequency": 2
+      },
+      {
+        "name": "原子化CSS实现方案",
+        "id": "atomic-css",
+        "description": "Utility-First架构实践",
+        "priority": 2,
+        "frequency": 2
+      },
+      {
+        "name": "CSS代码拆分策略",
+        "id": "css-code-splitting",
+        "description": "按需加载与分包优化",
+        "priority": 2,
+        "frequency": 2
+      },
+      {
+        "name": "Critical CSS提取方案",
+        "id": "critical-css",
+        "description": "首屏关键样式优化",
+        "priority": 2,
+        "frequency": 2
+      },
+      {
+        "name": "CSS Tree Shaking原理",
+        "id": "css-tree-shaking",
+        "description": "无用代码消除机制",
+        "priority": 2,
+        "frequency": 2
+      },
+      {
+        "name": "CSS自定义媒体查询",
+        "id": "custom-media",
+        "description": "@custom-media响应式复用",
+        "priority": 2,
+        "frequency": 1
+      },
+      {
+        "name": "现代重置样式方案 (modern-normalize)",
+        "id": "modern-normalize",
+        "description": "现代化浏览器样式重置",
+        "priority": 2,
+        "frequency": 2
+      },
+      {
+        "name": "CSS性能审计指标",
+        "id": "css-performance-metrics",
+        "description": "CLS/FCP/LCP优化监控",
+        "priority": 2,
+        "frequency": 2
+      }
+    ]
+  }
+]

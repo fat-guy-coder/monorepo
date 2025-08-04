@@ -1,0 +1,27 @@
+{
+  "$schema": "https://turbo.build/schema.jsonhttps://turbo.build/schema.json",
+  "pipeline": {
+    "build": {
+      "outputs": ["dist/**", ".next/**"],
+      "dependsOn": ["^build"]
+    },
+    "test": {
+      "outputs": [],
+      "dependsOn": ["build"]
+    },
+    "lint": {
+      "outputs": []
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "cache": {
+      "outputs": []
+    }
+  },
+  "cache": true,
+  "globalDependencies": [".env"],
+  "globalEnv": ["API_KEY", "ENV"],
+  "extends": []
+}

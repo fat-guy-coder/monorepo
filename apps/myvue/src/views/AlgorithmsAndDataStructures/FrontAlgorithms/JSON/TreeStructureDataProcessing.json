@@ -1,0 +1,147 @@
+[
+  {
+    "title": "深度优先遍历(DFS)",
+    "tag": "遍历",
+    "id": "1",
+    "description": "如何递归访问树中的每个节点，深度优先",
+    "solution": "使用递归或栈实现深度优先遍历，优先访问子节点",
+    "code": "function dfs(node) {\n  console.log(node.value);\n  node.children.forEach(child => dfs(child));\n}",
+    "timeComplexity": "O(n)",
+    "spaceComplexity": "O(n)",
+    "advantage": "空间复杂度低，实现简单",
+    "disadvantage": "可能存在栈溢出风险"
+  },
+  {
+    "title": "广度优先遍历(BFS)",
+    "tag": "遍历",
+    "id": "2",
+    "description": "如何按层级访问树中的每个节点，广度优先",
+    "solution": "使用队列实现广度优先遍历，按层级访问节点",
+    "code": "function bfs(root) {\n  const queue = [root];\n  while (queue.length) {\n    const node = queue.shift();\n    console.log(node.value);\n    queue.push(...node.children);\n  }\n}",
+    "timeComplexity": "O(n)",
+    "spaceComplexity": "O(n)",
+    "advantage": "空间复杂度低，实现简单",
+    "disadvantage": "可能存在栈溢出风险"
+  },
+  {
+    "title": "查找节点",
+    "tag": "查找",
+    "id": "3",
+    "description": "如何在树中查找特定节点",
+    "solution": "扁平化树(DFS/BFS转换)为数组，然后使用数组查找",
+    "code": "tree => DFS/BFS => array => array.find(node => node.id === targetId)",
+    "timeComplexity": "O(n^2)",
+    "spaceComplexity": "O(n)",
+    "advantage": "实现简单，获得了扁平数组",
+    "disadvantage": "时间和空间复杂度高，性能低，需要额外空间存储转换后的数组"
+  },
+  {
+    "title": "查找节点",
+    "tag": "查找",
+    "id": "4",
+    "description": "如何在树中查找特定节点",
+    "solution": "使用DFS(递归)或BFS(队列)遍历树，找到匹配条件的节点",
+    "code": "function findNodeDFS(root, targetId) {\n  if (root.id === targetId) return root;\n  for (const child of root.children) {\n    const found = findNodeDFS(child, targetId);\n    if (found) return found;\n  }\n  return null;\n}\n\nfunction findNodeBFS(root, targetId) {\n  const queue = [root];\n  while (queue.length) {\n    const node = queue.shift();\n    if (node.id === targetId) return node;\n    queue.push(...node.children);\n  }\n  return null;\n}",
+    "timeComplexity": "O(n)",
+    "spaceComplexity": "O(n)",
+    "advantage": "空间复杂度低，实现简单",
+    "disadvantage": "可能存在栈溢出风险"
+  },
+  {
+    "title": "查找父节点序列",
+    "tag": "查找",
+    "id": "5",
+    "description": "如何在树中查找父节点序列",
+    "solution": "使用DFS(递归)或BFS(队列)遍历树，找到匹配条件的节点并记录父节点",
+    "code": "function findNodeDFS(root, targetId, parent = null) {\n  if (root.id === targetId) return parent;\n  for (const child of root.children) {\n    const found = findNodeDFS(child, targetId, root);\n    if (found) return found;\n  }\n  return null;\n}\n\nfunction findNodeBFS(root, targetId) {\n  const queue = [root];\n  while (queue.length) {\n    const node = queue.shift();\n    if (node.id === targetId) return node;\n    queue.push(...node.children);\n  }\n  return null;\n}",
+    "timeComplexity": "O(n)",
+    "spaceComplexity": "O(n)",
+    "advantage": "空间复杂度低，实现简单",
+    "disadvantage": "可能存在栈溢出风险"
+  },
+  {
+    "title": "扁平化树结构",
+    "tag": "转换",
+    "id": "6",
+    "description": "如何将树形结构转换为扁平数组",
+    "solution": "使用DFS遍历树，收集所有节点到数组中",
+    "code": "function flattenTree(root) {\n  const result = [];\n  function traverse(node) {\n    result.push(node);\n    node.children.forEach(traverse);\n  }\n  traverse(root);\n  return result;\n}",
+    "timeComplexity": "O(n)",
+    "spaceComplexity": "O(n)",
+    "advantage": "空间复杂度低，实现简单",
+    "disadvantage": "可能存在栈溢出风险"
+  },
+  {
+    "title": "扁平化树结构",
+    "tag": "转换",
+    "id": "7",
+    "description": "如何将树形结构转换为扁平数组",
+    "solution": "使用BFS遍历树，利用队列,收集所有节点到数组中",
+    "code": "function flattenTree(root) {\n  const result = [];\n  const queue = [root];\n  while (queue.length) {\n    const node = queue.shift();\n    result.push(node);\n    queue.push(...node.children);\n  }\n  return result;\n}",
+    "timeComplexity": "O(n)",
+    "spaceComplexity": "O(n)",
+    "advantage": "空间复杂度低，实现简单",
+    "disadvantage": "可能存在栈溢出风险"
+  },
+  {
+    "title": "列表转树结构",
+    "tag": "转换",
+    "id": "8",
+    "description": "如何将扁平列表转换为树形结构",
+    "solution": "使用Map存储节点，根据parentId构建层级关系",
+    "code": "function listToTree(list) {\n  const map = new Map();\n  const roots = [];\n\n  list.forEach(item => {\n    map.set(item.id, { ...item, children: [] });\n  });\n\n  list.forEach(item => {\n    if (item.parentId) {\n      const parent = map.get(item.parentId);\n      parent.children.push(map.get(item.id));\n    } else {\n      roots.push(map.get(item.id));\n    }\n  });\n\n  return roots;\n map.clear() }",
+    "timeComplexity": "O(n)",
+    "spaceComplexity": "O(n)",
+    "advantage": "性能最高，空间复杂度低，实现简单",
+    "disadvantage": "需要额外空间存储转换后的数组"
+  },
+  {
+    "title": "列表转树结构",
+    "tag": "转换",
+    "id": "9",
+    "description": "如何将扁平列表转换为树形结构",
+    "solution": "用递归实现，根据parentId构建层级关系",
+    "code": "function listToTree(list) {\n  const roots = [];\n\n  list.forEach(item => {\n    if (item.parentId) {\n      const parent = list.find(parent => parent.id === item.parentId);\n      if (parent) {\n        parent.children = parent.children || [];\n        parent.children.push(item);\n      }\n    } else {\n      roots.push(item);\n    }\n  });\n\n  return roots;\n}",
+    "timeComplexity": "O(n)",
+    "spaceComplexity": "O(n)",
+    "advantage": "实现简单，性能一般",
+    "disadvantage": "性能一般"
+  },
+  {
+    "title": "树结构过滤",
+    "tag": "转换",
+    "id": "10",
+    "description": "如何根据条件过滤树节点",
+    "solution": "递归过滤节点，保留符合条件的节点及其祖先",
+    "code": "function filterTree(root, condition) {\n  if (!root) return null;\n\n  const filteredChildren = root.children\n    .map(child => filterTree(child, condition))\n    .filter(Boolean);\n\n  if (condition(root) || filteredChildren.length > 0) {\n    return { ...root, children: filteredChildren };\n  }\n\n  return null;\n}",
+    "timeComplexity": "O(n)",
+    "spaceComplexity": "O(n)",
+    "advantage": "性能最高，空间复杂度低，实现简单",
+    "disadvantage": "需要额外空间存储转换后的数组"
+  },
+
+  {
+    "title": "添加子节点",
+    "tag": "操作",
+    "id": "11",
+    "description": "如何在指定节点下添加新子节点",
+    "solution": "找到目标节点，向其children数组添加新节点",
+    "code": "function addChild(root, parentId, newNode) {\n  const parent = findNode(root, parentId);\n  if (parent) {\n    parent.children.push(newNode);\n    return true;\n  }\n  return false;\n}",
+    "timeComplexity": "O(n)",
+    "spaceComplexity": "O(n)",
+    "advantage": "性能最高，空间复杂度低，实现简单",
+    "disadvantage": "需要额外空间存储转换后的数组"
+  },
+  {
+    "title": "两树比对",
+    "tag": "比对",
+    "id": "12",
+    "description": "如何比对两棵树的结构和节点值，选出不同的节点(或者节点数组)",
+    "solution": "使用DFS或BFS遍历两棵树，比较节点值，选出不同的节点(或者节点数组),使用Map存储节点，根据parentId构建层级关系，然后比较Map的key和value，选出不同的节点(或者节点数组)，然后返回不同的节点(或者节点数组)",
+    "code": "function compareTrees(tree1, tree2) {\n  const map1 = new Map();\n  const map2 = new Map();\n  function traverse(node, map) {\n    map.set(node.id, node);\n    node.children.forEach(child => traverse(child, map));\n  }\n  traverse(tree1, map1);\n  traverse(tree2, map2);\n  return [...map1.values(), ...map2.values()].filter(node => node.value !== map1.get(node.id).value || node.children.length !== map1.get(node.id).children.length);\n}",
+    "timeComplexity": "O(n^2)",
+    "spaceComplexity": "O(n^2)",
+    "advantage": "实现简单，性能一般",
+    "disadvantage": "性能一般，需要额外空间存储转换后的数组，需要额外空间存储转换后的数组"
+  }
+]

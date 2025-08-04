@@ -1,0 +1,621 @@
+[
+  {
+    "id": "basic-config",
+    "title": "1. 基础配置",
+    "items": [
+      {
+        "name": "extends",
+        "type": "string",
+        "description": "继承另一个配置文件中的设置",
+        "example": "./base.json",
+        "details": "extends 属性允许你的配置文件继承另一个配置文件的所有属性设置。这在大型项目中特别有用，可以创建一个基础配置然后让其他配置扩展它，避免重复设置。路径可以是相对路径、绝对路径或Node模块解析的路径。"
+      },
+      {
+        "name": "compilerOptions",
+        "type": "object",
+        "description": "编译器选项配置",
+        "example": "{ /* 编译器选项 */ }",
+        "details": "compilerOptions 对象包含所有TypeScript编译器的配置选项。这些选项控制着TypeScript如何将代码编译为JavaScript，包括目标版本、模块系统、严格类型检查等。这是tsconfig.json中最重要且最复杂的部分。"
+      },
+      {
+        "name": "include",
+        "type": "string[]",
+        "description": "指定要包含的文件模式列表",
+        "example": "['src/**/*']",
+        "details": "include 属性使用glob模式匹配来指定哪些文件应该被包含在编译过程中。如果未指定，默认包含所有目录下的.ts、.tsx和.d.ts文件（排除exclude指定的文件）。支持常见的glob模式如*、?和**。"
+      },
+      {
+        "name": "exclude",
+        "type": "string[]",
+        "description": "指定要排除的文件模式列表",
+        "example": "['node_modules']",
+        "details": "exclude 属性指定在编译过程中应该排除的文件或目录。默认情况下会排除node_modules、bower_components和jspm_packages目录。注意：exclude只影响include匹配的文件，不影响files属性显式列出的文件。"
+      },
+      {
+        "name": "files",
+        "type": "string[]",
+        "description": "显式包含的文件列表",
+        "example": "['core.ts', 'app.ts']",
+        "details": "files 属性允许你显式指定要包含在编译中的文件列表。当项目文件较少或需要精确控制编译哪些文件时很有用。与include不同，files不支持glob模式，必须指定每个文件的完整路径。"
+      },
+      {
+        "name": "composite",
+        "type": "boolean",
+        "description": "启用复合项目",
+        "default": "false",
+        "example": "true",
+        "details": "composite 选项启用TypeScript的复合项目功能。复合项目允许将大型项目拆分为多个小项目，每个项目都有自己的tsconfig.json文件。编译器会自动处理依赖关系，确保在构建当前项目前先构建依赖项目。这在大型项目中特别有用，可以显著提高编译性能。"
+      },
+      {
+        "name": "references",
+        "type": "array",
+        "description": "项目引用，用于多项目配置",
+        "example": "[{ 'path': '../shared' }]",
+        "details": "references 属性用于配置项目引用，这是TypeScript 3.0引入的功能，允许将大型项目拆分为多个小项目。每个引用对象包含一个path属性指向另一个项目的tsconfig.json文件。启用复合模式(composite)后，TypeScript会确保在构建当前项目前先构建依赖项目。"
+      }
+    ]
+  },
+  {
+    "id": "compiler-options",
+    "title": "2. 编译器选项 - 核心配置",
+    "items": [
+      {
+        "name": "target",
+        "type": "string",
+        "description": "指定编译后的JavaScript目标版本",
+        "default": "ES3",
+        "options": {
+          "ES3": "ECMAScript 3 (默认)",
+          "ES5": "ECMAScript 5",
+          "ES6/ES2015": "ECMAScript 2015",
+          "ES2016": "ECMAScript 2016",
+          "ES2017": "ECMAScript 2017",
+          "ES2018": "ECMAScript 2018",
+          "ES2019": "ECMAScript 2019",
+          "ES2020": "ECMAScript 2020",
+          "ESNext": "最新版本"
+        },
+        "example": "'ES6'",
+        "details": "target 选项指定TypeScript编译生成的JavaScript代码应该符合哪个ECMAScript版本。较低版本如ES3/ES5有更好的浏览器兼容性，但会生成更多冗余代码；较高版本如ES2015+能生成更简洁的代码但需要现代运行时环境支持。ESNext表示使用最新的ECMAScript特性。"
+      },
+      {
+        "name": "module",
+        "type": "string",
+        "description": "指定模块系统",
+        "default": "CommonJS (target=ES3/ES5时), ES6 (其他)",
+        "options": {
+          "CommonJS": "Node.js风格的模块",
+          "AMD": "异步模块定义",
+          "System": "SystemJS模块",
+          "UMD": "通用模块定义",
+          "ES6/ES2015": "ECMAScript 2015模块",
+          "ES2020": "ECMAScript 2020模块",
+          "ESNext": "最新模块系统"
+        },
+        "example": "'CommonJS'",
+        "details": "module 选项决定TypeScript使用哪种模块系统生成代码。CommonJS是Node.js的默认模块系统；AMD用于浏览器端异步加载；ES6是ECMAScript标准模块系统，适用于现代浏览器和打包工具如Webpack/Rollup。选择应与你的运行时环境和打包工具兼容。"
+      },
+      {
+        "name": "moduleResolution",
+        "type": "string",
+        "description": "指定模块解析策略",
+        "default": "node (target=ES3/ES5时), bundler (其他)",
+        "options": {
+          "node": "Node.js风格的模块解析",
+          "bundler": "打包工具如Webpack/Rollup的模块解析"
+        },
+        "example": "'node'",
+        "details": "moduleResolution 选项决定TypeScript如何解析模块。node是Node.js风格的模块解析，适用于Node.js项目；bundler是打包工具如Webpack/Rollup的模块解析，适用于现代打包工具。选择应与你的运行时环境和打包工具兼容。"
+      },
+      {
+        "name": "lib",
+        "type": "string[]",
+        "description": "包含在编译中的库文件声明",
+        "example": "['ES6', 'DOM']",
+        "details": "lib 选项指定编译时包含哪些内置API的类型声明。例如，要使用Promise、Map等ES6特性，需要包含'ES6'；要使用DOM API如document对象，需要包含'DOM'。默认包含target对应的核心库。当target较低但想使用高级特性时特别有用。"
+      },
+      {
+        "name": "paths",
+        "type": "object",
+        "description": "模块名到基于baseUrl的路径映射",
+        "example": "{ '@/*': ['src/*'] }",
+        "details": "paths 选项允许你设置模块别名，简化模块导入路径。与baseUrl配合使用，可以创建类似'@/components/Button'这样的简洁导入路径。这在大型项目中特别有用，可以避免冗长的相对路径(如'../../../components/Button')。"
+      },
+      {
+        "name": "types",
+        "type": "string[]",
+        "description": "指定要包含的类型声明文件包",
+        "example": "['node', 'jest']",
+        "details": "types 选项显式指定要包含的类型声明包名称（对应@types/下的包）。默认会自动包含所有node_modules/@types下的声明文件。指定此选项后，只有列出的包会被包含，可以提高编译性能。空数组[]表示不自动包含任何声明文件。"
+      },
+      {
+        "name": "allowJs",
+        "type": "boolean",
+        "description": "允许编译JavaScript文件",
+        "default": "false",
+        "example": "true",
+        "details": "allowJs 选项允许TypeScript编译器处理.js和.jsx文件。这在逐步迁移JavaScript项目到TypeScript时非常有用。编译器会检查JavaScript文件中的语法错误（如果checkJs也启用），并根据JSDoc注释推断类型。输出文件会保留原始文件结构。"
+      },
+      {
+        "name": "checkJs",
+        "type": "boolean",
+        "description": "在.js文件中报告错误",
+        "default": "false",
+        "example": "true",
+        "details": "checkJs 选项使TypeScript编译器检查.js文件中的错误，类似于对.ts文件的检查。需要allowJs启用。编译器会利用JSDoc注释和类型推断来验证代码。这对于在纯JavaScript项目中获得TypeScript的部分类型检查能力很有用。"
+      },
+      {
+        "name": "jsx",
+        "type": "string",
+        "description": "指定JSX代码生成",
+        "options": {
+          "preserve": "保持JSX不变",
+          "react": "生成React.createElement",
+          "react-jsx": "React 17+ JSX转换",
+          "react-jsxdev": "React 17+ JSX转换(开发)",
+          "react-native": "保持JSX但生成.js文件"
+        },
+        "example": "'react'",
+        "details": "jsx 选项控制如何处理.tsx文件中的JSX语法。'preserve'保持JSX不变，通常与Babel等工具配合使用；'react'转换为React.createElement调用；'react-jsx'使用React 17+的新JSX转换，无需运行时显式导入React；'react-native'保持JSX但生成.js文件。"
+      },
+      {
+        "name": "jsxFactory",
+        "type": "string",
+        "description": "指定JSX工厂函数",
+        "example": "'h'",
+        "details": "jsxFactory 选项指定用于编译JSX元素的工厂函数名称。默认是'React.createElement'。如果使用其他库如Preact，可以设置为'h'。与jsx选项一起使用，当jsx设置为'react'时生效。"
+      },
+      {
+        "name": "jsxFragmentFactory",
+        "type": "string",
+        "description": "指定JSX Fragment工厂函数",
+        "example": "'Fragment'",
+        "details": "jsxFragmentFactory 选项指定用于编译JSX Fragment的工厂函数名称。默认是'React.Fragment'。如果使用其他库如Preact，可以设置为'Fragment'。与jsxFactory选项一起使用，当jsx设置为'react'时生效。"
+      },
+      {
+        "name": "noEmit",
+        "type": "boolean",
+        "description": "不生成输出文件",
+        "default": "false",
+        "example": "true",
+        "details": "noEmit 选项使TypeScript编译器只进行类型检查而不生成任何输出文件。这在只想检查代码类型错误而不需要编译输出时很有用，如与Babel等工具配合使用时。通常用于开发环境或持续集成中的类型检查。"
+      },
+      {
+        "name": "noEmitOnError",
+        "type": "boolean",
+        "description": "在有错误时不要生成输出文件",
+        "default": "false",
+        "example": "true",
+        "details": "noEmitOnError 选项使TypeScript在发现任何类型错误时不生成输出文件。默认情况下，即使有类型错误也会生成输出。启用此选项可以确保只有完全通过类型检查的代码才会被编译输出，提高代码质量。"
+      },
+      {
+        "name": "sourceMap",
+        "type": "boolean",
+        "description": "生成sourcemap文件",
+        "default": "false",
+        "example": "true",
+        "details": "sourceMap 选项使编译器为每个生成的.js文件生成对应的.sourcemap文件。sourcemap将编译后的代码映射回原始TypeScript代码，便于调试。在浏览器开发者工具或Node.js调试时，可以直接查看和调试TypeScript源代码而非生成的JavaScript。"
+      },
+      {
+        "name": "composite",
+        "type": "boolean",
+        "description": "启用复合项目",
+        "default": "false",
+        "example": "true",
+        "details": "composite 选项启用TypeScript的复合项目功能。复合项目允许将大型项目拆分为多个小项目，每个项目都有自己的tsconfig.json文件。编译器会自动处理依赖关系，确保在构建当前项目前先构建依赖项目。这在大型项目中特别有用，可以显著提高编译性能。"
+      },
+      {
+        "name": "incremental",
+        "type": "boolean",
+        "description": "启用增量编译",
+        "default": "false",
+        "example": "true",
+        "details": "incremental 选项启用TypeScript的增量编译功能。编译器会保存上次编译的信息到.tsbuildinfo文件，下次编译时只重新编译改变的文件及其依赖，显著提高大型项目的编译速度。需要启用composite选项。"
+      },
+      {
+        "name": "tsBuildInfoFile",
+        "type": "string",
+        "description": "指定增量编译信息文件位置",
+        "example": "'build/.tsbuildinfo'",
+        "details": "tsBuildInfoFile 选项指定保存增量编译信息的文件路径。默认与输出文件在同一目录下。可以自定义位置以便更好地组织构建产物。需要启用incremental或composite选项。"
+      },
+      {
+        "name": "removeComments",
+        "type": "boolean",
+        "description": "移除注释",
+        "default": "false",
+        "example": "true",
+        "details": "removeComments 选项使编译器从生成的JavaScript文件中移除所有注释。这可以减小输出文件体积，但会丢失所有源代码中的注释信息。如果需要在输出中保留特定注释，可以使用/*!这样的特殊注释格式。"
+      },
+      {
+        "name": "importHelpers",
+        "type": "boolean",
+        "description": "从tslib导入辅助函数",
+        "default": "false",
+        "example": "true",
+        "details": "importHelpers 选项使编译器从tslib模块导入辅助函数（如__extends、__awaiter等），而不是在每个文件中内联这些函数。这可以显著减小代码体积，特别是当目标版本较低需要大量辅助函数时。需要安装tslib依赖。"
+      },
+      {
+        "name": "downlevelIteration",
+        "type": "boolean",
+        "description": "为迭代器提供更完整的ES5支持",
+        "default": "false",
+        "example": "true",
+        "details": "downlevelIteration 选项为ES5及以下目标版本提供更完整的迭代器协议支持。启用后，for...of循环、数组解构等会生成更复杂但更符合规范的代码，能正确处理生成器和自定义迭代器。会增加代码体积，只在必要时启用。"
+      },
+      {
+        "name": "isolatedModules",
+        "type": "boolean",
+        "description": "确保每个文件可以单独编译",
+        "default": "false",
+        "example": "true",
+        "details": "isolatedModules 选项确保每个文件可以独立编译而不依赖其他文件的类型信息。这在某些构建工具（如Babel）单独处理每个文件时是必需的。启用后，某些需要跨文件类型检查的特性（如const enum）会被限制或禁用。"
+      }
+    ]
+  },
+  {
+    "id": "output-config",
+    "title": "3. 输出配置",
+    "items": [
+      {
+        "name": "declaration",
+        "type": "boolean",
+        "description": "生成对应的.d.ts声明文件",
+        "default": "false",
+        "example": "true",
+        "details": "declaration 选项使编译器为每个.ts或.tsx文件生成对应的.d.ts声明文件。这些文件描述模块的公共API类型信息，对于发布库供其他TypeScript项目使用是必需的。声明文件使其他开发者在使用你的库时能获得完整的类型检查和编辑器智能提示。"
+      },
+      {
+        "name": "declarationMap",
+        "type": "boolean",
+        "description": "为声明文件生成sourcemap",
+        "default": "false",
+        "example": "true",
+        "details": "declarationMap 选项为生成的.d.ts声明文件创建sourcemap文件(.d.ts.map)。这些sourcemap将声明文件映射回原始TypeScript源代码，使编辑器能在查看库的类型定义时导航到原始实现。需要同时启用declaration选项。"
+      },
+      {
+        "name": "sourceMap",
+        "type": "boolean",
+        "description": "生成sourcemap文件",
+        "default": "false",
+        "example": "true",
+        "details": "sourceMap 选项使编译器为每个生成的.js文件生成对应的.js.map sourcemap文件。sourcemap建立了编译后代码与原始TypeScript代码之间的映射关系，使调试器可以直接调试TypeScript源代码而非生成的JavaScript。"
+      },
+      {
+        "name": "inlineSourceMap",
+        "type": "boolean",
+        "description": "将sourcemap内联在输出文件中",
+        "default": "false",
+        "example": "true",
+        "details": "inlineSourceMap 选项将sourcemap数据作为base64编码的注释直接嵌入到生成的.js文件中，而不是生成单独的.map文件。这会增大输出文件体积，但简化了文件管理，因为不需要处理额外的.map文件。与sourceMap选项互斥。"
+      },
+      {
+        "name": "inlineSources",
+        "type": "boolean",
+        "description": "将源代码与sourcemap一起内联",
+        "default": "false",
+        "example": "true",
+        "details": "inlineSources 选项将原始TypeScript源代码作为字符串嵌入到sourcemap中。需要同时启用sourceMap或inlineSourceMap。这在需要完全自包含的调试信息时有用，但会显著增大文件体积。通常用于开发环境调试。"
+      },
+      {
+        "name": "outFile",
+        "type": "string",
+        "description": "将所有输出合并为一个文件(仅限AMD/System模块)",
+        "example": "'dist/app.js'",
+        "details": "outFile 选项将所有全局模块（非模块化代码或AMD/System模块）合并输出到单个指定文件中。模块化代码会按依赖顺序合并。不支持ES模块或CommonJS模块的合并。需要module设置为AMD或System。通常用于浏览器端应用打包。"
+      },
+      {
+        "name": "outDir",
+        "type": "string",
+        "description": "指定输出目录",
+        "example": "'dist'",
+        "details": "outDir 选项指定所有输出文件（JavaScript、声明文件、sourcemap等）的根目录。输出文件会保持与输入文件相同的目录结构，但相对于outDir。如果不指定，输出文件会生成在各自.ts文件旁边。与rootDir配合使用可以更好地控制输出结构。"
+      },
+      {
+        "name": "rootDir",
+        "type": "string",
+        "description": "指定输入文件的根目录",
+        "example": "'src'",
+        "details": "rootDir 选项指定输入文件的根目录，用于控制输出目录结构。默认是所有非声明输入文件的共同父目录。设置后，输出文件会保持相对于rootDir的目录结构。与outDir配合使用可以精确控制输出文件的位置和组织方式。"
+      },
+      {
+        "name": "emitDeclarationOnly",
+        "type": "boolean",
+        "description": "只生成声明文件，不生成JavaScript文件",
+        "default": "false",
+        "example": "true",
+        "details": "emitDeclarationOnly 选项使编译器只生成.d.ts声明文件，不生成任何JavaScript代码。这在只需要类型信息而不需要实际编译输出的场景下有用，如某些库的发布流程或类型检查专用构建步骤。需要同时启用declaration选项。"
+      },
+      {
+        "name": "emitDecoratorMetadata",
+        "type": "boolean",
+        "description": "为装饰器生成元数据",
+        "default": "false",
+        "example": "true",
+        "details": "emitDecoratorMetadata 选项为装饰器生成运行时类型元数据，遵循reflect-metadata提案。这允许在运行时通过Reflect API访问类型信息，被许多依赖注入框架如InversifyJS使用。需要同时启用experimentalDecorators选项。会增加输出代码体积。"
+      }
+    ]
+  },
+  {
+    "id": "strict-checks",
+    "title": "4. 严格类型检查",
+    "items": [
+      {
+        "name": "strict",
+        "type": "boolean",
+        "description": "启用所有严格类型检查选项",
+        "default": "false",
+        "example": "true",
+        "details": "strict 选项是一个总开关，启用所有严格类型检查选项。包括：noImplicitAny、strictNullChecks、strictFunctionTypes、strictBindCallApply、strictPropertyInitialization、noImplicitThis和alwaysStrict。建议新项目启用以获得最全面的类型安全保证。"
+      },
+      {
+        "name": "noImplicitAny",
+        "type": "boolean",
+        "description": "禁止隐式any类型",
+        "default": "false (strict=true时为true)",
+        "example": "true",
+        "details": "noImplicitAny 选项禁止编译器推断类型为any的情况。当无法推断类型且没有显式类型注解时，会报告错误。这迫使开发者明确处理所有类型，提高代码类型安全性。对于大型项目或长期维护的项目特别有价值。"
+      },
+      {
+        "name": "strictNullChecks",
+        "type": "boolean",
+        "description": "启用严格的null检查",
+        "default": "false (strict=true时为true)",
+        "example": "true",
+        "details": "strictNullChecks 选项使null和undefined成为所有类型的独立类型，不能自动赋值给其他类型。这迫使开发者显式处理可能的null/undefined值，避免常见的运行时null引用错误。是TypeScript最有价值的严格选项之一。"
+      },
+      {
+        "name": "strictFunctionTypes",
+        "type": "boolean",
+        "description": "启用严格的函数类型检查",
+        "default": "false (strict=true时为true)",
+        "example": "true",
+        "details": "strictFunctionTypes 选项对函数类型参数启用更严格的逆变检查（而非默认的双变检查）。这能捕获更多潜在的类型不安全情况，特别是涉及类继承和方法重写时。是TypeScript类型系统更安全但可能更严格的选项。"
+      },
+      {
+        "name": "strictBindCallApply",
+        "type": "boolean",
+        "description": "对bind/call/apply方法启用严格检查",
+        "default": "false (strict=true时为true)",
+        "example": "true",
+        "details": "strictBindCallApply 选项使Function的bind、call和apply方法严格检查参数类型。默认情况下这些方法的类型检查较宽松。启用后，参数类型必须完全匹配，能捕获更多潜在的类型错误，特别是在动态调用函数时。"
+      },
+      {
+        "name": "strictPropertyInitialization",
+        "type": "boolean",
+        "description": "确保类的属性已初始化",
+        "default": "false (strict=true时为true)",
+        "example": "true",
+        "details": "strictPropertyInitialization 选项强制检查类实例属性是否在构造函数中初始化（或明确声明为可能undefined）。这能避免访问未初始化属性的运行时错误。需要同时启用strictNullChecks。对于依赖依赖注入或生命周期方法初始化的属性，可以使用明确类型断言。"
+      },
+      {
+        "name": "noImplicitThis",
+        "type": "boolean",
+        "description": "禁止隐式any类型的this",
+        "default": "false (strict=true时为true)",
+        "example": "true",
+        "details": "noImplicitThis 选项禁止隐式any类型的this。当无法推断this类型时（如在回调函数中），会报告错误。迫使开发者明确指定this类型，避免常见的this指向错误。可以通过箭头函数或this参数类型注解来解决。"
+      },
+      {
+        "name": "alwaysStrict",
+        "type": "boolean",
+        "description": "以严格模式解析并为每个源文件生成'use strict'",
+        "default": "false (strict=true时为true)",
+        "example": "true",
+        "details": "alwaysStrict 选项使编译器以严格模式解析所有代码，并在每个生成的.js文件顶部添加'use strict'指令。严格模式启用JavaScript的额外限制和更安全的特性，如禁止未声明变量、更严格的this绑定等。有助于避免常见的JavaScript陷阱。"
+      },
+      {
+        "name": "useUnknownInCatchVariables",
+        "type": "boolean",
+        "description": "将catch子句变量类型设为unknown而非any",
+        "default": "false (strict=true时为true)",
+        "example": "true",
+        "details": "useUnknownInCatchVariables 选项将catch子句中的错误变量类型设为unknown而非默认的any。这迫使开发者在使用错误变量前进行类型检查或类型断言，提高类型安全性。因为JavaScript的catch可以捕获任何值，unknown比any更能准确表示这种不确定性。"
+      }
+    ]
+  },
+  {
+    "id": "module-resolution",
+    "title": "5. 模块解析配置",
+    "items": [
+      {
+        "name": "moduleResolution",
+        "type": "string",
+        "description": "指定模块解析策略",
+        "default": "classic (module=AMD/System/ES6时为node)",
+        "options": {
+          "node": "Node.js风格的模块解析",
+          "classic": "TypeScript 1.6之前的模块解析",
+          "node16": "Node.js 16+的模块解析",
+          "nodenext": "Node.js ESM模块解析"
+        },
+        "example": "'node'",
+        "details": "moduleResolution 选项决定编译器如何查找导入的模块。'node'模拟Node.js的CommonJS解析策略；'node16'和'nodenext'支持Node.js的ES模块解析规则；'classic'是TypeScript旧版策略。通常应使用'node'，除非有特殊需求或使用ES模块。"
+      },
+      {
+        "name": "baseUrl",
+        "type": "string",
+        "description": "解析非相对模块名的基准目录",
+        "example": "'./src'",
+        "details": "baseUrl 选项指定解析非相对模块名（不以./或../开头的导入）时的基准目录。与paths选项配合使用可以实现模块别名。例如，baseUrl设为'./src'后，'components/Button'会从'src/components/Button'解析。通常设为项目根目录或主要源代码目录。"
+      },
+      {
+        "name": "paths",
+        "type": "object",
+        "description": "模块名到基于baseUrl的路径映射",
+        "example": "{ '@/*': ['src/*'] }",
+        "details": "paths 选项创建模块名到实际路径的映射，通常与baseUrl配合使用。例如，{'@/*': ['src/*']}使'@/components/Button'映射到'src/components/Button'。这在大型项目中可以简化深层嵌套的相对路径导入。需要确保构建工具（如Webpack）也配置了相同的别名解析。"
+      },
+      {
+        "name": "rootDirs",
+        "type": "string[]",
+        "description": "将多个目录合并为一个虚拟目录",
+        "example": "['src/views', 'generated/templates']",
+        "details": "rootDirs 选项允许将多个物理目录视为一个虚拟目录。这在多个目录包含逻辑上属于同一命名空间的模块时有用。例如，可以将源代码目录和生成的模板目录合并，使它们可以相互导入而不使用相对路径。不影响实际输出目录结构。"
+      },
+      {
+        "name": "typeRoots",
+        "type": "string[]",
+        "description": "指定类型声明文件的查找目录",
+        "example": "['./typings', './node_modules/@types']",
+        "details": "typeRoots 选项指定查找全局类型声明（非模块声明）的目录列表。默认是'node_modules/@types'。设置后会完全替代默认值，所以通常需要包含'node_modules/@types'。用于自定义类型声明位置或限制可用的全局类型。"
+      },
+      {
+        "name": "types",
+        "type": "string[]",
+        "description": "指定要包含的类型声明文件包",
+        "example": "['node', 'jest']",
+        "details": "types 选项显式指定要包含的@types包。设置后，只有列出的包会被包含，忽略typeRoots下的其他声明文件。空数组[]表示不包含任何全局声明。这可以显著提高编译速度，但需要手动维护所有依赖的类型包。"
+      },
+      {
+        "name": "allowUmdGlobalAccess",
+        "type": "boolean",
+        "description": "允许从模块访问UMD全局变量",
+        "default": "false",
+        "example": "true",
+        "details": "allowUmdGlobalAccess 选项允许从模块文件中直接访问UMD全局导出而不需要导入。当UMD库被全局引入（如通过script标签）时有用。这会降低类型安全性，因为编译器无法验证全局变量确实存在。"
+      },
+      {
+        "name": "resolveJsonModule",
+        "type": "boolean",
+        "description": "允许导入JSON模块",
+        "default": "false",
+        "example": "true",
+        "details": "resolveJsonModule 选项允许直接导入.json文件作为模块。导入的JSON会被类型化为具有任意属性的对象，或可以使用类型断言指定更精确的类型。这在需要配置文件或静态数据时很有用。需要moduleResolution设置为node16/nodenext或启用--esModuleInterop。"
+      },
+      {
+        "name": "allowSyntheticDefaultImports",
+        "type": "boolean",
+        "description": "允许从没有默认导出的模块中默认导入",
+        "default": "false",
+        "example": "true",
+        "details": "allowSyntheticDefaultImports 选项允许从没有默认导出的CommonJS/AMD/UMD模块中使用默认导入语法（如import React from 'react'）。这不会影响运行时行为，只是类型系统检查。通常与esModuleInterop一起使用，或当打包工具能确保正确运行时行为时使用。"
+      }
+    ]
+  },
+  {
+    "id": "advanced-options",
+    "title": "6. 高级配置",
+    "items": [
+      {
+        "name": "esModuleInterop",
+        "type": "boolean",
+        "description": "启用更兼容的ES模块互操作",
+        "default": "false",
+        "example": "true",
+        "details": "esModuleInterop 选项启用更符合ES6模块规范的CommonJS/AMD/UMD模块互操作。会改变生成的代码，添加__importDefault和__importStar辅助函数。允许更自然地混合使用ES模块和CommonJS模块，特别是对默认导入的支持。建议新项目启用。"
+      },
+      {
+        "name": "skipLibCheck",
+        "type": "boolean",
+        "description": "跳过声明文件的类型检查",
+        "default": "false",
+        "example": "true",
+        "details": "skipLibCheck 选项跳过对所有声明文件（.d.ts）的类型检查。这可以显著减少编译时间，特别是当依赖许多大型类型声明时。但会降低类型安全性，因为可能忽略依赖库中的类型错误。通常在类型检查性能成为瓶颈时使用。"
+      },
+      {
+        "name": "forceConsistentCasingInFileNames",
+        "type": "boolean",
+        "description": "强制文件名大小写一致",
+        "default": "false",
+        "example": "true",
+        "details": "forceConsistentCasingInFileNames 选项强制模块导入路径的大小写与实际文件系统大小写一致。在区分大小写的文件系统（如Linux）上能捕获因大小写不匹配导致的导入错误。在跨平台开发时特别有用，避免在一个平台工作而在另一个平台失败的情况。"
+      },
+      {
+        "name": "experimentalDecorators",
+        "type": "boolean",
+        "description": "启用实验性装饰器支持",
+        "default": "false",
+        "example": "true",
+        "details": "experimentalDecorators 选项启用对TC39阶段2的装饰器提案的支持。装饰器是一种元编程语法，用于修改类、方法、属性或参数的行为，被Angular、NestJS等框架广泛使用。由于提案尚未最终确定，未来可能有变化。"
+      },
+      {
+        "name": "emitDecoratorMetadata",
+        "type": "boolean",
+        "description": "为装饰器生成元数据",
+        "default": "false",
+        "example": "true",
+        "details": "emitDecoratorMetadata 选项为装饰器生成运行时类型元数据，遵循reflect-metadata提案。这允许在运行时通过Reflect API访问设计时类型信息，被许多依赖注入框架使用。需要同时启用experimentalDecorators。会增加输出代码体积。"
+      },
+      {
+        "name": "noImplicitReturns",
+        "type": "boolean",
+        "description": "确保函数有明确的返回值",
+        "default": "false",
+        "example": "true",
+        "details": "noImplicitReturns 选项确保所有函数代码路径都有明确的返回值。当函数声明了非void返回类型但某些路径没有返回值时会报告错误。这能避免意外的undefined返回值，提高代码可靠性。对于复杂逻辑的函数特别有用。"
+      },
+      {
+        "name": "noFallthroughCasesInSwitch",
+        "type": "boolean",
+        "description": "禁止switch语句中的case穿透",
+        "default": "false",
+        "example": "true",
+        "details": "noFallthroughCasesInSwitch 选项禁止switch语句中case的穿透行为（即没有break或return的case会继续执行下一个case）。这能避免常见的逻辑错误。如需故意穿透，可以使用/* falls through */注释明确表明意图。"
+      },
+      {
+        "name": "noUnusedLocals",
+        "type": "boolean",
+        "description": "禁止未使用的局部变量",
+        "default": "false",
+        "example": "true",
+        "details": "noUnusedLocals 选项报告未使用的局部变量错误。这有助于保持代码清洁，避免因遗留变量导致的混淆。对于私有前缀变量（如_private）或故意保留的变量，可以使用// @ts-ignore注释或重命名以_开头来抑制错误。"
+      },
+      {
+        "name": "noUnusedParameters",
+        "type": "boolean",
+        "description": "禁止未使用的函数参数",
+        "default": "false",
+        "example": "true",
+        "details": "noUnusedParameters 选项报告未使用的函数参数错误。有助于识别不必要的参数，特别是当接口要求特定参数但实现不需要时。对于必须声明但不需要使用的参数（如事件处理程序的event参数），可以重命名以_开头或使用// @ts-ignore注释。"
+      },
+      {
+        "name": "noImplicitOverride",
+        "type": "boolean",
+        "description": "禁止隐式覆盖基类方法",
+        "default": "false",
+        "example": "true",
+        "details": "noImplicitOverride 选项要求使用override关键字明确标记覆盖基类方法的情况。这能避免意外覆盖（如因拼写错误导致的新方法而非覆盖），提高代码的明确性和安全性。需要TypeScript 4.3+。"
+      },
+      {
+        "name": "noPropertyAccessFromIndexSignature",
+        "type": "boolean",
+        "description": "禁止通过点符号访问索引签名属性",
+        "default": "false",
+        "example": "true",
+        "details": "noPropertyAccessFromIndexSignature 选项强制对具有索引签名的类型使用方括号语法（obj['property']）而非点符号（obj.property）访问属性。这能更明确地区分已知属性和动态属性访问，提高代码清晰度。"
+      },
+      {
+        "name": "exactOptionalPropertyTypes",
+        "type": "boolean",
+        "description": "精确控制可选属性的undefined处理",
+        "default": "false",
+        "example": "true",
+        "details": "exactOptionalPropertyTypes 选项改变可选属性的行为，使{ property?: T }不允许显式赋值为undefined，除非类型明确包含undefined（如T | undefined）。这提供了更精确的类型控制，但可能与某些JavaScript模式不兼容。"
+      },
+      {
+        "name": "preserveWatchOutput",
+        "type": "boolean",
+        "description": "保留watch模式的输出历史",
+        "default": "false",
+        "example": "true",
+        "details": "preserveWatchOutput 选项使TypeScript的--watch模式保留控制台输出历史，而不是在每次重新编译时清除。这在需要比较多次编译结果或查找历史错误时有用。会增加控制台输出量，可能影响性能。"
+      },
+      {
+        "name": "disableSizeLimit",
+        "type": "boolean",
+        "description": "禁用JavaScript项目大小限制",
+        "default": "false",
+        "example": "true",
+        "details": "disableSizeLimit 选项禁用TypeScript对JavaScript项目的内存使用限制。TypeScript默认会限制JavaScript项目的内存使用以提高性能。对于非常大的JavaScript项目，可能需要启用此选项，但会影响IDE响应速度。"
+      },
+      {
+        "name": "plugins",
+        "type": "array",
+        "description": "配置语言服务插件",
+        "example": "[{ 'name': 'typescript-styled-plugin' }]",
+        "details": "plugins 选项配置TypeScript语言服务插件，增强编辑体验。插件可以提供特定框架或技术的支持，如CSS-in-JS模板字符串高亮和补全。插件通过npm安装，通常以typescript-plugin-或typescript-为前缀。需要编辑器支持。"
+      }
+    ]
+  }
+]

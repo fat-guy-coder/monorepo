@@ -1,0 +1,365 @@
+[
+  {
+    "name": "节点查询",
+    "apis": [
+      {
+        "name": "getElementById",
+        "type": "查询",
+        "grade": "first",
+        "description": "通过id查询元素",
+        "example": "document.getElementById('container')"
+      },
+      {
+        "name": "querySelector",
+        "type": "查询",
+        "grade": "first",
+        "description": "CSS选择器查找单个元素",
+        "example": "document.querySelector('.container')"
+      },
+      {
+        "name": "querySelectorAll",
+        "type": "查询",
+        "grade": "first",
+        "description": "CSS选择器查找所有匹配元素",
+        "example": "document.querySelectorAll('.container')"
+      },
+      {
+        "name": "getElementsByClassName",
+        "type": "查询",
+        "grade": "first",
+        "description": "通过类名查询元素",
+        "example": "document.getElementsByClassName('container')"
+      }
+    ]
+  },
+  {
+    "name": "节点操作",
+    "apis": [
+      {
+        "name": "createElement",
+        "type": "创建",
+        "grade": "first",
+        "description": "创建新的HTML元素",
+        "example": "const div = document.createElement('div')"
+      },
+      {
+        "name": "createDocumentFragment",
+        "type": "创建碎片节点",
+        "grade": "first",
+        "description": "创建一个模拟节点的碎片(不属于dom节点),常用于临时存储一组要一次性插入文档的节点，这样可以减少DOM操作的次数，优化性能",
+        "example": "const div = document.createDocumentFragment()"
+      },
+      {
+        "name": "appendChild",
+        "type": "插入",
+        "grade": "first",
+        "description": "向父节点添加子节点",
+        "example": "parent.appendChild(childNode)"
+      },
+      {
+        "name": "removeChild",
+        "type": "删除",
+        "grade": "first",
+        "description": "从父节点删除子节点",
+        "example": "parent.removeChild(childNode)"
+      },
+      {
+        "name": "replaceChild",
+        "type": "替换",
+        "grade": "first",
+        "description": "替换父节点中的子节点",
+        "example": "parent.replaceChild(newNode, oldNode)"
+      },
+      {
+        "name": "setAttribute",
+        "type": "设置",
+        "grade": "first",
+        "description": "设置元素的属性",
+        "example": "element.setAttribute('data-id', '123')"
+      },
+      {
+        "name": "getAttribute",
+        "type": "获取",
+        "grade": "first",
+        "description": "获取元素的属性值",
+        "example": "element.getAttribute('data-id')"
+      },
+      {
+        "name": "removeAttribute",
+        "type": "移除",
+        "grade": "second",
+        "description": "移除元素的属性",
+        "example": "element.removeAttribute('data-id')"
+      },
+      {
+        "name": "cloneNode",
+        "type": "克隆",
+        "grade": "second",
+        "description": "克隆节点",
+        "example": "const clone = node.cloneNode(true)"
+      },
+      {
+        "name": "insertBefore",
+        "type": "插入",
+        "grade": "second",
+        "description": "在父节点的指定子节点前插入一个新节点",
+        "example": "parent.insertBefore(newNode, referenceNode)"
+      },
+      {
+        "name": "hasAttribute",
+        "type": "判断",
+        "grade": "third",
+        "description": "判断元素是否具有该属性",
+        "example": "element.hasAttribute('data-id')"
+      }
+    ]
+  },
+  {
+    "name": "节点信息获取",
+    "apis": [
+      {
+        "name": "nodeType",
+        "type": "获取节点类型",
+        "grade": "second",
+        "description": "获取节点的类型",
+        "example": "element.nodeType"
+      },
+      {
+        "name": "nodeName",
+        "type": "获取节名称",
+        "grade": "second",
+        "description": "获取节点的名称",
+        "example": "element.nodeName"
+      },
+      {
+        "name": "nodeValue",
+        "type": "获取节点值",
+        "grade": "second",
+        "description": "获取节点的值",
+        "example": "element.nodeValue"
+      },
+
+      {
+        "name": "textContent",
+        "type": "获取节点文本内容",
+        "grade": "third",
+        "description": "获取节点的文本内容",
+        "example": "element.textContent"
+      },
+      {
+        "name": "nodeChildCount",
+        "type": "获取子节点数量",
+        "grade": "third",
+        "description": "获取节点的子节点数量",
+        "example": "element.nodeChildCount"
+      }
+    ]
+  },
+  {
+    "name": "节点位置和宽高",
+    "apis": [
+      {
+        "name": "offsetTop",
+        "type": "获取节点offsetTop",
+        "grade": "first",
+        "description": "获取节点距离视口顶部的距离",
+        "example": "element.offsetTop"
+      },
+      {
+        "name": "offsetLeft",
+        "type": "获取节点offsetLeft",
+        "grade": "first",
+        "description": "获取节点距离视口左侧的距离",
+        "example": "element.offsetLeft"
+      },
+      {
+        "name": "clientTop",
+        "type": "获取节点clientTop",
+        "grade": "second",
+        "description": "表示一个元素的顶部边框的宽度",
+        "example": "element.clientTop"
+      },
+      {
+        "name": "clientLeft",
+        "type": "获取节点clientLeft",
+        "grade": "second",
+        "description": "表示一个元素的左侧边框的宽度",
+        "example": "element.clientLeft"
+      },
+      {
+        "name": "scrollLeft",
+        "type": "获取节点scrollLeft",
+        "grade": "second",
+        "description": "获取或设置一个元素的内容水平滚动的像素数",
+        "example": "element.scrollLeft"
+      },
+      {
+        "name": "scrollTop",
+        "type": "获取节点scrollTop",
+        "grade": "second",
+        "description": "获取或设置一个元素的内容垂直滚动的像素数",
+        "example": "element.scrollTop"
+      },
+      {
+        "name": "offsetWidth",
+        "type": "获取节点offsetWidth",
+        "grade": "second",
+        "description": "获取节点的偏移量width",
+        "example": "element.offsetWidth"
+      },
+      {
+        "name": "offsetHeight",
+        "type": "获取节点offsetHeight",
+        "grade": "second",
+        "description": "获取节点的偏移量height",
+        "example": "element.offsetHeight"
+      }
+    ]
+  },
+  {
+    "name": "事件处理",
+    "apis": [
+      {
+        "name": "addEventListener",
+        "type": "绑定",
+        "grade": "first",
+        "description": "添加事件监听器",
+        "example": "element.addEventListener('click', handler)"
+      },
+      {
+        "name": "removeEventListener",
+        "type": "移除",
+        "grade": "first",
+        "description": "移除事件监听器",
+        "example": "element.removeEventListener('click', handler)"
+      },
+      {
+        "name": "focus",
+        "type": "聚焦",
+        "grade": "first",
+        "description": "将焦点设置到元素上",
+        "example": "element.focus()"
+      },
+      {
+        "name": "blur",
+        "type": "失焦",
+        "grade": "first",
+        "description": "移除元素的焦点",
+        "example": "element.blur()"
+      },
+      {
+        "name": "change",
+        "type": "改变",
+        "grade": "second",
+        "description": "当元素的值发生变化时触发",
+        "example": "element.addEventListener('change', handler)"
+      }
+    ]
+  },
+  {
+    "name": "节点方法",
+    "apis": [
+      {
+        "name": "scroll",
+        "type": "滚动",
+        "grade": "first",
+        "description": "滚动元素",
+        "example": "element.scroll()"
+      },
+      {
+        "name": "scrollTo",
+        "type": "滚动到",
+        "grade": "first",
+        "description": "滚动到元素",
+        "example": "element.scrollTo()"
+      },
+      {
+        "name": "scrollToView",
+        "type": "滚动到",
+        "grade": "first",
+        "description": "滚动元素视口",
+        "example": "element.scrollToView()"
+      },
+      {
+        "name": "scrollIntoView",
+        "type": "滚动到",
+        "grade": "first",
+        "description": "滚动元素视口",
+        "example": "element.scrollIntoView()"
+      }
+    ]
+  },
+  {
+    "name": "样式操作",
+    "apis": [
+      {
+        "name": "classList",
+        "type": "类名",
+        "grade": "first",
+        "description": "操作元素类名集合",
+        "example": "element.classList.add('active')"
+      },
+      {
+        "name": "style",
+        "type": "行内样式",
+        "grade": "first",
+        "description": "操作元素内联样式",
+        "example": "element.style.backgroundColor = 'red'"
+      },
+      {
+        "name": "getComputedStyle",
+        "type": "获取",
+        "grade": "second",
+        "description": "获取元素的计算样式",
+        "example": "const styles = window.getComputedStyle(element)"
+      },
+      {
+        "name": "removeAttribute",
+        "type": "移除",
+        "grade": "first",
+        "description": "移除元素的属性",
+        "example": "element.removeAttribute('style')"
+      },
+      {
+        "name": "setAttribute",
+        "type": "设置",
+        "grade": "first",
+        "description": "设置元素的属性",
+        "example": "element.setAttribute('style', 'color: blue;')"
+      },
+      {
+        "name": "toggleClass",
+        "type": "切换",
+        "grade": "first",
+        "description": "切换元素的类名",
+        "example": "element.classList.toggle('active')"
+      }
+    ]
+  },
+  {
+    "name": "元素属性",
+    "apis": [
+      {
+        "name": "getAttribute",
+        "type": "获取",
+        "grade": "first",
+        "description": "获取元素属性值",
+        "example": "element.getAttribute('data-id')"
+      },
+      {
+        "name": "setAttribute",
+        "type": "设置",
+        "grade": "first",
+        "description": "设置元素属性值",
+        "example": "element.setAttribute('disabled', true)"
+      },
+      {
+        "name": "removeAttribute",
+        "type": "移除",
+        "grade": "second",
+        "description": "移除元素属性",
+        "example": "element.removeAttribute('disabled')"
+      }
+    ]
+  }
+]

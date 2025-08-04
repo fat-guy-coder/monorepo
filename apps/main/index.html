@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="prefetch" href="app.js" as="script">
+  <!-- <script>
+    document.getElementsByTagName('link')[0].onload = function() {
+      const script = document.createElement('script');
+      script.src = this.href;
+      document.body.appendChild(script);
+    }
+  </script> -->
+</head>
+<body>
+  <h1>Hello World</h1>
+
+</body>
+<script type="module">
+  import { obj } from './app.js';
+  console.log(obj);
+
+</script>
+</html>

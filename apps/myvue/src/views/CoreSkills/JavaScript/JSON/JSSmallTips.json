@@ -1,0 +1,702 @@
+[
+  {
+    "name": "代码简写",
+    "id": "code-shortcuts",
+    "children": [
+      {
+        "name": "同类型变量合并",
+        "id": "merge-variables",
+        "description": "使用逗号分隔多个变量",
+        "example": "let data1, data2= 1;"
+      },
+      {
+        "name": "&&运算符",
+        "id": "&&-operator",
+        "description": "&&运算符简化if语句执行函数",
+        "example": "callback&&callback()\ncallback &&= callback()"
+      },
+      {
+        "name": "if语句",
+        "id": "if-statement",
+        "description": "适用于表达式，直接在if语句后写表达式",
+        "example": "if(condition) callback()"
+      }
+    ]
+  },
+  {
+    "name": "数组处理",
+    "id": "array-processing",
+    "route": "Array",
+    "children": [
+      {
+        "name": "生成数组",
+        "id": "generate-array",
+        "description": "利用Array.from实现快速创建数组",
+        "example": "const arr = Array.from({length:100},(x,index)=>index);"
+      },
+      {
+        "name": "生成数组",
+        "id": "generate-array",
+        "description": "利用fill实现快速填充数组",
+        "example": "const arr = Array(100).fill(\"0\");"
+      },
+      {
+        "name": "快速去重",
+        "id": "quick-unique",
+        "description": "利用Set实现数组快速去重",
+        "example": "const unique = [...new Set(arr)];"
+      },
+      {
+        "name": "数组洗牌",
+        "id": "shuffle-array",
+        "description": "使用sort进行随机排序",
+        "example": "arr.sort(() => Math.random() - 0.5);"
+      },
+      {
+        "name": "数组求和，求最小值，最大值",
+        "id": "array-sum-min-max",
+        "description": "利用reduce累加归并特性",
+        "example": "array.reduce((a,b) => a+b);\n最小值array.reduce((a,b) => a < b ? a : b);\n最大值array.reduce((a,b) => a > b ? a : b)"
+      },
+      {
+        "name": "判断简化",
+        "id": "simplify-judgment",
+        "description": "使用数组includes来简化",
+        "example": "if(a === undefined || a === 10 || a=== 15 || a === null)\nif([undefined, 10, 15, null].includes(a))"
+      },
+      {
+        "name": "过滤错误值",
+        "id": "filter-error-value",
+        "description": "使用数组filter来筛选",
+        "example": "const array = [1, 0, undefined, 6, 7, '', false];\narray.filter(Boolean)"
+      },
+      {
+        "name": "清空数组",
+        "id": "clear-array",
+        "description": "数组的length",
+        "example": "array.length = 0"
+      },
+      {
+        "name": "数组扁平化",
+        "id": "flatten-array",
+        "description": "使用flat方法将嵌套数组扁平化",
+        "example": "const flatArray = nestedArray.flat();"
+      },
+      {
+        "name": "数组去重",
+        "id": "unique-array",
+        "description": "使用filter和indexOf去重",
+        "example": "const uniqueArray = arr.filter((item, index) => arr.indexOf(item) === index);",
+        "notice": "使用indexOf方法时，注意数组长度较大的时候会比较慢",
+        "route": "Deduplication"
+      },
+      {
+        "name": "数组访问",
+        "id": "array-access",
+        "description": "取数组最后一个元素",
+        "example": "const last= arr[arr.length-1] or arr.at(-1)",
+        "notice": "at方法在数组长度较大的时候会比较慢以及兼容性较差"
+      }
+    ]
+  },
+  {
+    "name": "对象操作",
+    "id": "object-operation",
+    "route": "Object1",
+    "children": [
+      {
+        "name": "属性动态访问",
+        "id": "dynamic-property-access",
+        "description": "使用方括号访问动态属性名",
+        "example": "const key = 'name';\nconst value = obj[key];"
+      },
+      {
+        "name": "对象合并",
+        "id": "object-merge",
+        "description": "使用扩展运算符合并对象或者使用Object.assign合并对象",
+        "example": "const merged = { ...obj1, ...obj2 };\nconst merged = Object.assign({}, obj1, obj2);",
+        "notice": "使用扩展运算符或者Object.assign合并对象时，如果对象中存在相同的属性，后面的属性会覆盖前面的属性,浅拷贝"
+      },
+      {
+        "name": "对象拷贝",
+        "id": "object-copy",
+        "description": "使用JSON方法进行拷贝",
+        "example": "const deepCopy = JSON.parse(JSON.stringify(obj));",
+        "notice": "无法识别function,undefined,symbol等数据,无法实现含有这类数据对象的深拷贝",
+        "route": "DeepCopyShallowCopy"
+      },
+      {
+        "name": "对象属性过滤",
+        "id": "object-property-filter",
+        "description": "使用Object.keys和filter过滤属性",
+        "example": "const filtered = Object.keys(obj).filter(key => obj[key] !== undefined);"
+      },
+      {
+        "name": "有条件地向对象添加属性",
+        "id": "conditional-object-property",
+        "description": "使用展开运算符号(...)来有条件地向 JS 对象快速添加属性",
+        "example": "const condition = true;\nconst person = { id: 1, name: 'John Doe', ...(condition && { age: 16 }) };"
+      },
+      {
+        "name": "检查属性是否存在对象中",
+        "id": "check-property-in-object",
+        "description": "使用 in 关键字来检查 JavaScript 对象中是否存在某个属性",
+        "example": "const person = { name: 'in', salary: 1000 };\nconsole.log('salary' in person); // true\nconsole.log('age' in person); // false",
+        "notice": "检查属性是否存在对象中时，使用 in 关键字会比较慢,并且会遍历对象的所有属性(包括原型链上的属性),可以试试用Object.hasOwnProperty||Object.hasOwn方法替代"
+      }
+    ]
+  },
+  {
+    "name": "字符串相关",
+    "id": "string-related",
+    "route": "String",
+    "children": [
+      {
+        "name": "replaceAll",
+        "id": "replaceAll",
+        "description": "replaceAll可替换匹配到的所有字符",
+        "example": "str.replaceAll('-', ' ');",
+        "notice": "replaceAll方法在字符串长度较大的时候会比较慢",
+        "route": "StringMatchAllAndReplaceAll"
+      },
+      {
+        "name": "matchAll",
+        "id": "matchAll",
+        "description": "matchAll可匹配到的所有字符",
+        "example": "str.matchAll(regexp);",
+        "notice": "matchAll方法在字符串长度较大的时候会比较慢",
+        "route": "StringMatchAllAndReplaceAll"
+      },
+      {
+        "name": "...展开符",
+        "id": "spread-operator",
+        "description": "...同样对字符串适用,可以遍历所有的单个字符",
+        "example": "const str =[...'str'] => str === ['s','t','r']\nconst str =[...'str'].reverse().join('')"
+      }
+    ]
+  },
+  {
+    "name": "函数优化",
+    "id": "function-optimization",
+    "route": "Function",
+    "children": [
+      {
+        "name": "默认参数",
+        "id": "default-parameter",
+        "description": "设置函数参数的默认值",
+        "example": "function calc(x = 0) { /*...*/ }"
+      },
+      {
+        "name": "参数验证",
+        "id": "parameter-validation",
+        "description": "使用默认参数进行基础验证",
+        "example": "function calc(x = 0) { /*...*/ }"
+      },
+      {
+        "name": "函数柯里化",
+        "id": "curry-function",
+        "description": "创建可复用函数模板",
+        "example": "const add = a => b => a + b;"
+      },
+      {
+        "name": "函数参数解构",
+        "id": "function-parameter-destructuring",
+        "description": "函数参数解构",
+        "example": "function calc({x=0,y=0}) { /*...*/ }"
+      },
+      {
+        "name": "构造函数执行字符串代码",
+        "id": "constructor-execute-string-code",
+        "description": "构造函数执行字符串代码",
+        "example": "new Function('console.log(\"Hello, world!\")')()",
+        "route": "Function"
+      }
+    ]
+  },
+  {
+    "name": "ES+特性",
+    "id": "es-features",
+    "route": "ES+Overview",
+    "children": [
+      {
+        "name": "解构赋值",
+        "id": "destructuring-assignment",
+        "description": "解构赋值",
+        "example": "[a, b] = [b, a];{name}=item"
+      },
+      {
+        "name": "...扩展运算符",
+        "id": "spread-operator",
+        "description": "展开运算:克隆数组和合并对象",
+        "example": "const originalArray = [1, 2, 3];\nconst clonedArray = [...originalArray];\nconst obj = { b: 3, c: 4 };\nconst merged = { ...obj };"
+      },
+      {
+        "name": "可选链操作符",
+        "id": "optional-chaining",
+        "description": "安全访问嵌套对象属性",
+        "example": "const name = user?.profile?.name;",
+        "route": "OptionalChaining"
+      },
+      {
+        "name": "空值合并",
+        "id": "nullish-coalescing",
+        "description": "提供默认值的简洁写法",
+        "example": "const value = input ?? 'default';",
+        "route": "NullishCoalescing"
+      },
+      {
+        "name": "逻辑赋值运算符",
+        "id": "logical-assignment-operator",
+        "description": "简化赋值操作，只有在左侧为 falsy 值时才赋值",
+        "example": "let count = 0;\ncount ||= 10; // count 为 10",
+        "route": "LogicalAssignment"
+      }
+    ]
+  },
+  {
+    "name": "数值类型转换",
+    "id": "number-type-conversion",
+    "route": "TypeConversion",
+    "children": [
+      {
+        "name": "!!操作符",
+        "id": "double-exclamation-operator",
+        "description": "!! 运算符可用于将表达式的结果快速转换为布尔值",
+        "example": "const greeting = 'Hello there!';\nconsole.log(!!greeting) // true\nconst noGreeting = '';\nconsole.log(!!noGreeting); // false"
+      },
+      {
+        "name": "字符串和整数转换",
+        "id": "string-and-integer-conversion",
+        "description": "+ 操作符将字符串快速转换为数字或者将整数转换为字符串",
+        "example": "const stringNumer = '123';\nconst myString = 25 + '';\nconsole.log(typeof +stringNumer,typeof myString); //number string",
+        "route": "TypeConversion"
+      },
+      {
+        "name": "Number.parseInt",
+        "id": "number-parseint",
+        "description": "Number.parseInt将字符串转换为整数",
+        "example": "Number.parseInt('123');"
+      },
+      {
+        "name": "Number.parseFloat",
+        "id": "number-parsefloat",
+        "description": "Number.parseFloat将字符串转换为浮点数",
+        "example": "Number.parseFloat('123.456');"
+      },
+      {
+        "name": "Number.toFixed",
+        "id": "number-tofixed",
+        "description": "Number.toFixed将数字转换为指定小数位数的字符串",
+        "example": "Number.toFixed(2);"
+      }
+    ]
+  },
+  {
+    "name": "代码简写",
+    "id": "code-shortcuts-2",
+    "children": [
+      {
+        "name": "三元运算符",
+        "id": "ternary-operator",
+        "description": "用三元运算符简化if-else结构",
+        "example": "const result = condition ? 'A' : 'B';"
+      },
+      {
+        "name": "链式调用",
+        "id": "chained-calls",
+        "description": "连续调用对象方法，简化代码结构",
+        "example": "arr.filter(fn).map(fn2).reduce(fn3);"
+      },
+      {
+        "name": "立即执行函数",
+        "id": "iife",
+        "description": "立即执行函数表达式，避免变量污染全局",
+        "example": "(function(){ console.log('立即执行'); })();"
+      },
+      {
+        "name": "模板字符串",
+        "id": "template-string",
+        "description": "用反引号和${}拼接字符串",
+        "example": "const str = `hello, ${name}!`;"
+      },
+      {
+        "name": "短路运算符",
+        "id": "short-circuit",
+        "description": "利用||和&&实现简洁赋值或执行",
+        "example": "const val = a || '默认值';\nfn && fn();"
+      },
+      {
+        "name": "可选链+空值合并",
+        "id": "optional-chaining-nullish",
+        "description": "安全访问嵌套属性并设置默认值",
+        "example": "const name = user?.info?.name ?? '匿名';"
+      }
+    ]
+  },
+  {
+    "name": "数组处理进阶",
+    "id": "array-processing-advanced",
+    "route": "Array",
+    "children": [
+      {
+        "name": "map遍历",
+        "id": "array-map",
+        "description": "用map遍历数组并返回新数组",
+        "example": "const newArr = arr.map(x => x * 2);"
+      },
+      {
+        "name": "find查找",
+        "id": "array-find",
+        "description": "查找第一个符合条件的元素",
+        "example": "const item = arr.find(x => x.id === 1);"
+      },
+      {
+        "name": "some/every判断",
+        "id": "array-some-every",
+        "description": "判断数组是否有/全部满足条件",
+        "example": "arr.some(x => x > 0);\narr.every(x => x > 0);"
+      },
+      {
+        "name": "slice与splice",
+        "id": "array-slice-splice",
+        "description": "slice返回新数组，splice原地增删改",
+        "example": "arr.slice(1,3);\narr.splice(2,1,'a');"
+      },
+      {
+        "name": "fromEntries",
+        "id": "array-fromEntries",
+        "description": "二维数组转对象",
+        "example": "Object.fromEntries([['a',1],['b',2]]);"
+      },
+      {
+        "name": "flatMap",
+        "id": "array-flatMap",
+        "description": "先映射再扁平化",
+        "example": "[1,2,3].flatMap(x => [x, x*2]);"
+      },
+      {
+        "name": "at方法",
+        "id": "array-at",
+        "description": "用at方法正负索引访问元素",
+        "example": "arr.at(-1) // 最后一个"
+      },
+      {
+        "name": "reduceRight",
+        "id": "array-reduceRight",
+        "description": "从右到左归并数组",
+        "example": "arr.reduceRight((a,b)=>a+b);"
+      },
+      {
+        "name": "数组转对象",
+        "id": "array-to-object",
+        "description": "用reduce将数组转为对象",
+        "example": "arr.reduce((obj, item) => { obj[item.id] = item; return obj; }, {});"
+      },
+      {
+        "name": "groupBy",
+        "id": "array-groupBy",
+        "description": "用groupBy将数组分组",
+        "example": "const group = [ {id:1,name:'a'},{id:2,name:'b'},{id:1,name:'c'}  ];\nconst group = group.groupBy(item=>item.id);\nconsole.log(group); // {1: [{id:1,name:'a'},{id:1,name:'c'}],2: [{id:2,name:'b'}]}",
+        "route": "Array"
+      },
+      {
+        "name": "toSorted,toReversed,toSpliced",
+        "id": "array-toSorted-toReversed-toSpliced",
+        "description": "用toSorted,toReversed,toSpliced不改变原数组",
+        "example": "const sorted = arr.toSorted();\nconst reversed = arr.toReversed();\nconst spliced = arr.toSpliced(1,2,'a');",
+        "route": "Array"
+      }
+    ]
+  },
+  {
+    "name": "对象操作进阶",
+    "id": "object-operation-advanced",
+    "route": "Object2",
+    "children": [
+      {
+        "name": "Object.assign合并",
+        "id": "object-assign",
+        "description": "用Object.assign合并对象",
+        "example": "const merged = Object.assign({}, obj1, obj2);"
+      },
+      {
+        "name": "Object.entries遍历",
+        "id": "object-entries",
+        "description": "用Object.entries遍历对象键值对",
+        "example": "Object.entries(obj).forEach(([k,v])=>console.log(k,v));"
+      },
+      {
+        "name": "冻结对象",
+        "id": "object-freeze",
+        "description": "Object.freeze让对象不可变",
+        "example": "const frozen = Object.freeze(obj);",
+        "route": "Object1"
+      },
+      {
+        "name": "深拷贝函数",
+        "id": "deep-clone-function",
+        "description": "实现通用深拷贝函数",
+        "example": "function deepClone(obj) { return JSON.parse(JSON.stringify(obj)); }",
+        "route": "DeepCopyShallowCopy"
+      },
+      {
+        "name": "对象转数组",
+        "id": "object-to-array",
+        "description": "用Object.values/Object.keys转数组",
+        "example": "Object.values(obj);\nObject.keys(obj);"
+      },
+      {
+        "name": "对象属性重命名",
+        "id": "object-rename-property",
+        "description": "解构+重命名属性",
+        "example": "const { oldName: newName } = obj;"
+      },
+      {
+        "name": "对象转数组",
+        "id": "object-to-array",
+        "description": "用Object.values/Object.keys转数组",
+        "example": "Object.values(obj);\nObject.keys(obj);"
+      }
+    ]
+  },
+  {
+    "name": "字符串相关进阶",
+    "id": "string-related-advanced",
+    "route": "String",
+    "children": [
+      {
+        "name": "padStart/padEnd",
+        "id": "string-pad",
+        "description": "补全字符串长度",
+        "example": "'5'.padStart(2,'0'); // '05'"
+      },
+      {
+        "name": "repeat重复",
+        "id": "string-repeat",
+        "description": "字符串重复n次",
+        "example": "'abc'.repeat(3); // 'abcabcabc'"
+      },
+      {
+        "name": "trim去空格",
+        "id": "string-trim",
+        "description": "去除首尾空格",
+        "example": "'  hello  '.trim();"
+      },
+      {
+        "name": "split/join",
+        "id": "string-split-join",
+        "description": "字符串与数组互转",
+        "example": "'a,b,c'.split(',');\n['a','b','c'].join('-');"
+      },
+      {
+        "name": "includes判断",
+        "id": "string-includes",
+        "description": "判断字符串是否包含子串",
+        "example": "'hello'.includes('ll');"
+      },
+      {
+        "name": "startsWith/endsWith",
+        "id": "string-starts-ends-with",
+        "description": "判断字符串开头/结尾",
+        "example": "'abc'.startsWith('a');\n'abc'.endsWith('c');"
+      }
+    ]
+  },
+  {
+    "name": "函数优化进阶",
+    "id": "function-optimization-advanced",
+    "children": [
+      {
+        "name": "防抖函数",
+        "id": "debounce-function",
+        "description": "防止函数被频繁触发",
+        "example": "function debounce(fn, delay) { let timer; return function(...args) { clearTimeout(timer); timer = setTimeout(() => fn.apply(this, args), delay); }; }",
+        "route": "DebounceThrottle"
+      },
+      {
+        "name": "节流函数",
+        "id": "throttle-function",
+        "description": "限制函数单位时间内只执行一次",
+        "example": "function throttle(fn, delay) { let last = 0; return function(...args) { const now = Date.now(); if (now - last > delay) { last = now; fn.apply(this, args); } }; }"
+      },
+      {
+        "name": "箭头函数",
+        "id": "arrow-function",
+        "description": "简化函数写法并自动绑定this",
+        "example": "const add = (a, b) => a + b;",
+        "route": "ArrowFunction"
+      },
+      {
+        "name": "bind/call/apply",
+        "id": "bind-call-apply",
+        "description": "改变函数this指向",
+        "example": "fn.bind(obj); fn.call(obj, arg1); fn.apply(obj, [arg1]);",
+        "route": "CallAndApplyAndBind"
+      },
+      {
+        "name": "闭包",
+        "id": "closure",
+        "description": "函数内部返回函数，记住外部变量",
+        "example": "function outer() { let count = 0; return function() { count++; return count; }; }",
+        "route": "Closure"
+      },
+      {
+        "name": "递归函数",
+        "id": "recursive-function",
+        "description": "函数自己调用自己",
+        "example": "function factorial(n) { return n <= 1 ? 1 : n * factorial(n-1); }"
+      }
+    ]
+  },
+  {
+    "name": "ES+特性进阶",
+    "id": "es-features-advanced",
+    "route": "ES+Overview",
+    "children": [
+      {
+        "name": "Promise",
+        "id": "promise",
+        "description": "异步操作的解决方案",
+        "example": "new Promise((resolve, reject) => { setTimeout(() => resolve('ok'), 1000); });",
+        "route": "Promise"
+      },
+      {
+        "name": "async/await",
+        "id": "async-await",
+        "description": "用同步写法处理异步",
+        "example": "async function fetchData() { const data = await fetch(url); }",
+        "route": "AsyncAwait"
+      },
+      {
+        "name": "Symbol",
+        "id": "symbol",
+        "description": "唯一值标识符，常用于对象属性",
+        "example": "const s = Symbol('desc'); obj[s] = 123;",
+        "route": "Symbol"
+      },
+      {
+        "name": "Set/Map",
+        "id": "set-map",
+        "description": "Set去重，Map键值对集合",
+        "example": "const s = new Set([1,2,2]);\nconst m = new Map([[1,'a'],[2,'b']]);",
+        "route": "SetAndMap"
+      },
+      {
+        "name": "for...of遍历",
+        "id": "for-of",
+        "description": "遍历可迭代对象",
+        "example": "for(const item of arr){ console.log(item); }",
+        "route": "Iteration"
+      },
+      {
+        "name": "模块化import/export",
+        "id": "import-export",
+        "description": "模块化导入导出代码",
+        "example": "import x from './a.js';\nexport default x;",
+        "route": "Modules",
+        "notice": "tree shaking 需要使用EsModule"
+      },
+      {
+        "name": "动态导入",
+        "id": "dynamic-import",
+        "description": "动态导入模块",
+        "example": "import('./a.js').then(module => { /*...*/ });",
+        "route": "DynamicImport",
+        "notice": "代码分割利器"
+      }
+    ]
+  },
+  {
+    "name": "类型转换进阶",
+    "id": "type-conversion-advanced",
+    "route": "TypeConversion",
+    "children": [
+      {
+        "name": "toString()转字符串",
+        "id": "to-string",
+        "description": "用toString()将数字转为字符串",
+        "example": "(123).toString();"
+      },
+      {
+        "name": "isNaN判断",
+        "id": "is-nan",
+        "description": "判断值是否为NaN",
+        "example": "isNaN('abc'); // true"
+      },
+      {
+        "name": "typeof/instanceof",
+        "id": "typeof-instanceof",
+        "description": "判断变量类型",
+        "example": "typeof 123;\narr instanceof Array;",
+        "route": "TypeChecking"
+      }
+    ]
+  },
+  {
+    "name": "性能优化",
+    "id": "performance-optimization",
+    "route": "PerformanceOverview",
+    "children": [
+      {
+        "name": "事件委托",
+        "id": "event-delegation",
+        "description": "用父元素代理子元素事件，减少监听器数量",
+        "example": "parent.addEventListener('click', e => { if(e.target.matches('li')){ /*...*/ } });"
+      },
+      {
+        "name": "懒加载图片",
+        "id": "lazy-load-image",
+        "description": "图片进入视口再加载，节省流量",
+        "example": "<img loading='lazy' src='...' />"
+      },
+      {
+        "name": "虚拟列表",
+        "id": "virtual-list",
+        "description": "只渲染可见区域的列表项，提升大数据量渲染性能",
+        "example": "",
+        "route": "VirtualScrollList"
+      },
+      {
+        "name": "防止内存泄漏",
+        "id": "memory-leak",
+        "description": "及时清理定时器、事件监听等",
+        "example": "useEffect(()=>{ return ()=>clearInterval(timer); },[]);",
+        "route": "MemoryManagement"
+      }
+    ]
+  },
+  {
+    "name": "调试技巧",
+    "id": "debugging-tips",
+    "route": "FrontendDebugOverview",
+    "children": [
+      {
+        "name": "console.log变体",
+        "id": "console-log-variants",
+        "description": "console.table/console.dir等更好展示数据",
+        "example": "console.table(arr);\nconsole.dir(obj);",
+        "route": "Console"
+      },
+      {
+        "name": "断点调试",
+        "id": "breakpoint-debug",
+        "description": "在开发者工具中设置断点，逐步执行代码",
+        "example": "",
+        "route": "BreakpointDebug"
+      },
+      {
+        "name": "性能分析",
+        "id": "performance-profile",
+        "description": "用Performance面板分析页面性能瓶颈",
+        "example": "DevtoolsDebugTool",
+        "route": "DevtoolsDebugTool"
+      },
+      {
+        "name": "监控变量",
+        "id": "watch-variable",
+        "description": "在控制台监控变量变化",
+        "example": ""
+      }
+    ]
+  }
+]

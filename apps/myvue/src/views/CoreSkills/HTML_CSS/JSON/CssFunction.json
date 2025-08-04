@@ -1,0 +1,545 @@
+[
+  {
+    "name": "变量定义",
+    "type": "variable",
+    "id": "variable",
+    "children": [
+      {
+        "title": "变量",
+        "id": "variable-var",
+        "name": "var",
+        "des": "定义变量",
+        "code": "var(--primary-color, #333)",
+        "scene": "全局样式管理"
+      }
+    ]
+  },
+  {
+    "name": "数学函数",
+    "id": "math",
+    "type": "math",
+    "children": [
+      {
+        "title": "绝对值计算",
+        "id": "math-abs",
+        "name": "abs",
+        "des": "计算数值的绝对值",
+        "code": "width: abs(-150px);",
+        "scene": "处理负值转换"
+      },
+      {
+        "title": "取最小值",
+        "id": "math-min",
+        "name": "min",
+        "des": "取传入的值中的最小值",
+        "code": "min(100px, 20rem, 50%)",
+        "scene": "响应式布局限制"
+      },
+      {
+        "title": "取最大值",
+        "id": "math-max",
+        "name": "max",
+        "des": "取传入的值中的最大值",
+        "code": "max(300px, 30vw)",
+        "scene": "保证最小显示尺寸"
+      },
+      {
+        "title": "区间限制",
+        "id": "math-clamp",
+        "name": "clamp",
+        "des": "动态取值(min ≤ val ≤ max)",
+        "code": "clamp(1rem, 2.5vw, 2rem)",
+        "scene": "流体排版系统"
+      },
+      {
+        "title": "取范围",
+        "id": "math-minmax",
+        "name": "minmax",
+        "des": "定义一个长宽范围的闭区间",
+        "code": "minmax(200px, 1fr)",
+        "scene": "动态计算长短"
+      },
+      {
+        "title": "贝塞尔曲线",
+        "id": "math-cubic-bezier",
+        "name": "cubic-bezier",
+        "des": "定义动画曲线，和过渡曲线",
+        "code": "cubic-bezier(0.1, 0.7, 1.0, 0.1)",
+        "scene": "定义动画曲线，和过渡曲线"
+      },
+      {
+        "title": "三角函数",
+        "id": "math-sin-cos-tan",
+        "name": "sin/cos/tan",
+        "des": "计算三角函数值",
+        "code": "transform: rotate(cos(0.5turn));",
+        "scene": "复杂动画路径计算"
+      }
+    ]
+  },
+  {
+    "name": "颜色函数",
+    "id": "color",
+    "type": "color",
+    "children": [
+      {
+        "title": "RGB颜色",
+        "id": "color-rgb",
+        "name": "rgb",
+        "des": "红-绿-蓝模式",
+        "code": "rgb(255 0 0 / 0.8)",
+        "scene": "基础颜色控制"
+      },
+      {
+        "title": "RGBA颜色",
+        "id": "color-rgba",
+        "name": "rgba",
+        "des": "红-绿-蓝-透明度模式",
+        "code": "rgba(255 0 0 / 0.8)",
+        "scene": "基础颜色控制"
+      },
+      {
+        "title": "HSL颜色",
+        "id": "color-hsl",
+        "name": "hsl",
+        "des": "色相-饱和度-明度模式",
+        "code": "hsl(270 100% 50% / 0.8)",
+        "scene": "动态主题颜色控制"
+      },
+      {
+        "title": "HSLA颜色",
+        "id": "color-hsla",
+        "name": "hsla",
+        "des": "色相-饱和度-明度-透明度模式",
+        "code": "hsla(270 100% 50% / 0.8)",
+        "scene": "动态主题颜色控制"
+      },
+      {
+        "title": "颜色混合",
+        "id": "color-mix",
+        "name": "color-mix",
+        "des": "混合两种颜色",
+        "code": "color-mix(in lch, red 30%, blue)",
+        "scene": "品牌色衍生方案"
+      },
+      {
+        "title": "颜色调整",
+        "id": "color-adjust",
+        "name": "color-adjust",
+        "des": "明暗模式颜色切换",
+        "code": "light-dark(#333, #fff)",
+        "scene": "自动适配主题模式"
+      }
+    ]
+  },
+  {
+    "name": "布局函数",
+    "type": "layout",
+    "id": "layout",
+    "children": [
+      {
+        "title": "动态计算",
+        "name": "calc",
+        "id": "layout-calc",
+        "des": "执行数学运算保持单位有效性",
+        "code": "calc(100% - 60px)",
+        "scene": "响应式布局计算"
+      },
+      {
+        "title": "网格尺寸限制",
+        "name": "minmax",
+        "id": "layout-minmax",
+        "des": "定义网格尺寸范围",
+        "code": "grid-template-columns: minmax(200px, 1fr)",
+        "scene": "自适应网格布局"
+      },
+      {
+        "title": "弹性尺寸",
+        "name": "fit-content",
+        "id": "layout-fit-content",
+        "des": "根据内容自动调整尺寸",
+        "code": "width: fit-content(300px)",
+        "scene": "防止内容溢出容器"
+      },
+      {
+        "title": "repeat",
+        "name": "repeat",
+        "id": "layout-repeat",
+        "des": "重复轨道列表",
+        "code": "repeat(3, 1fr)",
+        "scene": "重复轨道列表"
+      }
+    ]
+  },
+  {
+    "name": "渐变函数",
+    "type": "gradient",
+    "id": "gradient",
+    "children": [
+      {
+        "title": "线性渐变",
+        "name": "linear-gradient",
+        "id": "gradient-linear",
+        "des": "创建线性颜色过渡",
+        "code": "linear-gradient(45deg, red, blue)",
+        "scene": "背景渐变设计"
+      },
+      {
+        "title": "径向渐变",
+        "name": "radial-gradient",
+        "id": "gradient-radial",
+        "des": "创建放射状渐变",
+        "code": "radial-gradient(circle at center, white, black)",
+        "scene": "光照效果模拟"
+      },
+      {
+        "title": "锥型渐变",
+        "name": "conic-gradient",
+        "id": "gradient-conic",
+        "des": "创建锥形渐变",
+        "code": "conic-gradient(from var(--angle), red, blue)",
+        "scene": "饼图效果模拟"
+      },
+      {
+        "title": "重复渐变",
+        "name": "repeating-linear-gradient",
+        "id": "gradient-repeating-linear",
+        "des": "重复线性渐变",
+        "code": "repeating-linear-gradient(45deg, red, blue)",
+        "scene": "背景渐变设计"
+      },
+      {
+        "title": "重复径向渐变",
+        "name": "repeating-radial-gradient",
+        "id": "gradient-repeating-radial",
+        "des": "重复径向渐变",
+        "code": "repeating-radial-gradient(circle at center, white, black)",
+        "scene": "背景渐变设计"
+      },
+      {
+        "title": "重复锥型渐变",
+        "name": "repeating-conic-gradient",
+        "id": "gradient-repeating-conic",
+        "des": "重复锥型渐变",
+        "code": "repeating-conic-gradient(from var(--angle), red, blue)",
+        "scene": "背景渐变设计"
+      }
+    ]
+  },
+  {
+    "name": "变换函数",
+    "type": "transform",
+    "id": "transform",
+    "children": [
+      {
+        "title": "2D旋转",
+        "name": "rotate",
+        "id": "transform-rotate",
+        "des": "元素平面旋转",
+        "code": "transform: rotate(45deg)",
+        "scene": "图标交互状态"
+      },
+      {
+        "title": "3D缩放",
+        "name": "scale3d",
+        "id": "transform-scale3d",
+        "des": "三维空间缩放",
+        "code": "transform: scale3d(1, 0.5, 2)",
+        "scene": "立体动画效果"
+      },
+      {
+        "title": "偏移倾斜",
+        "name": "skew",
+        "id": "transform-skew",
+        "des": "偏移倾斜",
+        "code": "transform: skew(20deg, 10deg)",
+        "scene": "复杂图形变换"
+      },
+      {
+        "title": "矩阵变换",
+        "name": "matrix",
+        "id": "transform-matrix",
+        "des": "6值矩阵变换",
+        "code": "matrix(1, 0.2, 0, 1, 20, 0)",
+        "scene": "复杂图形变换"
+      },
+      {
+        "title": "3D旋转",
+        "name": "rotate3d",
+        "id": "transform-rotate3d",
+        "des": "三维空间旋转",
+        "code": "transform: rotate3d(1, 1, 1, 45deg)",
+        "scene": "复杂图形变换"
+      }
+    ]
+  },
+  {
+    "name": "滤镜函数",
+    "type": "filter",
+    "id": "filter",
+    "children": [
+      {
+        "title": "高斯模糊",
+        "name": "blur",
+        "id": "filter-blur",
+        "des": "应用模糊效果",
+        "code": "filter: blur(4px)",
+        "scene": "背景虚化效果"
+      },
+      {
+        "title": "投影效果",
+        "name": "drop-shadow",
+        "id": "filter-drop-shadow",
+        "des": "创建元素投影",
+        "code": "filter: drop-shadow(2px 4px 6px black)",
+        "scene": "悬浮卡片效果"
+      },
+      {
+        "title": "亮度",
+        "id": "counter-brightness",
+        "name": "brightness",
+        "des": "调整亮度",
+        "code": "filter: brightness(0.5)",
+        "scene": "调整亮度"
+      },
+      {
+        "title": "对比度",
+        "id": "counter-contrast",
+        "name": "contrast",
+        "des": "调整对比度",
+        "code": "filter: contrast(0.5)",
+        "scene": "调整对比度"
+      },
+      {
+        "title": "饱和度",
+        "id": "counter-saturate",
+        "name": "saturate",
+        "des": "调整饱和度",
+        "code": "filter: saturate(0.5)",
+        "scene": "调整饱和度"
+      },
+      {
+        "title": "色相旋转",
+        "id": "counter-hue-rotate",
+        "name": "hue-rotate",
+        "des": "调整色相",
+        "code": "filter: hue-rotate(90deg)",
+        "scene": "调整色相"
+      },
+      {
+        "title": "反转",
+        "id": "counter-invert",
+        "name": "invert",
+        "des": "反转",
+        "code": "filter: invert(1)",
+        "scene": "反转"
+      },
+      {
+        "title": "灰度",
+        "id": "counter-grayscale",
+        "name": "grayscale",
+        "des": "灰度"
+      }
+    ]
+  },
+  {
+    "name": "环境变量",
+    "type": "env",
+    "id": "env",
+    "children": [
+      {
+        "title": "安全区域适配",
+        "name": "env(safe-area-inset)",
+        "id": "env-safe-area-inset",
+        "des": "获取设备安全边距",
+        "code": "padding-top: env(safe-area-inset-top)",
+        "scene": "全面屏设备适配"
+      },
+      {
+        "title": "视窗单位",
+        "name": "dvh/dvw",
+        "id": "env-dvh-dvw",
+        "des": "动态视窗单位",
+        "code": "height: 100dvh",
+        "scene": "移动端全屏布局"
+      }
+    ]
+  },
+  {
+    "name": "资源引用",
+    "type": "resource",
+    "id": "resource",
+    "children": [
+      {
+        "title": "图片路径",
+        "name": "url",
+        "id": "resource-url",
+        "des": "引用外部资源",
+        "code": "background-image: url('image.webp')",
+        "scene": "背景图加载"
+      },
+      {
+        "title": "响应式图片",
+        "name": "image-set",
+        "id": "resource-image-set",
+        "des": "多分辨率图片适配",
+        "code": "background-image: image-set('img1x.jpg' 1x, 'img2x.jpg' 2x)",
+        "scene": "Retina屏幕适配"
+      }
+    ]
+  },
+  {
+    "name": "形状函数",
+    "type": "shape",
+    "id": "shape",
+    "children": [
+      {
+        "title": "圆形裁剪",
+        "name": "circle",
+        "id": "shape-circle",
+        "des": "创建圆形区域",
+        "code": "clip-path: circle(50% at center)",
+        "scene": "圆形头像效果"
+      },
+      {
+        "title": "多边形裁剪",
+        "name": "polygon",
+        "id": "shape-polygon",
+        "des": "自定义多边形形状",
+        "code": "clip-path: polygon(0 0, 100% 0, 50% 100%)",
+        "scene": "异形元素设计"
+      },
+      {
+        "title": "椭圆裁剪",
+        "name": "ellipse",
+        "id": "shape-ellipse",
+        "des": "创建椭圆形区域",
+        "code": "clip-path: ellipse(50% 30% at center)",
+        "scene": "椭圆头像效果"
+      },
+      {
+        "title": "矩形裁剪",
+        "name": "inset",
+        "id": "shape-inset",
+        "des": "创建矩形区域",
+        "code": "clip-path: inset(10px 20px 30px 40px);clip-path:rect(10px 20px 30px 40px)",
+        "scene": "矩形头像效果"
+      },
+      {
+        "title": "路径裁剪",
+        "name": "path",
+        "id": "shape-path",
+        "des": "创建路径裁剪",
+        "code": "clip-path: path('M 0 0 L 100 0 L 50 100 Z')",
+        "scene": "复杂路径裁剪"
+      },
+      {
+        "title": "shape裁剪",
+        "name": "shape",
+        "id": "shape-shape",
+        "des": "自定义形状",
+        "code": "clip-path: shape(polygon(0 0, 100% 0, 50% 100%))",
+        "scene": "异形元素设计"
+      }
+    ]
+  },
+  {
+    "name": "动画函数",
+    "id": "animation",
+    "type": "animation",
+    "children": [
+      {
+        "title": "贝塞尔曲线",
+        "name": "cubic-bezier",
+        "id": "animation-cubic-bezier",
+        "des": "自定义动画速度曲线",
+        "code": "transition-timing-function: cubic-bezier(0.68, -0.55, 0.27, 1.55)",
+        "scene": "弹性动画效果"
+      },
+      {
+        "title": "步进动画",
+        "name": "steps",
+        "id": "animation-steps",
+        "des": "分步动画效果",
+        "code": "animation-timing-function: steps(5, jump-start)",
+        "scene": "帧动画实现"
+      }
+    ]
+  },
+  {
+    "name": "计数器函数",
+    "type": "counter",
+    "id": "counter",
+    "children": [
+      {
+        "title": "序号生成",
+        "name": "counter",
+        "id": "counter-counter",
+        "des": "自动递增计数器",
+        "code": "content: counter(section)",
+        "scene": "文档自动编号"
+      },
+      {
+        "title": "嵌套计数器",
+        "name": "counters",
+        "id": "counter-counters",
+        "des": "多级嵌套计数",
+        "code": "content: counters(section, '.')",
+        "scene": "多级目录编号"
+      }
+    ]
+  },
+  {
+    "name": "属性函数",
+    "type": "attribute",
+    "id": "attribute",
+    "children": [
+      {
+        "title": "属性值获取",
+        "name": "attr",
+        "id": "attribute-attr",
+        "des": "获取HTML属性值",
+        "code": "content: attr(data-tip)",
+        "scene": "动态提示文本"
+      }
+    ]
+  },
+  {
+    "name": "符号函数",
+    "type": "symbol",
+    "id": "symbol",
+    "children": [
+      {
+        "title": "列表标记定义",
+        "name": "symbols",
+        "id": "symbol-symbols",
+        "des": "自定义列表符号",
+        "code": "list-style-type: symbols('▶' '➤' '►')",
+        "scene": "个性化列表样式"
+      }
+    ]
+  },
+  {
+    "name": "实验性函数",
+    "type": "experimental",
+    "id": "experimental",
+    "children": [
+      {
+        "title": "锚点定位",
+        "name": "anchor",
+        "id": "experimental-anchor",
+        "des": "基于锚点位置定位元素",
+        "code": "anchor: --my-anchor;",
+        "scene": "动态浮动元素定位"
+      },
+      {
+        "title": "滚动定位",
+        "name": "scroll",
+        "id": "experimental-scroll",
+        "des": "绑定滚动位置",
+        "code": "scroll(top 200px)",
+        "scene": "复杂滚动交互"
+      }
+    ]
+  }
+]

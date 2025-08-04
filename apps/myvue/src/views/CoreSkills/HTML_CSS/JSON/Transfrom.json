@@ -1,0 +1,323 @@
+[
+  {
+    "type": "none",
+    "label": "重置",
+    "transformStyle": "flat",
+    "description": "移除所有应用于元素的变换效果，将元素恢复到其原始状态。常用于清除或重置之前应用的变换。",
+    "values": [],
+    "unit": []
+  },
+  {
+    "type": "translate",
+    "label": "平移",
+    "transformStyle": "flat",
+    "description": "将元素从当前位置移动到指定位置。第一个参数是水平方向(X轴)的移动距离，第二个参数是垂直方向(Y轴)的移动距离。正值向右/向下移动，负值向左/向上移动。",
+    "values": [
+      {
+        "label": "X轴",
+        "value": 50,
+        "unit": "px"
+      },
+      {
+        "label": "Y轴",
+        "value": 30,
+        "unit": "px"
+      }
+    ],
+    "unit": ["px", "px"]
+  },
+  {
+    "type": "rotate",
+    "label": "旋转",
+    "transformStyle": "flat",
+    "description": "使元素围绕中心点旋转指定的角度。正值为顺时针旋转，负值为逆时针旋转。可以使用deg(度)、turn(圈)或rad(弧度)作为单位。",
+    "values": [
+      {
+        "label": "角度",
+        "value": 45,
+        "unit": "deg",
+        "min": 0,
+        "max": 360
+      }
+    ],
+    "unit": ["deg"]
+  },
+  {
+    "type": "scale",
+    "label": "缩放",
+    "transformStyle": "flat",
+    "description": "按比例放大或缩小元素。值大于1表示放大，小于1表示缩小。可以使用两个参数分别控制水平和垂直方向的缩放比例，单个参数则等比例缩放。",
+    "values": [
+      {
+        "label": "X轴与Y轴",
+        "value": 1.2,
+        "unit": "",
+        "min": 0,
+        "max": 3,
+        "step": 0.1
+      }
+    ]
+  },
+  {
+    "type": "scale",
+    "label": "缩放",
+    "transformStyle": "flat",
+    "description": "按比例放大或缩小元素。两个参数则分别控制水平和垂直方向的缩放比例。",
+    "values": [
+      {
+        "label": "X轴",
+        "value": 1.2,
+        "unit": "",
+        "min": 0,
+        "max": 3,
+        "step": 0.1
+      },
+      {
+        "label": "Y轴",
+        "value": 2,
+        "unit": "",
+        "min": 0,
+        "max": 3,
+        "step": 0.1
+      }
+    ]
+  },
+  {
+    "type": "skew",
+    "label": "倾斜",
+    "transformStyle": "flat",
+    "description": "使元素按指定角度倾斜。第一个参数控制水平方向的倾斜角度，第二个参数控制垂直方向的倾斜角度。正值使元素向对应轴的负方向倾斜。",
+    "values": [
+      {
+        "label": "X轴",
+        "value": 20,
+        "unit": "deg",
+        "min": 0,
+        "max": 360
+      },
+      {
+        "label": "Y轴",
+        "value": 10,
+        "unit": "deg",
+        "min": 0,
+        "max": 360
+      }
+    ]
+  },
+  {
+    "type": "matrix",
+    "label": "矩阵",
+    "transformStyle": "flat",
+    "description": "使用6个参数的变换矩阵来控制元素的变形。这是一个综合变换方法，可以实现平移、旋转、缩放和倾斜的组合效果。参数依次为：scalex(水平缩放), skewY(垂直倾斜), skewX(水平倾斜), scaleY(垂直缩放), translateX(水平移动), translateY(垂直移动)。",
+    "values": [
+      {
+        "label": "scalex",
+        "value": 1,
+        "unit": "",
+        "step": 0.1,
+        "min": 0,
+        "max": 3
+      },
+      {
+        "label": "skewy",
+        "value": 0,
+        "unit": "",
+        "step": 0.1,
+        "min": 0,
+        "max": 5
+      },
+      {
+        "label": "skewx",
+        "value": 0,
+        "unit": "",
+        "min": 0,
+        "max": 5
+      },
+      {
+        "label": "scaley",
+        "value": 1,
+        "unit": "",
+        "min": 0,
+        "max": 3
+      },
+      {
+        "label": "translateX",
+        "value": 0,
+        "unit": "",
+        "min": 0,
+        "max": 100
+      },
+      {
+        "label": "translateY",
+        "value": 0,
+        "unit": "",
+        "min": 0,
+        "max": 100
+      }
+    ]
+  },
+
+  {
+    "type": "translate3d",
+    "label": "3D平移",
+    "transformStyle": "preserve-3d",
+    "description": "在3D空间中移动元素。三个参数分别表示X轴、Y轴和Z轴方向的移动距离。Z轴正值使元素\"靠近\"观察者，负值使其\"远离\"。",
+    "values": [
+      {
+        "label": "X轴",
+        "value": 50,
+        "unit": "px",
+        "step": 1
+      },
+      {
+        "label": "Y轴",
+        "value": 30,
+        "unit": "px",
+        "step": 1
+      },
+      {
+        "label": "Z轴",
+        "value": 20,
+        "unit": "px",
+        "step": 1
+      }
+    ]
+  },
+  {
+    "type": "rotate3d",
+    "label": "3D旋转",
+    "transformStyle": "preserve-3d",
+    "description": "使元素围绕自定义的3D向量进行旋转。前三个参数定义旋转轴的方向向量(x,y,z)，第四个参数是旋转角度。也可以使用rotateX()、rotateY()、rotateZ()进行单轴旋转。",
+    "values": [
+      {
+        "label": "X轴",
+        "value": 1,
+        "unit": "",
+        "min": 0,
+        "max": 1,
+        "step": 0.1
+      },
+      {
+        "label": "Y轴",
+        "value": 1,
+        "unit": "",
+        "min": 0,
+        "max": 1,
+        "step": 0.1
+      },
+      {
+        "label": "Z轴",
+        "value": 1,
+        "unit": "",
+        "min": 0,
+        "max": 1,
+        "step": 0.1
+      },
+      {
+        "label": "度数",
+        "value": 60,
+        "unit": "deg",
+        "min": 0,
+        "max": 360
+      }
+    ]
+  },
+  {
+    "type": "scale3d",
+    "label": "3D缩放",
+    "transformStyle": "preserve-3d",
+    "description": "在3D空间中缩放元素。三个参数分别控制X轴、Y轴和Z轴方向的缩放比例。也可以使用scaleX()、scaleY()、scaleZ()进行单轴缩放。",
+    "values": [
+      {
+        "label": "X轴",
+        "value": 1.2,
+        "unit": "",
+        "min": 0,
+        "max": 3,
+        "step": 0.1
+      },
+      {
+        "label": "Y轴",
+        "value": 1.2,
+        "unit": "",
+        "min": 0,
+        "max": 3,
+        "step": 0.1
+      },
+      {
+        "label": "Z轴",
+        "value": 2,
+        "unit": "",
+        "min": 0,
+        "max": 3,
+        "step": 0.1
+      }
+    ]
+  },
+  {
+    "type": "perspective",
+    "label": "透视",
+    "transformStyle": "preserve-3d",
+    "description": "为3D转换设置透视深度。值越小，3D效果越明显；值越大，3D效果越微弱。这个值表示观察者与z=0平面的距离。",
+    "values": [
+      {
+        "label": "透视",
+        "value": 1000,
+        "unit": "px",
+        "min": 0,
+        "max": 3
+      }
+    ]
+  },
+  {
+    "type": "matrix3d",
+    "label": "3D矩阵",
+    "transformStyle": "preserve-3d",
+    "description": "使用16个参数的4x4矩阵来定义3D转换。这是最复杂但也是最灵活的3D变换方法，可以实现任意的3D变换组合。",
+    "values": [
+      {
+        "label": "1",
+        "value": 1,
+        "unit": "",
+        "min": 0,
+        "max": 3
+      },
+      {
+        "label": "0",
+        "value": 0,
+        "unit": "",
+        "min": 0,
+        "max": 3
+      },
+      {
+        "label": "0",
+        "value": 0,
+        "unit": "",
+        "min": 0,
+        "max": 3
+      },
+      {
+        "label": "0",
+        "value": 0,
+        "unit": "",
+        "min": 0,
+        "max": 3
+      },
+      {
+        "label": "0",
+        "value": 0,
+        "unit": ""
+      },
+      {
+        "label": "0",
+        "value": 0,
+        "unit": ""
+      },
+      {
+        "label": "0",
+        "value": 0,
+        "unit": ""
+      }
+    ]
+  }
+]

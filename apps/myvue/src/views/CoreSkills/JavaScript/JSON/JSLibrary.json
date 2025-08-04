@@ -1,0 +1,453 @@
+[
+  {
+    "name": "前端框架",
+    "libraries": [
+      {
+        "name": "React",
+        "description": "用于构建用户界面的JavaScript库，组件化开发的首选方案",
+        "popularity": 5,
+        "downloads": 2400,
+        "stars": 218,
+        "tags": ["UI", "组件", "虚拟DOM"],
+        "url": "https://zh-hans.react.dev/"
+      },
+      {
+        "name": "Vue",
+        "description": "渐进式JavaScript框架，易学易用，性能出色",
+        "popularity": 5,
+        "downloads": 1900,
+        "stars": 210,
+        "tags": ["MVVM", "响应式", "组合式API"],
+        "url": "https://cn.vuejs.org/"
+      },
+      {
+        "name": "Angular",
+        "description": "基于TypeScript的前端框架，适合大型企业级应用",
+        "popularity": 4,
+        "downloads": 320,
+        "stars": 90,
+        "tags": ["MVC", "TypeScript", "依赖注入"],
+        "url": "https://angular.cn/"
+      },
+      {
+        "name": "Svelte",
+        "description": "编译型前端框架，无虚拟DOM，运行时性能卓越",
+        "popularity": 3,
+        "downloads": 75,
+        "stars": 72,
+        "tags": ["编译时", "轻量级", "响应式"],
+        "url": "https://svelte.dev/"
+      }
+    ]
+  },
+  {
+    "name": "状态管理",
+    "libraries": [
+      {
+        "name": "Redux",
+        "description": "JavaScript应用的可预测状态容器",
+        "popularity": 5,
+        "downloads": 1800,
+        "stars": 60,
+        "tags": ["Flux", "单向数据流", "中间件"],
+        "url": "https://redux.js.org/"
+      },
+      {
+        "name": "MobX",
+        "description": "简单、可扩展的状态管理解决方案",
+        "popularity": 4,
+        "downloads": 650,
+        "stars": 27,
+        "tags": ["响应式", "观察者", "装饰器"],
+        "url": "https://mobx.js.org/getting-started/overview"
+      },
+      {
+        "name": "Pinia",
+        "description": "Vue的轻量级状态管理库，替代Vuex",
+        "popularity": 4,
+        "downloads": 980,
+        "stars": 12,
+        "tags": ["Vue", "TypeScript", "Composition API"],
+        "url": "https://pinia.vuejs.org/"
+      },
+      {
+        "name": "Zustand",
+        "description": "小型、快速、可扩展的React状态管理解决方案",
+        "popularity": 3,
+        "downloads": 420,
+        "stars": 36,
+        "tags": ["轻量", "Hooks", "不可变"],
+        "url": "https://docs.pmnd.rs/zustand/getting-started/introduction"
+      }
+    ]
+  },
+  {
+    "name": "UI组件库",
+    "libraries": [
+      {
+        "name": "Material UI",
+        "description": "基于Google Material Design的React组件库",
+        "popularity": 5,
+        "downloads": 2700,
+        "stars": 90,
+        "tags": ["React", "Material", "主题"],
+        "url": "https://mui.com/material-ui/getting-started/installation/"
+      },
+      {
+        "name": "Ant Design",
+        "description": "企业级UI设计语言和React组件库",
+        "popularity": 5,
+        "downloads": 1900,
+        "stars": 88,
+        "tags": ["React", "企业级", "丰富组件"],
+        "url": "https://ant.design/components/overview-cn"
+      },
+      {
+        "name": "Element Plus",
+        "description": "基于Vue 3的桌面端组件库",
+        "popularity": 4,
+        "downloads": 850,
+        "stars": 21,
+        "tags": ["Vue", "组件", "TypeScript"],
+        "url": "https://element-plus.org/zh-CN/"
+      },
+      {
+        "name": "Antd Design Vue",
+        "description": "基于Vue 3的UI组件库",
+        "popularity": 4,
+        "downloads": 1200,
+        "stars": 33,
+        "tags": ["React", "组件", "TypeScript"],
+        "url": "https://www.antdv.com/components/overview-cn"
+      },
+      {
+        "name": "Tailwind CSS",
+        "description": "实用优先的CSS框架，快速构建自定义设计",
+        "popularity": 5,
+        "downloads": 3800,
+        "stars": 73,
+        "tags": ["CSS", "原子化", "工具类"],
+        "url": "https://tailwindcss.com/docs/installation"
+      }
+    ]
+  },
+  {
+    "name": "移动端框架",
+    "libraries": [
+      {
+        "name": "React Native",
+        "description": "用于构建移动应用的JavaScript框架",
+        "popularity": 5,
+        "downloads": 4900,
+        "stars": 103,
+        "tags": ["移动端", "React", "原生"],
+        "url": "https://reactnative.dev/"
+      },
+      {
+        "name": "Flutter",
+        "description": "跨平台移动应用开发框架",
+        "popularity": 5,
+        "downloads": 4900,
+        "stars": 103,
+        "tags": ["移动端", "Flutter", "原生"],
+        "url": "https://flutter.dev/"
+      },
+      {
+        "name": "Weex",
+        "description": "阿里巴巴推出的跨平台移动应用开发框架",
+        "popularity": 4,
+        "downloads": 4900,
+        "stars": 103,
+        "tags": ["移动端", "Weex", "原生"],
+        "url": "https://weex.apache.org/"
+      }
+    ]
+  },
+  {
+    "name": "实用工具",
+    "libraries": [
+      {
+        "name": "Lodash",
+        "description": "提供一致性、模块化、高性能的JavaScript实用工具库",
+        "popularity": 5,
+        "downloads": 5200,
+        "stars": 58,
+        "tags": ["工具", "函数式", "性能"],
+        "url": "https://www.lodashjs.com/"
+      },
+      {
+        "name": "Axios",
+        "description": "基于Promise的HTTP客户端，用于浏览器和Node.js",
+        "popularity": 5,
+        "downloads": 4900,
+        "stars": 103,
+        "tags": ["HTTP", "请求", "拦截器"],
+        "url": "https://www.axios-http.cn/"
+      },
+      {
+        "name": "Day.js",
+        "description": "轻量级的日期处理库，Moment.js的替代品",
+        "popularity": 5,
+        "downloads": 3100,
+        "stars": 45,
+        "tags": ["日期", "时间", "轻量"],
+        "url": "https://dayjs.fenxianglu.cn/"
+      },
+      {
+        "name": "Classnames",
+        "description": "用于有条件地将类名组合在一起的简单JavaScript工具",
+        "popularity": 4,
+        "downloads": 1800,
+        "stars": 17,
+        "tags": ["CSS", "类名", "条件"],
+        "url": "https://www.npmjs.com/package/classnames"
+      }
+    ]
+  },
+  {
+    "name": "HTTP客户端",
+    "libraries": [
+      {
+        "name": "Axios",
+        "description": "基于Promise的HTTP客户端，用于浏览器和Node.js",
+        "popularity": 5,
+        "downloads": 4900,
+        "stars": 103,
+        "tags": ["HTTP", "请求", "拦截器"],
+        "url": "https://www.axios-http.cn/"
+      },
+      {
+        "name": "Fetch API",
+        "description": "现代浏览器内置的HTTP请求API",
+        "popularity": 5,
+        "downloads": 0,
+        "stars": 0,
+        "tags": ["原生", "现代", "Promise"],
+        "url": "https://developer.mozilla.org/zh-CN/docs/Web/API/Fetch_API"
+      },
+      {
+        "name": "SWR",
+        "description": "React Hooks库，用于数据获取、缓存和重新验证",
+        "popularity": 4,
+        "downloads": 850,
+        "stars": 28,
+        "tags": ["React", "数据获取", "缓存"],
+        "url": "https://swr.vercel.app/"
+      },
+      {
+        "name": "GraphQL Client",
+        "description": "Apollo Client和Relay等GraphQL客户端库",
+        "popularity": 4,
+        "downloads": 420,
+        "stars": 19,
+        "tags": ["GraphQL", "数据管理", "API"],
+        "url": "https://www.apollographql.com/docs/react/"
+      }
+    ]
+  },
+  {
+    "name": "表单处理",
+    "libraries": [
+      {
+        "name": "Formik",
+        "description": "React中构建表单的强大工具，简单灵活",
+        "popularity": 4,
+        "downloads": 1200,
+        "stars": 33,
+        "tags": ["React", "表单", "验证"],
+        "url": "https://formik.org/"
+      },
+      {
+        "name": "React Hook Form",
+        "description": "高性能、灵活且可扩展的表单验证库",
+        "popularity": 5,
+        "downloads": 1800,
+        "stars": 38,
+        "tags": ["React", "Hooks", "性能"],
+        "url": "https://react-hook-form.com/"
+      },
+      {
+        "name": "Final Form",
+        "description": "框架无关的高性能表单状态管理",
+        "popularity": 3,
+        "downloads": 350,
+        "stars": 3.2,
+        "tags": ["表单", "状态", "订阅"],
+        "url": "https://final-form.org/"
+      },
+      {
+        "name": "Yup",
+        "description": "JavaScript对象模式验证器和解析器",
+        "popularity": 4,
+        "downloads": 2100,
+        "stars": 21,
+        "tags": ["验证", "模式", "对象"],
+        "url": "https://www.npmjs.com/package/yup"
+      }
+    ]
+  },
+  {
+    "name": "动画库",
+    "libraries": [
+      {
+        "name": "Framer Motion",
+        "description": "适用于React的生产就绪动画和手势库",
+        "popularity": 4,
+        "downloads": 950,
+        "stars": 20,
+        "tags": ["React", "动画", "手势"],
+        "url": "https://www.framer.com/motion/"
+      },
+      {
+        "name": "GSAP",
+        "description": "专业级JavaScript动画库，性能卓越",
+        "popularity": 5,
+        "downloads": 280,
+        "stars": 18,
+        "tags": ["高性能", "时间轴", "SVG"],
+        "url": "https://greensock.com/gsap/"
+      },
+      {
+        "name": "Anime.js",
+        "description": "轻量级JavaScript动画库，API简单强大",
+        "popularity": 4,
+        "downloads": 180,
+        "stars": 47,
+        "tags": ["轻量", "CSS", "SVG"],
+        "url": "https://animejs.com/"
+      },
+      {
+        "name": "Lottie",
+        "description": "解析Adobe After Effects动画并原生渲染",
+        "popularity": 4,
+        "downloads": 750,
+        "stars": 16,
+        "tags": ["AE", "矢量", "跨平台"],
+        "url": "https://airbnb.io/lottie/"
+      }
+    ]
+  },
+  {
+    "name": "日期处理",
+    "libraries": [
+      {
+        "name": "Day.js",
+        "description": "轻量级的日期处理库，Moment.js的替代品",
+        "popularity": 5,
+        "downloads": 3100,
+        "stars": 45,
+        "tags": ["日期", "时间", "轻量"],
+        "url": "https://dayjs.fenxianglu.cn/"
+      },
+      {
+        "name": "date-fns",
+        "description": "现代JavaScript日期实用程序库",
+        "popularity": 5,
+        "downloads": 2100,
+        "stars": 33,
+        "tags": ["模块化", "函数式", "不可变"],
+        "url": "https://date-fns.org/"
+      },
+      {
+        "name": "Moment.js",
+        "description": "经典的JavaScript日期处理库",
+        "popularity": 4,
+        "downloads": 1800,
+        "stars": 47,
+        "tags": ["日期", "时间", "格式化"],
+        "url": "https://momentjs.com/"
+      },
+      {
+        "name": "Luxon",
+        "description": "强大的现代JavaScript日期时间库",
+        "popularity": 3,
+        "downloads": 320,
+        "stars": 14,
+        "tags": ["时区", "国际化", "不可变"],
+        "url": "https://moment.github.io/luxon/"
+      }
+    ]
+  },
+  {
+    "name": "测试工具",
+    "libraries": [
+      {
+        "name": "Jest",
+        "description": "JavaScript测试框架，注重简单性和零配置",
+        "popularity": 5,
+        "downloads": 2700,
+        "stars": 43,
+        "tags": ["测试", "快照", "覆盖率"],
+        "url": "https://jestjs.io/"
+      },
+      {
+        "name": "Testing Library",
+        "description": "以用户为中心测试UI组件的简单而完整的工具",
+        "popularity": 5,
+        "downloads": 1800,
+        "stars": 18,
+        "tags": ["React", "Vue", "DOM"],
+        "url": "https://testing-library.com/"
+      },
+      {
+        "name": "Cypress",
+        "description": "下一代前端测试工具，专为现代Web设计",
+        "popularity": 5,
+        "downloads": 850,
+        "stars": 45,
+        "tags": ["E2E", "测试", "自动化"],
+        "url": "https://www.cypress.io/"
+      },
+      {
+        "name": "Vitest",
+        "description": "基于Vite的极速单元测试框架",
+        "popularity": 4,
+        "downloads": 520,
+        "stars": 11,
+        "tags": ["Vite", "快速", "兼容"],
+        "url": "https://vitest.dev/"
+      }
+    ]
+  },
+  {
+    "name": "数据可视化",
+    "libraries": [
+      {
+        "name": "D3.js",
+        "description": "使用Web标准实现数据可视化的JavaScript库",
+        "popularity": 5,
+        "downloads": 420,
+        "stars": 107,
+        "tags": ["SVG", "Canvas", "自定义"],
+        "url": "https://d3js.org/"
+      },
+      {
+        "name": "Chart.js",
+        "description": "简单灵活的JavaScript图表库",
+        "popularity": 5,
+        "downloads": 1200,
+        "stars": 62,
+        "tags": ["图表", "Canvas", "响应式"],
+        "url": "https://www.chartjs.org/"
+      },
+      {
+        "name": "ECharts",
+        "description": "百度开源的强大图表库，功能丰富",
+        "popularity": 4,
+        "downloads": 180,
+        "stars": 57,
+        "tags": ["图表", "大数据", "交互"],
+        "url": "https://echarts.apache.org/zh/index.html"
+      },
+      {
+        "name": "Three.js",
+        "description": "JavaScript 3D库，创建WebGL内容",
+        "popularity": 5,
+        "downloads": 320,
+        "stars": 95,
+        "tags": ["3D", "WebGL", "动画"],
+        "url": "https://threejs.org/"
+      }
+    ]
+  }
+]
