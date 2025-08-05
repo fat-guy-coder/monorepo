@@ -8,6 +8,7 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 import Components from 'unplugin-vue-components/vite';
 import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers'
 import { compression, defineAlgorithm } from 'vite-plugin-compression2'
+import zlib from 'zlib'
 
 const outDir = resolve('../../static/myvue')
 
@@ -37,9 +38,12 @@ export default defineConfig({
     }),
     compression({
       algorithms: [
-        'gzip', 'brotliCompress'
+        'gzip', defineAlgorithm('brotliCompress', {
+          [zlib.constants.BROTLI_PARAM_QUALITY]: 6,
+        })
       ],
-      deleteOriginalAssets: true,
+      // deleteOriginalAssets: true,
+      threshold: 500,
     }),
   ],
   build: {

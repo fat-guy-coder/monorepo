@@ -130,6 +130,7 @@ const toggleCollapsed = async () => {
 
 const loading = ref(false)
 
+
 onBeforeMount(async () => {
   loading.value = true
   // const { data, needLoadKeys: n } = await getMainMenu()

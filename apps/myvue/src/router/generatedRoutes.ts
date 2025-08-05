@@ -1777,6 +1777,11 @@ export default [
             "component": () => import('@/views/CoreSkills/ComputerBasicKnowledge/CharacterEncoding.vue')
           },
           {
+            "name": "HuffmanEncoding",
+            "path": "/CoreSkills/ComputerBasicKnowledge/HuffmanEncoding",
+            "component": () => import('@/views/CoreSkills/ComputerBasicKnowledge/HuffmanEncoding.vue')
+          },
+          {
             "name": "BasicAlgorithm",
             "path": "/CoreSkills/ComputerBasicKnowledge/BasicAlgorithm",
             "children": [
@@ -2741,6 +2746,16 @@ export default [
             "component": () => import('@/views/CoreSkills/TeamCollaboration/GitBase.vue')
           },
           {
+            "name": "GitWorkflow",
+            "path": "/CoreSkills/TeamCollaboration/GitWorkflow",
+            "component": () => import('@/views/CoreSkills/TeamCollaboration/GitWorkflow.vue')
+          },
+          {
+            "name": "GitIgnore",
+            "path": "/CoreSkills/TeamCollaboration/GitIgnore",
+            "component": () => import('@/views/CoreSkills/TeamCollaboration/GitIgnore.vue')
+          },
+          {
             "name": "GitCommand",
             "path": "/CoreSkills/TeamCollaboration/GitCommand",
             "component": () => import('@/views/CoreSkills/TeamCollaboration/GitCommand.vue')
@@ -3482,6 +3497,11 @@ export default [
                         "name": "WebpackLibrary",
                         "path": "/FrameworksAndEngineering/Engineering/BuildTools/Webpack/WebpackConfiguration/WebpackLibrary",
                         "component": () => import('@/views/FrameworksAndEngineering/Engineering/BuildTools/Webpack/WebpackConfiguration/WebpackLibrary.vue')
+                      },
+                      {
+                        "name": "WebpackCache",
+                        "path": "/FrameworksAndEngineering/Engineering/BuildTools/Webpack/WebpackConfiguration/WebpackCache",
+                        "component": () => import('@/views/FrameworksAndEngineering/Engineering/BuildTools/Webpack/WebpackConfiguration/WebpackCache.vue')
                       }
                     ]
                   },
@@ -4458,29 +4478,41 @@ export default [
                 "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/OtherAlgorithm",
                 "children": [
                   {
-                    "name": "HashAlgorithm",
-                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/OtherAlgorithm/HashAlgorithm",
-                    "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/OtherAlgorithm/HashAlgorithm.vue')
-                  },
-                  {
-                    "name": "BitOpe",
-                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/OtherAlgorithm/BitOpe",
-                    "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/OtherAlgorithm/BitOpe.vue')
-                  },
-                  {
                     "name": "DivideAndConquerAlgorithm2",
                     "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/OtherAlgorithm/DivideAndConquerAlgorithm2",
                     "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/OtherAlgorithm/DivideAndConquerAlgorithm2.vue')
                   },
                   {
-                    "name": "LRUAlgorithm",
-                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/OtherAlgorithm/LRUAlgorithm",
-                    "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/OtherAlgorithm/LRUAlgorithm.vue')
+                    "name": "SlidingWindowAlgorithm",
+                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/OtherAlgorithm/SlidingWindowAlgorithm",
+                    "children": [
+                      {
+                        "name": "LRUAlgorithm",
+                        "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/OtherAlgorithm/SlidingWindowAlgorithm/LRUAlgorithm",
+                        "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/OtherAlgorithm/SlidingWindowAlgorithm/LRUAlgorithm.vue')
+                      }
+                    ]
                   },
                   {
                     "name": "MappingAlgorithm",
                     "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/OtherAlgorithm/MappingAlgorithm",
-                    "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/OtherAlgorithm/MappingAlgorithm.vue')
+                    "children": [
+                      {
+                        "name": "LZ77Algorithm",
+                        "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/OtherAlgorithm/MappingAlgorithm/LZ77Algorithm",
+                        "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/OtherAlgorithm/MappingAlgorithm/LZ77Algorithm.vue')
+                      },
+                      {
+                        "name": "HashAlgorithm",
+                        "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/OtherAlgorithm/MappingAlgorithm/HashAlgorithm",
+                        "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/OtherAlgorithm/MappingAlgorithm/HashAlgorithm.vue')
+                      },
+                      {
+                        "name": "BitOpe",
+                        "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/OtherAlgorithm/MappingAlgorithm/BitOpe",
+                        "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/OtherAlgorithm/MappingAlgorithm/BitOpe.vue')
+                      }
+                    ]
                   },
                   {
                     "name": "LongestIncreasingSubsequence2",
@@ -5509,6 +5541,11 @@ export default [
             "name": "HtmlCodeCommenter",
             "path": "/ProjectsAndSoftSkills/ToolCompile/HtmlCodeCommenter",
             "component": () => import('@/views/ProjectsAndSoftSkills/ToolCompile/HtmlCodeCommenter.vue')
+          },
+          {
+            "name": "IncrementalGenerator",
+            "path": "/ProjectsAndSoftSkills/ToolCompile/IncrementalGenerator",
+            "component": () => import('@/views/ProjectsAndSoftSkills/ToolCompile/IncrementalGenerator.vue')
           }
         ]
       },

@@ -14,7 +14,8 @@ apps/myvue/src/menu/subMenu/
 apps/svelte/node_modules/
 apps/express/node_modules/
 apps/express/dist/
-apps/express
+apps/express/myvue/
+apps/express/config/
 static/
 .DS_Store
 coverage/

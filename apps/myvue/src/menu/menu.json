@@ -1473,6 +1473,10 @@
             "name": "CharacterEncoding"
           },
           {
+            "label": "🔤 霍夫曼编码 ⭐⭐⭐",
+            "name": "HuffmanEncoding"
+          },
+          {
             "label": "🧮 基础算法 ⭐⭐⭐",
             "name": "BasicAlgorithm",
             "children": [
@@ -4644,6 +4648,10 @@
           {
             "label": "🔄 html代码注释器 ⭐⭐⭐",
             "name": "HtmlCodeCommenter"
+          },
+          {
+            "label": "🔄 增量生成器 ⭐⭐⭐",
+            "name": "IncrementalGenerator"
           }
         ]
       },

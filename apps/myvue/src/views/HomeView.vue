@@ -21,12 +21,11 @@ function uiConfig() {
 
 const path = ref('A')
 
-
-function switchComponent() {
-  path.value = path.value === 'A' ? 'B' : 'A'
-  // import(`@/components/${path.value}.vue`).then((res) => {
-  //   console.log(res)
-  // })
-}
+// function switchComponent() {
+//   path.value = path.value === 'A' ? 'B' : 'A'
+//   import(`@/components/${path.value}.vue`).then((res) => {
+//     console.log(res.default)
+//   })
+// }
 </script>
 <style scoped></style>
