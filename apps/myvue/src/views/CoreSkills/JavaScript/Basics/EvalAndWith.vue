@@ -344,7 +344,7 @@ console.log(subtract(10, 4)); // 输出: 6</code></pre>
                 </div>
                 <div>
                   <h4>JSON.parse()</h4>
-                  <p>用于安全解析JSON字符串</p>
+                  <p>用于安基本指南JSON字符串</p>
                 </div>
               </div>
               <div class="alt">

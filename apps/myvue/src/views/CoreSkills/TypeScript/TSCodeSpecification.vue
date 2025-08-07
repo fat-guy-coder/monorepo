@@ -425,7 +425,7 @@ const eslintVersion = ref('8.50.0');
 </script>
 
 <style lang="less" scoped>
-@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+
 
 .ts-guide-container {
   * {

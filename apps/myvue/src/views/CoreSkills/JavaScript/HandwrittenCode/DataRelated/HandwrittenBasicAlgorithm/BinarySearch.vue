@@ -1,5 +1,5 @@
 <template>
-  <div>🔍 二分查找 ⭐⭐⭐</div>
+  <div>🔍 二分查找 ⭐⭐</div>
 </template>
 <script lang="ts" setup>
 </script>

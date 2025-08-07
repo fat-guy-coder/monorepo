@@ -5,6 +5,7 @@
         <h1>JavaScript Promise 详解</h1>
         <p class="subtitle">异步编程的现代解决方案</p>
         <a @click="goToByRouteName" style="cursor: pointer">promise的实现原理</a>
+        <p>promise过于重要，需要重点掌握</p>
       </div>
       <div class="demo-area">
         <div class="promise-visualization">
@@ -535,7 +536,6 @@ const runReturnPromise = () => {
 </script>
 
 <style lang="less" scoped>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Source+Code+Pro:wght@400;500&display=swap');
 
 // 颜色变量
 @primary-color: #4a6cf7;

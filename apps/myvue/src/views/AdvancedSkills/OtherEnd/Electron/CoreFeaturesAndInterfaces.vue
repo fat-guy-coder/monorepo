@@ -429,7 +429,7 @@ npm run publish`
 </script>
 
 <style lang="less" scoped>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+
 
 :root {
   --primary-color: #47848f;

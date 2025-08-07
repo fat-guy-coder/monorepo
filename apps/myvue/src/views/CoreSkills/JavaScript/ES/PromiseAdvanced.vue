@@ -106,15 +106,15 @@ async function batchRequests(tasks, concurrency = 5) {
 
     for (const task of tasks) {
       const p = task();
-      set.add(p);
+      results.push(p);
+      set.add(p.then(e=>{
+        set.delete(p);
+      }).catch(err=>{
+        set.delete(p);
+        results.push(err);
+      }));
       if (set.size >= concurrency) {
-       await  Promise.race(set).then(e => {
-        results.push(e);
-        set.delete(p);
-       }).catch(e => {
-        //这里可以进一步处理错误
-        set.delete(p);
-       });
+       await  Promise.race(set)
       }
     }
     return Promise.all(results);
@@ -415,10 +415,51 @@ async function processAll(items) {
 
 <script setup lang="ts">
 // 此组件不需要额外的逻辑，仅用于展示Promise进阶使用
+async function concurrentControl(formList: any[], limit: number = 5) {
+  const tasks = formList.map((item, index) => () => {
+    return new Promise((resolve, reject) => {
+      setTimeout(
+        () => {
+          resolve(item)
+        },
+        1000 + index * 100,
+      )
+    })
+  })
+  const result: any[] = []
+  const set = new Set()
+  for (const task of tasks) {
+    const p = task()
+      .then((e) => {
+        set.delete(p)
+        result.push(e)
+        return e
+      })
+      .catch((e) => {
+        set.delete(p)
+        result.push(e)
+        return e
+      })
+    set.add(p)
+    //或者2
+    //result.push(p)
+    if (set.size >= limit) {
+      await Promise.race(set)
+    }
+  }
+  //执行set中剩下的任务
+  await Promise.allSettled(set).then((e) => {
+    result.concat(e.map((e: any) => e.value || e.reason))
+  })
+  return result
+  //或者2
+  //return Promise.all(result)
+}
+
+//concurrentControl([1, 2, 3, 4, 5, 6, 7, 8, 9, 10],3)
 </script>
 
 <style lang="less" scoped>
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Source+Code+Pro:wght@400;500&display=swap');
 
 // 颜色变量
 @primary-color: #5e35b1;

@@ -1,0 +1,240 @@
+[
+  {
+    "name": "冒泡排序",
+    "description": "重复遍历数组，比较相邻元素，如果顺序错误就交换它们。",
+    "complexity": {
+      "worst": "O(n²)",
+      "average": "O(n²)",
+      "best": "O(n)",
+      "space": "O(1)",
+      "stable": true
+    },
+    "steps": [
+      "从数组的第一个元素开始",
+      "比较当前元素和下一个元素",
+      "如果当前元素大于下一个元素，交换它们",
+      "对每一对相邻元素重复上述步骤",
+      "重复整个过程，直到没有需要交换的元素"
+    ],
+    "useCases": ["教学目的，理解排序基本原理", "小规模数据排序", "几乎已经排序好的数据"],
+    "code": "function bubbleSort(arr: number[]): number[] {\n const n = arr.length;\n for (let i = 0; i < n - 1; i++) {\n let swapped = false;\n for (let j = 0; j < n - i - 1; j++) {\n if (arr[j] > arr[j + 1]) {\n [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];\n swapped = true;\n }\n }\n if (!swapped) break;\n }\n return arr;\n}"
+  },
+  {
+    "name": "选择排序",
+    "description": "每次从未排序部分选择最小（或最大）元素，放到已排序部分的末尾。",
+    "complexity": {
+      "worst": "O(n²)",
+      "average": "O(n²)",
+      "best": "O(n²)",
+      "space": "O(1)",
+      "stable": false
+    },
+    "steps": [
+      "将数组分为已排序和未排序两部分",
+      "初始时已排序部分为空",
+      "在未排序部分中找到最小元素",
+      "将找到的最小元素与未排序部分的第一个元素交换",
+      "将交换后的元素纳入已排序部分",
+      "重复直到所有元素排序完成"
+    ],
+    "useCases": ["当内存空间有限时", "需要最小化交换次数的场景", "小规模数据排序"],
+    "code": "function selectionSort(arr: number[]): number[] {\n const n = arr.length;\n for (let i = 0; i < n - 1; i++) {\n let minIndex = i;\n for (let j = i + 1; j < n; j++) {\n if (arr[j] < arr[minIndex]) {\n minIndex = j;\n }\n }\n if (minIndex !== i) {\n [arr[i], arr[minIndex]] = [arr[minIndex], arr[i]];\n }\n }\n return arr;\n}"
+  },
+  {
+    "name": "插入排序",
+    "description": "构建有序序列，对于未排序数据，在已排序序列中从后向前扫描，找到相应位置并插入。",
+    "complexity": {
+      "worst": "O(n²)",
+      "average": "O(n²)",
+      "best": "O(n)",
+      "space": "O(1)",
+      "stable": true
+    },
+    "steps": [
+      "从第一个元素开始，该元素可以认为已经被排序",
+      "取出下一个元素，在已排序序列中从后向前扫描",
+      "如果已排序元素大于新元素，将该元素移到下一位置",
+      "重复步骤3，直到找到已排序元素小于或等于新元素的位置",
+      "将新元素插入到该位置后",
+      "重复步骤2~5"
+    ],
+    "useCases": ["小规模数据排序", "几乎已经排序好的数据", "作为更高级算法（如快速排序）的子过程"],
+    "code": "function insertionSort(arr: number[]): number[] {\n const n = arr.length;\n for (let i = 1; i < n; i++) {\n const current = arr[i];\n let j = i - 1;\n while (j >= 0 && arr[j] > current) {\n arr[j + 1] = arr[j];\n j--;\n }\n arr[j + 1] = current;\n }\n return arr;\n}"
+  },
+  {
+    "name": "归并排序",
+    "description": "采用分治法，将数组分成两半分别排序，然后合并结果。",
+    "complexity": {
+      "worst": "O(n log n)",
+      "average": "O(n log n)",
+      "best": "O(n log n)",
+      "space": "O(n)",
+      "stable": true
+    },
+    "steps": [
+      "将数组分成两个大致相等的子数组",
+      "递归地对两个子数组进行归并排序",
+      "合并两个已排序的子数组",
+      "合并过程：比较两个子数组的前端元素，取较小者放入结果数组",
+      "重复直到所有元素都放入结果数组"
+    ],
+    "useCases": [
+      "大规模数据排序",
+      "需要稳定排序的场景",
+      "外部排序（数据量大于内存容量）",
+      "链表排序"
+    ],
+    "code": "function mergeSort(arr: number[]): number[] {\n if (arr.length <= 1) {\n return arr;\n }\n const mid = Math.floor(arr.length / 2);\n const left = arr.slice(0, mid);\n const right = arr.slice(mid);\n return merge(mergeSort(left), mergeSort(right));\n}"
+  },
+  {
+    "name": "快速排序",
+    "description": "采用分治法，选择一个基准元素，将数组分为两部分，小于基准的放左边，大于基准的放右边，然后递归排序子数组。",
+    "complexity": {
+      "worst": "O(n²)",
+      "average": "O(n log n)",
+      "best": "O(n log n)",
+      "space": "O(log n)",
+      "stable": false
+    },
+    "steps": [
+      "选择一个基准元素（pivot）",
+      "分区操作：重新排列数组，所有小于基准的元素放在基准前面，所有大于基准的元素放在基准后面",
+      "递归地将小于基准的子数组和大于基准的子数组排序",
+      "基准选择策略：通常选择第一个、最后一个或中间元素",
+      "当子数组长度小于某个阈值时，可切换到插入排序"
+    ],
+    "useCases": [
+      "大规模数据排序",
+      "需要原地排序的场景",
+      "通用目的排序",
+      "编程语言内置排序函数的实现"
+    ],
+    "code": "function quickSort(arr: number[], low = 0, high = arr.length - 1): number[] {\n if (low < high) {\n const pivotIndex = partition(arr, low, high);\n quickSort(arr, low, pivotIndex - 1);\n quickSort(arr, pivotIndex + 1, high);\n }\n return arr;\n}"
+  },
+  {
+    "name": "计数排序",
+    "description": "计数排序是一种非比较排序算法，通过统计每个元素出现的次数来实现排序。",
+    "complexity": {
+      "worst": "O(n+k)",
+      "average": "O(n+k)",
+      "best": "O(n+k)"
+    },
+    "steps": ["统计每个元素出现的次数", "根据统计结果构建新的有序数组"],
+    "useCases": ["需要O(1)空间复杂度的场景"],
+    "code": "function countingSort(arr: number[]): number[] {\n const max = Math.max(...arr);\n const min = Math.min(...arr);\n const range = max - min + 1;\n const count = new Array(range).fill(0);\n const output = new Array(arr.length);\n for (let i = 0; i < arr.length; i++) {\n count[arr[i] - min]++;\n }\n for (let i = 1; i < range; i++) {\n count[i] += count[i - 1];\n }\n for (let i = arr.length - 1; i >= 0; i--) {\n output[count[arr[i] - min] - 1] = arr[i];\n count[arr[i] - min]--;\n }\n return output;\n}"
+  },
+  {
+    "name": "希尔排序",
+    "description": "希尔排序是插入排序的一种改进版本，通过将数组分成多个子数组，对每个子数组进行插入排序，最后对整个数组进行插入排序。",
+    "complexity": {
+      "worst": "O(n²)",
+      "average": "O(n log n)",
+      "best": "O(n log n)"
+    },
+    "steps": [
+      "将数组分成多个子数组，每个子数组间隔为h",
+      "对每个子数组进行插入排序",
+      "缩小h的值，重复上述步骤",
+      "最后对整个数组进行插入排序"
+    ],
+    "useCases": [
+      "需要O(1)空间复杂度的场景",
+      "需要稳定O(n log n)时间复杂度的场景",
+      "优先级队列实现",
+      "大规模数据排序"
+    ],
+    "code": "function shellSort(arr: number[]): number[] {\n const n = arr.length;\n let gap = Math.floor(n / 2);\n while (gap > 0) {\n for (let i = gap; i < n; i++) {\n const temp = arr[i];\n let j = i;\n while (j >= gap && arr[j - gap] > temp) {\n arr[j] = arr[j - gap];\n j -= gap;\n }\n arr[j] = temp;\n }\n gap = Math.floor(gap / 2);\n }\n return arr;\n}"
+  },
+  {
+    "name": "堆排序",
+    "description": "利用堆这种数据结构设计的一种排序算法，通过构建最大堆或最小堆来实现排序。",
+    "complexity": {
+      "worst": "O(n log n)",
+      "average": "O(n log n)",
+      "best": "O(n log n)",
+      "space": "O(1)",
+      "stable": false
+    },
+    "steps": [
+      "构建最大堆：从最后一个非叶子节点开始调整堆",
+      "将堆顶元素（最大值）与堆尾元素交换",
+      "减少堆的大小（排除已排序元素）",
+      "从堆顶开始调整堆，使其重新成为最大堆",
+      "重复交换和调整步骤，直到堆的大小为1"
+    ],
+    "useCases": [
+      "需要O(1)空间复杂度的场景",
+      "需要稳定O(n log n)时间复杂度的场景",
+      "优先级队列实现",
+      "大规模数据排序"
+    ],
+    "code": "function heapSort(arr: number[]): number[] {\n const n = arr.length;\n for (let i = Math.floor(n / 2) - 1; i >= 0; i--) {\n heapify(arr, n, i);\n }\n for (let i = n - 1; i > 0; i--) {\n [arr[0], arr[i]] = [arr[i], arr[0]];\n heapify(arr, i, 0);\n }\n return arr;\n}"
+  },
+  {
+    "name": "桶排序",
+    "description": "桶排序是一种非比较排序算法，通过将数据分到有限数量的桶里，每个桶再分别排序。\n桶排序是计数排序的扩展版本，计数排序可以看成每个桶只存储相同元素的桶排序。",
+    "complexity": {
+      "worst": "O(n+k)",
+      "average": "O(n+k)",
+      "best": "O(n+k)"
+    },
+    "steps": [
+      "将数据分到有限数量的桶里",
+      "每个桶再分别排序",
+      "合并所有桶中的数据"
+    ],
+    "useCases": ["需要O(n)空间复杂度的场景"],
+    "code": "function bucketSort(arr: number[]): number[] {\n const n = arr.length;\n const max = Math.max(...arr);\n const min = Math.min(...arr);\n const range = max - min + 1;\n const bucketSize = Math.floor(range / n);\n const buckets = Array.from({ length: n }, () => []);\n for (let i = 0; i < n; i++) {\n const bucketIndex = Math.floor((arr[i] - min) / bucketSize);\n buckets[bucketIndex].push(arr[i]);\n }\n return buckets.flat();\n}"
+  },
+  {
+    "name": "基数排序",
+    "description": "基数排序是一种非比较排序算法(桶排序的扩展)，通过将数据分到有限数量的桶里，每个桶再分别排序。\n先通过个位数将数据分到10个桶里，然后合并数据，再通过十位数将数据分到10个桶里，然后合并数据，以此类推，直到最高位数。",
+    "complexity": {
+      "worst": "O(n+k)",
+      "average": "O(n+k)",
+      "best": "O(n+k)"
+    },
+    "steps": [
+      "将数据分到有限数量的桶里",
+      "每个桶再分别排序",
+      "合并所有桶中的数据"
+    ],
+    "useCases": ["需要O(n)空间复杂度的场景"],
+    "code": "function radixSort(arr: number[]): number[] {\n const max = Math.max(...arr);\n const digits = Math.floor(Math.log10(max)) + 1;\n for (let i = 0; i < digits; i++) {\n const buckets = Array.from({ length: 10 }, () => []);\n for (let j = 0; j < arr.length; j++) {\n const digit = Math.floor(arr[j] / Math.pow(10, i)) % 10;\n buckets[digit].push(arr[j]);\n }\n arr = buckets.flat();\n }\n return arr;\n}"
+  },
+  {
+    "name": "tim排序",
+    "description": "tim排序是一种混合排序算法，结合了插入排序和归并排序的优点。\n核心思想是通过识别和利用数据集中已有的有序性，提高排序效率。",
+    "complexity": {
+      "worst": "O(n log n)",
+      "average": "O(n log n)",
+      "best": "O(n log n)"
+    },
+    "steps": [
+      "识别数据中的已排序片段(子数组)run",
+      "根据数组长度确定一个阈值min_run(通常是32或者64)",
+      "如果已排序片段长度小于阈值，则使用插入排序(二分插入排序)对其进行扩展",
+      "维护一个特殊的栈，采用特定的归并策略将栈中已有的 run 合并成更大的有序序列",
+      "当栈中 run 数量大于等于 2 时，采用归并排序将栈顶的 run 合并成更大的有序序列",
+      "当栈中 run 数量小于 2 时，将 run 压入栈中"
+    ],
+    "useCases": ["需要O(n)空间复杂度的场景"],
+    "code": "function timSort(arr: number[]): number[] {\n const n = arr.length;\n const minRun = 32;\n for (let i = 0; i < n; i += minRun) {\n insertionSort(arr, i, Math.min(i + minRun - 1, n - 1));\n }\n let size = minRun;\n while (size < n) {\n for (let left = 0; left < n; left += 2 * size) {\n const mid = left + size - 1;\n const right = Math.min(left + 2 * size - 1, n - 1);\n if (mid < right) {\n merge(arr, left, mid, right);\n }\n }\n size *= 2;\n }\n return arr;\n}"
+  },
+  {
+    "name": "锦标赛排序",
+    "description": "锦标赛排序是一种比较排序算法，通过将数据分到有限数量的桶里，每个桶再分别排序。",
+    "complexity": {
+      "worst": "O(n+k)",
+      "average": "O(n+k)",
+      "best": "O(n+k)"
+    },
+    "steps": [
+      "将数据分到有限数量的桶里",
+      "每个桶再分别排序",
+      "合并所有桶中的数据"
+    ],
+    "useCases": ["需要O(n)空间复杂度的场景"],
+    "code": "function tournamentSort(arr: number[]): number[] {\n const n = arr.length;\n const tree = new Array(2 * n - 1);\n for (let i = 0; i < n; i++) {\n tree[n - 1 + i] = arr[i];\n }\n for (let i = n - 2; i >= 0; i--) {\n tree[i] = Math.min(tree[2 * i + 1], tree[2 * i + 2]);\n }\n const result = [];\n while (tree[0] !== Infinity) {\n const minIndex = 0;\n result.push(tree[minIndex]);\n tree[minIndex] = Infinity;\n while (minIndex > 0) {\n const parentIndex = Math.floor((minIndex - 1) / 2);\n tree[parentIndex] = Math.min(tree[2 * parentIndex + 1], tree[2 * parentIndex + 2]);\n minIndex = parentIndex;\n }\n }\n return result;\n}"
+  }
+]

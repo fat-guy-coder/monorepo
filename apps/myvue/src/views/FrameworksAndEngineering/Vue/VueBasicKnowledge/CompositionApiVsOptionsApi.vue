@@ -531,8 +531,8 @@ const activeTab = ref('options');
 </script>
 
 <style lang="less" scoped>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css');
+
+
 
 // 基础变量
 @primary-color: #42b883; // Vue 绿色

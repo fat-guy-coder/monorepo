@@ -304,7 +304,7 @@ const attackStats = ref([
 </script>
 
 <style scoped lang="less">
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
 
 :root {
   --primary: #2c3e50;

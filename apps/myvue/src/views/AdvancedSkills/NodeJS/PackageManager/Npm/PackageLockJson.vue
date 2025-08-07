@@ -724,8 +724,8 @@ onBeforeUnmount(() => {
 </script>
 
 <style lang="less" scoped>
-@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Source+Code+Pro:wght@400;600&display=swap');
+
+
 
 // 变量定义
 @primary-color: #4361ee;

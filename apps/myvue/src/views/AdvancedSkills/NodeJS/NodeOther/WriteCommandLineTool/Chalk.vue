@@ -286,7 +286,7 @@ const combinedStyles = ref<ChalkAPI[]>([
 </script>
 
 <style lang="less" scoped>
-@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@300;400;500;600&display=swap');
+
 
 .chalk-demo {
   max-width: 1200px;

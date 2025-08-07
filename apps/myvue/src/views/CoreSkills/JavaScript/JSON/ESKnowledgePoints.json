@@ -1,0 +1,6181 @@
+[
+  {
+    "name": "基础语法",
+    "id": "base",
+    "items": [
+      {
+        "name": "let/const",
+        "id": "letAndconst",
+        "description": "块级作用域变量声明",
+        "importance": 5,
+        "tags": [
+          "作用域",
+          "变量"
+        ],
+        "version": "ES6",
+        "example": "let x = 10;\nconst PI = 3.14;",
+        "route": "letConst",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 49,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 44,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 10,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 12,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 11,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "o",
+            "v": 36,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 10,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 49,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 6,
+            "e": false,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "箭头函数",
+        "id": "arrowFunction",
+        "description": "简洁函数语法和词法this绑定",
+        "importance": 5,
+        "tags": [
+          "函数",
+          "this"
+        ],
+        "version": "ES6",
+        "example": "const sum = (a, b) => a + b;",
+        "route": "arrowFunction",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 45,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 22,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 10,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 12,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 32,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 10,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 49,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 4,
+            "e": false,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "模板字符串",
+        "id": "templateString",
+        "description": "使用反引号定义的多行字符串",
+        "importance": 5,
+        "tags": [
+          "字符串",
+          "插值"
+        ],
+        "version": "ES6",
+        "example": "const greeting = `Hello, ${name}!`;",
+        "route": "templateString",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 41,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 34,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 9,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 13,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 28,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 9,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 49,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 4,
+            "e": false,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "解构赋值",
+        "id": "destructuring",
+        "description": "从数组或对象提取值",
+        "importance": 5,
+        "tags": [
+          "赋值",
+          "模式匹配"
+        ],
+        "version": "ES6",
+        "example": "const { name, age } = person;",
+        "route": "destructuring",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 49,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 41,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 10,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 12,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 36,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 10,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 49,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 6,
+            "e": false,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "默认参数",
+        "id": "defaultParameter",
+        "description": "函数参数默认值",
+        "importance": 5,
+        "tags": [
+          "函数",
+          "参数"
+        ],
+        "version": "ES6",
+        "example": "function greet(name = 'Guest') {...}",
+        "route": "DefaultAndRestParameters",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 49,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 15,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 10,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 13,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 36,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 10,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 49,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 6,
+            "e": false,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "剩余参数",
+        "id": "restParameter",
+        "description": "将剩余参数收集到数组中",
+        "importance": 5,
+        "tags": [
+          "函数",
+          "参数"
+        ],
+        "version": "ES6",
+        "example": "function sum(...nums) {...}",
+        "route": "DefaultAndRestParameters",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 47,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 15,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 10,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 12,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 34,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 10,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 49,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 6,
+            "e": false,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "展开运算符",
+        "id": "spreadOperator",
+        "description": "展开数组或对象",
+        "importance": 5,
+        "tags": [
+          "运算符",
+          "复制"
+        ],
+        "version": "ES6",
+        "example": "const newArr = [...arr1, ...arr2];",
+        "route": "SpreadOperator",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 46,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 16,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 10,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 13,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 33,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 10,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 49,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 6,
+            "e": false,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "可选链",
+        "id": "optionalChain",
+        "description": "安全访问嵌套属性",
+        "importance": 5,
+        "tags": [
+          "对象",
+          "安全访问"
+        ],
+        "version": "ES2020",
+        "example": "const street = user?.address?.street;",
+        "route": "OptionalChain",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 80,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 72,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 13,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 80,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 67,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 13,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 80,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 12,
+            "e": false,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "空值合并",
+        "id": "nullishCoalescing",
+        "description": "提供默认值的逻辑运算符",
+        "importance": 5,
+        "tags": [
+          "运算符",
+          "默认值"
+        ],
+        "version": "ES2020",
+        "example": "const value = input ?? 'default';",
+        "route": "NullishCoalescing",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 80,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 72,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 13,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 80,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 67,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 13,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 80,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 12,
+            "e": false,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "BigInt",
+        "id": "bigInt",
+        "description": "表示任意精度的整数",
+        "importance": 4,
+        "tags": [
+          "数值",
+          "精度"
+        ],
+        "version": "ES2020",
+        "example": "const bigNum = 12345678901234567890n;",
+        "route": "BigInt",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 67,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 68,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 14,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 79,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 54,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 14,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 67,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 10,
+            "e": false,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "全局This",
+        "id": "globalThis",
+        "description": "标准化全局对象引用",
+        "importance": 4,
+        "tags": [
+          "全局对象",
+          "跨环境"
+        ],
+        "version": "ES2020",
+        "example": "globalThis.setTimeout(...);",
+        "route": "GlobalThis",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 71,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 65,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 12,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 79,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 58,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 12,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 71,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 12,
+            "e": false,
+            "ns": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "面向对象",
+    "id": "object",
+    "items": [
+      {
+        "name": "Class语法",
+        "id": "classSyntax",
+        "description": "类声明语法糖",
+        "importance": 5,
+        "tags": [
+          "类",
+          "继承"
+        ],
+        "version": "ES6",
+        "example": "class Person {\n  constructor(name) {...}\n}",
+        "route": "Class",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 42,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 45,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 9,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 13,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 29,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 9,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 42,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 4,
+            "e": false,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "类继承",
+        "id": "classInheritance",
+        "description": "使用extends实现继承",
+        "importance": 5,
+        "tags": [
+          "类",
+          "继承"
+        ],
+        "version": "ES6",
+        "example": "class Student extends Person {...}",
+        "route": "Class",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 42,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 45,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 9,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 13,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 29,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 9,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 42,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 4,
+            "e": false,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "静态方法",
+        "id": "staticMethod",
+        "description": "类静态方法和属性",
+        "importance": 4,
+        "tags": [
+          "类",
+          "方法"
+        ],
+        "version": "ES6",
+        "example": "class MathUtils {\n  static sum(a, b) {...}\n}",
+        "route": "Class",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 42,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 45,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 9,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 13,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 29,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 9,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 42,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 4,
+            "e": false,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "私有字段",
+        "id": "privateField",
+        "description": "类私有属性和方法",
+        "importance": 4,
+        "tags": [
+          "类",
+          "封装"
+        ],
+        "version": "ES2022",
+        "example": "class Person {\n  #name;\n  #getName() {...}\n}",
+        "route": "PrivateClassFields",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 74,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 90,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 14,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 79,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 62,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 14,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 74,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 12,
+            "e": false,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "静态块",
+        "id": "staticBlock",
+        "description": "类静态初始化块",
+        "importance": 3,
+        "tags": [
+          "类",
+          "初始化"
+        ],
+        "version": "ES2022",
+        "example": "class C {\n  static {\n    // 静态初始化代码\n  }\n}",
+        "route": "StaticBlock",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 93,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 91,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 15,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 93,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 79,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 15,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 93,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 16,
+            "e": false,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "公共字段",
+        "id": "publicField",
+        "description": "类公共实例字段",
+        "importance": 4,
+        "tags": [
+          "类",
+          "属性"
+        ],
+        "version": "ES2022",
+        "example": "class Person {\n  name = 'Anonymous';\n}",
+        "route": "Class",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 72,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 69,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 14,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 79,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 59,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 14,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 72,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 12,
+            "e": false,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "decorator",
+        "id": "decorator",
+        "description": "装饰器",
+        "importance": 4,
+        "tags": [
+          "类",
+          "装饰器"
+        ],
+        "version": "ES2024",
+        "example": "class Person {\n  @readonly\n  name = 'Anonymous';\n}",
+        "route": "Decorator",
+        "proposal": true,
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 0,
+            "e": true,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 0,
+            "e": true,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 0,
+            "e": true,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 0,
+            "e": true,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 0,
+            "e": true,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 0,
+            "e": true,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 0,
+            "e": true,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 0,
+            "e": true,
+            "ns": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "异步编程",
+    "id": "async",
+    "items": [
+      {
+        "name": "Promise",
+        "id": "promise",
+        "description": "异步操作处理对象",
+        "importance": 5,
+        "tags": [
+          "异步",
+          "回调"
+        ],
+        "version": "ES6",
+        "example": "new Promise((resolve, reject) => {...})",
+        "route": "Promise",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 32,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 29,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 8,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 12,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 11,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "o",
+            "v": 19,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 8,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 32,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 0,
+            "e": false,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "async/await",
+        "id": "asyncAwait",
+        "description": "异步代码同步写法",
+        "importance": 5,
+        "tags": [
+          "异步",
+          "语法糖"
+        ],
+        "version": "ES2017",
+        "example": "async function fetchData() {\n  const data = await getData();\n}",
+        "route": "AsyncAwait",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 55,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 52,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 11,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 15,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 42,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 11,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 55,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 7,
+            "e": false,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "Promise.all",
+        "id": "promiseAll",
+        "description": "并行执行多个Promise",
+        "importance": 5,
+        "tags": [
+          "并发",
+          "Promise"
+        ],
+        "version": "ES6",
+        "example": "Promise.all([p1, p2, p3]);",
+        "route": "Promise",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 32,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 29,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 8,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 12,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 11,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "o",
+            "v": 19,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 8,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 32,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 0,
+            "e": false,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "Promise.race",
+        "id": "promiseRace",
+        "description": "首个完成/拒绝的Promise",
+        "importance": 4,
+        "tags": [
+          "并发",
+          "Promise"
+        ],
+        "version": "ES6",
+        "example": "Promise.race([p1, p2]);",
+        "route": "Promise",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 32,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 29,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 8,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 12,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 11,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "o",
+            "v": 19,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 8,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 32,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 0,
+            "e": false,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "Promise.allSettled",
+        "id": "promiseAllSettled",
+        "description": "所有Promise完成后返回结果",
+        "importance": 4,
+        "tags": [
+          "并发",
+          "Promise"
+        ],
+        "version": "ES2020",
+        "example": "Promise.allSettled([p1, p2]);",
+        "route": "Promise",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 76,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 71,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 13,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 79,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 63,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 13,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 76,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 12,
+            "e": false,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "Promise.any",
+        "id": "promiseAny",
+        "description": "首个完成的Promise",
+        "importance": 4,
+        "tags": [
+          "并发",
+          "Promise"
+        ],
+        "version": "ES2021",
+        "example": "Promise.any([p1, p2]);",
+        "route": "Promise",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 85,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 79,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 14,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 85,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 71,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 14,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 85,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 15,
+            "e": false,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "异步迭代",
+        "id": "asyncIterator",
+        "description": "for await...of处理异步可迭代对象",
+        "importance": 4,
+        "tags": [
+          "异步",
+          "迭代"
+        ],
+        "version": "ES2018",
+        "example": "for await (const chunk of stream) {...}",
+        "route": "AsyncIterator",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 63,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 57,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 12,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 79,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 50,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 12,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 63,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 10,
+            "e": false,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "顶层await",
+        "id": "topLevelAwait",
+        "description": "在模块顶层使用await",
+        "importance": 4,
+        "tags": [
+          "异步",
+          "模块"
+        ],
+        "version": "ES2022",
+        "example": "const data = await fetchData();",
+        "route": "TopLevelAwait",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 89,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 89,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 15,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 89,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 75,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 15,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 89,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 14,
+            "e": false,
+            "ns": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "数据结构",
+    "id": "data",
+    "items": [
+      {
+        "name": "Map",
+        "id": "map",
+        "description": "键值对集合",
+        "importance": 5,
+        "tags": [
+          "集合",
+          "数据结构"
+        ],
+        "version": "ES6",
+        "example": "const map = new Map();\nmap.set('key', 'value');",
+        "route": "SetMap",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 38,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 13,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 8,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 12,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 11,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "o",
+            "v": 25,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 8,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 38,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 0,
+            "e": false,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "Set",
+        "id": "set",
+        "description": "唯一值集合",
+        "importance": 5,
+        "tags": [
+          "集合",
+          "唯一性"
+        ],
+        "version": "ES6",
+        "example": "const set = new Set([1, 2, 3]);",
+        "route": "SetMap",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 38,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 13,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 8,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 12,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 11,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "o",
+            "v": 25,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 8,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 38,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 0,
+            "e": false,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "WeakMap",
+        "id": "weakMap",
+        "description": "弱引用键的Map",
+        "importance": 4,
+        "tags": [
+          "集合",
+          "弱引用"
+        ],
+        "version": "ES6",
+        "example": "const wm = new WeakMap();",
+        "route": "WeakRef",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 36,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 6,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 8,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 12,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 11,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "o",
+            "v": 23,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 8,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 36,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 0,
+            "e": false,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "WeakSet",
+        "id": "weakSet",
+        "description": "弱引用值的Set",
+        "importance": 4,
+        "tags": [
+          "集合",
+          "弱引用"
+        ],
+        "version": "ES6",
+        "example": "const ws = new WeakSet();",
+        "route": "WeakRef",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 36,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 34,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 8,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 12,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 23,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 8,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 36,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 0,
+            "e": false,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "TypedArray",
+        "id": "typedArray",
+        "description": "类型化数组视图",
+        "importance": 4,
+        "tags": [
+          "数组",
+          "二进制"
+        ],
+        "version": "ES6",
+        "example": "const buffer = new ArrayBuffer(16);\nconst int32View = new Int32Array(buffer);",
+        "route": "ArrayBufferf",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 36,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 13,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 8,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 12,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 11,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "o",
+            "v": 25,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 8,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 38,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 12,
+            "e": false,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "ArrayBuffer",
+        "id": "arrayBuffer",
+        "description": "通用的二进制数据缓冲区",
+        "importance": 4,
+        "tags": [
+          "二进制",
+          "缓冲区"
+        ],
+        "version": "ES6",
+        "example": "const buffer = new ArrayBuffer(16);",
+        "route": "ArrayBuffer",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 36,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 13,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 8,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 12,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 11,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "o",
+            "v": 25,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 8,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 38,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 12,
+            "e": false,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "Object.fromEntries",
+        "id": "objectFromEntries",
+        "description": "键值对列表转对象",
+        "importance": 4,
+        "tags": [
+          "对象",
+          "转换"
+        ],
+        "version": "ES2019",
+        "example": "const obj = Object.fromEntries(map);",
+        "route": "Object2",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 73,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 63,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 12,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 79,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 60,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 12,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 73,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 12,
+            "e": false,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "Array.prototype.at",
+        "id": "arrayAt",
+        "description": "数组索引访问方法",
+        "importance": 4,
+        "tags": [
+          "数组",
+          "方法"
+        ],
+        "version": "ES2022",
+        "example": "const last = arr.at(-1);",
+        "route": "Array",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 92,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 90,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 15,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 92,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 78,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 15,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 92,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 16,
+            "e": false,
+            "ns": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "函数增强",
+    "id": "function",
+    "items": [
+      {
+        "name": "默认参数",
+        "id": "defaultParameter",
+        "description": "函数参数默认值",
+        "importance": 5,
+        "tags": [
+          "函数",
+          "参数"
+        ],
+        "version": "ES6",
+        "example": "function multiply(a, b = 1) {\n  return a * b;\n}",
+        "route": "DefaultAndRestParameters",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 49,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 15,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 10,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 13,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 36,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 10,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 49,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 6,
+            "e": false,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "剩余参数",
+        "id": "restParameter",
+        "description": "收集剩余参数为数组",
+        "importance": 5,
+        "tags": [
+          "函数",
+          "参数"
+        ],
+        "version": "ES6",
+        "example": "function sum(...numbers) {\n  return numbers.reduce((a, b) => a + b);\n}",
+        "route": "DefaultAndRestParameters",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 47,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 15,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 10,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 12,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 34,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 10,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 49,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 6,
+            "e": false,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "参数解构",
+        "id": "parameterDestructuring",
+        "description": "函数参数解构赋值",
+        "importance": 4,
+        "tags": [
+          "函数",
+          "解构"
+        ],
+        "version": "ES6",
+        "example": "function fullName({firstName, lastName}) {\n  return `${firstName} ${lastName}`;\n}",
+        "route": "Destructuring",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 49,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 41,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 10,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 12,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 36,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 10,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 49,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 6,
+            "e": false,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "尾调用优化",
+        "id": "tailCallOptimization",
+        "description": "递归函数调用优化",
+        "importance": 3,
+        "tags": [
+          "函数",
+          "优化"
+        ],
+        "version": "ES6",
+        "example": "function factorial(n, total = 1) {\n  if (n === 0) return total;\n  return factorial(n - 1, n * total);\n}",
+        "route": "TailCall",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "f",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "s",
+            "v": 10,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "ios",
+            "v": 10,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "node",
+            "v": 0,
+            "e": false,
+            "ns": true
+          }
+        ]
+      },
+      {
+        "name": "函数名属性",
+        "id": "functionNameProperty",
+        "description": "函数对象的name属性",
+        "importance": 3,
+        "tags": [
+          "函数",
+          "元数据"
+        ],
+        "version": "ES6",
+        "example": "function foo() {}\nconsole.log(foo.name); // 'foo'",
+        "route": "Functions",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 33,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 53,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 9,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 12,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 20,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 9,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 33,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 4,
+            "e": false,
+            "ns": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "模块系统",
+    "id": "module",
+    "items": [
+      {
+        "name": "import/export",
+        "id": "importExport",
+        "description": "模块导入导出",
+        "importance": 5,
+        "tags": [
+          "模块",
+          "封装"
+        ],
+        "version": "ES6",
+        "example": "// module.js\nexport const PI = 3.14;\n// main.js\nimport { PI } from './module.js';",
+        "route": "Module",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 61,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 60,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 10,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 16,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 48,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 10,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 61,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 12,
+            "e": false,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "默认导出",
+        "id": "defaultExport",
+        "description": "模块默认导出",
+        "importance": 5,
+        "tags": [
+          "模块",
+          "导出"
+        ],
+        "version": "ES6",
+        "example": "// module.js\nexport default function() {...}\n// main.js\nimport myFunc from './module.js';",
+        "route": "Module",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 61,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 60,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 10,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 16,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 48,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 10,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 61,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 12,
+            "e": false,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "命名空间导入",
+        "id": "namespaceImport",
+        "description": "导入整个模块作为命名空间",
+        "importance": 4,
+        "tags": [
+          "模块",
+          "导入"
+        ],
+        "version": "ES6",
+        "example": "import * as utils from './utils.js';",
+        "route": "Module",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 61,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 60,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 10,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 16,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 48,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 10,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 61,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 12,
+            "e": false,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "动态导入",
+        "id": "dynamicImport",
+        "description": "运行时按需加载模块",
+        "importance": 4,
+        "tags": [
+          "模块",
+          "懒加载"
+        ],
+        "version": "ES2020",
+        "example": "const module = await import('./module.js');",
+        "route": "DynamicImport",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 63,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 67,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 11,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 79,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 50,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 11,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 63,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 13,
+            "e": false,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "import.meta",
+        "id": "importMeta",
+        "description": "提供当前模块的元信息",
+        "importance": 3,
+        "tags": [
+          "模块",
+          "元数据"
+        ],
+        "version": "ES2020",
+        "example": "console.log(import.meta.url);",
+        "route": "Module",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 64,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 62,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 11,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 79,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 51,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 11,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 64,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 12,
+            "e": false,
+            "ns": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "数组增强",
+    "id": "array",
+    "items": [
+      {
+        "name": "Array.from",
+        "id": "arrayFrom",
+        "description": "类数组转数组",
+        "importance": 5,
+        "tags": [
+          "数组",
+          "转换"
+        ],
+        "version": "ES6",
+        "example": "const arr = Array.from(document.querySelectorAll('div'));",
+        "route": "Array",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 45,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 32,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 9,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 12,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 11,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "o",
+            "v": 32,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 9,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 45,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 4,
+            "e": false,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "Array.of",
+        "id": "arrayOf",
+        "description": "创建包含参数的新数组",
+        "importance": 4,
+        "tags": [
+          "数组",
+          "创建"
+        ],
+        "version": "ES6",
+        "example": "const arr = Array.of(1, 2, 3);",
+        "route": "Array",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 45,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 25,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 9,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 12,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 32,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 9,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 45,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 4,
+            "e": false,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "find/findIndex",
+        "id": "findAndFindIndex",
+        "description": "查找数组元素",
+        "importance": 5,
+        "tags": [
+          "数组",
+          "查找"
+        ],
+        "version": "ES6",
+        "example": "const found = arr.find(item => item.id === 123);",
+        "route": "Array",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 45,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 25,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 7,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 12,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 32,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 8,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 45,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 4,
+            "e": false,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "includes",
+        "id": "includes",
+        "description": "检查数组是否包含值",
+        "importance": 5,
+        "tags": [
+          "数组",
+          "包含"
+        ],
+        "version": "ES2016",
+        "example": "if (arr.includes('value')) {...}",
+        "route": "Array",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 47,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 43,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 9,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 14,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 34,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 9,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 47,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 6,
+            "e": false,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "flat/flatMap",
+        "id": "flatAndFlatMap",
+        "description": "数组扁平化",
+        "importance": 4,
+        "tags": [
+          "数组",
+          "扁平化"
+        ],
+        "version": "ES2019",
+        "example": "const flatArr = arr.flat(2);",
+        "route": "Array",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 69,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 62,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 12,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 79,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 56,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 12,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 69,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 11,
+            "e": false,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "Array.prototype.at",
+        "id": "arrayAt",
+        "description": "数组索引访问方法",
+        "importance": 4,
+        "tags": [
+          "数组",
+          "方法"
+        ],
+        "version": "ES2022",
+        "example": "const last = arr.at(-1);",
+        "route": "Array",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 92,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 90,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 15,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 92,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 78,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 15,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 92,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 16,
+            "e": false,
+            "ns": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "对象增强",
+    "id": "object",
+    "items": [
+      {
+        "name": "属性简写",
+        "id": "propertyShorthand",
+        "description": "对象属性简写语法",
+        "importance": 5,
+        "tags": [
+          "对象",
+          "语法糖"
+        ],
+        "version": "ES6",
+        "example": "const name = 'John';\nconst obj = { name };",
+        "route": "Object2",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 41,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 33,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 9,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 12,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 28,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 9,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 41,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 4,
+            "e": false,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "方法简写",
+        "id": "methodShorthand",
+        "description": "对象方法简写语法",
+        "importance": 5,
+        "tags": [
+          "对象",
+          "方法"
+        ],
+        "version": "ES6",
+        "example": "const obj = {\n  sayHello() {\n    console.log('Hello');\n  }\n};",
+        "route": "Object2",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 41,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 33,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 9,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 12,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 28,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 9,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 41,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 4,
+            "e": false,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "计算属性名",
+        "id": "computedPropertyName",
+        "description": "动态属性名",
+        "importance": 5,
+        "tags": [
+          "对象",
+          "动态"
+        ],
+        "version": "ES6",
+        "example": "const prop = 'name';\nconst obj = { [prop]: 'John' };",
+        "route": "Object2",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 44,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 34,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 9,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 12,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 31,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 9,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 44,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 4,
+            "e": false,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "Object.assign",
+        "id": "objectAssign",
+        "description": "对象属性合并",
+        "importance": 5,
+        "tags": [
+          "对象",
+          "合并"
+        ],
+        "version": "ES6",
+        "example": "const merged = Object.assign({}, obj1, obj2);",
+        "route": "Object2",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 45,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 34,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 9,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 12,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 32,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 9,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 45,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 4,
+            "e": false,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "Object.is",
+        "id": "objectIs",
+        "description": "值比较方法",
+        "importance": 4,
+        "tags": [
+          "对象",
+          "比较"
+        ],
+        "version": "ES6",
+        "example": "Object.is(NaN, NaN); // true",
+        "route": "Object2",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 30,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 22,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 9,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 12,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 17,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 9,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 30,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 0,
+            "e": false,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "Object.values/Object.entries",
+        "id": "objectValuesAndEntries",
+        "description": "对象值/键值对数组",
+        "importance": 5,
+        "tags": [
+          "对象",
+          "转换"
+        ],
+        "version": "ES2017",
+        "example": "const values = Object.values(obj);",
+        "route": "Object2",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 54,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 47,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 10,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 14,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 41,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 10,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 54,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 7,
+            "e": false,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "Object.fromEntries",
+        "id": "objectFromEntries",
+        "description": "键值对列表转对象",
+        "importance": 4,
+        "tags": [
+          "对象",
+          "转换"
+        ],
+        "version": "ES2019",
+        "example": "const obj = Object.fromEntries(map);",
+        "route": "Object2",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 73,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 63,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 12,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 79,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 60,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 12,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 73,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 12,
+            "e": false,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "可选链",
+        "id": "optionalChain",
+        "description": "安全访问嵌套属性",
+        "importance": 5,
+        "tags": [
+          "对象",
+          "安全访问"
+        ],
+        "version": "ES2020",
+        "example": "const street = user?.address?.street;",
+        "route": "OptionalChain",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 80,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 72,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 13,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 80,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 67,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 13,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 80,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 12,
+            "e": false,
+            "ns": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "字符串增强",
+    "id": "string",
+    "items": [
+      {
+        "name": "模板字符串",
+        "id": "templateString",
+        "description": "多行字符串和插值",
+        "importance": 5,
+        "tags": [
+          "字符串",
+          "插值"
+        ],
+        "version": "ES6",
+        "example": "const str = `Hello, ${name}!\nWelcome back.`;",
+        "route": "templateString",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 41,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 34,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 9,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 13,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 28,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 9,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 49,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 4,
+            "e": false,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "标签模板",
+        "id": "taggedTemplate",
+        "description": "模板字符串函数调用",
+        "importance": 4,
+        "tags": [
+          "字符串",
+          "函数"
+        ],
+        "version": "ES6",
+        "example": "const result = tag`Hello ${name}`;",
+        "route": "TaggedTemplate",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 41,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 34,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 9,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 13,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 28,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 9,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 49,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 4,
+            "e": false,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "String.prototype.includes",
+        "id": "stringIncludes",
+        "description": "检查是否包含子字符串",
+        "importance": 5,
+        "tags": [
+          "字符串",
+          "包含"
+        ],
+        "version": "ES6",
+        "example": "if (str.includes('substr')) {...}",
+        "route": "String",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 41,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 40,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 9,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 12,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 28,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 9,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 41,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 4,
+            "e": false,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "String.prototype.startsWith/endsWith",
+        "id": "stringStartsWithAndEndsWith",
+        "description": "检查开头/结尾",
+        "importance": 5,
+        "tags": [
+          "字符串",
+          "检查"
+        ],
+        "version": "ES6",
+        "example": "if (str.startsWith('http')) {...}",
+        "route": "String",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 41,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 17,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 9,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 12,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 28,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 9,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 41,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 4,
+            "e": false,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "String.prototype.repeat",
+        "id": "stringRepeat",
+        "description": "重复字符串",
+        "importance": 4,
+        "tags": [
+          "字符串",
+          "重复"
+        ],
+        "version": "ES6",
+        "example": "const indent = ' '.repeat(4);",
+        "route": "String",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 41,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 24,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 9,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 12,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 28,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 9,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 41,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 4,
+            "e": false,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "String.prototype.padStart/padEnd",
+        "id": "stringPadStartAndPadEnd",
+        "description": "字符串填充",
+        "importance": 4,
+        "tags": [
+          "字符串",
+          "填充"
+        ],
+        "version": "ES2017",
+        "example": "const str = '5'.padStart(2, '0'); // '05'",
+        "route": "String",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 57,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 48,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 10,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 15,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 44,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 10,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 57,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 8,
+            "e": false,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "String.prototype.trimStart/trimEnd",
+        "id": "stringTrimStartAndTrimEnd",
+        "description": "去除空白字符",
+        "importance": 4,
+        "tags": [
+          "字符串",
+          "清理"
+        ],
+        "version": "ES2019",
+        "example": "const clean = str.trimStart();",
+        "route": "String",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 66,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 61,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 12,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 79,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 53,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 12,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 66,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 10,
+            "e": false,
+            "ns": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "符号与元编程",
+    "id": "symbol",
+    "items": [
+      {
+        "name": "Symbol",
+        "id": "symbol",
+        "description": "创建唯一标识符",
+        "importance": 4,
+        "tags": [
+          "符号",
+          "唯一性"
+        ],
+        "version": "ES6",
+        "example": "const sym = Symbol('description');",
+        "route": "Symbol",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 38,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 36,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 9,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 12,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 11,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "o",
+            "v": 25,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 9,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 38,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 0,
+            "e": false,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "Symbol.iterator",
+        "id": "symbolIterator",
+        "description": "定义对象的默认迭代器",
+        "importance": 5,
+        "tags": [
+          "符号",
+          "迭代"
+        ],
+        "version": "ES6",
+        "example": "obj[Symbol.iterator] = function*() {...}",
+        "route": "Symbol",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 36,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 36,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 9,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 12,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 11,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "o",
+            "v": 23,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 9,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 36,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 0,
+            "e": false,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "Symbol.asyncIterator",
+        "id": "symbolAsyncIterator",
+        "description": "定义异步迭代器",
+        "importance": 4,
+        "tags": [
+          "符号",
+          "异步"
+        ],
+        "version": "ES2018",
+        "example": "obj[Symbol.asyncIterator] = async function*() {...}",
+        "route": "Symbol",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 63,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 57,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 12,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 79,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 50,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 12,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 63,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 10,
+            "e": false,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "Symbol.toStringTag",
+        "id": "symbolToStringTag",
+        "description": "自定义对象toString标签",
+        "importance": 3,
+        "tags": [
+          "符号",
+          "元编程"
+        ],
+        "version": "ES6",
+        "example": "class MyClass {\n  get [Symbol.toStringTag]() {\n    return 'MyClass';\n  }\n}",
+        "route": "Symbol",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 38,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 36,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 9,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 12,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 11,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "o",
+            "v": 25,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 9,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 38,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 0,
+            "e": false,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "Proxy",
+        "id": "proxy",
+        "description": "对象操作拦截器",
+        "importance": 4,
+        "tags": [
+          "代理",
+          "元编程"
+        ],
+        "version": "ES6",
+        "example": "const proxy = new Proxy(target, handlers);",
+        "route": "Proxy2",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 49,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 18,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 10,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 12,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 36,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 10,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 49,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 6,
+            "e": false,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "Reflect",
+        "id": "reflect",
+        "description": "对象操作反射API",
+        "importance": 4,
+        "tags": [
+          "反射",
+          "元编程"
+        ],
+        "version": "ES6",
+        "example": "Reflect.set(obj, 'prop', value);",
+        "route": "Reflect",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 49,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 42,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 10,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 12,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 36,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 10,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 49,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 6,
+            "e": false,
+            "ns": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "迭代器与生成器",
+    "id": "iterator",
+    "items": [
+      {
+        "name": "for...of循环",
+        "id": "forOfLoop",
+        "description": "遍历可迭代对象",
+        "importance": 5,
+        "tags": [
+          "迭代",
+          "循环"
+        ],
+        "version": "ES6",
+        "example": "for (const item of iterable) {...}",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 38,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 13,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 7,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 12,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 11,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "o",
+            "v": 25,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 8,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 38,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 0,
+            "e": false,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "迭代协议",
+        "id": "iterationProtocol",
+        "description": "可迭代协议和迭代器协议",
+        "importance": 4,
+        "tags": [
+          "迭代",
+          "协议"
+        ],
+        "version": "ES6",
+        "example": "const iterable = {\n  [Symbol.iterator]() {\n    return {\n      next() {...}\n    }\n  }\n}",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 36,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 36,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 9,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 12,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 11,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "o",
+            "v": 23,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 9,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 36,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 0,
+            "e": false,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "生成器函数",
+        "id": "generatorFunction",
+        "description": "创建生成器对象",
+        "importance": 4,
+        "tags": [
+          "生成器",
+          "函数"
+        ],
+        "version": "ES6",
+        "example": "function* gen() {\n  yield 1;\n  yield 2;\n}",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 39,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 26,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 10,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 13,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 26,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 10,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 39,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 4,
+            "e": false,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "yield表达式",
+        "id": "yieldExpression",
+        "description": "暂停和恢复生成器",
+        "importance": 4,
+        "tags": [
+          "生成器",
+          "控制"
+        ],
+        "version": "ES6",
+        "example": "function* gen() {\n  const result = yield someValue;\n}",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 39,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 26,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 10,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 13,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 26,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 10,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 39,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 4,
+            "e": false,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "yield*表达式",
+        "id": "yieldStarExpression",
+        "description": "委托给另一个生成器",
+        "importance": 4,
+        "tags": [
+          "生成器",
+          "委托"
+        ],
+        "version": "ES6",
+        "example": "function* gen() {\n  yield* anotherGen();\n}",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 39,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 27,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 10,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 13,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 26,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 10,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 39,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 4,
+            "e": false,
+            "ns": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "ES2023新特性",
+    "id": "es2023",
+    "items": [
+      {
+        "name": "Array find from last",
+        "id": "arrayFindFromLast",
+        "description": "从数组末尾查找元素",
+        "importance": 4,
+        "tags": [
+          "数组",
+          "查找"
+        ],
+        "version": "ES2023",
+        "example": "const lastEven = arr.findLast(n => n % 2 === 0);",
+        "route": "Array",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 97,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 104,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 16,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 97,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 83,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 16,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 97,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 18,
+            "e": false,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "Hashbang语法",
+        "id": "hashbangSyntax",
+        "description": "支持Shebang行",
+        "importance": 2,
+        "tags": [
+          "语法",
+          "脚本"
+        ],
+        "version": "ES2023",
+        "example": "#!/usr/bin/env node",
+        "route": "Hashbang",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 74,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 67,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 15,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 79,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 62,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 15,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 74,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 12,
+            "e": false,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "Symbol作为WeakMap键",
+        "id": "symbolAsWeakMapKey",
+        "description": "允许Symbol作为WeakMap键",
+        "importance": 3,
+        "tags": [
+          "符号",
+          "WeakMap"
+        ],
+        "version": "ES2023",
+        "example": "const wm = new WeakMap();\nwm.set(Symbol(), value);",
+        "route": "WekRef",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 123,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 120,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 17,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 123,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 109,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 17,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 123,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 20,
+            "e": false,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "改变数组副本方法",
+        "id": "changeArrayCopyMethods",
+        "description": "返回数组副本而非修改原数组",
+        "importance": 4,
+        "tags": [
+          "数组",
+          "不可变性"
+        ],
+        "version": "ES2023",
+        "example": "const sorted = arr.toSorted();\nconst reversed = arr.toReversed();",
+        "route": "Array",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 110,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 115,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 16,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 110,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 96,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 16,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 110,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 20,
+            "e": false,
+            "ns": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "ES2024新特性提案",
+    "id": "es2024",
+    "items": [
+      {
+        "name": "Promise.withResolvers",
+        "id": "promiseWithResolvers",
+        "description": "创建具有resolve和reject方法的Promise",
+        "importance": 4,
+        "tags": [
+          "Promise",
+          "resolve",
+          "reject"
+        ],
+        "version": "ES2024",
+        "example": "const { resolve, reject } = Promise.withResolvers();",
+        "compatible": [
+          "Chrome 134",
+          "Firefox 134",
+          "Safari 17",
+          "Edge 134",
+          "Node.js 20.10.0"
+        ],
+        "route": "Promise",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 113,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 113,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 17,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 113,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 99,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 17,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 113,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 20,
+            "e": false,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "Object.groupBy",
+        "id": "objectGroupBy",
+        "description": "根据属性分组对象",
+        "importance": 4,
+        "tags": [
+          "对象",
+          "分组"
+        ],
+        "version": "ES2024",
+        "example": "const grouped = Object.groupBy(arr, item => item.category);",
+        "compatible": [
+          "Chrome 134",
+          "Firefox 134",
+          "Safari 17",
+          "Edge 134",
+          "Node.js 20.10.0"
+        ],
+        "route": "Object2",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 120,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 120,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 17,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 120,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 106,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 17,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 120,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 20,
+            "e": false,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "Array.prototype.toReversed/toSorted/toSpliced/with",
+        "id": "arrayToReversed",
+        "description": "返回数组副本而非修改原数组",
+        "importance": 4,
+        "tags": [
+          "数组",
+          "不可变性"
+        ],
+        "version": "ES2024",
+        "example": "const reversed = arr.toReversed();",
+        "compatible": [
+          "Chrome 134",
+          "Firefox 134",
+          "Safari 17",
+          "Edge 134",
+          "Node.js 20.10.0"
+        ],
+        "route": "Array",
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 110,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 115,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 16,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 110,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 96,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 16,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 110,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 20,
+            "e": false,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "RegExp v flag",
+        "id": "regExpVFlag",
+        "description": "v标志用于启用Unicode模式，支持Unicode字符类和转义序列",
+        "importance": 4,
+        "tags": [
+          "正则表达式",
+          "v标志"
+        ],
+        "version": "ES2024",
+        "example": "const reg = /hello/v;",
+        "compatible": [
+          "Chrome 134",
+          "Firefox 134",
+          "Safari 17",
+          "Edge 134",
+          "Node.js 20.10.0"
+        ],
+        "route": "RegExp",
+        "proposal": true,
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 0,
+            "e": true,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 0,
+            "e": true,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 0,
+            "e": true,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 0,
+            "e": true,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 0,
+            "e": true,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 0,
+            "e": true,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 0,
+            "e": true,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 0,
+            "e": true,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "Temporal API",
+        "id": "temporalApi",
+        "description": "更精准的日期和时间API",
+        "importance": 4,
+        "tags": [
+          "日期",
+          "时间"
+        ],
+        "version": "ES2024",
+        "example": "const date = new Temporal.PlainDate(2024, 1, 1);",
+        "route": "Temporal",
+        "proposal": true,
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 0,
+            "e": true,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 0,
+            "e": true,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 0,
+            "e": true,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 0,
+            "e": true,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 0,
+            "e": true,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 0,
+            "e": true,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 0,
+            "e": true,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 0,
+            "e": true,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "Intl.ListFormat",
+        "id": "intlListFormat",
+        "description": "更灵活的列表格式化",
+        "importance": 4,
+        "tags": [
+          "国际化",
+          "列表"
+        ],
+        "version": "ES2024",
+        "example": "const formatter = new Intl.ListFormat('en-US', { style: 'long' });",
+        "route": "Intl",
+        "proposal": true,
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 72,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 78,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 14,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 79,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 59,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 14,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 72,
+            "e": false,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 14,
+            "e": false,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "RecordAndTuple",
+        "id": "recordAndTuple",
+        "description": "不可变数据结构",
+        "importance": 4,
+        "tags": [
+          "对象",
+          "元组"
+        ],
+        "version": "ES2024",
+        "example": "const record = { name: 'John', age: 30 };",
+        "route": "RecordAndTuple",
+        "proposal": true,
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 0,
+            "e": true,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 0,
+            "e": true,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 0,
+            "e": true,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 0,
+            "e": true,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 0,
+            "e": true,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 0,
+            "e": true,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 0,
+            "e": true,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 0,
+            "e": true,
+            "ns": false
+          }
+        ]
+      },
+      {
+        "name": "Pipeline Operator",
+        "id": "pipelineOperator",
+        "description": "管道运算符",
+        "importance": 4,
+        "tags": [
+          "管道运算符"
+        ],
+        "version": "ES2024",
+        "example": "const result = 1 |> add(2) |> multiply(3);",
+        "route": "PipelineOperator",
+        "proposal": true,
+        "browserSupport": [
+          {
+            "b": "c",
+            "v": 0,
+            "e": true,
+            "ns": false
+          },
+          {
+            "b": "f",
+            "v": 0,
+            "e": true,
+            "ns": false
+          },
+          {
+            "b": "s",
+            "v": 0,
+            "e": true,
+            "ns": false
+          },
+          {
+            "b": "e",
+            "v": 0,
+            "e": true,
+            "ns": false
+          },
+          {
+            "b": "ie",
+            "v": 0,
+            "e": false,
+            "ns": true
+          },
+          {
+            "b": "o",
+            "v": 0,
+            "e": true,
+            "ns": false
+          },
+          {
+            "b": "ios",
+            "v": 0,
+            "e": true,
+            "ns": false
+          },
+          {
+            "b": "android",
+            "v": 0,
+            "e": true,
+            "ns": false
+          },
+          {
+            "b": "node",
+            "v": 0,
+            "e": true,
+            "ns": false
+          }
+        ]
+      }
+    ]
+  }
+]

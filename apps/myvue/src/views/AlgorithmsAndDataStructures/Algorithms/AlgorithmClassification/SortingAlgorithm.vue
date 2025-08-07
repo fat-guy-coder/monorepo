@@ -29,7 +29,7 @@
 
       <div class="tabs">
         <button v-for="(algorithm, index) in algorithms" :key="index" @click="activeAlgorithm = algorithm"
-          :class="{ active: activeAlgorithm === algorithm }">
+          :class="{ active: activeAlgorithm.name === algorithm.name  }">
           {{ algorithm.name }}
         </button>
       </div>
@@ -82,503 +82,279 @@
         </div>
       </div>
 
-      <div class="visualization">
-        <h2>排序算法可视化</h2>
-        <div class="visual-controls">
-          <div class="control-group">
-            <label>数组大小:</label>
-            <input type="range" min="5" max="30" v-model="arraySize">
-            <span>{{ arraySize }} 个元素</span>
-          </div>
-          <div class="control-group">
-            <label>排序速度:</label>
-            <input type="range" min="10" max="500" v-model="sortSpeed">
-            <span>{{ 510 - sortSpeed }}ms/步</span>
-          </div>
-          <div class="control-group">
-            <button @click="generateArray">生成新数组</button>
-            <button @click="startSorting" :disabled="isSorting">开始排序</button>
-            <button @click="resetSorting">重置</button>
-          </div>
-        </div>
-
-        <div class="array-visualization">
-          <div v-for="(value, index) in array" :key="index" class="array-element"
-            :style="{ height: `${value * 5}px`, backgroundColor: getElementColor(index) }">
-            <span class="element-value">{{ value }}</span>
-          </div>
-        </div>
+    <!-- INSERT_YOUR_CODE -->
+    <div class="sorting-comparison-table" style="margin-top:2rem;">
+      <h3>常见12种排序算法性能对比表</h3>
+      <table style="width:100%;border-collapse:collapse;font-size:0.98rem;">
+        <thead>
+          <tr style="background:#f0f4fa;">
+            <th style="border:1px solid #dbeafe;padding:8px;">排序算法</th>
+            <th style="border:1px solid #dbeafe;padding:8px;">时间复杂度(最坏/平均/最好)</th>
+            <th style="border:1px solid #dbeafe;padding:8px;">空间复杂度</th>
+            <th style="border:1px solid #dbeafe;padding:8px;">稳定性</th>
+            <th style="border:1px solid #dbeafe;padding:8px;">适用场景</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="border:1px solid #dbeafe;padding:8px;">冒泡排序</td>
+            <td style="border:1px solid #dbeafe;padding:8px;">O(n²) / O(n²) / O(n)</td>
+            <td style="border:1px solid #dbeafe;padding:8px;">O(1)</td>
+            <td style="border:1px solid #dbeafe;padding:8px;">稳定</td>
+            <td style="border:1px solid #dbeafe;padding:8px;">小数据量，数据基本有序</td>
+          </tr>
+          <tr>
+            <td style="border:1px solid #dbeafe;padding:8px;">选择排序</td>
+            <td style="border:1px solid #dbeafe;padding:8px;">O(n²) / O(n²) / O(n²)</td>
+            <td style="border:1px solid #dbeafe;padding:8px;">O(1)</td>
+            <td style="border:1px solid #dbeafe;padding:8px;">不稳定</td>
+            <td style="border:1px solid #dbeafe;padding:8px;">小数据量，对稳定性无要求</td>
+          </tr>
+          <tr>
+            <td style="border:1px solid #dbeafe;padding:8px;">插入排序</td>
+            <td style="border:1px solid #dbeafe;padding:8px;">O(n²) / O(n²) / O(n)</td>
+            <td style="border:1px solid #dbeafe;padding:8px;">O(1)</td>
+            <td style="border:1px solid #dbeafe;padding:8px;">稳定</td>
+            <td style="border:1px solid #dbeafe;padding:8px;">小数据量，数据基本有序</td>
+          </tr>
+          <tr>
+            <td style="border:1px solid #dbeafe;padding:8px;">希尔排序</td>
+            <td style="border:1px solid #dbeafe;padding:8px;">O(n²) / O(n^1.3) / O(n)</td>
+            <td style="border:1px solid #dbeafe;padding:8px;">O(1)</td>
+            <td style="border:1px solid #dbeafe;padding:8px;">不稳定</td>
+            <td style="border:1px solid #dbeafe;padding:8px;">中等数据量，数据较无序</td>
+          </tr>
+          <tr>
+            <td style="border:1px solid #dbeafe;padding:8px;">归并排序</td>
+            <td style="border:1px solid #dbeafe;padding:8px;">O(n log n) / O(n log n) / O(n log n)</td>
+            <td style="border:1px solid #dbeafe;padding:8px;">O(n)</td>
+            <td style="border:1px solid #dbeafe;padding:8px;">稳定</td>
+            <td style="border:1px solid #dbeafe;padding:8px;">大数据量，要求稳定排序</td>
+          </tr>
+          <tr>
+            <td style="border:1px solid #dbeafe;padding:8px;">快速排序</td>
+            <td style="border:1px solid #dbeafe;padding:8px;">O(n²) / O(n log n) / O(n log n)</td>
+            <td style="border:1px solid #dbeafe;padding:8px;">O(log n)</td>
+            <td style="border:1px solid #dbeafe;padding:8px;">不稳定</td>
+            <td style="border:1px solid #dbeafe;padding:8px;">大数据量，数据较无序</td>
+          </tr>
+          <tr>
+            <td style="border:1px solid #dbeafe;padding:8px;">堆排序</td>
+            <td style="border:1px solid #dbeafe;padding:8px;">O(n log n) / O(n log n) / O(n log n)</td>
+            <td style="border:1px solid #dbeafe;padding:8px;">O(1)</td>
+            <td style="border:1px solid #dbeafe;padding:8px;">不稳定</td>
+            <td style="border:1px solid #dbeafe;padding:8px;">大数据量，对稳定性无要求</td>
+          </tr>
+          <tr>
+            <td style="border:1px solid #dbeafe;padding:8px;">计数排序</td>
+            <td style="border:1px solid #dbeafe;padding:8px;">O(n+k) / O(n+k) / O(n+k)</td>
+            <td style="border:1px solid #dbeafe;padding:8px;">O(k)</td>
+            <td style="border:1px solid #dbeafe;padding:8px;">稳定</td>
+            <td style="border:1px solid #dbeafe;padding:8px;">数据范围小且集中，整数排序</td>
+          </tr>
+          <tr>
+            <td style="border:1px solid #dbeafe;padding:8px;">桶排序</td>
+            <td style="border:1px solid #dbeafe;padding:8px;">O(n+k) / O(n+k) / O(n+k)</td>
+            <td style="border:1px solid #dbeafe;padding:8px;">O(n+k)</td>
+            <td style="border:1px solid #dbeafe;padding:8px;">稳定</td>
+            <td style="border:1px solid #dbeafe;padding:8px;">数据分布均匀，数据量大</td>
+          </tr>
+          <tr>
+            <td style="border:1px solid #dbeafe;padding:8px;">基数排序</td>
+            <td style="border:1px solid #dbeafe;padding:8px;">O(nk) / O(nk) / O(nk)</td>
+            <td style="border:1px solid #dbeafe;padding:8px;">O(n+k)</td>
+            <td style="border:1px solid #dbeafe;padding:8px;">稳定</td>
+            <td style="border:1px solid #dbeafe;padding:8px;">数据位数不大，整数/字符串排序</td>
+          </tr>
+          <tr>
+            <td style="border:1px solid #dbeafe;padding:8px;">Tim排序</td>
+            <td style="border:1px solid #dbeafe;padding:8px;">O(n log n) / O(n log n) / O(n)</td>
+            <td style="border:1px solid #dbeafe;padding:8px;">O(n)</td>
+            <td style="border:1px solid #dbeafe;padding:8px;">稳定</td>
+            <td style="border:1px solid #dbeafe;padding:8px;">大多数实际场景，数据部分有序</td>
+          </tr>
+          <tr>
+            <td style="border:1px solid #dbeafe;padding:8px;">锦标赛排序</td>
+            <td style="border:1px solid #dbeafe;padding:8px;">O(n log n) / O(n log n) / O(n log n)</td>
+            <td style="border:1px solid #dbeafe;padding:8px;">O(n)</td>
+            <td style="border:1px solid #dbeafe;padding:8px;">稳定</td>
+            <td style="border:1px solid #dbeafe;padding:8px;">需要频繁找最大/最小值的场景</td>
+          </tr>
+        </tbody>
+      </table>
+      <div style="margin-top:1rem;font-size:0.95rem;color:#666;">
+        <strong>说明：</strong>
+        <ul style="margin:0.5rem 0 0 1.2rem;padding:0;">
+          <li>大数据量推荐：归并、快速、堆、Tim、桶、基数、锦标赛排序</li>
+          <li>小数据量推荐：插入、冒泡、选择、希尔排序</li>
+          <li>数据基本有序推荐：插入、冒泡、Tim排序</li>
+          <li>数据分布均匀或范围小：计数、桶、基数排序</li>
+          <li>对稳定性有要求：插入、冒泡、归并、计数、桶、基数、Tim、锦标赛排序</li>
+        </ul>
       </div>
+    </div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, onMounted } from 'vue';
+import { ref, onBeforeMount, onMounted } from 'vue';
+
+interface Algorithm {
+  name: string;
+  description: string;
+  complexity: {
+    worst: string;
+    average: string;
+    best: string;
+    space: string;
+    stable: boolean;
+  };
+  steps: string[];
+  useCases: string[];
+  code: string;
+}
 
 // 排序算法数据
-const algorithms = ref([
-  {
-    name: '冒泡排序',
-    description: '重复遍历数组，比较相邻元素，如果顺序错误就交换它们。',
-    complexity: {
-      worst: 'O(n²)',
-      average: 'O(n²)',
-      best: 'O(n)',
-      space: 'O(1)',
-      stable: true
-    },
-    steps: [
-      '从数组的第一个元素开始',
-      '比较当前元素和下一个元素',
-      '如果当前元素大于下一个元素，交换它们',
-      '对每一对相邻元素重复上述步骤',
-      '重复整个过程，直到没有需要交换的元素'
-    ],
-    useCases: [
-      '教学目的，理解排序基本原理',
-      '小规模数据排序',
-      '几乎已经排序好的数据'
-    ],
-    code: `function bubbleSort(arr: number[]): number[] {
-  const n = arr.length;
-  for (let i = 0; i < n - 1; i++) {
-    let swapped = false;
-    for (let j = 0; j < n - i - 1; j++) {
-      if (arr[j] > arr[j + 1]) {
-        // 交换元素
-        [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
-        swapped = true;
-      }
-    }
-    // 如果没有交换，数组已经排序完成
-    if (!swapped) break;
-  }
-  return arr;
-}`
-  },
-  {
-    name: '选择排序',
-    description: '每次从未排序部分选择最小（或最大）元素，放到已排序部分的末尾。',
-    complexity: {
-      worst: 'O(n²)',
-      average: 'O(n²)',
-      best: 'O(n²)',
-      space: 'O(1)',
-      stable: false
-    },
-    steps: [
-      '将数组分为已排序和未排序两部分',
-      '初始时已排序部分为空',
-      '在未排序部分中找到最小元素',
-      '将找到的最小元素与未排序部分的第一个元素交换',
-      '将交换后的元素纳入已排序部分',
-      '重复直到所有元素排序完成'
-    ],
-    useCases: [
-      '当内存空间有限时',
-      '需要最小化交换次数的场景',
-      '小规模数据排序'
-    ],
-    code: `function selectionSort(arr: number[]): number[] {
-  const n = arr.length;
+const algorithms = ref<Algorithm[]>([]);
 
-  for (let i = 0; i < n - 1; i++) {
-    let minIndex = i;
+onBeforeMount(async () => {
+  const data = await import ('../JSON/SortingAlgorithm.json');
+  algorithms.value = data.default as Algorithm[];
+  algorithms.value[algorithms.value.length - 2].code = `function timSort(arr) {
+    const MIN_MERGE = 32;
 
-    // 在未排序部分中寻找最小元素
-    for (let j = i + 1; j < n; j++) {
-      if (arr[j] < arr[minIndex]) {
-        minIndex = j;
-      }
-    }
-
-    // 将找到的最小元素与第一个未排序元素交换
-    if (minIndex !== i) {
-      [arr[i], arr[minIndex]] = [arr[minIndex], arr[i]];
-    }
-  }
-
-  return arr;
-}`
-  },
-  {
-    name: '插入排序',
-    description: '构建有序序列，对于未排序数据，在已排序序列中从后向前扫描，找到相应位置并插入。',
-    complexity: {
-      worst: 'O(n²)',
-      average: 'O(n²)',
-      best: 'O(n)',
-      space: 'O(1)',
-      stable: true
-    },
-    steps: [
-      '从第一个元素开始，该元素可以认为已经被排序',
-      '取出下一个元素，在已排序序列中从后向前扫描',
-      '如果已排序元素大于新元素，将该元素移到下一位置',
-      '重复步骤3，直到找到已排序元素小于或等于新元素的位置',
-      '将新元素插入到该位置后',
-      '重复步骤2~5'
-    ],
-    useCases: [
-      '小规模数据排序',
-      '几乎已经排序好的数据',
-      '作为更高级算法（如快速排序）的子过程'
-    ],
-    code: `function insertionSort(arr: number[]): number[] {
-  const n = arr.length;
-
-  for (let i = 1; i < n; i++) {
-    const current = arr[i];
-    let j = i - 1;
-
-    // 将大于current的元素向后移动
-    while (j >= 0 && arr[j] > current) {
-      arr[j + 1] = arr[j];
-      j--;
-    }
-
-    // 插入current到正确位置
-    arr[j + 1] = current;
-  }
-
-  return arr;
-}`
-  },
-  {
-    name: '归并排序',
-    description: '采用分治法，将数组分成两半分别排序，然后合并结果。',
-    complexity: {
-      worst: 'O(n log n)',
-      average: 'O(n log n)',
-      best: 'O(n log n)',
-      space: 'O(n)',
-      stable: true
-    },
-    steps: [
-      '将数组分成两个大致相等的子数组',
-      '递归地对两个子数组进行归并排序',
-      '合并两个已排序的子数组',
-      '合并过程：比较两个子数组的前端元素，取较小者放入结果数组',
-      '重复直到所有元素都放入结果数组'
-    ],
-    useCases: [
-      '大规模数据排序',
-      '需要稳定排序的场景',
-      '外部排序（数据量大于内存容量）',
-      '链表排序'
-    ],
-    code: `function mergeSort(arr: number[]): number[] {
-  if (arr.length <= 1) {
-    return arr;
-  }
-
-  // 分割数组
-  const mid = Math.floor(arr.length / 2);
-  const left = arr.slice(0, mid);
-  const right = arr.slice(mid);
-
-  // 递归排序
-  return merge(mergeSort(left), mergeSort(right));
-}
-
-function merge(left: number[], right: number[]): number[] {
-  const result: number[] = [];
-  let leftIndex = 0;
-  let rightIndex = 0;
-
-  // 合并两个有序数组
-  while (leftIndex < left.length && rightIndex < right.length) {
-    if (left[leftIndex] < right[rightIndex]) {
-      result.push(left[leftIndex]);
-      leftIndex++;
-    } else {
-      result.push(right[rightIndex]);
-      rightIndex++;
-    }
-  }
-
-  // 添加剩余元素
-  return result.concat(left.slice(leftIndex)).concat(right.slice(rightIndex));
-}`
-  },
-  {
-    name: '快速排序',
-    description: '采用分治法，选择一个基准元素，将数组分为两部分，小于基准的放左边，大于基准的放右边，然后递归排序子数组。',
-    complexity: {
-      worst: 'O(n²)',
-      average: 'O(n log n)',
-      best: 'O(n log n)',
-      space: 'O(log n)',
-      stable: false
-    },
-    steps: [
-      '选择一个基准元素（pivot）',
-      '分区操作：重新排列数组，所有小于基准的元素放在基准前面，所有大于基准的元素放在基准后面',
-      '递归地将小于基准的子数组和大于基准的子数组排序',
-      '基准选择策略：通常选择第一个、最后一个或中间元素',
-      '当子数组长度小于某个阈值时，可切换到插入排序'
-    ],
-    useCases: [
-      '大规模数据排序',
-      '需要原地排序的场景',
-      '通用目的排序',
-      '编程语言内置排序函数的实现'
-    ],
-    code: `function quickSort(arr: number[], low = 0, high = arr.length - 1): number[] {
-  if (low < high) {
-    // 分区操作
-    const pivotIndex = partition(arr, low, high);
-
-    // 递归排序子数组
-    quickSort(arr, low, pivotIndex - 1);
-    quickSort(arr, pivotIndex + 1, high);
-  }
-  return arr;
-}
-
-function partition(arr: number[], low: number, high: number): number {
-  // 选择最后一个元素作为基准
-  const pivot = arr[high];
-  let i = low - 1;
-
-  for (let j = low; j < high; j++) {
-    if (arr[j] < pivot) {
-      i++;
-      [arr[i], arr[j]] = [arr[j], arr[i]];
-    }
-  }
-
-  // 将基准放到正确位置
-  [arr[i + 1], arr[high]] = [arr[high], arr[i + 1]];
-  return i + 1;
-}`
-  },
-  {
-    name: '计数排序',
-    description: '计数排序是一种非比较排序算法，通过统计每个元素出现的次数来实现排序。',
-    complexity: {
-      worst: 'O(n+k)',
-      average: 'O(n+k)',
-      best: 'O(n+k)',
-    },
-    steps: [
-      '统计每个元素出现的次数',
-      '根据统计结果构建新的有序数组'
-    ],
-    useCases: [
-      '需要O(1)空间复杂度的场景',
-    ],
-    code: `function countingSort(arr: number[]): number[] {
-  const max = Math.max(...arr);
-  const min = Math.min(...arr);
-  const range = max - min + 1;
-  const count = new Array(range).fill(0);
-  const output = new Array(arr.length);
-
-  // 统计每个元素出现的次数
-  for (let i = 0; i < arr.length; i++) {
-    count[arr[i] - min]++;
-  }
-
-  // 构建新的有序数组
-  for (let i = 0; i < range; i++) {
-    while (count[i] > 0) {
-      output.push(i + min);
-      count[i]--;
-    }
-  }
-
-  return output;
-}`
-  },
-  {
-    name: '希尔排序',
-    description: '希尔排序是插入排序的一种改进版本，通过将数组分成多个子数组，对每个子数组进行插入排序，最后对整个数组进行插入排序。',
-    complexity: {
-      worst: 'O(n²)',
-      average: 'O(n log n)',
-      best: 'O(n log n)',
-    },
-    steps: [
-      '将数组分成多个子数组，每个子数组间隔为h',
-      '对每个子数组进行插入排序',
-      '缩小h的值，重复上述步骤',
-      '最后对整个数组进行插入排序'
-    ],
-    useCases: [
-      '需要O(1)空间复杂度的场景',
-      '需要稳定O(n log n)时间复杂度的场景',
-      '优先级队列实现',
-      '大规模数据排序'
-    ],
-    code: `function shellSort(arr: number[]): number[] {
-      const n = arr.length;
-      let gap = Math.floor(n / 2);
-      while (gap > 0) {
-        for (let i = gap; i < n; i++) {
-          const temp = arr[i];
-          let j = i;
-          while (j >= gap && arr[j - gap] > temp) {
-            arr[j] = arr[j - gap];
-            j -= gap;
-          }
-          arr[j] = temp;
+    // 计算最小run长度
+    function calcMinRun(n) {
+        let r = 0;
+        while (n >= MIN_MERGE) {
+            r |= n & 1;
+            n >>= 1;
         }
-        gap = Math.floor(gap / 2);
-      }
-      return arr;
-    }`
-  },
-  {
-    name: '堆排序',
-    description: '利用堆这种数据结构设计的一种排序算法，通过构建最大堆或最小堆来实现排序。',
-    complexity: {
-      worst: 'O(n log n)',
-      average: 'O(n log n)',
-      best: 'O(n log n)',
-      space: 'O(1)',
-      stable: false
-    },
-    steps: [
-      '构建最大堆：从最后一个非叶子节点开始调整堆',
-      '将堆顶元素（最大值）与堆尾元素交换',
-      '减少堆的大小（排除已排序元素）',
-      '从堆顶开始调整堆，使其重新成为最大堆',
-      '重复交换和调整步骤，直到堆的大小为1'
-    ],
-    useCases: [
-      '需要O(1)空间复杂度的场景',
-      '需要稳定O(n log n)时间复杂度的场景',
-      '优先级队列实现',
-      '大规模数据排序'
-    ],
-    code: `function heapSort(arr: number[]): number[] {
-  const n = arr.length;
+        return n + r;
+    }
 
-  // 构建最大堆
-  for (let i = Math.floor(n / 2) - 1; i >= 0; i--) {
-    heapify(arr, n, i);
-  }
+    // 插入排序（用于小数组或run）
+    function insertionSort(arr, left, right) {
+        for (let i = left + 1; i <= right; i++) {
+            const key = arr[i];
+            let j = i - 1;
+            while (j >= left && arr[j] > key) {
+                arr[j + 1] = arr[j];
+                j--;
+            }
+            arr[j + 1] = key;
+        }
+    }
 
-  // 一个个从堆顶取出元素
-  for (let i = n - 1; i > 0; i--) {
-    // 将当前堆顶（最大值）移到数组末尾
-    [arr[0], arr[i]] = [arr[i], arr[0]];
+    // 合并两个相邻的run
+    function merge(arr, left, mid, right) {
+        const len1 = mid - left + 1;
+        const len2 = right - mid;
+        const leftArr = new Array(len1);
+        const rightArr = new Array(len2);
 
-    // 调整剩余元素组成的堆
-    heapify(arr, i, 0);
-  }
+        for (let i = 0; i < len1; i++) {
+            leftArr[i] = arr[left + i];
+        }
+        for (let i = 0; i < len2; i++) {
+            rightArr[i] = arr[mid + 1 + i];
+        }
 
-  return arr;
+        let i = 0, j = 0, k = left;
+        while (i < len1 && j < len2) {
+            if (leftArr[i] <= rightArr[j]) {
+                arr[k] = leftArr[i];
+                i++;
+            } else {
+                arr[k] = rightArr[j];
+                j++;
+            }
+            k++;
+        }
+
+        while (i < len1) {
+            arr[k] = leftArr[i];
+            i++;
+            k++;
+        }
+
+        while (j < len2) {
+            arr[k] = rightArr[j];
+            j++;
+            k++;
+        }
+    }
+
+    // 主排序函数
+    const n = arr.length;
+    if (n < 2) return arr;
+
+    const minRun = calcMinRun(n);
+    const runs = [];
+
+    // 分割数组为多个run并排序
+    for (let i = 0; i < n; i += minRun) {
+        const end = Math.min(i + minRun - 1, n - 1);
+        insertionSort(arr, i, end);
+        runs.push({ start: i, length: end - i + 1 });
+    }
+
+    // 合并所有run
+    while (runs.length > 1) {
+        const run1 = runs.pop();
+        const run2 = runs.pop();
+        const start1 = run1.start;
+        const start2 = run2.start;
+        const len1 = run1.length;
+        const len2 = run2.length;
+        const end1 = start1 + len1 - 1;
+        const end2 = start2 + len2 - 1;
+
+        // 确保run1在run2之前
+        if (end1 + 1 !== start2) {
+            runs.push(run2);
+            runs.push(run1);
+            continue;
+        }
+
+        merge(arr, start1, end1, end2);
+        runs.push({ start: start1, length: len1 + len2 });
+    }
+
+    return arr;
 }
 
-function heapify(arr: number[], n: number, i: number): void {
-  let largest = i; // 初始化最大值为根节点
-  const left = 2 * i + 1; // 左子节点
-  const right = 2 * i + 2; // 右子节点
-
-  // 如果左子节点大于根节点
-  if (left < n && arr[left] > arr[largest]) {
-    largest = left;
-  }
-
-  // 如果右子节点大于当前最大值
-  if (right < n && arr[right] > arr[largest]) {
-    largest = right;
-  }
-
-  // 如果最大值不是根节点
-  if (largest !== i) {
-    [arr[i], arr[largest]] = [arr[largest], arr[i]];
-
-    // 递归调整受影响的子树
-    heapify(arr, n, largest);
-  }
-}`
-  }
-]);
+// 示例用法
+const array = [5, 2, 9, 1, 5, 6, 3, 8, 7, 4];
+console.log("排序前:", array);
+timSort(array);
+console.log("排序后:", array);`;
+});
 
 // 当前活动算法
-const activeAlgorithm = ref(algorithms.value[0]);
+const activeAlgorithm = ref<Algorithm>({
+    "name": "冒泡排序",
+    "description": "重复遍历数组，比较相邻元素，如果顺序错误就交换它们。",
+    "complexity": {
+      "worst": "O(n²)",
+      "average": "O(n²)",
+      "best": "O(n)",
+      "space": "O(1)",
+      "stable": true
+    },
+    "steps": [
+      "从数组的第一个元素开始",
+      "比较当前元素和下一个元素",
+      "如果当前元素大于下一个元素，交换它们",
+      "对每一对相邻元素重复上述步骤",
+      "重复整个过程，直到没有需要交换的元素"
+    ],
+    "useCases": ["教学目的，理解排序基本原理", "小规模数据排序", "几乎已经排序好的数据"],
+    "code": "function bubbleSort(arr: number[]): number[] {\n const n = arr.length;\n for (let i = 0; i < n - 1; i++) {\n let swapped = false;\n for (let j = 0; j < n - i - 1; j++) {\n if (arr[j] > arr[j + 1]) {\n [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];\n swapped = true;\n }\n }\n if (!swapped) break;\n }\n return arr;\n}"
+  });
 
-// 可视化数据
-const arraySize = ref(15);
-const sortSpeed = ref(200);
-const array = ref<number[]>([]);
-const isSorting = ref(false);
-const activeIndices = ref<number[]>([]);
 
-// 生成随机数组
-function generateArray() {
-  array.value = [];
-  for (let i = 0; i < arraySize.value; i++) {
-    array.value.push(Math.floor(Math.random() * 60) + 1);
-  }
-}
-
-// 获取元素颜色
-function getElementColor(index: number) {
-  if (activeIndices.value.includes(index)) {
-    return '#ff6b6b'; // 活动元素 - 红色
-  }
-  return '#4da6ff'; // 默认颜色 - 蓝色
-}
-
-// 开始排序
-function startSorting() {
-  isSorting.value = true;
-  abortSorting.value = false;
-  bubbleSortVisualization();
-}
-
-const abortSorting = ref(false);
-
-function resetSorting() {
-  isSorting.value = false;
-  activeIndices.value = [];
-  array.value = [];
-  abortSorting.value = true;
-}
-
-// 冒泡排序可视化
-async function bubbleSortVisualization() {
-  const arr = [...array.value];
-  const n = arr.length;
-
-  for (let i = 0; i < n - 1; i++) {
-    let swapped = false;
-    if (abortSorting.value) {
-      break;
-    }
-
-    for (let j = 0; j < n - i - 1; j++) {
-      // 更新活动索引
-      activeIndices.value = [j, j + 1];
-      await new Promise(resolve => setTimeout(resolve, 510 - sortSpeed.value));
-
-      if (arr[j] > arr[j + 1]) {
-        // 交换元素
-        [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
-        swapped = true;
-
-        // 更新数组显示
-        array.value = [...arr];
-      }
-    }
-
-    // 如果没有交换，提前结束
-    if (!swapped) break;
-  }
-
-  activeIndices.value = [];
-  isSorting.value = false;
-}
-
-// 初始化
-onMounted(() => {
-  generateArray();
-});
 </script>
 
 <style lang="less" scoped>
@@ -675,7 +451,9 @@ onMounted(() => {
 
   button {
     padding: 0.75rem 1.5rem;
-    background: #e2e8f0;
+
+    background: #4f46e5;
+    color: white;
     border: none;
     border-radius: 6px;
     cursor: pointer;
@@ -687,8 +465,8 @@ onMounted(() => {
     }
 
     &.active {
-      background: #4f46e5;
-      color: white;
+      background: #e2e8f0;
+      color: black;
     }
   }
 }

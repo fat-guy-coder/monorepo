@@ -33,6 +33,11 @@
         <h3>Arguments 对象</h3>
         <p>包含所有参数的类数组对象</p>
       </div>
+      <div class="concept-card">
+        <div class="concept-icon">🔢</div>
+        <h3>函数的length属性</h3>
+        <p>函数定义时声明的参数个数</p>
+      </div>
     </div>
 
     <!-- 形参与实参 -->
@@ -306,6 +311,33 @@ function modernSum(...numbers) {
             </ul>
           </div>
         </div>
+      </div>
+    </div>
+
+    <!-- 函数的length属性 -->
+
+    <div class="section">
+      <div class="section-header">
+        <div class="icon">🔢</div>
+        <h2>函数的length属性</h2>
+      </div>
+      <div class="content-card">
+        <div class="method-description">
+          <h3>基本用法</h3>
+          <p>函数定义时声明的参数个数</p>
+          <pre><code>function sum(a, b) {
+  return a + b;
+}
+console.log(sum.length); // 2</code></pre>
+        </div>
+      </div>
+      <div class="method-description">
+        <h3>注意事项</h3>
+        <p>length 属性不包括 Rest 参数</p>
+        <pre><code>function sum(a, b, ...rest) {
+  return a + b + rest.length;
+}
+console.log(sum.length); // 2</code></pre>
       </div>
     </div>
 

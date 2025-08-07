@@ -2,7 +2,7 @@
   <div class="window-api-container">
     <header class="header">
       <h1>JavaScript Window 全局类接口指南</h1>
-      <p>全面解析浏览器环境中的核心 API</p>
+      <p>基本指南浏览器环境中的核心 API</p>
     </header>
 
     <div class="stats-bar">

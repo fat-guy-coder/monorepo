@@ -13,7 +13,7 @@
       <section class="section syntax">
         <h2 class="section-title">📜 属性语法</h2>
         <div class="syntax-card">
-          <pre class="code-block"><code>border-image: 
+          <pre class="code-block"><code>border-image:
   source slice / width / outset repeat;</code></pre>
           <div class="property-grid">
             <div class="property">
@@ -127,7 +127,7 @@ const gradientExampleCode = `.gradient-border {
 </script>
 
 <style lang="less" scoped>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Fira+Code&display=swap');
+
 
 .border-image-doc {
   max-width: 1200px;

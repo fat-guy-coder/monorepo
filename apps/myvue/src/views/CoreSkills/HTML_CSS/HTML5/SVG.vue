@@ -163,7 +163,7 @@ function goto() {
 </script>
 
 <style lang="less">
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Fira+Code&display=swap');
+
 
 .svg-doc {
   max-width: 1200px;

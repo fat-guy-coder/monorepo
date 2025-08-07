@@ -545,7 +545,7 @@ const currentYear = computed(() => new Date().getFullYear());
 </script>
 
 <style lang="less" scoped>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
 
 @primary: #4361ee;
 @primary-light: rgba(67, 97, 238, 0.1);

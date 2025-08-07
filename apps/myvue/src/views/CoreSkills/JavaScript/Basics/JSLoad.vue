@@ -100,7 +100,7 @@
                 <ul>
                   <li>不阻塞HTML解析</li>
                   <li>保持脚本执行顺序</li>
-                  <li>在DOM完全解析后执行</li>
+                  <li>在DOM完基本指南后执行</li>
                 </ul>
               </div>
               <div class="cons">
@@ -356,7 +356,7 @@ const goToESModule = () => {
 </script>
 
 <style lang="less" scoped>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
 
 :root {
   --primary: #4361ee;

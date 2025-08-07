@@ -374,7 +374,7 @@ const popularPackages = ref([
 </script>
 
 <style lang="less" scoped>
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&family=Roboto+Mono:wght@300;400&display=swap');
+
 
 :root {
   --primary: #339933;

@@ -346,8 +346,8 @@ const copyCode = (code: string) => {
 </script>
 
 <style lang="less" scoped>
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
-@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+
+
 
 // 颜色变量
 @primary-color: #3498db;

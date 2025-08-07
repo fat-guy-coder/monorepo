@@ -107,7 +107,7 @@ const currentYear = computed(() => new Date().getFullYear());
 </script>
 
 <style lang="less" scoped>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
 
 @primary: #61dafb;
 @secondary: #282c34;

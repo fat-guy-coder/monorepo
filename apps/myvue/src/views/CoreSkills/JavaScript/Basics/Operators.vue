@@ -228,7 +228,7 @@ const operatorCategories = reactive<OperatorCategory[]>([
 </script>
 
 <style lang="less">
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;500&family=Roboto:wght@300;500&display=swap');
+
 
 .operator-docs {
   max-width: 1200px;

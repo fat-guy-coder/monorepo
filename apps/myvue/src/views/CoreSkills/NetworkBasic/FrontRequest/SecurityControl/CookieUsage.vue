@@ -468,7 +468,7 @@ const implementationType = ref('library'); // 'native' 或 'library'
 </script>
 
 <style lang="less" scoped>
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
+
 
 :root {
   --primary-color: #3498db;

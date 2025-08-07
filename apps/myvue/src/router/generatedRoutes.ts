@@ -641,7 +641,9 @@ export default [
                       {
                         "name": "Function",
                         "path": "/CoreSkills/JavaScript/Basics/DataTypes/ReferenceTypes/Function",
-                        "component": () => import('@/views/CoreSkills/JavaScript/Basics/DataTypes/ReferenceTypes/Function.vue')
+                        "redirect": {
+                          "name": "Functions"
+                        }
                       },
                       {
                         "name": "Date1",
@@ -769,6 +771,11 @@ export default [
                 "component": () => import('@/views/CoreSkills/JavaScript/Basics/EvalAndWith.vue')
               },
               {
+                "name": "ExecuteCodeString",
+                "path": "/CoreSkills/JavaScript/Basics/ExecuteCodeString",
+                "component": () => import('@/views/CoreSkills/JavaScript/Basics/ExecuteCodeString.vue')
+              },
+              {
                 "name": "Scope",
                 "path": "/CoreSkills/JavaScript/Basics/Scope",
                 "component": () => import('@/views/CoreSkills/JavaScript/Basics/Scope.vue')
@@ -884,7 +891,13 @@ export default [
               {
                 "name": "AsyncProgramming",
                 "path": "/CoreSkills/JavaScript/Basics/AsyncProgramming",
-                "component": () => import('@/views/CoreSkills/JavaScript/Basics/AsyncProgramming.vue')
+                "children": [
+                  {
+                    "name": "AsyncProgrammingIntroduce",
+                    "path": "/CoreSkills/JavaScript/Basics/AsyncProgramming/AsyncProgrammingIntroduce",
+                    "component": () => import('@/views/CoreSkills/JavaScript/Basics/AsyncProgramming/AsyncProgrammingIntroduce.vue')
+                  }
+                ]
               },
               {
                 "name": "JSPAndCAndE",
@@ -905,6 +918,11 @@ export default [
                 "name": "ReservedKeywords",
                 "path": "/CoreSkills/JavaScript/Basics/ReservedKeywords",
                 "component": () => import('@/views/CoreSkills/JavaScript/Basics/ReservedKeywords.vue')
+              },
+              {
+                "name": "NativeJSKnowledgePoints",
+                "path": "/CoreSkills/JavaScript/Basics/NativeJSKnowledgePoints",
+                "component": () => import('@/views/CoreSkills/JavaScript/Basics/NativeJSKnowledgePoints.vue')
               }
             ]
           },
@@ -923,6 +941,11 @@ export default [
                 "component": () => import('@/views/CoreSkills/JavaScript/ES/LetConst.vue')
               },
               {
+                "name": "SpreadOperator",
+                "path": "/CoreSkills/JavaScript/ES/SpreadOperator",
+                "component": () => import('@/views/CoreSkills/JavaScript/ES/SpreadOperator.vue')
+              },
+              {
                 "name": "Destructuring",
                 "path": "/CoreSkills/JavaScript/ES/Destructuring",
                 "component": () => import('@/views/CoreSkills/JavaScript/ES/Destructuring.vue')
@@ -936,6 +959,11 @@ export default [
                 "name": "StrictMode",
                 "path": "/CoreSkills/JavaScript/ES/StrictMode",
                 "component": () => import('@/views/CoreSkills/JavaScript/ES/StrictMode.vue')
+              },
+              {
+                "name": "GlobalThis",
+                "path": "/CoreSkills/JavaScript/ES/GlobalThis",
+                "component": () => import('@/views/CoreSkills/JavaScript/ES/GlobalThis.vue')
               },
               {
                 "name": "Array",
@@ -1013,6 +1041,31 @@ export default [
                 "component": () => import('@/views/CoreSkills/JavaScript/ES/Symbol.vue')
               },
               {
+                "name": "Proxy2",
+                "path": "/CoreSkills/JavaScript/ES/Proxy2",
+                "component": () => import('@/views/CoreSkills/JavaScript/ES/Proxy2.vue')
+              },
+              {
+                "name": "Reflect",
+                "path": "/CoreSkills/JavaScript/ES/Reflect",
+                "component": () => import('@/views/CoreSkills/JavaScript/ES/Reflect.vue')
+              },
+              {
+                "name": "SetMap",
+                "path": "/CoreSkills/JavaScript/ES/SetMap",
+                "component": () => import('@/views/CoreSkills/JavaScript/ES/SetMap.vue')
+              },
+              {
+                "name": "SetMapObjectPerformanceComparison",
+                "path": "/CoreSkills/JavaScript/ES/SetMapObjectPerformanceComparison",
+                "component": () => import('@/views/CoreSkills/JavaScript/ES/SetMapObjectPerformanceComparison.vue')
+              },
+              {
+                "name": "WeakRef",
+                "path": "/CoreSkills/JavaScript/ES/WeakRef",
+                "component": () => import('@/views/CoreSkills/JavaScript/ES/WeakRef.vue')
+              },
+              {
                 "name": "Promise",
                 "path": "/CoreSkills/JavaScript/ES/Promise",
                 "component": () => import('@/views/CoreSkills/JavaScript/ES/Promise.vue')
@@ -1021,6 +1074,11 @@ export default [
                 "name": "PromiseAdvanced",
                 "path": "/CoreSkills/JavaScript/ES/PromiseAdvanced",
                 "component": () => import('@/views/CoreSkills/JavaScript/ES/PromiseAdvanced.vue')
+              },
+              {
+                "name": "PromiseImplementationScenarios",
+                "path": "/CoreSkills/JavaScript/ES/PromiseImplementationScenarios",
+                "component": () => import('@/views/CoreSkills/JavaScript/ES/PromiseImplementationScenarios.vue')
               },
               {
                 "name": "Generator",
@@ -1063,31 +1121,6 @@ export default [
                 "component": () => import('@/views/CoreSkills/JavaScript/ES/ImportAttributes.vue')
               },
               {
-                "name": "Proxy2",
-                "path": "/CoreSkills/JavaScript/ES/Proxy2",
-                "component": () => import('@/views/CoreSkills/JavaScript/ES/Proxy2.vue')
-              },
-              {
-                "name": "Reflect",
-                "path": "/CoreSkills/JavaScript/ES/Reflect",
-                "component": () => import('@/views/CoreSkills/JavaScript/ES/Reflect.vue')
-              },
-              {
-                "name": "SetMap",
-                "path": "/CoreSkills/JavaScript/ES/SetMap",
-                "component": () => import('@/views/CoreSkills/JavaScript/ES/SetMap.vue')
-              },
-              {
-                "name": "WeakRef",
-                "path": "/CoreSkills/JavaScript/ES/WeakRef",
-                "component": () => import('@/views/CoreSkills/JavaScript/ES/WeakRef.vue')
-              },
-              {
-                "name": "Decorator1",
-                "path": "/CoreSkills/JavaScript/ES/Decorator1",
-                "component": () => import('@/views/CoreSkills/JavaScript/ES/Decorator1.vue')
-              },
-              {
                 "name": "BinaryArray",
                 "path": "/CoreSkills/JavaScript/ES/BinaryArray",
                 "component": () => import('@/views/CoreSkills/JavaScript/ES/BinaryArray.vue')
@@ -1123,6 +1156,11 @@ export default [
                 "component": () => import('@/views/CoreSkills/JavaScript/ES/Hashbang.vue')
               },
               {
+                "name": "Decorator1",
+                "path": "/CoreSkills/JavaScript/ES/Decorator1",
+                "component": () => import('@/views/CoreSkills/JavaScript/ES/Decorator1.vue')
+              },
+              {
                 "name": "Temporal",
                 "path": "/CoreSkills/JavaScript/ES/Temporal",
                 "component": () => import('@/views/CoreSkills/JavaScript/ES/Temporal.vue')
@@ -1136,6 +1174,11 @@ export default [
                 "name": "PipelineOperator",
                 "path": "/CoreSkills/JavaScript/ES/PipelineOperator",
                 "component": () => import('@/views/CoreSkills/JavaScript/ES/PipelineOperator.vue')
+              },
+              {
+                "name": "ESKnowledgepPoints",
+                "path": "/CoreSkills/JavaScript/ES/ESKnowledgepPoints",
+                "component": () => import('@/views/CoreSkills/JavaScript/ES/ESKnowledgepPoints.vue')
               }
             ]
           },
@@ -1279,7 +1322,9 @@ export default [
               {
                 "name": "ArrayBufferDataFormat",
                 "path": "/CoreSkills/JavaScript/FrontendDataStreamFormat/ArrayBufferDataFormat",
-                "component": () => import('@/views/CoreSkills/JavaScript/FrontendDataStreamFormat/ArrayBufferDataFormat.vue')
+                "redirect": {
+                  "name": "BinaryArray"
+                }
               },
               {
                 "name": "MIMEType",
@@ -1337,6 +1382,11 @@ export default [
                     "component": () => import('@/views/CoreSkills/JavaScript/HandwrittenCode/NativeMethodsImplementation/TemplateStringImplementation.vue')
                   },
                   {
+                    "name": "JSONStringifyAndParse",
+                    "path": "/CoreSkills/JavaScript/HandwrittenCode/NativeMethodsImplementation/JSONStringifyAndParse",
+                    "component": () => import('@/views/CoreSkills/JavaScript/HandwrittenCode/NativeMethodsImplementation/JSONStringifyAndParse.vue')
+                  },
+                  {
                     "name": "PromiseImplementation",
                     "path": "/CoreSkills/JavaScript/HandwrittenCode/NativeMethodsImplementation/PromiseImplementation",
                     "component": () => import('@/views/CoreSkills/JavaScript/HandwrittenCode/NativeMethodsImplementation/PromiseImplementation.vue')
@@ -1389,9 +1439,9 @@ export default [
                     "component": () => import('@/views/CoreSkills/JavaScript/HandwrittenCode/DesignPatternImplementation/ObserverPattern.vue')
                   },
                   {
-                    "name": "PublishSubscribe",
-                    "path": "/CoreSkills/JavaScript/HandwrittenCode/DesignPatternImplementation/PublishSubscribe",
-                    "component": () => import('@/views/CoreSkills/JavaScript/HandwrittenCode/DesignPatternImplementation/PublishSubscribe.vue')
+                    "name": "PublishSubscribeImplementation",
+                    "path": "/CoreSkills/JavaScript/HandwrittenCode/DesignPatternImplementation/PublishSubscribeImplementation",
+                    "component": () => import('@/views/CoreSkills/JavaScript/HandwrittenCode/DesignPatternImplementation/PublishSubscribeImplementation.vue')
                   },
                   {
                     "name": "FactoryPattern",
@@ -1429,29 +1479,66 @@ export default [
                     "path": "/CoreSkills/JavaScript/HandwrittenCode/DataRelated/HandwrittenBasicAlgorithm",
                     "children": [
                       {
-                        "name": "SortingAlgorithms",
-                        "path": "/CoreSkills/JavaScript/HandwrittenCode/DataRelated/HandwrittenBasicAlgorithm/SortingAlgorithms",
-                        "component": () => import('@/views/CoreSkills/JavaScript/HandwrittenCode/DataRelated/HandwrittenBasicAlgorithm/SortingAlgorithms.vue')
+                        "name": "ArrayRelatedAlgorithm",
+                        "path": "/CoreSkills/JavaScript/HandwrittenCode/DataRelated/HandwrittenBasicAlgorithm/ArrayRelatedAlgorithm",
+                        "children": [
+                          {
+                            "name": "SortingAlgorithms",
+                            "path": "/CoreSkills/JavaScript/HandwrittenCode/DataRelated/HandwrittenBasicAlgorithm/ArrayRelatedAlgorithm/SortingAlgorithms",
+                            "component": () => import('@/views/CoreSkills/JavaScript/HandwrittenCode/DataRelated/HandwrittenBasicAlgorithm/ArrayRelatedAlgorithm/SortingAlgorithms.vue')
+                          },
+                          {
+                            "name": "Deduplication",
+                            "path": "/CoreSkills/JavaScript/HandwrittenCode/DataRelated/HandwrittenBasicAlgorithm/ArrayRelatedAlgorithm/Deduplication",
+                            "component": () => import('@/views/CoreSkills/JavaScript/HandwrittenCode/DataRelated/HandwrittenBasicAlgorithm/ArrayRelatedAlgorithm/Deduplication.vue')
+                          },
+                          {
+                            "name": "ArrayFlattening",
+                            "path": "/CoreSkills/JavaScript/HandwrittenCode/DataRelated/HandwrittenBasicAlgorithm/ArrayRelatedAlgorithm/ArrayFlattening",
+                            "component": () => import('@/views/CoreSkills/JavaScript/HandwrittenCode/DataRelated/HandwrittenBasicAlgorithm/ArrayRelatedAlgorithm/ArrayFlattening.vue')
+                          },
+                          {
+                            "name": "ArrayOtherAlgorithm",
+                            "path": "/CoreSkills/JavaScript/HandwrittenCode/DataRelated/HandwrittenBasicAlgorithm/ArrayRelatedAlgorithm/ArrayOtherAlgorithm",
+                            "component": () => import('@/views/CoreSkills/JavaScript/HandwrittenCode/DataRelated/HandwrittenBasicAlgorithm/ArrayRelatedAlgorithm/ArrayOtherAlgorithm.vue')
+                          }
+                        ]
                       },
                       {
-                        "name": "Deduplication",
-                        "path": "/CoreSkills/JavaScript/HandwrittenCode/DataRelated/HandwrittenBasicAlgorithm/Deduplication",
-                        "component": () => import('@/views/CoreSkills/JavaScript/HandwrittenCode/DataRelated/HandwrittenBasicAlgorithm/Deduplication.vue')
+                        "name": "LinkedListRelatedAlgorithm",
+                        "path": "/CoreSkills/JavaScript/HandwrittenCode/DataRelated/HandwrittenBasicAlgorithm/LinkedListRelatedAlgorithm",
+                        "redirect": {
+                          "name": "LinkedListBasicAlgorithmt"
+                        }
                       },
                       {
-                        "name": "ReverseLinkedList",
-                        "path": "/CoreSkills/JavaScript/HandwrittenCode/DataRelated/HandwrittenBasicAlgorithm/ReverseLinkedList",
-                        "component": () => import('@/views/CoreSkills/JavaScript/HandwrittenCode/DataRelated/HandwrittenBasicAlgorithm/ReverseLinkedList.vue')
+                        "name": "BinaryTreeRelatedAlgorithm",
+                        "path": "/CoreSkills/JavaScript/HandwrittenCode/DataRelated/HandwrittenBasicAlgorithm/BinaryTreeRelatedAlgorithm",
+                        "children": [
+                          {
+                            "name": "ListToTreeAndTreeToList",
+                            "path": "/CoreSkills/JavaScript/HandwrittenCode/DataRelated/HandwrittenBasicAlgorithm/BinaryTreeRelatedAlgorithm/ListToTreeAndTreeToList",
+                            "redirect": {
+                              "name": "TreeStructureDataProcessing"
+                            }
+                          },
+                          {
+                            "name": "BinaryTreeTraversal",
+                            "path": "/CoreSkills/JavaScript/HandwrittenCode/DataRelated/HandwrittenBasicAlgorithm/BinaryTreeRelatedAlgorithm/BinaryTreeTraversal",
+                            "component": () => import('@/views/CoreSkills/JavaScript/HandwrittenCode/DataRelated/HandwrittenBasicAlgorithm/BinaryTreeRelatedAlgorithm/BinaryTreeTraversal.vue')
+                          }
+                        ]
                       },
                       {
-                        "name": "ReverseString",
-                        "path": "/CoreSkills/JavaScript/HandwrittenCode/DataRelated/HandwrittenBasicAlgorithm/ReverseString",
-                        "component": () => import('@/views/CoreSkills/JavaScript/HandwrittenCode/DataRelated/HandwrittenBasicAlgorithm/ReverseString.vue')
-                      },
-                      {
-                        "name": "ArrayFlattening",
-                        "path": "/CoreSkills/JavaScript/HandwrittenCode/DataRelated/HandwrittenBasicAlgorithm/ArrayFlattening",
-                        "component": () => import('@/views/CoreSkills/JavaScript/HandwrittenCode/DataRelated/HandwrittenBasicAlgorithm/ArrayFlattening.vue')
+                        "name": "StringRelatedAlgorithm",
+                        "path": "/CoreSkills/JavaScript/HandwrittenCode/DataRelated/HandwrittenBasicAlgorithm/StringRelatedAlgorithm",
+                        "children": [
+                          {
+                            "name": "ReverseString",
+                            "path": "/CoreSkills/JavaScript/HandwrittenCode/DataRelated/HandwrittenBasicAlgorithm/StringRelatedAlgorithm/ReverseString",
+                            "component": () => import('@/views/CoreSkills/JavaScript/HandwrittenCode/DataRelated/HandwrittenBasicAlgorithm/StringRelatedAlgorithm/ReverseString.vue')
+                          }
+                        ]
                       },
                       {
                         "name": "BinarySearch",
@@ -1661,6 +1748,11 @@ export default [
             "name": "TS5",
             "path": "/CoreSkills/TypeScript/TS5",
             "component": () => import('@/views/CoreSkills/TypeScript/TS5.vue')
+          },
+          {
+            "name": "TSProsAndCons",
+            "path": "/CoreSkills/TypeScript/TSProsAndCons",
+            "component": () => import('@/views/CoreSkills/TypeScript/TSProsAndCons.vue')
           }
         ]
       },
@@ -1788,42 +1880,58 @@ export default [
               {
                 "name": "SortingAlgorithm1",
                 "path": "/CoreSkills/ComputerBasicKnowledge/BasicAlgorithm/SortingAlgorithm1",
-                "component": () => import('@/views/CoreSkills/ComputerBasicKnowledge/BasicAlgorithm/SortingAlgorithm1.vue')
+                "redirect": {
+                  "name": "SortingAlgorithm"
+                }
               },
               {
                 "name": "SearchAlgorithm1",
                 "path": "/CoreSkills/ComputerBasicKnowledge/BasicAlgorithm/SearchAlgorithm1",
-                "component": () => import('@/views/CoreSkills/ComputerBasicKnowledge/BasicAlgorithm/SearchAlgorithm1.vue')
+                "redirect": {
+                  "name": "SearchAlgorithm"
+                }
               },
               {
                 "name": "RecursiveAlgorithm1",
                 "path": "/CoreSkills/ComputerBasicKnowledge/BasicAlgorithm/RecursiveAlgorithm1",
-                "component": () => import('@/views/CoreSkills/ComputerBasicKnowledge/BasicAlgorithm/RecursiveAlgorithm1.vue')
+                "redirect": {
+                  "name": "RecursiveAlgorithm"
+                }
               },
               {
                 "name": "DynamicProgramming1",
                 "path": "/CoreSkills/ComputerBasicKnowledge/BasicAlgorithm/DynamicProgramming1",
-                "component": () => import('@/views/CoreSkills/ComputerBasicKnowledge/BasicAlgorithm/DynamicProgramming1.vue')
+                "redirect": {
+                  "name": "DynamicProgramming"
+                }
               },
               {
                 "name": "GreedyAlgorithm1",
                 "path": "/CoreSkills/ComputerBasicKnowledge/BasicAlgorithm/GreedyAlgorithm1",
-                "component": () => import('@/views/CoreSkills/ComputerBasicKnowledge/BasicAlgorithm/GreedyAlgorithm1.vue')
+                "redirect": {
+                  "name": "GreedyAlgorithm"
+                }
               },
               {
                 "name": "DivideAndConquer1",
                 "path": "/CoreSkills/ComputerBasicKnowledge/BasicAlgorithm/DivideAndConquer1",
-                "component": () => import('@/views/CoreSkills/ComputerBasicKnowledge/BasicAlgorithm/DivideAndConquer1.vue')
+                "redirect": {
+                  "name": "DivideAndConquer"
+                }
               },
               {
                 "name": "BacktrackingAlgorithm1",
                 "path": "/CoreSkills/ComputerBasicKnowledge/BasicAlgorithm/BacktrackingAlgorithm1",
-                "component": () => import('@/views/CoreSkills/ComputerBasicKnowledge/BasicAlgorithm/BacktrackingAlgorithm1.vue')
+                "redirect": {
+                  "name": "BacktrackingAlgorithm"
+                }
               },
               {
                 "name": "BranchAndBoundAlgorithm1",
                 "path": "/CoreSkills/ComputerBasicKnowledge/BasicAlgorithm/BranchAndBoundAlgorithm1",
-                "component": () => import('@/views/CoreSkills/ComputerBasicKnowledge/BasicAlgorithm/BranchAndBoundAlgorithm1.vue')
+                "redirect": {
+                  "name": "BranchAndBoundAlgorithm"
+                }
               }
             ]
           },
@@ -1839,7 +1947,9 @@ export default [
               {
                 "name": "LinkedList1",
                 "path": "/CoreSkills/ComputerBasicKnowledge/DataStructureBasic/LinkedList1",
-                "component": () => import('@/views/CoreSkills/ComputerBasicKnowledge/DataStructureBasic/LinkedList1.vue')
+                "redirect": {
+                  "name": "LinkedListBasic"
+                }
               },
               {
                 "name": "Stack1",
@@ -1849,12 +1959,16 @@ export default [
               {
                 "name": "Queue1",
                 "path": "/CoreSkills/ComputerBasicKnowledge/DataStructureBasic/Queue1",
-                "component": () => import('@/views/CoreSkills/ComputerBasicKnowledge/DataStructureBasic/Queue1.vue')
+                "redirect": {
+                  "name": "Queue"
+                }
               },
               {
                 "name": "Tree1",
                 "path": "/CoreSkills/ComputerBasicKnowledge/DataStructureBasic/Tree1",
-                "component": () => import('@/views/CoreSkills/ComputerBasicKnowledge/DataStructureBasic/Tree1.vue')
+                "redirect": {
+                  "name": "TreeClassification"
+                }
               },
               {
                 "name": "Graph1",
@@ -1869,7 +1983,9 @@ export default [
               {
                 "name": "HashTable1",
                 "path": "/CoreSkills/ComputerBasicKnowledge/DataStructureBasic/HashTable1",
-                "component": () => import('@/views/CoreSkills/ComputerBasicKnowledge/DataStructureBasic/HashTable1.vue')
+                "redirect": {
+                  "name": "HashTableIntroduction"
+                }
               }
             ]
           },
@@ -1877,74 +1993,6 @@ export default [
             "name": "CMDCommand",
             "path": "/CoreSkills/ComputerBasicKnowledge/CMDCommand",
             "component": () => import('@/views/CoreSkills/ComputerBasicKnowledge/CMDCommand.vue')
-          }
-        ]
-      },
-      {
-        "name": "Browser",
-        "path": "/CoreSkills/Browser",
-        "children": [
-          {
-            "name": "XLLC",
-            "path": "/CoreSkills/Browser/XLLC",
-            "children": [
-              {
-                "name": "NetworkProcess",
-                "path": "/CoreSkills/Browser/XLLC/NetworkProcess",
-                "component": () => import('@/views/CoreSkills/Browser/XLLC/NetworkProcess.vue')
-              },
-              {
-                "name": "ResourceLoadingProcess",
-                "path": "/CoreSkills/Browser/XLLC/ResourceLoadingProcess",
-                "component": () => import('@/views/CoreSkills/Browser/XLLC/ResourceLoadingProcess.vue')
-              },
-              {
-                "name": "RenderProcess",
-                "path": "/CoreSkills/Browser/XLLC/RenderProcess",
-                "component": () => import('@/views/CoreSkills/Browser/XLLC/RenderProcess.vue')
-              },
-              {
-                "name": "BrowserRenderProcess",
-                "path": "/CoreSkills/Browser/XLLC/BrowserRenderProcess",
-                "component": () => import('@/views/CoreSkills/Browser/XLLC/BrowserRenderProcess.vue')
-              }
-            ]
-          },
-          {
-            "name": "ZW1Z",
-            "path": "/CoreSkills/Browser/ZW1Z",
-            "component": () => import('@/views/CoreSkills/Browser/ZW1Z.vue')
-          },
-          {
-            "name": "V8Engine",
-            "path": "/CoreSkills/Browser/V8Engine",
-            "children": [
-              {
-                "name": "V8EngineIntroduction",
-                "path": "/CoreSkills/Browser/V8Engine/V8EngineIntroduction",
-                "component": () => import('@/views/CoreSkills/Browser/V8Engine/V8EngineIntroduction.vue')
-              },
-              {
-                "name": "V8GarbageCollection",
-                "path": "/CoreSkills/Browser/V8Engine/V8GarbageCollection",
-                "component": () => import('@/views/CoreSkills/Browser/V8Engine/V8GarbageCollection.vue')
-              },
-              {
-                "name": "V8SomeMechanism",
-                "path": "/CoreSkills/Browser/V8Engine/V8SomeMechanism",
-                "component": () => import('@/views/CoreSkills/Browser/V8Engine/V8SomeMechanism.vue')
-              }
-            ]
-          },
-          {
-            "name": "BrowserProcessandThread",
-            "path": "/CoreSkills/Browser/BrowserProcessandThread",
-            "component": () => import('@/views/CoreSkills/Browser/BrowserProcessandThread.vue')
-          },
-          {
-            "name": "BrowserRenderingLayer",
-            "path": "/CoreSkills/Browser/BrowserRenderingLayer",
-            "component": () => import('@/views/CoreSkills/Browser/BrowserRenderingLayer.vue')
           }
         ]
       },
@@ -2033,14 +2081,25 @@ export default [
                 "component": () => import('@/views/CoreSkills/NetworkBasic/FrontRequest/GetAndPost.vue')
               },
               {
-                "name": "Restful",
-                "path": "/CoreSkills/NetworkBasic/FrontRequest/Restful",
-                "component": () => import('@/views/CoreSkills/NetworkBasic/FrontRequest/Restful.vue')
-              },
-              {
-                "name": "GraphQL",
-                "path": "/CoreSkills/NetworkBasic/FrontRequest/GraphQL",
-                "component": () => import('@/views/CoreSkills/NetworkBasic/FrontRequest/GraphQL.vue')
+                "name": "InterfaceStyle",
+                "path": "/CoreSkills/NetworkBasic/FrontRequest/InterfaceStyle",
+                "children": [
+                  {
+                    "name": "Restful",
+                    "path": "/CoreSkills/NetworkBasic/FrontRequest/InterfaceStyle/Restful",
+                    "component": () => import('@/views/CoreSkills/NetworkBasic/FrontRequest/InterfaceStyle/Restful.vue')
+                  },
+                  {
+                    "name": "GraphQL",
+                    "path": "/CoreSkills/NetworkBasic/FrontRequest/InterfaceStyle/GraphQL",
+                    "component": () => import('@/views/CoreSkills/NetworkBasic/FrontRequest/InterfaceStyle/GraphQL.vue')
+                  },
+                  {
+                    "name": "RestfulAndGraphQL",
+                    "path": "/CoreSkills/NetworkBasic/FrontRequest/InterfaceStyle/RestfulAndGraphQL",
+                    "component": () => import('@/views/CoreSkills/NetworkBasic/FrontRequest/InterfaceStyle/RestfulAndGraphQL.vue')
+                  }
+                ]
               },
               {
                 "name": "CookieSessionToken",
@@ -2097,7 +2156,9 @@ export default [
               {
                 "name": "SSEOverview",
                 "path": "/CoreSkills/NetworkBasic/HttpOverview/SSEOverview",
-                "component": () => import('@/views/CoreSkills/NetworkBasic/HttpOverview/SSEOverview.vue')
+                "redirect": {
+                  "name": "SSE"
+                }
               },
               {
                 "name": "HTTP2Multiplex",
@@ -2188,14 +2249,100 @@ export default [
             "component": () => import('@/views/CoreSkills/NetworkBasic/cURL.vue')
           },
           {
-            "name": "ServerIntroduction",
-            "path": "/CoreSkills/NetworkBasic/ServerIntroduction",
-            "component": () => import('@/views/CoreSkills/NetworkBasic/ServerIntroduction.vue')
+            "name": "Server",
+            "path": "/CoreSkills/NetworkBasic/Server",
+            "children": [
+              {
+                "name": "ServerIntroduction",
+                "path": "/CoreSkills/NetworkBasic/Server/ServerIntroduction",
+                "component": () => import('@/views/CoreSkills/NetworkBasic/Server/ServerIntroduction.vue')
+              },
+              {
+                "name": "WebServer",
+                "path": "/CoreSkills/NetworkBasic/Server/WebServer",
+                "component": () => import('@/views/CoreSkills/NetworkBasic/Server/WebServer.vue')
+              },
+              {
+                "name": "NodeServer",
+                "path": "/CoreSkills/NetworkBasic/Server/NodeServer",
+                "redirect": {
+                  "name": "HTTP"
+                }
+              },
+              {
+                "name": "Nginx",
+                "path": "/CoreSkills/NetworkBasic/Server/Nginx",
+                "component": () => import('@/views/CoreSkills/NetworkBasic/Server/Nginx.vue')
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Browser",
+        "path": "/CoreSkills/Browser",
+        "children": [
+          {
+            "name": "XLLC",
+            "path": "/CoreSkills/Browser/XLLC",
+            "children": [
+              {
+                "name": "NetworkProcess",
+                "path": "/CoreSkills/Browser/XLLC/NetworkProcess",
+                "component": () => import('@/views/CoreSkills/Browser/XLLC/NetworkProcess.vue')
+              },
+              {
+                "name": "ResourceLoadingProcess",
+                "path": "/CoreSkills/Browser/XLLC/ResourceLoadingProcess",
+                "component": () => import('@/views/CoreSkills/Browser/XLLC/ResourceLoadingProcess.vue')
+              },
+              {
+                "name": "RenderProcess",
+                "path": "/CoreSkills/Browser/XLLC/RenderProcess",
+                "component": () => import('@/views/CoreSkills/Browser/XLLC/RenderProcess.vue')
+              },
+              {
+                "name": "BrowserRenderProcess",
+                "path": "/CoreSkills/Browser/XLLC/BrowserRenderProcess",
+                "component": () => import('@/views/CoreSkills/Browser/XLLC/BrowserRenderProcess.vue')
+              }
+            ]
           },
           {
-            "name": "Nginx",
-            "path": "/CoreSkills/NetworkBasic/Nginx",
-            "component": () => import('@/views/CoreSkills/NetworkBasic/Nginx.vue')
+            "name": "ZW1Z",
+            "path": "/CoreSkills/Browser/ZW1Z",
+            "component": () => import('@/views/CoreSkills/Browser/ZW1Z.vue')
+          },
+          {
+            "name": "V8Engine",
+            "path": "/CoreSkills/Browser/V8Engine",
+            "children": [
+              {
+                "name": "V8EngineIntroduction",
+                "path": "/CoreSkills/Browser/V8Engine/V8EngineIntroduction",
+                "component": () => import('@/views/CoreSkills/Browser/V8Engine/V8EngineIntroduction.vue')
+              },
+              {
+                "name": "V8GarbageCollection",
+                "path": "/CoreSkills/Browser/V8Engine/V8GarbageCollection",
+                "component": () => import('@/views/CoreSkills/Browser/V8Engine/V8GarbageCollection.vue')
+              },
+              {
+                "name": "V8SomeMechanism",
+                "path": "/CoreSkills/Browser/V8Engine/V8SomeMechanism",
+                "component": () => import('@/views/CoreSkills/Browser/V8Engine/V8SomeMechanism.vue')
+              }
+            ]
+          },
+          {
+            "name": "BrowserProcessandThread",
+            "path": "/CoreSkills/Browser/BrowserProcessandThread",
+            "component": () => import('@/views/CoreSkills/Browser/BrowserProcessandThread.vue')
+          },
+          {
+            "name": "BrowserRenderingLayer",
+            "path": "/CoreSkills/Browser/BrowserRenderingLayer",
+            "component": () => import('@/views/CoreSkills/Browser/BrowserRenderingLayer.vue')
           }
         ]
       },
@@ -2445,7 +2592,9 @@ export default [
                   {
                     "name": "AlgorithmOptimization",
                     "path": "/CoreSkills/Performance/CodeAspect/JsCodeOptimization/AlgorithmOptimization",
-                    "component": () => import('@/views/CoreSkills/Performance/CodeAspect/JsCodeOptimization/AlgorithmOptimization.vue')
+                    "redirect": {
+                      "name": "AlgorithmIntroduction"
+                    }
                   },
                   {
                     "name": "MemoryManagement2",
@@ -2464,7 +2613,9 @@ export default [
                       {
                         "name": "WeakMapAndWeakSetAndWeakRef",
                         "path": "/CoreSkills/Performance/CodeAspect/JsCodeOptimization/MemoryManagement2/WeakMapAndWeakSetAndWeakRef",
-                        "component": () => import('@/views/CoreSkills/Performance/CodeAspect/JsCodeOptimization/MemoryManagement2/WeakMapAndWeakSetAndWeakRef.vue')
+                        "redirect": {
+                          "name": "WeakRef"
+                        }
                       }
                     ]
                   },
@@ -2643,7 +2794,9 @@ export default [
               {
                 "name": "SingleSignOn1",
                 "path": "/CoreSkills/FunctionImplementation/UserOperationRelated/SingleSignOn1",
-                "component": () => import('@/views/CoreSkills/FunctionImplementation/UserOperationRelated/SingleSignOn1.vue')
+                "redirect": {
+                  "name": "SingleSignOn"
+                }
               },
               {
                 "name": "SiteSearch",
@@ -2684,7 +2837,9 @@ export default [
               {
                 "name": "SeoAndOptimization",
                 "path": "/CoreSkills/FunctionImplementation/DataRelated2/SeoAndOptimization",
-                "component": () => import('@/views/CoreSkills/FunctionImplementation/DataRelated2/SeoAndOptimization.vue')
+                "redirect": {
+                  "name": "SeoAndOptimization2"
+                }
               },
               {
                 "name": "DataTracking",
@@ -2829,7 +2984,9 @@ export default [
           {
             "name": "Husky1",
             "path": "/CoreSkills/TeamCollaboration/Husky1",
-            "component": () => import('@/views/CoreSkills/TeamCollaboration/Husky1.vue')
+            "redirect": {
+              "name": "Husky"
+            }
           },
           {
             "name": "FeatureBranchAndTrunkBased",
@@ -3262,7 +3419,9 @@ export default [
               {
                 "name": "LongestIncreasingSubsequence",
                 "path": "/FrameworksAndEngineering/Vue/VueUnderlyingPrinciples/LongestIncreasingSubsequence",
-                "component": () => import('@/views/FrameworksAndEngineering/Vue/VueUnderlyingPrinciples/LongestIncreasingSubsequence.vue')
+                "redirect": {
+                  "name": "LongestIncreasingSubsequence2"
+                }
               },
               {
                 "name": "AsyncUpdate",
@@ -3356,6 +3515,11 @@ export default [
                 "name": "Pinia",
                 "path": "/FrameworksAndEngineering/Vue/VueEcosystem/Pinia",
                 "component": () => import('@/views/FrameworksAndEngineering/Vue/VueEcosystem/Pinia.vue')
+              },
+              {
+                "name": "Vuex",
+                "path": "/FrameworksAndEngineering/Vue/VueEcosystem/Vuex",
+                "component": () => import('@/views/FrameworksAndEngineering/Vue/VueEcosystem/Vuex.vue')
               },
               {
                 "name": "VueUIFramework",
@@ -3520,6 +3684,11 @@ export default [
                         "component": () => import('@/views/FrameworksAndEngineering/Engineering/BuildTools/Webpack/WebpackLoader/WebpackCommonLoader.vue')
                       },
                       {
+                        "name": "OtherUsefulLoader",
+                        "path": "/FrameworksAndEngineering/Engineering/BuildTools/Webpack/WebpackLoader/OtherUsefulLoader",
+                        "component": () => import('@/views/FrameworksAndEngineering/Engineering/BuildTools/Webpack/WebpackLoader/OtherUsefulLoader.vue')
+                      },
+                      {
                         "name": "BabelLoader",
                         "path": "/FrameworksAndEngineering/Engineering/BuildTools/Webpack/WebpackLoader/BabelLoader",
                         "component": () => import('@/views/FrameworksAndEngineering/Engineering/BuildTools/Webpack/WebpackLoader/BabelLoader.vue')
@@ -3583,7 +3752,9 @@ export default [
                       {
                         "name": "ModuleFederation1",
                         "path": "/FrameworksAndEngineering/Engineering/BuildTools/Webpack/WebpackPlugin/ModuleFederation1",
-                        "component": () => import('@/views/FrameworksAndEngineering/Engineering/BuildTools/Webpack/WebpackPlugin/ModuleFederation1.vue')
+                        "redirect": {
+                          "name": "ModuleFederation"
+                        }
                       },
                       {
                         "name": "HowToImplementAPlugin",
@@ -3933,7 +4104,45 @@ export default [
               {
                 "name": "UnitTesting",
                 "path": "/FrameworksAndEngineering/Engineering/Testing/UnitTesting",
-                "component": () => import('@/views/FrameworksAndEngineering/Engineering/Testing/UnitTesting.vue')
+                "children": [
+                  {
+                    "name": "UnitTestingIntroduction",
+                    "path": "/FrameworksAndEngineering/Engineering/Testing/UnitTesting/UnitTestingIntroduction",
+                    "component": () => import('@/views/FrameworksAndEngineering/Engineering/Testing/UnitTesting/UnitTestingIntroduction.vue')
+                  },
+                  {
+                    "name": "Jest",
+                    "path": "/FrameworksAndEngineering/Engineering/Testing/UnitTesting/Jest",
+                    "children": [
+                      {
+                        "name": "JestBasicKnowledge",
+                        "path": "/FrameworksAndEngineering/Engineering/Testing/UnitTesting/Jest/JestBasicKnowledge",
+                        "component": () => import('@/views/FrameworksAndEngineering/Engineering/Testing/UnitTesting/Jest/JestBasicKnowledge.vue')
+                      },
+                      {
+                        "name": "JestApi",
+                        "path": "/FrameworksAndEngineering/Engineering/Testing/UnitTesting/Jest/JestApi",
+                        "component": () => import('@/views/FrameworksAndEngineering/Engineering/Testing/UnitTesting/Jest/JestApi.vue')
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Vitest",
+                    "path": "/FrameworksAndEngineering/Engineering/Testing/UnitTesting/Vitest",
+                    "children": [
+                      {
+                        "name": "VitestBasicKnowledge",
+                        "path": "/FrameworksAndEngineering/Engineering/Testing/UnitTesting/Vitest/VitestBasicKnowledge",
+                        "component": () => import('@/views/FrameworksAndEngineering/Engineering/Testing/UnitTesting/Vitest/VitestBasicKnowledge.vue')
+                      },
+                      {
+                        "name": "VitestApi",
+                        "path": "/FrameworksAndEngineering/Engineering/Testing/UnitTesting/Vitest/VitestApi",
+                        "component": () => import('@/views/FrameworksAndEngineering/Engineering/Testing/UnitTesting/Vitest/VitestApi.vue')
+                      }
+                    ]
+                  }
+                ]
               },
               {
                 "name": "IntegrationTesting",
@@ -3943,44 +4152,13 @@ export default [
               {
                 "name": "EndToEndTesting",
                 "path": "/FrameworksAndEngineering/Engineering/Testing/EndToEndTesting",
-                "component": () => import('@/views/FrameworksAndEngineering/Engineering/Testing/EndToEndTesting.vue')
-              },
-              {
-                "name": "Jest",
-                "path": "/FrameworksAndEngineering/Engineering/Testing/Jest",
                 "children": [
                   {
-                    "name": "JestBasicKnowledge",
-                    "path": "/FrameworksAndEngineering/Engineering/Testing/Jest/JestBasicKnowledge",
-                    "component": () => import('@/views/FrameworksAndEngineering/Engineering/Testing/Jest/JestBasicKnowledge.vue')
-                  },
-                  {
-                    "name": "JestApi",
-                    "path": "/FrameworksAndEngineering/Engineering/Testing/Jest/JestApi",
-                    "component": () => import('@/views/FrameworksAndEngineering/Engineering/Testing/Jest/JestApi.vue')
+                    "name": "Cypress",
+                    "path": "/FrameworksAndEngineering/Engineering/Testing/EndToEndTesting/Cypress",
+                    "component": () => import('@/views/FrameworksAndEngineering/Engineering/Testing/EndToEndTesting/Cypress.vue')
                   }
                 ]
-              },
-              {
-                "name": "Vitest",
-                "path": "/FrameworksAndEngineering/Engineering/Testing/Vitest",
-                "children": [
-                  {
-                    "name": "VitestBasicKnowledge",
-                    "path": "/FrameworksAndEngineering/Engineering/Testing/Vitest/VitestBasicKnowledge",
-                    "component": () => import('@/views/FrameworksAndEngineering/Engineering/Testing/Vitest/VitestBasicKnowledge.vue')
-                  },
-                  {
-                    "name": "VitestApi",
-                    "path": "/FrameworksAndEngineering/Engineering/Testing/Vitest/VitestApi",
-                    "component": () => import('@/views/FrameworksAndEngineering/Engineering/Testing/Vitest/VitestApi.vue')
-                  }
-                ]
-              },
-              {
-                "name": "Cypress",
-                "path": "/FrameworksAndEngineering/Engineering/Testing/Cypress",
-                "component": () => import('@/views/FrameworksAndEngineering/Engineering/Testing/Cypress.vue')
               }
             ]
           },
@@ -4288,12 +4466,16 @@ export default [
               {
                 "name": "Recursion",
                 "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmBasic/Recursion",
-                "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmBasic/Recursion.vue')
+                "redirect": {
+                  "name": "RecursionAlgorithmBasic"
+                }
               },
               {
                 "name": "SortingAlgorithm3",
                 "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmBasic/SortingAlgorithm3",
-                "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmBasic/SortingAlgorithm3.vue')
+                "redirect": {
+                  "name": "SortingAlgorithm"
+                }
               },
               {
                 "name": "GreedyAlgorithmIntroduction",
@@ -4410,7 +4592,13 @@ export default [
                       {
                         "name": "DynamicProgrammingSimpleDP",
                         "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/DynamicProgramming/DynamicProgrammingProblem/DynamicProgrammingSimpleDP",
-                        "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/DynamicProgramming/DynamicProgrammingProblem/DynamicProgrammingSimpleDP.vue')
+                        "children": [
+                          {
+                            "name": "LongestIncreasingSubsequence2",
+                            "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/DynamicProgramming/DynamicProgrammingProblem/DynamicProgrammingSimpleDP/LongestIncreasingSubsequence2",
+                            "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/DynamicProgramming/DynamicProgrammingProblem/DynamicProgrammingSimpleDP/LongestIncreasingSubsequence2.vue')
+                          }
+                        ]
                       },
                       {
                         "name": "DynamicProgrammingMediumDP",
@@ -4449,13 +4637,13 @@ export default [
                     "name": "BacktrackingAlgorithm",
                     "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/SearchAlgorithm/BacktrackingAlgorithm",
                     "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/SearchAlgorithm/BacktrackingAlgorithm.vue')
+                  },
+                  {
+                    "name": "EnumerationAlgorithm",
+                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/SearchAlgorithm/EnumerationAlgorithm",
+                    "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/SearchAlgorithm/EnumerationAlgorithm.vue')
                   }
                 ]
-              },
-              {
-                "name": "GraphAlgorithm",
-                "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/GraphAlgorithm",
-                "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/GraphAlgorithm.vue')
               },
               {
                 "name": "GreedyAlgorithm",
@@ -4470,6 +4658,53 @@ export default [
                     "name": "DijkstraAlgorithm",
                     "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/GreedyAlgorithm/DijkstraAlgorithm",
                     "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/GreedyAlgorithm/DijkstraAlgorithm.vue')
+                  }
+                ]
+              },
+              {
+                "name": "MappingAlgorithm",
+                "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/MappingAlgorithm",
+                "children": [
+                  {
+                    "name": "LZ77Algorithm",
+                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/MappingAlgorithm/LZ77Algorithm",
+                    "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/MappingAlgorithm/LZ77Algorithm.vue')
+                  },
+                  {
+                    "name": "HashAlgorithm",
+                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/MappingAlgorithm/HashAlgorithm",
+                    "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/MappingAlgorithm/HashAlgorithm.vue')
+                  },
+                  {
+                    "name": "BitOpe",
+                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/MappingAlgorithm/BitOpe",
+                    "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/MappingAlgorithm/BitOpe.vue')
+                  }
+                ]
+              },
+              {
+                "name": "CompressionAlgorithm",
+                "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/CompressionAlgorithm",
+                "children": [
+                  {
+                    "name": "LossyCompressionAlgorithmIntroduction",
+                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/CompressionAlgorithm/LossyCompressionAlgorithmIntroduction",
+                    "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/CompressionAlgorithm/LossyCompressionAlgorithmIntroduction.vue')
+                  },
+                  {
+                    "name": "LosslessCompressionAlgorithmIntroduction",
+                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/CompressionAlgorithm/LosslessCompressionAlgorithmIntroduction",
+                    "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/CompressionAlgorithm/LosslessCompressionAlgorithmIntroduction.vue')
+                  },
+                  {
+                    "name": "HuffmanEncoding1",
+                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/CompressionAlgorithm/HuffmanEncoding1",
+                    "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/CompressionAlgorithm/HuffmanEncoding1.vue')
+                  },
+                  {
+                    "name": "ReferenceCounting",
+                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/CompressionAlgorithm/ReferenceCounting",
+                    "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/CompressionAlgorithm/ReferenceCounting.vue')
                   }
                 ]
               },
@@ -4492,32 +4727,6 @@ export default [
                         "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/OtherAlgorithm/SlidingWindowAlgorithm/LRUAlgorithm.vue')
                       }
                     ]
-                  },
-                  {
-                    "name": "MappingAlgorithm",
-                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/OtherAlgorithm/MappingAlgorithm",
-                    "children": [
-                      {
-                        "name": "LZ77Algorithm",
-                        "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/OtherAlgorithm/MappingAlgorithm/LZ77Algorithm",
-                        "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/OtherAlgorithm/MappingAlgorithm/LZ77Algorithm.vue')
-                      },
-                      {
-                        "name": "HashAlgorithm",
-                        "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/OtherAlgorithm/MappingAlgorithm/HashAlgorithm",
-                        "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/OtherAlgorithm/MappingAlgorithm/HashAlgorithm.vue')
-                      },
-                      {
-                        "name": "BitOpe",
-                        "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/OtherAlgorithm/MappingAlgorithm/BitOpe",
-                        "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/OtherAlgorithm/MappingAlgorithm/BitOpe.vue')
-                      }
-                    ]
-                  },
-                  {
-                    "name": "LongestIncreasingSubsequence2",
-                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/OtherAlgorithm/LongestIncreasingSubsequence2",
-                    "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/OtherAlgorithm/LongestIncreasingSubsequence2.vue')
                   }
                 ]
               }
@@ -5183,7 +5392,9 @@ export default [
           {
             "name": "WebAssembly1",
             "path": "/AdvancedSkills/NewTechnology/WebAssembly1",
-            "component": () => import('@/views/AdvancedSkills/NewTechnology/WebAssembly1.vue')
+            "redirect": {
+              "name": "WebAssembly"
+            }
           },
           {
             "name": "WebRTC",

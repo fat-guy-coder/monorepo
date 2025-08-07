@@ -240,7 +240,7 @@ const userPrefersDark = ref(false);
 </script>
 
 <style lang="less" scoped>
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
+
 
 .abstract-factory-container {
   max-width: 1200px;

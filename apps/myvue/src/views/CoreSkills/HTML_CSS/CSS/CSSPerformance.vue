@@ -226,7 +226,7 @@ requestAnimationFrame(() => {
 </script>
 
 <style lang="less" scoped>
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600&family=Inter:wght@400;600&display=swap');
+
 
 .metric {
   color: #000;

@@ -1,7 +1,7 @@
 <template>
   <div class="shape-layout-guide">
     <header class="guide-header">
-      <h1 class="title">CSS Shape 布局全解析</h1>
+      <h1 class="title">CSS Shape 布局基本指南</h1>
       <p class="subtitle">打破矩形束缚，实现自由文本环绕</p>
     </header>
 

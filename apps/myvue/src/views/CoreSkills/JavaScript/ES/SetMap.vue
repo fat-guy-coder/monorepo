@@ -1,85 +1,473 @@
-// MapDocument.vue
-
 <template>
-  <div class="map-doc-container">
-    <!-- 标题部分 -->
-    <header class="doc-header">
-      <h1 class="title">📚 Set Map 基本指南</h1>
-      <p class="subtitle">键值对集合的现代化解决方案</p>
+  <div class="set-map-container">
+    <!-- 页面标题 -->
+    <header class="page-header">
+      <h1 class="main-title">📚 ES6 Set & Map 完整指南</h1>
+      <p class="subtitle">现代化的集合数据结构，提升开发效率</p>
     </header>
 
-    <!-- 内容主体 -->
-    <main class="doc-content">
-      <!-- 概述 -->
-      <section class="section overview">
-        <h2 class="section-title">🌟 概述</h2>
-        <div class="content-box">
-          <p>Map是ES6引入的键值对集合类型，相比Object具备以下优势：</p>
-          <ul class="feature-list">
-            <li>🔑 键可以是任意数据类型</li>
-            <li>📏 内置size属性获取元素数量</li>
-            <li>🔄 保持插入顺序迭代</li>
-            <li>⚡ 更优的增删查改性能</li>
+    <!-- Set 部分 -->
+    <section class="data-structure-section">
+      <div class="section-header">
+        <h2 class="section-title">🔸 Set 集合</h2>
+        <div class="title-decoration"></div>
+      </div>
+
+      <!-- Set 概念 -->
+      <div class="concept-card">
+        <h3 class="card-title">📖 概念定义</h3>
+        <p class="concept-text">
+          Set 是 ES6 引入的一种新的数据结构，它类似于数组，但是成员的值都是唯一的，没有重复的值。
+          Set 本身是一个构造函数，用来生成 Set 数据结构。
+        </p>
+        <div class="code-demo">
+          <pre><code>const set = new Set([1, 2, 3, 3, 4, 4]);
+console.log(set); // Set(4) {1, 2, 3, 4}</code></pre>
+        </div>
+      </div>
+
+      <!-- Set 特点 -->
+      <div class="features-card">
+        <h3 class="card-title">✨ 核心特点</h3>
+        <div class="features-grid">
+          <div class="feature-item">
+            <div class="feature-icon">🔑</div>
+            <h4>值唯一性</h4>
+            <p>自动去重，使用 SameValueZero 算法比较</p>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">🎯</div>
+            <h4>任意类型</h4>
+            <p>可以存储对象、函数等任意类型值</p>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">📊</div>
+            <h4>有序迭代</h4>
+            <p>按插入顺序迭代，支持 for...of 遍历</p>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">⚡</div>
+            <h4>快速查找</h4>
+            <p>O(1) 时间复杂度的查找操作</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Set API -->
+      <div class="api-card">
+        <h3 class="card-title">🛠️ API 方法</h3>
+        <div class="api-table">
+          <div class="api-header">
+            <span class="api-method">方法</span>
+            <span class="api-desc">描述</span>
+            <span class="api-return">返回值</span>
+            <span class="api-example">示例</span>
+          </div>
+          <div class="api-row">
+            <code class="api-method">add(value)</code>
+            <span class="api-desc">添加新元素</span>
+            <span class="api-return">Set</span>
+            <code class="api-example">set.add(5)</code>
+          </div>
+          <div class="api-row">
+            <code class="api-method">has(value)</code>
+            <span class="api-desc">检查值是否存在</span>
+            <span class="api-return">Boolean</span>
+            <code class="api-example">set.has(3)</code>
+          </div>
+          <div class="api-row">
+            <code class="api-method">delete(value)</code>
+            <span class="api-desc">删除指定值</span>
+            <span class="api-return">Boolean</span>
+            <code class="api-example">set.delete(2)</code>
+          </div>
+          <div class="api-row">
+            <code class="api-method">clear()</code>
+            <span class="api-desc">清空所有元素</span>
+            <span class="api-return">undefined</span>
+            <code class="api-example">set.clear()</code>
+          </div>
+          <div class="api-row">
+            <code class="api-method">size</code>
+            <span class="api-desc">获取元素数量</span>
+            <span class="api-return">Number</span>
+            <code class="api-example">set.size</code>
+          </div>
+        </div>
+      </div>
+
+      <!-- Set 遍历 -->
+      <div class="iteration-card">
+        <h3 class="card-title">🔄 遍历方法</h3>
+        <div class="iteration-methods">
+          <div class="method-item">
+            <h4>forEach()</h4>
+            <pre><code>set.forEach((value, key, set) => {
+  console.log(value);
+});</code></pre>
+          </div>
+          <div class="method-item">
+            <h4>for...of</h4>
+            <pre><code>for (const value of set) {
+  console.log(value);
+}</code></pre>
+          </div>
+          <div class="method-item">
+            <h4>values()</h4>
+            <pre><code>for (const value of set.values()) {
+  console.log(value);
+}</code></pre>
+          </div>
+          <div class="method-item">
+            <h4>keys()</h4>
+            <pre><code>for (const key of set.keys()) {
+  console.log(key); // 与 values() 相同
+}</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- INSERT_YOUR_CODE -->
+      <!-- Set 底层实现原理 -->
+      <div class="iteration-card">
+        <h3 class="card-title">🧩 底层实现原理</h3>
+        <div class="concept-text">
+          <p>
+            <strong>Set</strong> 的底层实现通常基于<strong>哈希表（Hash Table）</strong>。每个元素在插入时会通过哈希函数计算出一个唯一的哈希值，然后将其存储到哈希表的对应位置。这样做有以下几个优点：
+          </p>
+          <ul>
+            <li>
+              <strong>查找、添加、删除操作的时间复杂度为 O(1)</strong>，即操作速度非常快，不会因为数据量变大而明显变慢。
+            </li>
+            <li>
+              <strong>自动去重</strong>：哈希表的 key 唯一，插入重复元素时会自动覆盖，保证集合中没有重复值。
+            </li>
+            <li>
+              <strong>支持任意类型的值</strong>：Set 可以存储对象、数组等任意类型，底层通过引用地址进行判断。
+            </li>
           </ul>
+          <p>
+            <strong>高效的原因：</strong>哈希表通过哈希函数将元素快速定位到内存中的某个位置，避免了线性遍历，因此无论集合有多少元素，查找和操作的速度都非常快。
+          </p>
+          <div class="principle-example">
+            <strong>简化示意：</strong>
+            <pre><code>// 模拟 Set 的底层结构
+const table = {};
+function add(value) {
+  const key = hash(value); // 计算哈希值
+  table[key] = value;      // 存储到哈希表
+}
+function has(value) {
+  const key = hash(value);
+  return table.hasOwnProperty(key);
+}</code></pre>
+            <span class="tip">（实际实现更复杂，涉及哈希冲突处理等）</span>
+          </div>
         </div>
-      </section>
+      </div>
 
+      <!-- Set 优缺点 -->
+      <div class="pros-cons-card">
+        <h3 class="card-title">⚖️ 优缺点分析</h3>
+        <div class="pros-cons-grid">
+          <div class="pros">
+            <h4>✅ 优点</h4>
+            <ul>
+              <li>自动去重，无需手动处理</li>
+              <li>查找性能优秀 O(1)</li>
+              <li>支持任意类型值</li>
+              <li>有序迭代</li>
+              <li>API 简洁易用</li>
+            </ul>
+          </div>
+          <div class="cons">
+            <h4>❌ 缺点</h4>
+            <ul>
+              <li>不支持索引访问</li>
+              <li>无法直接获取随机元素</li>
+              <li>对象比较基于引用</li>
+              <li>内存占用相对较高</li>
+            </ul>
+          </div>
+        </div>
+      </div>
 
-      <!-- 基础用法 -->
-      <section class="section basic-usage">
-        <h2 class="section-title">🔨 基础用法</h2>
-        <div class="code-example">
-          <pre class="code-block"><code>// 初始化Map
-const map = new Map();
+      <!-- Set 适用场景 -->
+      <div class="scenarios-card">
+        <h3 class="card-title">💡 适用场景</h3>
+        <div class="scenarios-grid">
+          <div class="scenario-item">
+            <div class="scenario-icon">🔄</div>
+            <h4>数组去重</h4>
+            <pre><code>const unique = [...new Set(array)];</code></pre>
+          </div>
+          <div class="scenario-item">
+            <div class="scenario-icon">🔍</div>
+            <h4>快速查找</h4>
+            <pre><code>const cache = new Set();
+if (cache.has(key)) { ... }</code></pre>
+          </div>
+          <div class="scenario-item">
+            <div class="scenario-icon">📊</div>
+            <h4>集合运算</h4>
+            <pre><code>// 并集、交集、差集
+const union = new Set([...setA, ...setB]);</code></pre>
+          </div>
+          <div class="scenario-item">
+            <div class="scenario-icon">🎯</div>
+            <h4>状态追踪</h4>
+            <pre><code>const visited = new Set();
+visited.add(element);</code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
 
-// 添加元素
-map.set('age', 25);
+    <!-- Map 部分 -->
+    <section class="data-structure-section">
+      <div class="section-header">
+        <h2 class="section-title">🔹 Map 映射</h2>
+        <div class="title-decoration"></div>
+      </div>
+
+      <!-- Map 概念 -->
+      <div class="concept-card">
+        <h3 class="card-title">📖 概念定义</h3>
+        <p class="concept-text">
+          Map 是 ES6 引入的键值对集合，类似于对象，但是键可以是任意类型。
+          Map 提供了更强大的键值对管理能力，是 Object 的现代化替代方案。
+        </p>
+        <div class="code-demo">
+          <pre><code>const map = new Map();
+map.set('name', 'Alice');
 map.set(42, 'The Answer');
-
-// 获取值
-console.log(map.get('age')); // 25
-
-// 检查存在
-console.log(map.has(42));    // true
-
-// 删除元素
-map.delete('age');
-
-// 清空Map
-map.clear();</code></pre>
+map.set({}, 'Object Key');</code></pre>
         </div>
-      </section>
+      </div>
 
-      <!-- 常用方法 -->
-      <section class="section methods">
-        <h2 class="section-title">🛠️ 常用方法</h2>
-        <div class="method-grid">
-          <div class="method-card">
-            <h3>map.set(key, value)</h3>
-            <p>添加/更新键值对，返回Map本身</p>
+      <!-- Map 特点 -->
+      <div class="features-card">
+        <h3 class="card-title">✨ 核心特点</h3>
+        <div class="features-grid">
+          <div class="feature-item">
+            <div class="feature-icon">🔑</div>
+            <h4>任意键类型</h4>
+            <p>键可以是对象、函数等任意类型</p>
           </div>
-          <div class="method-card">
-            <h3>map.get(key)</h3>
-            <p>获取对应键的值，不存在返回undefined</p>
+          <div class="feature-item">
+            <div class="feature-icon">📏</div>
+            <h4>内置大小</h4>
+            <p>通过 size 属性直接获取元素数量</p>
           </div>
-          <div class="method-card">
-            <h3>map.has(key)</h3>
-            <p>判断是否存在指定键</p>
+          <div class="feature-item">
+            <div class="feature-icon">🔄</div>
+            <h4>有序迭代</h4>
+            <p>按照插入顺序进行迭代</p>
           </div>
-          <div class="method-card">
-            <h3>map.delete(key)</h3>
-            <p>删除指定键及其对应值</p>
+          <div class="feature-item">
+            <div class="feature-icon">⚡</div>
+            <h4>高性能</h4>
+            <p>增删查改操作性能优秀</p>
           </div>
         </div>
-      </section>
+      </div>
 
-      <!-- 对比表格 -->
-      <section class="section comparison">
-        <h2 class="section-title">🆚 与Object对比</h2>
-        <table class="comparison-table">
+      <!-- Map API -->
+      <div class="api-card">
+        <h3 class="card-title">🛠️ API 方法</h3>
+        <div class="api-table">
+          <div class="api-header">
+            <span class="api-method">方法</span>
+            <span class="api-desc">描述</span>
+            <span class="api-return">返回值</span>
+            <span class="api-example">示例</span>
+          </div>
+          <div class="api-row">
+            <code class="api-method">set(key, value)</code>
+            <span class="api-desc">设置键值对</span>
+            <span class="api-return">Map</span>
+            <code class="api-example">map.set('key', 'value')</code>
+          </div>
+          <div class="api-row">
+            <code class="api-method">get(key)</code>
+            <span class="api-desc">获取值</span>
+            <span class="api-return">Value</span>
+            <code class="api-example">map.get('key')</code>
+          </div>
+          <div class="api-row">
+            <code class="api-method">has(key)</code>
+            <span class="api-desc">检查键是否存在</span>
+            <span class="api-return">Boolean</span>
+            <code class="api-example">map.has('key')</code>
+          </div>
+          <div class="api-row">
+            <code class="api-method">delete(key)</code>
+            <span class="api-desc">删除键值对</span>
+            <span class="api-return">Boolean</span>
+            <code class="api-example">map.delete('key')</code>
+          </div>
+          <div class="api-row">
+            <code class="api-method">clear()</code>
+            <span class="api-desc">清空所有元素</span>
+            <span class="api-return">undefined</span>
+            <code class="api-example">map.clear()</code>
+          </div>
+          <div class="api-row">
+            <code class="api-method">size</code>
+            <span class="api-desc">获取元素数量</span>
+            <span class="api-return">Number</span>
+            <code class="api-example">map.size</code>
+          </div>
+        </div>
+      </div>
+
+      <!-- Map 遍历 -->
+      <div class="iteration-card">
+        <h3 class="card-title">🔄 遍历方法</h3>
+        <div class="iteration-methods">
+          <div class="method-item">
+            <h4>forEach()</h4>
+            <pre><code>map.forEach((value, key, map) => {
+  console.log(key, value);
+});</code></pre>
+          </div>
+          <div class="method-item">
+            <h4>for...of entries()</h4>
+            <pre><code>for (const [key, value] of map.entries()) {
+  console.log(key, value);
+}</code></pre>
+          </div>
+          <div class="method-item">
+            <h4>keys()</h4>
+            <pre><code>for (const key of map.keys()) {
+  console.log(key);
+}</code></pre>
+          </div>
+          <div class="method-item">
+            <h4>values()</h4>
+            <pre><code>for (const value of map.values()) {
+  console.log(value);
+}</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- INSERT_YOUR_CODE -->
+      <!-- Map 底层实现原理 -->
+      <div class="iteration-card">
+        <h3 class="card-title">🧩 底层实现原理</h3>
+        <div class="concept-text">
+          <p>
+            <strong>Map</strong> 的底层实现同样基于<strong>哈希表（Hash Table）</strong>，但与 Set 不同，Map 存储的是<strong>键值对（key-value）</strong>，并且键可以是任意类型（包括对象、函数等）。
+          </p>
+          <ul>
+            <li>
+              <strong>高效查找、插入、删除</strong>：通过哈希函数将键映射到内存中的唯一位置，查找、添加、删除操作的时间复杂度为 O(1)。
+            </li>
+            <li>
+              <strong>键的唯一性</strong>：每个键在 Map 中只能出现一次，后插入的同键会覆盖前一个。
+            </li>
+            <li>
+              <strong>有序存储</strong>：Map 保证键值对的迭代顺序与插入顺序一致。
+            </li>
+            <li>
+              <strong>支持任意类型键</strong>：不仅仅是字符串或数字，任何对象都可以作为键。
+            </li>
+          </ul>
+          <p>
+            <strong>高性能的原因：</strong>哈希表通过哈希函数将键快速定位，避免了线性遍历，提升了操作效率。实际实现中还会处理哈希冲突（如拉链法、开放寻址法等）。
+          </p>
+          <div class="principle-example">
+            <strong>简化示意：</strong>
+            <pre><code>// 模拟 Map 的底层结构
+const table = {};
+function set(key, value) {
+  const hashKey = hash(key); // 计算哈希值
+  table[hashKey] = { key, value }; // 存储键值对
+}
+function get(key) {
+  const hashKey = hash(key);
+  if (table[hashKey] && table[hashKey].key === key) {
+    return table[hashKey].value;
+  }
+  return undefined;
+}</code></pre>
+            <span class="tip">（实际实现更复杂，需处理哈希冲突和引用类型键的唯一性）</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Map 优缺点 -->
+      <div class="pros-cons-card">
+        <h3 class="card-title">⚖️ 优缺点分析</h3>
+        <div class="pros-cons-grid">
+          <div class="pros">
+            <h4>✅ 优点</h4>
+            <ul>
+              <li>支持任意类型键</li>
+              <li>内置 size 属性</li>
+              <li>有序迭代</li>
+              <li>高性能操作</li>
+              <li>API 统一</li>
+            </ul>
+          </div>
+          <div class="cons">
+            <h4>❌ 缺点</h4>
+            <ul>
+              <li>不支持点语法访问</li>
+              <li>JSON 序列化复杂</li>
+              <li>对象键比较基于引用</li>
+              <li>内存占用较高</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Map 适用场景 -->
+      <div class="scenarios-card">
+        <h3 class="card-title">💡 适用场景</h3>
+        <div class="scenarios-grid">
+          <div class="scenario-item">
+            <div class="scenario-icon">📊</div>
+            <h4>频率统计</h4>
+            <pre><code>const freq = new Map();
+array.forEach(item => {
+  freq.set(item, (freq.get(item) || 0) + 1);
+});</code></pre>
+          </div>
+          <div class="scenario-item">
+            <div class="scenario-icon">💾</div>
+            <h4>缓存机制</h4>
+            <pre><code>const cache = new Map();
+if (cache.has(key)) {
+  return cache.get(key);
+}</code></pre>
+          </div>
+          <div class="scenario-item">
+            <div class="scenario-icon">🔗</div>
+            <h4>数据关联</h4>
+            <pre><code>const userMap = new Map();
+userMap.set(userId, userData);</code></pre>
+          </div>
+          <div class="scenario-item">
+            <div class="scenario-icon">🎯</div>
+            <h4>状态管理</h4>
+            <pre><code>const state = new Map();
+state.set('loading', true);</code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 对比表格 -->
+    <section class="comparison-section">
+      <h2 class="section-title">🆚 Set vs Map vs Object 对比</h2>
+      <div class="comparison-table">
+        <table>
           <thead>
             <tr>
               <th>特性</th>
+              <th>Set</th>
               <th>Map</th>
               <th>Object</th>
             </tr>
@@ -87,675 +475,593 @@ map.clear();</code></pre>
           <tbody>
             <tr>
               <td>键类型</td>
-              <td>任意值</td>
+              <td>无键概念</td>
+              <td>任意类型</td>
               <td>String/Symbol</td>
             </tr>
             <tr>
-              <td>顺序性</td>
+              <td>值类型</td>
+              <td>任意类型</td>
+              <td>任意类型</td>
+              <td>任意类型</td>
+            </tr>
+            <tr>
+              <td>大小获取</td>
+              <td>set.size</td>
+              <td>map.size</td>
+              <td>Object.keys().length</td>
+            </tr>
+            <tr>
+              <td>迭代顺序</td>
+              <td>插入顺序</td>
               <td>插入顺序</td>
               <td>无序</td>
             </tr>
             <tr>
-              <td>Size获取</td>
-              <td>map.size</td>
-              <td>手动计算</td>
+              <td>性能</td>
+              <td>优秀</td>
+              <td>优秀</td>
+              <td>良好</td>
+            </tr>
+            <tr>
+              <td>JSON 支持</td>
+              <td>需转换</td>
+              <td>需转换</td>
+              <td>原生支持</td>
             </tr>
           </tbody>
         </table>
-      </section>
-    </main>
-
-    <!-- 遍历Map的方法 -->
-    <section class="section traversal">
-      <h2 class="section-title">🔍 遍历Map的方法</h2>
-      <div class="content-box">
-        <p>Map提供了多种遍历方法，以下是常用的几种：</p>
-        <ul class="traversal-list">
-          <li>
-            <strong>map.forEach(callback)</strong>
-            <p>对Map中的每个元素执行一次提供的函数，顺序与插入顺序一致。</p>
-            <pre class="code-example"><code>
-  map.forEach((value, key) => {
-    console.log(key, value);
-  });</code></pre>
-          </li>
-          <li>
-            <strong>map.keys()</strong>
-            <p>返回一个包含Map中所有键的迭代器。</p>
-            <pre class="code-example"><code>
-  for (const key of map.keys()) {
-    console.log(key);
-  }</code></pre>
-          </li>
-          <li>
-            <strong>map.values()</strong>
-            <p>返回一个包含Map中所有值的迭代器。</p>
-            <pre class="code-example"><code>
-  for (const value of map.values()) {
-    console.log(value);
-  }</code></pre>
-          </li>
-          <li>
-            <strong>map.entries()</strong>
-            <p>返回一个包含Map中所有键值对的迭代器。</p>
-            <pre class="code-example"><code>
-  for (const [key, value] of map.entries()) {
-    console.log(key, value);
-  }</code></pre>
-          </li>
-        </ul>
       </div>
     </section>
 
-    <!-- 使用场景 -->
-    <section class="section usage-scenarios">
-      <h2 class="section-title">💡 Map使用场景</h2>
-      <div class="usage-list">
-        <div class="usage-item">
-          <h3>频率统计</h3>
-          <p>使用Map可以轻松统计元素出现的频率，例如在数组中统计每个元素的出现次数。</p>
-          <pre class="code-block"><code>
-  const array = ['apple', 'banana', 'apple', 'orange', 'banana', 'banana'];
-  const frequencyMap = new Map();
-
-  array.forEach(item => {
-    frequencyMap.set(item, (frequencyMap.get(item) || 0) + 1);
-  });
-
-  console.log(frequencyMap); // Map(3) { 'apple' => 2, 'banana' => 3, 'orange' => 1 }
-        </code></pre>
-        </div>
-        <div class="usage-item">
-          <h3>缓存机制</h3>
-          <p>Map可以用作缓存存储，避免重复计算。例如，存储函数的计算结果以提高性能。</p>
-          <pre class="code-block"><code>
-  const cache = new Map();
-
-  function expensiveCalculation(num) {
-    if (cache.has(num)) {
-    return cache.get(num); // 从缓存中获取结果
-    }
-    const result = num * num; // 假设这是一个耗时的计算
-    cache.set(num, result); // 存储结果到缓存
-    return result;
-  }
-
-  console.log(expensiveCalculation(5)); // 25
-  console.log(expensiveCalculation(5)); // 直接从缓存获取
-        </code></pre>
-        </div>
-        <div class="usage-item">
-          <h3>数据关联</h3>
-          <p>Map可以用于将键值对关联起来，例如将用户ID与用户对象关联。</p>
-          <pre class="code-block"><code>
-  const userMap = new Map();
-  userMap.set(1, { name: 'Alice', age: 30 });
-  userMap.set(2, { name: 'Bob', age: 25 });
-
-  console.log(userMap.get(1)); // { name: 'Alice', age: 30 }
-        </code></pre>
-        </div>
-      </div>
-    </section>
-
-    <!-- 注意事项 -->
-    <footer class="doc-footer">
-      <div class="notice">
-        <h3>💡 注意事项</h3>
-        <ul>
-          <li>使用对象作为键时，需保持对象引用</li>
-          <li>NaN可以作为Map的键</li>
-          <li>优先使用forEach或for...of进行迭代</li>
-        </ul>
-      </div>
-    </footer>
-  </div>
-  <div class="set-guide">
-    <header class="guide-header">
-      <h1 class="title">Set 基本指南</h1>
-      <div class="decorative-line"></div>
-    </header>
-
-    <div class="content-wrapper">
-      <!-- 定义章节 -->
-      <section class="definition-section card">
-        <h2 class="section-title gradient-text">📚 Set定义</h2>
-        <div class="section-content">
-          <p class="highlight-text">允许存储任何类型唯一值的集合，具有快速查找能力</p>
-          <pre class="code-block">const set = new Set([1, 2, 3]);</pre>
-        </div>
-        <div class="notice">
-          <p>注意：但是存入的是对象时，会以对象的内存地址作为判断依据，所以即使内容相同，也会被认为是不同的对象。</p>
-        </div>
-      </section>
-
-      <!-- 核心特性 -->
-      <section class="features-section card">
-        <h2 class="section-title gradient-text">✨ 核心特性</h2>
-        <div class="features-grid">
-          <div v-for="(feature, index) in features" :key="index" class="feature-card">
-            <div class="feature-icon" :style="{ backgroundColor: feature.color }">
-              {{ feature.icon }}
-            </div>
-            <h3>{{ feature.title }}</h3>
-            <p>{{ feature.description }}</p>
-            <pre v-if="feature.example" class="example-code">{{ feature.example }}</pre>
-          </div>
-        </div>
-      </section>
-
-      <!-- 常用方法 -->
-      <section class="methods-section card">
-        <h2 class="section-title gradient-text">🔧 常用方法</h2>
-        <div class="methods-grid">
-          <div v-for="(method, index) in methods" :key="index" class="method-card">
-            <div class="method-header">
-              <span class="method-icon">{{ method.icon }}</span>
-              <code class="method-name">{{ method.name }}</code>
-            </div>
-            <p class="method-desc">{{ method.description }}</p>
-            <pre class="code-example">{{ method.example }}</pre>
-          </div>
-        </div>
-      </section>
-
-      <!-- 遍历Set的方法 -->
-      <section class="section traversal-set card">
-        <h2 class="section-title">🔍 遍历Set的方法</h2>
-        <div class="content-box">
-          <p>Set提供了多种遍历方法，以下是常用的几种：</p>
-          <ul class="traversal-list">
-            <li>
-              <strong>set.forEach(callback)</strong>
-              <p>对Set中的每个元素执行一次提供的函数，顺序与插入顺序一致。</p>
-              <pre class="code-example"><code>
-      set.forEach(value => {
-        console.log(value);
-      });</code></pre>
-            </li>
-            <li>
-              <strong>set.values()</strong>
-              <p>返回一个包含Set中所有值的迭代器。</p>
-              <pre class="code-example"><code>
-      for (const value of set.values()) {
-        console.log(value);
-      }</code></pre>
-            </li>
-            <li>
-              <strong>set.keys()</strong>
-              <p>与set.values()相同，返回一个包含Set中所有值的迭代器。</p>
-              <pre class="code-example"><code>
-      for (const key of set.keys()) {
-        console.log(key);
-      }</code></pre>
-            </li>
-            <li>
-              <strong>set.entries()</strong>
-              <p>返回一个包含Set中所有键值对的迭代器，键和值相同。</p>
-              <pre class="code-example"><code>
-      for (const entry of set.entries()) {
-        console.log(entry);
-      }</code></pre>
-            </li>
+    <!-- 最佳实践 -->
+    <section class="best-practices-section">
+      <h2 class="section-title">🎯 最佳实践</h2>
+      <div class="practices-grid">
+        <div class="practice-item">
+          <h3>选择合适的结构</h3>
+          <ul>
+            <li>需要去重 → 使用 Set</li>
+            <li>需要键值对 → 使用 Map</li>
+            <li>需要 JSON 序列化 → 使用 Object</li>
           </ul>
         </div>
-      </section>
-
-      <!-- 使用场景 -->
-      <section class="usage-section card">
-        <h2 class="section-title gradient-text">💡 使用场景</h2>
-        <div class="usage-stack">
-          <div v-for="(usage, index) in useCases" :key="index" class="usage-item">
-            <div class="usage-index">#{{ index + 1 }}</div>
-            <div class="usage-content">
-              <h3>{{ usage.scenario }}</h3>
-              <pre class="code-example">{{ usage.example }}</pre>
-              <p class="usage-desc">{{ usage.description }}</p>
-            </div>
-          </div>
+        <div class="practice-item">
+          <h3>性能优化</h3>
+          <ul>
+            <li>预分配容量避免扩容</li>
+            <li>使用 WeakMap/WeakSet 避免内存泄漏</li>
+            <li>及时清理不需要的数据</li>
+          </ul>
         </div>
-      </section>
-    </div>
+        <div class="practice-item">
+          <h3>代码可读性</h3>
+          <ul>
+            <li>使用语义化的变量名</li>
+            <li>添加适当的注释</li>
+            <li>保持代码结构清晰</li>
+          </ul>
+        </div>
+      </div>
+    </section>
   </div>
 </template>
 
 <script lang="ts" setup>
-interface Feature {
-  title: string
-  description: string
-  icon: string
-  color: string
-  example?: string
-}
-
-interface Method {
-  name: string
-  description: string
-  example: string
-  icon: string
-}
-
-interface UseCase {
-  scenario: string
-  example: string
-  description: string
-}
-
-
-
-const features: Feature[] = [
-  {
-    title: '值唯一性',
-    description: '自动去重，使用SameValueZero算法比较',
-    icon: '🔑',
-    color: '#ff6b6b',
-    example: 'new Set([1, 1, 2]).size // 2',
-  },
-  {
-    title: '任意类型',
-    description: '可以存储对象、函数等任意类型值',
-    icon: '🎁',
-    color: '#69b1ff',
-    example: 'const set = new Set([{}, {}])',
-  },
-  {
-    title: '有序迭代',
-    description: '按插入顺序迭代，支持for...of遍历',
-    icon: '🔄',
-    color: '#42b983',
-    example: 'for (const item of set) { ... }',
-  },
-]
-
-const methods: Method[] = [
-  {
-    name: 'add(value)',
-    description: '添加新元素，返回Set本身',
-    example: 'set.add(4).add(5);',
-    icon: '➕',
-  },
-  {
-    name: 'has(value)',
-    description: '检查值是否存在，返回布尔值',
-    example: 'set.has(2); // true',
-    icon: '🔍',
-  },
-  {
-    name: 'delete(value)',
-    description: '删除指定值，返回是否删除成功',
-    example: 'set.delete(3); // true',
-    icon: '🗑️',
-  },
-  {
-    name: 'clear()',
-    description: '清空所有元素',
-    example: 'set.clear();',
-    icon: '🧹',
-  },
-]
-
-const useCases: UseCase[] = [
-  {
-    scenario: '数组去重',
-    example: `const arr = [1, 2, 2, 3];
-const unique = [...new Set(arr)]; // [1, 2, 3]`,
-    description: '最简洁的数组去重方案',
-  },
-  {
-    scenario: '集合运算',
-    example: `// 并集
-new Set([...setA, ...setB]);
-// 交集
-new Set([...setA].filter(x => setB.has(x)));`,
-    description: '实现数学集合操作',
-  },
-  {
-    scenario: 'DOM元素追踪',
-    example: `const clickedElements = new Set();
-element.addEventListener('click', () => {
-  clickedElements.add(element);
-});`,
-    description: '跟踪已交互的页面元素',
-  },
-
-  {
-    scenario: '唯一值存储',
-    example: `const uniqueValues = new Set([1, 2, 2, 3]); // Set(3) { 1, 2, 3 }`,
-    description: '确保集合中的值是唯一的，避免重复。',
-  },
-  {
-    scenario: '快速查找',
-    example: `const set = new Set(['apple', 'banana', 'orange']);
-    console.log(set.has('banana')); // true`,
-    description: 'Set提供快速的查找能力，适合需要频繁检查存在性的场景。',
-  },
-
-]
+// 组件逻辑可以在这里添加
 </script>
 
 <style lang="less" scoped>
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;500&family=Roboto:wght@300;500;700&display=swap');
-
+// 变量定义
 @primary-color: #2c3e50;
-@secondary-color: #42b983;
-@accent-color: #ff6b6b;
-@code-bg: #f8f9fa;
+@secondary-color: #3498db;
+@accent-color: #e74c3c;
+@success-color: #27ae60;
+@warning-color: #f39c12;
+@light-bg: #f8f9fa;
+@border-color: #e9ecef;
+@text-color: #495057;
+@code-bg: #f1f3f4;
 
-.notice {
-  color: #ff6b6b;
+// 全局样式
+* {
+  box-sizing: border-box;
 }
 
-li,
-p,
-td,
-pre,
-h3 {
-  color: #000;
-}
-
-.code-block {
-  color: #000;
-}
-
-.map-doc-container {
-  max-width: 1000px;
-  margin: 2rem auto;
+.set-map-container {
+  max-width: 1200px;
+  margin: 0 auto;
   padding: 2rem;
-  background: #f8f9fa;
-  border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  font-family: 'Roboto', sans-serif;
-
-  .doc-header {
-    text-align: center;
-    margin-bottom: 2rem;
-
-    .title {
-      color: #2c3e50;
-      font-size: 2.5rem;
-      margin-bottom: 0.5rem;
-      font-weight: 700;
-      text-decoration: underline;
-      text-decoration-color: #3498db;
-    }
-
-    .subtitle {
-      color: #7f8c8d;
-      font-size: 1.2rem;
-    }
-  }
-
-  .doc-content {
-    .section {
-      margin-bottom: 2.5rem;
-      background: white;
-      padding: 1.5rem;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-
-      .section-title {
-        color: #3498db;
-        font-size: 1.8rem;
-        margin-bottom: 1rem;
-        padding-bottom: 0.5rem;
-        border-bottom: 2px solid #eee;
-      }
-
-      .code-example {
-        background: #2c3e50;
-        border-radius: 6px;
-        padding: 1rem;
-        overflow-x: auto;
-
-        .code-block {
-          color: #000;
-          font-family: 'Roboto Mono', monospace;
-          font-size: 0.9rem;
-          line-height: 1.5;
-          margin: 0;
-        }
-      }
-
-      .method-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 1rem;
-
-        .method-card {
-          background: #f8f9fa;
-          padding: 1rem;
-          border-radius: 6px;
-          transition: transform 0.2s;
-
-          &:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-          }
-
-          h3 {
-            color: #e74c3c;
-            margin-bottom: 0.5rem;
-            font-size: 1.1rem;
-          }
-
-          p {
-            color: #7f8c8d;
-            font-size: 0.9rem;
-          }
-        }
-      }
-
-      .comparison-table {
-        width: 100%;
-        border-collapse: collapse;
-
-        th,
-        td {
-          padding: 1rem;
-          text-align: left;
-          border-bottom: 1px solid #eee;
-        }
-
-        th {
-          background: #3498db;
-          color: white;
-        }
-
-        tr:nth-child(even) {
-          background: #f8f9fa;
-        }
-      }
-    }
-  }
-
-  .doc-footer {
-    margin-top: 2rem;
-    padding: 1rem;
-    background: #fff3cd;
-    border-radius: 8px;
-    border-left: 4px solid #ffc107;
-
-    .notice {
-      h3 {
-        color: #d39e00;
-        margin-bottom: 0.8rem;
-      }
-
-      ul {
-        list-style-type: '👉 ';
-        padding-left: 1.5rem;
-
-        li {
-          margin-bottom: 0.5rem;
-        }
-      }
-    }
-  }
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.6;
+  color: @text-color;
+  background: white;
 }
 
-@media (max-width: 768px) {
-  .map-doc-container {
-    padding: 1rem;
-    margin: 1rem;
-
-    .doc-header .title {
-      font-size: 2rem;
-    }
-
-    .method-grid {
-      grid-template-columns: 1fr !important;
-    }
-  }
-}
-
-.set-guide {
-  max-width: 1000px;
-  margin: 2rem auto;
-  padding: 0 2rem;
-  font-family: 'Helvetica Neue', Arial, sans-serif;
-}
-
-.guide-header {
+// 页面标题
+.page-header {
   text-align: center;
   margin-bottom: 3rem;
+  padding: 2rem 0;
+  background: linear-gradient(135deg, @light-bg 0%, #ffffff 100%);
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 
-  .title {
-    font-size: 2.8rem;
+  .main-title {
+    font-size: 2.5rem;
+    font-weight: 700;
     color: @primary-color;
-    margin-bottom: 1rem;
-    letter-spacing: 1px;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.5px;
   }
 
-  .decorative-line {
-    width: 100px;
-    height: 4px;
+  .subtitle {
+    font-size: 1.1rem;
+    color: #6c757d;
+    font-weight: 400;
+  }
+}
+
+// 数据结构部分
+.data-structure-section {
+  margin-bottom: 4rem;
+}
+
+.section-header {
+  margin-bottom: 2rem;
+  text-align: center;
+
+  .section-title {
+    font-size: 2rem;
+    font-weight: 600;
+    color: @primary-color;
+    margin-bottom: 0.5rem;
+  }
+
+  .title-decoration {
+    width: 60px;
+    height: 3px;
     background: linear-gradient(90deg, @secondary-color, @accent-color);
     margin: 0 auto;
     border-radius: 2px;
   }
 }
 
-.card {
+// 卡片基础样式
+.concept-card,
+.features-card,
+.api-card,
+.iteration-card,
+.pros-cons-card,
+.scenarios-card {
   background: white;
   border-radius: 12px;
   padding: 2rem;
   margin-bottom: 2rem;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
-}
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid @border-color;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 
-.section-title {
-  font-size: 1.8rem;
-  margin-bottom: 1.5rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 2px solid #eee;
-}
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  }
 
-.gradient-text {
-  background: linear-gradient(45deg, @secondary-color, @accent-color);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.features-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 2rem;
-
-  .feature-card {
-    padding: 1.5rem;
-    text-align: center;
-    border-radius: 8px;
-    transition: transform 0.2s;
-
-    &:hover {
-      transform: translateY(-5px);
-    }
-
-    .feature-icon {
-      width: 60px;
-      height: 60px;
-      margin: 0 auto 1rem;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.8rem;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
+  .card-title {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: @primary-color;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid @border-color;
   }
 }
 
-.methods-grid {
+// 概念卡片
+.concept-text {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: @text-color;
+  margin-bottom: 1.5rem;
+}
+
+.code-demo {
+  background: @code-bg;
+  border-radius: 8px;
+  padding: 1.5rem;
+  border-left: 4px solid @secondary-color;
+
+  pre {
+    margin: 0;
+    font-family: 'Fira Code', 'Monaco', 'Consolas', monospace;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: @primary-color;
+    overflow-x: auto;
+  }
+}
+
+// 特性网格
+.features-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 1.5rem;
 
-  .method-card {
+  .feature-item {
+    text-align: center;
     padding: 1.5rem;
-    background: #f8fafc;
+    background: @light-bg;
     border-radius: 8px;
+    transition: transform 0.2s ease;
 
-    .method-header {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
+    &:hover {
+      transform: translateY(-3px);
+    }
+
+    .feature-icon {
+      font-size: 2rem;
       margin-bottom: 1rem;
+    }
 
-      .method-icon {
-        font-size: 1.5rem;
-      }
+    h4 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: @primary-color;
+      margin-bottom: 0.5rem;
+    }
 
-      .method-name {
-        color: @secondary-color;
-        font-weight: 600;
-      }
+    p {
+      font-size: 0.9rem;
+      color: #6c757d;
+      margin: 0;
     }
   }
 }
 
-.usage-stack {
-  display: grid;
-  gap: 1.5rem;
+// API 表格
+.api-table {
+  border: 1px solid @border-color;
+  border-radius: 8px;
+  overflow: hidden;
 
-  .usage-item {
-    display: flex;
-    gap: 1.5rem;
-    padding: 1.5rem;
-    background: #f8fafc;
-    border-radius: 8px;
+  .api-header {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr 1.5fr;
+    background: @primary-color;
+    color: white;
+    font-weight: 600;
+    padding: 1rem;
 
-    .usage-index {
-      width: 50px;
-      height: 50px;
-      flex-shrink: 0;
+    span {
+      padding: 0.5rem;
+    }
+  }
+
+  .api-row {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr 1.5fr;
+    border-bottom: 1px solid @border-color;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background: @light-bg;
+    }
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    .api-method {
       background: @secondary-color;
       color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 8px;
-      font-weight: bold;
-      font-size: 1.2rem;
+      padding: 0.5rem;
+      border-radius: 4px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.85rem;
+    }
+
+    .api-desc {
+      padding: 0.5rem;
+      color: @text-color;
+    }
+
+    .api-return {
+      padding: 0.5rem;
+      color: @accent-color;
+      font-weight: 500;
+    }
+
+    .api-example {
+      padding: 0.5rem;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.85rem;
+      color: @primary-color;
     }
   }
 }
 
-.code-block,
-.code-example {
-  background: @code-bg;
-  padding: 1.2rem;
-  border-radius: 8px;
-  font-family: 'Fira Code', monospace;
-  font-size: 0.95rem;
-  line-height: 1.6;
-  margin: 1rem 0;
-  border: 1px solid #eee;
+// 迭代方法
+.iteration-methods {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+
+  .method-item {
+    background: @light-bg;
+    padding: 1.5rem;
+    border-radius: 8px;
+    border-left: 4px solid @secondary-color;
+
+    h4 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: @primary-color;
+      margin-bottom: 1rem;
+    }
+
+    pre {
+      background: @code-bg;
+      padding: 1rem;
+      border-radius: 6px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.85rem;
+      line-height: 1.4;
+      margin: 0;
+      overflow-x: auto;
+    }
+  }
 }
 
-.highlight-text {
-  color: @secondary-color;
-  font-weight: 600;
-  font-size: 1.1rem;
-  margin: 1rem 0;
+// 优缺点
+.pros-cons-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+
+  .pros,
+  .cons {
+    h4 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid @border-color;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+
+      li {
+        padding: 0.5rem 0;
+        padding-left: 1.5rem;
+        position: relative;
+
+        &::before {
+          content: '•';
+          position: absolute;
+          left: 0;
+          color: @secondary-color;
+          font-weight: bold;
+        }
+      }
+    }
+  }
+
+  .pros h4 {
+    color: @success-color;
+  }
+
+  .cons h4 {
+    color: @accent-color;
+  }
+}
+
+// 适用场景
+.scenarios-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+
+  .scenario-item {
+    background: @light-bg;
+    padding: 1.5rem;
+    border-radius: 8px;
+    text-align: center;
+    transition: transform 0.2s ease;
+
+    &:hover {
+      transform: translateY(-3px);
+    }
+
+    .scenario-icon {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    h4 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: @primary-color;
+      margin-bottom: 1rem;
+    }
+
+    pre {
+      background: @code-bg;
+      padding: 1rem;
+      border-radius: 6px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.8rem;
+      line-height: 1.4;
+      margin: 0;
+      text-align: left;
+      overflow-x: auto;
+    }
+  }
+}
+
+// 对比表格
+.comparison-section {
+  margin: 4rem 0;
+
+  .section-title {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 600;
+    color: @primary-color;
+    margin-bottom: 2rem;
+  }
+
+  .comparison-table {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    border: 1px solid @border-color;
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+
+      th,
+      td {
+        padding: 1rem;
+        text-align: left;
+        border-bottom: 1px solid @border-color;
+      }
+
+      th {
+        background: @primary-color;
+        color: white;
+        font-weight: 600;
+        font-size: 1rem;
+      }
+
+      tr:nth-child(even) {
+        background: @light-bg;
+      }
+
+      tr:hover {
+        background: #e3f2fd;
+      }
+    }
+  }
+}
+
+// 最佳实践
+.best-practices-section {
+  margin: 4rem 0;
+
+  .section-title {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 600;
+    color: @primary-color;
+    margin-bottom: 2rem;
+  }
+
+  .practices-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+
+    .practice-item {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      border: 1px solid @border-color;
+
+      h3 {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: @primary-color;
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid @border-color;
+      }
+
+      ul {
+        list-style: none;
+        padding: 0;
+
+        li {
+          padding: 0.5rem 0;
+          padding-left: 1.5rem;
+          position: relative;
+
+          &::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: @secondary-color;
+            font-weight: bold;
+          }
+        }
+      }
+    }
+  }
+}
+
+// 响应式设计
+@media (max-width: 768px) {
+  .set-map-container {
+    padding: 1rem;
+  }
+
+  .page-header .main-title {
+    font-size: 2rem;
+  }
+
+  .features-grid,
+  .iteration-methods,
+  .scenarios-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .pros-cons-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .api-table {
+    .api-header,
+    .api-row {
+      grid-template-columns: 1fr;
+      gap: 0.5rem;
+    }
+
+    .api-header {
+      display: none;
+    }
+
+    .api-row {
+      border: 1px solid @border-color;
+      margin-bottom: 1rem;
+      border-radius: 8px;
+      padding: 1rem;
+
+      .api-method,
+      .api-desc,
+      .api-return,
+      .api-example {
+        padding: 0.25rem 0;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .page-header .main-title {
+    font-size: 1.5rem;
+  }
+
+  .section-title {
+    font-size: 1.5rem;
+  }
+
+  .card-title {
+    font-size: 1.2rem;
+  }
 }
 </style>

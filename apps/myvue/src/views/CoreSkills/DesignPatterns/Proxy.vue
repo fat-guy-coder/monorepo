@@ -419,7 +419,6 @@ const loadImage = (filename: string) => {
     }
 
     pre {
-      background: #2d2d2d;
       color: #f8f8f2;
       padding: 15px;
       border-radius: 5px;

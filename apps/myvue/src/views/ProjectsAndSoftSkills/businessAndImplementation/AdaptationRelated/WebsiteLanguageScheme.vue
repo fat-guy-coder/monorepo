@@ -1,7 +1,7 @@
 <template>
   <div class="i18n-container">
     <header class="header">
-      <h1>前端国际化方案全解析</h1>
+      <h1>前端国际化方案基本指南</h1>
       <p class="subtitle">构建多语言应用的现代解决方案</p>
 
       <div class="stats">

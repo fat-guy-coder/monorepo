@@ -3,6 +3,7 @@
     <div class="header">
       <h1>ES装饰器详解</h1>
       <p class="subtitle">元编程利器 - 用声明式语法增强代码功能</p>
+      <div class="proposal-status">Stage 2 Proposal</div>
     </div>
 
     <div class="pattern-card">
@@ -543,7 +544,8 @@ const activeType = ref<'class' | 'method' | 'property' | 'param' | 'accessor'>('
 </script>
 
 <style scoped lang="less">
-//@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Source+Code+Pro:wght@400;500&display=swap');
+//
+@warning-color: #ff9800;
 
 .decorator-container {
   max-width: 1200px;
@@ -553,6 +555,17 @@ const activeType = ref<'class' | 'method' | 'property' | 'param' | 'accessor'>('
   color: #2c3e50;
   background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
   min-height: 100vh;
+  position: relative;
+  .proposal-status {
+      position: absolute;
+      top: 2rem;
+      right: 2rem;
+      background: @warning-color;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      transform: rotate(5deg);
+    }
 
   .header {
     text-align: center;

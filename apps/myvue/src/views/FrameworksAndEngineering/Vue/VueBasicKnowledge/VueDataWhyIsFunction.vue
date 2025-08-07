@@ -244,7 +244,7 @@ const functionData = ref([0, 0, 0])
 </script>
 
 <style lang="less" scoped>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
 
 .data-function-principle {
   max-width: 1200px;

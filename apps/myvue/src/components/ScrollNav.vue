@@ -1,25 +1,25 @@
 <template>
-  <nav class="nav">
+  <nav class="nav" :class="{ foldNav: fold }">
     <h2>
       {{ title ?? '目录' }}
       <span class="fold" @click.stop="fold = !fold">{{ fold ? '展开' : '收起' }}</span>
     </h2>
     <ul class="list" :style="{ display: fold ? 'block' : 'none' }">
       <li
-        v-for="(item, index) in list"
+        v-for="(item, index) in newList"
         :key="index"
-        @click="scrollTo($event, item[map.id] || '')"
+        @click="scrollTo($event, item.id)"
         class="nav-item"
       >
-        {{ item[map.title] }}
+        {{ item.title }}
         <ul v-if="showChild" class="nav children">
           <li
-            v-for="(subItem, subIndex) in item[map.children]"
+            v-for="(subItem, subIndex) in item.children"
             :key="subIndex"
             @click="scrollTo($event, subItem.id)"
             class="nav-item"
           >
-            {{ subItem[map.title] }}
+            {{ subItem.title }}
           </li>
         </ul>
       </li>
@@ -32,19 +32,32 @@ import { defineProps, ref, type PropType, computed } from 'vue'
 
 const fold = ref(false)
 
-type NavItem = {
-  name?: string
+interface Item {
+  title?: string
   id: string
-  children?: NavItem[]
-  [key: string]: any
+  children?: Item[]
 }
 
-const map = computed(() => {
-  return {
-    title: props.keyMap.title || 'name',
-    id: props.keyMap.id || 'id',
-    children: props.keyMap.children || 'children',
-  }
+type NavItem = Item & {
+  [index: string]: any
+}
+
+const newList = computed(() => {
+  const { title, id, children } = props.keyMap
+  return props.list.map((item) => {
+    return {
+      title: item[title || 'name'],
+      id: item[id || 'id'],
+      children: props.showChild
+        ? item[children || 'children'].map((child: NavItem) => {
+            return {
+              title: child[title || 'name'],
+              id: child[id || 'id'],
+            }
+          })
+        : [],
+    }
+  })
 })
 
 interface KeyMap {
@@ -69,6 +82,7 @@ const props = defineProps({
   stopPropagation: {
     type: Boolean,
     required: false,
+    default: true,
   },
   keyMap: {
     type: Object as PropType<KeyMap>,
@@ -78,6 +92,11 @@ const props = defineProps({
       id: 'id',
       children: 'children',
     }),
+  },
+  position: {
+    type: String as PropType<'top-left' | 'top-right' | 'bottom-right' | 'bottom-right'>,
+    required: false,
+    default: 'top-right',
   },
 })
 
@@ -105,6 +124,7 @@ nav {
   top: 3rem;
   right: 3rem;
   width: 200px;
+  transition: transform 0.5s ease-in-out;
   z-index: 2;
   .title-container {
     display: flex;

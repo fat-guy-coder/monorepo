@@ -64,6 +64,19 @@ function globalFunc() {
 // console.log(PI);       // 错误！</code></pre>
             </div>
           </div>
+          <div class="scope-type">
+           <h3>4. 参数作用域 (函数参数作用域)</h3>
+            <div class="code-block">
+              <pre><code>// 参数作用域：默认参数在赋值时候生效
+const name = '小明';
+function greet(name=name) {
+  // 默认会先从外部作用域中查找name，如果外部作用域中没有name，则会报错，所以需要使用name=name来避免报错
+  console.log('你好, ' + name);
+}
+greet('小明'); // 输出：你好, 小明
+</code></pre>
+            </div>
+          </div>
         </section>
 
         <section class="section">

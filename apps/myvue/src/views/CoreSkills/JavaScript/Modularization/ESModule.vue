@@ -417,7 +417,7 @@ const modulesLoaded = computed(() => Math.floor(Math.random() * 100) + 50);
 </script>
 
 <style lang="less" scoped>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
 
 // 颜色变量
 @primary-color: #4361ee;

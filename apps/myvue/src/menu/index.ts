@@ -2,6 +2,8 @@ import menus from './menu.json'
 import { h } from 'vue'
 import type { VNode } from 'vue'
 
+
+
 export type Route = {
   label: VNode | string
   name: string
@@ -16,6 +18,7 @@ export type Route = {
   loading?: boolean
   match?: boolean
   id?: string
+  redirect?: { name: string }
 }
 
 export function addKeysToRoutes(
@@ -23,7 +26,7 @@ export function addKeysToRoutes(
   parentKey: string = '',
   parentPath: string = '',
 ): Route[] {
-  return routes.map(({ name, label: rawLabel, children }) => {
+  return routes.map(({ name, label: rawLabel, children ,redirect}) => {
     const path = parentPath ? parentPath + '/' + name : '/' + name
     const key = path
     const title = rawLabel as string
@@ -38,6 +41,7 @@ export function addKeysToRoutes(
       title,
       id: name,
       loading: false,
+      redirect,
     }
     if (children) {
       newRoute.children = addKeysToRoutes(children, key, path)

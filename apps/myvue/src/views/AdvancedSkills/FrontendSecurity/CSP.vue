@@ -448,7 +448,7 @@ const styleHash = '3dQw5ZpL4YhN6MvE1cSR8B7k2Jx9FgT';
 </script>
 
 <style lang="less" scoped>
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
+
 
 :root {
   --primary: #3498db;

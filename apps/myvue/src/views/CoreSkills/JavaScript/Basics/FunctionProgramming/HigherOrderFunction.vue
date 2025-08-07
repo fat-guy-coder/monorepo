@@ -152,7 +152,7 @@ function createPrefixer(prefix: string): StringModifier {
 </script>
 
 <style lang="less" scoped>
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Source+Code+Pro:wght@400;500&display=swap');
+
 
 :root {
   --primary: #3498db;

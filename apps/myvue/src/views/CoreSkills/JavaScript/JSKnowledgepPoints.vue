@@ -1,188 +1,408 @@
 <template>
-  <div class="css-knowledge-container">
-    <h1 class="main-title">JS 知识点</h1>
-    <p class="update-info">面试高频优先 | 生产环境常用排序</p>
+  <div class="js-reference">
+    <!-- 标题区域 -->
+    <header class="header">
+      <h1>JavaScript 核心知识点参考</h1>
+      <p class="subtitle">全面梳理JavaScript核心概念、API及设计模式，按使用频率排序</p>
+    </header>
 
-    <!-- 知识分类 -->
-    <div v-for="category in categories" :key="category.id" class="category-card">
-      <h2 class="category-title">{{ category.title }}</h2>
-      <div class="knowledge-list">
-        <div v-for="(item, index) in category.items" :key="item.id" class="knowledge-item"
-          :class="{ 'high-priority': item.priority === 1 }">
-          <div class="item-header">
-            <span class="item-index">{{ index + 1 }}.</span>
-            <h3 class="item-title">{{ item.title }}</h3>
-            <span class="item-tags">
-              <span v-if="item.priority === 1" class="tag interview">面试必考</span>
-              <span v-if="item.priority === 2" class="tag important">重要知识</span>
-              <span class="tag frequency">使用频率: {{ getFrequencyStar(item.frequency) }}</span>
-            </span>
-          </div>
-          <div class="item-content">
-            <p class="item-description">{{ item.description }}</p>
+    <!-- 控制区域 -->
+    <div class="controls">
+      <div class="search-box">
+        <input
+          type="text"
+          v-model="searchTerm"
+          placeholder="搜索知识点..."
+          class="search-input"
+        >
+        <span class="search-icon">🔍</span>
+      </div>
+
+      <div class="category-filter">
+        <button
+          v-for="category in categories"
+          :key="category"
+          @click="toggleCategory(category)"
+          :class="{ active: selectedCategories.includes(category) }"
+          class="category-btn"
+        >
+          {{ category }}
+        </button>
+      </div>
+    </div>
+
+    <!-- 知识点展示区域 -->
+    <div class="knowledge-container">
+      <div
+        v-for="(category, catIndex) in filteredKnowledge"
+        :key="catIndex"
+        class="category-section"
+      >
+        <h2 class="category-title">{{ category.name }}</h2>
+        <div class="knowledge-grid">
+          <div
+            v-for="(item, index) in category.items"
+            :key="index"
+            class="knowledge-card"
+          >
+            <div class="card-header">
+              <h3>{{ item.name }}</h3>
+              <div class="stars">
+                <span v-for="n in 5" :key="n" :class="{ filled: n <= item.importance }">★</span>
+              </div>
+            </div>
+            <p class="description">{{ item.description }}</p>
+            <div class="tags">
+              <span v-for="(tag, tagIndex) in item.tags" :key="tagIndex" class="tag">{{ tag }}</span>
+            </div>
           </div>
         </div>
       </div>
     </div>
+
+    <!-- 底部信息 -->
+    <footer class="footer">
+      <p>共 {{ totalItems }} 个知识点 | 最后更新: {{ new Date().toLocaleDateString() }}</p>
+    </footer>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue';
 
-// 类型定义
+// 知识点类型定义
 interface KnowledgeItem {
-  id: number
-  title: string
-  description: string
-  priority: number // 1-面试必考 2-重要知识
-  frequency: number // 使用频率
+  name: string;
+  description: string;
+  importance: number; // 1-5星
+  tags: string[];
 }
 
 interface KnowledgeCategory {
-  id: number
-  title: string
-  items: KnowledgeItem[]
+  name: string;
+  items: KnowledgeItem[];
 }
 
-// 知识体系数据
-const categories = ref<KnowledgeCategory[]>([])
+// 知识点数据
+const knowledgeData = ref<KnowledgeCategory[]>([]);
 
-onMounted(async () => {
-  const list = await import('./JSON/JsKnowledgePoints.json')
-  categories.value = list.default
+onMounted(async() => {
+  const res = await import('./JSON/JsKnowledgePoints.json')
+  knowledgeData.value =  res.default as unknown as KnowledgeCategory[]
 })
 
-// 辅助方法
-const getFrequencyStar = (level: number) => {
-  return '⭐'.repeat(level) + '☆'.repeat(3 - level)
-}
+// 可用分类
+const categories = ref<string[]>([
+  "全部",
+  "基础概念",
+  "函数相关",
+  "对象与原型",
+  "异步编程",
+  "数组操作",
+  "ES6+特性",
+  "错误处理",
+  "设计模式",
+  "Web API",
+  "性能优化"
+]);
+
+// 选中的分类
+const selectedCategories = ref<string[]>(["全部"]);
+
+// 搜索词
+const searchTerm = ref<string>("");
+
+// 切换分类
+const toggleCategory = (category: string) => {
+  if (category === "全部") {
+    selectedCategories.value = ["全部"];
+    return;
+  }
+
+  const index = selectedCategories.value.indexOf(category);
+
+  if (index > -1) {
+    selectedCategories.value.splice(index, 1);
+    // 如果移除了所有分类，自动选择"全部"
+    if (selectedCategories.value.length === 0) {
+      selectedCategories.value.push("全部");
+    }
+  } else {
+    // 移除"全部"如果选择了具体分类
+    const allIndex = selectedCategories.value.indexOf("全部");
+    if (allIndex > -1) {
+      selectedCategories.value.splice(allIndex, 1);
+    }
+    selectedCategories.value.push(category);
+  }
+};
+
+// 过滤知识点
+const filteredKnowledge = computed(() => {
+  return knowledgeData.value
+    .filter(category =>
+      selectedCategories.value.includes("全部") ||
+      selectedCategories.value.includes(category.name)
+    )
+    .map(category => {
+      if (!searchTerm.value) return category;
+
+      const filteredItems = category.items.filter(item =>
+        item.name.toLowerCase().includes(searchTerm.value.toLowerCase()) ||
+        item.description.toLowerCase().includes(searchTerm.value.toLowerCase()) ||
+        item.tags.some(tag => tag.toLowerCase().includes(searchTerm.value.toLowerCase()))
+      );
+
+      return { ...category, items: filteredItems };
+    })
+    .filter(category => category.items.length > 0);
+});
+
+// 计算总知识点数量
+const totalItems = computed(() => {
+  return filteredKnowledge.value.reduce(
+    (total, category) => total + category.items.length, 0
+  );
+});
 </script>
 
-<style scoped>
-.css-knowledge-container {
-  max-width: 1200px;
-  margin: 2rem auto;
-  padding: 0 1rem;
+<style scoped lang="less">
+@primary-color: #4361ee;
+@secondary-color: #3a0ca3;
+@light-bg: #f8f9fa;
+@card-bg: #ffffff;
+@text-color: #2b2d42;
+@border-color: #e9ecef;
+@success-color: #06d6a0;
+@warning-color: #ffd166;
+@error-color: #ef476f;
+@info-color: #118ab2;
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-.main-title {
+.js-reference {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+  background-color: @light-bg;
+  min-height: 100vh;
+  color: @text-color;
+  line-height: 1.5;
+}
+
+.header {
   text-align: center;
-  color: #2c3e50;
-  font-size: 2.8em;
-  margin-bottom: 0.5rem;
+  margin-bottom: 30px;
+  padding: 20px 0;
+
+  h1 {
+    font-size: 2.5rem;
+    color: @secondary-color;
+    margin-bottom: 10px;
+  }
+
+  .subtitle {
+    font-size: 1.1rem;
+    color: lighten(@text-color, 20%);
+    max-width: 700px;
+    margin: 0 auto;
+  }
 }
 
-.update-info {
-  text-align: center;
-  color: #666;
-  margin-bottom: 3rem;
-  font-size: 0.9em;
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 30px;
+  justify-content: center;
+
+  .search-box {
+    position: relative;
+    flex: 1;
+    max-width: 500px;
+
+    .search-input {
+      width: 100%;
+      padding: 12px 15px 12px 40px;
+      border: 1px solid @border-color;
+      border-radius: 30px;
+      font-size: 1rem;
+      transition: all 0.3s;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+
+      &:focus {
+        outline: none;
+        border-color: @primary-color;
+        box-shadow: 0 2px 8px rgba(67, 97, 238, 0.2);
+      }
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #777;
+    }
+  }
+
+  .category-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+
+    .category-btn {
+      padding: 8px 16px;
+      background: white;
+      border: 1px solid @border-color;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+
+      &:hover {
+        background-color: #f0f0f0;
+      }
+
+      &.active {
+        background-color: @primary-color;
+        color: white;
+        border-color: @primary-color;
+      }
+    }
+  }
 }
 
-.category-card {
+.knowledge-container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.category-section {
   background: white;
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  margin-bottom: 2.5rem;
-  padding: 2rem;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+
+  .category-title {
+    color: @secondary-color;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid fade(@primary-color, 20%);
+  }
 }
 
-.category-title {
-  color: #2196F3;
-  border-bottom: 3px solid #2196F3;
-  padding-bottom: 0.5rem;
-  margin-bottom: 1.5rem;
-  font-size: 1.8em;
+.knowledge-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
 }
 
-.knowledge-item {
-  border: 1px solid #eee;
-  border-radius: 8px;
-  margin-bottom: 1.5rem;
-  transition: transform 0.2s;
-}
-
-.knowledge-item:hover {
-  transform: translateX(5px);
-}
-
-.high-priority {
-  border-left: 4px solid #FF5722;
-}
-
-.item-header {
+.knowledge-card {
+  background: @light-bg;
+  border-radius: 10px;
+  padding: 18px;
+  transition: transform 0.2s, box-shadow 0.2s;
+  border: 1px solid @border-color;
   display: flex;
-  align-items: center;
-  padding: 1rem;
-  background: #f8f9fa;
-  border-radius: 8px 8px 0 0;
+  flex-direction: column;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+    border-color: fade(@primary-color, 30%);
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+
+    h3 {
+      font-size: 1.2rem;
+      color: @secondary-color;
+      flex: 1;
+    }
+
+    .stars {
+      color: #ddd;
+      font-size: 0.9rem;
+      margin-left: 10px;
+
+      .filled {
+        color: @warning-color;
+      }
+    }
+  }
+
+  .description {
+    color: lighten(@text-color, 15%);
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+    flex: 1;
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+
+    .tag {
+      background: fade(@primary-color, 10%);
+      color: @primary-color;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+    }
+  }
 }
 
-.item-index {
-  font-weight: bold;
-  color: #666;
-  margin-right: 1rem;
-  min-width: 30px;
+.footer {
+  text-align: center;
+  padding: 30px 20px 20px;
+  color: lighten(@text-color, 30%);
+  font-size: 0.9rem;
+  margin-top: 20px;
 }
 
-.item-title {
-  margin: 0;
-  font-size: 1.2em;
-  color: #2c3e50;
-  flex-grow: 1;
+@media (max-width: 768px) {
+  .controls {
+    flex-direction: column;
+    align-items: stretch;
+
+    .search-box {
+      max-width: 100%;
+    }
+  }
+
+  .knowledge-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .header h1 {
+    font-size: 2rem;
+  }
 }
 
-.item-tags {
-  display: flex;
-  gap: 0.8rem;
-}
+@media (max-width: 480px) {
+  .category-filter {
+    justify-content: flex-start;
+  }
 
-.tag {
-  padding: 0.3rem 0.8rem;
-  border-radius: 4px;
-  font-size: 0.8em;
-}
+  .header {
+    padding: 10px 0;
 
-.tag.interview {
-  background: #FF5722;
-  color: white;
-}
-
-.tag.important {
-  background: #2196F3;
-  color: white;
-}
-
-.tag.frequency {
-  background: #4CAF50;
-  color: white;
-}
-
-.item-content {
-  padding: 1rem;
-}
-
-.item-description {
-  color: #666;
-  line-height: 1.6;
-  margin-bottom: 1rem;
-}
-
-.code-example {
-  background: #1e1e1e;
-  border-radius: 6px;
-  padding: 1rem;
-  overflow-x: auto;
-}
-
-code {
-  font-family: 'Fira Code', monospace;
-  color: #d4d4d4;
-  font-size: 0.9em;
-}
-
-pre {
-  margin: 0;
+    h1 {
+      font-size: 1.8rem;
+    }
+  }
 }
 </style>

@@ -474,7 +474,7 @@ const activeType = ref<'simple' | 'method' | 'abstract'>('method');
 </script>
 
 <style scoped lang="less">
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Source+Code+Pro:wght@400;500&display=swap');
+
 
 .factory-container {
   max-width: 1200px;

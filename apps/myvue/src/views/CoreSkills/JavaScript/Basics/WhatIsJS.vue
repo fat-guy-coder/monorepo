@@ -402,6 +402,9 @@ const cons: string[] = [
   '调试困难（尤其是异步代码）',
 ]
 // ... existing code ...
+// const ste = `
+// const str =/@import url\(\'https:\/\/fonts.+swap.+/g
+// console.log(ste.replace(str, 'aa'))
 </script>
 
 <style scoped lang="less">

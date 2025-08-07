@@ -382,7 +382,7 @@ const activePattern = ref<'mvc' | 'mvp' | 'mvvm'>('mvc');
 </script>
 
 <style lang="less" scoped>
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
+
 
 // 颜色变量
 @primary-color: #3498db;

@@ -433,7 +433,7 @@ const nodeVersion = ref('18.16.0');
 </script>
 
 <style lang="less" scoped>
-@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+
 
 .express-container {
   max-width: 1200px;

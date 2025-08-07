@@ -304,7 +304,6 @@
 <script lang="ts" setup></script>
 
 <style lang="less" scoped>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Fira+Code&display=swap');
 
 .event-doc {
   max-width: 1200px;

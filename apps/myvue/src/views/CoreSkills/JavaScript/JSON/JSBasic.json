@@ -1,0 +1,500 @@
+[
+  {
+    "name": "数据类型",
+    "description": "JavaScript 的基本数据类型和类型相关操作",
+    "items": [
+      {
+        "name": "原始类型",
+        "description": "6种原始数据类型：Undefined、Null、Boolean、Number、String、Symbol",
+        "importance": 5,
+        "examples": [
+          "typeof null === 'object'",
+          "let sym = Symbol('desc')"
+        ]
+      },
+      {
+        "name": "对象类型",
+        "description": "Object 类型及内置对象",
+        "importance": 5,
+        "examples": [
+          "{} 对象字面量",
+          "new Object()"
+        ]
+      },
+      {
+        "name": "类型检测",
+        "description": "typeof、instanceof、Object.prototype.toString",
+        "importance": 5,
+        "examples": [
+          "typeof [] === 'object'",
+          "[] instanceof Array"
+        ]
+      },
+      {
+        "name": "类型转换",
+        "description": "显式和隐式类型转换规则",
+        "importance": 5,
+        "examples": [
+          "Number('123')",
+          "'1' + 2 === '12'"
+        ]
+      },
+      {
+        "name": "真值假值",
+        "description": "falsy 值列表和 truthy 值",
+        "importance": 4,
+        "examples": [
+          "!!0 === false",
+          "!!{} === true"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "变量和作用域",
+    "description": "变量声明和作用域相关概念",
+    "items": [
+      {
+        "name": "var/let/const",
+        "description": "三种变量声明方式区别",
+        "importance": 5,
+        "examples": [
+          "var 的函数作用域",
+          "let 的暂时性死区"
+        ]
+      },
+      {
+        "name": "作用域链",
+        "description": "词法作用域和变量查找规则",
+        "importance": 5,
+        "examples": [
+          "内层函数访问外层变量",
+          "with 改变作用域链（已废弃）"
+        ]
+      },
+      {
+        "name": "闭包",
+        "description": "函数记住并访问其词法作用域",
+        "importance": 5,
+        "examples": [
+          "函数返回函数",
+          "模块模式"
+        ]
+      },
+      {
+        "name": "提升",
+        "description": "变量和函数声明提升",
+        "importance": 4,
+        "examples": [
+          "var 变量提升",
+          "函数声明提升"
+        ]
+      },
+      {
+        "name": "全局变量",
+        "description": "全局作用域和全局对象属性",
+        "importance": 3,
+        "examples": [
+          "window 对象上的全局变量",
+          "全局变量污染问题"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "函数",
+    "description": "函数相关核心概念",
+    "items": [
+      {
+        "name": "函数声明 vs 函数表达式",
+        "description": "两种定义方式的区别",
+        "importance": 4,
+        "examples": [
+          "function foo() {}",
+          "const foo = function() {}"
+        ]
+      },
+      {
+        "name": "this 绑定",
+        "description": "this 的四种绑定规则",
+        "importance": 5,
+        "examples": [
+          "默认绑定（严格模式）",
+          "new 绑定优先级"
+        ]
+      },
+      {
+        "name": "arguments 对象",
+        "description": "类数组参数对象",
+        "importance": 3,
+        "examples": [
+          "arguments.length",
+          "Array.from(arguments)"
+        ]
+      },
+      {
+        "name": "call/apply/bind",
+        "description": "显式绑定 this 的方法",
+        "importance": 5,
+        "examples": [
+          "func.call(context, arg1, arg2)",
+          "bind 的柯里化"
+        ]
+      },
+      {
+        "name": "立即执行函数(IIFE)",
+        "description": "定义即执行的函数表达式",
+        "importance": 4,
+        "examples": [
+          "(function() {})()",
+          "模块封装"
+        ]
+      },
+      {
+        "name": "高阶函数",
+        "description": "接收或返回函数的函数",
+        "importance": 4,
+        "examples": [
+          "数组的 map/filter",
+          "函数装饰器"
+        ]
+      },
+      {
+        "name": "递归",
+        "description": "函数调用自身",
+        "importance": 3,
+        "examples": [
+          "阶乘实现",
+          "递归优化（尾调用）"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "对象和原型",
+    "description": "对象系统与原型链机制",
+    "items": [
+      {
+        "name": "属性描述符",
+        "description": "数据属性和访问器属性",
+        "importance": 4,
+        "examples": [
+          "Object.getOwnPropertyDescriptor",
+          "configurable 特性"
+        ]
+      },
+      {
+        "name": "原型链",
+        "description": "对象间的原型继承关系",
+        "importance": 5,
+        "examples": [
+          "__proto__ 属性",
+          "Object.prototype 原型顶端"
+        ]
+      },
+      {
+        "name": "构造函数",
+        "description": "new 操作符的工作原理",
+        "importance": 5,
+        "examples": [
+          "function Person() {}",
+          "new 的四个步骤"
+        ]
+      },
+      {
+        "name": "instanceof",
+        "description": "检测构造函数的 prototype 是否在原型链上",
+        "importance": 4,
+        "examples": [
+          "[] instanceof Array",
+          "手动实现 instanceof"
+        ]
+      },
+      {
+        "name": "继承实现",
+        "description": "各种继承方式的实现",
+        "importance": 5,
+        "examples": [
+          "原型链继承",
+          "组合继承（最常用）"
+        ]
+      },
+      {
+        "name": "Object 静态方法",
+        "description": "Object 上的工具方法",
+        "importance": 4,
+        "examples": [
+          "Object.keys()",
+          "Object.assign()"
+        ]
+      },
+      {
+        "name": "for...in 遍历",
+        "description": "遍历对象可枚举属性（包括原型链）",
+        "importance": 3,
+        "examples": [
+          "结合 hasOwnProperty 过滤",
+          "与 Object.keys() 区别"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "数组",
+    "description": "数组相关操作和方法",
+    "items": [
+      {
+        "name": "数组创建",
+        "description": "多种数组创建方式",
+        "importance": 4,
+        "examples": [
+          "数组字面量 []",
+          "new Array(5)"
+        ]
+      },
+      {
+        "name": "数组方法",
+        "description": "常用数组操作方法",
+        "importance": 5,
+        "examples": [
+          "push/pop/shift/unshift",
+          "slice/splice"
+        ]
+      },
+      {
+        "name": "迭代方法",
+        "description": "数组的高阶函数方法",
+        "importance": 5,
+        "examples": [
+          "forEach/map/filter",
+          "reduce/reduceRight"
+        ]
+      },
+      {
+        "name": "数组检测",
+        "description": "判断是否为数组",
+        "importance": 4,
+        "examples": [
+          "Array.isArray()",
+          "Object.prototype.toString.call()"
+        ]
+      },
+      {
+        "name": "稀疏数组",
+        "description": "包含空位的数组",
+        "importance": 3,
+        "examples": [
+          "new Array(3)",
+          "1 in [undefined, undefined]"
+        ]
+      },
+      {
+        "name": "类数组转换",
+        "description": "将类数组转为真实数组",
+        "importance": 3,
+        "examples": [
+          "Array.from(arguments)",
+          "[].slice.call(arguments)"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "异步编程",
+    "description": "JavaScript 异步处理机制",
+    "items": [
+      {
+        "name": "事件循环",
+        "description": "调用栈、任务队列和微任务",
+        "importance": 5,
+        "examples": [
+          "setTimeout 延迟",
+          "Promise 微任务"
+        ]
+      },
+      {
+        "name": "回调函数",
+        "description": "异步编程的基础模式",
+        "importance": 4,
+        "examples": [
+          "Node.js 错误优先回调",
+          "回调地狱问题"
+        ]
+      },
+      {
+        "name": "定时器",
+        "description": "setTimeout 和 setInterval",
+        "importance": 4,
+        "examples": [
+          "clearTimeout 取消",
+          "定时器最小延迟"
+        ]
+      },
+      {
+        "name": "Promise",
+        "description": "异步编程的解决方案",
+        "importance": 5,
+        "examples": [
+          "then/catch/finally",
+          "Promise.all/race"
+        ]
+      },
+      {
+        "name": "生成器",
+        "description": "function* 和 yield 语法",
+        "importance": 3,
+        "examples": [
+          "手动迭代 next()",
+          "协程实现"
+        ]
+      },
+      {
+        "name": "错误处理",
+        "description": "try/catch 和错误捕获",
+        "importance": 4,
+        "examples": [
+          "throw 抛出错误",
+          "Error 对象类型"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "BOM/DOM",
+    "description": "浏览器对象模型和文档对象模型",
+    "items": [
+      {
+        "name": "window 对象",
+        "description": "浏览器全局对象",
+        "importance": 4,
+        "examples": [
+          "window.location",
+          "window.navigator"
+        ]
+      },
+      {
+        "name": "DOM 树",
+        "description": "文档节点树结构",
+        "importance": 4,
+        "examples": [
+          "document 对象",
+          "节点类型（Node.ELEMENT_NODE）"
+        ]
+      },
+      {
+        "name": "DOM 查询",
+        "description": "查找 DOM 元素的方法",
+        "importance": 5,
+        "examples": [
+          "getElementById",
+          "querySelectorAll"
+        ]
+      },
+      {
+        "name": "DOM 操作",
+        "description": "增删改查 DOM 元素",
+        "importance": 5,
+        "examples": [
+          "appendChild",
+          "removeChild"
+        ]
+      },
+      {
+        "name": "事件模型",
+        "description": "DOM 事件流和事件处理",
+        "importance": 5,
+        "examples": [
+          "addEventListener",
+          "事件冒泡和捕获"
+        ]
+      },
+      {
+        "name": "事件对象",
+        "description": "事件触发时的 event 对象",
+        "importance": 4,
+        "examples": [
+          "event.preventDefault()",
+          "event.target vs event.currentTarget"
+        ]
+      },
+      {
+        "name": "事件委托",
+        "description": "利用冒泡优化事件处理",
+        "importance": 4,
+        "examples": [
+          "列表项点击委托",
+          "动态元素事件处理"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "其他重要概念",
+    "description": "其他 JavaScript 核心知识点",
+    "items": [
+      {
+        "name": "JSON",
+        "description": "数据交换格式",
+        "importance": 5,
+        "examples": [
+          "JSON.stringify",
+          "JSON.parse"
+        ]
+      },
+      {
+        "name": "Date",
+        "description": "日期和时间处理",
+        "importance": 4,
+        "examples": [
+          "new Date()",
+          "Date.now() 时间戳"
+        ]
+      },
+      {
+        "name": "正则表达式",
+        "description": "RegExp 对象和模式匹配",
+        "importance": 4,
+        "examples": [
+          "/pattern/flags",
+          "test() 和 exec()"
+        ]
+      },
+      {
+        "name": "严格模式",
+        "description": "use strict 指令",
+        "importance": 3,
+        "examples": [
+          "消除静默错误",
+          "简化变量使用"
+        ]
+      },
+      {
+        "name": "eval",
+        "description": "执行字符串代码（慎用）",
+        "importance": 2,
+        "examples": [
+          "eval('2+2')",
+          "安全问题和性能影响"
+        ]
+      },
+      {
+        "name": "with",
+        "description": "改变作用域链（已废弃）",
+        "importance": 1,
+        "examples": [
+          "with(obj) { a = 1 }",
+          "严格模式禁用"
+        ]
+      },
+      {
+        "name": "标签语句",
+        "description": "带标签的 break 和 continue",
+        "importance": 2,
+        "examples": [
+          "outer: for(...) { break outer }",
+          "跳出多层循环"
+        ]
+      }
+    ]
+  }
+]

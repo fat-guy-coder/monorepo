@@ -675,7 +675,7 @@ const scrollToMethod = (methodName: string) => {
 </script>
 
 <style lang="less" scoped>
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&family=Roboto+Mono:wght@400;500&display=swap');
+
 
 .path-module-container {
   font-family: 'Noto Sans SC', sans-serif;

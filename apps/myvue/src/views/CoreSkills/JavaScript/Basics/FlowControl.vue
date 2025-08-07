@@ -260,7 +260,7 @@ const headerStyle = (type: FlowControlType) => ({
 </script>
 
 <style lang="less" scoped>
-@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Roboto:wght@300;500&display=swap');
+
 
 span {
   color: #fff;

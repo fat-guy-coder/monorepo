@@ -388,9 +388,11 @@ pre {
   color: #fff;
 }
 
-.main-main-container {
+.main-container {
   margin: 2rem auto;
   padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
   font-family: 'Segoe UI', system-ui, sans-serif;
 }
 

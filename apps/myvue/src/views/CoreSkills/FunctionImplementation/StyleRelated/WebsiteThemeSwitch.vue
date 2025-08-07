@@ -3,7 +3,7 @@
     <!-- 标题部分 -->
     <header class="header">
       <h1>🎨 网站主题切换方案</h1>
-      <p class="subtitle">多模式主题切换实现全解析</p>
+      <p class="subtitle">多模式主题切换实现基本指南</p>
     </header>
 
     <!-- 主内容区 -->

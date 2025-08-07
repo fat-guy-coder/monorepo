@@ -171,7 +171,6 @@ onMounted(() => {
 </script>
 
 <style lang="less" scoped>
-@import url('//fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
 
 .font-icons-container {
   max-width: 1200px;

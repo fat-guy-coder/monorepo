@@ -144,6 +144,42 @@
         </div>
       </section>
 
+      <section class="section let-const-hoisting">
+        <h2 class="section-title">🧐 let/const 也有变量提升吗？</h2>
+        <div class="let-const-hoisting-explanation">
+          <p>
+            很多人以为 <code>let</code> 和 <code>const</code> 没有变量提升，其实它们也会被提升到当前作用域的顶部，
+            <strong>只是不会初始化</strong>。在声明之前访问会进入“暂存死区”（TDZ），导致 <code>ReferenceError</code>。
+          </p>
+          <div class="code-example">
+            <pre class="code-block"><code>console.log(b); // ReferenceError: Cannot access 'b' before initialization
+let b = 20;
+
+console.log(c); // ReferenceError: Cannot access 'c' before initialization
+const c = 30;</code></pre>
+          </div>
+          <p>
+            <strong>原理解析：</strong> <br>
+            <code>let</code> 和 <code>const</code> 声明的变量在作用域开始时就已经“被创建”，
+            但在代码运行到声明语句之前，变量处于“未初始化”状态，不能被访问。
+            这就是为什么会报错，而不是像 <code>var</code> 那样返回 <code>undefined</code>。
+          </p>
+          <div class="code-example">
+            <pre class="code-block"><code>// 伪代码理解
+{
+  // TDZ开始
+  // 访问b会报错
+  let b; // 声明提升到块顶部，但未初始化
+  // 现在b可用
+}</code></pre>
+          </div>
+          <ul>
+            <li><strong>var：</strong> 声明提升+初始化为<code>undefined</code>，可提前访问</li>
+            <li><strong>let/const：</strong> 只提升声明，不初始化，提前访问报错</li>
+          </ul>
+        </div>
+      </section>
+
       <section class="section release">
         <h2 class="section-title">🔄 手动释放变量</h2>
         <div class="release-explanation">
@@ -231,7 +267,7 @@ export default defineComponent({
 </script>
 
 <style lang="less" scoped>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Source+Code+Pro&display=swap');
+
 
 h3,
 p,

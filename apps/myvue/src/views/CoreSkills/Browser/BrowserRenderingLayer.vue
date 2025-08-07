@@ -1,930 +1,805 @@
 <template>
-  <div class="browser-layers-container">
-    <div class="hero-section">
-      <div class="hero-content">
-        <h1>浏览器图层机制解析</h1>
-        <p>深入理解现代浏览器的图层合成与渲染优化</p>
-        <div class="layer-animation">
-          <div class="layer" v-for="(layer, index) in layers" :key="index" :style="layerStyle(index)">
-            <div class="layer-label">图层 {{ layers - index }}</div>
-            <div class="layer-content">
-              <div v-if="index === 0" class="composite-demo">
-                <div class="demo-element"></div>
-                <div class="demo-element"></div>
-                <div class="demo-element"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+  <div class="browser-layers">
+    <header class="header">
+      <h1>浏览器图层技术解析</h1>
+      <p>深入理解现代浏览器渲染性能优化的核心机制</p>
+    </header>
 
-    <div class="content-wrapper">
-      <!-- 图层概述 -->
-      <section class="section">
+    <div class="content-container">
+      <section class="concept-section">
         <div class="section-header">
-          <i class="icon fas fa-layer-group"></i>
-          <h2>图层概述</h2>
+          <div class="icon">🔍</div>
+          <h2>浏览器图层基础概念</h2>
         </div>
-        <div class="section-content">
-          <p>浏览器图层(Layer)是浏览器渲染引擎中的关键概念，它将页面内容分解为多个独立的绘制层，通过分层渲染和合成技术优化页面性能。</p>
 
-          <div class="info-grid">
-            <div class="info-card">
-              <i class="fas fa-lightbulb"></i>
-              <h3>核心目的</h3>
-              <p>优化渲染性能，减少不必要的重绘，实现高效动画</p>
-            </div>
-            <div class="info-card">
-              <i class="fas fa-puzzle-piece"></i>
-              <h3>实现方式</h3>
-              <p>将页面分解为多个独立层，分别绘制后合成最终图像</p>
-            </div>
-            <div class="info-card">
-              <i class="fas fa-rocket"></i>
-              <h3>性能优势</h3>
-              <p>GPU加速、局部重绘、避免布局抖动</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- 图层的作用 -->
-      <section class="section">
-        <div class="section-header">
-          <i class="icon fas fa-tasks"></i>
-          <h2>图层的作用</h2>
-        </div>
-        <div class="section-content">
-          <div class="role-cards">
-            <div class="role-card">
-              <div class="role-icon">
-                <i class="fas fa-bolt"></i>
-              </div>
-              <h3>GPU加速渲染</h3>
-              <p>图层内容可以交由GPU处理，利用硬件加速提升渲染性能</p>
-            </div>
-
-            <div class="role-card">
-              <div class="role-icon">
-                <i class="fas fa-sync"></i>
-              </div>
-              <h3>减少重绘范围</h3>
-              <p>仅更新变化图层，避免整个页面重绘</p>
-            </div>
-
-            <div class="role-card">
-              <div class="role-icon">
-                <i class="fas fa-film"></i>
-              </div>
-              <h3>高效动画支持</h3>
-              <p>对独立图层进行变换操作不影响其他元素</p>
-            </div>
-
-            <div class="role-card">
-              <div class="role-icon">
-                <i class="fas fa-clipboard-check"></i>
-              </div>
-              <h3>避免布局抖动</h3>
-              <p>图层化可以隔离变化，减少布局重排影响</p>
-            </div>
+        <div class="content-card">
+          <div class="definition">
+            <h3>什么是浏览器图层？</h3>
+            <p>浏览器图层(Layers)是浏览器渲染引擎内部的一种优化机制，它将页面内容分解为多个独立的图像层，通过分层管理和合成技术实现高效的页面渲染。</p>
           </div>
 
-          <div class="visualization">
-            <div class="visualization-title">
-              <i class="fas fa-chart-bar"></i>
-              <h3>图层渲染性能对比</h3>
-            </div>
-            <div class="chart-container">
-              <div class="chart-bar" style="height: 80%; background-color: #ff6b6b;">
-                <div class="chart-label">无图层渲染</div>
-                <div class="chart-value">80ms</div>
+          <div class="render-flow">
+            <h3>浏览器渲染流程中的图层</h3>
+            <div class="flow-diagram">
+              <div class="step">
+                <div class="step-icon">1</div>
+                <div class="step-content">
+                  <h4>DOM树构建</h4>
+                  <p>解析HTML生成DOM树</p>
+                </div>
               </div>
-              <div class="chart-bar" style="height: 35%; background-color: #4ecdc4;">
-                <div class="chart-label">图层化渲染</div>
-                <div class="chart-value">35ms</div>
+              <div class="arrow">→</div>
+              <div class="step">
+                <div class="step-icon">2</div>
+                <div class="step-content">
+                  <h4>样式计算</h4>
+                  <p>解析CSS生成CSSOM</p>
+                </div>
               </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- 渲染时机 -->
-      <section class="section">
-        <div class="section-header">
-          <i class="icon fas fa-clock"></i>
-          <h2>图层渲染时机</h2>
-        </div>
-        <div class="section-content">
-          <div class="timeline">
-            <div class="timeline-item">
-              <div class="timeline-marker"></div>
-              <div class="timeline-content">
-                <h3>1. 初始页面加载</h3>
-                <p>浏览器解析HTML、CSS后创建渲染树，根据图层触发条件生成初始图层结构</p>
+              <div class="arrow">→</div>
+              <div class="step">
+                <div class="step-icon">3</div>
+                <div class="step-content">
+                  <h4>布局(Layout)</h4>
+                  <p>计算元素位置和大小</p>
+                </div>
               </div>
-            </div>
-
-            <div class="timeline-item">
-              <div class="timeline-marker"></div>
-              <div class="timeline-content">
-                <h3>2. 样式变化</h3>
-                <p>当元素样式改变且影响视觉效果时，浏览器检查是否需要创建新图层</p>
-                <div class="code-example">
-                  <pre>element.style.transform = 'translateX(100px)';</pre>
+              <div class="arrow">→</div>
+              <div class="step">
+                <div class="step-icon">4</div>
+                <div class="step-content">
+                  <h4>图层分层</h4>
+                  <p>创建独立的渲染层</p>
+                </div>
+              </div>
+              <div class="arrow">→</div>
+              <div class="step">
+                <div class="step-icon">5</div>
+                <div class="step-content">
+                  <h4>绘制(Paint)</h4>
+                  <p>填充像素数据</p>
+                </div>
+              </div>
+              <div class="arrow">→</div>
+              <div class="step">
+                <div class="step-icon">6</div>
+                <div class="step-content">
+                  <h4>合成(Composite)</h4>
+                  <p>合并图层到屏幕</p>
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
 
-            <div class="timeline-item">
-              <div class="timeline-marker"></div>
-              <div class="timeline-content">
-                <h3>3. 内容更新</h3>
-                <p>元素内容变化时，浏览器判断该元素是否在独立图层，决定重绘范围</p>
+      <section class="types-section">
+        <div class="section-header">
+          <div class="icon">📚</div>
+          <h2>浏览器图层类型</h2>
+        </div>
+
+        <div class="layer-types">
+          <div class="layer-card">
+            <div class="layer-icon">1</div>
+            <h3>根图层</h3>
+            <p>整个页面的基础层，包含所有内容</p>
+            <div class="characteristics">
+              <span class="char-tag">位置固定</span>
+              <span class="char-tag">包含所有元素</span>
+            </div>
+          </div>
+
+          <div class="layer-card">
+            <div class="layer-icon">2</div>
+            <h3>渲染层</h3>
+            <p>具有特定样式的DOM子树</p>
+            <div class="characteristics">
+              <span class="char-tag">独立绘制</span>
+              <span class="char-tag">可单独更新</span>
+            </div>
+          </div>
+
+          <div class="layer-card">
+            <div class="layer-icon">3</div>
+            <h3>合成层</h3>
+            <p>由GPU处理的独立图层</p>
+            <div class="characteristics">
+              <span class="char-tag">硬件加速</span>
+              <span class="char-tag">高效合成</span>
+            </div>
+          </div>
+
+          <div class="layer-card">
+            <div class="layer-icon">4</div>
+            <h3>滚动层</h3>
+            <p>处理滚动内容的图层</p>
+            <div class="characteristics">
+              <span class="char-tag">独立滚动</span>
+              <span class="char-tag">平滑滚动</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="function-section">
+        <div class="section-header">
+          <div class="icon">💡</div>
+          <h2>浏览器图层的作用</h2>
+        </div>
+
+        <div class="functions">
+          <div class="function-card">
+            <div class="func-icon">⚡</div>
+            <h3>性能优化</h3>
+            <p>减少重绘和重排范围，仅更新变化图层</p>
+          </div>
+
+          <div class="function-card">
+            <div class="func-icon">🎨</div>
+            <h3>动画流畅</h3>
+            <p>GPU加速动画，避免主线程阻塞</p>
+          </div>
+
+          <div class="function-card">
+            <div class="func-icon">🔄</div>
+            <h3>高效渲染</h3>
+            <p>并行处理图层，充分利用多核CPU/GPU</p>
+          </div>
+
+          <div class="function-card">
+            <div class="func-icon">🛡️</div>
+            <h3>内容隔离</h3>
+            <p>防止内容重叠和显示问题</p>
+          </div>
+        </div>
+
+        <div class="performance-comparison">
+          <h3>图层优化前后的性能对比</h3>
+          <div class="comparison-chart">
+            <div class="chart-bar">
+              <div class="bar-label">无图层优化</div>
+              <div class="bar-container">
+                <div class="bar bad" :style="{ width: '85%' }">85% CPU占用</div>
               </div>
             </div>
-
-            <div class="timeline-item">
-              <div class="timeline-marker"></div>
-              <div class="timeline-content">
-                <h3>4. 动画执行</h3>
-                <p>每帧动画触发前，浏览器准备图层内容，动画执行时进行图层合成</p>
-              </div>
-            </div>
-
-            <div class="timeline-item">
-              <div class="timeline-marker"></div>
-              <div class="timeline-content">
-                <h3>5. 滚动事件</h3>
-                <p>页面滚动时，浏览器优先合成现有图层，减少重绘计算</p>
+            <div class="chart-bar">
+              <div class="bar-label">启用图层加速</div>
+              <div class="bar-container">
+                <div class="bar good" :style="{ width: '30%' }">30% CPU占用</div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- 图层触发条件 -->
-      <section class="section">
+      <section class="acceleration-section">
         <div class="section-header">
-          <i class="icon fas fa-magic"></i>
-          <h2>图层触发条件</h2>
+          <div class="icon">🚀</div>
+          <h2>启用图层加速技术</h2>
         </div>
-        <div class="section-content">
-          <div class="trigger-grid">
-            <div class="trigger-card">
-              <div class="trigger-header">
-                <i class="fab fa-css3-alt"></i>
-                <h3>CSS 3D变换</h3>
-              </div>
-              <p>使用3D变换属性会触发新图层创建</p>
-              <div class="code-example">
-                <pre>transform: translate3d(0, 0, 0);</pre>
-                <pre>transform: rotateY(30deg);</pre>
-              </div>
-              <div class="efficiency">
-                <i class="fas fa-battery-full"></i>
-                <span>GPU加速，高效渲染</span>
-              </div>
-            </div>
 
-            <div class="trigger-card">
-              <div class="trigger-header">
-                <i class="fas fa-video"></i>
-                <h3>视频与Canvas</h3>
-              </div>
-              <p>视频元素和Canvas元素默认创建独立图层</p>
-              <div class="code-example">
-                <pre>&lt;video src="movie.mp4"&gt;&lt;/video&gt;</pre>
-                <pre>&lt;canvas id="myCanvas"&gt;&lt;/canvas&gt;</pre>
-              </div>
-              <div class="efficiency">
-                <i class="fas fa-battery-three-quarters"></i>
-                <span>中等开销，内容更新频繁</span>
-              </div>
-            </div>
-
-            <div class="trigger-card">
-              <div class="trigger-header">
-                <i class="fas fa-window-restore"></i>
-                <h3>叠加上下文</h3>
-              </div>
-              <p>position: fixed、z-index等创建叠加上下文</p>
-              <div class="code-example">
-                <pre>position: fixed;</pre>
-                <pre>z-index: 10;</pre>
-                <pre>opacity: 0.5;</pre>
-              </div>
-              <div class="efficiency">
-                <i class="fas fa-battery-half"></i>
-                <span>根据内容复杂度变化</span>
-              </div>
-            </div>
-
-            <div class="trigger-card">
-              <div class="trigger-header">
-                <i class="fas fa-flash"></i>
-                <h3>动画属性</h3>
-              </div>
-              <p>使用opacity和transform的动画会触发图层</p>
-              <div class="code-example">
-                <pre>@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}</pre>
-              </div>
-              <div class="efficiency">
-                <i class="fas fa-battery-full"></i>
-                <span>GPU加速，高效动画</span>
-              </div>
-            </div>
-
-            <div class="trigger-card">
-              <div class="trigger-header">
-                <i class="fas fa-scroll"></i>
-                <h3>滚动关联</h3>
-              </div>
-              <p>与滚动相关的元素可能创建独立图层</p>
-              <div class="code-example">
-                <pre>overflow: scroll;</pre>
-                <pre>-webkit-overflow-scrolling: touch;</pre>
-              </div>
-              <div class="efficiency">
-                <i class="fas fa-battery-quarter"></i>
-                <span>根据滚动内容复杂度</span>
-              </div>
-            </div>
-
-            <div class="trigger-card">
-              <div class="trigger-header">
-                <i class="fas fa-exclamation-triangle"></i>
-                <h3>will-change</h3>
-              </div>
-              <p>显式告知浏览器元素将要变化</p>
-              <div class="code-example">
-                <pre>will-change: transform;</pre>
-                <pre>will-change: opacity;</pre>
-              </div>
-              <div class="efficiency">
-                <i class="fas fa-battery-three-quarters"></i>
-                <span>提前准备，优化性能</span>
-              </div>
+        <div class="acceleration-methods">
+          <div class="method-card">
+            <div class="method-icon">🎛️</div>
+            <h3>CSS属性触发</h3>
+            <div class="code-examples">
+              <pre><code>transform: translateZ(0);</code></pre>
+              <pre><code>will-change: transform;</code></pre>
+              <pre><code>backface-visibility: hidden;</code></pre>
             </div>
           </div>
 
-          <div class="optimization-tips">
-            <h3><i class="fas fa-tips"></i> 图层优化建议</h3>
-            <ul>
-              <li>避免过度使用图层，每个图层消耗额外内存</li>
-              <li>优先使用transform和opacity进行动画</li>
-              <li>使用will-change时要及时清除</li>
-              <li>定期检查页面图层数量（通过浏览器开发者工具）</li>
-              <li>复杂静态内容可考虑提升为图层减少重绘</li>
+          <div class="method-card">
+            <div class="method-icon">🖼️</div>
+            <h3>元素特性触发</h3>
+            <ul class="element-list">
+              <li>3D变换元素 (transform: translate3d)</li>
+              <li>视频和Canvas元素</li>
+              <li>透明元素 (opacity &lt; 1)</li>
+              <li>CSS滤镜元素 (filter)</li>
+              <li>固定定位元素 (position: fixed)</li>
             </ul>
           </div>
         </div>
-      </section>
 
-      <div class="summary-section">
-        <h3><i class="fas fa-check-circle"></i> 关键总结</h3>
-        <div class="summary-grid">
-          <div class="summary-item">
-            <i class="fas fa-th"></i>
-            <p>图层是浏览器优化渲染性能的核心机制</p>
-          </div>
-          <div class="summary-item">
-            <i class="fas fa-bolt"></i>
-            <p>合理使用图层可充分利用GPU加速</p>
-          </div>
-          <div class="summary-item">
-            <i class="fas fa-sync"></i>
-            <p>图层可减少重绘范围，提高渲染效率</p>
-          </div>
-          <div class="summary-item">
-            <i class="fas fa-exclamation"></i>
-            <p>过度使用图层会导致内存占用增加</p>
+        <div class="best-practices">
+          <h3>图层优化最佳实践</h3>
+          <div class="practice-grid">
+            <div class="practice">
+              <div class="practice-icon">✅</div>
+              <h4>合理使用will-change</h4>
+              <p>仅对需要动画的元素应用</p>
+            </div>
+            <div class="practice">
+              <div class="practice-icon">✅</div>
+              <h4>避免过度分层</h4>
+              <p>过多图层消耗内存</p>
+            </div>
+            <div class="practice">
+              <div class="practice-icon">✅</div>
+              <h4>优先使用transform/opacity</h4>
+              <p>这些属性可被GPU加速</p>
+            </div>
+            <div class="practice">
+              <div class="practice-icon">✅</div>
+              <h4>使用CSS动画而非JS动画</h4>
+              <p>CSS动画更易被浏览器优化</p>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
+      </section>
 
-    <footer class="footer">
-      <p>浏览器图层机制解析 | 前端性能优化核心知识</p>
-      <div class="footer-links">
-        <a href="#"><i class="fab fa-chrome"></i> Chrome Layers Panel</a>
-        <a href="#"><i class="fas fa-book"></i> 浏览器渲染原理文档</a>
-      </div>
-    </footer>
+      <section class="devtools-section">
+        <div class="section-header">
+          <div class="icon">🔧</div>
+          <h2>开发者工具分析</h2>
+        </div>
+
+        <div class="devtools-content">
+          <div class="devtools-image">
+            <div class="placeholder">
+              <div class="browser-frame">
+                <div class="browser-tabs">
+                  <div class="tab active">Layers</div>
+                  <div class="tab">Performance</div>
+                  <div class="tab">Rendering</div>
+                </div>
+                <div class="layers-panel">
+                  <div class="layer-item">
+                    <div class="layer-color"></div>
+                    <div class="layer-info">Root Layer</div>
+                  </div>
+                  <div class="layer-item">
+                    <div class="layer-color" style="background: #FF6B6B;"></div>
+                    <div class="layer-info">Header Layer</div>
+                  </div>
+                  <div class="layer-item">
+                    <div class="layer-color" style="background: #4ECDC4;"></div>
+                    <div class="layer-info">Animation Layer</div>
+                  </div>
+                  <div class="layer-item">
+                    <div class="layer-color" style="background: #FFD166;"></div>
+                    <div class="layer-info">Video Layer</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="devtools-steps">
+            <h3>Chrome图层分析步骤</h3>
+            <ol>
+              <li>打开开发者工具 (F12)</li>
+              <li>切换到"Layers"面板</li>
+              <li>查看页面图层结构</li>
+              <li>分析图层边界和深度</li>
+              <li>检查图层更新频率</li>
+              <li>识别不必要的图层</li>
+            </ol>
+          </div>
+        </div>
+      </section>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref } from 'vue';
 
-const layers = ref(5); // 图层数量
-
-const layerStyle = computed(() => (index: number) => {
-  const zIndex = layers.value - index;
-  const scale = 1 - (index * 0.05);
-  const rotate = index % 2 === 0 ? index * 0.5 : -index * 0.5;
-
-  return {
-    zIndex: zIndex,
-    transform: `scale(${scale}) rotate(${rotate}deg)`,
-    opacity: 1 - (index * 0.1),
-    backgroundColor: `hsl(${200 + (index * 10)}, 70%, ${85 - (index * 5)}%)`
-  };
-});
+// 用于动画的响应式数据
+const animatedValue = ref(0);
 </script>
 
 <style lang="less" scoped>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css');
+@primary-color: #4361ee;
+@secondary-color: #3a0ca3;
+@accent-color: #4895ef;
+@layer-color-1: #4ECDC4;
+@layer-color-2: #FF6B6B;
+@layer-color-3: #FFD166;
+@layer-color-4: #1A535C;
+@light-bg: #f8f9fa;
+@card-bg: #ffffff;
+@text-color: #2b2d42;
+@border-color: #e9ecef;
+@success-color: #4cc9f0;
+@bad-color: #ff6b6b;
+@good-color: #06d6a0;
 
-.browser-layers-container {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
-  color: #2d3748;
-  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-  overflow: hidden;
+.browser-layers {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.6;
+  color: @text-color;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+  min-height: 100vh;
+  padding: 2rem;
 }
 
-.hero-section {
-  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
-  border-radius: 12px;
+.header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+  padding: 2rem;
+  background: linear-gradient(120deg, @primary-color, @secondary-color);
+  border-radius: 16px;
   color: white;
-  position: relative;
-  overflow: hidden;
-  margin-bottom: 40px;
-  padding: 40px 20px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
 
-  &::before {
-    content: "";
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0) 70%);
-    z-index: 0;
+  h1 {
+    font-size: 2.8rem;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
   }
 
-  .hero-content {
-    position: relative;
-    z-index: 1;
-    text-align: center;
-
-    h1 {
-      font-size: 2.8rem;
-      font-weight: 800;
-      margin-bottom: 15px;
-      letter-spacing: -0.5px;
-    }
-
-    p {
-      font-size: 1.3rem;
-      font-weight: 300;
-      opacity: 0.9;
-      max-width: 700px;
-      margin: 0 auto 30px;
-    }
+  p {
+    font-size: 1.2rem;
+    opacity: 0.9;
+    max-width: 600px;
+    margin: 0 auto;
   }
 }
 
-.layer-animation {
-  max-width: 500px;
-  height: 300px;
-  margin: 40px auto 0;
-  position: relative;
-  perspective: 1000px;
-}
-
-.layer {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  display: flex;
-  flex-direction: column;
-  transition: transform 0.5s ease, opacity 0.5s ease;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-
-  .layer-label {
-    padding: 10px 15px;
-    background: rgba(255, 255, 255, 0.1);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    font-weight: 600;
-  }
-
-  .layer-content {
-    flex: 1;
-    padding: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-}
-
-.composite-demo {
-  display: flex;
-  gap: 20px;
-
-  .demo-element {
-    width: 60px;
-    height: 60px;
-    background: linear-gradient(45deg, #ff9a9e, #fad0c4);
-    border-radius: 8px;
-    animation: float 3s ease-in-out infinite;
-
-    &:nth-child(2) {
-      background: linear-gradient(45deg, #a1c4fd, #c2e9fb);
-      animation-delay: 0.5s;
-    }
-
-    &:nth-child(3) {
-      background: linear-gradient(45deg, #d4fc79, #96e6a1);
-      animation-delay: 1s;
-    }
-  }
-}
-
-@keyframes float {
-
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-
-  50% {
-    transform: translateY(-15px);
-  }
-}
-
-.content-wrapper {
-  padding: 0 20px;
-}
-
-.section {
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
-  margin-bottom: 30px;
-  overflow: hidden;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-
-  &:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-  }
+.content-container {
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
 .section-header {
   display: flex;
   align-items: center;
-  padding: 20px 25px;
-  background: linear-gradient(90deg, #4f46e5, #7c3aed);
-  color: white;
+  gap: 1rem;
+  margin-bottom: 1.8rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 2px solid @primary-color;
 
   .icon {
-    font-size: 1.8rem;
-    margin-right: 15px;
+    font-size: 2rem;
+    background: @primary-color;
+    color: white;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   h2 {
-    margin: 0;
-    font-size: 1.7rem;
-    font-weight: 600;
+    font-size: 1.8rem;
+    color: @secondary-color;
   }
 }
 
-.section-content {
-  padding: 25px;
+.content-card {
+  background: @card-bg;
+  border-radius: 16px;
+  padding: 2.2rem;
+  margin-bottom: 2.5rem;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  }
+
+  h3 {
+    color: @primary-color;
+    margin-bottom: 1.5rem;
+    font-size: 1.6rem;
+  }
 
   p {
+    margin-bottom: 1.5rem;
     font-size: 1.1rem;
-    line-height: 1.7;
-    color: #4a5568;
-    margin-bottom: 20px;
+    line-height: 1.8;
   }
 }
 
-.info-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 20px;
-  margin-top: 25px;
-}
-
-.info-card {
-  background: #f8fafc;
-  border-radius: 10px;
-  padding: 25px;
-  text-align: center;
-  border: 1px solid #e2e8f0;
-  transition: all 0.3s ease;
-
-  &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.05);
-  }
-
-  i {
-    font-size: 2.5rem;
-    color: #4f46e5;
-    margin-bottom: 15px;
-  }
-
-  h3 {
-    margin: 0 0 15px;
-    color: #1e293b;
-  }
-
-  p {
-    margin: 0;
-    font-size: 1rem;
-  }
-}
-
-.role-cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 20px;
-  margin-bottom: 30px;
-}
-
-.role-card {
-  background: #f8fafc;
-  border-radius: 10px;
-  padding: 20px;
-  text-align: center;
-  border: 1px solid #e2e8f0;
-  transition: all 0.3s ease;
-
-  &:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-  }
-
-  .role-icon {
-    width: 70px;
-    height: 70px;
-    background: linear-gradient(135deg, #4f46e5, #7c3aed);
-    color: white;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 20px;
-    font-size: 1.8rem;
-  }
-
-  h3 {
-    margin: 0 0 15px;
-    color: #1e293b;
-  }
-
-  p {
-    margin: 0;
-    font-size: 1rem;
-  }
-}
-
-.visualization {
-  background: #f8fafc;
-  border-radius: 10px;
-  padding: 20px;
-  margin-top: 30px;
-  border: 1px solid #e2e8f0;
-
-  .visualization-title {
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-
-    i {
-      font-size: 1.5rem;
-      color: #4f46e5;
-      margin-right: 10px;
-    }
-
-    h3 {
-      margin: 0;
-      color: #1e293b;
-    }
-  }
-}
-
-.chart-container {
+.flow-diagram {
   display: flex;
-  justify-content: center;
-  gap: 40px;
-  height: 200px;
-  align-items: flex-end;
-  padding: 0 30px;
-}
-
-.chart-bar {
-  width: 100px;
-  border-radius: 8px 8px 0 0;
-  display: flex;
-  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
-  justify-content: flex-end;
-  position: relative;
+  flex-wrap: wrap;
+  margin-top: 2rem;
 
-  .chart-label {
-    position: absolute;
-    top: -30px;
-    font-weight: 600;
-    color: #334155;
-  }
+  .step {
+    flex: 1;
+    min-width: 120px;
+    text-align: center;
+    position: relative;
 
-  .chart-value {
-    margin-bottom: 10px;
-    color: white;
-    font-weight: 600;
-  }
-}
-
-.timeline {
-  position: relative;
-  padding-left: 30px;
-
-  &::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 4px;
-    background: #c7d2fe;
-    border-radius: 2px;
-  }
-}
-
-.timeline-item {
-  position: relative;
-  margin-bottom: 30px;
-
-  &:last-child {
-    margin-bottom: 0;
-  }
-
-  .timeline-marker {
-    position: absolute;
-    left: -38px;
-    top: 5px;
-    width: 20px;
-    height: 20px;
-    background: #4f46e5;
-    border-radius: 50%;
-    border: 4px solid #eef2ff;
-  }
-
-  .timeline-content {
-    background: #f8fafc;
-    border-radius: 8px;
-    padding: 20px;
-    border-left: 3px solid #4f46e5;
-
-    h3 {
-      margin-top: 0;
-      margin-bottom: 15px;
-      color: #1e293b;
-    }
-
-    p {
-      margin-bottom: 15px;
-    }
-  }
-}
-
-.code-example {
-  background: #1e293b;
-  color: #f1f5f9;
-  border-radius: 6px;
-  padding: 15px;
-  font-family: 'Fira Code', monospace;
-  font-size: 0.95rem;
-  overflow-x: auto;
-  margin-top: 15px;
-
-  pre {
-    margin: 0;
-  }
-}
-
-.trigger-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 20px;
-  margin-bottom: 30px;
-}
-
-.trigger-card {
-  background: white;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  transition: all 0.3s ease;
-
-  &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-  }
-
-  .trigger-header {
-    display: flex;
-    align-items: center;
-    padding: 20px;
-    background: linear-gradient(90deg, #4f46e5, #7c3aed);
-    color: white;
-
-    i {
-      font-size: 1.8rem;
-      margin-right: 15px;
-    }
-
-    h3 {
-      margin: 0;
-      font-size: 1.3rem;
-    }
-  }
-
-  p {
-    padding: 15px 20px 0;
-    margin: 0;
-    font-size: 1rem;
-  }
-
-  .code-example {
-    margin: 15px 20px;
-    border-radius: 6px;
-  }
-
-  .efficiency {
-    display: flex;
-    align-items: center;
-    padding: 10px 20px 20px;
-    font-size: 0.9rem;
-    color: #64748b;
-
-    i {
-      margin-right: 8px;
-      font-size: 1.2rem;
-    }
-  }
-}
-
-.optimization-tips {
-  background: #e0f2fe;
-  border-left: 4px solid #0ea5e9;
-  border-radius: 0 8px 8px 0;
-  padding: 20px;
-
-  h3 {
-    display: flex;
-    align-items: center;
-    margin-top: 0;
-    color: #0369a1;
-
-    i {
-      margin-right: 10px;
-    }
-  }
-
-  ul {
-    padding-left: 20px;
-    margin: 15px 0 0;
-
-    li {
-      margin-bottom: 10px;
-      line-height: 1.6;
-    }
-  }
-}
-
-.summary-section {
-  background: linear-gradient(135deg, #4f46e5, #7c3aed);
-  color: white;
-  border-radius: 12px;
-  padding: 30px;
-  margin-bottom: 40px;
-
-  h3 {
-    display: flex;
-    align-items: center;
-    margin-top: 0;
-    font-size: 1.5rem;
-
-    i {
-      margin-right: 15px;
-    }
-  }
-}
-
-.summary-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 20px;
-  margin-top: 20px;
-}
-
-.summary-item {
-  display: flex;
-  align-items: center;
-  background: rgba(255, 255, 255, 0.1);
-  padding: 15px;
-  border-radius: 8px;
-
-  i {
-    font-size: 1.8rem;
-    margin-right: 15px;
-    color: #c7d2fe;
-  }
-
-  p {
-    margin: 0;
-    font-size: 1.05rem;
-  }
-}
-
-.footer {
-  text-align: center;
-  padding: 25px;
-  color: #64748b;
-  font-size: 0.95rem;
-  border-top: 1px solid #e2e8f0;
-
-  .footer-links {
-    display: flex;
-    justify-content: center;
-    gap: 30px;
-    margin-top: 15px;
-
-    a {
-      color: #4f46e5;
-      text-decoration: none;
+    .step-icon {
+      width: 50px;
+      height: 50px;
+      background: @accent-color;
+      color: white;
+      border-radius: 50%;
       display: flex;
       align-items: center;
-      gap: 8px;
-      font-weight: 500;
+      justify-content: center;
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin: 0 auto 1rem;
+    }
 
-      &:hover {
-        text-decoration: underline;
+    .step-content {
+      background: @light-bg;
+      border-radius: 10px;
+      padding: 1rem;
+
+      h4 {
+        color: @secondary-color;
+        margin-bottom: 0.5rem;
+      }
+    }
+  }
+
+  .arrow {
+    font-size: 2rem;
+    color: @primary-color;
+    font-weight: bold;
+    padding: 0 10px;
+  }
+}
+
+.layer-types {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.8rem;
+  margin-bottom: 2rem;
+}
+
+.layer-card {
+  background: @card-bg;
+  border-radius: 14px;
+  padding: 1.8rem;
+  text-align: center;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+  border-top: 4px solid @layer-color-1;
+
+  &:nth-child(2) {
+    border-top-color: @layer-color-2;
+  }
+
+  &:nth-child(3) {
+    border-top-color: @layer-color-3;
+  }
+
+  &:nth-child(4) {
+    border-top-color: @layer-color-4;
+  }
+
+  &:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  }
+
+  .layer-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: @primary-color;
+    color: white;
+    font-size: 1.5rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.2rem;
+  }
+
+  h3 {
+    color: @secondary-color;
+    margin-bottom: 0.8rem;
+    font-size: 1.4rem;
+  }
+
+  p {
+    color: lighten(@text-color, 15%);
+    margin-bottom: 1.2rem;
+  }
+}
+
+.characteristics {
+  display: flex;
+  justify-content: center;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+
+  .char-tag {
+    background: @light-bg;
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    color: @primary-color;
+    border: 1px solid @border-color;
+  }
+}
+
+.functions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.8rem;
+  margin-bottom: 2.5rem;
+}
+
+.function-card {
+  background: @card-bg;
+  border-radius: 14px;
+  padding: 1.8rem;
+  text-align: center;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.06);
+
+  .func-icon {
+    font-size: 3rem;
+    margin-bottom: 1.2rem;
+  }
+
+  h3 {
+    color: @primary-color;
+    margin-bottom: 1rem;
+    font-size: 1.3rem;
+  }
+}
+
+.performance-comparison {
+  background: @light-bg;
+  border-radius: 14px;
+  padding: 1.8rem;
+
+  h3 {
+    text-align: center;
+    color: @secondary-color;
+    margin-bottom: 1.5rem;
+  }
+}
+
+.comparison-chart {
+  max-width: 600px;
+  margin: 0 auto;
+
+  .chart-bar {
+    margin-bottom: 1.5rem;
+
+    .bar-label {
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+
+    .bar-container {
+      height: 30px;
+      background: #e9ecef;
+      border-radius: 15px;
+      overflow: hidden;
+
+      .bar {
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        padding-right: 15px;
+        font-weight: 500;
+        color: white;
+        min-width: 80px;
+      }
+
+      .bad {
+        background: linear-gradient(90deg, #ff6b6b, #ff8e8e);
+      }
+
+      .good {
+        background: linear-gradient(90deg, #06d6a0, #4ecdc4);
+      }
+    }
+  }
+}
+
+.acceleration-methods {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2.5rem;
+}
+
+.method-card {
+  background: @card-bg;
+  border-radius: 14px;
+  padding: 1.8rem;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.06);
+
+  .method-icon {
+    font-size: 3rem;
+    text-align: center;
+    margin-bottom: 1.2rem;
+    color: @primary-color;
+  }
+
+  h3 {
+    color: @secondary-color;
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+}
+
+.code-examples {
+  background: #2b2d42;
+  border-radius: 8px;
+  padding: 1.2rem;
+  color: #f8f9fa;
+  font-family: 'Fira Code', monospace;
+  font-size: 0.95rem;
+
+  pre {
+    margin: 0.8rem 0;
+    overflow-x: auto;
+
+    code {
+      display: block;
+      padding: 0.5rem 1rem;
+      background: #34374c;
+      border-radius: 4px;
+    }
+  }
+}
+
+.element-list {
+  list-style: none;
+  padding: 0;
+
+  li {
+    padding: 0.8rem 0;
+    border-bottom: 1px dashed @border-color;
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+}
+
+.best-practices {
+  background: @light-bg;
+  border-radius: 14px;
+  padding: 1.8rem;
+
+  h3 {
+    text-align: center;
+    color: @secondary-color;
+    margin-bottom: 1.5rem;
+  }
+}
+
+.practice-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+}
+
+.practice {
+  background: @card-bg;
+  border-radius: 10px;
+  padding: 1.2rem;
+  text-align: center;
+
+  .practice-icon {
+    font-size: 1.8rem;
+    margin-bottom: 0.8rem;
+  }
+
+  h4 {
+    color: @primary-color;
+    margin-bottom: 0.5rem;
+  }
+}
+
+.devtools-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.devtools-image {
+  .placeholder {
+    background: @card-bg;
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  }
+}
+
+.browser-frame {
+  border: 1px solid @border-color;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.browser-tabs {
+  display: flex;
+  background: @light-bg;
+  border-bottom: 1px solid @border-color;
+
+  .tab {
+    padding: 0.8rem 1.2rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+
+    &.active {
+      background: white;
+      border-bottom: 2px solid @primary-color;
+      font-weight: 500;
+    }
+  }
+}
+
+.layers-panel {
+  background: white;
+  padding: 1rem;
+
+  .layer-item {
+    display: flex;
+    align-items: center;
+    padding: 0.8rem;
+    border-bottom: 1px solid @border-color;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    .layer-color {
+      width: 20px;
+      height: 20px;
+      border-radius: 4px;
+      background: @primary-color;
+      margin-right: 1rem;
+    }
+  }
+}
+
+.devtools-steps {
+  ol {
+    padding-left: 1.5rem;
+
+    li {
+      padding: 0.8rem 0;
+      border-bottom: 1px dashed @border-color;
+
+      &:last-child {
+        border-bottom: none;
       }
     }
   }
 }
 
 @media (max-width: 768px) {
-  .hero-section .hero-content h1 {
-    font-size: 2rem;
+  .header {
+    padding: 1.5rem;
+
+    h1 {
+      font-size: 2rem;
+    }
   }
 
-  .hero-section .hero-content p {
-    font-size: 1.1rem;
-  }
+  .flow-diagram {
+    .step {
+      min-width: 100%;
+      margin-bottom: 2rem;
 
-  .layer-animation {
-    height: 200px;
-  }
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
 
-  .section-header h2 {
-    font-size: 1.4rem !important;
-  }
-
-  .chart-container {
-    gap: 20px;
-  }
-
-  .chart-bar {
-    width: 80px;
-  }
-}
-
-@media (max-width: 480px) {
-  .hero-section {
-    padding: 30px 15px;
-  }
-
-  .section-content {
-    padding: 15px;
-  }
-
-  .chart-container {
-    gap: 10px;
-    padding: 0 10px;
-  }
-
-  .chart-bar {
-    width: 60px;
+    .arrow {
+      transform: rotate(90deg);
+      margin: 0.5rem auto;
+      width: 100%;
+      text-align: center;
+    }
   }
 }
 </style>

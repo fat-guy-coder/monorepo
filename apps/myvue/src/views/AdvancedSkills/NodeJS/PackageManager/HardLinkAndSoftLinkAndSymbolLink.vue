@@ -276,7 +276,7 @@ New-Item -ItemType SymbolicLink -Path "symlink" -Target "target"</pre>
 </script>
 
 <style lang="less" scoped>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
 
 .link-guide {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;

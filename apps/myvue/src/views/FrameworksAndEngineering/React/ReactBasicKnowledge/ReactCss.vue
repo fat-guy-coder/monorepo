@@ -585,7 +585,7 @@ const cssApproaches = [
 </script>
 
 <style lang="less" scoped>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap');
+
 
 // 颜色变量
 @primary-color: #3498db;

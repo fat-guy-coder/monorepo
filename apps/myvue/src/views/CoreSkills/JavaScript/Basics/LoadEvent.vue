@@ -168,7 +168,7 @@ const timelineEvents = [
       '执行不依赖外部资源的脚本'
     ],
     example: `document.addEventListener('DOMContentLoaded', () => {
-  console.log('DOM已完全解析');
+  console.log('DOM已完基本指南');
   // 初始化应用
 });`
   },

@@ -340,7 +340,7 @@ fn main(@builtin(global_invocation_id) id: vec3&lt;u32&gt;) {
 </script>
 
 <style lang="less" scoped>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
 
 .webgpu-guide {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;

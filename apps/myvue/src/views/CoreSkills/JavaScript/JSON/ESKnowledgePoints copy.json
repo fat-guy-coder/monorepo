@@ -1,0 +1,2221 @@
+[
+  {
+    "name": "基础语法",
+    "id": "base",
+    "items": [
+      {
+        "name": "let/const",
+        "id": "letAndconst",
+        "description": "块级作用域变量声明",
+        "importance": 5,
+        "tags": [
+          "作用域",
+          "变量"
+        ],
+        "version": "ES6",
+        "example": "let x = 10;\nconst PI = 3.14;",
+        "route": "letConst",
+        "browserSupport": [
+          "Chrome 49",
+          "Firefox 44",
+          "Safari 10",
+          "Edge 12",
+          "IE 11 (仅let部分支持有限)",
+          "Opera 36",
+          "iOS Safari 10",
+          "Android Browser 49",
+          "Node.js 6.0"
+        ]
+      },
+      {
+        "name": "箭头函数",
+        "id": "arrowFunction",
+        "description": "简洁函数语法和词法this绑定",
+        "importance": 5,
+        "tags": [
+          "函数",
+          "this"
+        ],
+        "version": "ES6",
+        "example": "const sum = (a, b) => a + b;",
+        "route": "arrowFunction",
+        "browserSupport": [
+          "Chrome 45",
+          "Firefox 22",
+          "Safari 10",
+          "Edge 12",
+          "IE 不支持",
+          "Opera 32",
+          "iOS Safari 10",
+          "Android Browser 49",
+          "Node.js 4.0"
+        ]
+      },
+      {
+        "name": "模板字符串",
+        "id": "templateString",
+        "description": "使用反引号定义的多行字符串",
+        "importance": 5,
+        "tags": [
+          "字符串",
+          "插值"
+        ],
+        "version": "ES6",
+        "example": "const greeting = `Hello, ${name}!`;",
+        "route": "templateString",
+        "browserSupport": [
+          "Chrome 41",
+          "Firefox 34",
+          "Safari 9",
+          "Edge 13",
+          "IE 不支持",
+          "Opera 28",
+          "iOS Safari 9",
+          "Android Browser 49",
+          "Node.js 4.0"
+        ]
+      },
+      {
+        "name": "解构赋值",
+        "id": "destructuring",
+        "description": "从数组或对象提取值",
+        "importance": 5,
+        "tags": [
+          "赋值",
+          "模式匹配"
+        ],
+        "version": "ES6",
+        "example": "const { name, age } = person;",
+        "route": "destructuring",
+        "browserSupport": [
+          "Chrome 49",
+          "Firefox 41",
+          "Safari 10",
+          "Edge 12",
+          "IE 不支持",
+          "Opera 36",
+          "iOS Safari 10",
+          "Android Browser 49",
+          "Node.js 6.0"
+        ]
+      },
+      {
+        "name": "默认参数",
+        "id": "defaultParameter",
+        "description": "函数参数默认值",
+        "importance": 5,
+        "tags": [
+          "函数",
+          "参数"
+        ],
+        "version": "ES6",
+        "example": "function greet(name = 'Guest') {...}",
+        "route": "DefaultAndRestParameters",
+        "browserSupport": [
+          "Chrome 49",
+          "Firefox 15",
+          "Safari 10",
+          "Edge 13",
+          "IE 不支持",
+          "Opera 36",
+          "iOS Safari 10",
+          "Android Browser 49",
+          "Node.js 6.0"
+        ]
+      },
+      {
+        "name": "剩余参数",
+        "id": "restParameter",
+        "description": "将剩余参数收集到数组中",
+        "importance": 5,
+        "tags": [
+          "函数",
+          "参数"
+        ],
+        "version": "ES6",
+        "example": "function sum(...nums) {...}",
+        "route": "DefaultAndRestParameters",
+        "browserSupport": [
+          "Chrome 47",
+          "Firefox 15",
+          "Safari 10",
+          "Edge 12",
+          "IE 不支持",
+          "Opera 34",
+          "iOS Safari 10",
+          "Android Browser 49",
+          "Node.js 6.0"
+        ]
+      },
+      {
+        "name": "展开运算符",
+        "id": "spreadOperator",
+        "description": "展开数组或对象",
+        "importance": 5,
+        "tags": [
+          "运算符",
+          "复制"
+        ],
+        "version": "ES6",
+        "example": "const newArr = [...arr1, ...arr2];",
+        "route": "SpreadOperator",
+        "browserSupport": [
+          "Chrome 46",
+          "Firefox 16",
+          "Safari 10",
+          "Edge 13",
+          "IE 不支持",
+          "Opera 33",
+          "iOS Safari 10",
+          "Android Browser 49",
+          "Node.js 6.0"
+        ]
+      },
+      {
+        "name": "可选链",
+        "id": "optionalChain",
+        "description": "安全访问嵌套属性",
+        "importance": 5,
+        "tags": [
+          "对象",
+          "安全访问"
+        ],
+        "version": "ES2020",
+        "example": "const street = user?.address?.street;",
+        "route": "OptionalChain",
+        "browserSupport": [
+          "Chrome 80",
+          "Firefox 72",
+          "Safari 13.1",
+          "Edge 80",
+          "IE 不支持",
+          "Opera 67",
+          "iOS Safari 13.4",
+          "Android Browser 80",
+          "Node.js 12.0"
+        ]
+      },
+      {
+        "name": "空值合并",
+        "id": "nullishCoalescing",
+        "description": "提供默认值的逻辑运算符",
+        "importance": 5,
+        "tags": [
+          "运算符",
+          "默认值"
+        ],
+        "version": "ES2020",
+        "example": "const value = input ?? 'default';",
+        "route": "NullishCoalescing",
+        "browserSupport": [
+          "Chrome 80",
+          "Firefox 72",
+          "Safari 13.1",
+          "Edge 80",
+          "IE 不支持",
+          "Opera 67",
+          "iOS Safari 13.4",
+          "Android Browser 80",
+          "Node.js 12.0"
+        ]
+      },
+      {
+        "name": "BigInt",
+        "id": "bigInt",
+        "description": "表示任意精度的整数",
+        "importance": 4,
+        "tags": [
+          "数值",
+          "精度"
+        ],
+        "version": "ES2020",
+        "example": "const bigNum = 12345678901234567890n;",
+        "route": "BigInt",
+        "browserSupport": [
+          "Chrome 67",
+          "Firefox 68",
+          "Safari 14",
+          "Edge 79",
+          "IE 不支持",
+          "Opera 54",
+          "iOS Safari 14",
+          "Android Browser 67",
+          "Node.js 10.4.0"
+        ]
+      },
+      {
+        "name": "全局This",
+        "id": "globalThis",
+        "description": "标准化全局对象引用",
+        "importance": 4,
+        "tags": [
+          "全局对象",
+          "跨环境"
+        ],
+        "version": "ES2020",
+        "example": "globalThis.setTimeout(...);",
+        "route": "GlobalThis",
+        "browserSupport": [
+          "Chrome 71",
+          "Firefox 65",
+          "Safari 12.1",
+          "Edge 79",
+          "IE 不支持",
+          "Opera 58",
+          "iOS Safari 12.2",
+          "Android Browser 71",
+          "Node.js 12.0.0"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "面向对象",
+    "id": "object",
+    "items": [
+      {
+        "name": "Class语法",
+        "id": "classSyntax",
+        "description": "类声明语法糖",
+        "importance": 5,
+        "tags": [
+          "类",
+          "继承"
+        ],
+        "version": "ES6",
+        "example": "class Person {\n  constructor(name) {...}\n}",
+        "route": "Class",
+        "browserSupport": [
+          "Chrome 42",
+          "Firefox 45",
+          "Safari 9",
+          "Edge 13",
+          "IE 不支持",
+          "Opera 29",
+          "iOS Safari 9",
+          "Android Browser 42",
+          "Node.js 4.0"
+        ]
+      },
+      {
+        "name": "类继承",
+        "id": "classInheritance",
+        "description": "使用extends实现继承",
+        "importance": 5,
+        "tags": [
+          "类",
+          "继承"
+        ],
+        "version": "ES6",
+        "example": "class Student extends Person {...}",
+        "route": "Class",
+        "browserSupport": [
+          "Chrome 42",
+          "Firefox 45",
+          "Safari 9",
+          "Edge 13",
+          "IE 不支持",
+          "Opera 29",
+          "iOS Safari 9",
+          "Android Browser 42",
+          "Node.js 4.0"
+        ]
+      },
+      {
+        "name": "静态方法",
+        "id": "staticMethod",
+        "description": "类静态方法和属性",
+        "importance": 4,
+        "tags": [
+          "类",
+          "方法"
+        ],
+        "version": "ES6",
+        "example": "class MathUtils {\n  static sum(a, b) {...}\n}",
+        "route": "Class",
+        "browserSupport": [
+          "Chrome 42",
+          "Firefox 45",
+          "Safari 9",
+          "Edge 13",
+          "IE 不支持",
+          "Opera 29",
+          "iOS Safari 9",
+          "Android Browser 42",
+          "Node.js 4.0"
+        ]
+      },
+      {
+        "name": "私有字段",
+        "id": "privateField",
+        "description": "类私有属性和方法",
+        "importance": 4,
+        "tags": [
+          "类",
+          "封装"
+        ],
+        "version": "ES2022",
+        "example": "class Person {\n  #name;\n  #getName() {...}\n}",
+        "route": "PrivateClassFields",
+        "browserSupport": [
+          "Chrome 74",
+          "Firefox 90",
+          "Safari 14",
+          "Edge 79",
+          "IE 不支持",
+          "Opera 62",
+          "iOS Safari 14",
+          "Android Browser 74",
+          "Node.js 12.0.0"
+        ]
+      },
+      {
+        "name": "静态块",
+        "id": "staticBlock",
+        "description": "类静态初始化块",
+        "importance": 3,
+        "tags": [
+          "类",
+          "初始化"
+        ],
+        "version": "ES2022",
+        "example": "class C {\n  static {\n    // 静态初始化代码\n  }\n}",
+        "route": "StaticBlock",
+        "browserSupport": [
+          "Chrome 93",
+          "Firefox 91",
+          "Safari 15",
+          "Edge 93",
+          "IE 不支持",
+          "Opera 79",
+          "iOS Safari 15",
+          "Android Browser 93",
+          "Node.js 16.0.0"
+        ]
+      },
+      {
+        "name": "公共字段",
+        "id": "publicField",
+        "description": "类公共实例字段",
+        "importance": 4,
+        "tags": [
+          "类",
+          "属性"
+        ],
+        "version": "ES2022",
+        "example": "class Person {\n  name = 'Anonymous';\n}",
+        "route": "Class",
+        "browserSupport": [
+          "Chrome 72",
+          "Firefox 69",
+          "Safari 14",
+          "Edge 79",
+          "IE 不支持",
+          "Opera 59",
+          "iOS Safari 14",
+          "Android Browser 72",
+          "Node.js 12.0.0"
+        ]
+      },
+      {
+        "name": "decorator",
+        "id": "decorator",
+        "description": "装饰器",
+        "importance": 4,
+        "tags": [
+          "类",
+          "装饰器"
+        ],
+        "version": "ES2024",
+        "example": "class Person {\n  @readonly\n  name = 'Anonymous';\n}",
+        "route": "Decorator",
+        "proposal": true,
+        "browserSupport": [
+          "Chrome 108 (实验性)",
+          "Firefox 121 (实验性)",
+          "Safari 17 (实验性)",
+          "Edge 108 (实验性)",
+          "IE 不支持",
+          "Opera 94 (实验性)",
+          "iOS Safari 17 (实验性)",
+          "Android Browser 108 (实验性)",
+          "Node.js 20.0.0 (实验性)"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "异步编程",
+    "id": "async",
+    "items": [
+      {
+        "name": "Promise",
+        "id": "promise",
+        "description": "异步操作处理对象",
+        "importance": 5,
+        "tags": [
+          "异步",
+          "回调"
+        ],
+        "version": "ES6",
+        "example": "new Promise((resolve, reject) => {...})",
+        "route": "Promise",
+        "browserSupport": [
+          "Chrome 32",
+          "Firefox 29",
+          "Safari 8",
+          "Edge 12",
+          "IE 11 (部分支持)",
+          "Opera 19",
+          "iOS Safari 8",
+          "Android Browser 32",
+          "Node.js 0.12"
+        ]
+      },
+      {
+        "name": "async/await",
+        "id": "asyncAwait",
+        "description": "异步代码同步写法",
+        "importance": 5,
+        "tags": [
+          "异步",
+          "语法糖"
+        ],
+        "version": "ES2017",
+        "example": "async function fetchData() {\n  const data = await getData();\n}",
+        "route": "AsyncAwait",
+        "browserSupport": [
+          "Chrome 55",
+          "Firefox 52",
+          "Safari 11",
+          "Edge 15",
+          "IE 不支持",
+          "Opera 42",
+          "iOS Safari 11",
+          "Android Browser 55",
+          "Node.js 7.6.0"
+        ]
+      },
+      {
+        "name": "Promise.all",
+        "id": "promiseAll",
+        "description": "并行执行多个Promise",
+        "importance": 5,
+        "tags": [
+          "并发",
+          "Promise"
+        ],
+        "version": "ES6",
+        "example": "Promise.all([p1, p2, p3]);",
+        "route": "Promise",
+        "browserSupport": [
+          "Chrome 32",
+          "Firefox 29",
+          "Safari 8",
+          "Edge 12",
+          "IE 11 (部分支持)",
+          "Opera 19",
+          "iOS Safari 8",
+          "Android Browser 32",
+          "Node.js 0.12"
+        ]
+      },
+      {
+        "name": "Promise.race",
+        "id": "promiseRace",
+        "description": "首个完成/拒绝的Promise",
+        "importance": 4,
+        "tags": [
+          "并发",
+          "Promise"
+        ],
+        "version": "ES6",
+        "example": "Promise.race([p1, p2]);",
+        "route": "Promise",
+        "browserSupport": [
+          "Chrome 32",
+          "Firefox 29",
+          "Safari 8",
+          "Edge 12",
+          "IE 11 (部分支持)",
+          "Opera 19",
+          "iOS Safari 8",
+          "Android Browser 32",
+          "Node.js 0.12"
+        ]
+      },
+      {
+        "name": "Promise.allSettled",
+        "id": "promiseAllSettled",
+        "description": "所有Promise完成后返回结果",
+        "importance": 4,
+        "tags": [
+          "并发",
+          "Promise"
+        ],
+        "version": "ES2020",
+        "example": "Promise.allSettled([p1, p2]);",
+        "route": "Promise",
+        "browserSupport": [
+          "Chrome 76",
+          "Firefox 71",
+          "Safari 13",
+          "Edge 79",
+          "IE 不支持",
+          "Opera 63",
+          "iOS Safari 13",
+          "Android Browser 76",
+          "Node.js 12.9.0"
+        ]
+      },
+      {
+        "name": "Promise.any",
+        "id": "promiseAny",
+        "description": "首个完成的Promise",
+        "importance": 4,
+        "tags": [
+          "并发",
+          "Promise"
+        ],
+        "version": "ES2021",
+        "example": "Promise.any([p1, p2]);",
+        "route": "Promise",
+        "browserSupport": [
+          "Chrome 85",
+          "Firefox 79",
+          "Safari 14",
+          "Edge 85",
+          "IE 不支持",
+          "Opera 71",
+          "iOS Safari 14",
+          "Android Browser 85",
+          "Node.js 15.0.0"
+        ]
+      },
+      {
+        "name": "异步迭代",
+        "id": "asyncIterator",
+        "description": "for await...of处理异步可迭代对象",
+        "importance": 4,
+        "tags": [
+          "异步",
+          "迭代"
+        ],
+        "version": "ES2018",
+        "example": "for await (const chunk of stream) {...}",
+        "route": "AsyncIterator",
+        "browserSupport": [
+          "Chrome 63",
+          "Firefox 57",
+          "Safari 12",
+          "Edge 79",
+          "IE 不支持",
+          "Opera 50",
+          "iOS Safari 12",
+          "Android Browser 63",
+          "Node.js 10.0.0"
+        ]
+      },
+      {
+        "name": "顶层await",
+        "id": "topLevelAwait",
+        "description": "在模块顶层使用await",
+        "importance": 4,
+        "tags": [
+          "异步",
+          "模块"
+        ],
+        "version": "ES2022",
+        "example": "const data = await fetchData();",
+        "route": "TopLevelAwait",
+        "browserSupport": [
+          "Chrome 89",
+          "Firefox 89",
+          "Safari 15",
+          "Edge 89",
+          "IE 不支持",
+          "Opera 75",
+          "iOS Safari 15",
+          "Android Browser 89",
+          "Node.js 14.8.0"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "数据结构",
+    "id": "data",
+    "items": [
+      {
+        "name": "Map",
+        "id": "map",
+        "description": "键值对集合",
+        "importance": 5,
+        "tags": [
+          "集合",
+          "数据结构"
+        ],
+        "version": "ES6",
+        "example": "const map = new Map();\nmap.set('key', 'value');",
+        "route": "SetMap",
+        "browserSupport": [
+          "Chrome 38",
+          "Firefox 13",
+          "Safari 8",
+          "Edge 12",
+          "IE 11",
+          "Opera 25",
+          "iOS Safari 8",
+          "Android Browser 38",
+          "Node.js 0.12"
+        ]
+      },
+      {
+        "name": "Set",
+        "id": "set",
+        "description": "唯一值集合",
+        "importance": 5,
+        "tags": [
+          "集合",
+          "唯一性"
+        ],
+        "version": "ES6",
+        "example": "const set = new Set([1, 2, 3]);",
+        "route": "SetMap",
+        "browserSupport": [
+          "Chrome 38",
+          "Firefox 13",
+          "Safari 8",
+          "Edge 12",
+          "IE 11",
+          "Opera 25",
+          "iOS Safari 8",
+          "Android Browser 38",
+          "Node.js 0.12"
+        ]
+      },
+      {
+        "name": "WeakMap",
+        "id": "weakMap",
+        "description": "弱引用键的Map",
+        "importance": 4,
+        "tags": [
+          "集合",
+          "弱引用"
+        ],
+        "version": "ES6",
+        "example": "const wm = new WeakMap();",
+        "route": "WeakRef",
+        "browserSupport": [
+          "Chrome 36",
+          "Firefox 6",
+          "Safari 8",
+          "Edge 12",
+          "IE 11",
+          "Opera 23",
+          "iOS Safari 8",
+          "Android Browser 36",
+          "Node.js 0.12"
+        ]
+      },
+      {
+        "name": "WeakSet",
+        "id": "weakSet",
+        "description": "弱引用值的Set",
+        "importance": 4,
+        "tags": [
+          "集合",
+          "弱引用"
+        ],
+        "version": "ES6",
+        "example": "const ws = new WeakSet();",
+        "route": "WeakRef",
+        "browserSupport": [
+          "Chrome 36",
+          "Firefox 34",
+          "Safari 8",
+          "Edge 12",
+          "IE 不支持",
+          "Opera 23",
+          "iOS Safari 8",
+          "Android Browser 36",
+          "Node.js 0.12"
+        ]
+      },
+      {
+        "name": "TypedArray",
+        "id": "typedArray",
+        "description": "类型化数组视图",
+        "importance": 4,
+        "tags": [
+          "数组",
+          "二进制"
+        ],
+        "version": "ES6",
+        "example": "const buffer = new ArrayBuffer(16);\nconst int32View = new Int32Array(buffer);",
+        "route": "ArrayBufferf",
+        "browserSupport": [
+          "Chrome 36",
+          "Firefox 13",
+          "Safari 8",
+          "Edge 12",
+          "IE 11",
+          "Opera 25",
+          "iOS Safari 8",
+          "Android Browser 38",
+          "Node.js 12.0.0"
+        ]
+      },
+      {
+        "name": "ArrayBuffer",
+        "id": "arrayBuffer",
+        "description": "通用的二进制数据缓冲区",
+        "importance": 4,
+        "tags": [
+          "二进制",
+          "缓冲区"
+        ],
+        "version": "ES6",
+        "example": "const buffer = new ArrayBuffer(16);",
+        "route": "ArrayBuffer",
+        "browserSupport": [
+          "Chrome 36",
+          "Firefox 13",
+          "Safari 8",
+          "Edge 12",
+          "IE 11",
+          "Opera 25",
+          "iOS Safari 8",
+          "Android Browser 38",
+          "Node.js 12.0.0"
+        ]
+      },
+      {
+        "name": "Object.fromEntries",
+        "id": "objectFromEntries",
+        "description": "键值对列表转对象",
+        "importance": 4,
+        "tags": [
+          "对象",
+          "转换"
+        ],
+        "version": "ES2019",
+        "example": "const obj = Object.fromEntries(map);",
+        "route": "Object2",
+        "browserSupport": [
+          "Chrome 73",
+          "Firefox 63",
+          "Safari 12.1",
+          "Edge 79",
+          "IE 不支持",
+          "Opera 60",
+          "iOS Safari 12.2",
+          "Android Browser 73",
+          "Node.js 12.0.0"
+        ]
+      },
+      {
+        "name": "Array.prototype.at",
+        "id": "arrayAt",
+        "description": "数组索引访问方法",
+        "importance": 4,
+        "tags": [
+          "数组",
+          "方法"
+        ],
+        "version": "ES2022",
+        "example": "const last = arr.at(-1);",
+        "route": "Array",
+        "browserSupport": [
+          "Chrome 92",
+          "Firefox 90",
+          "Safari 15",
+          "Edge 92",
+          "IE 不支持",
+          "Opera 78",
+          "iOS Safari 15",
+          "Android Browser 92",
+          "Node.js 16.6.0"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "函数增强",
+    "id": "function",
+    "items": [
+      {
+        "name": "默认参数",
+        "id": "defaultParameter",
+        "description": "函数参数默认值",
+        "importance": 5,
+        "tags": [
+          "函数",
+          "参数"
+        ],
+        "version": "ES6",
+        "example": "function multiply(a, b = 1) {\n  return a * b;\n}",
+        "route": "DefaultAndRestParameters",
+        "browserSupport": [
+          "Chrome 49",
+          "Firefox 15",
+          "Safari 10",
+          "Edge 13",
+          "IE 不支持",
+          "Opera 36",
+          "iOS Safari 10",
+          "Android Browser 49",
+          "Node.js 6.0"
+        ]
+      },
+      {
+        "name": "剩余参数",
+        "id": "restParameter",
+        "description": "收集剩余参数为数组",
+        "importance": 5,
+        "tags": [
+          "函数",
+          "参数"
+        ],
+        "version": "ES6",
+        "example": "function sum(...numbers) {\n  return numbers.reduce((a, b) => a + b);\n}",
+        "route": "DefaultAndRestParameters",
+        "browserSupport": [
+          "Chrome 47",
+          "Firefox 15",
+          "Safari 10",
+          "Edge 12",
+          "IE 不支持",
+          "Opera 34",
+          "iOS Safari 10",
+          "Android Browser 49",
+          "Node.js 6.0"
+        ]
+      },
+      {
+        "name": "参数解构",
+        "id": "parameterDestructuring",
+        "description": "函数参数解构赋值",
+        "importance": 4,
+        "tags": [
+          "函数",
+          "解构"
+        ],
+        "version": "ES6",
+        "example": "function fullName({firstName, lastName}) {\n  return `${firstName} ${lastName}`;\n}",
+        "route": "Destructuring",
+        "browserSupport": [
+          "Chrome 49",
+          "Firefox 41",
+          "Safari 10",
+          "Edge 12",
+          "IE 不支持",
+          "Opera 36",
+          "iOS Safari 10",
+          "Android Browser 49",
+          "Node.js 6.0"
+        ]
+      },
+      {
+        "name": "尾调用优化",
+        "id": "tailCallOptimization",
+        "description": "递归函数调用优化",
+        "importance": 3,
+        "tags": [
+          "函数",
+          "优化"
+        ],
+        "version": "ES6",
+        "example": "function factorial(n, total = 1) {\n  if (n === 0) return total;\n  return factorial(n - 1, n * total);\n}",
+        "route": "TailCall",
+        "browserSupport": [
+          "Chrome 不支持",
+          "Firefox 不支持",
+          "Safari 10 (仅严格模式)",
+          "Edge 不支持",
+          "IE 不支持",
+          "Opera 不支持",
+          "iOS Safari 10 (仅严格模式)",
+          "Android Browser 不支持",
+          "Node.js 不支持"
+        ]
+      },
+      {
+        "name": "函数名属性",
+        "id": "functionNameProperty",
+        "description": "函数对象的name属性",
+        "importance": 3,
+        "tags": [
+          "函数",
+          "元数据"
+        ],
+        "version": "ES6",
+        "example": "function foo() {}\nconsole.log(foo.name); // 'foo'",
+        "route": "Functions",
+        "browserSupport": [
+          "Chrome 33",
+          "Firefox 53",
+          "Safari 9",
+          "Edge 12",
+          "IE 不支持",
+          "Opera 20",
+          "iOS Safari 9",
+          "Android Browser 33",
+          "Node.js 4.0"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "模块系统",
+    "id": "module",
+    "items": [
+      {
+        "name": "import/export",
+        "id": "importExport",
+        "description": "模块导入导出",
+        "importance": 5,
+        "tags": [
+          "模块",
+          "封装"
+        ],
+        "version": "ES6",
+        "example": "// module.js\nexport const PI = 3.14;\n// main.js\nimport { PI } from './module.js';",
+        "route": "Module",
+        "browserSupport": [
+          "Chrome 61",
+          "Firefox 60",
+          "Safari 10.1",
+          "Edge 16",
+          "IE 不支持",
+          "Opera 48",
+          "iOS Safari 10.3",
+          "Android Browser 61",
+          "Node.js 12.0.0 (仅ESM)"
+        ]
+      },
+      {
+        "name": "默认导出",
+        "id": "defaultExport",
+        "description": "模块默认导出",
+        "importance": 5,
+        "tags": [
+          "模块",
+          "导出"
+        ],
+        "version": "ES6",
+        "example": "// module.js\nexport default function() {...}\n// main.js\nimport myFunc from './module.js';",
+        "route": "Module",
+        "browserSupport": [
+          "Chrome 61",
+          "Firefox 60",
+          "Safari 10.1",
+          "Edge 16",
+          "IE 不支持",
+          "Opera 48",
+          "iOS Safari 10.3",
+          "Android Browser 61",
+          "Node.js 12.0.0 (仅ESM)"
+        ]
+      },
+      {
+        "name": "命名空间导入",
+        "id": "namespaceImport",
+        "description": "导入整个模块作为命名空间",
+        "importance": 4,
+        "tags": [
+          "模块",
+          "导入"
+        ],
+        "version": "ES6",
+        "example": "import * as utils from './utils.js';",
+        "route": "Module",
+        "browserSupport": [
+          "Chrome 61",
+          "Firefox 60",
+          "Safari 10.1",
+          "Edge 16",
+          "IE 不支持",
+          "Opera 48",
+          "iOS Safari 10.3",
+          "Android Browser 61",
+          "Node.js 12.0.0 (仅ESM)"
+        ]
+      },
+      {
+        "name": "动态导入",
+        "id": "dynamicImport",
+        "description": "运行时按需加载模块",
+        "importance": 4,
+        "tags": [
+          "模块",
+          "懒加载"
+        ],
+        "version": "ES2020",
+        "example": "const module = await import('./module.js');",
+        "route": "DynamicImport",
+        "browserSupport": [
+          "Chrome 63",
+          "Firefox 67",
+          "Safari 11.1",
+          "Edge 79",
+          "IE 不支持",
+          "Opera 50",
+          "iOS Safari 11.3",
+          "Android Browser 63",
+          "Node.js 13.2.0"
+        ]
+      },
+      {
+        "name": "import.meta",
+        "id": "importMeta",
+        "description": "提供当前模块的元信息",
+        "importance": 3,
+        "tags": [
+          "模块",
+          "元数据"
+        ],
+        "version": "ES2020",
+        "example": "console.log(import.meta.url);",
+        "route": "Module",
+        "browserSupport": [
+          "Chrome 64",
+          "Firefox 62",
+          "Safari 11.1",
+          "Edge 79",
+          "IE 不支持",
+          "Opera 51",
+          "iOS Safari 11.3",
+          "Android Browser 64",
+          "Node.js 12.0.0"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "数组增强",
+    "id": "array",
+    "items": [
+      {
+        "name": "Array.from",
+        "id": "arrayFrom",
+        "description": "类数组转数组",
+        "importance": 5,
+        "tags": [
+          "数组",
+          "转换"
+        ],
+        "version": "ES6",
+        "example": "const arr = Array.from(document.querySelectorAll('div'));",
+        "route": "Array",
+        "browserSupport": [
+          "Chrome 45",
+          "Firefox 32",
+          "Safari 9",
+          "Edge 12",
+          "IE 11",
+          "Opera 32",
+          "iOS Safari 9",
+          "Android Browser 45",
+          "Node.js 4.0"
+        ]
+      },
+      {
+        "name": "Array.of",
+        "id": "arrayOf",
+        "description": "创建包含参数的新数组",
+        "importance": 4,
+        "tags": [
+          "数组",
+          "创建"
+        ],
+        "version": "ES6",
+        "example": "const arr = Array.of(1, 2, 3);",
+        "route": "Array",
+        "browserSupport": [
+          "Chrome 45",
+          "Firefox 25",
+          "Safari 9",
+          "Edge 12",
+          "IE 不支持",
+          "Opera 32",
+          "iOS Safari 9",
+          "Android Browser 45",
+          "Node.js 4.0"
+        ]
+      },
+      {
+        "name": "find/findIndex",
+        "id": "findAndFindIndex",
+        "description": "查找数组元素",
+        "importance": 5,
+        "tags": [
+          "数组",
+          "查找"
+        ],
+        "version": "ES6",
+        "example": "const found = arr.find(item => item.id === 123);",
+        "route": "Array",
+        "browserSupport": [
+          "Chrome 45",
+          "Firefox 25",
+          "Safari 7.1",
+          "Edge 12",
+          "IE 不支持",
+          "Opera 32",
+          "iOS Safari 8.4",
+          "Android Browser 45",
+          "Node.js 4.0"
+        ]
+      },
+      {
+        "name": "includes",
+        "id": "includes",
+        "description": "检查数组是否包含值",
+        "importance": 5,
+        "tags": [
+          "数组",
+          "包含"
+        ],
+        "version": "ES2016",
+        "example": "if (arr.includes('value')) {...}",
+        "route": "Array",
+        "browserSupport": [
+          "Chrome 47",
+          "Firefox 43",
+          "Safari 9",
+          "Edge 14",
+          "IE 不支持",
+          "Opera 34",
+          "iOS Safari 9",
+          "Android Browser 47",
+          "Node.js 6.0"
+        ]
+      },
+      {
+        "name": "flat/flatMap",
+        "id": "flatAndFlatMap",
+        "description": "数组扁平化",
+        "importance": 4,
+        "tags": [
+          "数组",
+          "扁平化"
+        ],
+        "version": "ES2019",
+        "example": "const flatArr = arr.flat(2);",
+        "route": "Array",
+        "browserSupport": [
+          "Chrome 69",
+          "Firefox 62",
+          "Safari 12",
+          "Edge 79",
+          "IE 不支持",
+          "Opera 56",
+          "iOS Safari 12",
+          "Android Browser 69",
+          "Node.js 11.0.0"
+        ]
+      },
+      {
+        "name": "Array.prototype.at",
+        "id": "arrayAt",
+        "description": "数组索引访问方法",
+        "importance": 4,
+        "tags": [
+          "数组",
+          "方法"
+        ],
+        "version": "ES2022",
+        "example": "const last = arr.at(-1);",
+        "route": "Array",
+        "browserSupport": [
+          "Chrome 92",
+          "Firefox 90",
+          "Safari 15",
+          "Edge 92",
+          "IE 不支持",
+          "Opera 78",
+          "iOS Safari 15",
+          "Android Browser 92",
+          "Node.js 16.6.0"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "对象增强",
+    "id": "object",
+    "items": [
+      {
+        "name": "属性简写",
+        "id": "propertyShorthand",
+        "description": "对象属性简写语法",
+        "importance": 5,
+        "tags": [
+          "对象",
+          "语法糖"
+        ],
+        "version": "ES6",
+        "example": "const name = 'John';\nconst obj = { name };",
+        "route": "Object2",
+        "browserSupport": [
+          "Chrome 41",
+          "Firefox 33",
+          "Safari 9",
+          "Edge 12",
+          "IE 不支持",
+          "Opera 28",
+          "iOS Safari 9",
+          "Android Browser 41",
+          "Node.js 4.0"
+        ]
+      },
+      {
+        "name": "方法简写",
+        "id": "methodShorthand",
+        "description": "对象方法简写语法",
+        "importance": 5,
+        "tags": [
+          "对象",
+          "方法"
+        ],
+        "version": "ES6",
+        "example": "const obj = {\n  sayHello() {\n    console.log('Hello');\n  }\n};",
+        "route": "Object2",
+        "browserSupport": [
+          "Chrome 41",
+          "Firefox 33",
+          "Safari 9",
+          "Edge 12",
+          "IE 不支持",
+          "Opera 28",
+          "iOS Safari 9",
+          "Android Browser 41",
+          "Node.js 4.0"
+        ]
+      },
+      {
+        "name": "计算属性名",
+        "id": "computedPropertyName",
+        "description": "动态属性名",
+        "importance": 5,
+        "tags": [
+          "对象",
+          "动态"
+        ],
+        "version": "ES6",
+        "example": "const prop = 'name';\nconst obj = { [prop]: 'John' };",
+        "route": "Object2",
+        "browserSupport": [
+          "Chrome 44",
+          "Firefox 34",
+          "Safari 9",
+          "Edge 12",
+          "IE 不支持",
+          "Opera 31",
+          "iOS Safari 9",
+          "Android Browser 44",
+          "Node.js 4.0"
+        ]
+      },
+      {
+        "name": "Object.assign",
+        "id": "objectAssign",
+        "description": "对象属性合并",
+        "importance": 5,
+        "tags": [
+          "对象",
+          "合并"
+        ],
+        "version": "ES6",
+        "example": "const merged = Object.assign({}, obj1, obj2);",
+        "route": "Object2",
+        "browserSupport": [
+          "Chrome 45",
+          "Firefox 34",
+          "Safari 9",
+          "Edge 12",
+          "IE 不支持",
+          "Opera 32",
+          "iOS Safari 9",
+          "Android Browser 45",
+          "Node.js 4.0"
+        ]
+      },
+      {
+        "name": "Object.is",
+        "id": "objectIs",
+        "description": "值比较方法",
+        "importance": 4,
+        "tags": [
+          "对象",
+          "比较"
+        ],
+        "version": "ES6",
+        "example": "Object.is(NaN, NaN); // true",
+        "route": "Object2",
+        "browserSupport": [
+          "Chrome 30",
+          "Firefox 22",
+          "Safari 9",
+          "Edge 12",
+          "IE 不支持",
+          "Opera 17",
+          "iOS Safari 9",
+          "Android Browser 30",
+          "Node.js 0.12"
+        ]
+      },
+      {
+        "name": "Object.values/Object.entries",
+        "id": "objectValuesAndEntries",
+        "description": "对象值/键值对数组",
+        "importance": 5,
+        "tags": [
+          "对象",
+          "转换"
+        ],
+        "version": "ES2017",
+        "example": "const values = Object.values(obj);",
+        "route": "Object2",
+        "browserSupport": [
+          "Chrome 54",
+          "Firefox 47",
+          "Safari 10.1",
+          "Edge 14",
+          "IE 不支持",
+          "Opera 41",
+          "iOS Safari 10.3",
+          "Android Browser 54",
+          "Node.js 7.0.0"
+        ]
+      },
+      {
+        "name": "Object.fromEntries",
+        "id": "objectFromEntries",
+        "description": "键值对列表转对象",
+        "importance": 4,
+        "tags": [
+          "对象",
+          "转换"
+        ],
+        "version": "ES2019",
+        "example": "const obj = Object.fromEntries(map);",
+        "route": "Object2",
+        "browserSupport": [
+          "Chrome 73",
+          "Firefox 63",
+          "Safari 12.1",
+          "Edge 79",
+          "IE 不支持",
+          "Opera 60",
+          "iOS Safari 12.2",
+          "Android Browser 73",
+          "Node.js 12.0.0"
+        ]
+      },
+      {
+        "name": "可选链",
+        "id": "optionalChain",
+        "description": "安全访问嵌套属性",
+        "importance": 5,
+        "tags": [
+          "对象",
+          "安全访问"
+        ],
+        "version": "ES2020",
+        "example": "const street = user?.address?.street;",
+        "route": "OptionalChain",
+        "browserSupport": [
+          "Chrome 80",
+          "Firefox 72",
+          "Safari 13.1",
+          "Edge 80",
+          "IE 不支持",
+          "Opera 67",
+          "iOS Safari 13.4",
+          "Android Browser 80",
+          "Node.js 12.0"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "字符串增强",
+    "id": "string",
+    "items": [
+      {
+        "name": "模板字符串",
+        "id": "templateString",
+        "description": "多行字符串和插值",
+        "importance": 5,
+        "tags": [
+          "字符串",
+          "插值"
+        ],
+        "version": "ES6",
+        "example": "const str = `Hello, ${name}!\nWelcome back.`;",
+        "route": "templateString",
+        "browserSupport": [
+          "Chrome 41",
+          "Firefox 34",
+          "Safari 9",
+          "Edge 13",
+          "IE 不支持",
+          "Opera 28",
+          "iOS Safari 9",
+          "Android Browser 49",
+          "Node.js 4.0"
+        ]
+      },
+      {
+        "name": "标签模板",
+        "id": "taggedTemplate",
+        "description": "模板字符串函数调用",
+        "importance": 4,
+        "tags": [
+          "字符串",
+          "函数"
+        ],
+        "version": "ES6",
+        "example": "const result = tag`Hello ${name}`;",
+        "route": "TaggedTemplate",
+        "browserSupport": [
+          "Chrome 41",
+          "Firefox 34",
+          "Safari 9",
+          "Edge 13",
+          "IE 不支持",
+          "Opera 28",
+          "iOS Safari 9",
+          "Android Browser 49",
+          "Node.js 4.0"
+        ]
+      },
+      {
+        "name": "String.prototype.includes",
+        "id": "stringIncludes",
+        "description": "检查是否包含子字符串",
+        "importance": 5,
+        "tags": [
+          "字符串",
+          "包含"
+        ],
+        "version": "ES6",
+        "example": "if (str.includes('substr')) {...}",
+        "route": "String",
+        "browserSupport": [
+          "Chrome 41",
+          "Firefox 40",
+          "Safari 9",
+          "Edge 12",
+          "IE 不支持",
+          "Opera 28",
+          "iOS Safari 9",
+          "Android Browser 41",
+          "Node.js 4.0"
+        ]
+      },
+      {
+        "name": "String.prototype.startsWith/endsWith",
+        "id": "stringStartsWithAndEndsWith",
+        "description": "检查开头/结尾",
+        "importance": 5,
+        "tags": [
+          "字符串",
+          "检查"
+        ],
+        "version": "ES6",
+        "example": "if (str.startsWith('http')) {...}",
+        "route": "String",
+        "browserSupport": [
+          "Chrome 41",
+          "Firefox 17",
+          "Safari 9",
+          "Edge 12",
+          "IE 不支持",
+          "Opera 28",
+          "iOS Safari 9",
+          "Android Browser 41",
+          "Node.js 4.0"
+        ]
+      },
+      {
+        "name": "String.prototype.repeat",
+        "id": "stringRepeat",
+        "description": "重复字符串",
+        "importance": 4,
+        "tags": [
+          "字符串",
+          "重复"
+        ],
+        "version": "ES6",
+        "example": "const indent = ' '.repeat(4);",
+        "route": "String",
+        "browserSupport": [
+          "Chrome 41",
+          "Firefox 24",
+          "Safari 9",
+          "Edge 12",
+          "IE 不支持",
+          "Opera 28",
+          "iOS Safari 9",
+          "Android Browser 41",
+          "Node.js 4.0"
+        ]
+      },
+      {
+        "name": "String.prototype.padStart/padEnd",
+        "id": "stringPadStartAndPadEnd",
+        "description": "字符串填充",
+        "importance": 4,
+        "tags": [
+          "字符串",
+          "填充"
+        ],
+        "version": "ES2017",
+        "example": "const str = '5'.padStart(2, '0'); // '05'",
+        "route": "String",
+        "browserSupport": [
+          "Chrome 57",
+          "Firefox 48",
+          "Safari 10",
+          "Edge 15",
+          "IE 不支持",
+          "Opera 44",
+          "iOS Safari 10.3",
+          "Android Browser 57",
+          "Node.js 8.0.0"
+        ]
+      },
+      {
+        "name": "String.prototype.trimStart/trimEnd",
+        "id": "stringTrimStartAndTrimEnd",
+        "description": "去除空白字符",
+        "importance": 4,
+        "tags": [
+          "字符串",
+          "清理"
+        ],
+        "version": "ES2019",
+        "example": "const clean = str.trimStart();",
+        "route": "String",
+        "browserSupport": [
+          "Chrome 66",
+          "Firefox 61",
+          "Safari 12",
+          "Edge 79",
+          "IE 不支持",
+          "Opera 53",
+          "iOS Safari 12",
+          "Android Browser 66",
+          "Node.js 10.0.0"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "符号与元编程",
+    "id": "symbol",
+    "items": [
+      {
+        "name": "Symbol",
+        "id": "symbol",
+        "description": "创建唯一标识符",
+        "importance": 4,
+        "tags": [
+          "符号",
+          "唯一性"
+        ],
+        "version": "ES6",
+        "example": "const sym = Symbol('description');",
+        "route": "Symbol",
+        "browserSupport": [
+          "Chrome 38",
+          "Firefox 36",
+          "Safari 9",
+          "Edge 12",
+          "IE 11 (部分支持)",
+          "Opera 25",
+          "iOS Safari 9",
+          "Android Browser 38",
+          "Node.js 0.12"
+        ]
+      },
+      {
+        "name": "Symbol.iterator",
+        "id": "symbolIterator",
+        "description": "定义对象的默认迭代器",
+        "importance": 5,
+        "tags": [
+          "符号",
+          "迭代"
+        ],
+        "version": "ES6",
+        "example": "obj[Symbol.iterator] = function*() {...}",
+        "route": "Symbol",
+        "browserSupport": [
+          "Chrome 36",
+          "Firefox 36",
+          "Safari 9",
+          "Edge 12",
+          "IE 11 (部分支持)",
+          "Opera 23",
+          "iOS Safari 9",
+          "Android Browser 36",
+          "Node.js 0.12"
+        ]
+      },
+      {
+        "name": "Symbol.asyncIterator",
+        "id": "symbolAsyncIterator",
+        "description": "定义异步迭代器",
+        "importance": 4,
+        "tags": [
+          "符号",
+          "异步"
+        ],
+        "version": "ES2018",
+        "example": "obj[Symbol.asyncIterator] = async function*() {...}",
+        "route": "Symbol",
+        "browserSupport": [
+          "Chrome 63",
+          "Firefox 57",
+          "Safari 12",
+          "Edge 79",
+          "IE 不支持",
+          "Opera 50",
+          "iOS Safari 12",
+          "Android Browser 63",
+          "Node.js 10.0.0"
+        ]
+      },
+      {
+        "name": "Symbol.toStringTag",
+        "id": "symbolToStringTag",
+        "description": "自定义对象toString标签",
+        "importance": 3,
+        "tags": [
+          "符号",
+          "元编程"
+        ],
+        "version": "ES6",
+        "example": "class MyClass {\n  get [Symbol.toStringTag]() {\n    return 'MyClass';\n  }\n}",
+        "route": "Symbol",
+        "browserSupport": [
+          "Chrome 38",
+          "Firefox 36",
+          "Safari 9",
+          "Edge 12",
+          "IE 11 (部分支持)",
+          "Opera 25",
+          "iOS Safari 9",
+          "Android Browser 38",
+          "Node.js 0.12"
+        ]
+      },
+      {
+        "name": "Proxy",
+        "id": "proxy",
+        "description": "对象操作拦截器",
+        "importance": 4,
+        "tags": [
+          "代理",
+          "元编程"
+        ],
+        "version": "ES6",
+        "example": "const proxy = new Proxy(target, handlers);",
+        "route": "Proxy2",
+        "browserSupport": [
+          "Chrome 49",
+          "Firefox 18",
+          "Safari 10",
+          "Edge 12",
+          "IE 不支持",
+          "Opera 36",
+          "iOS Safari 10",
+          "Android Browser 49",
+          "Node.js 6.0"
+        ]
+      },
+      {
+        "name": "Reflect",
+        "id": "reflect",
+        "description": "对象操作反射API",
+        "importance": 4,
+        "tags": [
+          "反射",
+          "元编程"
+        ],
+        "version": "ES6",
+        "example": "Reflect.set(obj, 'prop', value);",
+        "route": "Reflect",
+        "browserSupport": [
+          "Chrome 49",
+          "Firefox 42",
+          "Safari 10",
+          "Edge 12",
+          "IE 不支持",
+          "Opera 36",
+          "iOS Safari 10",
+          "Android Browser 49",
+          "Node.js 6.0"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "迭代器与生成器",
+    "id": "iterator",
+    "items": [
+      {
+        "name": "for...of循环",
+        "id": "forOfLoop",
+        "description": "遍历可迭代对象",
+        "importance": 5,
+        "tags": [
+          "迭代",
+          "循环"
+        ],
+        "version": "ES6",
+        "example": "for (const item of iterable) {...}",
+        "browserSupport": [
+          "Chrome 38",
+          "Firefox 13",
+          "Safari 7.1",
+          "Edge 12",
+          "IE 11 (部分支持)",
+          "Opera 25",
+          "iOS Safari 8",
+          "Android Browser 38",
+          "Node.js 0.12"
+        ]
+      },
+      {
+        "name": "迭代协议",
+        "id": "iterationProtocol",
+        "description": "可迭代协议和迭代器协议",
+        "importance": 4,
+        "tags": [
+          "迭代",
+          "协议"
+        ],
+        "version": "ES6",
+        "example": "const iterable = {\n  [Symbol.iterator]() {\n    return {\n      next() {...}\n    }\n  }\n}",
+        "browserSupport": [
+          "Chrome 36",
+          "Firefox 36",
+          "Safari 9",
+          "Edge 12",
+          "IE 11 (部分支持)",
+          "Opera 23",
+          "iOS Safari 9",
+          "Android Browser 36",
+          "Node.js 0.12"
+        ]
+      },
+      {
+        "name": "生成器函数",
+        "id": "generatorFunction",
+        "description": "创建生成器对象",
+        "importance": 4,
+        "tags": [
+          "生成器",
+          "函数"
+        ],
+        "version": "ES6",
+        "example": "function* gen() {\n  yield 1;\n  yield 2;\n}",
+        "browserSupport": [
+          "Chrome 39",
+          "Firefox 26",
+          "Safari 10",
+          "Edge 13",
+          "IE 不支持",
+          "Opera 26",
+          "iOS Safari 10",
+          "Android Browser 39",
+          "Node.js 4.0"
+        ]
+      },
+      {
+        "name": "yield表达式",
+        "id": "yieldExpression",
+        "description": "暂停和恢复生成器",
+        "importance": 4,
+        "tags": [
+          "生成器",
+          "控制"
+        ],
+        "version": "ES6",
+        "example": "function* gen() {\n  const result = yield someValue;\n}",
+        "browserSupport": [
+          "Chrome 39",
+          "Firefox 26",
+          "Safari 10",
+          "Edge 13",
+          "IE 不支持",
+          "Opera 26",
+          "iOS Safari 10",
+          "Android Browser 39",
+          "Node.js 4.0"
+        ]
+      },
+      {
+        "name": "yield*表达式",
+        "id": "yieldStarExpression",
+        "description": "委托给另一个生成器",
+        "importance": 4,
+        "tags": [
+          "生成器",
+          "委托"
+        ],
+        "version": "ES6",
+        "example": "function* gen() {\n  yield* anotherGen();\n}",
+        "browserSupport": [
+          "Chrome 39",
+          "Firefox 27",
+          "Safari 10",
+          "Edge 13",
+          "IE 不支持",
+          "Opera 26",
+          "iOS Safari 10",
+          "Android Browser 39",
+          "Node.js 4.0"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "ES2023新特性",
+    "id": "es2023",
+    "items": [
+      {
+        "name": "Array find from last",
+        "id": "arrayFindFromLast",
+        "description": "从数组末尾查找元素",
+        "importance": 4,
+        "tags": [
+          "数组",
+          "查找"
+        ],
+        "version": "ES2023",
+        "example": "const lastEven = arr.findLast(n => n % 2 === 0);",
+        "route": "Array",
+        "browserSupport": [
+          "Chrome 97",
+          "Firefox 104",
+          "Safari 16.4",
+          "Edge 97",
+          "IE 不支持",
+          "Opera 83",
+          "iOS Safari 16.4",
+          "Android Browser 97",
+          "Node.js 18.0.0"
+        ]
+      },
+      {
+        "name": "Hashbang语法",
+        "id": "hashbangSyntax",
+        "description": "支持Shebang行",
+        "importance": 2,
+        "tags": [
+          "语法",
+          "脚本"
+        ],
+        "version": "ES2023",
+        "example": "#!/usr/bin/env node",
+        "route": "Hashbang",
+        "browserSupport": [
+          "Chrome 74",
+          "Firefox 67",
+          "Safari 15.4",
+          "Edge 79",
+          "IE 不支持",
+          "Opera 62",
+          "iOS Safari 15.4",
+          "Android Browser 74",
+          "Node.js 12.0.0"
+        ]
+      },
+      {
+        "name": "Symbol作为WeakMap键",
+        "id": "symbolAsWeakMapKey",
+        "description": "允许Symbol作为WeakMap键",
+        "importance": 3,
+        "tags": [
+          "符号",
+          "WeakMap"
+        ],
+        "version": "ES2023",
+        "example": "const wm = new WeakMap();\nwm.set(Symbol(), value);",
+        "route": "WekRef",
+        "browserSupport": [
+          "Chrome 123",
+          "Firefox 120",
+          "Safari 17",
+          "Edge 123",
+          "IE 不支持",
+          "Opera 109",
+          "iOS Safari 17",
+          "Android Browser 123",
+          "Node.js 20.0.0"
+        ]
+      },
+      {
+        "name": "改变数组副本方法",
+        "id": "changeArrayCopyMethods",
+        "description": "返回数组副本而非修改原数组",
+        "importance": 4,
+        "tags": [
+          "数组",
+          "不可变性"
+        ],
+        "version": "ES2023",
+        "example": "const sorted = arr.toSorted();\nconst reversed = arr.toReversed();",
+        "route": "Array",
+        "browserSupport": [
+          "Chrome 110",
+          "Firefox 115",
+          "Safari 16.4",
+          "Edge 110",
+          "IE 不支持",
+          "Opera 96",
+          "iOS Safari 16.4",
+          "Android Browser 110",
+          "Node.js 20.0.0"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "ES2024新特性提案",
+    "id": "es2024",
+    "items": [
+      {
+        "name": "Promise.withResolvers",
+        "id": "promiseWithResolvers",
+        "description": "创建具有resolve和reject方法的Promise",
+        "importance": 4,
+        "tags": [
+          "Promise",
+          "resolve",
+          "reject"
+        ],
+        "version": "ES2024",
+        "example": "const { resolve, reject } = Promise.withResolvers();",
+        "compatible": [
+          "Chrome 134",
+          "Firefox 134",
+          "Safari 17",
+          "Edge 134",
+          "Node.js 20.10.0"
+        ],
+        "route": "Promise",
+        "browserSupport": [
+          "Chrome 113",
+          "Firefox 113",
+          "Safari 17",
+          "Edge 113",
+          "IE 不支持",
+          "Opera 99",
+          "iOS Safari 17",
+          "Android Browser 113",
+          "Node.js 20.10.0"
+        ]
+      },
+      {
+        "name": "Object.groupBy",
+        "id": "objectGroupBy",
+        "description": "根据属性分组对象",
+        "importance": 4,
+        "tags": [
+          "对象",
+          "分组"
+        ],
+        "version": "ES2024",
+        "example": "const grouped = Object.groupBy(arr, item => item.category);",
+        "compatible": [
+          "Chrome 134",
+          "Firefox 134",
+          "Safari 17",
+          "Edge 134",
+          "Node.js 20.10.0"
+        ],
+        "route": "Object2",
+        "browserSupport": [
+          "Chrome 120",
+          "Firefox 120",
+          "Safari 17",
+          "Edge 120",
+          "IE 不支持",
+          "Opera 106",
+          "iOS Safari 17",
+          "Android Browser 120",
+          "Node.js 20.10.0"
+        ]
+      },
+      {
+        "name": "Array.prototype.toReversed/toSorted/toSpliced/with",
+        "id": "arrayToReversed",
+        "description": "返回数组副本而非修改原数组",
+        "importance": 4,
+        "tags": [
+          "数组",
+          "不可变性"
+        ],
+        "version": "ES2024",
+        "example": "const reversed = arr.toReversed();",
+        "compatible": [
+          "Chrome 134",
+          "Firefox 134",
+          "Safari 17",
+          "Edge 134",
+          "Node.js 20.10.0"
+        ],
+        "route": "Array",
+        "browserSupport": [
+          "Chrome 110",
+          "Firefox 115",
+          "Safari 16.4",
+          "Edge 110",
+          "IE 不支持",
+          "Opera 96",
+          "iOS Safari 16.4",
+          "Android Browser 110",
+          "Node.js 20.0.0"
+        ]
+      },
+      {
+        "name": "RegExp v flag",
+        "id": "regExpVFlag",
+        "description": "v标志用于启用Unicode模式，支持Unicode字符类和转义序列",
+        "importance": 4,
+        "tags": [
+          "正则表达式",
+          "v标志"
+        ],
+        "version": "ES2024",
+        "example": "const reg = /hello/v;",
+        "compatible": [
+          "Chrome 134",
+          "Firefox 134",
+          "Safari 17",
+          "Edge 134",
+          "Node.js 20.10.0"
+        ],
+        "route": "RegExp",
+        "proposal": true,
+        "browserSupport": [
+          "Chrome 120 (实验性)",
+          "Firefox 120 (实验性)",
+          "Safari 17 (实验性)",
+          "Edge 120 (实验性)",
+          "IE 不支持",
+          "Opera 106 (实验性)",
+          "iOS Safari 17 (实验性)",
+          "Android Browser 120 (实验性)",
+          "Node.js 20.10.0 (实验性)"
+        ]
+      },
+      {
+        "name": "Temporal API",
+        "id": "temporalApi",
+        "description": "更精准的日期和时间API",
+        "importance": 4,
+        "tags": [
+          "日期",
+          "时间"
+        ],
+        "version": "ES2024",
+        "example": "const date = new Temporal.PlainDate(2024, 1, 1);",
+        "route": "Temporal",
+        "proposal": true,
+        "browserSupport": [
+          "Chrome 115 (实验性)",
+          "Firefox 115 (实验性)",
+          "Safari 17 (实验性)",
+          "Edge 115 (实验性)",
+          "IE 不支持",
+          "Opera 101 (实验性)",
+          "iOS Safari 17 (实验性)",
+          "Android Browser 115 (实验性)",
+          "Node.js 20.10.0 (实验性)"
+        ]
+      },
+      {
+        "name": "Intl.ListFormat",
+        "id": "intlListFormat",
+        "description": "更灵活的列表格式化",
+        "importance": 4,
+        "tags": [
+          "国际化",
+          "列表"
+        ],
+        "version": "ES2024",
+        "example": "const formatter = new Intl.ListFormat('en-US', { style: 'long' });",
+        "route": "Intl",
+        "proposal": true,
+        "browserSupport": [
+          "Chrome 72",
+          "Firefox 78",
+          "Safari 14",
+          "Edge 79",
+          "IE 不支持",
+          "Opera 59",
+          "iOS Safari 14",
+          "Android Browser 72",
+          "Node.js 14.0.0"
+        ]
+      },
+      {
+        "name": "RecordAndTuple",
+        "id": "recordAndTuple",
+        "description": "不可变数据结构",
+        "importance": 4,
+        "tags": [
+          "对象",
+          "元组"
+        ],
+        "version": "ES2024",
+        "example": "const record = { name: 'John', age: 30 };",
+        "route": "RecordAndTuple",
+        "proposal": true,
+        "browserSupport": [
+          "Chrome (实验性)",
+          "Firefox (实验性)",
+          "Safari (实验性)",
+          "Edge (实验性)",
+          "IE 不支持",
+          "Opera (实验性)",
+          "iOS Safari (实验性)",
+          "Android Browser (实验性)",
+          "Node.js (实验性)"
+        ]
+      },
+      {
+        "name": "Pipeline Operator",
+        "id": "pipelineOperator",
+        "description": "管道运算符",
+        "importance": 4,
+        "tags": [
+          "管道运算符"
+        ],
+        "version": "ES2024",
+        "example": "const result = 1 |> add(2) |> multiply(3);",
+        "route": "PipelineOperator",
+        "proposal": true,
+        "browserSupport": [
+          "Chrome 110 (实验性)",
+          "Firefox 110 (实验性)",
+          "Safari (实验性)",
+          "Edge 110 (实验性)",
+          "IE 不支持",
+          "Opera 96 (实验性)",
+          "iOS Safari (实验性)",
+          "Android Browser 110 (实验性)",
+          "Node.js (实验性)"
+        ]
+      }
+    ]
+  }
+]

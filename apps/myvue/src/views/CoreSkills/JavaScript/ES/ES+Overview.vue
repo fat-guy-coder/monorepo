@@ -3,7 +3,9 @@
     <header class="guide-header">
       <h1 class="title">ECMAScript 新特性演进</h1>
       <p class="subtitle">从 ES5 到 ES2025 的核心特性解析</p>
+      <p><a @click="handleClick('ESKnowledgepPoints')">跳转总结</a></p>
     </header>
+    <ScrollNav :list="versions" :keyMap="{ children: 'features' }" :showChild="true" />
 
     <div class="version-timeline">
       <div
@@ -11,10 +13,11 @@
         :key="version.year"
         class="version-card"
         :class="'version-' + version.year"
+        :id="version.id"
       >
         <h2 class="version-title">ES{{ version.year }}</h2>
         <div class="features-list">
-          <div v-for="feature in version.features" :key="feature.name" class="feature-item">
+          <div v-for="feature in version.features" :key="feature.name" class="feature-item" :id="feature.id">
             <h3 class="feature-name">
               {{ feature.name }} <a @click="handleClick(feature.route)">跳转详细</a>
             </h3>
@@ -29,12 +32,13 @@
 
 <script setup lang="ts">
 import { onMounted, ref, defineEmits } from 'vue'
+import ScrollNav from '@/components/ScrollNav.vue'
 
 const versions = ref<ESVersion[]>([])
 
 onMounted(async () => {
   const res = await import('../JSON/Es+.json')
-  versions.value = res.default
+  versions.value = res.default as ESVersion[]
 })
 
 const emit = defineEmits(['goToByRouteName'])
@@ -47,11 +51,14 @@ interface ESFeature {
   name: string
   description: string
   code: string
+  id: string
   route: string
 }
 
 interface ESVersion {
   year: string
+  id: string
+  name: string
   features: ESFeature[]
 }
 </script>

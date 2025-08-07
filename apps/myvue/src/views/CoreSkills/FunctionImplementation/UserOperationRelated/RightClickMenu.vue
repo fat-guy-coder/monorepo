@@ -406,7 +406,7 @@ onBeforeUnmount(() => {
 </script>
 
 <style lang="less" scoped>
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
+
 
 :root {
   --primary-color: #4a6cf7;

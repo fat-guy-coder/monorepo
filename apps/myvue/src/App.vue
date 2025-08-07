@@ -257,6 +257,9 @@ function goto({
     originItemValue: { label },
   },
 }: any) {
+  if (path === activeKey.value) {
+    return
+  }
   mainViewLoading.value = true
   store.activateTab(
     {

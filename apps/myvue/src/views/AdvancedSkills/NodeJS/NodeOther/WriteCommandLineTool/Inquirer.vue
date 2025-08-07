@@ -500,7 +500,7 @@ bottomBar.updateBottomBar('正在处理...');`,
 </script>
 
 <style lang="less" scoped>
-@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@300;400;500;600&family=Inter:wght@300;400;500;600;700&display=swap');
+
 
 .inquirer-docs {
   max-width: 1200px;

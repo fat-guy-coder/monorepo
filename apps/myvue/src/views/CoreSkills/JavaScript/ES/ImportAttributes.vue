@@ -1,7 +1,7 @@
 <template>
   <div class="import-attributes-guide">
     <header class="guide-header">
-      <h1 class="title">ES Import Attributes 完全解析</h1>
+      <h1 class="title">ES Import Attributes 完基本指南</h1>
       <p class="subtitle">新一代模块导入的元数据控制方案</p>
     </header>
 

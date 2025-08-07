@@ -381,6 +381,32 @@ watcher.close();`,
     ],
   },
   {
+    name: 'fs.watchFile',
+    type: '异步',
+    category: 'watch',
+    added: '0.1',
+    description: '监视文件或目录的变化',
+    usage: `fs.watchFile('file.txt', (curr, prev) => {
+  console.log('文件已修改');
+});`,
+    params: [
+      { name: 'filename', description: '文件/目录路径' },
+      { name: 'options', description: '选项对象', optional: true },
+      { name: 'listener', description: '监听函数(curr, prev)' },
+    ],
+  },
+  {
+    name: 'fs.unwatchFile',
+    type: '异步',
+    category: 'watch',
+    added: '0.1',
+    description: '停止监视文件或目录的变化',
+    usage: `fs.unwatchFile('file.txt');`,
+    params: [
+      { name: 'filename', description: '文件/目录路径' },
+    ],
+  },
+  {
     name: 'fs.createReadStream',
     type: '流操作',
     category: 'stream',
@@ -505,7 +531,7 @@ const filteredApis = computed(() => {
 </script>
 
 <style lang="less" scoped>
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Source+Code+Pro:wght@400;500&display=swap');
+
 
 // 颜色变量
 @primary-color: #4285f4;

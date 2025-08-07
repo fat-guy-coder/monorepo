@@ -1,0 +1,284 @@
+{
+  "query": [
+    {
+      "arrayRange": "50~100",
+      "arrayAverage": 75,
+      "objectRange": "0.1~0.5",
+      "objectAverage": 0.26,
+      "mapRange": "0.1~0.3",
+      "mapAverage": 0.2,
+      "setRange": "0.1~0.3",
+      "setAverage": 0.2,
+      "size": "1万次",
+      "fastest": "Map和Set",
+      "note": "Array.includes/indexOf为O(n)操作，Map/Set/Object接近O(1)"
+    },
+    {
+      "arrayRange": ">5000 (超时)",
+      "arrayAverage": 5000,
+      "objectRange": "1~5",
+      "objectAverage": 0.26,
+      "mapRange": "1~3",
+      "mapAverage": 2,
+      "setRange": "1~3",
+      "setAverage": 2,
+      "size": "10万次",
+      "fastest": "Map和Set",
+      "note": "大规模数据查找Array性能急剧下降"
+    },
+    {
+      "arrayRange": ">5000 (超时)",
+      "arrayAverage": 5000,
+      "objectRange": "10~50",
+      "objectAverage": 30,
+      "mapRange": "10~30",
+      "mapAverage": 20,
+      "setRange": "10~30",
+      "setAverage": 20,
+      "size": "100万次",
+      "fastest": "Map和Set",
+      "note": "百万级数据Array查找不可行"
+    },
+    {
+      "arrayRange": ">5000 (超时)",
+      "arrayAverage": 5000,
+      "objectRange": "100~500",
+      "objectAverage": 300,
+      "mapRange": "100~300",
+      "mapAverage": 200,
+      "setRange": "100~300",
+      "setAverage": 200,
+      "size": "1000万次",
+      "fastest": "Map和Set",
+      "note": "千万级数据Map查找性能最优"
+    }
+  ],
+  "access": [
+    {
+      "arrayRange": "0.1~0.5",
+      "arrayAverage": 0.3,
+      "objectRange": "0.1~0.5",
+      "objectAverage": 0.3,
+      "mapRange": "0.1~0.3",
+      "mapAverage": 0.2,
+      "setRange": "无访问",
+      "setAverage": 0,
+      "size": "1万次",
+      "fastest": "Array/Map",
+      "note": "Array索引访问最快，Map.get()次之（哈希计算）"
+    },
+    {
+      "arrayRange": "1~5",
+      "arrayAverage":3,
+      "objectRange": "1~5",
+      "objectAverage": 3,
+      "mapRange": "1~3",
+      "mapAverage": 0.2,
+      "setRange": "无访问",
+      "setAverage": 0,
+      "size": "10万次",
+      "fastest": "Map",
+      "note": "Map.get()性能稳定，Array索引访问次之"
+    },
+    {
+      "arrayRange": "10~50",
+      "arrayAverage": 25,
+      "objectRange": "10~50",
+      "objectAverage": 30,
+      "mapRange": "10~30",
+      "mapAverage": 20,
+      "setRange": "无访问",
+      "setAverage": 0,
+      "size": "100万次",
+      "fastest": "Map",
+      "note": "百万级数据Map访问性能最优"
+    },
+    {
+      "arrayRange": "100~500",
+      "arrayAverage": 250,
+      "objectRange": "100~500",
+      "objectAverage": 300,
+      "mapRange": "100~300",
+      "mapAverage": 200,
+      "setRange": "无访问",
+      "setAverage": 0,
+      "size": "1000万次",
+      "fastest": "Map",
+      "note": "千万级数据Map保持稳定访问性能"
+    }
+  ],
+  "add": [
+    {
+      "arrayRange": "0.1~0.5",
+      "arrayAverage": 0.25,
+      "objectRange": "1~5",
+      "objectAverage": 2.6,
+      "mapRange": "1~3",
+      "mapAverage": 2,
+      "setRange": "1~3",
+      "setAverage": 2,
+      "size": "1万次",
+      "fastest": "Array",
+      "note": "Array.push尾部插入最快（连续内存）"
+    },
+    {
+      "arrayRange": "1~5",
+      "arrayAverage": 2.5,
+      "objectRange": "20~50",
+      "objectAverage": 35,
+      "mapRange": "15~30",
+      "mapAverage": 23,
+      "setRange": "15~30",
+      "setAverage": 23,
+      "size": "10万次",
+      "fastest": "Array",
+      "note": "Array保持插入性能优势"
+    },
+    {
+      "arrayRange": "10~50",
+      "arrayAverage": 25,
+      "objectRange": "200~500",
+      "objectAverage": 350,
+      "mapRange": "150~300",
+      "mapAverage": 230,
+      "setRange": "150~300",
+      "setAverage": 230,
+      "size": "100万次",
+      "fastest": "Array",
+      "note": "百万级插入Array最快（直接内存写入）"
+    },
+    {
+      "arrayRange": "100~500",
+      "arrayAverage": 250,
+      "objectRange": "2000~5000",
+      "objectAverage": 3500,
+      "mapRange": "1500~3000",
+      "mapAverage": 2300,
+      "setRange": "1500~3000",
+      "setAverage": 2300,
+      "size": "1000万次",
+      "fastest": "Array",
+      "note": "千万级插入Array性能最佳"
+    }
+  ],
+  "delete": [
+    {
+      "arrayRange": "10~50",
+      "arrayAverage": 25,
+      "objectRange": "5~10",
+      "objectAverage": 7.5,
+      "mapRange": "1~3",
+      "mapAverage": 2,
+      "setRange": "1~3",
+      "setAverage": 2,
+      "size": "1万次",
+      "fastest": "Map和Set",
+      "note": "Map/Set删除接近O(1)，Array需重建索引"
+    },
+    {
+      "arrayRange": "500~1000",
+      "arrayAverage": 750,
+      "objectRange": "50~100",
+      "objectAverage": 75,
+      "mapRange": "10~20",
+      "mapAverage": 15,
+      "setRange": "10~20",
+      "setAverage": 15,
+      "size": "10万次",
+      "fastest": "Map和Set",
+      "note": "Array.splice大规模删除成本高"
+    },
+    {
+      "arrayRange": ">5000 (超时)",
+        "arrayAverage": 5000,
+      "objectRange": "500~1000",
+      "objectAverage": 750,
+      "mapRange": "100~200",
+      "mapAverage": 150,
+      "setRange": "100~200",
+      "setAverage": 150,
+      "size": "100万次",
+      "fastest": "Map和Set",
+      "note": "百万级删除优选Map/Set"
+    },
+    {
+      "arrayRange": ">5000 (超时)",
+      "arrayAverage": 5000,
+      "objectRange": ">5000 (超时)",
+      "objectAverage":5000,
+      "mapRange": "1000~2000",
+      "mapAverage": 1500,
+      "setRange": "1000~2000",
+      "setAverage": 1500,
+      "size": "1000万次",
+      "fastest": "Map和Set",
+      "note": "千万级删除Map/Set唯一可行方案"
+    }
+  ],
+  "update": [
+    {
+      "arrayRange": "0.1~0.5",
+      "arrayAverage": 0.25,
+      "objectRange": "0.5~2",
+      "objectAverage": 1.25,
+      "mapRange": "0.3~1",
+      "mapAverage": 0.6,
+      "setRange": "0.3~1",
+      "setAverage": 0.6,
+      "size": "1万次",
+      "fastest": "Array",
+      "note": "Array索引修改最快（直接内存写入）"
+    },
+    {
+      "arrayRange": "1~5",
+      "arrayAverage": 2.5,
+      "objectRange": "5~20",
+      "objectAverage": 12.5,
+      "mapRange": "3~10",
+      "mapAverage": 6.5,
+      "setRange": "3~10",
+      "setAverage": 6.5,
+      "size": "10万次",
+      "fastest": "Array和Map",
+      "note": "Array保持修改性能优势"
+    },
+    {
+      "arrayRange": "10~50",
+      "arrayAverage": 25,
+      "objectRange": "50~200",
+      "objectAverage": 125,
+      "mapRange": "30~100",
+      "mapAverage": 65,
+      "setRange": "30~100",
+      "setAverage": 65,
+      "size": "100万次",
+      "fastest": "Array",
+      "note": "百万级修改Array最快"
+    },
+    {
+      "arrayRange": "100~500",
+      "arrayAverage": 250,
+      "objectRange": "500~2000",
+      "objectAverage": 1250,
+      "mapRange": "300~1000",
+      "mapAverage": 650,
+      "setRange": "300~1000",
+      "setAverage": 650,
+      "size": "1000万次",
+      "fastest": "Array",
+      "note": "千万级修改Array性能最优"
+    }
+  ],
+  "summary": {
+    "Array": "尾部插入和索引修改和访问极快，但查找/删除性能差",
+    "Object": "大规模删除性能差（受原型链影响），1000万+数据量劣于Map",
+    "Map": "增删查操作稳定（接近O(1)），适合高频删除或键值查找，但查找性能差",
+    "Set": "去重操作性能最佳，其他特性类似Map，但查找性能差,无法直接访问",
+    "recommendations": [
+      "超大数据操作：优选Array（插入/修改）或Map（删除/查找）",
+      "避免用Array做大规模查找/删除",
+      "键值场景Map全面优于Object",
+      "去重用Set性能最佳"
+    ]
+  }
+}

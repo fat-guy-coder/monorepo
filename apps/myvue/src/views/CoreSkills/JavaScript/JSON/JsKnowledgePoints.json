@@ -1,623 +1,699 @@
 [
   {
-    "title": "📜 基础语法与类型",
-    "id": 1,
+    "name": "基础概念",
     "items": [
       {
-        "title": "变量声明 (var/let/const)",
-        "id": 101,
-        "description": "作用域提升、暂时性死区与块级作用域差异",
-        "priority": 1,
-        "frequency": 3,
-        "route": "LetAndConst"
+        "name": "变量声明",
+        "description": "var, let, const的区别与使用场景",
+        "importance": 5,
+        "tags": ["作用域", "提升"]
       },
       {
-        "title": "数据类型与基本类型",
-        "id": 102,
-        "description": "undefined、null、Boolean、Number、BigInt、String、Symbol、Object等类型的特点与区别",
-        "priority": 1,
-        "frequency": 3,
-        "route": "DataTypes"
+        "name": "数据类型",
+        "description": "7种原始类型和对象类型，类型检测方法",
+        "importance": 5,
+        "tags": ["typeof", "instanceof"]
       },
       {
-        "title": "数据类型检测 (typeof/instanceof/Object.prototype.toString)",
-        "id": 103,
-        "description": "基本类型与引用类型的检测方式、边界场景、准确判断数组/函数/对象/日期等",
-        "priority": 1,
-        "frequency": 3,
-        "route": "TypeChecking"
+        "name": "类型转换",
+        "description": "显式/隐式类型转换规则和常见陷阱",
+        "importance": 5,
+        "tags": ["强制转换", "相等比较"]
       },
       {
-        "title": "类型转换规则 (隐式/显式)",
-        "id": 104,
-        "description": "ToPrimitive抽象操作、==与===区别、Boolean/Number/String转换、对象到原始值的转换流程",
-        "priority": 1,
-        "frequency": 3,
-        "route": "TypeConversion"
+        "name": "作用域",
+        "description": "词法作用域、函数作用域和块级作用域",
+        "importance": 5,
+        "tags": ["闭包", "作用域链"]
       },
       {
-        "title": "undefined与null的区别与应用",
-        "id": 105,
-        "description": "空值、未定义、类型判断、==与===的比较、API设计中的使用场景",
-        "priority": 2,
-        "frequency": 3,
-        "route": "UndefinedNull"
+        "name": "闭包",
+        "description": "函数与其词法环境的引用捆绑",
+        "importance": 5,
+        "tags": ["私有变量", "记忆化"]
       },
       {
-        "title": "NaN与isNaN、Number相关陷阱",
-        "id": 106,
-        "description": "NaN的特性、isNaN与Number.isNaN区别、Infinity、-0等特殊数值",
-        "priority": 2,
-        "frequency": 2,
-        "route": "NaNAndNumber"
+        "name": "原型链",
+        "description": "对象之间通过原型继承属性和方法的机制",
+        "importance": 5,
+        "tags": ["__proto__", "prototype"]
       },
       {
-        "title": "深拷贝与浅拷贝实现方案",
-        "id": 107,
-        "description": "递归/JSON.parse/structuredClone/手写深拷贝/浅拷贝的区别与应用",
-        "priority": 2,
-        "frequency": 2,
-        "route": "DeepCopy"
+        "name": "this关键字",
+        "description": "函数执行上下文中的this绑定规则",
+        "importance": 5,
+        "tags": ["绑定规则", "箭头函数"]
       },
       {
-        "title": "Symbol唯一性与应用场景",
-        "id": 108,
-        "description": "私有属性定义、内置Symbol方法、作为对象属性key的优势",
-        "priority": 2,
-        "frequency": 2,
-        "route": "Symbol"
+        "name": "事件循环",
+        "description": "JS单线程执行模型和异步处理机制",
+        "importance": 5,
+        "tags": ["宏任务", "微任务"]
       },
       {
-        "title": "BigInt大数运算",
-        "id": 109,
-        "description": "安全整数范围、BigInt基本用法、与Number的区别、序列化问题",
-        "priority": 2,
-        "frequency": 1,
-        "route": "BigInt"
+        "name": "严格模式",
+        "description": "限制不安全操作，启用更严格的解析",
+        "importance": 4,
+        "tags": ["'use strict'", "错误检测"]
       },
       {
-        "title": "instanceof实现与原理",
-        "id": 110,
-        "description": "instanceof操作符的实现原理、原型链查找机制、手写instanceof",
-        "priority": 2,
-        "frequency": 2,
-        "route": "AchieveInstanceof"
+        "name": "执行上下文",
+        "description": "代码执行时的环境信息存储结构",
+        "importance": 4,
+        "tags": ["变量对象", "活动对象"]
       },
       {
-        "title": "Object.is与==、===的区别",
-        "id": 111,
-        "description": "Object.is的特殊判断、NaN、+0/-0、严格相等与全等的差异",
-        "priority": 2,
-        "frequency": 2,
-        "route": "TypeComparison"
+        "name": "内存管理",
+        "description": "内存分配、使用和回收机制",
+        "importance": 4,
+        "tags": ["垃圾回收", "内存泄漏"]
       },
       {
-        "title": "原始值与引用值的存储与比较",
-        "id": 112,
-        "description": "栈与堆的存储方式、赋值与拷贝的区别、引用类型的比较陷阱",
-        "priority": 2,
-        "frequency": 2,
-        "route": "ReferenceTypesIntroduce"
+        "name": "模块系统",
+        "description": "ES6模块的导入导出机制",
+        "importance": 4,
+        "tags": ["import", "export"]
       },
       {
-        "title": "对象属性的枚举与遍历",
-        "id": 113,
-        "description": "for...in、Object.keys、Object.getOwnPropertyNames、Reflect.ownKeys、属性可枚举性",
-        "priority": 2,
-        "frequency": 2,
-        "route": "Object2"
+        "name": "运算符",
+        "description": "算术、比较、逻辑、位运算符及其优先级",
+        "importance": 4,
+        "tags": ["运算符", "优先级"]
       },
       {
-        "title": "模板字符串与字符串操作",
-        "id": 114,
-        "description": "模板字符串、转义字符、常用字符串方法（slice、substring、split、replace等）",
-        "priority": 2,
-        "frequency": 2,
-        "route": "StringTemplate"
+        "name": "对象",
+        "description": "对象的创建、属性访问、遍历和扩展",
+        "importance": 5,
+        "tags": ["Object", "属性"]
       },
       {
-        "title": "数组的基本操作与特性",
-        "id": 115,
-        "description": "稀疏数组、length属性、常用方法（map、filter、reduce、forEach、find等）、数组与对象的区别",
-        "priority": 2,
-        "frequency": 2,
-        "route": "Array"
+        "name": "数组",
+        "description": "数组的基本操作、遍历方法和常用API",
+        "importance": 5,
+        "tags": ["Array", "遍历"]
       },
       {
-        "title": "Boolean类型与真假值判断",
-        "id": 116,
-        "description": "JavaScript中的真值与假值、Boolean()转换、常见陷阱（0、''、null、undefined、NaN、false）",
-        "priority": 2,
-        "frequency": 2,
-        "route": "Boolean"
+        "name": "JSON",
+        "description": "JSON的解析与序列化，常见用法和注意事项",
+        "importance": 4,
+        "tags": ["JSON.parse", "JSON.stringify"]
       },
       {
-        "title": "数值精度与浮点数陷阱",
-        "id": 117,
-        "description": "浮点数精度丢失、toFixed、parseInt/parseFloat、Math相关方法",
-        "priority": 2,
-        "frequency": 2,
-        "route": "FloatingPointPrecisionAndSolution"
+        "name": "错误处理",
+        "description": "try/catch/finally语句和Error对象",
+        "importance": 4,
+        "tags": ["异常", "错误捕获"]
       },
       {
-        "title": "对象解构与数组解构",
-        "id": 118,
-        "description": "解构赋值语法、默认值、嵌套解构、剩余参数",
-        "priority": 2,
-        "frequency": 2,
-        "route": "Destructuring"
+        "name": "定时器",
+        "description": "setTimeout和setInterval的用法与区别",
+        "importance": 3,
+        "tags": ["异步", "定时"]
       },
       {
-        "title": "可选链与空值合并运算符",
-        "id": 119,
-        "description": "?.与??的用法、兼容性、常见应用场景",
-        "priority": 2,
-        "frequency": 2,
-        "route": "OptionalChaining"
+        "name": "全局对象",
+        "description": "window、globalThis等全局对象的作用",
+        "importance": 3,
+        "tags": ["全局", "环境"]
+      },
+      {
+        "name": "隐式全局变量",
+        "description": "未声明直接赋值导致的隐式全局变量问题",
+        "importance": 3,
+        "tags": ["全局污染", "变量声明"]
+      },
+      {
+        "name": "立即执行函数（IIFE）",
+        "description": "函数定义后立即执行的写法及其作用",
+        "importance": 3,
+        "tags": ["作用域隔离", "IIFE"]
       }
     ]
   },
   {
-    "title": "⚙️ 函数与作用域",
-    "id": 2,
+    "name": "函数相关",
     "items": [
       {
-        "title": "闭包与内存管理",
-        "id": 201,
-        "description": "词法环境与GC回收机制",
-        "priority": 1,
-        "frequency": 3,
-        "route": "Closure"
+        "name": "函数声明",
+        "description": "函数定义的不同方式及区别",
+        "importance": 5,
+        "tags": ["函数表达式", "箭头函数"]
       },
       {
-        "title": "this绑定规则",
-        "id": 202,
-        "description": "默认/隐式/显式/new绑定优先级",
-        "priority": 1,
-        "frequency": 3,
-        "route": "ThisBinding"
+        "name": "高阶函数",
+        "description": "接收函数作为参数或返回函数的函数",
+        "importance": 5,
+        "tags": ["回调", "函数组合"]
       },
       {
-        "title": "箭头函数特性",
-        "id": 203,
-        "description": "无arguments、无this绑定与原型限制",
-        "priority": 1,
-        "frequency": 3,
-        "route": "ArrowFunction"
+        "name": "箭头函数",
+        "description": "简洁语法和词法this绑定",
+        "importance": 5,
+        "tags": ["=>", "this绑定"]
       },
       {
-        "title": "高阶函数应用",
-        "id": 204,
-        "description": "函数柯里化与组合函数实现",
-        "priority": 2,
-        "frequency": 2,
-        "route": "HigherOrderFunction"
+        "name": "回调函数",
+        "description": "作为参数传递给另一个函数的函数",
+        "importance": 5,
+        "tags": ["异步", "事件处理"]
       },
       {
-        "title": "尾调用优化 (TCO)",
-        "id": 205,
-        "description": "递归性能优化与浏览器支持",
-        "priority": 2,
-        "frequency": 1,
-        "route": "TailCall"
+        "name": "IIFE",
+        "description": "立即调用函数表达式",
+        "importance": 4,
+        "tags": ["模块模式", "作用域隔离"]
       },
       {
-        "title": "函数声明与函数表达式",
-        "id": 206,
-        "description": "声明提升、匿名函数、命名函数表达式的区别与应用",
-        "priority": 2,
-        "frequency": 2,
-        "route": "Functions"
+        "name": "纯函数",
+        "description": "无副作用且相同输入总是返回相同输出",
+        "importance": 4,
+        "tags": ["函数式", "可预测"]
       },
       {
-        "title": "参数默认值与剩余参数",
-        "id": 207,
-        "description": "ES6参数默认值、rest参数、arguments对象的区别",
-        "priority": 2,
-        "frequency": 2,
-        "route": "DefaultAndRestParameters"
+        "name": "柯里化",
+        "description": "将多参数函数转换为一系列单参数函数",
+        "importance": 4,
+        "tags": ["部分应用", "函数组合"]
       },
       {
-        "title": "立即执行函数表达式（IIFE）",
-        "id": 208,
-        "description": "IIFE的语法、作用与常见使用场景",
-        "priority": 2,
-        "frequency": 2,
-        "route": "Functions"
+        "name": "函数组合",
+        "description": "将多个函数组合成新函数的技术",
+        "importance": 4,
+        "tags": ["pipe", "compose"]
       },
       {
-        "title": "作用域链与变量查找",
-        "id": 209,
-        "description": "作用域链的形成、变量提升、块级作用域与全局作用域",
-        "priority": 1,
-        "frequency": 3,
-        "route": "Scope"
+        "name": "递归",
+        "description": "函数调用自身来解决问题的方法",
+        "importance": 4,
+        "tags": ["基线条件", "栈溢出"]
       },
       {
-        "title": "函数防抖与节流",
-        "id": 210,
-        "description": "防抖与节流的原理、实现方式及应用场景",
-        "priority": 2,
-        "frequency": 2,
-        "route": "DebounceAndThrottle"
+        "name": "尾调用优化",
+        "description": "避免额外栈帧的递归优化技术",
+        "importance": 3,
+        "tags": ["TCO", "递归优化"]
       }
     ]
   },
   {
-    "title": "🏗️ 对象与原型",
-    "id": 3,
+    "name": "对象与原型",
     "items": [
       {
-        "title": "原型链继承机制",
-        "id": 301,
-        "description": "__proto__与prototype的联动关系",
-        "priority": 1,
-        "frequency": 3,
-        "route": "Prototype1"
+        "name": "对象创建",
+        "description": "多种对象创建方式及适用场景",
+        "importance": 5,
+        "tags": ["字面量", "构造函数", "Object.create"]
       },
       {
-        "title": "class语法糖解析",
-        "id": 302,
-        "description": "静态方法、super关键字与extends实现原理",
-        "priority": 1,
-        "frequency": 3,
-        "route": "Class"
+        "name": "属性描述符",
+        "description": "控制对象属性的特性配置",
+        "importance": 5,
+        "tags": ["getter", "setter", "可枚举"]
       },
       {
-        "title": "对象属性描述符",
-        "id": 303,
-        "description": "configurable/writable/enumerable配置",
-        "priority": 2,
-        "frequency": 2,
-        "route": "Object3"
+        "name": "原型继承",
+        "description": "基于原型的对象继承机制",
+        "importance": 5,
+        "tags": ["prototype", "__proto__"]
       },
       {
-        "title": "Proxy与Reflect",
-        "id": 304,
-        "description": "元编程拦截器与代理模式应用",
-        "priority": 2,
-        "frequency": 2,
-        "route": "Proxy"
+        "name": "类语法",
+        "description": "ES6提供的基于类的语法糖",
+        "importance": 5,
+        "tags": ["class", "extends", "super"]
       },
       {
-        "title": "WeakMap/WeakSet内存优化",
-        "id": 305,
-        "description": "弱引用与私有数据存储",
-        "priority": 2,
-        "frequency": 2,
-        "route": "WeakRef"
+        "name": "Object方法",
+        "description": "Object静态方法的使用",
+        "importance": 5,
+        "tags": ["keys", "values", "entries", "assign"]
+      },
+      {
+        "name": "深拷贝",
+        "description": "创建对象的完全独立副本",
+        "importance": 5,
+        "tags": ["递归", "结构化克隆"]
+      },
+      {
+        "name": "原型污染",
+        "description": "修改原型导致的安全问题",
+        "importance": 4,
+        "tags": ["安全", "预防"]
+      },
+      {
+        "name": "属性代理",
+        "description": "使用Proxy拦截对象操作",
+        "importance": 4,
+        "tags": ["拦截器", "元编程"]
+      },
+      {
+        "name": "反射API",
+        "description": "Reflect对象提供的元编程方法",
+        "importance": 4,
+        "tags": ["Reflect", "元编程"]
+      },
+      {
+        "name": "Symbol类型",
+        "description": "创建唯一标识符，用于对象属性",
+        "importance": 4,
+        "tags": ["唯一性", "内置Symbol"]
       }
     ]
   },
   {
-    "title": "🔄 异步编程",
-    "id": 4,
+    "name": "异步编程",
     "items": [
       {
-        "title": "事件循环机制",
-        "id": 401,
-        "description": "宏任务/微任务执行优先级与Node.js差异",
-        "priority": 1,
-        "frequency": 3,
-        "route": "AsyncProgrammin"
+        "name": "Promise",
+        "description": "处理异步操作的对象",
+        "importance": 5,
+        "tags": ["then", "catch", "finally"]
       },
       {
-        "title": "Promise核心实现",
-        "id": 402,
-        "description": "状态机、链式调用与错误冒泡",
-        "priority": 1,
-        "frequency": 3,
-        "route": "PromiseImplementation"
+        "name": "async/await",
+        "description": "基于Promise的异步语法糖",
+        "importance": 5,
+        "tags": ["异步", "同步风格"]
       },
       {
-        "title": "Async/Await原理",
-        "id": 403,
-        "description": "生成器协程与自动执行器实现",
-        "priority": 1,
-        "frequency": 3,
-        "route": "AsyncAwait"
+        "name": "事件循环",
+        "description": "JS执行异步代码的机制",
+        "importance": 5,
+        "tags": ["宏任务", "微任务"]
       },
       {
-        "title": "Web Worker通信",
-        "id": 404,
-        "description": "主线程与Worker数据序列化策略",
-        "priority": 2,
-        "frequency": 2,
-        "route": "WebWorker"
+        "name": "回调地狱",
+        "description": "多层嵌套回调导致的代码可读性问题",
+        "importance": 4,
+        "tags": ["金字塔", "解决方案"]
       },
       {
-        "title": "AbortController中断请求",
-        "id": 405,
-        "description": "Fetch/定时器/Web Worker中断控制",
-        "priority": 2,
-        "frequency": 2,
-        "route": "AbortController"
+        "name": "生成器",
+        "description": "可暂停和恢复的函数",
+        "importance": 4,
+        "tags": ["function*", "yield"]
+      },
+      {
+        "name": "异步迭代",
+        "description": "for await...of处理异步可迭代对象",
+        "importance": 4,
+        "tags": ["异步迭代器", "Symbol.asyncIterator"]
+      },
+      {
+        "name": "Web Workers",
+        "description": "在后台线程运行脚本",
+        "importance": 4,
+        "tags": ["多线程", "并行"]
+      },
+      {
+        "name": "事件发射器",
+        "description": "实现发布-订阅模式的对象",
+        "importance": 4,
+        "tags": ["EventEmitter", "观察者模式"]
+      },
+      {
+        "name": "AbortController",
+        "description": "中止一个或多个Web请求",
+        "importance": 4,
+        "tags": ["取消请求", "fetch"]
+      },
+      {
+        "name": "微任务与宏任务",
+        "description": "区分和理解微任务（microtask）与宏任务（macrotask）的执行顺序",
+        "importance": 4,
+        "tags": ["event loop", "Promise", "setTimeout"]
+      },
+      {
+        "name": "setTimeout与setInterval",
+        "description": "定时器的异步执行机制与常见陷阱",
+        "importance": 4,
+        "tags": ["定时器", "异步"]
+      },
+      {
+        "name": "fetch API",
+        "description": "用于网络请求的现代异步API，基于Promise",
+        "importance": 4,
+        "tags": ["网络请求", "Promise", "异步"]
+      },
+      {
+        "name": "XMLHttpRequest",
+        "description": "早期用于异步网络请求的API",
+        "importance": 3,
+        "tags": ["AJAX", "异步", "网络请求"]
+      },
+      {
+        "name": "Promise.all",
+        "description": "并行执行多个Promise，全部完成后返回结果",
+        "importance": 4,
+        "tags": ["并发", "Promise", "聚合"]
+      },
+      {
+        "name": "Promise.race",
+        "description": "并行执行多个Promise，最先完成的结果返回",
+        "importance": 3,
+        "tags": ["并发", "Promise", "竞速"]
+      },
+      {
+        "name": "Promise.allSettled",
+        "description": "等待所有Promise完成（无论成功或失败）后返回每个结果",
+        "importance": 3,
+        "tags": ["并发", "Promise", "结果收集"]
+      },
+      {
+        "name": "Promise.any",
+        "description": "只要有一个Promise成功就返回其结果",
+        "importance": 3,
+        "tags": ["并发", "Promise", "成功优先"]
+      },
+      {
+        "name": "队列微任务（queueMicrotask）",
+        "description": "手动将任务加入微任务队列，优先于宏任务执行",
+        "importance": 3,
+        "tags": ["微任务", "异步", "event loop"]
+      },
+      {
+        "name": "requestAnimationFrame",
+        "description": "浏览器动画帧回调，适合高性能动画",
+        "importance": 3,
+        "tags": ["动画", "异步", "性能"]
+      },
+      {
+        "name": "MessageChannel",
+        "description": "用于多线程或不同上下文之间的异步消息通信",
+        "importance": 3,
+        "tags": ["消息传递", "并发", "异步"]
+      },
+      {
+        "name": "Service Worker",
+        "description": "拦截网络请求，实现离线缓存和推送等功能的浏览器后台线程",
+        "importance": 3,
+        "tags": ["PWA", "缓存", "离线", "异步"]
       }
     ]
   },
   {
-    "title": "📦 模块化与工程化",
-    "id": 5,
+    "name": "数组操作",
     "items": [
       {
-        "title": "ES Module规范",
-        "id": 501,
-        "description": "静态解析、循环引用与tree shaking支持",
-        "priority": 1,
-        "frequency": 3
+        "name": "数组方法",
+        "description": "map, filter, reduce等高阶函数",
+        "importance": 5,
+        "tags": ["遍历", "转换"]
       },
       {
-        "title": "CommonJS原理",
-        "id": 502,
-        "description": "require函数与模块缓存机制",
-        "priority": 1,
-        "frequency": 3
+        "name": "数组解构",
+        "description": "从数组提取值赋给变量",
+        "importance": 5,
+        "tags": ["...rest", "默认值"]
       },
       {
-        "title": "动态导入 (import())",
-        "id": 503,
-        "description": "代码分割与按需加载实现",
-        "priority": 2,
-        "frequency": 2
+        "name": "类数组转换",
+        "description": "将类数组对象转换为真实数组",
+        "importance": 4,
+        "tags": ["Array.from", "arguments"]
       },
       {
-        "title": "npm包发布规范",
-        "id": 504,
-        "description": "版本语义化与私有模块管理",
-        "priority": 2,
-        "frequency": 2
+        "name": "数组去重",
+        "description": "多种数组去重的方法",
+        "importance": 4,
+        "tags": ["Set", "filter", "reduce"]
       },
       {
-        "title": "Monorepo架构管理",
-        "id": 505,
-        "description": "Lerna/Nx工具链与依赖优化",
-        "priority": 2,
-        "frequency": 2
+        "name": "数组扁平化",
+        "description": "将多维数组转换为一维数组",
+        "importance": 4,
+        "tags": ["flat", "递归"]
+      },
+      {
+        "name": "数组排序",
+        "description": "sort方法的使用和自定义排序",
+        "importance": 4,
+        "tags": ["比较函数", "稳定性"]
+      },
+      {
+        "name": "类型化数组",
+        "description": "处理二进制数据的数组视图",
+        "importance": 3,
+        "tags": ["ArrayBuffer", "DataView"]
       }
     ]
   },
   {
-    "title": "🔧 现代特性",
-    "id": 6,
+    "name": "ES6+特性",
     "items": [
       {
-        "title": "解构赋值进阶",
-        "id": 601,
-        "description": "嵌套解构、别名设置与默认值",
-        "priority": 2,
-        "frequency": 3
+        "name": "解构赋值",
+        "description": "从数组/对象中提取值",
+        "importance": 5,
+        "tags": ["对象解构", "数组解构"]
       },
       {
-        "title": "可选链与空值合并",
-        "id": 602,
-        "description": "?.与??运算符的短路特性",
-        "priority": 2,
-        "frequency": 3
+        "name": "模板字符串",
+        "description": "使用反引号定义的多行字符串",
+        "importance": 5,
+        "tags": ["插值", "标签模板"]
       },
       {
-        "title": "Generator迭代器",
-        "id": 603,
-        "description": "yield执行控制与协程应用",
-        "priority": 2,
-        "frequency": 2
+        "name": "扩展运算符",
+        "description": "展开数组或对象",
+        "importance": 5,
+        "tags": ["...", "函数参数"]
       },
       {
-        "title": "装饰器提案 (Decorator)",
-        "id": 604,
-        "description": "类与方法装饰器的元编程应用",
-        "priority": 2,
-        "frequency": 1
+        "name": "默认参数",
+        "description": "函数参数的默认值设置",
+        "importance": 5,
+        "tags": ["默认值", "解构"]
       },
       {
-        "title": "Top-Level Await",
-        "id": 605,
-        "description": "模块顶层异步操作支持",
-        "priority": 2,
-        "frequency": 2
+        "name": "剩余参数",
+        "description": "将剩余参数收集到数组中",
+        "importance": 5,
+        "tags": ["...rest", "arguments"]
+      },
+      {
+        "name": "可选链",
+        "description": "安全访问嵌套对象属性",
+        "importance": 5,
+        "tags": ["?.", "空值安全"]
+      },
+      {
+        "name": "空值合并",
+        "description": "提供默认值的逻辑运算符",
+        "importance": 5,
+        "tags": ["??", "默认值"]
+      },
+      {
+        "name": "BigInt",
+        "description": "表示任意精度的整数",
+        "importance": 4,
+        "tags": ["大整数", "精度"]
+      },
+      {
+        "name": "全局This",
+        "description": "标准化全局对象引用",
+        "importance": 4,
+        "tags": ["globalThis", "跨环境"]
+      },
+      {
+        "name": "动态导入",
+        "description": "运行时按需加载模块",
+        "importance": 4,
+        "tags": ["import()", "代码分割"]
       }
     ]
   },
   {
-    "title": "🌐 浏览器与DOM",
-    "id": 7,
+    "name": "错误处理",
     "items": [
       {
-        "title": "事件委托机制",
-        "id": 701,
-        "description": "冒泡阶段优化多元素事件监听",
-        "priority": 1,
-        "frequency": 3
+        "name": "try/catch/finally",
+        "description": "捕获和处理运行时错误",
+        "importance": 5,
+        "tags": ["错误捕获", "清理"]
       },
       {
-        "title": "RAF优化动画性能",
-        "id": 702,
-        "description": "requestAnimationFrame帧同步策略",
-        "priority": 2,
-        "frequency": 2
+        "name": "Error对象",
+        "description": "表示错误的标准对象",
+        "importance": 5,
+        "tags": ["类型", "堆栈跟踪"]
       },
       {
-        "title": "MutationObserver监听DOM",
-        "id": 703,
-        "description": "异步批量更新检测与性能影响",
-        "priority": 2,
-        "frequency": 2
+        "name": "自定义错误",
+        "description": "扩展Error创建特定错误类型",
+        "importance": 4,
+        "tags": ["继承", "Error"]
       },
       {
-        "title": "History API与路由控制",
-        "id": 704,
-        "description": "SPA路由实现与状态管理",
-        "priority": 2,
-        "frequency": 2
+        "name": "Promise错误处理",
+        "description": "使用catch处理Promise拒绝",
+        "importance": 5,
+        "tags": ["拒绝", "未处理拒绝"]
+      },
+      {
+        "name": "全局错误处理",
+        "description": "window.onerror捕获未处理错误",
+        "importance": 4,
+        "tags": ["全局", "错误报告"]
       }
     ]
   },
   {
-    "title": "🔐 安全与防护",
-    "id": 8,
+    "name": "设计模式",
     "items": [
       {
-        "title": "XSS攻击防御",
-        "id": 801,
-        "description": "输入过滤与CSP内容安全策略",
-        "priority": 1,
-        "frequency": 3
+        "name": "模块模式",
+        "description": "封装私有变量和公共API",
+        "importance": 5,
+        "tags": ["IIFE", "闭包"]
       },
       {
-        "title": "CSRF Token验证",
-        "id": 802,
-        "description": "SameSite Cookie与双重提交验证",
-        "priority": 1,
-        "frequency": 3
+        "name": "单例模式",
+        "description": "确保类只有一个实例",
+        "importance": 5,
+        "tags": ["全局访问", "实例控制"]
       },
       {
-        "title": "CORS跨域策略",
-        "id": 803,
-        "description": "预检请求与凭证模式配置",
-        "priority": 1,
-        "frequency": 3
+        "name": "工厂模式",
+        "description": "创建对象而不指定具体类",
+        "importance": 5,
+        "tags": ["对象创建", "解耦"]
       },
       {
-        "title": "HTTPS混合内容处理",
-        "id": 804,
-        "description": "安全上下文限制与升级策略",
-        "priority": 2,
-        "frequency": 2
+        "name": "观察者模式",
+        "description": "对象间的一对多依赖关系",
+        "importance": 5,
+        "tags": ["发布-订阅", "事件驱动"]
+      },
+      {
+        "name": "代理模式",
+        "description": "为对象提供代理以控制访问",
+        "importance": 4,
+        "tags": ["Proxy", "访问控制"]
+      },
+      {
+        "name": "装饰器模式",
+        "description": "动态添加对象功能",
+        "importance": 4,
+        "tags": ["装饰器", "功能扩展"]
+      },
+      {
+        "name": "策略模式",
+        "description": "封装可互换的算法",
+        "importance": 4,
+        "tags": ["算法封装", "运行时选择"]
+      },
+      {
+        "name": "迭代器模式",
+        "description": "顺序访问聚合对象的元素",
+        "importance": 4,
+        "tags": ["Symbol.iterator", "for...of"]
       }
     ]
   },
   {
-    "title": "📡 网络与存储",
-    "id": 9,
+    "name": "Web API",
     "items": [
       {
-        "title": "Fetch API高级配置",
-        "id": 901,
-        "description": "AbortController中断请求与超时处理",
-        "priority": 2,
-        "frequency": 3
+        "name": "DOM操作",
+        "description": "访问和操作文档对象模型",
+        "importance": 5,
+        "tags": ["选择器", "节点操作"]
       },
       {
-        "title": "IndexedDB事务管理",
-        "id": 902,
-        "description": "版本升级与游标遍历优化",
-        "priority": 2,
-        "frequency": 2
+        "name": "事件处理",
+        "description": "处理用户交互和浏览器事件",
+        "importance": 5,
+        "tags": ["addEventListener", "事件委托"]
       },
       {
-        "title": "Service Worker缓存策略",
-        "id": 903,
-        "description": "离线应用与资源预加载",
-        "priority": 2,
-        "frequency": 2
+        "name": "Fetch API",
+        "description": "现代网络请求接口",
+        "importance": 5,
+        "tags": ["Promise", "HTTP"]
       },
       {
-        "title": "WebSocket心跳检测",
-        "id": 904,
-        "description": "连接保活与断线重连机制",
-        "priority": 2,
-        "frequency": 2
+        "name": "Web Storage",
+        "description": "本地存储数据",
+        "importance": 5,
+        "tags": ["localStorage", "sessionStorage"]
+      },
+      {
+        "name": "定时器",
+        "description": "延迟执行和周期性执行",
+        "importance": 5,
+        "tags": ["setTimeout", "setInterval"]
+      },
+      {
+        "name": "URL API",
+        "description": "解析和操作URL",
+        "importance": 4,
+        "tags": ["URL", "URLSearchParams"]
+      },
+      {
+        "name": "History API",
+        "description": "操作浏览器会话历史",
+        "importance": 4,
+        "tags": ["pushState", "单页应用"]
+      },
+      {
+        "name": "WebSockets",
+        "description": "全双工客户端-服务器通信",
+        "importance": 4,
+        "tags": ["实时", "双向通信"]
+      },
+      {
+        "name": "Web Components",
+        "description": "创建可重用自定义元素",
+        "importance": 4,
+        "tags": ["Custom Elements", "Shadow DOM"]
       }
     ]
   },
   {
-    "title": "🧪 测试与调试",
-    "id": 10,
+    "name": "性能优化",
     "items": [
       {
-        "title": "单元测试覆盖率",
-        "id": 1001,
-        "description": "Jest断言与Mock模块实现",
-        "priority": 2,
-        "frequency": 2
+        "name": "防抖",
+        "description": "事件停止触发后执行",
+        "importance": 5,
+        "tags": ["resize", "输入"]
       },
       {
-        "title": "E2E测试框架",
-        "id": 1002,
-        "description": "Cypress/Puppeteer自动化流程",
-        "priority": 2,
-        "frequency": 2
+        "name": "节流",
+        "description": "固定时间间隔内只执行一次",
+        "importance": 5,
+        "tags": ["scroll", "高频事件"]
       },
       {
-        "title": "性能分析工具",
-        "id": 1003,
-        "description": "Lighthouse评分与优化建议",
-        "priority": 2,
-        "frequency": 1
-      }
-    ]
-  },
-  {
-    "title": "🚀 性能优化",
-    "id": 11,
-    "items": [
-      {
-        "title": "防抖与节流",
-        "id": 1101,
-        "description": "高频事件性能优化方案",
-        "priority": 1,
-        "frequency": 3
+        "name": "懒加载",
+        "description": "延迟加载非关键资源",
+        "importance": 5,
+        "tags": ["图片", "组件"]
       },
       {
-        "title": "虚拟列表渲染",
-        "id": 1102,
-        "description": "大数据量DOM渲染优化",
-        "priority": 2,
-        "frequency": 2
+        "name": "虚拟滚动",
+        "description": "只渲染可见区域内容",
+        "importance": 4,
+        "tags": ["大数据", "列表"]
       },
       {
-        "title": "Web Vitals指标",
-        "id": 1103,
-        "description": "FCP/LCP/CLS性能监控与优化",
-        "priority": 2,
-        "frequency": 2
+        "name": "内存优化",
+        "description": "减少内存占用和泄漏",
+        "importance": 5,
+        "tags": ["引用", "垃圾回收"]
       },
       {
-        "title": "代码分割策略",
-        "id": 1104,
-        "description": "动态导入与预加载优先级",
-        "priority": 2,
-        "frequency": 2
+        "name": "代码分割",
+        "description": "将代码拆分成小块按需加载",
+        "importance": 5,
+        "tags": ["动态导入", "懒加载"]
       },
       {
-        "title": "图片懒加载与预加载与滚动加载",
-        "id": 1105,
-        "description": "图片懒加载与预加载策略",
-        "priority": 2,
-        "frequency": 2
-      }
-    ]
-  },
-  {
-    "title": "🎭 设计模式",
-    "id": 12,
-    "items": [
-      {
-        "title": "观察者模式",
-        "id": 1201,
-        "description": "EventEmitter自定义事件实现",
-        "priority": 2,
-        "frequency": 2
-      },
-      {
-        "title": "发布订阅模式",
-        "id": 1202,
-        "description": "与观察者模式的中介者差异",
-        "priority": 2,
-        "frequency": 2
-      },
-      {
-        "title": "单例模式实现",
-        "id": 1203,
-        "description": "闭包与Proxy代理限制",
-        "priority": 2,
-        "frequency": 1
-      },
-      {
-        "title": "策略模式应用",
-        "id": 1204,
-        "description": "动态替换算法逻辑",
-        "priority": 2,
-        "frequency": 1
+        "name": "Web Workers",
+        "description": "后台线程执行CPU密集型任务",
+        "importance": 4,
+        "tags": ["并行", "非阻塞"]
       }
     ]
   }

@@ -338,7 +338,7 @@ onBeforeUnmount(() => {
 </script>
 
 <style lang="less" scoped>
-@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600;700&family=Source+Code+Pro:wght@400;500;600&display=swap');
+
 
 .util-container {
   max-width: 1400px;
