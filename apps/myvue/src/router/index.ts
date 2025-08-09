@@ -3,6 +3,7 @@ import { useAutoScroll } from '@/hooks/useAutoScroll'
 import HomeView from '../views/HomeView.vue'
 import type { VNode } from 'vue'
 import routes from './generatedRoutes'
+import notFound from '@/views/Other/notFound.vue'
 
 export type Route = {
   label: VNode | string
@@ -27,7 +28,12 @@ const router = createRouter({
       name: 'home',
       component: HomeView,
     },
-    ...routes
+    ...routes,
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'notFound',
+      component: notFound,
+    }
   ],
   // scrollBehavior(to, from, savedPosition) {
   //   return { top: 0 }

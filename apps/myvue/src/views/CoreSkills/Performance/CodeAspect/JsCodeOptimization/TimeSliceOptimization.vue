@@ -497,8 +497,8 @@ const resetVue = () => {
 }
 
 .code-block {
-  background: #2b2d42;
-  color: #f8f9fa;
+  background: #f8f9fa;
+  color: #2b2d42;
   padding: 20px;
   border-radius: 8px;
   overflow-x: auto;

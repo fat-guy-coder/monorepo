@@ -2,8 +2,12 @@
   <div class="transform-container">
     <h1 class="main-title">CSS Transform 变换魔法</h1>
 
-    <h3>CSS Transform 是一种强大的工具，可以对元素进行各种变换，如平移、旋转、缩放和倾斜。通过使用 transform 属性，开发者可以创建动态和交互式的用户界面，提升用户体验。</h3>
-    <h4>CSS Transform 的主要优势包括:
+    <h3>
+      CSS Transform 是一种强大的工具，可以对元素进行各种变换，如平移、旋转、缩放和倾斜。通过使用
+      transform 属性，开发者可以创建动态和交互式的用户界面，提升用户体验。
+    </h3>
+    <h4>
+      CSS Transform 的主要优势包括:
       <ul class="basic-list">
         <li>性能优化 - Transform 使用GPU加速,渲染更流畅</li>
         <li>不影响文档流 - 变换不会改变元素原有的布局位置</li>
@@ -16,19 +20,21 @@
       <div class="demo-header-control">
         <div class="control-group">
           <h2 class="control-title">变换原点transform-origin</h2>
-          <h3>transform-origin 属性定义了元素的变换原点。默认情况下，元素的变换原点是元素的中心点。</h3>
+          <h3>
+            transform-origin 属性定义了元素的变换原点。默认情况下，元素的变换原点是元素的中心点。
+          </h3>
           <div class="origin-controls">
             <div class="origin-control">
               <label>X轴原点: {{ transformOrigin.x }}%</label>
-              <input type="range" v-model="transformOrigin.x" min="0" max="100" step="1">
+              <input type="range" v-model="transformOrigin.x" min="0" max="100" step="1" />
             </div>
             <div class="origin-control">
               <label>Y轴原点: {{ transformOrigin.y }}%</label>
-              <input type="range" v-model="transformOrigin.y" min="0" max="100" step="1">
+              <input type="range" v-model="transformOrigin.y" min="0" max="100" step="1" />
             </div>
             <div class="origin-control">
               <label>Z轴原点: {{ transformOrigin.z }}px</label>
-              <input type="range" v-model="transformOrigin.z" min="0" max="100" step="1">
+              <input type="range" v-model="transformOrigin.z" min="0" max="100" step="1" />
             </div>
           </div>
         </div>
@@ -37,18 +43,24 @@
           <h3>transform-style 属性定义了元素的子元素是否保留其3D变换。</h3>
           <div class="origin-controls">
             <div class="origin-control">
-              <a-select style="width: 120px" v-model:value="currentTransform.transformStyle"
-                :options="transformStyle" />
+              <a-select
+                style="width: 120px"
+                v-model:value="currentTransform.transformStyle"
+                :options="transformStyle"
+              />
             </div>
           </div>
         </div>
         <div class="control-group">
           <h2 class="control-title">规定3D元素的透视效果perspective</h2>
-          <h3>perspective 属性定义了3D元素的透视效果。值越小，3D效果越明显；值越大，3D效果越微弱。这个值表示观察者与z=0平面的距离。</h3>
+          <h3>
+            perspective
+            属性定义了3D元素的透视效果。值越小，3D效果越明显；值越大，3D效果越微弱。这个值表示观察者与z=0平面的距离。
+          </h3>
           <div class="origin-controls">
             <div class="origin-control">
               <label>透视: {{ perspective }}px</label>
-              <input type="range" v-model="perspective" min="0" max="300" step="1">
+              <input type="range" v-model="perspective" min="0" max="300" step="1" />
             </div>
           </div>
         </div>
@@ -58,39 +70,71 @@
           <div class="origin-controls">
             <div class="origin-control">
               <label>X轴原点: {{ perspectiveOrigin.x }}%</label>
-              <input type="range" v-model="perspectiveOrigin.x" min="0" max="100" step="1">
+              <input type="range" v-model="perspectiveOrigin.x" min="0" max="100" step="1" />
             </div>
             <div class="origin-control">
               <label>Y轴原点: {{ perspectiveOrigin.y }}%</label>
-              <input type="range" v-model="perspectiveOrigin.y" min="0" max="100" step="1">
+              <input type="range" v-model="perspectiveOrigin.y" min="0" max="100" step="1" />
+            </div>
+          </div>
+        </div>
+        <div class="control-group">
+          <h2 class="control-title">backface-visibility</h2>
+          <h3>backface-visibility 属性定义了元素的背面是否可见。</h3>
+          <div class="origin-controls">
+            <div class="origin-control">
+              <a-select
+                style="width: 120px"
+                v-model:value="backfaceVisibility"
+                :options="backfaceVisibilityOptions"
+              />
             </div>
           </div>
         </div>
 
         <div class="control-group">
-          <h2 class="control-title"> {{ currentTransform?.description }}</h2>
-        </div>
-        <div class="control-group">
           <h2 class="control-title">当前属性值控制</h2>
-          <div class="origin-controls" v-for="(option, index) in currentTransform?.values" :key="index">
+          <div
+            class="origin-controls"
+            v-for="(option, index) in currentTransform?.values"
+            :key="index"
+          >
             <div class="origin-control">
-              <label>{{ option.label }} <span>{{ option.value }}{{ option.unit }}</span></label>
-              <input type="range" v-model="option.value" :min="option.min" :max="option.max" :step="option.step">
+              <label
+                >{{ option.label }} <span>{{ option.value }}{{ option.unit }}</span></label
+              >
+              <input
+                type="range"
+                v-model="option.value"
+                :min="option.min"
+                :max="option.max"
+                :step="option.step"
+              />
             </div>
           </div>
+        </div>
+
+        <div class="control-group">
+          <h2 class="control-title">{{ currentTransform?.description }}</h2>
         </div>
       </div>
       <div class="demo-container">
         <div class="demo-area" :style="{ perspective: perspective + 'px' }">
-          <div class="transform-box" :style="{
-            transform: currentTransformValue,
-            transformOrigin: `${transformOrigin.x}% ${transformOrigin.y}% ${transformOrigin.z}px`
-          }">
-            <div class="origin-point" :style="{
-              left: `${transformOrigin.x}%`,
-              top: `${transformOrigin.y}%`,
-              transform: `translateZ(${transformOrigin.z}px)`
-            }"></div>
+          <div
+            class="transform-box"
+            :style="{
+              transform: currentTransformValue,
+              transformOrigin: `${transformOrigin.x}% ${transformOrigin.y}% ${transformOrigin.z}px`,
+            }"
+          >
+            <div
+              class="origin-point"
+              :style="{
+                left: `${transformOrigin.x}%`,
+                top: `${transformOrigin.y}%`,
+                transform: `translateZ(${transformOrigin.z}px)`,
+              }"
+            ></div>
             <div class="element-front">
               <div class="coordinate-label">X</div>
               <div class="coordinate-label">Y</div>
@@ -102,8 +146,12 @@
           <div class="control-group transform-options">
             <h2 class="control-title">变换</h2>
             <div class="button-grid">
-              <button v-for="option in transformOptions" :key="option.type" @click="applyTransform(option)"
-                :class="{ active: currentTransform?.type === option.type }">
+              <button
+                v-for="option in transformOptions"
+                :key="option.type"
+                @click="applyTransform(option)"
+                :class="{ active: currentTransform?.type === option.type }"
+              >
                 {{ option.label }}
               </button>
             </div>
@@ -112,15 +160,7 @@
       </div>
       <div class="code-section">
         <div class="code-description">{{ currentTransform?.description }}</div>
-        <pre class="code-block"><code>.transform-box {
-perspective: {{ perspective }}px;
-perspective-origin: {{ perspectiveOrigin.x }}% {{ perspectiveOrigin.y }}%
-.transformed-element {
-  transform: {{ currentTransformValue }};
-  transform-origin: {{ transformOrigin.x }}% {{ transformOrigin.y }}% {{ transformOrigin.z }}px;
-  transform-style: {{ currentTransform.transformStyle }};
-}
-}</code></pre>
+        <CodeBlock :code="code" />
       </div>
     </div>
     <div class="instruction-section">
@@ -149,22 +189,36 @@ perspective-origin: {{ perspectiveOrigin.x }}% {{ perspectiveOrigin.y }}%
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
+import { Select as ASelect } from 'ant-design-vue'
+import CodeBlock from '@/components/CodeBlock.vue'
 
-
-type TransformType = 'translate' | 'rotate' | 'scale' | 'scale2' | 'skew' | 'matrix' | 'none' | 'custom' | 'translate3d' | 'rotate3d' | 'scale3d' | 'perspective' | 'matrix3d'
+type TransformType =
+  | 'translate'
+  | 'rotate'
+  | 'scale'
+  | 'scale2'
+  | 'skew'
+  | 'matrix'
+  | 'none'
+  | 'custom'
+  | 'translate3d'
+  | 'rotate3d'
+  | 'scale3d'
+  | 'perspective'
+  | 'matrix3d'
 type TransformOption = {
   type: TransformType
   label: string
   transformStyle: 'preserve-3d' | 'flat'
   description: string
-  values: ({
+  values: {
     label: string
     value: number
     unit: string
     min: number
     max: number
     step: number
-  }[])
+  }[]
   unit?: string[]
 }
 
@@ -182,7 +236,7 @@ type PerspectiveOrigin = {
 const transformOrigin = ref<TransformOrigin>({
   x: 50,
   y: 50,
-  z: 0
+  z: 0,
 })
 
 const perspectiveOrigin = ref<PerspectiveOrigin>({
@@ -192,40 +246,59 @@ const perspectiveOrigin = ref<PerspectiveOrigin>({
 
 const perspective = ref(1000)
 
-const transformStyle = ref<{
-  label: string
-  value: string
-}[]>([
+const transformStyle = ref<
+  {
+    label: string
+    value: string
+  }[]
+>([
   { label: 'preserve-3d', value: 'preserve-3d' },
   { label: 'flat', value: 'flat' },
 ])
 
-
 const transformOptions = ref<TransformOption[]>([])
 
-const currentTransform = ref<TransformOption>(
-  {
-    type: 'translate',
-    label: '平移',
-    transformStyle: 'flat',
-    description: '将元素沿X轴和Y轴进行平移',
-    values: [{ label: 'X轴', value: 0, unit: 'px', min: -100, max: 100, step: 1 }, { label: 'Y轴', value: 0, unit: 'px', min: -100, max: 100, step: 1 }],
-  }
-)
+const currentTransform = ref<TransformOption>({
+  type: 'translate',
+  label: '平移',
+  transformStyle: 'flat',
+  description: '将元素沿X轴和Y轴进行平移',
+  values: [
+    { label: 'X轴', value: 0, unit: 'px', min: -100, max: 100, step: 1 },
+    { label: 'Y轴', value: 0, unit: 'px', min: -100, max: 100, step: 1 },
+  ],
+})
 
 onMounted(async () => {
   const list = await import('@/views/CoreSkills/HTML_CSS/JSON/Transfrom.json')
-  transformOptions.value = (list.default as TransformOption[])
+  transformOptions.value = list.default as TransformOption[]
 })
 
+const backfaceVisibility = ref('hidden')
 
+const backfaceVisibilityOptions = ref<{ label: string; value: string }[]>([
+  { label: 'hidden(隐藏)', value: 'hidden' },
+  { label: 'visible(显示)', value: 'visible' },
+])
 
-
-
-
+const code = computed(() => {
+  return `.transform-box {
+perspective: ${perspective.value}px;
+perspective-origin: ${perspectiveOrigin.value.x}% ${perspectiveOrigin.value.y}%
+.transformed-element {
+  transform: ${currentTransformValue.value};
+  transform-origin: ${transformOrigin.value.x}% ${transformOrigin.value.y}% ${transformOrigin.value.z}px;
+  transform-style: ${currentTransform.value.transformStyle};
+  backface-visibility: ${backfaceVisibility.value};
+}
+}
+  `
+})
 
 const currentTransformValue = computed(() => {
-  return currentTransform.value?.type === 'none' ? 'none' : `${currentTransform.value?.type}(${currentTransform?.value?.values.map(item => `${item.value}${item.unit}`).join(',')})`
+  return currentTransform.value?.type === 'none'
+    ? 'none'
+    : `${currentTransform.value?.type}(${currentTransform?.value?.values.map((item) => `${item.value}${item.unit}`).join(',')})`
 })
 
 const applyTransform = (option: TransformOption) => {
@@ -236,8 +309,6 @@ const applyTransform = (option: TransformOption) => {
     currentTransform.value.values = []
   }
 }
-
-
 </script>
 
 <style scoped>
@@ -265,7 +336,6 @@ li {
 }
 
 .transform-container {
-
   margin: 2rem auto;
   padding: 0 2rem;
   font-family: 'Segoe UI', system-ui;
@@ -418,7 +488,6 @@ button:hover {
 }
 
 .code-block {
-  color: white;
   font-family: Monaco, monospace;
   white-space: pre-wrap;
 }

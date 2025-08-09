@@ -408,6 +408,7 @@ const loadImage = (filename: string) => {
     background: #f5f8fb;
     border-left: 4px solid @primary-color;
     padding: 15px;
+    color: @dark-text;
     border-radius: 0 8px 8px 0;
     margin-bottom: 20px;
     overflow-x: auto;
@@ -419,7 +420,7 @@ const loadImage = (filename: string) => {
     }
 
     pre {
-      color: #f8f8f2;
+
       padding: 15px;
       border-radius: 5px;
       overflow-x: auto;

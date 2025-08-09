@@ -1,7 +1,7 @@
 <template>
   <div class="reflect-docs">
     <header class="docs-header">
-      <h1>JavaScript Reflect 完全指南</h1>
+      <h1>JavaScript Reflect 基本指南</h1>
       <p class="subtitle">ES6 对象操作的现代化 API</p>
     </header>
 

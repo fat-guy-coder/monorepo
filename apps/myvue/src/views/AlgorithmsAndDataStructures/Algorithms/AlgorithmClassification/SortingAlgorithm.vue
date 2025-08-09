@@ -9,7 +9,9 @@
       <div class="intro">
         <div class="intro-card">
           <h2>排序算法概述</h2>
-          <p>排序算法是计算机科学中最基础的算法之一，用于将一组数据按特定顺序重新排列。选择合适的排序算法对程序性能至关重要。</p>
+          <p>
+            排序算法是计算机科学中最基础的算法之一，用于将一组数据按特定顺序重新排列。选择合适的排序算法对程序性能至关重要。
+          </p>
           <div class="algorithm-stats">
             <div class="stat">
               <div class="stat-value">O(n²)</div>
@@ -28,10 +30,15 @@
       </div>
 
       <div class="tabs">
-        <button v-for="(algorithm, index) in algorithms" :key="index" @click="activeAlgorithm = algorithm"
-          :class="{ active: activeAlgorithm.name === algorithm.name  }">
+        <Button
+          v-for="(algorithm, index) in algorithms"
+          :key="index"
+          type="primary"
+          @click="activeAlgorithm = algorithm"
+          :class="{ active: activeAlgorithm.name === algorithm.name }"
+        >
           {{ algorithm.name }}
-        </button>
+        </Button>
       </div>
 
       <div class="algorithm-details">
@@ -56,7 +63,9 @@
               </div>
               <div class="complexity-card">
                 <div class="complexity-type">稳定性</div>
-                <div class="complexity-value">{{ activeAlgorithm.complexity.stable ? '稳定' : '不稳定' }}</div>
+                <div class="complexity-value">
+                  {{ activeAlgorithm.complexity.stable ? '稳定' : '不稳定' }}
+                </div>
               </div>
             </div>
           </div>
@@ -71,7 +80,9 @@
           <div class="use-cases">
             <h3>使用场景</h3>
             <ul>
-              <li v-for="(useCase, index) in activeAlgorithm.useCases" :key="index">{{ useCase }}</li>
+              <li v-for="(useCase, index) in activeAlgorithm.useCases" :key="index">
+                {{ useCase }}
+              </li>
             </ul>
           </div>
         </div>
@@ -82,145 +93,201 @@
         </div>
       </div>
 
-    <!-- INSERT_YOUR_CODE -->
-    <div class="sorting-comparison-table" style="margin-top:2rem;">
-      <h3>常见12种排序算法性能对比表</h3>
-      <table style="width:100%;border-collapse:collapse;font-size:0.98rem;">
-        <thead>
-          <tr style="background:#f0f4fa;">
-            <th style="border:1px solid #dbeafe;padding:8px;">排序算法</th>
-            <th style="border:1px solid #dbeafe;padding:8px;">时间复杂度(最坏/平均/最好)</th>
-            <th style="border:1px solid #dbeafe;padding:8px;">空间复杂度</th>
-            <th style="border:1px solid #dbeafe;padding:8px;">稳定性</th>
-            <th style="border:1px solid #dbeafe;padding:8px;">适用场景</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td style="border:1px solid #dbeafe;padding:8px;">冒泡排序</td>
-            <td style="border:1px solid #dbeafe;padding:8px;">O(n²) / O(n²) / O(n)</td>
-            <td style="border:1px solid #dbeafe;padding:8px;">O(1)</td>
-            <td style="border:1px solid #dbeafe;padding:8px;">稳定</td>
-            <td style="border:1px solid #dbeafe;padding:8px;">小数据量，数据基本有序</td>
-          </tr>
-          <tr>
-            <td style="border:1px solid #dbeafe;padding:8px;">选择排序</td>
-            <td style="border:1px solid #dbeafe;padding:8px;">O(n²) / O(n²) / O(n²)</td>
-            <td style="border:1px solid #dbeafe;padding:8px;">O(1)</td>
-            <td style="border:1px solid #dbeafe;padding:8px;">不稳定</td>
-            <td style="border:1px solid #dbeafe;padding:8px;">小数据量，对稳定性无要求</td>
-          </tr>
-          <tr>
-            <td style="border:1px solid #dbeafe;padding:8px;">插入排序</td>
-            <td style="border:1px solid #dbeafe;padding:8px;">O(n²) / O(n²) / O(n)</td>
-            <td style="border:1px solid #dbeafe;padding:8px;">O(1)</td>
-            <td style="border:1px solid #dbeafe;padding:8px;">稳定</td>
-            <td style="border:1px solid #dbeafe;padding:8px;">小数据量，数据基本有序</td>
-          </tr>
-          <tr>
-            <td style="border:1px solid #dbeafe;padding:8px;">希尔排序</td>
-            <td style="border:1px solid #dbeafe;padding:8px;">O(n²) / O(n^1.3) / O(n)</td>
-            <td style="border:1px solid #dbeafe;padding:8px;">O(1)</td>
-            <td style="border:1px solid #dbeafe;padding:8px;">不稳定</td>
-            <td style="border:1px solid #dbeafe;padding:8px;">中等数据量，数据较无序</td>
-          </tr>
-          <tr>
-            <td style="border:1px solid #dbeafe;padding:8px;">归并排序</td>
-            <td style="border:1px solid #dbeafe;padding:8px;">O(n log n) / O(n log n) / O(n log n)</td>
-            <td style="border:1px solid #dbeafe;padding:8px;">O(n)</td>
-            <td style="border:1px solid #dbeafe;padding:8px;">稳定</td>
-            <td style="border:1px solid #dbeafe;padding:8px;">大数据量，要求稳定排序</td>
-          </tr>
-          <tr>
-            <td style="border:1px solid #dbeafe;padding:8px;">快速排序</td>
-            <td style="border:1px solid #dbeafe;padding:8px;">O(n²) / O(n log n) / O(n log n)</td>
-            <td style="border:1px solid #dbeafe;padding:8px;">O(log n)</td>
-            <td style="border:1px solid #dbeafe;padding:8px;">不稳定</td>
-            <td style="border:1px solid #dbeafe;padding:8px;">大数据量，数据较无序</td>
-          </tr>
-          <tr>
-            <td style="border:1px solid #dbeafe;padding:8px;">堆排序</td>
-            <td style="border:1px solid #dbeafe;padding:8px;">O(n log n) / O(n log n) / O(n log n)</td>
-            <td style="border:1px solid #dbeafe;padding:8px;">O(1)</td>
-            <td style="border:1px solid #dbeafe;padding:8px;">不稳定</td>
-            <td style="border:1px solid #dbeafe;padding:8px;">大数据量，对稳定性无要求</td>
-          </tr>
-          <tr>
-            <td style="border:1px solid #dbeafe;padding:8px;">计数排序</td>
-            <td style="border:1px solid #dbeafe;padding:8px;">O(n+k) / O(n+k) / O(n+k)</td>
-            <td style="border:1px solid #dbeafe;padding:8px;">O(k)</td>
-            <td style="border:1px solid #dbeafe;padding:8px;">稳定</td>
-            <td style="border:1px solid #dbeafe;padding:8px;">数据范围小且集中，整数排序</td>
-          </tr>
-          <tr>
-            <td style="border:1px solid #dbeafe;padding:8px;">桶排序</td>
-            <td style="border:1px solid #dbeafe;padding:8px;">O(n+k) / O(n+k) / O(n+k)</td>
-            <td style="border:1px solid #dbeafe;padding:8px;">O(n+k)</td>
-            <td style="border:1px solid #dbeafe;padding:8px;">稳定</td>
-            <td style="border:1px solid #dbeafe;padding:8px;">数据分布均匀，数据量大</td>
-          </tr>
-          <tr>
-            <td style="border:1px solid #dbeafe;padding:8px;">基数排序</td>
-            <td style="border:1px solid #dbeafe;padding:8px;">O(nk) / O(nk) / O(nk)</td>
-            <td style="border:1px solid #dbeafe;padding:8px;">O(n+k)</td>
-            <td style="border:1px solid #dbeafe;padding:8px;">稳定</td>
-            <td style="border:1px solid #dbeafe;padding:8px;">数据位数不大，整数/字符串排序</td>
-          </tr>
-          <tr>
-            <td style="border:1px solid #dbeafe;padding:8px;">Tim排序</td>
-            <td style="border:1px solid #dbeafe;padding:8px;">O(n log n) / O(n log n) / O(n)</td>
-            <td style="border:1px solid #dbeafe;padding:8px;">O(n)</td>
-            <td style="border:1px solid #dbeafe;padding:8px;">稳定</td>
-            <td style="border:1px solid #dbeafe;padding:8px;">大多数实际场景，数据部分有序</td>
-          </tr>
-          <tr>
-            <td style="border:1px solid #dbeafe;padding:8px;">锦标赛排序</td>
-            <td style="border:1px solid #dbeafe;padding:8px;">O(n log n) / O(n log n) / O(n log n)</td>
-            <td style="border:1px solid #dbeafe;padding:8px;">O(n)</td>
-            <td style="border:1px solid #dbeafe;padding:8px;">稳定</td>
-            <td style="border:1px solid #dbeafe;padding:8px;">需要频繁找最大/最小值的场景</td>
-          </tr>
-        </tbody>
-      </table>
-      <div style="margin-top:1rem;font-size:0.95rem;color:#666;">
-        <strong>说明：</strong>
-        <ul style="margin:0.5rem 0 0 1.2rem;padding:0;">
-          <li>大数据量推荐：归并、快速、堆、Tim、桶、基数、锦标赛排序</li>
-          <li>小数据量推荐：插入、冒泡、选择、希尔排序</li>
-          <li>数据基本有序推荐：插入、冒泡、Tim排序</li>
-          <li>数据分布均匀或范围小：计数、桶、基数排序</li>
-          <li>对稳定性有要求：插入、冒泡、归并、计数、桶、基数、Tim、锦标赛排序</li>
-        </ul>
+      <SortAlgorithBarCharts v-model:selectedAlgorithm="activeAlgorithm.name" v-model:log="log" />
+      <div class="options">
+        <Button type="primary" @click="sortBy('sortTime')">排序时间</Button>
+        <Button type="primary" @click="sortBy('compare')">比较次数</Button>
+        <Button type="primary" @click="sortBy('swap')">交换次数</Button>
       </div>
-    </div>
+      <!-- <div class="statistics">
+        <Pie :data="statistics" />
+      </div> -->
+      <!-- INSERT_YOUR_CODE -->
+      <div class="sorting-comparison-table" style="margin-top: 2rem">
+        <h3>常见12种排序算法性能对比表</h3>
+        <table style="width: 100%; border-collapse: collapse; font-size: 0.98rem">
+          <thead>
+            <tr style="background: #f0f4fa">
+              <th style="border: 1px solid #dbeafe; padding: 8px">排序算法</th>
+              <th style="border: 1px solid #dbeafe; padding: 8px">时间复杂度(最坏/平均/最好)</th>
+              <th style="border: 1px solid #dbeafe; padding: 8px">空间复杂度</th>
+              <th style="border: 1px solid #dbeafe; padding: 8px">稳定性</th>
+              <th style="border: 1px solid #dbeafe; padding: 8px">适用场景</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="border: 1px solid #dbeafe; padding: 8px">冒泡排序</td>
+              <td style="border: 1px solid #dbeafe; padding: 8px">O(n²) / O(n²) / O(n)</td>
+              <td style="border: 1px solid #dbeafe; padding: 8px">O(1)</td>
+              <td style="border: 1px solid #dbeafe; padding: 8px">稳定</td>
+              <td style="border: 1px solid #dbeafe; padding: 8px">小数据量，数据基本有序</td>
+            </tr>
+            <tr>
+              <td style="border: 1px solid #dbeafe; padding: 8px">选择排序</td>
+              <td style="border: 1px solid #dbeafe; padding: 8px">O(n²) / O(n²) / O(n²)</td>
+              <td style="border: 1px solid #dbeafe; padding: 8px">O(1)</td>
+              <td style="border: 1px solid #dbeafe; padding: 8px">不稳定</td>
+              <td style="border: 1px solid #dbeafe; padding: 8px">小数据量，对稳定性无要求</td>
+            </tr>
+            <tr>
+              <td style="border: 1px solid #dbeafe; padding: 8px">插入排序</td>
+              <td style="border: 1px solid #dbeafe; padding: 8px">O(n²) / O(n²) / O(n)</td>
+              <td style="border: 1px solid #dbeafe; padding: 8px">O(1)</td>
+              <td style="border: 1px solid #dbeafe; padding: 8px">稳定</td>
+              <td style="border: 1px solid #dbeafe; padding: 8px">小数据量，数据基本有序</td>
+            </tr>
+            <tr>
+              <td style="border: 1px solid #dbeafe; padding: 8px">希尔排序</td>
+              <td style="border: 1px solid #dbeafe; padding: 8px">O(n²) / O(n^1.3) / O(n)</td>
+              <td style="border: 1px solid #dbeafe; padding: 8px">O(1)</td>
+              <td style="border: 1px solid #dbeafe; padding: 8px">不稳定</td>
+              <td style="border: 1px solid #dbeafe; padding: 8px">中等数据量，数据较无序</td>
+            </tr>
+            <tr>
+              <td style="border: 1px solid #dbeafe; padding: 8px">归并排序</td>
+              <td style="border: 1px solid #dbeafe; padding: 8px">
+                O(n log n) / O(n log n) / O(n log n)
+              </td>
+              <td style="border: 1px solid #dbeafe; padding: 8px">O(n)</td>
+              <td style="border: 1px solid #dbeafe; padding: 8px">稳定</td>
+              <td style="border: 1px solid #dbeafe; padding: 8px">大数据量，要求稳定排序</td>
+            </tr>
+            <tr>
+              <td style="border: 1px solid #dbeafe; padding: 8px">快速排序</td>
+              <td style="border: 1px solid #dbeafe; padding: 8px">
+                O(n²) / O(n log n) / O(n log n)
+              </td>
+              <td style="border: 1px solid #dbeafe; padding: 8px">O(log n)</td>
+              <td style="border: 1px solid #dbeafe; padding: 8px">不稳定</td>
+              <td style="border: 1px solid #dbeafe; padding: 8px">大数据量，数据较无序</td>
+            </tr>
+            <tr>
+              <td style="border: 1px solid #dbeafe; padding: 8px">堆排序</td>
+              <td style="border: 1px solid #dbeafe; padding: 8px">
+                O(n log n) / O(n log n) / O(n log n)
+              </td>
+              <td style="border: 1px solid #dbeafe; padding: 8px">O(1)</td>
+              <td style="border: 1px solid #dbeafe; padding: 8px">不稳定</td>
+              <td style="border: 1px solid #dbeafe; padding: 8px">大数据量，对稳定性无要求</td>
+            </tr>
+            <tr>
+              <td style="border: 1px solid #dbeafe; padding: 8px">计数排序</td>
+              <td style="border: 1px solid #dbeafe; padding: 8px">O(n+k) / O(n+k) / O(n+k)</td>
+              <td style="border: 1px solid #dbeafe; padding: 8px">O(k)</td>
+              <td style="border: 1px solid #dbeafe; padding: 8px">稳定</td>
+              <td style="border: 1px solid #dbeafe; padding: 8px">数据范围小且集中，整数排序</td>
+            </tr>
+            <tr>
+              <td style="border: 1px solid #dbeafe; padding: 8px">桶排序</td>
+              <td style="border: 1px solid #dbeafe; padding: 8px">O(n+k) / O(n+k) / O(n+k)</td>
+              <td style="border: 1px solid #dbeafe; padding: 8px">O(n+k)</td>
+              <td style="border: 1px solid #dbeafe; padding: 8px">稳定</td>
+              <td style="border: 1px solid #dbeafe; padding: 8px">数据分布均匀，数据量大</td>
+            </tr>
+            <tr>
+              <td style="border: 1px solid #dbeafe; padding: 8px">基数排序</td>
+              <td style="border: 1px solid #dbeafe; padding: 8px">O(nk) / O(nk) / O(nk)</td>
+              <td style="border: 1px solid #dbeafe; padding: 8px">O(n+k)</td>
+              <td style="border: 1px solid #dbeafe; padding: 8px">稳定</td>
+              <td style="border: 1px solid #dbeafe; padding: 8px">数据位数不大，整数/字符串排序</td>
+            </tr>
+            <tr>
+              <td style="border: 1px solid #dbeafe; padding: 8px">Tim排序</td>
+              <td style="border: 1px solid #dbeafe; padding: 8px">
+                O(n log n) / O(n log n) / O(n)
+              </td>
+              <td style="border: 1px solid #dbeafe; padding: 8px">O(n)</td>
+              <td style="border: 1px solid #dbeafe; padding: 8px">稳定</td>
+              <td style="border: 1px solid #dbeafe; padding: 8px">大多数实际场景，数据部分有序</td>
+            </tr>
+            <tr>
+              <td style="border: 1px solid #dbeafe; padding: 8px">锦标赛排序</td>
+              <td style="border: 1px solid #dbeafe; padding: 8px">
+                O(n log n) / O(n log n) / O(n log n)
+              </td>
+              <td style="border: 1px solid #dbeafe; padding: 8px">O(n)</td>
+              <td style="border: 1px solid #dbeafe; padding: 8px">稳定</td>
+              <td style="border: 1px solid #dbeafe; padding: 8px">需要频繁找最大/最小值的场景</td>
+            </tr>
+          </tbody>
+        </table>
+        <div style="margin-top: 1rem; font-size: 0.95rem; color: #666">
+          <strong>说明：</strong>
+          <ul style="margin: 0.5rem 0 0 1.2rem; padding: 0">
+            <li>大数据量推荐：归并、快速、堆、Tim、桶、基数、锦标赛排序</li>
+            <li>小数据量推荐：插入、冒泡、选择、希尔排序</li>
+            <li>数据基本有序推荐：插入、冒泡、Tim排序</li>
+            <li>数据分布均匀或范围小：计数、桶、基数排序</li>
+            <li>对稳定性有要求：插入、冒泡、归并、计数、桶、基数、Tim、锦标赛排序</li>
+          </ul>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref, onBeforeMount, onMounted } from 'vue';
+import { ref, onBeforeMount, computed } from 'vue'
+import { Button } from 'ant-design-vue'
+import SortAlgorithBarCharts, { type LogItem } from '@/components/charts/sortAlgorithBarCharts.vue'
+import Pie from '@/components/charts/pie.vue'
+
+const log = ref<LogItem[]>([])
+
+const currentSortBy = ref<'sortTime' | 'compare' | 'swap'>('sortTime')
+
+const sortBy = (type: 'sortTime' | 'compare' | 'swap') => {
+  currentSortBy.value = type
+}
+
+const map = new Map<string, string>()
+
+// const statistics = computed(() => {
+//   return log.value.reduce(
+//     (acc, item) => {
+//       if (map.has(item.sortAlgorithm)) {
+//         const index = acc.findIndex((i) => i.label === item.sortAlgorithm)
+//         const j = acc[index]
+//         console.log(acc,index)
+//         acc.splice(index, 1, {
+//           label: item.sortAlgorithm,
+//           value: (item[currentSortBy.value] + j.value) as number,
+//         })
+//       } else {
+//         map.set(item.sortAlgorithm, item.sortAlgorithm)
+//         acc.push({
+//           label: item.sortAlgorithm,
+//           value: item[currentSortBy.value] as number,
+//         })
+//       }
+//       return acc
+//     },
+//     [] as { label: string; value: number }[],
+//   )
+// })
 
 interface Algorithm {
-  name: string;
-  description: string;
+  name: string
+  description: string
   complexity: {
-    worst: string;
-    average: string;
-    best: string;
-    space: string;
-    stable: boolean;
-  };
-  steps: string[];
-  useCases: string[];
-  code: string;
+    worst: string
+    average: string
+    best: string
+    space: string
+    stable: boolean
+  }
+  steps: string[]
+  useCases: string[]
+  code: string
 }
 
 // 排序算法数据
-const algorithms = ref<Algorithm[]>([]);
+const algorithms = ref<Algorithm[]>([])
 
 onBeforeMount(async () => {
-  const data = await import ('../JSON/SortingAlgorithm.json');
-  algorithms.value = data.default as Algorithm[];
+  const data = await import('../JSON/SortingAlgorithm.json')
+  algorithms.value = data.default as Algorithm[]
   algorithms.value[algorithms.value.length - 2].code = `function timSort(arr) {
     const MIN_MERGE = 32;
 
@@ -329,32 +396,30 @@ onBeforeMount(async () => {
 const array = [5, 2, 9, 1, 5, 6, 3, 8, 7, 4];
 console.log("排序前:", array);
 timSort(array);
-console.log("排序后:", array);`;
-});
+console.log("排序后:", array);`
+})
 
 // 当前活动算法
 const activeAlgorithm = ref<Algorithm>({
-    "name": "冒泡排序",
-    "description": "重复遍历数组，比较相邻元素，如果顺序错误就交换它们。",
-    "complexity": {
-      "worst": "O(n²)",
-      "average": "O(n²)",
-      "best": "O(n)",
-      "space": "O(1)",
-      "stable": true
-    },
-    "steps": [
-      "从数组的第一个元素开始",
-      "比较当前元素和下一个元素",
-      "如果当前元素大于下一个元素，交换它们",
-      "对每一对相邻元素重复上述步骤",
-      "重复整个过程，直到没有需要交换的元素"
-    ],
-    "useCases": ["教学目的，理解排序基本原理", "小规模数据排序", "几乎已经排序好的数据"],
-    "code": "function bubbleSort(arr: number[]): number[] {\n const n = arr.length;\n for (let i = 0; i < n - 1; i++) {\n let swapped = false;\n for (let j = 0; j < n - i - 1; j++) {\n if (arr[j] > arr[j + 1]) {\n [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];\n swapped = true;\n }\n }\n if (!swapped) break;\n }\n return arr;\n}"
-  });
-
-
+  name: '冒泡排序',
+  description: '重复遍历数组，比较相邻元素，如果顺序错误就交换它们。',
+  complexity: {
+    worst: 'O(n²)',
+    average: 'O(n²)',
+    best: 'O(n)',
+    space: 'O(1)',
+    stable: true,
+  },
+  steps: [
+    '从数组的第一个元素开始',
+    '比较当前元素和下一个元素',
+    '如果当前元素大于下一个元素，交换它们',
+    '对每一对相邻元素重复上述步骤',
+    '重复整个过程，直到没有需要交换的元素',
+  ],
+  useCases: ['教学目的，理解排序基本原理', '小规模数据排序', '几乎已经排序好的数据'],
+  code: 'function bubbleSort(arr: number[]): number[] {\n const n = arr.length;\n for (let i = 0; i < n - 1; i++) {\n let swapped = false;\n for (let j = 0; j < n - i - 1; j++) {\n if (arr[j] > arr[j + 1]) {\n [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];\n swapped = true;\n }\n }\n if (!swapped) break;\n }\n return arr;\n}',
+})
 </script>
 
 <style lang="less" scoped>
@@ -365,6 +430,15 @@ const activeAlgorithm = ref<Algorithm>({
   font-family: 'Segoe UI', system-ui, sans-serif;
   color: #2c3e50;
   line-height: 1.6;
+}
+
+.options {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  text-align: center;
+  color: #fff;
 }
 
 .header {
@@ -450,15 +524,8 @@ const activeAlgorithm = ref<Algorithm>({
   margin-bottom: 1.5rem;
 
   button {
-    padding: 0.75rem 1.5rem;
-
-    background: #4f46e5;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: 600;
     transition: all 0.2s;
+    color: #fff;
 
     &:hover {
       background: #cbd5e1;
@@ -643,32 +710,12 @@ const activeAlgorithm = ref<Algorithm>({
     font-weight: 500;
   }
 
-  input[type="range"] {
+  input[type='range'] {
     width: 150px;
   }
 
   span {
     min-width: 100px;
-  }
-}
-
-button {
-  background: #4f46e5;
-  color: white;
-  border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: background 0.2s;
-
-  &:hover:not(:disabled) {
-    background: #4338ca;
-  }
-
-  &:disabled {
-    background: #cbd5e1;
-    cursor: not-allowed;
   }
 }
 

@@ -34,7 +34,7 @@
         <div class="method-details">
           <div v-for="(method, index) in methods" :key="index" v-show="activeTab === index">
             <div class="method-header">
-              <h2>{{ method.name }}</h2>
+              <h2>{{ method.name }} <a  v-if="method.class" @click="goToClass">跳转详细</a> </h2>
               <div class="method-tags">
                 <span v-for="(tag, tagIndex) in method.tags" :key="tagIndex" :class="['tag', tag.toLowerCase()]">
                   {{ tag }}
@@ -143,6 +143,13 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
+
+const emit = defineEmits(['goToByRouteName']);
+
+
+function goToClass() {
+  emit('goToByRouteName', 'Class');
+}
 
 const activeTab = ref(0);
 
@@ -395,6 +402,7 @@ console.log(person1.greet()); // "你好，我是吴十，今年50岁"`,
   },
   {
     name: "类（ES6）",
+    class:true,
     tags: ["现代", "推荐"],
     description: "ES6引入的类语法，是创建对象的现代推荐方式。",
     codeExample: `// 类定义

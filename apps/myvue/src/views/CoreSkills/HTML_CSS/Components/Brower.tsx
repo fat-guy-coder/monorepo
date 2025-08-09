@@ -1,5 +1,3 @@
-import { defineComponent } from 'vue'
-
 // Chrome 浏览器 SVG 图标
 export const c = () => (
   <svg viewBox="0 0 48 48" width="1em" height="1em" fill="none">

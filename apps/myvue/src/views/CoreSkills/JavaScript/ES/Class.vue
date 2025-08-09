@@ -708,6 +708,7 @@ const scrollTo = (id: string) => {
   min-height: 100vh;
   color: @text-color;
   line-height: 1.6;
+  position: relative;
 }
 
 .header {
@@ -730,6 +731,9 @@ const scrollTo = (id: string) => {
 .navigation {
   display: flex;
   flex-wrap: wrap;
+  position: sticky;
+  z-index: 5;
+  top: 0;
   gap: 10px;
   justify-content: center;
   margin-bottom: 30px;

@@ -70,16 +70,28 @@ function globalFunc() {
               <pre><code>// 参数作用域：默认参数在赋值时候生效
 const name = '小明';
 function greet(name=name) {
-  // 默认会先从外部作用域中查找name，如果外部作用域中没有name，则会报错，所以需要使用name=name来避免报错
+  // 默认会先从外部作用域中查找name，如果外部作用域中没有name，则会报错。
   console.log('你好, ' + name);
 }
-greet('小明'); // 输出：你好, 小明
+// 1.默认参数在赋值时候生效,会先执行默认参数的函数或者表达式，然后赋值给参数。
+function greet(name= getDefaultParams() ) {
+  // 默认会先从外部作用域中查找name，如果外部作用域中没有name，则会报错。
+  console.log('你好 ' , name);
+}
+//getDefaultParams提升了，所以会先执行getDefaultParams，然后去找全局的name。然后返回{name,params}
+function getDefaultParams() {
+    const params = 'aaa'
+    return {name,params}
+}
+greet(); // 你好 {name: 'haha', params: 'aaa'}
 </code></pre>
             </div>
           </div>
         </section>
 
-        <section class="section">
+
+      </div>
+      <section class="section">
           <h2>作用域链</h2>
           <div class="definition-card">
             <p>作用域链(Scope Chain)是变量查找的机制：当访问变量时，JS引擎会从当前作用域开始查找，然后逐级向上查找，直到全局作用域。</p>
@@ -117,7 +129,6 @@ function outer() {
 outer();</code></pre>
           </div>
         </section>
-      </div>
 
       <section class="section">
         <h2>作用域与闭包</h2>

@@ -117,14 +117,14 @@ export default [
                     "component": () => import('@/views/CoreSkills/HTML_CSS/CSS/CSSBasicAttibutes/Font.vue')
                   },
                   {
-                    "name": "Background",
-                    "path": "/CoreSkills/HTML_CSS/CSS/CSSBasicAttibutes/Background",
-                    "component": () => import('@/views/CoreSkills/HTML_CSS/CSS/CSSBasicAttibutes/Background.vue')
-                  },
-                  {
                     "name": "Text",
                     "path": "/CoreSkills/HTML_CSS/CSS/CSSBasicAttibutes/Text",
                     "component": () => import('@/views/CoreSkills/HTML_CSS/CSS/CSSBasicAttibutes/Text.vue')
+                  },
+                  {
+                    "name": "Background",
+                    "path": "/CoreSkills/HTML_CSS/CSS/CSSBasicAttibutes/Background",
+                    "component": () => import('@/views/CoreSkills/HTML_CSS/CSS/CSSBasicAttibutes/Background.vue')
                   },
                   {
                     "name": "Opacity",
@@ -283,6 +283,11 @@ export default [
             "path": "/CoreSkills/HTML_CSS/CSS3",
             "children": [
               {
+                "name": "CSS3Overview",
+                "path": "/CoreSkills/HTML_CSS/CSS3/CSS3Overview",
+                "component": () => import('@/views/CoreSkills/HTML_CSS/CSS3/CSS3Overview.vue')
+              },
+              {
                 "name": "Flexbox",
                 "path": "/CoreSkills/HTML_CSS/CSS3/Flexbox",
                 "component": () => import('@/views/CoreSkills/HTML_CSS/CSS3/Flexbox.vue')
@@ -358,14 +363,14 @@ export default [
                 "component": () => import('@/views/CoreSkills/HTML_CSS/CSS3/ClipPath.vue')
               },
               {
-                "name": "BlendModes",
-                "path": "/CoreSkills/HTML_CSS/CSS3/BlendModes",
-                "component": () => import('@/views/CoreSkills/HTML_CSS/CSS3/BlendModes.vue')
-              },
-              {
                 "name": "MaskImage",
                 "path": "/CoreSkills/HTML_CSS/CSS3/MaskImage",
                 "component": () => import('@/views/CoreSkills/HTML_CSS/CSS3/MaskImage.vue')
+              },
+              {
+                "name": "BlendModes",
+                "path": "/CoreSkills/HTML_CSS/CSS3/BlendModes",
+                "component": () => import('@/views/CoreSkills/HTML_CSS/CSS3/BlendModes.vue')
               },
               {
                 "name": "ObjectFit",
@@ -413,6 +418,11 @@ export default [
                 "component": () => import('@/views/CoreSkills/HTML_CSS/CSS3/AnimateMotion.vue')
               },
               {
+                "name": "ScrollLinkedAnimations",
+                "path": "/CoreSkills/HTML_CSS/CSS3/ScrollLinkedAnimations",
+                "component": () => import('@/views/CoreSkills/HTML_CSS/CSS3/ScrollLinkedAnimations.vue')
+              },
+              {
                 "name": "CustomProperty",
                 "path": "/CoreSkills/HTML_CSS/CSS3/CustomProperty",
                 "component": () => import('@/views/CoreSkills/HTML_CSS/CSS3/CustomProperty.vue')
@@ -423,14 +433,14 @@ export default [
                 "component": () => import('@/views/CoreSkills/HTML_CSS/CSS3/RelativeColorScheme.vue')
               },
               {
-                "name": "ScrollLinkedAnimations",
-                "path": "/CoreSkills/HTML_CSS/CSS3/ScrollLinkedAnimations",
-                "component": () => import('@/views/CoreSkills/HTML_CSS/CSS3/ScrollLinkedAnimations.vue')
-              },
-              {
                 "name": "CSSNesting",
                 "path": "/CoreSkills/HTML_CSS/CSS3/CSSNesting",
                 "component": () => import('@/views/CoreSkills/HTML_CSS/CSS3/CSSNesting.vue')
+              },
+              {
+                "name": "CSS3OtherAttributes",
+                "path": "/CoreSkills/HTML_CSS/CSS3/CSS3OtherAttributes",
+                "component": () => import('@/views/CoreSkills/HTML_CSS/CSS3/CSS3OtherAttributes.vue')
               }
             ]
           },
@@ -762,23 +772,33 @@ export default [
                     "name": "HigherOrderFunction",
                     "path": "/CoreSkills/JavaScript/Basics/FunctionProgramming/HigherOrderFunction",
                     "component": () => import('@/views/CoreSkills/JavaScript/Basics/FunctionProgramming/HigherOrderFunction.vue')
+                  },
+                  {
+                    "name": "CallbackFunction",
+                    "path": "/CoreSkills/JavaScript/Basics/FunctionProgramming/CallbackFunction",
+                    "component": () => import('@/views/CoreSkills/JavaScript/Basics/FunctionProgramming/CallbackFunction.vue')
+                  },
+                  {
+                    "name": "RecursionFunction",
+                    "path": "/CoreSkills/JavaScript/Basics/FunctionProgramming/RecursionFunction",
+                    "component": () => import('@/views/CoreSkills/JavaScript/Basics/FunctionProgramming/RecursionFunction.vue')
+                  },
+                  {
+                    "name": "EvalAndWith",
+                    "path": "/CoreSkills/JavaScript/Basics/FunctionProgramming/EvalAndWith",
+                    "component": () => import('@/views/CoreSkills/JavaScript/Basics/FunctionProgramming/EvalAndWith.vue')
+                  },
+                  {
+                    "name": "ExecuteCodeString",
+                    "path": "/CoreSkills/JavaScript/Basics/FunctionProgramming/ExecuteCodeString",
+                    "component": () => import('@/views/CoreSkills/JavaScript/Basics/FunctionProgramming/ExecuteCodeString.vue')
                   }
                 ]
               },
               {
-                "name": "EvalAndWith",
-                "path": "/CoreSkills/JavaScript/Basics/EvalAndWith",
-                "component": () => import('@/views/CoreSkills/JavaScript/Basics/EvalAndWith.vue')
-              },
-              {
-                "name": "ExecuteCodeString",
-                "path": "/CoreSkills/JavaScript/Basics/ExecuteCodeString",
-                "component": () => import('@/views/CoreSkills/JavaScript/Basics/ExecuteCodeString.vue')
-              },
-              {
-                "name": "Scope",
-                "path": "/CoreSkills/JavaScript/Basics/Scope",
-                "component": () => import('@/views/CoreSkills/JavaScript/Basics/Scope.vue')
+                "name": "ExecutionContext",
+                "path": "/CoreSkills/JavaScript/Basics/ExecutionContext",
+                "component": () => import('@/views/CoreSkills/JavaScript/Basics/ExecutionContext.vue')
               },
               {
                 "name": "ThisBinding",
@@ -786,14 +806,30 @@ export default [
                 "component": () => import('@/views/CoreSkills/JavaScript/Basics/ThisBinding.vue')
               },
               {
+                "name": "Scope",
+                "path": "/CoreSkills/JavaScript/Basics/Scope",
+                "component": () => import('@/views/CoreSkills/JavaScript/Basics/Scope.vue')
+              },
+              {
                 "name": "Closure",
                 "path": "/CoreSkills/JavaScript/Basics/Closure",
                 "component": () => import('@/views/CoreSkills/JavaScript/Basics/Closure.vue')
               },
               {
-                "name": "Prototype1",
-                "path": "/CoreSkills/JavaScript/Basics/Prototype1",
-                "component": () => import('@/views/CoreSkills/JavaScript/Basics/Prototype1.vue')
+                "name": "PrototypeProgramming",
+                "path": "/CoreSkills/JavaScript/Basics/PrototypeProgramming",
+                "children": [
+                  {
+                    "name": "Prototype1",
+                    "path": "/CoreSkills/JavaScript/Basics/PrototypeProgramming/Prototype1",
+                    "component": () => import('@/views/CoreSkills/JavaScript/Basics/PrototypeProgramming/Prototype1.vue')
+                  },
+                  {
+                    "name": "PrototypePollution",
+                    "path": "/CoreSkills/JavaScript/Basics/PrototypeProgramming/PrototypePollution",
+                    "component": () => import('@/views/CoreSkills/JavaScript/Basics/PrototypeProgramming/PrototypePollution.vue')
+                  }
+                ]
               },
               {
                 "name": "BOM",
@@ -845,48 +881,54 @@ export default [
               {
                 "name": "Events",
                 "path": "/CoreSkills/JavaScript/Basics/Events",
-                "component": () => import('@/views/CoreSkills/JavaScript/Basics/Events.vue')
-              },
-              {
-                "name": "LoadEvent",
-                "path": "/CoreSkills/JavaScript/Basics/LoadEvent",
-                "component": () => import('@/views/CoreSkills/JavaScript/Basics/LoadEvent.vue')
-              },
-              {
-                "name": "CommonEvents",
-                "path": "/CoreSkills/JavaScript/Basics/CommonEvents",
                 "children": [
                   {
-                    "name": "CommonEventsList",
-                    "path": "/CoreSkills/JavaScript/Basics/CommonEvents/CommonEventsList",
-                    "component": () => import('@/views/CoreSkills/JavaScript/Basics/CommonEvents/CommonEventsList.vue')
+                    "name": "EventsIntroduce",
+                    "path": "/CoreSkills/JavaScript/Basics/Events/EventsIntroduce",
+                    "component": () => import('@/views/CoreSkills/JavaScript/Basics/Events/EventsIntroduce.vue')
                   },
                   {
-                    "name": "ScrollEvent",
-                    "path": "/CoreSkills/JavaScript/Basics/CommonEvents/ScrollEvent",
-                    "component": () => import('@/views/CoreSkills/JavaScript/Basics/CommonEvents/ScrollEvent.vue')
+                    "name": "LoadEvent",
+                    "path": "/CoreSkills/JavaScript/Basics/Events/LoadEvent",
+                    "component": () => import('@/views/CoreSkills/JavaScript/Basics/Events/LoadEvent.vue')
                   },
                   {
-                    "name": "ResizeEvent",
-                    "path": "/CoreSkills/JavaScript/Basics/CommonEvents/ResizeEvent",
-                    "component": () => import('@/views/CoreSkills/JavaScript/Basics/CommonEvents/ResizeEvent.vue')
+                    "name": "CommonEvents",
+                    "path": "/CoreSkills/JavaScript/Basics/Events/CommonEvents",
+                    "children": [
+                      {
+                        "name": "CommonEventsList",
+                        "path": "/CoreSkills/JavaScript/Basics/Events/CommonEvents/CommonEventsList",
+                        "component": () => import('@/views/CoreSkills/JavaScript/Basics/Events/CommonEvents/CommonEventsList.vue')
+                      },
+                      {
+                        "name": "ScrollEvent",
+                        "path": "/CoreSkills/JavaScript/Basics/Events/CommonEvents/ScrollEvent",
+                        "component": () => import('@/views/CoreSkills/JavaScript/Basics/Events/CommonEvents/ScrollEvent.vue')
+                      },
+                      {
+                        "name": "ResizeEvent",
+                        "path": "/CoreSkills/JavaScript/Basics/Events/CommonEvents/ResizeEvent",
+                        "component": () => import('@/views/CoreSkills/JavaScript/Basics/Events/CommonEvents/ResizeEvent.vue')
+                      },
+                      {
+                        "name": "MouseMoveEvent",
+                        "path": "/CoreSkills/JavaScript/Basics/Events/CommonEvents/MouseMoveEvent",
+                        "component": () => import('@/views/CoreSkills/JavaScript/Basics/Events/CommonEvents/MouseMoveEvent.vue')
+                      },
+                      {
+                        "name": "TouchEvent",
+                        "path": "/CoreSkills/JavaScript/Basics/Events/CommonEvents/TouchEvent",
+                        "component": () => import('@/views/CoreSkills/JavaScript/Basics/Events/CommonEvents/TouchEvent.vue')
+                      }
+                    ]
                   },
                   {
-                    "name": "MouseMoveEvent",
-                    "path": "/CoreSkills/JavaScript/Basics/CommonEvents/MouseMoveEvent",
-                    "component": () => import('@/views/CoreSkills/JavaScript/Basics/CommonEvents/MouseMoveEvent.vue')
-                  },
-                  {
-                    "name": "TouchEvent",
-                    "path": "/CoreSkills/JavaScript/Basics/CommonEvents/TouchEvent",
-                    "component": () => import('@/views/CoreSkills/JavaScript/Basics/CommonEvents/TouchEvent.vue')
+                    "name": "CustomEvent",
+                    "path": "/CoreSkills/JavaScript/Basics/Events/CustomEvent",
+                    "component": () => import('@/views/CoreSkills/JavaScript/Basics/Events/CustomEvent.vue')
                   }
                 ]
-              },
-              {
-                "name": "CustomEvent",
-                "path": "/CoreSkills/JavaScript/Basics/CustomEvent",
-                "component": () => import('@/views/CoreSkills/JavaScript/Basics/CustomEvent.vue')
               },
               {
                 "name": "AsyncProgramming",
@@ -896,6 +938,21 @@ export default [
                     "name": "AsyncProgrammingIntroduce",
                     "path": "/CoreSkills/JavaScript/Basics/AsyncProgramming/AsyncProgrammingIntroduce",
                     "component": () => import('@/views/CoreSkills/JavaScript/Basics/AsyncProgramming/AsyncProgrammingIntroduce.vue')
+                  },
+                  {
+                    "name": "MacroTask",
+                    "path": "/CoreSkills/JavaScript/Basics/AsyncProgramming/MacroTask",
+                    "component": () => import('@/views/CoreSkills/JavaScript/Basics/AsyncProgramming/MacroTask.vue')
+                  },
+                  {
+                    "name": "MicroTask",
+                    "path": "/CoreSkills/JavaScript/Basics/AsyncProgramming/MicroTask",
+                    "component": () => import('@/views/CoreSkills/JavaScript/Basics/AsyncProgramming/MicroTask.vue')
+                  },
+                  {
+                    "name": "QueueMicrotask",
+                    "path": "/CoreSkills/JavaScript/Basics/AsyncProgramming/QueueMicrotask",
+                    "component": () => import('@/views/CoreSkills/JavaScript/Basics/AsyncProgramming/QueueMicrotask.vue')
                   }
                 ]
               },
@@ -974,6 +1031,11 @@ export default [
                 "name": "Object2",
                 "path": "/CoreSkills/JavaScript/ES/Object2",
                 "component": () => import('@/views/CoreSkills/JavaScript/ES/Object2.vue')
+              },
+              {
+                "name": "ObjectOtherKnowledge",
+                "path": "/CoreSkills/JavaScript/ES/ObjectOtherKnowledge",
+                "component": () => import('@/views/CoreSkills/JavaScript/ES/ObjectOtherKnowledge.vue')
               },
               {
                 "name": "String",
@@ -1325,6 +1387,21 @@ export default [
                 "redirect": {
                   "name": "BinaryArray"
                 }
+              },
+              {
+                "name": "FileReader",
+                "path": "/CoreSkills/JavaScript/FrontendDataStreamFormat/FileReader",
+                "component": () => import('@/views/CoreSkills/JavaScript/FrontendDataStreamFormat/FileReader.vue')
+              },
+              {
+                "name": "ReadableStreamAndWritableStream",
+                "path": "/CoreSkills/JavaScript/FrontendDataStreamFormat/ReadableStreamAndWritableStream",
+                "component": () => import('@/views/CoreSkills/JavaScript/FrontendDataStreamFormat/ReadableStreamAndWritableStream.vue')
+              },
+              {
+                "name": "OtherFileProcessingInterface",
+                "path": "/CoreSkills/JavaScript/FrontendDataStreamFormat/OtherFileProcessingInterface",
+                "component": () => import('@/views/CoreSkills/JavaScript/FrontendDataStreamFormat/OtherFileProcessingInterface.vue')
               },
               {
                 "name": "MIMEType",
@@ -2965,16 +3042,6 @@ export default [
             "name": "Rebase",
             "path": "/CoreSkills/TeamCollaboration/Rebase",
             "component": () => import('@/views/CoreSkills/TeamCollaboration/Rebase.vue')
-          },
-          {
-            "name": "GitStash",
-            "path": "/CoreSkills/TeamCollaboration/GitStash",
-            "component": () => import('@/views/CoreSkills/TeamCollaboration/GitStash.vue')
-          },
-          {
-            "name": "GitSubmodule",
-            "path": "/CoreSkills/TeamCollaboration/GitSubmodule",
-            "component": () => import('@/views/CoreSkills/TeamCollaboration/GitSubmodule.vue')
           },
           {
             "name": "GitTagAndGitAlias",
@@ -5011,6 +5078,16 @@ export default [
                 "component": () => import('@/views/AdvancedSkills/NodeJS/PackageManager/HardLinkAndSoftLinkAndSymbolLink.vue')
               },
               {
+                "name": "NpmDownloadPackage",
+                "path": "/AdvancedSkills/NodeJS/PackageManager/NpmDownloadPackage",
+                "component": () => import('@/views/AdvancedSkills/NodeJS/PackageManager/NpmDownloadPackage.vue')
+              },
+              {
+                "name": "NodeFindPackage",
+                "path": "/AdvancedSkills/NodeJS/PackageManager/NodeFindPackage",
+                "component": () => import('@/views/AdvancedSkills/NodeJS/PackageManager/NodeFindPackage.vue')
+              },
+              {
                 "name": "UploadPackage",
                 "path": "/AdvancedSkills/NodeJS/PackageManager/UploadPackage",
                 "component": () => import('@/views/AdvancedSkills/NodeJS/PackageManager/UploadPackage.vue')
@@ -5308,6 +5385,11 @@ export default [
                 "name": "AnimeJs",
                 "path": "/AdvancedSkills/AnimationRelated/AnimationLibrary/AnimeJs",
                 "component": () => import('@/views/AdvancedSkills/AnimationRelated/AnimationLibrary/AnimeJs.vue')
+              },
+              {
+                "name": "MatterJs",
+                "path": "/AdvancedSkills/AnimationRelated/AnimationLibrary/MatterJs",
+                "component": () => import('@/views/AdvancedSkills/AnimationRelated/AnimationLibrary/MatterJs.vue')
               }
             ]
           }
@@ -5881,9 +5963,20 @@ export default [
     ]
   },
   {
-    "name": "VSCodeShortcuts",
-    "path": "/VSCodeShortcuts",
-    "component": () => import('@/views/VSCodeShortcuts.vue')
+    "name": "Shortcuts",
+    "path": "/Shortcuts",
+    "children": [
+      {
+        "name": "CursorShortcuts",
+        "path": "/Shortcuts/CursorShortcuts",
+        "component": () => import('@/views/Shortcuts/CursorShortcuts.vue')
+      },
+      {
+        "name": "CursorShortcutsMac",
+        "path": "/Shortcuts/CursorShortcutsMac",
+        "component": () => import('@/views/Shortcuts/CursorShortcutsMac.vue')
+      }
+    ]
   }
 ];
   

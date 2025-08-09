@@ -15,6 +15,13 @@
       </div>
     </section>
 
+    <section >
+      <div class="info-card1">
+
+      </div> CSS Shape允许您定义非矩形布局，使文本可以环绕圆形、多边形或自定义路径等复杂形状，
+      突破传统盒模型的限制，创造更具设计感的排版效果。
+    </section>
+
     <section class="shapes-section">
       <h2 class="section-title">✨ 核心Shape接口</h2>
 
@@ -83,8 +90,8 @@ const shapes: CssShape[] = [
       height: '100px',
       float: 'left',
       background: 'linear-gradient(45deg, #ff9a9e, #fad0c4)',
-      borderRadius: '50%'
-    }
+      borderRadius: '50%',
+    },
   },
   {
     name: 'ellipse()',
@@ -102,8 +109,8 @@ const shapes: CssShape[] = [
       height: '80px',
       float: 'right',
       background: 'linear-gradient(45deg, #a18cd1, #fbc2eb)',
-      borderRadius: '50%'
-    }
+      borderRadius: '50%',
+    },
   },
   {
     name: 'polygon()',
@@ -124,8 +131,8 @@ const shapes: CssShape[] = [
       height: '100px',
       float: 'left',
       background: 'linear-gradient(45deg, #ffecd2, #fcb69f)',
-      clipPath: 'polygon(0 0, 100% 0, 100% 80%, 50% 100%, 0 80%)'
-    }
+      clipPath: 'polygon(0 0, 100% 0, 100% 80%, 50% 100%, 0 80%)',
+    },
   },
   {
     name: 'url()',
@@ -139,13 +146,14 @@ const shapes: CssShape[] = [
   float: right;
 }`,
     demoStyle: {
-      shapeOutside: 'url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><circle cx=\'50\' cy=\'50\' r=\'40\' fill=\'black\'/></svg>")',
+      shapeOutside:
+        "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='40' fill='black'/></svg>\")",
       shapeMargin: '8px',
       width: '100px',
       height: '100px',
       float: 'right',
-      background: 'linear-gradient(45deg, #84fab0, #8fd3f4)'
-    }
+      background: 'linear-gradient(45deg, #84fab0, #8fd3f4)',
+    },
   },
   {
     name: 'inset()',
@@ -163,9 +171,9 @@ const shapes: CssShape[] = [
       height: '100px',
       float: 'left',
       background: 'linear-gradient(45deg, #a6c1ee, #fbc2eb)',
-      borderRadius: '20px'
-    }
-  }
+      borderRadius: '20px',
+    },
+  },
 ]
 </script>
 
@@ -217,7 +225,14 @@ const shapes: CssShape[] = [
   border-left: 4px solid #6a11cb;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
-
+.info-card1 {
+  shape-outside: circle(50%);
+  float: left;
+  width: 100px;
+  height: 100px;
+  background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+  border-radius: 50%;
+}
 .shape-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));

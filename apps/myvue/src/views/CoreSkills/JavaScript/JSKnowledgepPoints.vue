@@ -1,5 +1,5 @@
 <template>
-  <div class="js-reference">
+  <div class="js-reference" ref="JsReference">
     <!-- 标题区域 -->
     <header class="header">
       <h1>JavaScript 核心知识点参考</h1>
@@ -9,12 +9,7 @@
     <!-- 控制区域 -->
     <div class="controls">
       <div class="search-box">
-        <input
-          type="text"
-          v-model="searchTerm"
-          placeholder="搜索知识点..."
-          class="search-input"
-        >
+        <input type="text" v-model="searchTerm" placeholder="搜索知识点..." class="search-input" />
         <span class="search-icon">🔍</span>
       </div>
 
@@ -44,17 +39,27 @@
             v-for="(item, index) in category.items"
             :key="index"
             class="knowledge-card"
+            @mouseenter="getCodePositon($event, item.id)"
           >
             <div class="card-header">
-              <h3>{{ item.name }}</h3>
+              <h3>
+                <a @click="goToRoute(item.route)">{{ item.name }}</a>
+              </h3>
               <div class="stars">
                 <span v-for="n in 5" :key="n" :class="{ filled: n <= item.importance }">★</span>
               </div>
             </div>
             <p class="description">{{ item.description }}</p>
             <div class="tags">
-              <span v-for="(tag, tagIndex) in item.tags" :key="tagIndex" class="tag">{{ tag }}</span>
+              <span v-for="(tag, tagIndex) in item.tags" :key="tagIndex" class="tag">{{
+                tag
+              }}</span>
             </div>
+            <pre
+              :id="item.id"
+              class="code-block"
+              :style="{ top: tipsAbsolutePosition.Y, left: tipsAbsolutePosition.X }"
+            ><code >{{item.code}}</code></pre>
           </div>
         </div>
       </div>
@@ -68,102 +73,175 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted } from 'vue'
+
+const emit = defineEmits(['goToByRouteName'])
+
+const goToRoute = (route: string) => {
+  emit('goToByRouteName', route)
+}
 
 // 知识点类型定义
 interface KnowledgeItem {
-  name: string;
-  description: string;
-  importance: number; // 1-5星
-  tags: string[];
+  name: string
+  description: string
+  importance: number // 1-5星
+  route: string
+  tags: string[]
+  code: string
+  id: string
 }
 
 interface KnowledgeCategory {
-  name: string;
-  items: KnowledgeItem[];
+  name: string
+  items: KnowledgeItem[]
 }
 
 // 知识点数据
-const knowledgeData = ref<KnowledgeCategory[]>([]);
+const knowledgeData = ref<KnowledgeCategory[]>([])
 
-onMounted(async() => {
+const JsReference = ref<HTMLElement>()
+
+const clientPosition = ref<{ b: number; t: number; l: number; r: number }>({
+  b: 0,
+  t: 0,
+  l: 0,
+  r: 0,
+})
+
+onMounted(async () => {
   const res = await import('./JSON/JsKnowledgePoints.json')
-  knowledgeData.value =  res.default as unknown as KnowledgeCategory[]
+  knowledgeData.value = res.default as unknown as KnowledgeCategory[]
+  const { bottom, right, top, left } = JsReference.value?.getBoundingClientRect() as DOMRect
+  clientPosition.value = { b: bottom, t: top, l: left, r: right }
 })
 
 // 可用分类
 const categories = ref<string[]>([
-  "全部",
-  "基础概念",
-  "函数相关",
-  "对象与原型",
-  "异步编程",
-  "数组操作",
-  "ES6+特性",
-  "错误处理",
-  "设计模式",
-  "Web API",
-  "性能优化"
-]);
+  '全部',
+  '基础概念',
+  '函数相关',
+  '对象与原型',
+  '异步编程',
+  '数组操作',
+  'ES6+特性',
+  '错误处理',
+  '设计模式',
+  'Web API',
+  '性能优化',
+])
 
 // 选中的分类
-const selectedCategories = ref<string[]>(["全部"]);
+const selectedCategories = ref<string[]>(['全部'])
 
 // 搜索词
-const searchTerm = ref<string>("");
+const searchTerm = ref<string>('')
 
 // 切换分类
 const toggleCategory = (category: string) => {
-  if (category === "全部") {
-    selectedCategories.value = ["全部"];
-    return;
+  if (category === '全部') {
+    selectedCategories.value = ['全部']
+    return
   }
 
-  const index = selectedCategories.value.indexOf(category);
+  const index = selectedCategories.value.indexOf(category)
 
   if (index > -1) {
-    selectedCategories.value.splice(index, 1);
+    selectedCategories.value.splice(index, 1)
     // 如果移除了所有分类，自动选择"全部"
     if (selectedCategories.value.length === 0) {
-      selectedCategories.value.push("全部");
+      selectedCategories.value.push('全部')
     }
   } else {
     // 移除"全部"如果选择了具体分类
-    const allIndex = selectedCategories.value.indexOf("全部");
+    const allIndex = selectedCategories.value.indexOf('全部')
     if (allIndex > -1) {
-      selectedCategories.value.splice(allIndex, 1);
+      selectedCategories.value.splice(allIndex, 1)
     }
-    selectedCategories.value.push(category);
+    selectedCategories.value.push(category)
   }
-};
+}
 
 // 过滤知识点
 const filteredKnowledge = computed(() => {
   return knowledgeData.value
-    .filter(category =>
-      selectedCategories.value.includes("全部") ||
-      selectedCategories.value.includes(category.name)
+    .filter(
+      (category) =>
+        selectedCategories.value.includes('全部') ||
+        selectedCategories.value.includes(category.name),
     )
-    .map(category => {
-      if (!searchTerm.value) return category;
+    .map((category) => {
+      if (!searchTerm.value) return category
 
-      const filteredItems = category.items.filter(item =>
-        item.name.toLowerCase().includes(searchTerm.value.toLowerCase()) ||
-        item.description.toLowerCase().includes(searchTerm.value.toLowerCase()) ||
-        item.tags.some(tag => tag.toLowerCase().includes(searchTerm.value.toLowerCase()))
-      );
+      const filteredItems = category.items.filter(
+        (item) =>
+          item.name.toLowerCase().includes(searchTerm.value.toLowerCase()) ||
+          item.description.toLowerCase().includes(searchTerm.value.toLowerCase()) ||
+          item.tags.some((tag) => tag.toLowerCase().includes(searchTerm.value.toLowerCase())),
+      )
 
-      return { ...category, items: filteredItems };
+      return { ...category, items: filteredItems }
     })
-    .filter(category => category.items.length > 0);
-});
+    .filter((category) => category.items.length > 0)
+})
 
 // 计算总知识点数量
 const totalItems = computed(() => {
-  return filteredKnowledge.value.reduce(
-    (total, category) => total + category.items.length, 0
-  );
-});
+  return filteredKnowledge.value.reduce((total, category) => total + category.items.length, 0)
+})
+
+interface TipsPosition {
+  X: 'center' | 'left' | 'right'
+  Y: 'center' | 'top' | 'bottom'
+  width: number
+  height: number
+}
+
+const tipsPosition = ref<TipsPosition>({
+  X: 'center',
+  Y: 'center',
+  width: 0,
+  height: 0,
+})
+
+const tipsAbsolutePosition = computed(() => {
+  const { X, Y, width, height } = tipsPosition.value
+  const Ycenter = (X === 'left' || X === 'right') && Y === 'center'
+  return {
+    X: X === 'center' ? '0%' : X === 'left' ? `-${width}px` : '100%',
+    Y: Ycenter ? '0%' : Y === 'center' ? '100%' : Y === 'top' ? `-${height}px` : '100%',
+  }
+})
+
+const getCodePositon = async (event: MouseEvent, id: string) => {
+  const {
+    top: t2,
+    left: l2,
+    right: r2,
+    bottom: b2,
+  } = (event.target as HTMLElement).getBoundingClientRect()
+  let tips: HTMLElement | null = document.getElementById(id) as HTMLElement
+  const { l, r, b } = clientPosition.value
+  const diff = b > 960 ? b - 400 : b - 200
+  let X: 'center' | 'left' | 'right' = 'center'
+  let Y: 'center' | 'top' | 'bottom' = 'center'
+  if (t2 < 200) {
+    Y = 'bottom'
+  } else if (b2 > diff) {
+    Y = 'top'
+  } else {
+    Y = 'center'
+  }
+  if (l2 - l < 60) {
+    X = 'right'
+  } else if (r - r2 < 60) {
+    X = 'left'
+  } else {
+    X = 'center'
+  }
+  tipsPosition.value = { X, Y, width: tips?.offsetWidth, height: tips?.offsetHeight }
+  tips = null
+}
 </script>
 
 <style scoped lang="less">
@@ -233,7 +311,7 @@ const totalItems = computed(() => {
       border-radius: 30px;
       font-size: 1rem;
       transition: all 0.3s;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 
       &:focus {
         outline: none;
@@ -289,7 +367,7 @@ const totalItems = computed(() => {
   background: white;
   border-radius: 12px;
   padding: 20px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 
   .category-title {
     color: @secondary-color;
@@ -309,14 +387,30 @@ const totalItems = computed(() => {
   background: @light-bg;
   border-radius: 10px;
   padding: 18px;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
   border: 1px solid @border-color;
   display: flex;
   flex-direction: column;
 
+  .code-block {
+    height: 0;
+    width: 0;
+    color: #fff;
+    background-color: #000;
+
+  }
+  &:hover > .code-block {
+    position: absolute;
+    height: auto;
+    width: auto;
+
+  }
+
   &:hover {
     transform: translateY(-3px);
-    box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
     border-color: fade(@primary-color, 30%);
   }
 

@@ -98,12 +98,12 @@
                     "name": "Font"
                   },
                   {
-                    "label": "🖼️ 背景相关(background) ⭐⭐⭐",
-                    "name": "Background"
-                  },
-                  {
                     "label": "📝 文本相关(text) ⭐⭐⭐",
                     "name": "Text"
+                  },
+                  {
+                    "label": "🖼️ 背景相关(background) ⭐⭐⭐",
+                    "name": "Background"
                   },
                   {
                     "label": "💧 透明度(opacity) ⭐⭐⭐",
@@ -236,11 +236,15 @@
             "name": "CSS3",
             "children": [
               {
-                "label": "📏 Flexbox ⭐⭐⭐",
+                "label": "🔍 CSS3概览 ⭐⭐⭐",
+                "name": "CSS3Overview"
+              },
+              {
+                "label": "📏 Flexbox(布局) ⭐⭐⭐",
                 "name": "Flexbox"
               },
               {
-                "label": "🔲 Grid ⭐⭐⭐",
+                "label": "🔲 Grid(布局) ⭐⭐⭐",
                 "name": "Grid"
               },
               {
@@ -248,112 +252,116 @@
                 "name": "MultiColumnLayout"
               },
               {
-                "label": "📱 媒体查询 ⭐⭐⭐",
+                "label": "📱 媒体查询(布局) ⭐⭐⭐",
                 "name": "MediaQueries"
               },
               {
-                "label": "⏱️ 过渡(Transition) ⭐⭐⭐",
+                "label": "⏱️ 过渡(Transition)(动画) ⭐⭐⭐",
                 "name": "Transition"
               },
               {
-                "label": "🎬 动画(Animation) ⭐⭐⭐",
+                "label": "🎬 动画(Animation)(动画) ⭐⭐⭐",
                 "name": "Animation"
               },
               {
-                "label": "🔄 变换(Transform) ⭐⭐⭐",
+                "label": "🔄 变换(Transform)(特效) ⭐⭐⭐",
                 "name": "Transform"
               },
               {
-                "label": "➗ CSS函数 ⭐⭐⭐",
+                "label": "➗ CSS函数(计算) ⭐⭐⭐",
                 "name": "CSSFunctions"
               },
               {
-                "label": "🌈 渐变(gradient) ⭐⭐⭐",
+                "label": "🌈 渐变(gradient)(特效) ⭐⭐⭐",
                 "name": "Gradient"
               },
               {
-                "label": "🌈 重复渐变(repeating-gradient) ⭐⭐⭐",
+                "label": "🌈 重复渐变(repeating-gradient)(特效) ⭐⭐⭐",
                 "name": "RepeatingGradient"
               },
               {
-                "label": "🔍 滤镜(Filter) ⭐⭐",
+                "label": "🔍 滤镜(Filter)(特效) ⭐⭐",
                 "name": "Filter"
               },
               {
-                "label": "🌟 阴影(Box Shadow、Text Shadow) ⭐⭐⭐",
+                "label": "🌟 阴影(Box Shadow、Text Shadow)(特效) ⭐⭐⭐",
                 "name": "BoxShadow"
               },
               {
-                "label": "⭕ 边框圆角(Border-radius) ⭐⭐⭐",
+                "label": "⭕ 边框圆角(Border-radius)(特效) ⭐⭐⭐",
                 "name": "BorderRadius"
               },
               {
-                "label": "🖼️ 边框图片(border-image) ⭐⭐",
+                "label": "🖼️ 边框图片(border-image)(特效) ⭐⭐",
                 "name": "BordersImage"
               },
               {
-                "label": "✂️ 剪裁(Clip Path) ⭐⭐",
+                "label": "✂️ 剪裁(Clip Path)(特效) ⭐⭐",
                 "name": "ClipPath"
               },
               {
-                "label": "🎭 混合模式(Blend Modes) ⭐",
-                "name": "BlendModes"
-              },
-              {
-                "label": "🎭 mask-image ⭐⭐⭐",
+                "label": "🎭 遮罩(mask-image)(特效) ⭐⭐⭐",
                 "name": "MaskImage"
               },
               {
-                "label": "📐 对象适应和对象位置(Object Fit & Object Position) ⭐⭐",
+                "label": "🎭 混合模式(Blend Modes)(特效) ⭐",
+                "name": "BlendModes"
+              },
+              {
+                "label": "📐 对象适应和对象位置(Object Fit & Object Position)(布局) ⭐⭐",
                 "name": "ObjectFit"
               },
               {
-                "label": "🔷 形状(Shapes) ⭐",
+                "label": "🔷 形状(Shapes)(布局) ⭐",
                 "name": "Shapes"
               },
               {
-                "label": "📜 滚动捕捉(Scroll Snap) ⭐",
+                "label": "📜 滚动捕捉(Scroll Snap)(交互) ⭐",
                 "name": "ScrollSnap"
               },
               {
-                "label": "📦 容器查询(Container Queries) 🌟",
+                "label": "📦 容器查询(Container Queries)(布局) 🌟",
                 "name": "ContainerQueries"
               },
               {
-                "label": "📏 宽高比(Aspect Ratio) ⭐⭐",
+                "label": "📏 宽高比(Aspect Ratio)(布局) ⭐⭐",
                 "name": "AspectRatio"
               },
               {
-                "label": "📦 contain(独立渲染) ⭐",
+                "label": "📦 contain(独立渲染)(渲染优化) ⭐",
                 "name": "Contain"
               },
               {
-                "label": "👁️ content-visibility 🌟",
+                "label": "👁️ content-visibility(渲染优化) 🌟",
                 "name": "ContentVisibility"
               },
               {
-                "label": "🔮 will-change(将要改变的属性) ⭐",
+                "label": "🔮 will-change(渲染优化) ⭐",
                 "name": "WillChange"
               },
               {
-                "label": "🛤️ 路径动画(animateMotion) 🌟",
+                "label": "🛤️ 路径动画(animateMotion)(动画) 🌟",
                 "name": "AnimateMotion"
               },
               {
-                "label": "🔧 自定义属性@property 🌟",
-                "name": "CustomProperty"
-              },
-              {
-                "label": "🎨 相对色系(relative-color-scheme) 🌟",
-                "name": "RelativeColorScheme"
-              },
-              {
-                "label": "📜 Scroll-Linked Animations 🌟",
+                "label": "📜 Scroll-Linked Animations(动画) 🌟",
                 "name": "ScrollLinkedAnimations"
               },
               {
-                "label": "📚 CSS Nesting 🌟",
+                "label": "🔧 自定义属性@property(css属性) 🌟",
+                "name": "CustomProperty"
+              },
+              {
+                "label": "🎨 相对色系(relative-color-scheme)(css属性) 🌟",
+                "name": "RelativeColorScheme"
+              },
+              {
+                "label": "📚 CSS Nesting(css属性) 🌟",
                 "name": "CSSNesting"
+              },
+              {
+                "label": "🔍 CSS3一些其他属性 ⭐⭐",
+                "name": "CSS3OtherAttributes"
               }
             ]
           },
@@ -627,32 +635,54 @@
                   {
                     "label": "🚀 高阶函数 ⭐⭐⭐",
                     "name": "HigherOrderFunction"
+                  },
+                  {
+                    "label": "🔍 回调函数 ⭐⭐⭐",
+                    "name": "CallbackFunction"
+                  },
+                  {
+                    "label": "🔍 递归函数 ⭐⭐⭐",
+                    "name": "RecursionFunction"
+                  },
+                  {
+                    "label": "🔧 eval和with ⭐⭐⭐",
+                    "name": "EvalAndWith"
+                  },
+                  {
+                    "label": "🔍 js执行代码字符串 ⭐⭐⭐",
+                    "name": "ExecuteCodeString"
                   }
                 ]
               },
               {
-                "label": "🔧 eval和with ⭐⭐⭐",
-                "name": "EvalAndWith"
-              },
-              {
-                "label": "🔍 js执行代码字符串 ⭐⭐⭐",
-                "name": "ExecuteCodeString"
-              },
-              {
-                "label": "🎯 作用域⭐⭐⭐",
-                "name": "Scope"
+                "label": "🔍 执行上下文 ⭐⭐⭐",
+                "name": "ExecutionContext"
               },
               {
                 "label": "👉 this 指向 ⭐⭐⭐",
                 "name": "ThisBinding"
               },
               {
+                "label": "🎯 作用域⭐⭐⭐",
+                "name": "Scope"
+              },
+              {
                 "label": "🔒 闭包：定义、作用 ⭐⭐⭐",
                 "name": "Closure"
               },
               {
-                "label": "🔗 原型：原型链、继承 ⭐⭐⭐",
-                "name": "Prototype1"
+                "label": "🔍 原型 ⭐⭐⭐",
+                "name": "PrototypeProgramming",
+                "children": [
+                  {
+                    "label": "🔗 原型：原型链、继承 ⭐⭐⭐",
+                    "name": "Prototype1"
+                  },
+                  {
+                    "label": "🔗 原型污染 ⭐⭐⭐",
+                    "name": "PrototypePollution"
+                  }
+                ]
               },
               {
                 "label": "🌐 BOM(浏览器对象模型) ⭐⭐⭐",
@@ -695,50 +725,68 @@
                 ]
               },
               {
-                "label": "📢 事件：事件绑定、事件冒泡、事件代理 ⭐⭐⭐",
-                "name": "Events"
-              },
-              {
-                "label": "📢 加载事件 ⭐⭐⭐",
-                "name": "LoadEvent"
-              },
-              {
-                "label": "📢 常用事件 ⭐⭐⭐",
-                "name": "CommonEvents",
+                "label": "📢 事件 ⭐⭐⭐",
+                "name": "Events",
                 "children": [
                   {
-                    "label": "📢 常用事件列表 ⭐⭐⭐",
-                    "name": "CommonEventsList"
+                    "label": "📢 事件：事件绑定、事件冒泡、事件代理 ⭐⭐⭐",
+                    "name": "EventsIntroduce"
                   },
                   {
-                    "label": "📢 scroll ⭐⭐⭐",
-                    "name": "ScrollEvent"
+                    "label": "📢 加载事件 ⭐⭐⭐",
+                    "name": "LoadEvent"
                   },
                   {
-                    "label": "📢 resize ⭐⭐⭐",
-                    "name": "ResizeEvent"
+                    "label": "📢 常用事件 ⭐⭐⭐",
+                    "name": "CommonEvents",
+                    "children": [
+                      {
+                        "label": "📢 常用事件列表 ⭐⭐⭐",
+                        "name": "CommonEventsList"
+                      },
+                      {
+                        "label": "📢 scroll ⭐⭐⭐",
+                        "name": "ScrollEvent"
+                      },
+                      {
+                        "label": "📢 resize ⭐⭐⭐",
+                        "name": "ResizeEvent"
+                      },
+                      {
+                        "label": "📢 mouse相关 ⭐⭐⭐",
+                        "name": "MouseMoveEvent"
+                      },
+                      {
+                        "label": "📢 touch ⭐⭐⭐",
+                        "name": "TouchEvent"
+                      }
+                    ]
                   },
                   {
-                    "label": "📢 mouse相关 ⭐⭐⭐",
-                    "name": "MouseMoveEvent"
-                  },
-                  {
-                    "label": "📢 touch ⭐⭐⭐",
-                    "name": "TouchEvent"
+                    "label": "💡 自定义事件 ⭐⭐⭐",
+                    "name": "CustomEvent"
                   }
                 ]
-              },
-              {
-                "label": "💡 自定义事件 ⭐⭐⭐",
-                "name": "CustomEvent"
               },
               {
                 "label": "⏳ 异步编程：Event Loop(事件循环) ⭐⭐⭐",
                 "name": "AsyncProgramming",
                 "children": [
                   {
-                    "label": "🔍 异步编程介绍 ⭐⭐⭐",
+                    "label": "🔍 事件循环 ⭐⭐⭐",
                     "name": "AsyncProgrammingIntroduce"
+                  },
+                  {
+                    "label": "🔍 宏任务 ⭐⭐⭐",
+                    "name": "MacroTask"
+                  },
+                  {
+                    "label": "🔍 微任务 ⭐⭐⭐",
+                    "name": "MicroTask"
+                  },
+                  {
+                    "label": "🔍 queueMicrotask ⭐⭐⭐",
+                    "name": "QueueMicrotask"
                   }
                 ]
               },
@@ -804,7 +852,10 @@
                 "label": "🧩 Object(对象) ⭐⭐⭐",
                 "name": "Object2"
               },
-
+              {
+                "label": "🧩 Object的一些其他知识 ⭐⭐⭐",
+                "name": "ObjectOtherKnowledge"
+              },
               {
                 "label": "📝 String(字符串) ⭐⭐⭐",
                 "name": "String"
@@ -966,7 +1017,7 @@
                 "name": "PipelineOperator"
               },
               {
-                "label": "🔍 ES知识点列表 ⭐⭐⭐",
+                "label": "🔍 ES+知识点列表 ⭐⭐⭐",
                 "name": "ESKnowledgepPoints"
               }
             ]
@@ -1092,6 +1143,18 @@
                 "redirect": {
                   "name": "BinaryArray"
                 }
+              },
+              {
+                "label": "🔄 FileReader ⭐⭐⭐",
+                "name": "FileReader"
+              },
+              {
+                "label": "🔄 ReadableStream和WritableStream ⭐⭐",
+                "name": "ReadableStreamAndWritableStream"
+              },
+              {
+                "label": "🔄 其他文件处理接口 ⭐⭐⭐",
+                "name": "OtherFileProcessingInterface"
               },
               {
                 "label": "🔄 MIME类型 ⭐⭐⭐",
@@ -2474,14 +2537,6 @@
           {
             "label": "🔄 rebase ⭐⭐",
             "name": "Rebase"
-          },
-          {
-            "label": "🔄 git stash ⭐⭐⭐",
-            "name": "GitStash"
-          },
-          {
-            "label": "🔄 git submodule ⭐⭐⭐",
-            "name": "GitSubmodule"
           },
           {
             "label": "🔄 git tag 和 git alias ⭐⭐⭐",
@@ -4152,6 +4207,14 @@
                 "name": "HardLinkAndSoftLinkAndSymbolLink"
               },
               {
+                "label": "🔄 npm下载包的流程 ⭐⭐",
+                "name": "NpmDownloadPackage"
+              },
+              {
+                "label": "🔄 node找包机制 ⭐⭐",
+                "name": "NodeFindPackage"
+              },
+              {
                 "label": "📤 上传自己的包 ⭐⭐",
                 "name": "UploadPackage"
               }
@@ -4408,6 +4471,10 @@
               {
                 "label": "🔍 anime.js ⭐⭐⭐",
                 "name": "AnimeJs"
+              },
+              {
+                "label": "🔍 matter.js ⭐⭐⭐",
+                "name": "MatterJs"
               }
             ]
           }
@@ -4905,7 +4972,17 @@
     ]
   },
   {
-    "label": "⌨️ VSCODE快捷键 ⭐",
-    "name": "VSCodeShortcuts"
+    "label": "⌨️ 编辑器快捷键 ⭐⭐⭐",
+    "name": "Shortcuts",
+    "children": [
+      {
+        "label": "⌨️ cursor(windows)快捷键 ⭐⭐⭐",
+        "name": "CursorShortcuts"
+      },
+      {
+        "label": "⌨️ cursor(mac)快捷键 ⭐⭐⭐",
+        "name": "CursorShortcutsMac"
+      }
+    ]
   }
 ]

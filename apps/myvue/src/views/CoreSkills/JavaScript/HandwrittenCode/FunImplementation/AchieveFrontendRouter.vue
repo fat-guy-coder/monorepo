@@ -780,8 +780,8 @@ const codeTabs = ['Hash路由器实现', 'History路由器实现', '路由模式
 }
 
 .code-block {
-  background: #2b2d42;
-  color: #f8f9fa;
+  background: #f8f9fa;
+  color: #2b2d42;
   border-radius: 8px;
   overflow: hidden;
   margin: 20px 0;

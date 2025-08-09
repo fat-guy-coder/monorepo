@@ -2,9 +2,11 @@
   <div class="filter-container">
     <h1 class="main-title">CSS Filter 视觉魔法</h1>
 
-
-    <h3>CSS Filter 是一种强大的图像处理工具，可以通过调整图像的视觉效果来增强用户体验。它允许开发者应用模糊、亮度、对比度、饱和度等多种效果，甚至可以实现复杂的视觉效果组合。使用 CSS
-      Filter，您可以轻松创建动态和吸引人的用户界面。</h3>
+    <h3>
+      CSS Filter
+      是一种强大的图像处理工具，可以通过调整图像的视觉效果来增强用户体验。它允许开发者应用模糊、亮度、对比度、饱和度等多种效果，甚至可以实现复杂的视觉效果组合。使用
+      CSS Filter，您可以轻松创建动态和吸引人的用户界面。
+    </h3>
 
     <div class="code-section">
       <pre class="code-block"><code>.filtered-image {
@@ -18,8 +20,15 @@
         <div class="sliders-grid">
           <div v-for="filter in filters" :key="filter.name" class="slider-item">
             <label>{{ filter.label }}</label>
-            <input type="range" :min="filter.min" :max="filter.max" :step="filter.step"
-              v-model="filterValues[filter.name]" class="styled-slider" :style="{ '--track-color': filter.color }" />
+            <input
+              type="range"
+              :min="filter.min"
+              :max="filter.max"
+              :step="filter.step"
+              v-model="filterValues[filter.name]"
+              class="styled-slider"
+              :style="{ '--track-color': filter.color }"
+            />
             <span>{{ filterValues[filter.name] }}{{ filter.unit }}</span>
           </div>
         </div>
@@ -67,7 +76,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed } from 'vue'
+import { reactive, computed } from 'vue'
 
 type Filter = {
   name: string
@@ -81,11 +90,51 @@ type Filter = {
 
 const filters: Filter[] = [
   { name: 'blur', label: '模糊(blur)', unit: 'px', min: 0, max: 20, step: 1, color: '#3498db' },
-  { name: 'brightness', label: '亮度(brightness)', unit: '%', min: 0, max: 200, step: 1, color: '#f1c40f' },
-  { name: 'contrast', label: '对比度(contrast)', unit: '%', min: 0, max: 200, step: 1, color: '#2ecc71' },
-  { name: 'saturate', label: '饱和度(saturate)', unit: '%', min: 0, max: 200, step: 1, color: '#e74c3c' },
-  { name: 'hue', label: '色相旋转(hue-rotate)', unit: 'deg', min: 0, max: 360, step: 1, color: '#9b59b6' },
-  { name: 'grayscale', label: '灰度(grayscale)', unit: '%', min: 0, max: 100, step: 1, color: '#95a5a6' },
+  {
+    name: 'brightness',
+    label: '亮度(brightness)',
+    unit: '%',
+    min: 0,
+    max: 200,
+    step: 1,
+    color: '#f1c40f',
+  },
+  {
+    name: 'contrast',
+    label: '对比度(contrast)',
+    unit: '%',
+    min: 0,
+    max: 200,
+    step: 1,
+    color: '#2ecc71',
+  },
+  {
+    name: 'saturate',
+    label: '饱和度(saturate)',
+    unit: '%',
+    min: 0,
+    max: 200,
+    step: 1,
+    color: '#e74c3c',
+  },
+  {
+    name: 'hue',
+    label: '色相旋转(hue-rotate)',
+    unit: 'deg',
+    min: 0,
+    max: 360,
+    step: 1,
+    color: '#9b59b6',
+  },
+  {
+    name: 'grayscale',
+    label: '灰度(grayscale)',
+    unit: '%',
+    min: 0,
+    max: 100,
+    step: 1,
+    color: '#95a5a6',
+  },
 ]
 
 const filterPresets = [
@@ -300,10 +349,14 @@ img {
   margin: 2rem 0;
 }
 
-.code-block code {
-  color: white;
+.code-block  {
+
+  background: #2c3e50;
   font-family: Monaco, monospace;
   white-space: pre-wrap;
+  code {
+    color: white;
+  }
 }
 
 .instruction-section {

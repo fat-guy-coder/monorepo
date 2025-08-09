@@ -490,37 +490,55 @@ function heapify(arr: number[], n: number, i: number): void {
     },
     stable: true,
     idea: '将数组分到有限数量的桶中，每个桶再分别排序（可以使用其他排序算法或递归桶排序），最后合并结果。',
-    code: `function bucketSort(arr: number[], bucketSize: number = 5): number[] {
-  if (arr.length === 0) return arr;
+    code: `function bucketSort(arr, bucketSize = 5) {
+    if (arr.length === 0) return arr;
 
-  // 确定最大值和最小值
-  let min = arr[0];
-  let max = arr[0];
-  for (let i = 1; i < arr.length; i++) {
-    if (arr[i] < min) min = arr[i];
-    else if (arr[i] > max) max = arr[i];
-  }
+    // 找到数组中的最小值和最大值
+    let min = arr[0];
+    let max = arr[0];
+    for (let i = 1; i < arr.length; i++) {
+        if (arr[i] < min) min = arr[i];
+        else if (arr[i] > max) max = arr[i];
+    }
 
-  // 计算桶的数量
-  const bucketCount = Math.floor((max - min) / bucketSize) + 1;
-  const buckets = new Array(bucketCount).fill(null).map(() => []);
+    // 计算桶的数量
+    const bucketCount = Math.floor((max - min) / bucketSize) + 1;
+    const buckets = new Array(bucketCount);
+    for (let i = 0; i < buckets.length; i++) {
+        buckets[i] = [];
+    }
 
-  // 将元素分配到桶中
-  for (const num of arr) {
-    const bucketIndex = Math.floor((num - min) / bucketSize);
-    buckets[bucketIndex].push(num);
-  }
+    // 将元素分配到各个桶中
+    for (let i = 0; i < arr.length; i++) {
+        // 计算元素应该放入哪个桶
+        const bucketIndex = Math.floor((arr[i] - min) / bucketSize);
+        // 将元素放入对应的桶中
+        buckets[bucketIndex].push(arr[i]);
+    }
 
-  // 对每个桶排序并合并结果
-  const sortedArray = [];
-  for (const bucket of buckets) {
-    // 使用插入排序对每个桶排序
-    insertionSort(bucket);
-    //在桶排序中，使用插入排序对每个桶排序，而不是使用归并排序，因为桶排序的桶数量是有限的，所以插入排序的性能更好。
-    sortedArray.push(...bucket);
-  }
-  // 然后再使用归并排序合并桶 ，因为每个桶内已经排好序了，所以归并排序的性能更好。
-  return mergeSort(sortedArray, bucketSize);
+    // 对每个桶进行排序（这里使用插入排序）
+    const sortedArray = [];
+    for (let i = 0; i < buckets.length; i++) {
+        if (buckets[i]) {
+            insertionSort(buckets[i]); // 调用插入排序辅助函数
+            sortedArray.push(...buckets[i]);
+        }
+    }
+    return sortedArray;
+}
+
+// 插入排序（用于桶内排序）
+function insertionSort(arr) {
+    for (let i = 1; i < arr.length; i++) {
+        const current = arr[i];
+        let j = i - 1;
+        while (j >= 0 && arr[j] > current) {
+            arr[j + 1] = arr[j];
+            j--;
+        }
+        arr[j + 1] = current;
+    }
+    return arr;
 }`,
     scenario: '均匀分布的数据、浮点数排序、外部排序',
     performance: '当输入数据均匀分布时性能优异，最坏情况为O(n²)。',

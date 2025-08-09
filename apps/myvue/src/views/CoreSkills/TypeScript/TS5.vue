@@ -28,8 +28,13 @@
       </div>
 
       <div class="version-timeline">
-        <div v-for="version in versions" :key="version.id" class="version"
-          :class="{ active: activeVersion === version.id }" @click="activeVersion = version.id">
+        <div
+          v-for="version in versions"
+          :key="version.id"
+          class="version"
+          :class="{ active: activeVersion === version.id }"
+          @click="activeVersion = version.id"
+        >
           <div class="version-name">{{ version.name }}</div>
           <div class="version-date">{{ version.date }}</div>
         </div>
@@ -38,21 +43,32 @@
 
     <div class="feature-search">
       <div class="search-box">
-        <input type="text" v-model="searchQuery" placeholder="搜索特性 (装饰器, const类型...)">
+        <input type="text" v-model="searchQuery" placeholder="搜索特性 (装饰器, const类型...)" />
         <svg class="search-icon" viewBox="0 0 24 24">
           <path
-            d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
+            d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"
+          />
         </svg>
       </div>
       <div class="filter-tags">
-        <span v-for="tag in filterTags" :key="tag" :class="{ active: activeTag === tag }" @click="toggleTag(tag)">
+        <span
+          v-for="tag in filterTags"
+          :key="tag"
+          :class="{ active: activeTag === tag }"
+          @click="toggleTag(tag)"
+        >
           {{ tag }}
         </span>
       </div>
     </div>
 
     <div class="features-grid">
-      <div class="feature-card" v-for="feature in filteredFeatures" :key="feature.id" :class="feature.category">
+      <div
+        class="feature-card"
+        v-for="feature in filteredFeatures"
+        :key="feature.id"
+        :class="feature.category"
+      >
         <div class="feature-header">
           <div class="feature-icon">
             <div :class="feature.iconClass"></div>
@@ -112,7 +128,11 @@
               <td>{{ feature.title }}</td>
               <td v-for="version in versions" :key="version.id">
                 <span v-if="feature.version === version.name" class="supported">✓</span>
-                <span v-else-if="isNewerVersion(feature.version, version.name)" class="not-supported">-</span>
+                <span
+                  v-else-if="isNewerVersion(feature.version, version.name)"
+                  class="not-supported"
+                  >-</span
+                >
                 <span v-else class="na">N/A</span>
               </td>
             </tr>
@@ -171,328 +191,75 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue'
 
 const versions = [
   { id: '5.0', name: '5.0', date: '2023年3月' },
   { id: '5.1', name: '5.1', date: '2023年6月' },
   { id: '5.2', name: '5.2', date: '2023年8月' },
   { id: '5.3', name: '5.3', date: '2023年10月' },
-  { id: '5.4', name: '5.4', date: '2024年3月' }
-];
+  { id: '5.4', name: '5.4', date: '2024年3月' },
+]
 
-const activeVersion = ref('5.0');
+const activeVersion = ref('5.0')
 
-const features = ref([
-  {
-    id: 'decorators',
-    title: '标准装饰器',
-    version: '5.0',
-    category: '语言特性',
-    iconClass: 'decorator-icon',
-    description: '实现了ECMAScript装饰器提案，提供了标准化的装饰器语法，取代了传统的实验性装饰器',
-    usage: `// 类装饰器
-function LogClass(target: Function) {
-  console.log(\`类 \${target.name} 被定义\`);
+interface Feature {
+  id: string
+  title: string
+  version: string
+  category: string
+  iconClass: string
+  description: string
+  usage: string
+  scenarios: string[]
+  pros: string[]
 }
 
-@LogClass
-class MyClass {
-  // 方法装饰器
-  @LogMethod
-  myMethod() {}
-}
+const features = ref<Feature[]>([])
 
-// 属性装饰器
-function ReadOnly(target: any, key: string) {
-  Object.defineProperty(target, key, {
-    writable: false
-  });
-}`,
-    scenarios: [
-      '框架开发（如Angular、NestJS）',
-      'AOP（面向切面编程）实现',
-      '类和方法级别的元数据添加',
-      '自动绑定和依赖注入'
-    ],
-    pros: [
-      '符合ECMAScript标准，未来兼容性好',
-      '更简洁的语法',
-      '更好的类型推断',
-      '与JavaScript装饰器行为一致'
-    ]
-  },
-  {
-    id: 'const-type-params',
-    title: 'const 类型参数',
-    version: '5.0',
-    category: '类型系统',
-    iconClass: 'const-icon',
-    description: '允许在泛型类型参数中使用const修饰符，使类型推断更精确，保留字面量类型',
-    usage: `// 之前
-function getValues<T>(obj: T) {
-  return Object.values(obj);
-}
-
-// 返回类型为 any[]，丢失了原始类型信息
-
-// TS 5.0+
-function getValues<const T>(obj: T) {
-  return Object.values(obj);
-}
-
-const values = getValues({
-  name: "John",
-  age: 30
-});
-// values 类型为 (string | number)[]
-// 而不是之前的 any[]`,
-    scenarios: [
-      'API响应处理',
-      '配置对象类型推断',
-      '函数式编程工具',
-      '保留对象字面量的精确类型'
-    ],
-    pros: [
-      '更精确的类型推断',
-      '减少不必要的类型断言',
-      '更好地保留字面量类型',
-      '提高代码类型安全性'
-    ]
-  },
-  {
-    id: 'enum-improvements',
-    title: '枚举增强',
-    version: '5.0',
-    category: '类型系统',
-    iconClass: 'enum-icon',
-    description: '所有枚举现在都是联合枚举，每个枚举成员都有自己独特的类型，提高了类型安全性',
-    usage: `enum UserRole {
-  Admin = "ADMIN",
-  Editor = "EDITOR",
-  Viewer = "VIEWER"
-}
-
-// 之前: 类型为UserRole
-// 现在: 类型为UserRole.Admin | UserRole.Editor | UserRole.Viewer
-
-function checkPermission(role: UserRole) {
-  // 现在可以精确检查每个枚举成员
-  if (role === UserRole.Admin) {
-    // ...
-  }
-}
-
-// 也适用于数字枚举
-enum Status {
-  Pending,
-  Approved,
-  Rejected
-}
-
-// Status 现在是一个联合类型: Status.Pending | Status.Approved | Status.Rejected`,
-    scenarios: [
-      '状态管理',
-      '权限控制系统',
-      '有限选项集合',
-      '提高枚举类型安全性'
-    ],
-    pros: [
-      '更精确的类型检查',
-      '减少运行时错误',
-      '更好的自动完成支持',
-      '与字符串/数字字面量类型行为一致'
-    ]
-  },
-  {
-    id: 'module-resolution',
-    title: '模块解析改进',
-    version: '5.0',
-    category: '工具链',
-    iconClass: 'module-icon',
-    description: '新的 moduleResolution 选项 "bundler"，更好地支持现代打包工具如 Vite、esbuild 等',
-    usage: `// tsconfig.json
-{
-  "compilerOptions": {
-    "module": "esnext",
-    "moduleResolution": "bundler",
-    // 其他配置...
-  }
-}`,
-    scenarios: [
-      '使用 Vite、Webpack 5+ 的项目',
-      'ESM 模块项目',
-      'Monorepo 项目',
-      '需要与打包工具更紧密集成的项目'
-    ],
-    pros: [
-      '更好地支持现代打包工具',
-      '更准确的模块解析',
-      '减少配置复杂度',
-      '改善开发体验'
-    ]
-  },
-  {
-    id: 'satisfies-jsdoc',
-    title: 'JSDoc @satisfies',
-    version: '5.0',
-    category: '工具链',
-    iconClass: 'jsdoc-icon',
-    description: '在 JavaScript 文件中使用 @satisfies 注释来验证表达式类型，而不改变其类型',
-    usage: `// 在 JavaScript 文件中
-/** @satisfies {Record<string, number>} */
-const colors = {
-  red: 255,
-  green: 0,
-  blue: 0,
-  // 错误: 字符串不能赋值给 number 类型
-  // alpha: "1"
-};
-
-// 保留字面量类型的同时验证类型
-/** @satisfies {Array<number | string>} */
-const mixedArray = [1, "two", 3];`,
-    scenarios: [
-      'JavaScript 项目迁移到 TypeScript',
-      '在 JS 文件中添加类型安全',
-      '渐进式类型迁移',
-      '文档驱动的开发'
-    ],
-    pros: [
-      '在 JavaScript 中提供类型安全',
-      '不改变原始类型推断',
-      '渐进式采用 TypeScript',
-      '更好的文档和代码提示'
-    ]
-  },
-  {
-    id: 'export-type-star',
-    title: 'export type *',
-    version: '5.0',
-    category: '模块系统',
-    iconClass: 'export-icon',
-    description: '支持 export type * 语法，可以重新导出另一个模块中的所有类型',
-    usage: `// types.ts
-export type User = { id: number; name: string };
-export interface Product { sku: string; price: number; }
-
-// 之前需要手动导出每个类型
-// export type { User, Product };
-
-// TS 5.0+
-export type * from './types';
-
-// 使用
-import { User, Product } from './exports';`,
-    scenarios: [
-      '类型库开发',
-      '集中管理类型定义',
-      '模块化类型系统',
-      '大型项目类型组织'
-    ],
-    pros: [
-      '简化类型导出',
-      '减少样板代码',
-      '提高代码可维护性',
-      '更好的模块化组织'
-    ]
-  },
-  {
-    id: 'speed-optimization',
-    title: '速度与内存优化',
-    version: '5.0',
-    category: '性能',
-    iconClass: 'speed-icon',
-    description: 'TypeScript 5.0 进行了全面优化，减少了内存占用，提高了编译速度',
-    usage: `// 无需特殊配置即可享受性能提升
-// 安装最新版本：
-// npm install typescript@latest
-
-// 在大型项目中，编译时间显著减少
-// 内存占用减少约 40%`,
-    scenarios: [
-      '大型代码库',
-      '持续集成环境',
-      '开发服务器热重载',
-      '资源受限环境'
-    ],
-    pros: [
-      '编译速度提升 2 倍以上',
-      '内存占用减少 40%',
-      '更小的 npm 包体积',
-      '改善开发体验'
-    ]
-  },
-  {
-    id: 'resolution-customization',
-    title: '自定义模块解析',
-    version: '5.1',
-    category: '工具链',
-    iconClass: 'resolution-icon',
-    description: '新增 resolve 编译选项，允许更细粒度地控制模块解析策略',
-    usage: `// tsconfig.json
-{
-  "compilerOptions": {
-    "moduleResolution": "node",
-    "resolve": {
-      "conditionNames": ["import", "node", "types"],
-      "extensionAlias": {
-        ".js": [".ts", ".js"],
-        ".mjs": [".mts", ".mjs"]
-      }
-    }
-  }
-}`,
-    scenarios: [
-      '复杂模块解析需求',
-      '自定义文件扩展名',
-      '非标准模块解析',
-      '高级打包配置'
-    ],
-    pros: [
-      '更灵活的模块解析',
-      '更好地支持非标准模块',
-      '与打包工具更紧密集成',
-      '减少路径配置问题'
-    ]
-  }
-]);
-
-const filterTags = ['全部', '语言特性', '类型系统', '工具链', '性能', '模块系统'];
-const activeTag = ref('全部');
-const searchQuery = ref('');
+const filterTags = ['全部', '语言特性', '类型系统', '工具链', '性能', '模块系统']
+const activeTag = ref('全部')
+const searchQuery = ref('')
 
 const filteredFeatures = computed(() => {
-  let result = features.value;
+  let result = features.value
 
   if (searchQuery.value) {
-    const query = searchQuery.value.toLowerCase();
-    result = result.filter(feature =>
-      feature.title.toLowerCase().includes(query) ||
-      feature.description.toLowerCase().includes(query) ||
-      feature.scenarios.some(scene => scene.toLowerCase().includes(query))
-    );
+    const query = searchQuery.value.toLowerCase()
+    result = result.filter(
+      (feature) =>
+        feature.title.toLowerCase().includes(query) ||
+        feature.description.toLowerCase().includes(query) ||
+        feature.scenarios.some((scene) => scene.toLowerCase().includes(query))
+    )
   }
+
+  result = result.filter((feature) => feature.version === activeVersion.value)
 
   if (activeTag.value !== '全部') {
-    result = result.filter(feature => feature.category === activeTag.value);
+    result = result.filter((feature) => feature.category === activeTag.value)
   }
 
-  return result;
-});
+  return result
+})
 
 function toggleTag(tag: string) {
-  activeTag.value = activeTag.value === tag ? '全部' : tag;
+  activeTag.value = activeTag.value === tag ? '全部' : tag
 }
 
 function isNewerVersion(featureVersion: string, currentVersion: string): boolean {
-  const featureParts = featureVersion.split('.').map(Number);
-  const currentParts = currentVersion.split('.').map(Number);
+  const featureParts = featureVersion.split('.').map(Number)
+  const currentParts = currentVersion.split('.').map(Number)
 
-  if (featureParts[0] > currentParts[0]) return true;
-  if (featureParts[0] === currentParts[0] && featureParts[1] > currentParts[1]) return true;
-  return false;
+  if (featureParts[0] > currentParts[0]) return true
+  if (featureParts[0] === currentParts[0] && featureParts[1] > currentParts[1]) return true
+  return false
 }
+
+onMounted(async () => {
+  const res = await import('./JSON/TS5+.json')
+  features.value = res.default
+})
 </script>
 
 <style lang="less" scoped>
@@ -714,7 +481,9 @@ function isNewerVersion(featureVersion: string, currentVersion: string): boolean
   border-radius: 12px;
   overflow: hidden;
   box-shadow: @card-shadow;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
   background: white;
   display: flex;
   flex-direction: column;

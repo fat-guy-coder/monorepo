@@ -152,6 +152,52 @@ reader.readAsText(file);</code></pre>
         <div class="api-card">
           <div class="api-header">
             <div class="api-icon">🔢</div>
+            <h3>ReadableStream</h3>
+            <div class="popularity medium">中频</div>
+          </div>
+          <div class="api-content">
+            <p>表示可读取的数据流</p>
+            <div class="code-example">
+              <pre><code>// 创建ReadableStream
+const stream = new ReadableStream({
+  start(controller) {
+    controller.enqueue('Hello, world!');
+  }
+});
+
+// 读取数据
+const reader = stream.getReader();
+reader.read().then(result => {
+  console.log(result.value); // 'Hello, world!'
+});</code></pre>
+            </div>
+            <div class="usage-tip"><strong>使用场景：</strong> 处理大文件、网络流</div>
+          </div>
+        </div>
+
+        <div class="api-card">
+          <div class="api-header">
+            <div class="api-icon">🔢</div>
+            <h3>WritableStream</h3>
+            <div class="popularity medium">中频</div>
+          </div>
+          <div class="api-content">
+            <p>表示可写入的数据流</p>
+            <div class="code-example">
+              <pre><code>// 创建WritableStream
+const stream = new WritableStream({
+  write(chunk, controller) {
+    console.log(chunk);
+  }
+});</code></pre>
+            </div>
+            <div class="usage-tip"><strong>使用场景：</strong> 处理大文件、网络流</div>
+          </div>
+        </div>
+
+        <div class="api-card">
+          <div class="api-header">
+            <div class="api-icon">🔢</div>
             <h3>Blob</h3>
             <div class="popularity medium">中频</div>
           </div>

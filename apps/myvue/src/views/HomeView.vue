@@ -10,16 +10,17 @@
 </template>
 
 <script setup lang="ts">
-import { ref,defineAsyncComponent } from 'vue'
+import { ref, defineAsyncComponent } from 'vue'
 
-const A = defineAsyncComponent(() => import('@/components/A.vue'))
-const B = defineAsyncComponent(() => import('@/components/B.vue'))
+
+// const A = defineAsyncComponent(() => import('@/components/A.vue'))
+// const B = defineAsyncComponent(() => import('@/components/B.vue'))
 
 function uiConfig() {
   console.log('uiConfig')
 }
 
-const path = ref('A')
+// const path = ref('A')
 
 // function switchComponent() {
 //   path.value = path.value === 'A' ? 'B' : 'A'

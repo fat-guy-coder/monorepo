@@ -576,6 +576,8 @@ const usageTable = [
   background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
   min-height: 100vh;
   padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .header {

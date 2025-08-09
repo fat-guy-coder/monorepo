@@ -65,7 +65,7 @@
             <div class="usage-type">
               <h4>图像遮罩</h4>
               <div class="demo-image">
-                <div class="masked-image masked-demo-1"></div>
+                <div class="masked-image masked-demo-1">设置遮罩图像的位置设置遮罩图像的位置设置遮罩图像的位置设置遮罩图像的位置设置遮罩图像的位置设置遮罩图像的位置设置遮罩图像的位置设置遮罩图像的位置设置遮罩图像的位置设置遮罩图像的位置设置遮罩图像的位置设置遮罩图像的位置设置遮罩图像的位置</div>
                 <p>使用PNG/SVG图像作为遮罩</p>
               </div>
               <pre><code class="language-css">mask-image: url('star-mask.svg');</code></pre>

@@ -1,0 +1,213 @@
+[
+  {
+    "id": "decorators",
+    "title": "标准装饰器",
+    "version": "5.0",
+    "category": "语言特性",
+    "iconClass": "decorator-icon",
+    "description": "实现了ECMAScript装饰器提案，提供了标准化的装饰器语法，取代了传统的实验性装饰器",
+    "usage": "// 类装饰器\nfunction LogClass(target: Function) {\n  console.log(`类 ${target.name} 被定义`);\n}\n\n@LogClass\nclass MyClass {\n  // 方法装饰器\n  @LogMethod\n  myMethod() {}\n}\n\n// 属性装饰器\nfunction ReadOnly(target: any, key: string) {\n  Object.defineProperty(target, key, {\n    writable: false\n  });\n}\n",
+    "scenarios": [
+      "框架开发（如Angular、NestJS）",
+      "AOP（面向切面编程）实现",
+      "类和方法级别的元数据添加",
+      "自动绑定和依赖注入"
+    ],
+    "pros": [
+      "符合ECMAScript标准，未来兼容性好",
+      "更简洁的语法",
+      "更好的类型推断",
+      "与JavaScript装饰器行为一致"
+    ]
+  },
+  {
+    "id": "const-type-params",
+    "title": "const 类型参数",
+    "version": "5.0",
+    "category": "类型系统",
+    "iconClass": "const-icon",
+    "description": "允许在泛型类型参数中使用const修饰符，使类型推断更精确，保留字面量类型",
+    "usage": "// 之前\nfunction getValues<T>(obj: T) {\n  return Object.values(obj);\n}\n\n// 返回类型为 any[]，丢失了原始类型信息\n\n// TS 5.0+\nfunction getValues<const T>(obj: T) {\n  return Object.values(obj);\n}\n\nconst values = getValues({\n  name: \"John\",\n  age: 30\n});\n// values 类型为 (string | number)[]\n// 而不是之前的 any[]",
+    "scenarios": ["API响应处理", "配置对象类型推断", "函数式编程工具", "保留对象字面量的精确类型"],
+    "pros": [
+      "更精确的类型推断",
+      "减少不必要的类型断言",
+      "更好地保留字面量类型",
+      "提高代码类型安全性"
+    ]
+  },
+  {
+    "id": "enum-improvements",
+    "title": "枚举增强",
+    "version": "5.0",
+    "category": "类型系统",
+    "iconClass": "enum-icon",
+    "description": "所有枚举现在都是联合枚举，每个枚举成员都有自己独特的类型，提高了类型安全性",
+    "usage": "enum UserRole {\n  Admin = \"ADMIN\",\n  Editor = \"EDITOR\",\n  Viewer = \"VIEWER\"\n}\n\n// 之前: 类型为UserRole\n// 现在: 类型为UserRole.Admin | UserRole.Editor | UserRole.Viewer\n\nfunction checkPermission(role: UserRole) {\n  // 现在可以精确检查每个枚举成员\n  if (role === UserRole.Admin) {\n    // ...\n  }\n}\n\n// 也适用于数字枚举\nenum Status {\n  Pending,\n  Approved,\n  Rejected\n}\n\n// Status 现在是一个联合类型: Status.Pending | Status.Approved | Status.Rejected",
+    "scenarios": ["状态管理", "权限控制系统", "有限选项集合", "提高枚举类型安全性"],
+    "pros": [
+      "更精确的类型检查",
+      "减少运行时错误",
+      "更好的自动完成支持",
+      "与字符串/数字字面量类型行为一致"
+    ]
+  },
+  {
+    "id": "module-resolution",
+    "title": "模块解析改进",
+    "version": "5.0",
+    "category": "工具链",
+    "iconClass": "module-icon",
+    "description": "新的 moduleResolution 选项 \"bundler\"，更好地支持现代打包工具如 Vite、esbuild 等",
+    "usage": "// tsconfig.json\n{\n  \"compilerOptions\": {\n    \"module\": \"esnext\",\n    \"moduleResolution\": \"bundler\",\n    // 其他配置...\n  }\n}\n",
+    "scenarios": [
+      "使用 Vite、Webpack 5+ 的项目",
+      "ESM 模块项目",
+      "Monorepo 项目",
+      "需要与打包工具更紧密集成的项目"
+    ],
+    "pros": ["更好地支持现代打包工具", "更准确的模块解析", "减少配置复杂度", "改善开发体验"]
+  },
+  {
+    "id": "satisfies-jsdoc",
+    "title": "JSDoc @satisfies",
+    "version": "5.0",
+    "category": "工具链",
+    "iconClass": "jsdoc-icon",
+    "description": "在 JavaScript 文件中使用 @satisfies 注释来验证表达式类型，而不改变其类型",
+    "usage": "// 在 JavaScript 文件中\n/** @satisfies {Record<string, number>} */\nconst colors = {\n  red: 255,\n  green: 0,\n  blue: 0,\n  // 错误: 字符串不能赋值给 number 类型\n  // alpha: \"1\"\n};\n\n// 保留字面量类型的同时验证类型\n/** @satisfies {Array<number | string>} */\nconst mixedArray = [1, \"two\", 3];",
+    "scenarios": [
+      "JavaScript 项目迁移到 TypeScript",
+      "在 JS 文件中添加类型安全",
+      "渐进式类型迁移",
+      "文档驱动的开发"
+    ],
+    "pros": [
+      "在 JavaScript 中提供类型安全",
+      "不改变原始类型推断",
+      "渐进式采用 TypeScript",
+      "更好的文档和代码提示"
+    ]
+  },
+  {
+    "id": "export-type-star",
+    "title": "export type *",
+    "version": "5.0",
+    "category": "模块系统",
+    "iconClass": "export-icon",
+    "description": "支持 export type * 语法，可以重新导出另一个模块中的所有类型",
+    "usage": "// types.ts\nexport type User = { id: number; name: string };\nexport interface Product { sku: string; price: number; }\n\n// 之前需要手动导出每个类型\n// export type { User, Product };\n\n// TS 5.0+\nexport type * from './types';\n\n// 使用\nimport { User, Product } from './exports';",
+    "scenarios": ["类型库开发", "集中管理类型定义", "模块化类型系统", "大型项目类型组织"],
+    "pros": ["简化类型导出", "减少样板代码", "提高代码可维护性", "更好的模块化组织"]
+  },
+  {
+    "id": "speed-optimization",
+    "title": "速度与内存优化",
+    "version": "5.0",
+    "category": "性能",
+    "iconClass": "speed-icon",
+    "description": "TypeScript 5.0 进行了全面优化，减少了内存占用，提高了编译速度",
+    "usage": "// 无需特殊配置即可享受性能提升\n// 安装最新版本：\n// npm install typescript@latest\n\n// 在大型项目中，编译时间显著减少\n// 内存占用减少约 40%",
+    "scenarios": ["大型代码库", "持续集成环境", "开发服务器热重载", "资源受限环境"],
+    "pros": ["编译速度提升 2 倍以上", "内存占用减少 40%", "更小的 npm 包体积", "改善开发体验"]
+  },
+  {
+    "id": "resolution-customization",
+    "title": "自定义模块解析",
+    "version": "5.1",
+    "category": "工具链",
+    "iconClass": "resolution-icon",
+    "description": "新增 resolve 编译选项，允许更细粒度地控制模块解析策略",
+    "usage": "// tsconfig.json\n{\n  \"compilerOptions\": {\n    \"moduleResolution\": \"node\",\n    \"resolve\": {\n      \"conditionNames\": [\"import\", \"node\", \"types\"],\n      \"extensionAlias\": {\n        \".js\": [\".ts\", \".js\"],\n        \".mjs\": [\".mts\", \".mjs\"]\n      }\n    }\n  }\n}\n",
+    "scenarios": ["复杂模块解析需求", "自定义文件扩展名", "非标准模块解析", "高级打包配置"],
+    "pros": ["更灵活的模块解析", "更好地支持非标准模块", "与打包工具更紧密集成", "减少路径配置问题"]
+  },
+  {
+    "id": "type-only-imports",
+    "title": "类型导入",
+    "version": "5.1",
+    "category": "类型系统",
+    "iconClass": "type-icon",
+    "description": "支持 import type 语法，只导入类型而不执行模块代码",
+    "usage": "// 之前\nimport { User } from './user';\n\n// 现在\nimport type { User } from './user';\n\n// 使用\nconst user: User = { name: 'John' };",
+    "scenarios": ["大型项目类型管理", "模块间类型共享", "类型驱动的开发", "减少模块加载时间"],
+    "pros": ["更精确的类型导入", "减少模块加载时间", "提高代码可维护性", "更好的类型安全"]
+  },
+  {
+    "id": "explicit-resource-management",
+    "title": "显式资源管理",
+    "version": "5.2",
+    "category": "语言特性",
+    "iconClass": "resource-icon",
+    "description": "支持显式资源管理提案，通过using声明自动管理资源（如文件句柄、数据库连接等）的生命周期",
+    "usage": "// 使用Symbol.dispose\n{\n  using resource = new Resource();\n  // 使用资源...\n  // 作用域结束时自动释放\n}\n\n// 异步资源\nasync function doWork() {\n  await using conn = await getConnection();\n  // 使用数据库连接...\n}",
+    "scenarios": ["资源管理", "文件操作", "数据库连接", "网络连接"],
+    "pros": ["减少资源泄漏", "简化资源清理代码", "提高代码可读性", "自动释放资源"]
+  },
+  {
+    "id": "decorator-metadata",
+    "title": "装饰器元数据",
+    "version": "5.2",
+    "category": "语言特性",
+    "iconClass": "metadata-icon",
+    "description": "支持装饰器元数据提案，允许装饰器通过context.metadata访问和修改类的元数据",
+    "usage": "function logMetadata(_, context: DecoratorContext) {\n  context.metadata.logLevel = 'debug';\n}\n\n@logMetadata\nclass ApiService {\n  // ...\n}\n\n// 通过Symbol.metadata访问\nconsole.log(ApiService[Symbol.metadata]);",
+    "scenarios": ["元数据驱动框架", "依赖注入", "序列化/反序列化", "ORM框架"],
+    "pros": ["标准化的元数据访问", "简化元数据管理", "增强装饰器能力", "框架开发更便捷"]
+  },
+  {
+    "id": "switch-true-narrowing",
+    "title": "switch(true)类型收窄",
+    "version": "5.3",
+    "category": "类型系统",
+    "iconClass": "switch-icon",
+    "description": "改进控制流分析，支持对switch(true)中的条件进行类型收窄",
+    "usage": "function processValue(val: string | number | Date) {\n  switch (true) {\n    case typeof val === 'string':\n      return val.toUpperCase(); // val 收窄为 string\n    case val instanceof Date:\n      return val.toISOString(); // val 收窄为 Date\n    case typeof val === 'number':\n      return val.toFixed(2); // val 收窄为 number\n  }\n}",
+    "scenarios": ["复杂条件判断", "类型守卫", "减少类型断言", "提高代码安全性"],
+    "pros": ["更智能的类型推断", "减少类型断言", "提高代码可读性", "增强类型安全"]
+  },
+  {
+    "id": "preserved-narrowing-in-closures",
+    "title": "闭包中保留类型收窄",
+    "version": "5.4",
+    "category": "类型系统",
+    "iconClass": "closure-icon",
+    "description": "改进了类型收窄在闭包中的保留，当函数在闭包中被调用时，能够保留外层作用域的类型收窄信息",
+    "usage": "function validateInput(input: unknown) {\n  if (typeof input === 'string') {\n    setTimeout(() => {\n      console.log(input.length); // TS 5.4+ 仍知道 input 是 string\n    }, 100);\n  }\n}",
+    "scenarios": ["异步回调", "事件处理", "高阶函数", "闭包使用频繁的代码"],
+    "pros": ["减少不必要的类型断言", "提高类型安全性", "改进开发体验", "更准确的类型推断"]
+  },
+  {
+    "id": "groupby-methods",
+    "title": "Object.groupBy 和 Map.groupBy",
+    "version": "5.4",
+    "category": "类型声明",
+    "iconClass": "groupby-icon",
+    "description": "新增对ES提案中Object.groupBy和Map.groupBy静态方法的类型声明支持",
+    "usage": "const inventory = [\n  { name: 'asparagus', type: 'vegetables', quantity: 5 },\n  { name: 'bananas', type: 'fruit', quantity: 0 },\n];\n\nconst result = Object.groupBy(inventory, ({ type }) => type);\n/* 类型推断结果:\n{\n  vegetables: { name: string; type: string; quantity: number; }[],\n  fruit: { name: string; type: string; quantity: number; }[]\n} */",
+    "scenarios": ["数据分组", "集合操作", "数据处理", "统计分析"],
+    "pros": ["提供标准分组方法类型", "简化分组操作", "与最新ECMAScript提案一致", "提高代码可读性"]
+  },
+  {
+    "id": "module-resolution-enhancements",
+    "title": "模块解析增强",
+    "version": "5.4",
+    "category": "工具链",
+    "iconClass": "module-resolve-icon",
+    "description": "在--moduleResolution bundler和--module preserve下支持require()调用，新增moduleSuffixes配置选项",
+    "usage": "// tsconfig.json\n{\n  \"compilerOptions\": {\n    \"moduleResolution\": \"bundler\",\n    \"moduleSuffixes\": [\".ios\", \".native\", \"\"]\n  }\n}\n\n// 代码中支持\nconst fs = require('fs'); // 在bundler模式下被识别",
+    "scenarios": ["混合模块环境", "多平台开发", "现代打包工具集成", "从CommonJS迁移"],
+    "pros": ["更好的模块兼容性", "减少迁移成本", "支持多平台后缀", "简化配置"]
+  },
+  {
+    "id": "type-narrowing-enhancements",
+    "title": "类型收窄增强",
+    "version": "5.4",
+    "category": "类型系统",
+    "iconClass": "narrow-icon",
+    "description": "新增对in运算符、Array.isArray和instanceof的类型守卫优化，支持在闭包中保留收窄类型",
+    "usage": "function check(obj: unknown) {\n  if (obj && typeof obj === 'object' && 'key' in obj) {\n    // obj 收窄为 object & { key: unknown }\n    console.log(obj.key);\n  }\n}",
+    "scenarios": ["复杂类型守卫", "运行时类型检查", "数据验证", "模式匹配"],
+    "pros": ["更精确的类型推断", "减少类型断言", "改进模式匹配支持", "增强代码健壮性"]
+  }
+]

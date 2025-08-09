@@ -1,7 +1,7 @@
 <template>
   <div class="code-block-container">
     <!-- 代码工具栏 -->
-    <div class="code-toolbar">
+    <div class="code-toolbar" v-if="!hiddenToolbar">
       <span class="language-tag">{{ formattedLanguage }}</span>
       <span v-if="title" class="title">{{ title }}</span>
       <button class="copy-button" @click="handleCopy" :disabled="isCopying" :aria-label="`复制${language}代码`">
@@ -38,10 +38,12 @@ const props = withDefaults(
     code: string
     language?: Language
     lineNumbers?: boolean
+    hiddenToolbar?: boolean
   }>(),
   {
     language: 'js',
     lineNumbers: true,
+    hiddenToolbar: false,
   },
 )
 

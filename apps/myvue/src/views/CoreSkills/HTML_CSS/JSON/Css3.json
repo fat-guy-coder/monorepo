@@ -1,0 +1,460 @@
+[
+  {
+    "name": "布局",
+    "id": "base",
+    "items": [
+      {
+        "name": "flex",
+        "id": "flex",
+        "description": "弹性布局，自适应",
+        "importance": 5,
+        "tags": ["布局", "flex", "自适应"],
+        "version": "CSS3",
+        "example": "display: flex;\nflex-direction: row;\nflex-wrap: wrap;\njustify-content: space-between;\nalign-items: center;",
+        "route": "Flexbox"
+      },
+      {
+        "name": "grid",
+        "id": "grid",
+        "description": "网格布局，自适应",
+        "importance": 5,
+        "tags": ["布局", "grid", "自适应"],
+        "version": "CSS3",
+        "example": "display: grid;\ngrid-template-columns: repeat(3, 1fr);\ngrid-template-rows: repeat(3, 1fr);",
+        "route": "Grid"
+      },
+      {
+        "name": "多列布局",
+        "id": "columns",
+        "description": "创建类似报纸的多列布局",
+        "importance": 4,
+        "tags": ["布局", "多列"],
+        "version": "CSS3",
+        "example": "column-count: 3;\ncolumn-gap: 20px;\ncolumn-rule: 1px solid #ddd;",
+        "route": "MultiColumnLayout"
+      },
+      {
+        "name": "盒模型调整",
+        "id": "box-sizing",
+        "description": "控制盒模型计算方式",
+        "importance": 5,
+        "tags": ["布局", "盒模型"],
+        "version": "CSS3",
+        "example": "box-sizing: content-box; /* 默认 */\nbox-sizing: border-box; /* 包含padding和border */",
+        "route": "CSSBoxModel"
+      },
+      {
+        "name": "浮动定位",
+        "id": "float",
+        "description": "元素浮动定位",
+        "importance": 4,
+        "tags": ["布局", "浮动"],
+        "version": "CSS3",
+        "example": "float: left;\nclear: both;",
+        "route": "CSSFloat"
+      },
+      {
+        "name": "定位",
+        "id": "position",
+        "description": "元素定位方式",
+        "importance": 5,
+        "tags": ["布局", "定位"],
+        "version": "CSS3",
+        "example": "position: relative;\ntop: 10px;\nleft: 20px;",
+        "route": "CSSPositioning"
+      }
+    ]
+  },
+  {
+    "name": "动画",
+    "id": "animation",
+    "items": [
+      {
+        "name": "animation",
+        "id": "animation",
+        "description": "关键帧动画",
+        "importance": 5,
+        "tags": ["动画", "关键帧"],
+        "version": "CSS3",
+        "example": "animation: myAnimation 2s infinite;\n@keyframes myAnimation { \n  0% { transform: rotate(0deg); }\n  100% { transform: rotate(360deg); }\n}",
+        "route": "Animation"
+      },
+      {
+        "name": "transition",
+        "id": "transition",
+        "description": "属性过渡效果",
+        "importance": 5,
+        "tags": ["动画", "过渡"],
+        "version": "CSS3",
+        "example": "transition: all 0.3s ease-in-out;\ntransition-property: width, background;\ntransition-duration: 0.5s;",
+        "route": "Transition"
+      },
+      {
+        "name": "变换(2D)",
+        "id": "transform-2d",
+        "description": "2D空间变换效果",
+        "importance": 5,
+        "tags": ["动画", "变换"],
+        "version": "CSS3",
+        "example": "transform: translate(20px, 20px);\ntransform: rotate(30deg);\ntransform: scale(1.2);\ntransform: skew(20deg);",
+        "route": "Transform"
+      },
+      {
+        "name": "变换(3D)",
+        "id": "transform-3d",
+        "description": "3D空间变换效果",
+        "importance": 4,
+        "tags": ["动画", "3D"],
+        "version": "CSS3",
+        "example": "transform: perspective(500px) rotateX(45deg);\ntransform-style: preserve-3d;",
+        "route": "Transform"
+      },
+      {
+        "name": "动画性能",
+        "id": "animation-performance",
+        "description": "优化动画性能的属性",
+        "importance": 4,
+        "tags": ["动画", "性能"],
+        "version": "CSS3",
+        "example": "will-change: transform;\nbackface-visibility: hidden;",
+        "route": "Willchange"
+      },
+      {
+        "name": "滚动动画",
+        "id": "scroll-linked-animation",
+        "description": "滚动时触发动画效果",
+        "importance": 4,
+        "tags": ["动画", "性能"],
+        "version": "CSS3",
+        "example": "animation-timeline: scroll(root);\n animation-range: 0 100%;  ",
+        "route": "ScrollLinkedAnimations"
+      }
+    ]
+  },
+  {
+    "name": "特效",
+    "id": "effect",
+    "items": [
+      {
+        "name": "filter",
+        "id": "filter",
+        "description": "视觉滤镜效果",
+        "importance": 5,
+        "tags": ["特效", "滤镜"],
+        "version": "CSS3",
+        "example": "filter: blur(5px);\nfilter: grayscale(50%);\nfilter: drop-shadow(2px 2px 5px rgba(0,0,0,0.5));",
+        "route": "Filter"
+      },
+      {
+        "name": "transform",
+        "id": "transform",
+        "description": "元素变换效果",
+        "importance": 5,
+        "tags": ["特效", "变换", "形变"],
+        "version": "CSS3",
+        "example": "transform: rotate(360deg);\ntransform: scale(2);\ntransform: translate3d(0, 0, 100px);",
+        "route": "Transform"
+      },
+      {
+        "name": "渐变",
+        "id": "gradient",
+        "description": "颜色渐变效果",
+        "importance": 5,
+        "tags": ["特效", "渐变"],
+        "version": "CSS3",
+        "example": "background: linear-gradient(to right, red, blue);\nbackground: radial-gradient(circle, #a1c4fd, #c2e9fb);",
+        "route": "Gradient"
+      },
+      {
+        "name": "阴影",
+        "id": "shadow",
+        "description": "元素和文本阴影",
+        "importance": 5,
+        "tags": ["特效", "阴影"],
+        "version": "CSS3",
+        "example": "box-shadow: 3px 3px 10px rgba(0,0,0,0.3);\ntext-shadow: 2px 2px 4px rgba(0,0,0,0.5);",
+        "route": "BoxShadow"
+      },
+      {
+        "name": "边框特效",
+        "id": "border-effects",
+        "description": "边框样式增强",
+        "importance": 4,
+        "tags": ["特效", "边框"],
+        "version": "CSS3",
+        "example": "border-radius: 10px;\nborder-radius: 50%; /* 圆形 */\nborder-image: url(border.png) 30 round;",
+        "route": "BorderRadius"
+      },
+      {
+        "name": "混合模式",
+        "id": "blend-mode",
+        "description": "元素混合效果",
+        "importance": 4,
+        "tags": ["特效", "混合"],
+        "version": "CSS3",
+        "example": "background-blend-mode: multiply;\nmix-blend-mode: screen;",
+        "route": "BlendMode"
+      },
+      {
+        "name": "遮罩与裁剪",
+        "id": "mask-clip",
+        "description": "元素遮罩和裁剪",
+        "importance": 4,
+        "tags": ["特效", "遮罩"],
+        "version": "CSS3",
+        "example": "clip-path: circle(50% at center);\nmask-image: url(mask.png);",
+        "route": "ClipPath"
+      }
+    ]
+  },
+  {
+    "name": "选择器",
+    "id": "selectors",
+    "items": [
+      {
+        "name": "属性选择器",
+        "id": "attribute-selectors",
+        "description": "基于属性选择元素",
+        "importance": 5,
+        "tags": ["选择器", "属性"],
+        "version": "CSS3",
+        "example": "a[target=\"_blank\"] {\n  color: red;\n}\ninput[type=\"text\"] {\n  background: #eee;\n}",
+        "route": "CSSSelectors"
+      },
+      {
+        "name": "伪类选择器",
+        "id": "pseudo-classes",
+        "description": "基于状态选择元素",
+        "importance": 5,
+        "tags": ["选择器", "伪类"],
+        "version": "CSS3",
+        "example": "a:hover {\n  color: blue;\n}\nli:nth-child(odd) {\n  background: #f0f0f0;\n}",
+        "route": "CSSSelectors"
+      },
+      {
+        "name": "伪元素选择器",
+        "id": "pseudo-elements",
+        "description": "选择元素的特定部分",
+        "importance": 4,
+        "tags": ["选择器", "伪元素"],
+        "version": "CSS3",
+        "example": "p::first-line {\n  font-weight: bold;\n}\ndiv::before {\n  content: \"★\";\n}",
+        "route": "CSSSelectors"
+      },
+      {
+        "name": "组合选择器",
+        "id": "combinators",
+        "description": "组合多个选择器",
+        "importance": 4,
+        "tags": ["选择器", "组合"],
+        "version": "CSS3",
+        "example": "div > p {\n  color: blue;\n}\nsection + p {\n  margin-top: 0;\n}",
+        "route": "CSSSelectors"
+      }
+    ]
+  },
+  {
+    "name": "响应式设计",
+    "id": "responsive",
+    "items": [
+      {
+        "name": "媒体查询",
+        "id": "media-queries",
+        "description": "根据设备特性应用样式",
+        "importance": 5,
+        "tags": ["响应式", "媒体查询"],
+        "version": "CSS3",
+        "example": "@media (max-width: 768px) {\n  .container { padding: 10px; }\n}\n@media (min-width: 1200px) {\n  .container { max-width: 1140px; }\n}",
+        "route": "MediaQueries"
+      },
+      {
+        "name": "视口单位",
+        "id": "viewport-units",
+        "description": "基于视口大小的单位",
+        "importance": 5,
+        "tags": ["响应式", "单位"],
+        "version": "CSS3",
+        "example": "width: 100vw;\nheight: 50vh;\nfont-size: calc(1rem + 1vw);",
+        "route": "CSSUnits"
+      },
+      {
+        "name": "弹性图片",
+        "id": "flexible-images",
+        "description": "自适应图像处理",
+        "importance": 4,
+        "tags": ["响应式", "图像"],
+        "version": "CSS3",
+        "example": "img {\n  max-width: 100%;\n  height: auto;\n}\npicture source {\n  media: (min-width: 800px);\n}",
+        "route": "ObjectFit"
+      },
+      {
+        "name": "响应式表格",
+        "id": "responsive-tables",
+        "description": "小屏幕表格处理",
+        "importance": 3,
+        "tags": ["响应式", "表格"],
+        "version": "CSS3",
+        "example": "@media (max-width: 600px) {\n  table, thead, tbody, th, td, tr {\n    display: block;\n  }\n}",
+        "route": "ResponsiveTables"
+      }
+    ]
+  },
+  {
+    "name": "文本与字体",
+    "id": "text-font",
+    "items": [
+      {
+        "name": "自定义字体",
+        "id": "font-face",
+        "description": "嵌入自定义字体",
+        "importance": 5,
+        "tags": ["文本", "字体"],
+        "version": "CSS3",
+        "example": "@font-face {\n  font-family: 'MyFont';\n  src: url('myfont.woff2') format('woff2');\n}\nbody { font-family: 'MyFont', sans-serif; }",
+        "route": "FontFace"
+      },
+      {
+        "name": "文本效果",
+        "id": "text-effects",
+        "description": "文本样式增强",
+        "importance": 4,
+        "tags": ["文本", "效果"],
+        "version": "CSS3",
+        "example": "text-overflow: ellipsis;\nwhite-space: nowrap;\noverflow: hidden;\nword-wrap: break-word;",
+        "route": "TextEffects"
+      },
+      {
+        "name": "字体特性",
+        "id": "font-features",
+        "description": "高级字体控制",
+        "importance": 3,
+        "tags": ["文本", "字体"],
+        "version": "CSS3",
+        "example": "font-feature-settings: \"liga\", \"dlig\";\nfont-variant: small-caps;",
+        "route": "FontFeatures"
+      },
+      {
+        "name": "文本方向",
+        "id": "text-direction",
+        "description": "控制文本书写方向",
+        "importance": 3,
+        "tags": ["文本", "方向"],
+        "version": "CSS3",
+        "example": "writing-mode: vertical-rl;\ntext-orientation: mixed;",
+        "route": "TextDirection"
+      }
+    ]
+  },
+  {
+    "name": "性能",
+    "id": "performance",
+    "items": [
+      {
+        "name": "will-change",
+        "id": "will-change",
+        "description": "提示浏览器即将发生的变换",
+        "importance": 4,
+        "tags": ["性能", "will-change"],
+        "version": "CSS3",
+        "example": "will-change: transform;\nbackface-visibility: hidden;",
+        "route": "Willchange"
+      },
+      {
+        "name": "contain",
+        "id": "contain",
+        "description": "控制元素的渲染范围",
+        "importance": 4,
+        "tags": ["性能", "contain"],
+        "version": "CSS3",
+        "example": "contain: paint; /* 只渲染自身 */\ncontain: layout; /* 渲染自身和子元素 */\ncontain: content; /* 渲染自身和子元素，但不渲染后代元素 */",
+        "route": "Contain"  
+      },
+      {   
+        "name": "content-visibility",
+        "id": "content-visibility",
+        "description": "控制元素的渲染范围",
+        "importance": 4,
+        "tags": ["性能", "content-visibility"],
+        "version": "CSS3",
+        "example": "content-visibility: auto; /* 默认值，自动决定是否渲染 */\ncontent-visibility: hidden; /* 隐藏内容，但保留布局 */\ncontent-visibility: visible; /* 渲染内容，即使不可见 */",
+        "route": "ContentVisibility"
+      },
+      {
+        "name": "contain-intrinsic-size",
+        "id": "contain-intrinsic-size",
+        "description": "指定元素的固有尺寸",
+        "importance": 4,
+        "tags": ["性能", "contain-intrinsic-size"],
+        "version": "CSS3",
+        "example": "contain-intrinsic-size: 100px 100px; /* 指定元素的固有尺寸 */",
+        "route": "ContainIntrinsicSize"
+      }
+    ]
+  },
+  {
+    "name": "其他特性",
+    "id": "other",
+    "items": [
+      {
+        "name": "CSS变量",
+        "id": "css-variables",
+        "description": "自定义属性（变量）",
+        "importance": 5,
+        "tags": ["变量", "主题"],
+        "version": "CSS3",
+        "example": ":root {\n  --primary-color: #42b983;\n  --spacing: 8px;\n}\n.element {\n  background: var(--primary-color);\n  padding: var(--spacing);\n}",
+        "route": "CSSFunctions"
+      },
+      {
+        "name": "计算函数",
+        "id": "calc",
+        "description": "动态计算值",
+        "importance": 5,
+        "tags": ["计算", "函数"],
+        "version": "CSS3",
+        "example": "width: calc(100% - 80px);\nheight: calc(100vh - 120px);",
+        "route": "CSSFunctions"
+      },
+      {
+        "name": "形状",
+        "id": "shapes",
+        "description": "文本环绕复杂形状",
+        "importance": 3,
+        "tags": ["形状", "布局"],
+        "version": "CSS3",
+        "example": "shape-outside: circle(50%);\nshape-margin: 10px;",
+        "route": "Shapes"
+      },
+      {
+        "name": "计数器",
+        "id": "counters",
+        "description": "自动计数功能",
+        "importance": 3,
+        "tags": ["计数器"],
+        "version": "CSS3",
+        "example": "body { counter-reset: section; }\nh2::before {\n  counter-increment: section;\n  content: \"Section \" counter(section) \": \";\n}",
+        "route": "CSSFunctions"
+      },
+      {
+        "name": "用户界面",
+        "id": "user-interface",
+        "description": "表单控件样式增强",
+        "importance": 4,
+        "tags": ["UI", "表单"],
+        "version": "CSS3",
+        "example": "input[type=\"range\"] {\n  -webkit-appearance: none;\n}\ninput[type=\"checkbox\"]:checked {\n  background: #4CAF50;\n}",
+        "route": "UserInterface"
+      },
+      {
+        "name": "滚动捕捉",
+        "id": "scroll-snap",
+        "description": "控制滚动位置",
+        "importance": 3,
+        "tags": ["滚动", "交互"],
+        "version": "CSS3",
+        "example": "scroll-snap-type: y mandatory;\nscroll-snap-align: start;",
+        "route": "ScrollSnap"
+      }
+    ]
+  }
+]

@@ -1,1389 +1,815 @@
 <template>
-  <div class="v8-gc-container">
-    <div class="hero-section">
-      <div class="hero-content">
-        <h1>V8垃圾回收算法基础介绍</h1>
-        <p>深入探索JavaScript引擎的内存管理机制</p>
-        <div class="memory-visualization">
-          <div class="memory-area" v-for="(area, index) in memoryAreas" :key="index">
-            <div class="area-header" :style="{ backgroundColor: area.color }">
-              <i :class="area.icon"></i>
-              <h3>{{ area.name }}</h3>
-              <span class="size">{{ area.size }}</span>
-            </div>
-            <div class="memory-blocks">
-              <div
-                v-for="(block, blockIndex) in area.blocks"
-                :key="blockIndex"
-                class="memory-block"
-                :class="{
-                  active: block.active,
-                  inactive: !block.active,
-                }"
-                :style="{
-                  width: block.size + 'px',
-                  height: block.size + 'px',
-                  animationDelay: blockIndex * 0.1 + 's',
-                }"
-              ></div>
+  <div class="v8-engine-container">
+    <!-- 头部区域 -->
+    <div class="header">
+      <div class="title-container">
+        <h1>V8 JavaScript引擎机制详解</h1>
+        <p>探索Google Chrome背后的高性能JavaScript执行引擎</p>
+      </div>
+      <div class="engine-tag">
+        <span>开源 · 高性能 · 跨平台</span>
+      </div>
+    </div>
+
+    <!-- 主要内容区 -->
+    <div class="main-content">
+      <!-- V8概览 -->
+      <div class="section overview-section">
+        <div class="overview-card">
+          <div class="v8-logo">
+            <div class="v8-text">V8</div>
+          </div>
+          <div class="content">
+            <h2>V8引擎是什么？</h2>
+            <p>V8是由Google开发的开源高性能JavaScript和WebAssembly引擎，用C++编写。它是Chrome浏览器和Node.js的核心组件，负责将JavaScript代码编译成机器码并执行。</p>
+            <div class="key-facts">
+              <div class="fact">
+                <div class="fact-icon">⚡</div>
+                <div class="fact-text">首次发布于2008年</div>
+              </div>
+              <div class="fact">
+                <div class="fact-icon">🌐</div>
+                <div class="fact-text">支持x64, ARM, MIPS架构</div>
+              </div>
+              <div class="fact">
+                <div class="fact-icon">📦</div>
+                <div class="fact-text">C++代码超过100万行</div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="content-wrapper">
-      <!-- 垃圾回收概述 -->
-      <section class="section">
-        <div class="section-header">
-          <i class="icon fas fa-recycle"></i>
-          <h2>垃圾回收概述</h2>
-        </div>
-        <div class="section-content">
-          <div class="gc-intro">
-            <div class="intro-card">
-              <div class="intro-icon">
-                <i class="fas fa-brain"></i>
-              </div>
-              <div>
-                <h3>为什么需要垃圾回收？</h3>
-                <p>
-                  JavaScript是一种高级语言，开发者不需要手动管理内存。V8引擎的垃圾回收器(GC)自动分配和释放内存，防止内存泄漏，确保应用性能。
-                </p>
-              </div>
+      <!-- 核心架构 -->
+      <div class="section">
+        <h2 class="section-title">
+          <div class="title-icon">🏗️</div>
+          <span>V8核心架构</span>
+        </h2>
+        <div class="architecture">
+          <div class="architecture-diagram">
+            <div class="component parser">
+              <div class="component-icon">📝</div>
+              <div class="component-name">解析器</div>
+              <div class="component-desc">将JS源码转换为AST</div>
             </div>
-
-            <div class="stats-grid">
-              <div class="stat-card">
-                <div class="stat-value">1ms</div>
-                <div class="stat-label">新生代GC平均时间</div>
-              </div>
-              <div class="stat-card">
-                <div class="stat-value">10ms+</div>
-                <div class="stat-label">老生代GC平均时间</div>
-              </div>
-              <div class="stat-card">
-                <div class="stat-value">1.5MB</div>
-                <div class="stat-label">新生代默认大小</div>
-              </div>
-              <div class="stat-card">
-                <div class="stat-value">700MB</div>
-                <div class="stat-label">Node.js默认堆大小</div>
-              </div>
+            <div class="arrow">➞</div>
+            <div class="component ignition">
+              <div class="component-icon">🔥</div>
+              <div class="component-name">Ignition</div>
+              <div class="component-desc">生成字节码</div>
+            </div>
+            <div class="arrow">➞</div>
+            <div class="component turbofan">
+              <div class="component-icon">✈️</div>
+              <div class="component-name">Turbofan</div>
+              <div class="component-desc">优化编译器</div>
+            </div>
+            <div class="arrow">➞</div>
+            <div class="component orinoco">
+              <div class="component-icon">🧹</div>
+              <div class="component-name">Orinoco</div>
+              <div class="component-desc">垃圾回收器</div>
             </div>
           </div>
 
-          <div class="gc-principle">
-            <h3><i class="fas fa-cogs"></i> 垃圾回收基本原理</h3>
-            <p>
-              V8使用<strong>分代垃圾回收</strong>策略，将内存分为新生代(new space)和老生代(old
-              space)。不同代采用不同的回收算法：
-            </p>
-
-            <div class="principle-diagram">
-              <div class="generation">
-                <div class="gen-header">新生代</div>
-                <div class="gen-content">
-                  <div class="algorithm">
-                    <i class="fas fa-exchange-alt"></i>
-                    <span>Scavenge算法</span>
-                  </div>
-                  <div class="arrow">→</div>
-                  <div class="promotion">对象晋升</div>
-                </div>
-              </div>
-
-              <div class="generation">
-                <div class="gen-header">老生代</div>
-                <div class="gen-content">
-                  <div class="algorithm">
-                    <i class="fas fa-broom"></i>
-                    <span>标记清除</span>
-                  </div>
-                  <div class="algorithm">
-                    <i class="fas fa-compress-arrows-alt"></i>
-                    <span>标记整理</span>
-                  </div>
-                  <div class="algorithm">
-                    <i class="fas fa-tachometer-alt"></i>
-                    <span>增量标记</span>
-                  </div>
-                </div>
-              </div>
+          <div class="architecture-explanation">
+            <div class="phase">
+              <h3>1. 解析器 (Parser)</h3>
+              <p>将JavaScript源代码转换为抽象语法树(AST)，同时进行语法和词法分析。</p>
+            </div>
+            <div class="phase">
+              <h3>2. Ignition 解释器</h3>
+              <p>将AST转换为字节码并执行，同时收集优化信息。</p>
+            </div>
+            <div class="phase">
+              <h3>3. Turbofan 编译器</h3>
+              <p>根据Ignition收集的信息生成高度优化的机器码。</p>
+            </div>
+            <div class="phase">
+              <h3>4. Orinoco 垃圾回收</h3>
+              <p>并行、增量的垃圾回收机制，减少停顿时间。</p>
             </div>
           </div>
         </div>
-      </section>
+      </div>
 
-      <!-- 新生代垃圾回收 -->
-      <section class="section">
-        <div class="section-header">
-          <i class="icon fas fa-baby"></i>
-          <h2>新生代垃圾回收</h2>
+      <!-- 性能优化 -->
+      <div class="section">
+        <h2 class="section-title">
+          <div class="title-icon">⚡</div>
+          <span>V8为何如此高效？</span>
+        </h2>
+        <div class="performance-reasons">
+          <div class="reason-card">
+            <div class="reason-icon">🏎️</div>
+            <h3>即时编译 (JIT)</h3>
+            <p>结合解释器与编译器：解释器快速启动，编译器生成高效机器码</p>
+          </div>
+          <div class="reason-card">
+            <div class="reason-icon">📊</div>
+            <h3>内联缓存 (IC)</h3>
+            <p>缓存对象属性访问结果，避免重复查找</p>
+          </div>
+          <div class="reason-card">
+            <div class="reason-icon">🧠</div>
+            <h3>隐藏类机制</h3>
+            <p>为动态对象创建类似静态语言的类结构</p>
+          </div>
+          <div class="reason-card">
+            <div class="reason-icon">🔄</div>
+            <h3>增量垃圾回收</h3>
+            <p>并行回收减少主线程阻塞时间</p>
+          </div>
+          <div class="reason-card">
+            <div class="reason-icon">🔧</div>
+            <h3>自适应优化</h3>
+            <p>根据运行时数据动态优化热点代码</p>
+          </div>
+          <div class="reason-card">
+            <div class="reason-icon">⚙️</div>
+            <h3>并发编译</h3>
+            <p>在后台线程编译代码，不阻塞主线程</p>
+          </div>
         </div>
-        <div class="section-content">
-          <div class="space-description">
-            <p>
-              新生代存放<strong>生命周期短</strong>的对象。大多数对象在这里被创建并很快被回收。V8使用<strong>Scavenge算法</strong>进行新生代垃圾回收。
-            </p>
-          </div>
+      </div>
 
-          <div class="scavenge-process">
-            <h3><i class="fas fa-sync-alt"></i> Scavenge算法过程</h3>
-            <div class="process-steps">
-              <div class="step">
-                <div class="step-number">1</div>
-                <div class="step-content">
-                  <h4>内存分区</h4>
-                  <p>新生代分为两个等大的半空间(semi-space): From空间和To空间</p>
-                </div>
-              </div>
+      <!-- 字节码机制 -->
+      <div class="section">
+        <h2 class="section-title">
+          <div class="title-icon">💾</div>
+          <span>字节码的核心作用</span>
+        </h2>
+        <div class="bytecode-section">
+          <div class="bytecode-explanation">
+            <p>Ignition生成的字节码是V8架构的关键创新，它取代了早期的全代码生成器，提供了多项优势：</p>
 
-              <div class="step">
-                <div class="step-number">2</div>
-                <div class="step-content">
-                  <h4>对象分配</h4>
-                  <p>新对象分配到From空间，当From空间满时触发GC</p>
-                </div>
-              </div>
-
-              <div class="step">
-                <div class="step-number">3</div>
-                <div class="step-content">
-                  <h4>复制存活对象</h4>
-                  <p>将From空间中存活的对象复制到To空间</p>
-                </div>
-              </div>
-
-              <div class="step">
-                <div class="step-number">4</div>
-                <div class="step-content">
-                  <h4>空间翻转</h4>
-                  <p>清空From空间，然后交换From和To空间的角色</p>
-                </div>
+            <div class="benefit">
+              <div class="benefit-icon">📉</div>
+              <div class="benefit-text">
+                <h3>内存占用减少</h3>
+                <p>字节码比机器码小25-50%，显著降低内存使用</p>
               </div>
             </div>
 
-            <div class="scavenge-visual">
-              <div class="space from-space">
-                <div class="space-label">From空间</div>
-                <div class="blocks-container">
-                  <div class="block active" v-for="i in 8" :key="'from-' + i"></div>
-                  <div class="block inactive" v-for="i in 4" :key="'from-inactive-' + i"></div>
-                </div>
+            <div class="benefit">
+              <div class="benefit-icon">🚀</div>
+              <div class="benefit-text">
+                <h3>启动时间优化</h3>
+                <p>生成字节码比编译机器码快2-5倍，加快启动速度</p>
               </div>
+            </div>
 
-              <div class="arrow">
-                <i class="fas fa-arrow-right"></i>
+            <div class="benefit">
+              <div class="benefit-icon">🔍</div>
+              <div class="benefit-text">
+                <h3>优化信息收集</h3>
+                <p>在字节码执行期间收集类型反馈，指导Turbofan优化</p>
               </div>
+            </div>
 
-              <div class="space to-space">
-                <div class="space-label">To空间</div>
-                <div class="blocks-container">
-                  <div class="block active" v-for="i in 8" :key="'to-' + i"></div>
-                  <div class="block empty" v-for="i in 4" :key="'to-empty-' + i"></div>
-                </div>
+            <div class="benefit">
+              <div class="benefit-icon">🧩</div>
+              <div class="benefit-text">
+                <h3>简化编译器设计</h3>
+                <p>Turbofan只需优化热点函数，无需处理全部代码</p>
               </div>
             </div>
           </div>
 
-          <div class="object-promotion">
-            <h3><i class="fas fa-level-up-alt"></i> 对象晋升</h3>
-            <p>满足以下条件之一的对象会从新生代晋升到老生代：</p>
+          <div class="bytecode-example">
+            <h3>JavaScript代码与字节码对比</h3>
+            <div class="code-comparison">
+              <div class="javascript-code">
+                <h4>JavaScript 源码</h4>
+                <pre><code>function sum(a, b) {
+  return a + b;
+}
+
+let result = sum(1, 2);</code></pre>
+              </div>
+              <div class="bytecode-code">
+                <h4>Ignition 字节码</h4>
+                <pre><code>// 函数sum的字节码
+[generated bytecode for function: sum]
+Parameter count 3
+Register count 0
+Frame size 0
+   0 E> 0x2efc4c2d3d56 @    0 : 25 02             Ldar a1
+   2 E> 0x2efc4c2d3d58 @    2 : 34 03 00          Add a0, [0]
+   5 S> 0x2efc4c2d3d5b @    5 : aa                Return
+
+// 调用sum函数
+   8 S> 0x2efc4c2d3d8a @    8 : 0d 01             LdaSmi [1]
+  10 E> 0x2efc4c2d3d8c @   10 : 26 fb             Star r0
+  12 E> 0x2efc4c2d3d8e @   12 : 0d 02             LdaSmi [2]
+  14 E> 0x2efc4c2d3d90 @   14 : 26 fa             Star r1
+  16 E> 0x2efc4c2d3d92 @   16 : 13 01 00          LdaGlobal [1], [0]
+  19 E> 0x2efc4c2d3d95 @   19 : 26 f9             Star r2
+  21 E> 0x2efc4c2d3d97 @   21 : 5a f9 fb fa 02    Call r2, r0-r1, [2]</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 与其他引擎对比 -->
+      <div class="section">
+        <h2 class="section-title">
+          <div class="title-icon">📊</div>
+          <span>V8与其他JS引擎对比</span>
+        </h2>
+        <div class="comparison">
+          <div class="comparison-table">
+            <div class="table-row header">
+              <div class="table-cell">特性</div>
+              <div class="table-cell">V8 (Chrome/Node)</div>
+              <div class="table-cell">SpiderMonkey (Firefox)</div>
+              <div class="table-cell">JavaScriptCore (Safari)</div>
+              <div class="table-cell">Chakra (Edge Legacy)</div>
+            </div>
+
+            <div class="table-row">
+              <div class="table-cell">字节码使用</div>
+              <div class="table-cell">Ignition 字节码</div>
+              <div class="table-cell">IonMonkey 字节码</div>
+              <div class="table-cell">LLInt 字节码</div>
+              <div class="table-cell">无字节码</div>
+            </div>
+
+            <div class="table-row">
+              <div class="table-cell">优化编译器</div>
+              <div class="table-cell">Turbofan</div>
+              <div class="table-cell">IonMonkey</div>
+              <div class="table-cell">FTL (基于LLVM)</div>
+              <div class="table-cell">SimpleJIT/FullJIT</div>
+            </div>
+
+            <div class="table-row">
+              <div class="table-cell">垃圾回收</div>
+              <div class="table-cell">并行标记清除</div>
+              <div class="table-cell">增量标记清除</div>
+              <div class="table-cell">分代回收</div>
+              <div class="table-cell">并发标记清除</div>
+            </div>
+
+            <div class="table-row">
+              <div class="table-cell">内存占用</div>
+              <div class="table-cell">中等</div>
+              <div class="table-cell">较低</div>
+              <div class="table-cell">较低</div>
+              <div class="table-cell">较高</div>
+            </div>
+
+            <div class="table-row">
+              <div class="table-cell">启动速度</div>
+              <div class="table-cell">快</div>
+              <div class="table-cell">中等</div>
+              <div class="table-cell">快</div>
+              <div class="table-cell">慢</div>
+            </div>
+
+            <div class="table-row">
+              <div class="table-cell">峰值性能</div>
+              <div class="table-cell">高</div>
+              <div class="table-cell">高</div>
+              <div class="table-cell">高</div>
+              <div class="table-cell">中等</div>
+            </div>
+          </div>
+
+          <div class="comparison-key-points">
+            <h3>V8的核心优势</h3>
             <ul>
-              <li>对象经历过一次Scavenge回收仍然存活</li>
-              <li>复制到To空间时，To空间使用率超过25%</li>
-              <li>大对象直接分配到老生代</li>
+              <li>
+                <div class="point-icon">🚀</div>
+                <div class="point-text">更快的启动时间（得益于Ignition字节码）</div>
+              </li>
+              <li>
+                <div class="point-icon">🧠</div>
+                <div class="point-text">更激进的多层优化（Turbofan）</div>
+              </li>
+              <li>
+                <div class="point-icon">⚙️</div>
+                <div class="point-text">并行垃圾回收（减少停顿时间）</div>
+              </li>
+              <li>
+                <div class="point-icon">🌐</div>
+                <div class="point-text">更广泛的平台支持（x64, ARM, MIPS）</div>
+              </li>
+              <li>
+                <div class="point-icon">📦</div>
+                <div class="point-text">与Node.js深度集成（服务器端JavaScript）</div>
+              </li>
             </ul>
           </div>
         </div>
-      </section>
-
-      <!-- 老生代垃圾回收 -->
-      <section class="section">
-        <div class="section-header">
-          <i class="icon fas fa-tree"></i>
-          <h2>老生代垃圾回收</h2>
-        </div>
-        <div class="section-content">
-          <div class="space-description">
-            <p>
-              老生代存放<strong>生命周期长</strong>或从新生代晋升的对象。V8使用<strong>标记-清除(Mark-Sweep)</strong>和<strong>标记-整理(Mark-Compact)</strong>算法。
-            </p>
-          </div>
-
-          <div class="gc-algorithms">
-            <div class="algorithm-card">
-              <div class="algo-header mark-sweep">
-                <i class="fas fa-broom"></i>
-                <h3>标记-清除 (Mark-Sweep)</h3>
-              </div>
-              <div class="algo-steps">
-                <div class="algo-step">
-                  <div class="step-number">1</div>
-                  <p>标记阶段：从根对象出发，遍历所有可达对象并标记</p>
-                </div>
-                <div class="algo-step">
-                  <div class="step-number">2</div>
-                  <p>清除阶段：清除未被标记的对象（垃圾）</p>
-                </div>
-              </div>
-              <div class="algo-pros-cons">
-                <div class="pros">
-                  <h4>优点</h4>
-                  <ul>
-                    <li>速度较快</li>
-                    <li>不需要移动对象</li>
-                  </ul>
-                </div>
-                <div class="cons">
-                  <h4>缺点</h4>
-                  <ul>
-                    <li>内存碎片化</li>
-                    <li>可能引起内存不足</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-
-            <div class="algorithm-card">
-              <div class="algo-header mark-compact">
-                <i class="fas fa-compress-arrows-alt"></i>
-                <h3>标记-整理 (Mark-Compact)</h3>
-              </div>
-              <div class="algo-steps">
-                <div class="algo-step">
-                  <div class="step-number">1</div>
-                  <p>标记阶段：标记所有存活对象（同标记-清除）</p>
-                </div>
-                <div class="algo-step">
-                  <div class="step-number">2</div>
-                  <p>整理阶段：移动存活对象，消除内存碎片</p>
-                </div>
-                <div class="algo-step">
-                  <div class="step-number">3</div>
-                  <p>更新引用：更新对象移动后的引用地址</p>
-                </div>
-              </div>
-              <div class="algo-pros-cons">
-                <div class="pros">
-                  <h4>优点</h4>
-                  <ul>
-                    <li>消除内存碎片</li>
-                    <li>提高内存利用率</li>
-                  </ul>
-                </div>
-                <div class="cons">
-                  <h4>缺点</h4>
-                  <ul>
-                    <li>执行时间更长</li>
-                    <li>需要暂停主线程</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="optimization">
-            <h3><i class="fas fa-tachometer-alt"></i> 优化技术</h3>
-            <div class="optimization-cards">
-              <div class="opt-card">
-                <div class="opt-icon">
-                  <i class="fas fa-pause-circle"></i>
-                </div>
-                <h4>增量标记 (Incremental Marking)</h4>
-                <p>将标记过程分解为多个小任务，穿插在JavaScript执行中</p>
-              </div>
-
-              <div class="opt-card">
-                <div class="opt-icon">
-                  <i class="fas fa-parachute-box"></i>
-                </div>
-                <h4>惰性清理 (Lazy Sweeping)</h4>
-                <p>延迟清理过程，在需要内存或空闲时执行</p>
-              </div>
-
-              <div class="opt-card">
-                <div class="opt-icon">
-                  <i class="fas fa-broadcast-tower"></i>
-                </div>
-                <h4>并发标记 (Concurrent Marking)</h4>
-                <p>在后台线程进行标记，不阻塞主线程</p>
-              </div>
-
-              <div class="opt-card">
-                <div class="opt-icon">
-                  <i class="fas fa-memory"></i>
-                </div>
-                <h4>并行回收 (Parallel GC)</h4>
-                <p>使用多个线程同时执行垃圾回收任务</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- 触发时机 -->
-      <section class="section">
-        <div class="section-header">
-          <i class="icon fas fa-clock"></i>
-          <h2>垃圾回收触发时机</h2>
-        </div>
-        <div class="section-content">
-          <div class="trigger-description">
-            <p>V8垃圾回收不会在固定时间间隔运行，而是根据内存分配情况和引擎策略触发。</p>
-          </div>
-
-          <div class="trigger-timeline">
-            <div class="timeline-item">
-              <div class="timeline-marker"></div>
-              <div class="timeline-content">
-                <h3>分配时触发</h3>
-                <p>当新生代空间不足以分配新对象时，触发Scavenge回收</p>
-                <div class="code-example">
-                  <pre>
-// 创建大量临时对象
-for (let i = 0; i < 100000; i++) {
-  const temp = { index: i };
-}</pre
-                  >
-                </div>
-              </div>
-            </div>
-
-            <div class="timeline-item">
-              <div class="timeline-marker"></div>
-              <div class="timeline-content">
-                <h3>空间限制</h3>
-                <p>老生代空间接近或达到限制时，触发标记清除/整理</p>
-              </div>
-            </div>
-
-            <div class="timeline-item">
-              <div class="timeline-marker"></div>
-              <div class="timeline-content">
-                <h3>空闲时间</h3>
-                <p>V8尝试在JavaScript执行空闲时运行部分GC任务</p>
-              </div>
-            </div>
-
-            <div class="timeline-item">
-              <div class="timeline-marker"></div>
-              <div class="timeline-content">
-                <h3>手动触发</h3>
-                <p>开发者可以通过代码手动触发垃圾回收（仅调试用）</p>
-                <div class="code-example">
-                  <pre>
-// Node.js中触发GC（仅用于调试）
-if (global.gc) {
-  global.gc();
-}</pre
-                  >
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="memory-graph">
-            <h3><i class="fas fa-chart-line"></i> 内存使用与GC触发关系</h3>
-            <div class="graph-container">
-              <div class="graph">
-                <div
-                  v-for="(point, index) in memoryUsage"
-                  :key="index"
-                  class="data-point"
-                  :style="{
-                    left: index * 20 + 'px',
-                    bottom: point.usage * 0.8 + 'px',
-                  }"
-                ></div>
-                <div
-                  class="gc-event"
-                  v-for="gc in gcEvents"
-                  :key="gc.id"
-                  :style="{ left: gc.position + 'px' }"
-                >
-                  <div class="gc-marker"></div>
-                  <div class="gc-label">GC</div>
-                </div>
-              </div>
-              <div class="graph-labels">
-                <div>时间</div>
-                <div>内存使用量</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- 最佳实践 -->
-      <section class="section">
-        <div class="section-header">
-          <i class="icon fas fa-star"></i>
-          <h2>内存管理最佳实践</h2>
-        </div>
-        <div class="section-content">
-          <div class="best-practices">
-            <div class="practice-card">
-              <div class="practice-icon">
-                <i class="fas fa-ban"></i>
-              </div>
-              <h3>避免内存泄漏</h3>
-              <ul>
-                <li>及时清除不再需要的定时器和事件监听器</li>
-                <li>避免意外的全局变量</li>
-                <li>注意闭包引用</li>
-              </ul>
-            </div>
-
-            <div class="practice-card">
-              <div class="practice-icon">
-                <i class="fas fa-object-group"></i>
-              </div>
-              <h3>优化对象结构</h3>
-              <ul>
-                <li>使用相同结构的对象，利于V8隐藏类优化</li>
-                <li>避免动态添加/删除属性</li>
-                <li>使用数组代替键值对存储大量数据</li>
-              </ul>
-            </div>
-
-            <div class="practice-card">
-              <div class="practice-icon">
-                <i class="fas fa-memory"></i>
-              </div>
-              <h3>管理大内存</h3>
-              <ul>
-                <li>使用ArrayBuffer处理二进制数据</li>
-                <li>对于大对象，考虑流式处理或分页加载</li>
-                <li>使用对象池复用对象</li>
-              </ul>
-            </div>
-
-            <div class="practice-card">
-              <div class="practice-icon">
-                <i class="fas fa-tools"></i>
-              </div>
-              <h3>监控与分析</h3>
-              <ul>
-                <li>使用Chrome DevTools Memory面板</li>
-                <li>Node.js中使用--inspect和heapdump</li>
-                <li>监控堆内存使用情况</li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="practice-tip">
-            <div class="tip-icon">
-              <i class="fas fa-lightbulb"></i>
-            </div>
-            <p>
-              <strong>关键提示：</strong>
-              不要尝试过度优化GC，V8的垃圾回收器已经高度优化。专注于编写清晰、无内存泄漏的代码，让GC完成它的工作。
-            </p>
-          </div>
-        </div>
-      </section>
-    </div>
-
-    <footer class="footer">
-      <p>V8垃圾回收算法解析 | JavaScript性能优化核心知识</p>
-      <div class="footer-links">
-        <a href="#"><i class="fab fa-google"></i> V8引擎文档</a>
-        <a href="#"><i class="fab fa-chrome"></i> Chrome DevTools</a>
-        <a href="#"><i class="fab fa-node-js"></i> Node.js性能优化</a>
       </div>
-    </footer>
+
+      <!-- 优化建议 -->
+      <div class="section">
+        <h2 class="section-title">
+          <div class="title-icon">💡</div>
+          <span>针对V8的优化建议</span>
+        </h2>
+        <div class="optimization-tips">
+          <div class="tip-card">
+            <div class="tip-icon">🔄</div>
+            <h3>保持函数单一职责</h3>
+            <p>V8优化单态函数比多态函数更高效</p>
+          </div>
+          <div class="tip-card">
+            <div class="tip-icon">📏</div>
+            <h3>避免属性删除</h3>
+            <p>删除属性会破坏隐藏类，导致性能下降</p>
+          </div>
+          <div class="tip-card">
+            <div class="tip-icon">🧱</div>
+            <h3>使用固定类型</h3>
+            <p>避免频繁改变变量类型</p>
+          </div>
+          <div class="tip-card">
+            <div class="tip-icon">📝</div>
+            <h3>遵循原型模式</h3>
+            <p>在构造函数中声明所有属性</p>
+          </div>
+          <div class="tip-card">
+            <div class="tip-icon">⏱️</div>
+            <h3>避免大型对象</h3>
+            <p>大对象会增加垃圾回收压力</p>
+          </div>
+          <div class="tip-card">
+            <div class="tip-icon">🔢</div>
+            <h3>使用数组而非对象</h3>
+            <p>对连续整数索引使用数组更高效</p>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref } from 'vue';
 
-// 内存区域可视化数据
-const memoryAreas = ref([
-  {
-    name: '新生代',
-    size: '1-8MB',
-    color: '#4ecdc4',
-    icon: 'fas fa-seedling',
-    blocks: Array(30)
-      .fill(null)
-      .map((_, i) => ({
-        size: Math.random() * 20 + 10,
-        active: Math.random() > 0.3,
-      })),
-  },
-  {
-    name: '老生代',
-    size: '最大1.4GB',
-    color: '#1a73e8',
-    icon: 'fas fa-tree',
-    blocks: Array(40)
-      .fill(null)
-      .map((_, i) => ({
-        size: Math.random() * 30 + 15,
-        active: Math.random() > 0.7,
-      })),
-  },
-  {
-    name: '大对象空间',
-    size: '动态',
-    color: '#8b5cf6',
-    icon: 'fas fa-weight-hanging',
-    blocks: Array(5)
-      .fill(null)
-      .map((_, i) => ({
-        size: Math.random() * 40 + 30,
-        active: Math.random() > 0.8,
-      })),
-  },
-])
-
-// 内存使用图表数据
-const memoryUsage = ref(
-  Array(20)
-    .fill(null)
-    .map((_, i) => ({
-      usage: Math.floor(Math.random() * 60 + 20),
-    })),
-)
-
-const gcEvents = ref([
-  { id: 1, position: 50 },
-  { id: 2, position: 150 },
-  { id: 3, position: 280 },
-  { id: 4, position: 350 },
-])
+// 用于控制活动标签页的状态
+const activeTab = ref('overview');
 </script>
 
 <style lang="less" scoped>
 
-
-
-.v8-gc-container {
-  font-family:
-    'Inter',
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    Roboto,
-    sans-serif;
+.v8-engine-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 20px;
-  color: #2d3748;
-  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-  overflow: hidden;
+  padding: 2rem;
+  font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;
+  background: #f8fafc;
+  color: #334155;
+  line-height: 1.6;
 }
 
-.hero-section {
-  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
-  border-radius: 12px;
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 3rem;
+  background: linear-gradient(135deg, #4285f4, #34a853);
+  padding: 2rem;
+  border-radius: 16px;
   color: white;
-  position: relative;
-  overflow: hidden;
-  margin-bottom: 40px;
-  padding: 40px 20px;
+  box-shadow: 0 10px 25px rgba(66, 133, 244, 0.2);
 
-  &::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0) 70%);
-    z-index: 0;
-  }
-
-  .hero-content {
-    position: relative;
-    z-index: 1;
-    text-align: center;
-
+  .title-container {
     h1 {
-      font-size: 2.8rem;
-      font-weight: 800;
-      margin-bottom: 15px;
-      letter-spacing: -0.5px;
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
     }
 
     p {
-      font-size: 1.3rem;
-      font-weight: 300;
+      font-size: 1.2rem;
       opacity: 0.9;
-      max-width: 700px;
-      margin: 0 auto 30px;
+      max-width: 600px;
     }
   }
-}
 
-.memory-visualization {
-  display: flex;
-  justify-content: center;
-  gap: 30px;
-  margin-top: 40px;
-  flex-wrap: wrap;
-}
-
-.memory-area {
-  background: white;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-  width: 350px;
-}
-
-.area-header {
-  display: flex;
-  align-items: center;
-  padding: 20px;
-  color: white;
-
-  i {
-    font-size: 1.8rem;
-    margin-right: 15px;
-  }
-
-  h3 {
-    margin: 0;
-    flex: 1;
-    font-size: 1.5rem;
-  }
-
-  .size {
-    background: rgba(255, 255, 255, 0.3);
-    padding: 5px 15px;
+  .engine-tag {
+    background: rgba(255, 255, 255, 0.15);
+    padding: 0.5rem 1.2rem;
     border-radius: 20px;
-    font-weight: 600;
+    font-size: 0.9rem;
+    font-weight: 500;
+    backdrop-filter: blur(5px);
   }
-}
-
-.memory-blocks {
-  display: flex;
-  flex-wrap: wrap;
-  padding: 20px;
-  gap: 8px;
-  min-height: 150px;
-  align-content: flex-start;
-}
-
-.memory-block {
-  border-radius: 4px;
-  animation: pulse 1.5s infinite;
-
-  &.active {
-    background: #10b981;
-    opacity: 0.8;
-  }
-
-  &.inactive {
-    background: #ef4444;
-    opacity: 0.6;
-  }
-}
-
-@keyframes pulse {
-  0%,
-  100% {
-    transform: scale(1);
-  }
-
-  50% {
-    transform: scale(1.05);
-  }
-}
-
-.content-wrapper {
-  padding: 0 20px;
 }
 
 .section {
   background: white;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
-  margin-bottom: 30px;
-  overflow: hidden;
-  transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease;
+  border-radius: 16px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.03);
 
-  &:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-  }
-}
-
-.section-header {
-  display: flex;
-  align-items: center;
-  padding: 20px 25px;
-  background: linear-gradient(90deg, #4f46e5, #7c3aed);
-  color: white;
-
-  .icon {
-    font-size: 1.8rem;
-    margin-right: 15px;
-  }
-
-  h2 {
-    margin: 0;
-    font-size: 1.7rem;
-    font-weight: 600;
-  }
-}
-
-.section-content {
-  padding: 25px;
-
-  p {
-    font-size: 1.1rem;
-    line-height: 1.7;
-    color: #4a5568;
-    margin-bottom: 20px;
-  }
-}
-
-.gc-intro {
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
-}
-
-.intro-card {
-  display: flex;
-  gap: 20px;
-  align-items: center;
-  background: #f0f9ff;
-  border-radius: 12px;
-  padding: 25px;
-
-  .intro-icon {
-    width: 70px;
-    height: 70px;
-    background: #0ea5e9;
-    color: white;
-    border-radius: 50%;
+  .section-title {
     display: flex;
     align-items: center;
-    justify-content: center;
-    font-size: 2rem;
-  }
-
-  h3 {
-    margin-top: 0;
-    color: #0369a1;
-  }
-}
-
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
-}
-
-.stat-card {
-  background: #e0f2fe;
-  border-radius: 10px;
-  padding: 20px;
-  text-align: center;
-
-  .stat-value {
-    font-size: 2rem;
-    font-weight: 700;
-    color: #0ea5e9;
-    margin-bottom: 10px;
-  }
-
-  .stat-label {
-    color: #0c4a6e;
-    font-size: 0.95rem;
-  }
-}
-
-.gc-principle {
-  margin-top: 30px;
-
-  h3 {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    color: #1e293b;
-  }
-}
-
-.principle-diagram {
-  display: flex;
-  justify-content: center;
-  gap: 40px;
-  margin-top: 20px;
-  flex-wrap: wrap;
-}
-
-.generation {
-  width: 300px;
-  border: 2px solid #c7d2fe;
-  border-radius: 12px;
-  overflow: hidden;
-}
-
-.gen-header {
-  background: #4f46e5;
-  color: white;
-  text-align: center;
-  padding: 15px;
-  font-weight: 600;
-  font-size: 1.2rem;
-}
-
-.gen-content {
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  min-height: 180px;
-}
-
-.algorithm {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  background: #eef2ff;
-  padding: 15px;
-  border-radius: 8px;
-
-  i {
-    font-size: 1.5rem;
-    color: #4f46e5;
-  }
-}
-
-.scavenge-process {
-  margin-top: 30px;
-}
-
-.process-steps {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
-  margin: 25px 0;
-}
-
-.step {
-  background: #f8fafc;
-  border-radius: 10px;
-  padding: 20px;
-  border-left: 4px solid #4ecdc4;
-
-  .step-number {
-    width: 35px;
-    height: 35px;
-    background: #4ecdc4;
-    color: white;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 700;
-    margin-bottom: 15px;
-  }
-
-  h4 {
-    margin-top: 0;
-    margin-bottom: 10px;
-    color: #0f766e;
-  }
-}
-
-.scavenge-visual {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 40px;
-  margin: 30px 0;
-}
-
-.space {
-  width: 250px;
-  background: #f8fafc;
-  border-radius: 10px;
-  padding: 15px;
-  border: 2px dashed #c7d2fe;
-
-  .space-label {
-    text-align: center;
-    font-weight: 600;
-    margin-bottom: 15px;
-    color: #4f46e5;
-  }
-}
-
-.blocks-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  justify-content: center;
-}
-
-.block {
-  width: 30px;
-  height: 30px;
-  border-radius: 4px;
-
-  &.active {
-    background: #4ecdc4;
-  }
-
-  &.inactive {
-    background: #ef4444;
-    opacity: 0.6;
-  }
-
-  &.empty {
-    background: #e2e8f0;
-    border: 1px dashed #cbd5e1;
-  }
-}
-
-.arrow {
-  font-size: 2rem;
-  color: #94a3b8;
-}
-
-.gc-algorithms {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 30px;
-  justify-content: center;
-  margin-top: 30px;
-}
-
-.algorithm-card {
-  width: 100%;
-  max-width: 500px;
-  background: white;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-}
-
-.algo-header {
-  display: flex;
-  align-items: center;
-  padding: 20px;
-  color: white;
-  gap: 15px;
-
-  i {
-    font-size: 1.8rem;
-  }
-
-  h3 {
-    margin: 0;
-    font-size: 1.4rem;
-  }
-}
-
-.mark-sweep {
-  background: linear-gradient(90deg, #3b82f6, #60a5fa);
-}
-
-.mark-compact {
-  background: linear-gradient(90deg, #8b5cf6, #a78bfa);
-}
-
-.algo-steps {
-  padding: 20px;
-}
-
-.algo-step {
-  display: flex;
-  gap: 15px;
-  margin-bottom: 15px;
-  align-items: flex-start;
-
-  .step-number {
-    width: 30px;
-    height: 30px;
-    background: #eef2ff;
-    color: #4f46e5;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 600;
-    flex-shrink: 0;
-  }
-}
-
-.algo-pros-cons {
-  display: flex;
-  border-top: 1px solid #e2e8f0;
-
-  .pros,
-  .cons {
-    flex: 1;
-    padding: 20px;
-  }
-
-  .pros {
-    background: #f0fdf4;
-
-    h4 {
-      color: #15803d;
-    }
-  }
-
-  .cons {
-    background: #fef2f2;
-
-    h4 {
-      color: #b91c1c;
-    }
-  }
-
-  ul {
-    padding-left: 20px;
-    margin: 10px 0 0;
-
-    li {
-      margin-bottom: 8px;
-    }
-  }
-}
-
-.optimization-cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 20px;
-  margin-top: 20px;
-}
-
-.opt-card {
-  background: white;
-  border-radius: 10px;
-  padding: 20px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
-  border: 1px solid #e2e8f0;
-  transition: all 0.3s ease;
-
-  &:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.06);
-  }
-
-  .opt-icon {
-    width: 50px;
-    height: 50px;
-    background: #e0f2fe;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
-    color: #0ea5e9;
-    margin-bottom: 15px;
-  }
-
-  h4 {
-    margin-top: 0;
-    margin-bottom: 10px;
-    color: #1e293b;
-  }
-
-  p {
-    margin: 0;
-    font-size: 0.95rem;
-  }
-}
-
-.trigger-timeline {
-  position: relative;
-  padding-left: 30px;
-  margin: 30px 0;
-
-  &::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 4px;
-    background: #c7d2fe;
-    border-radius: 2px;
-  }
-}
-
-.timeline-item {
-  position: relative;
-  margin-bottom: 40px;
-
-  &:last-child {
-    margin-bottom: 0;
-  }
-
-  .timeline-marker {
-    position: absolute;
-    left: -38px;
-    top: 5px;
-    width: 20px;
-    height: 20px;
-    background: #4f46e5;
-    border-radius: 50%;
-    border: 4px solid #eef2ff;
-  }
-
-  .timeline-content {
-    background: #f8fafc;
-    border-radius: 8px;
-    padding: 20px;
-    border-left: 3px solid #4f46e5;
-
-    h3 {
-      margin-top: 0;
-      margin-bottom: 15px;
-      color: #1e293b;
-    }
-  }
-}
-
-.code-example {
-  background: #1e293b;
-  color: #f1f5f9;
-  border-radius: 6px;
-  padding: 15px;
-  font-family: 'Fira Code', monospace;
-  font-size: 0.95rem;
-  overflow-x: auto;
-  margin-top: 15px;
-
-  pre {
-    margin: 0;
-  }
-}
-
-.memory-graph {
-  margin-top: 40px;
-}
-
-.graph-container {
-  position: relative;
-  height: 250px;
-  border-left: 2px solid #94a3b8;
-  border-bottom: 2px solid #94a3b8;
-  margin: 30px 0 20px 50px;
-}
-
-.graph {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-}
-
-.data-point {
-  position: absolute;
-  width: 8px;
-  height: 8px;
-  background: #3b82f6;
-  border-radius: 50%;
-  transform: translate(-4px, 4px);
-}
-
-.gc-event {
-  position: absolute;
-  bottom: 0;
-
-  .gc-marker {
-    width: 20px;
-    height: 20px;
-    background: #ef4444;
-    border-radius: 50%;
-    position: relative;
-
-    &::before {
-      content: '';
-      position: absolute;
-      top: -150px;
-      left: 9px;
-      width: 2px;
-      height: 150px;
-      background: #ef4444;
-      opacity: 0.3;
-    }
-  }
-
-  .gc-label {
-    position: absolute;
-    top: -40px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #ef4444;
-    color: white;
-    padding: 3px 10px;
-    border-radius: 4px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    white-space: nowrap;
-  }
-}
-
-.graph-labels {
-  display: flex;
-  justify-content: space-between;
-  padding: 0 20px;
-  color: #64748b;
-  font-size: 0.9rem;
-}
-
-.best-practices {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 20px;
-}
-
-.practice-card {
-  background: white;
-  border-radius: 10px;
-  padding: 20px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
-  border: 1px solid #e2e8f0;
-  transition: all 0.3s ease;
-
-  &:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.06);
-  }
-
-  .practice-icon {
-    width: 50px;
-    height: 50px;
-    background: #e0f2fe;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
-    color: #0ea5e9;
-    margin-bottom: 15px;
-  }
-
-  h3 {
-    margin-top: 0;
-    margin-bottom: 15px;
-    color: #1e293b;
-  }
-
-  ul {
-    padding-left: 20px;
-    margin: 0;
-
-    li {
-      margin-bottom: 10px;
-      line-height: 1.5;
-    }
-  }
-}
-
-.practice-tip {
-  display: flex;
-  gap: 20px;
-  align-items: center;
-  background: #f0fdf4;
-  border-radius: 12px;
-  padding: 20px;
-  margin-top: 30px;
-  border-left: 4px solid #10b981;
-
-  .tip-icon {
-    width: 50px;
-    height: 50px;
-    background: #10b981;
-    color: white;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
-    flex-shrink: 0;
-  }
-
-  p {
-    margin: 0;
-    font-size: 1.1rem;
-    line-height: 1.6;
-  }
-}
-
-.footer {
-  text-align: center;
-  padding: 25px;
-  color: #64748b;
-  font-size: 0.95rem;
-  border-top: 1px solid #e2e8f0;
-
-  .footer-links {
-    display: flex;
-    justify-content: center;
-    gap: 30px;
-    margin-top: 15px;
-
-    a {
-      color: #4f46e5;
-      text-decoration: none;
+    font-size: 1.6rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #e2e8f0;
+
+    .title-icon {
+      font-size: 1.8rem;
+      margin-right: 0.8rem;
+      width: 40px;
+      height: 40px;
       display: flex;
       align-items: center;
-      gap: 8px;
+      justify-content: center;
+    }
+  }
+}
+
+.overview-section {
+  .overview-card {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+
+    .v8-logo {
+      flex-shrink: 0;
+      width: 150px;
+      height: 150px;
+      background: linear-gradient(135deg, #4285f4, #34a853);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 20px rgba(66, 133, 244, 0.3);
+
+      .v8-text {
+        font-size: 3.5rem;
+        font-weight: 900;
+        color: white;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+      }
+    }
+
+    .content {
+      flex: 1;
+
+      h2 {
+        font-size: 1.8rem;
+        color: #1e293b;
+        margin-bottom: 1rem;
+      }
+
+      p {
+        font-size: 1.1rem;
+        color: #475569;
+        margin-bottom: 1.5rem;
+      }
+    }
+  }
+
+  .key-facts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+
+    .fact {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      background: #f1f5f9;
+      padding: 0.8rem 1.2rem;
+      border-radius: 10px;
       font-weight: 500;
 
-      &:hover {
-        text-decoration: underline;
+      .fact-icon {
+        width: 32px;
+        height: 32px;
+        background: #4285f4;
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
       }
     }
   }
 }
 
-@media (max-width: 900px) {
-  .hero-content h1 {
-    font-size: 2.2rem !important;
-  }
+.architecture {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
 
-  .memory-area {
-    width: 100%;
-    max-width: 400px;
-  }
-
-  .principle-diagram {
-    flex-direction: column;
+  .architecture-diagram {
+    display: flex;
+    justify-content: space-between;
     align-items: center;
+    background: #f1f5f9;
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid #e2e8f0;
+
+    .component {
+      text-align: center;
+      min-width: 120px;
+
+      .component-icon {
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .component-name {
+        font-weight: 700;
+        margin-bottom: 0.3rem;
+        color: #1e293b;
+      }
+
+      .component-desc {
+        font-size: 0.9rem;
+        color: #64748b;
+      }
+    }
+
+    .arrow {
+      font-size: 1.8rem;
+      color: #94a3b8;
+      margin: 0 0.5rem;
+    }
   }
 
-  .scavenge-visual {
-    flex-direction: column;
-    gap: 30px;
-  }
+  .architecture-explanation {
+    .phase {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+      border-left: 4px solid #4285f4;
 
-  .gc-algorithms {
-    flex-direction: column;
-    align-items: center;
+      h3 {
+        font-size: 1.2rem;
+        color: #1e293b;
+        margin-bottom: 0.8rem;
+      }
+
+      p {
+        color: #475569;
+        line-height: 1.6;
+      }
+    }
   }
 }
 
-@media (max-width: 600px) {
-  .hero-content h1 {
-    font-size: 1.8rem !important;
+.performance-reasons, .optimization-tips {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+
+  .reason-card, .tip-card {
+    background: #f1f5f9;
+    border-radius: 12px;
+    padding: 1.8rem 1.5rem;
+    text-align: center;
+    transition: transform 0.3s;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+    }
+
+    .reason-icon, .tip-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    h3 {
+      font-size: 1.2rem;
+      color: #1e293b;
+      margin-bottom: 0.8rem;
+    }
+
+    p {
+      color: #475569;
+      font-size: 0.95rem;
+    }
+  }
+}
+
+.bytecode-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+
+  .bytecode-explanation {
+    p {
+      font-size: 1.1rem;
+      color: #475569;
+      margin-bottom: 1.5rem;
+    }
   }
 
-  .hero-content p {
-    font-size: 1.1rem !important;
+  .benefit {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    align-items: flex-start;
+
+    .benefit-icon {
+      font-size: 1.8rem;
+      min-width: 40px;
+    }
+
+    .benefit-text {
+      h3 {
+        font-size: 1.2rem;
+        color: #1e293b;
+        margin-bottom: 0.5rem;
+      }
+
+      p {
+        color: #475569;
+        line-height: 1.6;
+      }
+    }
   }
 
-  .section-header h2 {
-    font-size: 1.4rem !important;
+  .bytecode-example {
+    background: #f1f5f9;
+    border-radius: 12px;
+    padding: 1.5rem;
+
+    h3 {
+      font-size: 1.3rem;
+      color: #1e293b;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+  }
+}
+
+.code-comparison {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+
+  .javascript-code, .bytecode-code {
+    background: white;
+    border-radius: 8px;
+    padding: 1rem;
+    overflow: hidden;
+
+    h4 {
+      font-size: 1rem;
+      color: #1e293b;
+      margin-bottom: 0.5rem;
+      text-align: center;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid #e2e8f0;
+    }
+  }
+
+  pre {
+    background: #0f172a;
+    border-radius: 6px;
+    padding: 1rem;
+    overflow-x: auto;
+
+    code {
+      font-family: 'Fira Code', 'Source Code Pro', monospace;
+      font-size: 0.85rem;
+      line-height: 1.5;
+      color: #cbd5e1;
+    }
+  }
+}
+
+.comparison {
+  .comparison-table {
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 2rem;
+
+    .table-row {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr;
+
+      &.header {
+        background: #1e293b;
+        color: white;
+        font-weight: 600;
+      }
+
+      &:not(.header):nth-child(even) {
+        background: #f8fafc;
+      }
+
+      .table-cell {
+        padding: 1rem;
+        border-right: 1px solid #e2e8f0;
+        display: flex;
+        align-items: center;
+
+        &:last-child {
+          border-right: none;
+        }
+      }
+    }
+  }
+
+  .comparison-key-points {
+    background: #f1f5f9;
+    border-radius: 12px;
+    padding: 1.5rem;
+
+    h3 {
+      font-size: 1.3rem;
+      color: #1e293b;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+
+      li {
+        display: flex;
+        gap: 1rem;
+        align-items: flex-start;
+        margin-bottom: 1rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px dashed #cbd5e1;
+
+        &:last-child {
+          margin-bottom: 0;
+          padding-bottom: 0;
+          border-bottom: none;
+        }
+
+        .point-icon {
+          font-size: 1.5rem;
+          min-width: 40px;
+          color: #4285f4;
+        }
+
+        .point-text {
+          font-weight: 500;
+          color: #475569;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 992px) {
+  .architecture, .bytecode-section {
+    grid-template-columns: 1fr;
+  }
+
+  .architecture-diagram {
+    flex-wrap: wrap;
+    justify-content: center !important;
+
+    .arrow {
+      transform: rotate(90deg);
+      margin: 1rem 0;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    gap: 1.5rem;
+    align-items: flex-start;
+  }
+
+  .overview-card {
+    flex-direction: column;
+    text-align: center;
+
+    .key-facts {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .code-comparison {
+    grid-template-columns: 1fr;
+  }
+
+  .comparison-table {
+    overflow-x: auto;
+
+    .table-row {
+      min-width: 800px;
+    }
   }
 }
 </style>

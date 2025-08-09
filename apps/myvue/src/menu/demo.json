@@ -1,0 +1,184 @@
+[
+  {
+    "label": "🎯 基础核心能力 ⭐⭐⭐",
+    "name": "CoreSkills",
+    "children": [
+      {
+        "label": "🌐 HTML & CSS ⭐⭐⭐",
+        "name": "HTML_CSS",
+        "children": [
+          {
+            "label": "📄 HTML ⭐⭐⭐",
+            "name": "HTML",
+            "children": [
+              {
+                "label": "❓ 什么是HTML ⭐⭐⭐",
+                "name": "WhatIsHtml"
+              },
+              {
+                "label": "🏷️ 常用标签 ⭐⭐⭐",
+                "name": "CommonUseTags"
+              },
+              {
+                "label": "📋 DOCTYPE ⭐⭐⭐",
+                "name": "DOCTYPE"
+              },
+              {
+                "label": "📝 Meta与Title ⭐⭐⭐",
+                "name": "MetaAndTitle"
+              },
+              {
+                "label": "🔗 href与src的区别 ⭐⭐⭐",
+                "name": "HrefAndSrc"
+              },
+              {
+                "label": "🖼️ 图片加载 ⭐⭐⭐",
+                "name": "ImageLoad"
+              },
+              {
+                "label": "📊 图片格式 ⭐⭐⭐",
+                "name": "ImageFormat"
+              },
+              {
+                "label": "🎥 视频格式 ⭐⭐",
+                "name": "VideoFormat"
+              },
+              {
+                "label": "🖼️ iframe ⭐⭐",
+                "name": "Iframe"
+              },
+              {
+                "label": "🔄 link标签 ⭐⭐⭐",
+                "name": "LinkTag"
+              }
+            ]
+          },
+          {
+            "label": "📋 HTML(5)知识点 ⭐⭐⭐",
+            "name": "HtmlKnowledgepPoints"
+          },
+          {
+            "label": "📋 CSS知识点 ⭐⭐⭐",
+            "name": "CssKnowledgepPoints"
+          }
+        ]
+      },
+      {
+        "label": "📜 JavaScript ⭐⭐⭐",
+        "name": "JavaScript",
+        "children": [
+          {
+            "label": "📚 基础 ⭐⭐⭐",
+            "name": "Basics",
+            "children": [
+              {
+                "label": "❓ 什么是JS ⭐⭐⭐",
+                "name": "WhatIsJS"
+              },
+              {
+                "label": "🔍 JS的加载方式具体对比 ⭐⭐⭐",
+                "name": "JSLoad"
+              },
+              {
+                "label": "📦 变量：var、let、const ⭐⭐⭐",
+                "name": "Variables"
+              },
+              {
+                "label": "➕ 运算符 ⭐⭐⭐",
+                "name": "Operators"
+              },
+              {
+                "label": "🔢 运算符优先级和运算符进阶使用 ⭐⭐⭐",
+                "name": "OperatorPriorityAndAdvancedUsage"
+              },
+              {
+                "label": "🔢 位运算 ⭐",
+                "name": "BitwiseOperators"
+              },
+              {
+                "label": "🔀 流程控制：if、switch、for、while ⭐⭐⭐",
+                "name": "FlowControl"
+              },
+              {
+                "label": "🔄 迭代和循环(iteration) ⭐⭐⭐",
+                "name": "Iteration"
+              },
+              {
+                "label": "📜 迭代器与协议 ⭐⭐",
+                "name": "IteratorAndProtocol"
+              },
+              {
+                "label": "⚙️ 生成器与协程 ⭐⭐",
+                "name": "GeneratorAndCoroutine"
+              },
+              {
+                "label": "🔍 执行上下文 ⭐⭐⭐",
+                "name": "ExecutionContext"
+              },
+              {
+                "label": "👉 this 指向 ⭐⭐⭐",
+                "name": "ThisBinding"
+              },
+              {
+                "label": "🎯 作用域⭐⭐⭐",
+                "name": "Scope"
+              },
+              {
+                "label": "🔒 闭包：定义、作用 ⭐⭐⭐",
+                "name": "Closure"
+              },
+              {
+                "label": "🔍 原型 ⭐⭐⭐",
+                "name": "PrototypeProgramming",
+                "children": [
+                  {
+                    "label": "🔗 原型：原型链、继承 ⭐⭐⭐",
+                    "name": "Prototype1"
+                  },
+                  {
+                    "label": "🔗 原型污染 ⭐⭐⭐",
+                    "name": "PrototypePollution"
+                  }
+                ]
+              },
+              {
+                "label": "⚙️ JS的解析与编译与执行 ⭐⭐⭐",
+                "name": "JSPAndCAndE"
+              },
+              {
+                "label": "⚠️ 错误处理机制 ⭐⭐",
+                "name": "ErrorHandling"
+              },
+              {
+                "label": "📜 use strict ⭐⭐⭐",
+                "name": "UseStrict"
+              },
+              {
+                "label": "🚫 保留关键字 ⭐⭐⭐",
+                "name": "ReservedKeywords"
+              },
+              {
+                "label": "🔍 原生js知识点列表 ⭐⭐⭐",
+                "name": "NativeJSKnowledgePoints"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "label": "⌨️ 编辑器快捷键 ⭐⭐⭐",
+    "name": "Shortcuts",
+    "children": [
+      {
+        "label": "⌨️ cursor(windows)快捷键 ⭐⭐⭐",
+        "name": "CursorShortcuts"
+      },
+      {
+        "label": "⌨️ cursor(mac)快捷键 ⭐⭐⭐",
+        "name": "CursorShortcutsMac"
+      }
+    ]
+  }
+]

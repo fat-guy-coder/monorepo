@@ -4,9 +4,6 @@
 
     <h2>Flexbox布局是一种强大的CSS布局系统，允许开发者创建复杂的网页布局。通过定义主轴和交叉轴，开发者可以精确控制元素的排列和对齐，使得网页设计更加灵活和响应式。</h2>
 
-    <h3>详细的Flexbox布局教程还是看阮一峰老师的<a href="https://www.ruanyifeng.com/blog/2015/07/flex-grammar.html" target="_blank"
-        rel="noopener noreferrer">阮一峰的Flexbox教程</a></h3>
-
     <section class="concept-section">
       <div class="concept-card">
         <div class="axis-container">
@@ -35,6 +32,9 @@
       alignItems: container.alignItems,
       alignContent: container.alignContent,
       gap: container.gap + 'px',
+      position: 'sticky',
+      top: '0',
+      zIndex: '10',
     }">
       <div v-for="(item, index) in items" :key="index" class="demo-item" :style="{
         order: item.order,

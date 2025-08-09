@@ -1,584 +1,595 @@
 <template>
-  <div class="error-container">
-    <h1 class="main-title">JavaScript 错误处理指南</h1>
+  <div class="error-handling-container">
+    <header class="header">
+      <h1 class="title">JavaScript 错误处理详解</h1>
+      <p class="subtitle">全面掌握错误类型、捕获机制与自定义错误处理</p>
+    </header>
 
-    <div class="demo-section">
-      <div class="control-group">
-        <button class="error-button syntax" @click="triggerSyntaxError">
-          触发语法错误
-        </button>
-        <button class="error-button reference" @click="triggerReferenceError">
-          触发引用错误
-        </button>
-        <button class="error-button custom" @click="triggerCustomError">
-          触发自定义错误
-        </button>
-        <button class="error-button async" @click="triggerAsyncError">
-          触发异步错误
-        </button>
-      </div>
-
-      <div class="error-display">
-        <div class="error-card" v-if="currentError">
-          <h2 class="error-type">{{ currentError.name }}</h2>
-          <div class="error-message">消息：{{ currentError.message }}</div>
-          <pre class="error-stack">{{ currentError.stack }}</pre>
-          <div class="error-details">
-            <span>位置：{{ currentError.file }}:{{ currentError.line }}</span>
-            <span>组件：{{ currentError.component }}</span>
-          </div>
-        </div>
-        <div class="placeholder" v-else>
-          👇 点击按钮查看错误处理效果
-        </div>
-      </div>
-    </div>
-
-    <section>
-      <h3>📝 Error 对象</h3>
-      <p>在 JavaScript 中，Error 对象用于表示运行时错误。它包含以下属性：</p>
-      <ul>
-        <li><strong>name</strong>: 错误的名称，例如 "TypeError"。</li>
-        <li><strong>message</strong>: 描述错误的消息。</li>
-        <li><strong>stack</strong>: 可选，表示错误发生时的调用栈。</li>
-        <li><strong>cause</strong>: 可选，表示导致当前错误的原始错误（ES2022 引入）。</li>
-      </ul>
-      <h3>抛出错误</h3>
-      <pre><code>throw new Error('错误消息')</code></pre>
-    </section>
-
-    <section>
-      <!-- 内容区 -->
-      <main class="guide-content">
-        <!-- 核心概念 -->
-        <section id="concept" class="content-section">
-          <div class="concept-grid">
-            <div class="concept-card">
-              <div class="error-icon">🚨</div>
-              <h3>错误类型体系</h3>
-              <ul class="error-types">
-                <li v-for="error in errorTypes" :key="error.name">
-                  <code>{{ error.name }}</code>
-                  <span>{{ error.desc }}</span>
-                </li>
-              </ul>
+    <div class="content-grid">
+      <!-- 错误类型 -->
+      <section class="card error-types">
+        <h2 class="section-title">错误类型</h2>
+        <div class="error-grid">
+          <div v-for="error in errorTypes" :key="error.name" class="error-card">
+            <div class="error-icon" :class="error.name.toLowerCase()">
+              <span class="icon">!</span>
             </div>
-
-            <div class="concept-card">
-              <div class="error-icon">🛠️</div>
-              <h3>错误组成要素</h3>
-              <div class="error-structure">
-                <pre><code>interface Error {
-  name: string;
-  message: string;
-  stack?: string;  // 非标准
-  cause?: Error;   // ES2022
-}</code></pre>
+            <div class="error-info">
+              <h3 class="error-name">{{ error.name }}</h3>
+              <p class="error-desc">{{ error.description }}</p>
+              <div class="error-example">
+                <pre><code>{{ error.example }}</code></pre>
               </div>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        <!-- 使用方法 -->
-        <section id="usage" class="content-section">
-          <h2>🛠️ 使用方法</h2>
-          <div class="usage-columns">
-            <div class="usage-card">
-              <h3>基础错误处理</h3>
-              <pre><code class="language-ts">try {
-  JSON.parse(invalidJson);
+      <!-- 错误信息 -->
+      <section class="card error-info">
+        <h2 class="section-title">错误信息</h2>
+        <div class="error-props">
+          <div class="prop-card">
+            <div class="prop-name">name</div>
+            <div class="prop-desc">错误类型的名称</div>
+            <pre class="prop-example"><code>console.error(err.name); // "TypeError"</code></pre>
+          </div>
+          <div class="prop-card">
+            <div class="prop-name">message</div>
+            <div class="prop-desc">人类可读的错误描述</div>
+            <pre class="prop-example"><code>console.error(err.message); // "Cannot read property 'x' of undefined"</code></pre>
+          </div>
+          <div class="prop-card">
+            <div class="prop-name">stack</div>
+            <div class="prop-desc">错误发生时的调用栈</div>
+            <pre class="prop-example"><code>console.error(err.stack);
+// "TypeError: Cannot read property 'x' of undefined\n
+//    at myFunction (script.js:10:5)\n
+//    at anotherFunction (script.js:15:3)"</code></pre>
+          </div>
+          <div class="prop-card">
+            <div class="prop-name">cause</div>
+            <div class="prop-desc">原始错误对象（ES2022）</div>
+            <pre class="prop-example"><code>try {
+  // ...
 } catch (err) {
-  console.error('解析失败:', err.message);
-  // 重新抛出保留堆栈
-  throw new Error('处理失败', { cause: err });
+  throw new Error('Processing failed', { cause: err });
 }</code></pre>
-            </div>
+          </div>
+        </div>
+      </section>
 
-            <div class="usage-card">
-              <h3>异步错误处理</h3>
-              <pre><code class="language-ts">// Promise链式处理
-fetchData()
-  .then(handleData)
+      <!-- 错误捕获 -->
+      <section class="card error-catching">
+        <h2 class="section-title">错误捕获方式</h2>
+        <div class="catching-methods">
+          <div class="method-card">
+            <div class="method-icon">{} try/catch</div>
+            <h3 class="method-name">块级捕获</h3>
+            <pre class="method-code"><code>try {
+  // 可能出错的代码
+  riskyOperation();
+} catch (err) {
+  // 处理错误
+  console.error('操作失败:', err.message);
+} finally {
+  // 清理操作
+  cleanup();
+}</code></pre>
+          </div>
+
+          <div class="method-card">
+            <div class="method-icon">🌐 全局捕获</div>
+            <h3 class="method-name">全局错误处理</h3>
+            <pre class="method-code"><code>// 同步错误捕获
+window.onerror = (msg, url, line, col, error) => {
+  console.error(`全局错误: ${msg} at ${line}:${col}`);
+  return true; // 阻止默认错误提示
+};
+
+// 未处理Promise错误
+window.addEventListener('unhandledrejection', event => {
+  console.error('未处理的Promise拒绝:', event.reason);
+  event.preventDefault(); // 阻止默认错误提示
+});</code></pre>
+          </div>
+
+          <div class="method-card">
+            <div class="method-icon">⏳ Promise.catch</div>
+            <h3 class="method-name">Promise错误处理</h3>
+            <pre class="method-code"><code>fetch('/api/data')
+  .then(response => response.json())
+  .then(data => processData(data))
   .catch(err => {
-    sentry.captureException(err);
-    showToast(err.message);
+    console.error('API请求失败:', err);
   });
 
-// async/await
-async function load() {
+// async/await方式
+async function loadData() {
   try {
-    await initApp();
+    const response = await fetch('/api/data');
+    const data = await response.json();
+    return data;
   } catch (err) {
-    logError(err);
+    console.error('数据加载失败:', err);
+    throw err; // 可选：重新抛出错误
   }
 }</code></pre>
-            </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        <!-- 注意事项 -->
-        <section id="notice" class="content-section">
-          <h2>⚠️ 注意事项</h2>
-          <div class="notice-grid">
-            <div class="notice-card" v-for="note in notices" :key="note.title">
-              <div class="notice-icon">{{ note.icon }}</div>
-              <div>
-                <h3>{{ note.title }}</h3>
-                <p>{{ note.content }}</p>
-              </div>
-            </div>
-          </div>
-        </section>
-      </main>
-    </section>
+      <!-- 自定义错误 -->
+      <section class="card custom-errors">
+        <h2 class="section-title">自定义错误</h2>
+        <div class="custom-error-content">
+          <div class="custom-example">
+            <h3>创建自定义错误类</h3>
+            <pre><code>class ValidationError extends Error {
+  constructor(message, field) {
+    super(message);
+    this.name = "ValidationError";
+    this.field = field;
+    this.timestamp = new Date();
+  }
 
-    <div class="info-grid">
-      <div class="info-card try-catch">
-        <h2>Try/Catch 处理</h2>
-        <pre><code>try {
-  // 可能出错的代码
-} catch (error) {
-  console.error('捕获错误:', error);
-  // 处理错误逻辑
+  toString() {
+    return `${this.name}: ${this.message} (${this.field})`;
+  }
+}
+
+// 使用自定义错误
+function validateUser(user) {
+  if (!user.name) {
+    throw new ValidationError("用户名不能为空", "name");
+  }
+  if (user.age < 18) {
+    throw new ValidationError("用户年龄不足18岁", "age");
+  }
 }</code></pre>
-      </div>
+          </div>
 
-      <div class="info-card error-types">
-        <h2>常见错误类型error.name</h2>
-        <ul>
-          <li>SyntaxError - 语法错误</li>
-          <li>ReferenceError - 引用错误</li>
-          <li>TypeError - 类型错误</li>
-          <li>RangeError - 范围错误</li>
-          <li>自定义错误 - new Error()</li>
-        </ul>
-      </div>
+          <div class="custom-benefits">
+            <h3>自定义错误的优势</h3>
+            <ul>
+              <li>创建特定领域的错误类型</li>
+              <li>携带额外的上下文信息</li>
+              <li>实现统一的错误处理</li>
+              <li>增强错误信息的可读性</li>
+              <li>支持错误分类和统计</li>
+            </ul>
 
-      <div class="info-card error-object">
-        <h2>Error 对象属性</h2>
-        <ul>
-          <li>name: 错误类型名称</li>
-          <li>message: 错误描述信息</li>
-          <li>stack: 错误堆栈跟踪</li>
-          <li>fileName: 出错文件名</li>
-          <li>lineNumber: 出错行号</li>
-        </ul>
-      </div>
-
-      <div class="info-card best-practice">
-        <h2>最佳实践</h2>
-        <ul>
-          <li>始终处理Promise拒绝</li>
-          <li>使用错误边界组件</li>
-          <li>记录错误日志</li>
-          <li>用户友好提示</li>
-          <li>生产环境错误上报</li>
-        </ul>
-      </div>
+            <div class="usage-tips">
+              <h3>使用建议</h3>
+              <ol>
+                <li>为特定错误场景创建子类</li>
+                <li>添加有意义的错误信息</li>
+                <li>包含必要的上下文数据</li>
+                <li>考虑实现toJSON()方法用于序列化</li>
+                <li>在错误边界处统一处理自定义错误</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
+
+    <footer class="footer">
+      <p>JavaScript错误处理最佳实践 | 提供清晰的错误信息 | 确保应用稳定性</p>
+    </footer>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-
-interface ErrorInfo {
-  name: string
-  message: string
-  stack?: string
-  line?: number
-  file?: string
-  component?: string
-}
-
-const currentError = ref<ErrorInfo | null>(null)
-
-// 全局错误处理
-window.onerror = (message, source, lineno, colno, error) => {
-  currentError.value = {
-    name: error?.name || 'UnknownError',
-    message: message.toString(),
-    stack: error?.stack,
-    line: lineno,
-    file: source,
-    component: 'Global'
-  }
-  return true // 阻止默认处理
-}
-
-const triggerSyntaxError = () => {
-  try {
-    throw new Error('SyntaxError')
-  } catch (error) {
-    handleError(error, 'SyntaxDemo')
-  }
-}
-
-const triggerReferenceError = () => {
-  try {
-    // @ts-ignore 故意生成引用错误
-    console.log(undefinedVariable)
-  } catch (error) {
-    handleError(error, 'ReferenceDemo')
-  }
-}
-
-const triggerCustomError = () => {
-  try {
-    throw new Error('自定义业务逻辑错误')
-  } catch (error) {
-    handleError(error, 'CustomDemo')
-  }
-}
-
-const triggerAsyncError = async () => {
-  try {
-    await new Promise((_, reject) => {
-      setTimeout(() => reject(new Error('异步操作失败')), 100)
-    })
-  } catch (error) {
-    handleError(error, 'AsyncDemo')
-  }
-}
-
-const handleError = (error: unknown, component: string) => {
-  const err = error as Error
-  currentError.value = {
-    name: err.name,
-    message: err.message,
-    stack: err.stack,
-    component
-  }
-}
-
-const errorTypes = ref([
-  { name: 'Error', desc: '通用错误基类' },
-  { name: 'SyntaxError', desc: '语法解析错误' },
-  { name: 'TypeError', desc: '类型错误' },
-  { name: 'ReferenceError', desc: '引用错误' }
-]);
-
-const notices = ref([
+// 错误类型数据
+const errorTypes = [
   {
-    icon: '🚫',
-    title: '避免静默失败',
-    content: '不要使用空的catch块，至少记录错误信息'
+    name: "Error",
+    description: "所有错误对象的基类，用于通用错误",
+    example: "throw new Error('发生错误');"
   },
   {
-    icon: '📝',
-    title: '错误信息',
-    content: '提供足够上下文，避免敏感信息泄露'
+    name: "SyntaxError",
+    description: "语法错误，通常由代码解析问题引起",
+    example: "JSON.parse('{invalid json}');"
   },
   {
-    icon: '⏱️',
-    title: '性能影响',
-    content: '避免在try块中执行耗时操作'
+    name: "TypeError",
+    description: "类型错误，当值不是预期类型时发生",
+    example: "null.someProperty;"
   },
   {
-    icon: '🔗',
-    title: '错误链',
-    content: '使用cause属性保留原始错误信息'
+    name: "ReferenceError",
+    description: "引用错误，当引用未声明的变量时发生",
+    example: "console.log(undeclaredVar);"
+  },
+  {
+    name: "RangeError",
+    description: "范围错误，当值超出有效范围时发生",
+    example: "new Array(-1);"
+  },
+  {
+    name: "URIError",
+    description: "URI错误，当URI处理函数使用不当时发生",
+    example: "decodeURIComponent('%');"
+  },
+  {
+    name: "AggregateError",
+    description: "聚合错误，包含多个错误（ES2021）",
+    example: "Promise.any([rejectedPromise]);"
+  },
+  {
+    name: "EvalError",
+    description: "eval()函数相关错误（现代JS中较少使用）",
+    example: "eval = 42; // 严格模式下"
   }
-]);
+];
 </script>
 
-<style scoped>
-.error-container {
+<style lang="less" scoped>
+
+:root {
+  --primary: #4361ee;
+  --primary-light: #4895ef;
+  --secondary: #3f37c9;
+  --success: #4cc9f0;
+  --danger: #f72585;
+  --warning: #fca311;
+  --info: #2ec4b6;
+  --light: #f8f9fa;
+  --dark: #212529;
+  --gray: #6c757d;
+  --light-gray: #e9ecef;
+  --border-radius: 10px;
+  --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --transition: all 0.3s ease;
+}
+
+.error-handling-container {
   max-width: 1200px;
-  margin: 2rem auto;
-  padding: 0 20px;
-  font-family: 'Segoe UI', system-ui, sans-serif;
-}
-
-.main-title {
-  color: #2c3e50;
-  text-align: center;
-  margin-bottom: 2rem;
-  font-size: 2.4em;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.control-group {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin-bottom: 2rem;
-}
-
-.error-button {
-  padding: 12px 24px;
-  border: none;
-  border-radius: 6px;
-  color: white;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-size: 1em;
-}
-
-.error-button:hover {
-  transform: translateY(-2px);
-  opacity: 0.9;
-}
-
-.syntax {
-  background: #e74c3c;
-}
-
-.reference {
-  background: #3498db;
-}
-
-.custom {
-  background: #9b59b6;
-}
-
-.async {
-  background: #f1c40f;
-  color: #2c3e50;
-}
-
-.error-display {
-  min-height: 200px;
-  margin-bottom: 3rem;
-  border: 2px dashed #eee;
-  border-radius: 12px;
-  padding: 1rem;
-}
-
-.error-card {
-  background: #fff5f5;
-  padding: 1.5rem;
-  border-radius: 8px;
-  border-left: 4px solid #e74c3c;
-}
-
-.error-type {
-  color: #c0392b;
-  margin-top: 0;
-}
-
-.error-message {
-  color: #666;
-  margin: 1rem 0;
-  font-weight: 500;
-}
-
-.error-stack {
-  background: #f8f8f8;
-  padding: 1rem;
-  border-radius: 6px;
-  white-space: pre-wrap;
-  font-size: 0.9em;
-  color: #666;
-}
-
-.error-details {
-  margin-top: 1rem;
-  font-size: 0.9em;
-  color: #888;
-  display: flex;
-  justify-content: space-between;
-}
-
-.placeholder {
-  height: 200px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #999;
-  font-size: 1.2em;
-}
-
-.info-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 2rem;
-}
-
-.info-card {
-  padding: 1.5rem;
-  border-radius: 12px;
-  background: white;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-}
-
-.info-card h2 {
-  margin-top: 0;
-  color: #2c3e50;
-  font-size: 1.3em;
-}
-
-.info-card pre {
-  background: #f8f8f8;
-  padding: 1rem;
-  border-radius: 6px;
-  overflow-x: auto;
-}
-
-.info-card ul {
-  padding-left: 1.2rem;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e4e7f4 100%);
+  min-height: 100vh;
+  color: #333;
   line-height: 1.6;
-  color: #444;
 }
 
-.try-catch {
-  border-left: 4px solid #3498db;
-}
+.header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+  padding: 2rem;
+  background: white;
+  color: #212529;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
 
-.error-types {
-  border-left: 4px solid #9b59b6;
-}
+  .title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--primary);
+    background: linear-gradient(45deg, var(--primary), var(--secondary));
+    -webkit-background-clip: text;
+    background-clip: text;
 
-.error-object {
-  border-left: 4px solid #2ecc71;
-}
-
-.best-practice {
-  border-left: 4px solid #f1c40f;
-}
-
-@media (max-width: 768px) {
-  .control-group {
-    flex-direction: column;
   }
 
-  .error-button {
-    width: 100%;
-  }
-}
-
-.content-section {
-  margin-bottom: 3rem;
-  scroll-margin-top: 1rem;
-
-  h2 {
-    font-size: 1.8rem;
-    color: #2c3e50;
-    border-left: 4px solid #e74c3c;
-    padding-left: 1rem;
-    margin: 2rem 0;
+  .subtitle {
+    font-size: 1.2rem;
+    color: var(--gray);
+    font-weight: 400;
   }
 }
 
-.concept-grid {
+.content-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 1.5rem;
+  margin-bottom: 2rem;
 }
 
-.concept-card {
+.card {
   background: white;
-  padding: 1.5rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  padding: 1.8rem;
+  transition: var(--transition);
 
-  .error-icon {
-    font-size: 2rem;
-    margin-bottom: 1rem;
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  }
+}
+
+.section-title {
+  font-size: 1.6rem;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 2px solid var(--light-gray);
+  color: var(--secondary);
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background: var(--primary);
+    border-radius: 3px;
+  }
+}
+
+// 错误类型样式
+.error-types {
+  grid-column: span 2;
+
+  .error-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.2rem;
   }
 
-  .error-types {
-    list-style: none;
-    padding: 0;
+  .error-card {
+    display: flex;
+    border: 1px solid var(--light-gray);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: var(--transition);
 
-    li {
-      padding: 0.5rem 0;
-      border-bottom: 1px solid #eee;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+    &:hover {
+      border-color: var(--primary-light);
+    }
+  }
+
+  .error-icon {
+    width: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: white;
+
+    &.error { background: var(--danger); }
+    &.syntaxerror { background: var(--warning); }
+    &.typeerror { background: #9d4edd; }
+    &.referenceerror { background: #ff6b6b; }
+    &.rangeerror { background: #ff9e00; }
+    &.urierror { background: #06d6a0; }
+    &.aggregateerror { background: #3a86ff; }
+    &.evalerror { background: #8338ec; }
+  }
+
+  .error-info {
+    flex: 1;
+    padding: 1rem;
+
+    .error-name {
+      margin: 0 0 0.5rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--dark);
+    }
+
+    .error-desc {
+      margin: 0 0 0.8rem;
+      color: var(--gray);
+      font-size: 0.95rem;
+    }
+
+    .error-example {
+      background: #f8f9fa;
+      border-radius: 6px;
+      padding: 0.6rem;
+      overflow-x: auto;
+
+      pre {
+        margin: 0;
+        font-size: 0.85rem;
+      }
 
       code {
-        background: #f3f3f3;
-        padding: 2px 4px;
-        border-radius: 3px;
+        color: var(--secondary);
       }
     }
   }
 }
 
-.usage-columns {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
-}
-
-.usage-card {
-  background: #f8f9fa;
-  border-radius: 8px;
-  overflow: hidden;
-
-  h3 {
-    margin: 0;
-    padding: 1rem;
-    background: #e9ecef;
+// 错误信息样式
+.error-info {
+  .error-props {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.2rem;
   }
 
-  pre {
-    margin: 0;
-    padding: 1rem;
-  }
-}
-
-.vue-example {
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  overflow: hidden;
-
-  .error-boundary {
-    border: 2px solid #e74c3c;
+  .prop-card {
+    border: 1px solid var(--light-gray);
     border-radius: 8px;
-    margin-bottom: 1rem;
-    overflow: hidden;
-  }
+    padding: 1.2rem;
+    transition: var(--transition);
 
-  .error-panel {
-    padding: 1.5rem;
-    background: #fdecea;
-    text-align: center;
+    &:hover {
+      border-color: var(--info);
+      background: #f8fdff;
+    }
 
-    button {
-      background: #e74c3c;
-      color: white;
-      padding: 0.5rem 1rem;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
+    .prop-name {
+      font-weight: 700;
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+      color: var(--primary);
+    }
+
+    .prop-desc {
+      color: var(--gray);
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+      min-height: 40px;
+    }
+
+    .prop-example {
+      background: #f8f9fa;
+      border-radius: 6px;
+      padding: 0.8rem;
+      font-size: 0.85rem;
+      overflow-x: auto;
+
+      code {
+        color: #d63384;
+      }
     }
   }
 }
 
-.notice-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 1.5rem;
+// 错误捕获样式
+.error-catching {
+  grid-column: span 2;
+
+  .catching-methods {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .method-card {
+    border: 1px solid var(--light-gray);
+    border-radius: 8px;
+    padding: 1.5rem;
+    transition: var(--transition);
+
+    &:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .method-icon {
+      font-weight: 600;
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+      color: var(--primary);
+    }
+
+    .method-name {
+      font-size: 1.2rem;
+      margin-top: 0;
+      margin-bottom: 1rem;
+      color: var(--dark);
+    }
+
+    .method-code {
+      background: #2d3748;
+      color: #e2e8f0;
+      border-radius: 6px;
+      padding: 1rem;
+      overflow-x: auto;
+      font-size: 0.9rem;
+
+      code {
+        color: #a0aec0;
+      }
+    }
+  }
 }
 
-.notice-card {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
+// 自定义错误样式
+.custom-errors {
+  grid-column: span 2;
+
+  .custom-error-content {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 2rem;
+
+    @media (max-width: 900px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .custom-example {
+    pre {
+      background: #f8f9fa;
+      border-radius: 8px;
+      padding: 1.2rem;
+      overflow-x: auto;
+      border-left: 4px solid var(--primary);
+
+      code {
+        color: #2b2d42;
+      }
+    }
+  }
+
+  .custom-benefits {
+    background: #f0f7ff;
+    border-radius: 8px;
+    padding: 1.5rem;
+
+    h3 {
+      font-size: 1.2rem;
+      margin-top: 0;
+      color: var(--primary);
+    }
+
+    ul, ol {
+      padding-left: 1.5rem;
+    }
+
+    li {
+      margin-bottom: 0.5rem;
+    }
+
+    .usage-tips {
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px dashed #c5d5f0;
+
+      ol {
+        counter-reset: tip-counter;
+        list-style: none;
+        padding-left: 0;
+
+        li {
+          position: relative;
+          padding-left: 2rem;
+          margin-bottom: 0.8rem;
+
+          &::before {
+            counter-increment: tip-counter;
+            content: counter(tip-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            background: var(--primary);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+          }
+        }
+      }
+    }
+  }
+}
+
+.footer {
+  text-align: center;
   padding: 1.5rem;
   background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-
-  .notice-icon {
-    font-size: 2rem;
-  }
-}
-
-pre code {
-  font-family: 'Fira Code', monospace;
-  line-height: 1.5;
-  color: #2c3e50;
-}
-
-@media (max-width: 768px) {
-  .error-guide {
-    padding: 1rem;
-  }
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  font-weight: 500;
+  color: var(--gray);
+  margin-top: 2rem;
 }
 </style>

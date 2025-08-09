@@ -4,9 +4,6 @@
 
     <h2> Grid布局是一种强大的CSS布局系统，允许开发者创建复杂的网页布局。通过定义行和列，开发者可以精确控制元素的排列和对齐，使得网页设计更加灵活和响应式。</h2>
 
-    <h3>详细的Grid布局教程还是看阮一峰老师的<a href="https://ruanyifeng.com/blog/2019/03/grid-layout-tutorial.html" target="_blank"
-        rel="noopener noreferrer">阮一峰的CSS Grid教程</a></h3>
-
     <section class="trigger-section">
       <h3>触发条件</h3>
       <p>
@@ -161,12 +158,17 @@ column-gap: 30px;//列间距
         <p><b>auto-fill</b>:有时，单元格的大小是固定的，但是容器的大小不确定。如果希望每一行（或每一列）容纳尽可能多的单元格，这时可以使用auto-fill关键字表示自动填充</p>
         <p>
           自动填充：
-        <pre class="code-preview"><code>repeat(auto-fill, 1fr)</code></pre> 表示根据容器宽度自动填充列，每列占据相等的可用空间。
+        <pre class="code-preview"><code>repeat(auto-fill, 1fr)</code></pre> 表示根据容器宽度自动填充列，每列占据相等的可用空间。<b>如果有剩余空间的话，auto-fill 会创建额外的空列</b>
         </p>
-        <p><b>auto-fit</b>:auto-fit和auto-fill类似，但是不同的是，auto-fit会根据容器宽度自动填充列，每列占据相等的可用空间。</p>
+        <p><b>auto-fit</b>:auto-fit和auto-fill类似，但是不同的是 auto-fit <b>以最后一个 Gird 项目结束 Gird 容器，不管是否还有额外的空间存在</b></p>
         <p>
           自动填充：
-        <pre class="code-preview"><code>repeat(auto-fit, 1fr)</code></pre> 表示根据容器宽度自动填充列，每列占据相等的可用空间。
+        <pre class="code-preview"><code>repeat(auto-fit, 1fr)</code></pre> 表示根据容器宽度自动填充列，每列占据相等的可用空间。如果有剩余空间的话，auto-fit 会压缩列的宽度。
+        </p>
+        <p><b>minmax(min, max)</b>表示一个范围，min表示最小值，max表示最大值。</p>
+        <pre class="code-preview"><code>grid-template-columns: repeat(minmax(auto-fill, 3), minmax(100px, 1fr));</code></pre>
+        <p>
+          表示创建三列或者自动，每列的宽度在100px到1fr之间。如果容器宽度小于100px，则每列的宽度为100px，如果容器宽度大于1fr，则每列的宽度为1fr。
         </p>
       </div>
       <div>
@@ -187,30 +189,61 @@ column-gap: 30px;//列间距
           class="code-preview"><code>grid-template-columns: 1fr auto 200px;//表示三列，第一列占据1份，第二列占据内容宽度，第三列占据200px</code></pre>
       </div>
     </div>
-    <section class="sub-grid-introduction">
-      <h2>子网格介绍</h2>
-      <p>
-        子网格是CSS
-        Grid布局中的一种强大功能，允许在主网格内创建独立的网格布局。通过对子网格的控制，可以实现更复杂的布局结构。
-      </p>
-      <p>
-        使用子网格可以更好地管理和组织内容，使得布局更加灵活和响应式。您可以在子网格中定义自己的列和行，从而实现更精细的控制。
-      </p>
-    </section>
+  <div class="subgrid-section" style="margin-top:2rem;">
+    <h2>子网格（Subgrid）</h2>
+    <p>
+      <b>子网格（subgrid）</b> 是 CSS Grid 布局中的一个高级特性，允许嵌套的网格项（子元素）继承父网格的行或列轨道，实现更复杂且一致的布局。通过 subgrid，可以让多层嵌套的网格在对齐和尺寸上保持一致，非常适合需要多级对齐的场景。
+    </p>
+    <h3>作用</h3>
+    <ul>
+      <li>让子元素的网格轨道与父网格保持一致，实现多层级的精准对齐。</li>
+      <li>简化嵌套网格的布局代码，提升可维护性。</li>
+      <li>适用于新闻列表、卡片布局等需要多层对齐的复杂页面。</li>
+    </ul>
+    <h3>用法示例</h3>
+    <pre class="code-preview"><code>
+.parent-grid {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 10px;
+}
+
+.child-grid {
+  display: grid;
+  grid-template-columns: subgrid;
+  /* 继承父网格的列轨道 */
+  grid-column: 1 / -1;
+}
+    </code></pre>
+    <h4>HTML结构示例：</h4>
+    <pre class="code-preview"><code>
+<div class="parent-grid">
+  <div>头部</div>
+  <div>头部</div>
+  <div>头部</div>
+  <div class="child-grid">
+    <div>子项1</div>
+    <div>子项2</div>
+    <div>子项3</div>
+  </div>
+</div>
+    </code></pre>
+    <h3>适用场景</h3>
+    <ul>
+      <li>多级卡片、新闻列表等需要子元素与父元素严格对齐的布局。</li>
+      <li>表格型页面，子表格需要与主表格列宽一致。</li>
+      <li>响应式复杂布局，减少重复定义网格轨道。</li>
+    </ul>
+    <div style="background:#f8f9fa;padding:1rem;border-radius:8px;margin-top:1rem;">
+      <b>注意：</b> subgrid 目前在部分浏览器（如 Firefox）支持较好，Chrome 也已逐步支持，实际开发中请注意兼容性。
+    </div>
+  </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
-
-interface GridOptions {
-  templateColumns: string
-  templateRows: string
-  justifyContent: string
-  alignItems: string
-  gap: number
-}
-
 interface GridItem {
   gridColumn: string
   gridRow: string
@@ -249,7 +282,7 @@ const columnPresets = [
 ]
 
 const rowPresets = [
-  { label: '固定高度', value: 'repeat(2, 100px)' },
+  { label: '2等分', value: 'repeat(2, 100px)' },
   { label: '自动高度', value: 'auto' },
   { label: '混合高度', value: '50px 1fr' },
 ]

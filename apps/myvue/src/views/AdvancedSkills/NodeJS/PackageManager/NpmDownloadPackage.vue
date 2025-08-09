@@ -1,5 +1,5 @@
 <template>
-  <div>🔍 动画库 ⭐⭐⭐</div>
+  <div>🔄 npm下载包的流程 ⭐⭐</div>
 </template>
 <script lang="ts" setup>
 </script>

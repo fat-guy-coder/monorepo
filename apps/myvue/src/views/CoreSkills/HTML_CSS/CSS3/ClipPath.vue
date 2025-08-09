@@ -1,7 +1,7 @@
 <template>
   <div class="clip-path-guide">
     <header class="guide-header">
-      <h1>CSS Clip-Path 完全指南</h1>
+      <h1>CSS Clip-Path 基本指南</h1>
       <p>掌握创建复杂形状和视觉效果的强大CSS属性</p>
       <div class="shapes-container">
         <div class="shape circle"></div>
@@ -269,7 +269,7 @@ clip-path: polygon(50% 0%, 100% 50%,
           <a href="#" class="footer-link">交互式工具</a>
           <a href="#" class="footer-link">示例库</a>
         </div>
-        <div class="footer-copyright">© 2023 CSS Clip-Path完全指南 | 现代Web设计技术</div>
+        <div class="footer-copyright">© 2023 CSS Clip-Path基本指南 | 现代Web设计技术</div>
       </div>
     </footer>
   </div>

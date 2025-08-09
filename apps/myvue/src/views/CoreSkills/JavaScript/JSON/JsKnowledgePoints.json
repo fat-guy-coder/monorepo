@@ -4,129 +4,192 @@
     "items": [
       {
         "name": "变量声明",
+        "id": 1,
         "description": "var, let, const的区别与使用场景",
         "importance": 5,
-        "tags": ["作用域", "提升"]
+        "tags": ["作用域", "提升", "变量声明"],
+        "code": "var a = 1; let b = 2; const c = 3;",
+        "route": "Variables"
       },
       {
         "name": "数据类型",
+        "id": 2,
         "description": "7种原始类型和对象类型，类型检测方法",
         "importance": 5,
-        "tags": ["typeof", "instanceof"]
+        "tags": ["typeof", "instanceof", "数据类型"],
+        "code": "typeof 1;\ninstanceof Object;\nObject.prototype.toString.call(1);",
+        "route": "PrimitiveTypes"
       },
       {
         "name": "类型转换",
+        "id": 3,
         "description": "显式/隐式类型转换规则和常见陷阱",
         "importance": 5,
-        "tags": ["强制转换", "相等比较"]
+        "tags": ["强制转换", "相等比较", "类型转换"],
+        "code": "1 + '2';\n1 - '2';\n1 == '1';\n1 === '1';\nString(1);",
+        "route": "TypeConversion"
       },
       {
         "name": "作用域",
+        "id": 4,
         "description": "词法作用域、函数作用域和块级作用域",
         "importance": 5,
-        "tags": ["闭包", "作用域链"]
+        "tags": ["闭包", "作用域链", "作用域"],
+        "code": "function a() { var b = 1;\n return function()\n { console.log(b); } }",
+        "route": "Scope"
       },
       {
         "name": "闭包",
+        "id": 5,
         "description": "函数与其词法环境的引用捆绑",
         "importance": 5,
-        "tags": ["私有变量", "记忆化"]
+        "tags": ["私有变量", "记忆化", "闭包"],
+        "code": "function a() { var b = 1;\n return function()\n { console.log(b); } }",
+        "route": "Closure"
       },
       {
         "name": "原型链",
+        "id": 6,
         "description": "对象之间通过原型继承属性和方法的机制",
         "importance": 5,
-        "tags": ["__proto__", "prototype"]
+        "tags": ["__proto__", "prototype", "原型链"],
+        "code": "Object.getPrototypeOf(a);\na.__proto__;\na.prototype;",
+        "route": "Prototype1"
       },
       {
         "name": "this关键字",
+        "id": 7,
         "description": "函数执行上下文中的this绑定规则",
         "importance": 5,
-        "tags": ["绑定规则", "箭头函数"]
+        "tags": ["绑定规则", "箭头函数", "this关键字"],
+        "code": "function a() { console.log(this); }\na();",
+        "route": "ThisBinding"
       },
       {
         "name": "事件循环",
+        "id": 8,
         "description": "JS单线程执行模型和异步处理机制",
         "importance": 5,
-        "tags": ["宏任务", "微任务"]
+        "tags": ["宏任务", "微任务", "事件循环"],
+        "code": "setTimeout(() => { console.log('setTimeout'); }, 0);\nPromise.resolve().then(() => {\n console.log('Promise'); });",
+        "route": "AsyncProgrammingIntroduce"
       },
       {
         "name": "严格模式",
+        "id": 9,
         "description": "限制不安全操作，启用更严格的解析",
         "importance": 4,
-        "tags": ["'use strict'", "错误检测"]
+        "tags": ["'use strict'", "错误检测", "严格模式"],
+        "code": "function a() { 'use strict';\n console.log(this); }\na();",
+        "route": "StrictMode"
       },
       {
         "name": "执行上下文",
+        "id": 10,
         "description": "代码执行时的环境信息存储结构",
         "importance": 4,
-        "tags": ["变量对象", "活动对象"]
+        "tags": ["变量对象", "活动对象", "执行上下文"],
+        "code": "function a() { console.log(this); }\na();",
+        "route": "ExecutionContext"
       },
       {
         "name": "内存管理",
+        "id": 11,
         "description": "内存分配、使用和回收机制",
         "importance": 4,
-        "tags": ["垃圾回收", "内存泄漏"]
+        "tags": ["垃圾回收", "内存泄漏", "内存管理"],
+        "code": "function a() { console.log(this); }\na();",
+        "route": "MemoryManagement1"
       },
       {
         "name": "模块系统",
+        "id": 12,
         "description": "ES6模块的导入导出机制",
         "importance": 4,
-        "tags": ["import", "export"]
+        "tags": ["import", "export", "模块系统"],
+        "code": "import { a } from 'b';\nexport { a };",
+        "route": "ModuleSystem"
       },
       {
         "name": "运算符",
+        "id": 13,
         "description": "算术、比较、逻辑、位运算符及其优先级",
         "importance": 4,
-        "tags": ["运算符", "优先级"]
+        "tags": ["运算符", "优先级", "运算符优先级"],
+        "code": "1 + 2;\n1 - 2;\n1 && 2;\n1 || 2;\n1 ? 2 : 3;",
+        "route": "Operators"
       },
       {
         "name": "对象",
+        "id": 14,
         "description": "对象的创建、属性访问、遍历和扩展",
         "importance": 5,
-        "tags": ["Object", "属性"]
+        "tags": ["Object", "属性", "对象"],
+        "code": "const obj = { a: 1, b: 2 };\nobj.a;\nobj['a'];",
+        "route": "Object1"
       },
       {
         "name": "数组",
+        "id": 15,
         "description": "数组的基本操作、遍历方法和常用API",
         "importance": 5,
-        "tags": ["Array", "遍历"]
+        "tags": ["Array", "遍历", "数组"],
+        "code": "const arr = [1, 2, 3];\narr[0];\narr.forEach(item => { console.log(item); });",
+        "route": "Array1"
       },
       {
         "name": "JSON",
+        "id": 16,
         "description": "JSON的解析与序列化，常见用法和注意事项",
         "importance": 4,
-        "tags": ["JSON.parse", "JSON.stringify"]
+        "tags": ["JSON.parse", "JSON.stringify", "JSON"],
+        "code": "JSON.parse('{\"a\":1}');\nJSON.stringify({ a: 1 });",
+        "route": "JSON"
       },
       {
         "name": "错误处理",
+        "id": 17,
         "description": "try/catch/finally语句和Error对象",
         "importance": 4,
-        "tags": ["异常", "错误捕获"]
+        "tags": ["异常", "错误捕获", "错误处理"],
+        "code": "try {\n throw new Error('error');\n} catch (e) {\n console.log(e);\n} finally {\n console.log('finally');\n}",
+        "route": "ErrorHandling"
       },
       {
         "name": "定时器",
+        "id": 18,
         "description": "setTimeout和setInterval的用法与区别",
         "importance": 3,
-        "tags": ["异步", "定时"]
+        "tags": ["异步", "定时", "定时器"],
+        "code": "setTimeout(() => { console.log('setTimeout'); }, 0);\nsetInterval(() => { console.log('setInterval'); }, 1000);",
+        "route": "MacroTask"
       },
       {
         "name": "全局对象",
+        "id": 19,
         "description": "window、globalThis等全局对象的作用",
         "importance": 3,
-        "tags": ["全局", "环境"]
+        "tags": ["全局", "环境", "全局对象"],
+        "code": "window.a;\nglobalThis.a;",
+        "route": "GlobalThis"
       },
       {
         "name": "隐式全局变量",
+        "id": 20,
         "description": "未声明直接赋值导致的隐式全局变量问题",
         "importance": 3,
-        "tags": ["全局污染", "变量声明"]
+        "tags": ["全局污染", "变量声明", "隐式全局变量"],
+        "code": "a = 1;\nconsole.log(a);",
+        "route": "Variables"
       },
       {
         "name": "立即执行函数（IIFE）",
+        "id": 21,
         "description": "函数定义后立即执行的写法及其作用",
         "importance": 3,
-        "tags": ["作用域隔离", "IIFE"]
+        "tags": ["作用域隔离", "IIFE", "立即执行函数"],
+        "code": "(function() {\n console.log('a');\n})();",
+        "route": "FunctionProgrammingIntroduce"
       }
     ]
   },
@@ -135,63 +198,93 @@
     "items": [
       {
         "name": "函数声明",
+        "id": 22,
         "description": "函数定义的不同方式及区别",
         "importance": 5,
-        "tags": ["函数表达式", "箭头函数"]
+        "tags": ["函数表达式", "箭头函数", "函数声明"],
+        "code": "function a() { console.log('a'); }\na();\nconst b = ()=>{}",
+        "route": "Functions"
       },
       {
         "name": "高阶函数",
+        "id": 23,
         "description": "接收函数作为参数或返回函数的函数",
         "importance": 5,
-        "tags": ["回调", "函数组合"]
+        "tags": ["回调", "函数组合", "高阶函数"],
+        "code": "function a(callback) { callback(); }\na(() => { console.log('a'); });",
+        "route": "HigherOrderFunction"
       },
       {
         "name": "箭头函数",
+        "id": 24,
         "description": "简洁语法和词法this绑定",
         "importance": 5,
-        "tags": ["=>", "this绑定"]
+        "tags": ["=>", "this绑定", "箭头函数"],
+        "code": "const a = ()=>{};\na();",
+        "route": "ArrowFunction"
       },
       {
         "name": "回调函数",
+        "id": 25,
         "description": "作为参数传递给另一个函数的函数",
         "importance": 5,
-        "tags": ["异步", "事件处理"]
+        "tags": ["异步", "事件处理", "回调函数"],
+        "code": "function a(callback) { callback(); }\na(() => { console.log('a'); });",
+        "route": "CallbackFunction"
       },
       {
         "name": "IIFE",
+        "id": 26,
         "description": "立即调用函数表达式",
         "importance": 4,
-        "tags": ["模块模式", "作用域隔离"]
+        "tags": ["模块模式", "作用域隔离", "立即执行函数"],
+        "code": "(function() {\n console.log('a');\n})();",
+        "route": "Functions"
       },
       {
         "name": "纯函数",
+        "id": 27,
         "description": "无副作用且相同输入总是返回相同输出",
         "importance": 4,
-        "tags": ["函数式", "可预测"]
+        "tags": ["函数式", "可预测", "纯函数"],
+        "code": "function a(b) { return b; }\na(1);",
+        "route": "PureFunction"
       },
       {
         "name": "柯里化",
+        "id": 28,
         "description": "将多参数函数转换为一系列单参数函数",
         "importance": 4,
-        "tags": ["部分应用", "函数组合"]
+        "tags": ["部分应用", "函数组合", "柯里化"],
+        "code": "function a(b) { return function(c) { return b + c; } }\na(1)(2);",
+        "route": "Currying"
       },
       {
         "name": "函数组合",
+        "id": 29,
         "description": "将多个函数组合成新函数的技术",
         "importance": 4,
-        "tags": ["pipe", "compose"]
+        "tags": ["pipe", "compose", "函数组合"],
+        "code": "function a(b) { return function(c) { return b + c; } }\na(1)(2);",
+        "route": "FunctionComposition"
       },
       {
         "name": "递归",
+        "id": 30,
         "description": "函数调用自身来解决问题的方法",
         "importance": 4,
-        "tags": ["基线条件", "栈溢出"]
+        "tags": ["基线条件", "栈溢出", "递归"],
+        "code": "let a = 1;\nfunction b() { a++; b() ;if(a>1000000){console.log(a);return;} }\nb();",
+        "route": "Recursion"
       },
       {
         "name": "尾调用优化",
+        "id": 31,
         "description": "避免额外栈帧的递归优化技术",
         "importance": 3,
-        "tags": ["TCO", "递归优化"]
+        "tags": ["TCO", "递归优化", "尾调用优化"],
+        "code": "function a(b) { if (b === 0) { return 0; } return a(b - 1) + 1; }\na(10);",
+        "route": "TailCall"
       }
     ]
   },
@@ -200,63 +293,93 @@
     "items": [
       {
         "name": "对象创建",
+        "id": 32,
         "description": "多种对象创建方式及适用场景",
         "importance": 5,
-        "tags": ["字面量", "构造函数", "Object.create"]
+        "tags": ["字面量", "构造函数", "Object.create", "对象创建"],
+        "code": "const obj = { a: 1, b: 2 };\nconst obj2 = new Object({ a: 1, b: 2 });\nconst obj3 = Object.create({ a: 1, b: 2 });",
+        "route": "Object1"
       },
       {
         "name": "属性描述符",
+        "id": 33,
         "description": "控制对象属性的特性配置",
         "importance": 5,
-        "tags": ["getter", "setter", "可枚举"]
+        "tags": ["getter", "setter", "可枚举"],
+        "code": "const obj = { a: 1, b: 2 };\nObject.defineProperty(obj, 'a', { get() { return this.b; }, set(value) { this.b = value; } });",
+        "route": "ObjectDescriptor"
       },
       {
         "name": "原型继承",
+        "id": 34,
         "description": "基于原型的对象继承机制",
         "importance": 5,
-        "tags": ["prototype", "__proto__"]
+        "tags": ["prototype", "__proto__", "原型继承"],
+        "code": "const obj = { a: 1, b: 2 };\nconst obj2 = Object.create(obj);\nobj2.a = 3;",
+        "route": "Prototype1"
       },
       {
         "name": "类语法",
+        "id": 35,
         "description": "ES6提供的基于类的语法糖",
         "importance": 5,
-        "tags": ["class", "extends", "super"]
+        "tags": ["class", "extends", "super", "类语法"],
+        "code": "class A { constructor(a) { this.a = a; } }\nclass B extends A { constructor(a, b) { super(a); this.b = b; } }\nconst obj = new B(1, 2);",
+        "route": "Class"
       },
       {
         "name": "Object方法",
+        "id": 36,
         "description": "Object静态方法的使用",
         "importance": 5,
-        "tags": ["keys", "values", "entries", "assign"]
+        "tags": ["keys", "values", "entries", "assign"],
+        "code": "Object.keys(obj);\nObject.values(obj);\nObject.entries(obj);\nObject.assign(obj, { a: 1, b: 2 });",
+        "route": "Object2"
       },
       {
         "name": "深拷贝",
+        "id": 37,
         "description": "创建对象的完全独立副本",
         "importance": 5,
-        "tags": ["递归", "结构化克隆"]
+        "tags": ["递归", "结构化克隆"],
+        "code": "const obj = { a: 1, b: 2 };\nconst obj2 = JSON.parse(JSON.stringify(obj));",
+        "route": "DeepCopy"
       },
       {
         "name": "原型污染",
+        "id": 38,
         "description": "修改原型导致的安全问题",
         "importance": 4,
-        "tags": ["安全", "预防"]
+        "tags": ["安全", "预防"],
+        "code": "const obj = { a: 1, b: 2 };\nconst obj2 = Object.create(obj);\nobj2.a = 3;",
+        "route": "PrototypePollutio"
       },
       {
         "name": "属性代理",
+        "id": 39,
         "description": "使用Proxy拦截对象操作",
         "importance": 4,
-        "tags": ["拦截器", "元编程"]
+        "tags": ["拦截器", "元编程"],
+        "code": "const obj = { a: 1, b: 2 };\nconst obj2 = new Proxy(obj, { get(target, prop)\n { return target[prop]; }\n});",
+        "route": "Proxy2"
       },
       {
         "name": "反射API",
+        "id": 40,
         "description": "Reflect对象提供的元编程方法",
         "importance": 4,
-        "tags": ["Reflect", "元编程"]
+        "tags": ["Reflect", "元编程"],
+        "code": "Reflect.get(obj, 'a');",
+        "route": "Reflect"
       },
       {
         "name": "Symbol类型",
+        "id": 41,
         "description": "创建唯一标识符，用于对象属性",
         "importance": 4,
-        "tags": ["唯一性", "内置Symbol"]
+        "tags": ["唯一性", "内置Symbol"],
+        "code": "const a = Symbol('a');\nconst obj = { [a]: 1 };",
+        "route": "Symbol"
       }
     ]
   },
@@ -265,129 +388,192 @@
     "items": [
       {
         "name": "Promise",
+        "id": 42,
         "description": "处理异步操作的对象",
         "importance": 5,
-        "tags": ["then", "catch", "finally"]
+        "tags": ["then", "catch", "finally"],
+        "code": "Promise.resolve().then(() => {\n console.log('Promise');\n});",
+        "route": "Promise"
       },
       {
         "name": "async/await",
+        "id": 43,
         "description": "基于Promise的异步语法糖",
         "importance": 5,
-        "tags": ["异步", "同步风格"]
+        "tags": ["异步", "同步风格"],
+        "code": "async function a() { await Promise.resolve(); }\na();",
+        "route": "AsyncAwait"
       },
       {
         "name": "事件循环",
+        "id": 44,
         "description": "JS执行异步代码的机制",
         "importance": 5,
-        "tags": ["宏任务", "微任务"]
+        "tags": ["宏任务", "微任务"],
+        "code": "setTimeout(() => { console.log('setTimeout'); }, 0);\nPromise.resolve().then(() => {\n console.log('Promise');\n});",
+        "route": "AsyncProgrammingIntroduce"
       },
       {
         "name": "回调地狱",
+        "id": 45,
         "description": "多层嵌套回调导致的代码可读性问题",
         "importance": 4,
-        "tags": ["金字塔", "解决方案"]
+        "tags": ["金字塔", "解决方案"],
+        "code": "function a(callback) { callback(); callback(); callback(); }\na(() => { console.log('a'); });",
+        "route": "CallbackFunction"
       },
       {
         "name": "生成器",
+        "id": 46,
         "description": "可暂停和恢复的函数",
         "importance": 4,
-        "tags": ["function*", "yield"]
+        "tags": ["function*", "yield"],
+        "code": "function* a() { yield 1; yield 2; yield 3; }\nconst b = a();\nb.next();",
+        "route": "Generator"
       },
       {
         "name": "异步迭代",
+        "id": 47,
         "description": "for await...of处理异步可迭代对象",
         "importance": 4,
-        "tags": ["异步迭代器", "Symbol.asyncIterator"]
+        "tags": ["异步迭代器", "Symbol.asyncIterator"],
+        "code": "async function* a() { yield 1; yield 2; yield 3; }\nconst b = a();\nb.next();",
+        "route": "Generator"
       },
       {
         "name": "Web Workers",
+        "id": 48,
         "description": "在后台线程运行脚本",
         "importance": 4,
-        "tags": ["多线程", "并行"]
+        "tags": ["多线程", "并行"],
+        "code": "const worker = new Worker('worker.js');\nworker.postMessage('message');\nworker.onmessage = (e) => { console.log(e.data); };",
+        "route": "WebWorkers"
       },
       {
         "name": "事件发射器",
+        "id": 49,
         "description": "实现发布-订阅模式的对象",
         "importance": 4,
-        "tags": ["EventEmitter", "观察者模式"]
+        "tags": ["EventEmitter", "观察者模式"],
+        "code": "const eventEmitter = new EventEmitter();\neventEmitter.on('a', () => { console.log('a'); });\neventEmitter.emit('a');",
+        "route": "PublishSubscribe"
       },
       {
         "name": "AbortController",
+        "id": 50,
         "description": "中止一个或多个Web请求",
         "importance": 4,
-        "tags": ["取消请求", "fetch"]
+        "tags": ["取消请求", "fetch"],
+        "code": "const controller = new AbortController();\nconst signal = controller.signal;\nfetch('https://api.example.com', { signal }).then(response => { console.log(response); }).catch(error => { console.log(error); });\ncontroller.abort();",
+        "route": "AbortController"
       },
       {
         "name": "微任务与宏任务",
+        "id": 51,
         "description": "区分和理解微任务（microtask）与宏任务（macrotask）的执行顺序",
         "importance": 4,
-        "tags": ["event loop", "Promise", "setTimeout"]
+        "tags": ["event loop", "Promise", "setTimeout"],
+        "code": "setTimeout(() => { console.log('setTimeout'); }, 0);\nPromise.resolve().then(() => { console.log('Promise'); });",
+        "route": "AsyncProgrammingIntroduce"
       },
       {
         "name": "setTimeout与setInterval",
+        "id": 52,
         "description": "定时器的异步执行机制与常见陷阱",
         "importance": 4,
-        "tags": ["定时器", "异步"]
+        "tags": ["定时器", "异步"],
+        "code": "setTimeout(() => { console.log('setTimeout'); }, 0);\nsetInterval(() => { console.log('setInterval'); }, 1000);",
+        "route": "MacroTask"
       },
       {
         "name": "fetch API",
+        "id": 53,
         "description": "用于网络请求的现代异步API，基于Promise",
         "importance": 4,
-        "tags": ["网络请求", "Promise", "异步"]
+        "tags": ["网络请求", "Promise", "异步"],
+        "code": "fetch('https://api.example.com').then(response => { console.log(response); }).catch(error => { console.log(error); });\n",
+        "route": "Fetch"
       },
       {
         "name": "XMLHttpRequest",
+        "id": 54,
         "description": "早期用于异步网络请求的API",
         "importance": 3,
-        "tags": ["AJAX", "异步", "网络请求"]
+        "tags": ["AJAX", "异步", "网络请求"],
+        "code": "const xhr = new XMLHttpRequest();\nxhr.open('GET', 'https://api.example.com', true);\nxhr.onreadystatechange = function() { if (xhr.readyState === 4) { console.log(xhr.responseText); } };\nxhr.send();",
+        "route": "XMLHttpRequest"
       },
       {
         "name": "Promise.all",
+        "id": 55,
         "description": "并行执行多个Promise，全部完成后返回结果",
         "importance": 4,
-        "tags": ["并发", "Promise", "聚合"]
+        "tags": ["并发", "Promise", "聚合"],
+        "code": "Promise.all([Promise.resolve(1),\n Promise.resolve(2), \nPromise.resolve(3)]).\nthen(results => { console.log(results); });\n",
+        "route": "Promise"
       },
       {
         "name": "Promise.race",
+        "id": 56,
         "description": "并行执行多个Promise，最先完成的结果返回",
         "importance": 3,
-        "tags": ["并发", "Promise", "竞速"]
+        "tags": ["并发", "Promise", "竞速"],
+        "code": "Promise.race([Promise.resolve(1),\n Promise.resolve(2),\n Promise.resolve(3)]).\nthen(result => { console.log(result); });",
+        "route": "Promise"
       },
       {
         "name": "Promise.allSettled",
+        "id": 57,
         "description": "等待所有Promise完成（无论成功或失败）后返回每个结果",
         "importance": 3,
-        "tags": ["并发", "Promise", "结果收集"]
+        "tags": ["并发", "Promise", "结果收集"],
+        "code": "Promise.allSettled([Promise.resolve(1),\n Promise.resolve(2),\n Promise.resolve(3)]).\nthen(results => { console.log(results); });",
+        "route": "Promise"
       },
       {
         "name": "Promise.any",
+        "id": 58,
         "description": "只要有一个Promise成功就返回其结果",
         "importance": 3,
-        "tags": ["并发", "Promise", "成功优先"]
+        "tags": ["并发", "Promise", "成功优先"],
+        "code": "Promise.any([Promise.resolve(1),\n Promise.resolve(2), \nPromise.resolve(3)]).\nthen(result => { console.log(result); });",
+        "route": "Promise"
       },
       {
         "name": "队列微任务（queueMicrotask）",
+        "id": 59,
         "description": "手动将任务加入微任务队列，优先于宏任务执行",
         "importance": 3,
-        "tags": ["微任务", "异步", "event loop"]
+        "tags": ["微任务", "异步", "event loop"],
+        "code": "queueMicrotask(() => { console.log('queueMicrotask'); });",
+        "route": "QueueMicrotask"
       },
       {
         "name": "requestAnimationFrame",
+        "id": 60,
         "description": "浏览器动画帧回调，适合高性能动画",
         "importance": 3,
-        "tags": ["动画", "异步", "性能"]
+        "tags": ["动画", "异步", "性能"],
+        "code": "requestAnimationFrame(() => { console.log('requestAnimationFrame'); });",
+        "route": "RequestAnimationFrame"
       },
       {
         "name": "MessageChannel",
+        "id": 61,
         "description": "用于多线程或不同上下文之间的异步消息通信",
         "importance": 3,
-        "tags": ["消息传递", "并发", "异步"]
+        "tags": ["消息传递", "并发", "异步"],
+        "code": "const channel = new MessageChannel();\nchannel.port1.onmessage = (e) => { console.log(e.data); };\nchannel.port2.postMessage('message');",
+        "route": "MessageChannel"
       },
       {
         "name": "Service Worker",
+        "id": 62,
         "description": "拦截网络请求，实现离线缓存和推送等功能的浏览器后台线程",
         "importance": 3,
-        "tags": ["PWA", "缓存", "离线", "异步"]
+        "tags": ["PWA", "缓存", "离线", "异步"],
+        "code": "const serviceWorker = new ServiceWorker('service-worker.js');\n serviceWorker.postMessage('message');\n serviceWorker.onmessage = (e) => { console.log(e.data); };",
+        "route": "ServiceWorker"
       }
     ]
   },
@@ -396,45 +582,66 @@
     "items": [
       {
         "name": "数组方法",
+        "id": 63,
         "description": "map, filter, reduce等高阶函数",
         "importance": 5,
-        "tags": ["遍历", "转换"]
+        "tags": ["遍历", "转换"],
+        "code": "const arr = [1, 2, 3]; arr.map(item => item * 2);",
+        "route": "Array"
       },
       {
         "name": "数组解构",
+        "id": 64,
         "description": "从数组提取值赋给变量",
         "importance": 5,
-        "tags": ["...rest", "默认值"]
+        "tags": ["...rest", "默认值"],
+        "code": "const [a, b, ...rest] = [1, 2, 3, 4, 5];",
+        "route": "Destructuring"
       },
       {
         "name": "类数组转换",
+        "id": 65,
         "description": "将类数组对象转换为真实数组",
         "importance": 4,
-        "tags": ["Array.from", "arguments"]
+        "tags": ["Array.from", "arguments"],
+        "code": "const arr = Array.from(arguments);",
+        "route": "Array"
       },
       {
         "name": "数组去重",
+        "id": 66,
         "description": "多种数组去重的方法",
         "importance": 4,
-        "tags": ["Set", "filter", "reduce"]
+        "tags": ["Set", "filter", "reduce"],
+        "code": "const arr = [1, 2, 3, 1, 2, 3]; const uniqueArr = [...new Set(arr)];",
+        "route": "Deduplication"
       },
       {
         "name": "数组扁平化",
+        "id": 67,
         "description": "将多维数组转换为一维数组",
         "importance": 4,
-        "tags": ["flat", "递归"]
+        "tags": ["flat", "递归"],
+        "code": "const arr = [1, [2, [3, 4]]]; const flatArr = arr.flat(2);",
+        "route": "Array"
       },
       {
         "name": "数组排序",
+        "id": 68,
         "description": "sort方法的使用和自定义排序",
         "importance": 4,
-        "tags": ["比较函数", "稳定性"]
+        "tags": ["比较函数", "稳定性"],
+        "code": "const arr = [3, 1, 2]; arr.sort((a, b) => a - b);",
+        "route": "SortingAlgorithms"
       },
       {
         "name": "类型化数组",
+        "id": 69,
         "description": "处理二进制数据的数组视图",
         "importance": 3,
-        "tags": ["ArrayBuffer", "DataView"]
+        "tags": ["ArrayBuffer", "DataView"],
+        "code": "const arr = new Int8Array(10); arr[0] = 1; console.log(arr[0]);",
+        "route": "ArrayBuffer"
       }
     ]
   },
@@ -443,63 +650,93 @@
     "items": [
       {
         "name": "解构赋值",
+        "id": 70,
         "description": "从数组/对象中提取值",
         "importance": 5,
-        "tags": ["对象解构", "数组解构"]
+        "tags": ["对象解构", "数组解构"],
+        "code": "const { a, b } = { a: 1, b: 2 };",
+        "route": "Destructuring"
       },
       {
-        "name": "模板字符串",
+        "name": "模板字符串",   
+        "id": 71,
         "description": "使用反引号定义的多行字符串",
         "importance": 5,
-        "tags": ["插值", "标签模板"]
+        "tags": ["插值", "标签模板"],
+        "code": "const str = `Hello ${name}`;",
+        "route": "TemplateLiteral"
       },
       {
         "name": "扩展运算符",
+        "id": 72,
         "description": "展开数组或对象",
         "importance": 5,
-        "tags": ["...", "函数参数"]
+        "tags": ["...", "函数参数"],
+        "code": "const arr = [1, 2, 3]; const newArr = [...arr, 4, 5];",
+        "route": "SpreadOperator"
       },
       {
         "name": "默认参数",
+        "id": 73,
         "description": "函数参数的默认值设置",
         "importance": 5,
-        "tags": ["默认值", "解构"]
+        "tags": ["默认值", "解构"],
+        "code": "function a(a = 1) { console.log(a); } a();",
+        "route": "DefaultAndRestParameters"
       },
       {
         "name": "剩余参数",
+        "id": 74,
         "description": "将剩余参数收集到数组中",
         "importance": 5,
-        "tags": ["...rest", "arguments"]
+        "tags": ["...rest", "arguments"],
+        "code": "function a(...rest) { console.log(rest); } a(1, 2, 3);",
+        "route": "DefaultAndRestParameters"
       },
       {
-        "name": "可选链",
+        "name": "可选链", 
+        "id": 75,
         "description": "安全访问嵌套对象属性",
         "importance": 5,
-        "tags": ["?.", "空值安全"]
+        "tags": ["?.", "空值安全"],
+        "code": "const a = { b: { c: 1 } }; console.log(a?.b?.c);",
+        "route": "OptionalChain"
       },
       {
         "name": "空值合并",
+        "id": 76,
         "description": "提供默认值的逻辑运算符",
         "importance": 5,
-        "tags": ["??", "默认值"]
+        "tags": ["??", "默认值"],
+        "code": "const a = 0 ?? 1; console.log(a);",
+        "route": "NullishCoalescingOperator"
       },
       {
         "name": "BigInt",
+        "id": 77,
         "description": "表示任意精度的整数",
         "importance": 4,
-        "tags": ["大整数", "精度"]
+        "tags": ["大整数", "精度"],
+        "code": "const a = BigInt(12345678901234567890); console.log(a);",
+        "route": "BigInt"
       },
       {
         "name": "全局This",
+        "id": 78,
         "description": "标准化全局对象引用",
         "importance": 4,
-        "tags": ["globalThis", "跨环境"]
+        "tags": ["globalThis", "跨环境"],
+        "code": "console.log(globalThis);",
+        "route": "GlobalThis"
       },
       {
         "name": "动态导入",
+        "id": 79,
         "description": "运行时按需加载模块",
         "importance": 4,
-        "tags": ["import()", "代码分割"]
+        "tags": ["import()", "代码分割"],
+        "code": "const a = await import('./a.js'); console.log(a);",
+        "route": "DynamicImport"
       }
     ]
   },
@@ -508,33 +745,48 @@
     "items": [
       {
         "name": "try/catch/finally",
+        "id": 80,
         "description": "捕获和处理运行时错误",
         "importance": 5,
-        "tags": ["错误捕获", "清理"]
+        "tags": ["错误捕获", "清理"],
+        "code": "try { throw new Error('error'); } catch (error) { console.log(error); }",
+        "route": "TryCatch"
       },
       {
         "name": "Error对象",
+        "id": 81,
         "description": "表示错误的标准对象",
         "importance": 5,
-        "tags": ["类型", "堆栈跟踪"]
+        "tags": ["类型", "堆栈跟踪"],
+        "code": "const error = new Error('error');\n console.log(error.name);\n console.log(error.message);\n console.log(error.stack);",
+        "route": "ErrorHandling"
       },
       {
         "name": "自定义错误",
+        "id": 82,
         "description": "扩展Error创建特定错误类型",
         "importance": 4,
-        "tags": ["继承", "Error"]
+        "tags": ["继承", "Error"],
+        "code": "class CustomError extends Error\n {\n constructor(message) { super(message); this.name = 'CustomError'; }\n }\n const error = new CustomError('error');\n console.log(error.name);\n console.log(error.message);\n console.log(error.stack);",
+        "route": "ErrorHandling"
       },
       {
         "name": "Promise错误处理",
+        "id": 83,
         "description": "使用catch处理Promise拒绝",
         "importance": 5,
-        "tags": ["拒绝", "未处理拒绝"]
+        "tags": ["拒绝", "未处理拒绝"],
+        "code": "Promise.reject('error').catch(error => { console.log(error); });",
+        "route": "Promise"
       },
       {
         "name": "全局错误处理",
+        "id": 84,
         "description": "window.onerror捕获未处理错误",
         "importance": 4,
-        "tags": ["全局", "错误报告"]
+        "tags": ["全局", "错误报告"],
+        "code": "window.onerror = (message, source, lineno, colno, error) => { console.log(message, source, lineno, colno, error); };",
+        "route": "ErrorHandling"
       }
     ]
   },
@@ -543,51 +795,75 @@
     "items": [
       {
         "name": "模块模式",
+        "id": 85,
         "description": "封装私有变量和公共API",
         "importance": 5,
-        "tags": ["IIFE", "闭包"]
+        "tags": ["IIFE", "闭包"],
+        "code": "const module = (function() {\n const privateVar = 'private';\n return {\n publicMethod: function() {\n console.log(privateVar);\n }\n };\n })();",
+        "route": "Module"
       },
       {
         "name": "单例模式",
+        "id": 86,
         "description": "确保类只有一个实例",
         "importance": 5,
-        "tags": ["全局访问", "实例控制"]
+        "tags": ["全局访问", "实例控制"],
+        "code": "class Singleton {\n constructor() {\n if (Singleton.instance) { return Singleton.instance; }\n Singleton.instance = this;\n }\n }\n const instance1 = new Singleton();\n const instance2 = new Singleton();\n console.log(instance1 === instance2);",
+        "route": "SingletonPattern"
       },
       {
         "name": "工厂模式",
+        "id": 87,
         "description": "创建对象而不指定具体类",
         "importance": 5,
-        "tags": ["对象创建", "解耦"]
+        "tags": ["对象创建", "解耦"],
+        "code": "class Factory {\n createProduct(type) {\n if (type === 'A') {\n return new ProductA();\n } else if (type === 'B') {\n return new ProductB();\n }\n }\n }\n const factory = new Factory();\n const productA = factory.createProduct('A');\n const productB = factory.createProduct('B');",
+        "route": "FactoryPattern"
       },
       {
         "name": "观察者模式",
+        "id": 88,
         "description": "对象间的一对多依赖关系",
         "importance": 5,
-        "tags": ["发布-订阅", "事件驱动"]
+        "tags": ["发布-订阅", "事件驱动"],
+        "code": "class Subject {\n constructor() {\n this.observers = [];\n }\n addObserver(observer) {\n this.observers.push(observer);\n }\n removeObserver(observer) {\n this.observers = this.observers.filter(o => o !== observer);\n }\n notify(data) {\n this.observers.forEach(observer => observer.update(data));\n }\n }\n class Observer {\n update(data) {\n console.log(data);\n }\n }\n const subject = new Subject();\n const observer = new Observer();\n subject.addObserver(observer);\n subject.notify('data');",
+        "route": "ObserverPattern"
       },
       {
         "name": "代理模式",
+        "id": 89,
         "description": "为对象提供代理以控制访问",
         "importance": 4,
-        "tags": ["Proxy", "访问控制"]
+        "tags": ["Proxy", "访问控制"],
+        "code": "class Subject {\n constructor() {\n this.observers = [];\n }\n addObserver(observer) {\n this.observers.push(observer);\n }\n removeObserver(observer) {\n this.observers = this.observers.filter(o => o !== observer);\n }\n notify(data) {\n this.observers.forEach(observer => observer.update(data));\n }\n }\n class Observer {\n update(data) {\n console.log(data);\n }\n }\n const subject = new Subject();\n const observer = new Observer();\n subject.addObserver(observer);\n subject.notify('data');",
+        "route": "ProxyPattern"
       },
       {
         "name": "装饰器模式",
+        "id": 90,
         "description": "动态添加对象功能",
         "importance": 4,
-        "tags": ["装饰器", "功能扩展"]
+        "tags": ["装饰器", "功能扩展"],
+        "code": "class Subject {\n constructor() {\n this.observers = [];\n }\n addObserver(observer) {\n this.observers.push(observer);\n }\n removeObserver(observer) {\n this.observers = this.observers.filter(o => o !== observer);\n }\n notify(data) {\n this.observers.forEach(observer => observer.update(data));\n }\n }\n class Observer {\n update(data) {\n console.log(data);\n }\n }\n const subject = new Subject();\n const observer = new Observer();\n subject.addObserver(observer);\n subject.notify('data');",
+        "route": "DecoratorPattern"
       },
       {
         "name": "策略模式",
+        "id": 91,
         "description": "封装可互换的算法",
         "importance": 4,
-        "tags": ["算法封装", "运行时选择"]
+        "tags": ["算法封装", "运行时选择"],
+        "code": "class Subject {\n constructor() {\n this.observers = [];\n }\n addObserver(observer) {\n this.observers.push(observer);\n }\n removeObserver(observer) {\n this.observers = this.observers.filter(o => o !== observer);\n }\n notify(data) {\n this.observers.forEach(observer => observer.update(data));\n }\n }\n class Observer {\n update(data) {\n console.log(data);\n }\n }\n const subject = new Subject();\n const observer = new Observer();\n subject.addObserver(observer);\n subject.notify('data');",
+        "route": "StrategyPattern"
       },
       {
         "name": "迭代器模式",
+        "id": 92,
         "description": "顺序访问聚合对象的元素",
         "importance": 4,
-        "tags": ["Symbol.iterator", "for...of"]
+        "tags": ["Symbol.iterator", "for...of"],
+        "code": "class Subject {\n constructor() {\n this.observers = [];\n }\n addObserver(observer) {\n this.observers.push(observer);\n }\n removeObserver(observer) {\n this.observers = this.observers.filter(o => o !== observer);\n }\n notify(data) {\n this.observers.forEach(observer => observer.update(data));\n }\n }\n class Observer {\n update(data) {\n console.log(data);\n }\n }\n const subject = new Subject();\n const observer = new Observer();\n subject.addObserver(observer);\n subject.notify('data');",
+        "route": "IteratorPattern"
       }
     ]
   },
@@ -596,57 +872,84 @@
     "items": [
       {
         "name": "DOM操作",
+        "id": 93,
         "description": "访问和操作文档对象模型",
         "importance": 5,
-        "tags": ["选择器", "节点操作"]
+        "tags": ["选择器", "节点操作"],
+        "code": "const element = document.querySelector('.element'); element.innerHTML = 'Hello';",
+        "route": "DOM"
       },
       {
         "name": "事件处理",
+        "id": 94,
         "description": "处理用户交互和浏览器事件",
         "importance": 5,
-        "tags": ["addEventListener", "事件委托"]
+        "tags": ["addEventListener", "事件委托"],
+        "code": "const element = document.querySelector('.element');\n element.addEventListener('click', () => { console.log('click'); });",
+        "route": "Events"
       },
       {
         "name": "Fetch API",
+        "id": 95,
         "description": "现代网络请求接口",
         "importance": 5,
-        "tags": ["Promise", "HTTP"]
+        "tags": ["Promise", "HTTP"],
+        "code": "fetch('https://api.example.com/data').then(response => response.json()).then(data => console.log(data));",
+        "route": "Fetch"
       },
       {
-        "name": "Web Storage",
+        "name": "Web Storage",  
+        "id": 96,
         "description": "本地存储数据",
         "importance": 5,
-        "tags": ["localStorage", "sessionStorage"]
+        "tags": ["localStorage", "sessionStorage"],
+        "code": "localStorage.setItem('key', 'value'); localStorage.getItem('key');",
+        "route": "WebStorage"
       },
       {
         "name": "定时器",
+        "id": 97,
         "description": "延迟执行和周期性执行",
         "importance": 5,
-        "tags": ["setTimeout", "setInterval"]
+        "tags": ["setTimeout", "setInterval"],
+        "code": "setTimeout(() => { console.log('setTimeout'); }, 1000);\n setInterval(() => { console.log('setInterval'); }, 1000);",
+        "route": "Timer"
       },
       {
         "name": "URL API",
+        "id": 98,
         "description": "解析和操作URL",
         "importance": 4,
-        "tags": ["URL", "URLSearchParams"]
+        "tags": ["URL", "URLSearchParams"],
+        "code": "const url = new URL('https://api.example.com/data');\n console.log(url.searchParams.get('key'));",
+        "route": "WindowClassInterface"
       },
       {
         "name": "History API",
+        "id": 99,
         "description": "操作浏览器会话历史",
         "importance": 4,
-        "tags": ["pushState", "单页应用"]
+        "tags": ["pushState", "单页应用"],
+        "code": "history.pushState({ page: 'home' }, 'Home', '/');",
+        "route": "WindowNavigatorScreenCommonMethodsAndAttributes"
       },
       {
         "name": "WebSockets",
+        "id": 100,
         "description": "全双工客户端-服务器通信",
         "importance": 4,
-        "tags": ["实时", "双向通信"]
+        "tags": ["实时", "双向通信"],
+        "code": "const socket = new WebSocket('ws://api.example.com/data');\n socket.onmessage = (event) => { console.log(event.data); };\n socket.send('message');",
+        "route": "WebSocket"
       },
       {
         "name": "Web Components",
+        "id": 101,
         "description": "创建可重用自定义元素",
         "importance": 4,
-        "tags": ["Custom Elements", "Shadow DOM"]
+        "tags": ["Custom Elements", "Shadow DOM"],
+        "code": "class MyElement extends HTMLElement {\n constructor() { super(); this.innerHTML = 'Hello'; }\n }\n customElements.define('my-element', MyElement);",
+        "route": "WebComponents"
       }
     ]
   },
@@ -655,45 +958,66 @@
     "items": [
       {
         "name": "防抖",
+        "id": 102,
         "description": "事件停止触发后执行",
         "importance": 5,
-        "tags": ["resize", "输入"]
+        "tags": ["resize", "输入"],
+        "code": "const debouncedFn = debounce(() => { console.log('debounce'); }, 1000);",
+        "route": "DebounceAndThrottle"
       },
       {
         "name": "节流",
+        "id": 103,
         "description": "固定时间间隔内只执行一次",
         "importance": 5,
-        "tags": ["scroll", "高频事件"]
+        "tags": ["scroll", "高频事件"],
+        "code": "const throttledFn = throttle(() => { console.log('throttle'); }, 1000);",
+        "route": "DebounceAndThrottle"
       },
       {
         "name": "懒加载",
+        "id": 104,
         "description": "延迟加载非关键资源",
         "importance": 5,
-        "tags": ["图片", "组件"]
+        "tags": ["图片", "组件"],
+        "code": "const lazyLoad = (src) => { const img = new Image();\n img.src = src;\n img.onload = () => { console.log('lazy load'); }; };",
+        "route": "LazyLoadAndpreLoad"
       },
       {
         "name": "虚拟滚动",
+        "id": 105,
         "description": "只渲染可见区域内容",
         "importance": 4,
-        "tags": ["大数据", "列表"]
+        "tags": ["大数据", "列表"],
+        "code": "const virtualScroll = (container, items) => { const visibleItems = items.slice(0, 10);\n container.innerHTML = visibleItems.map(item => `<div>${item}</div>`).join(''); };",
+        "route": "VirtualScrollList"
       },
       {
         "name": "内存优化",
+        "id": 106,
         "description": "减少内存占用和泄漏",
         "importance": 5,
-        "tags": ["引用", "垃圾回收"]
+        "tags": ["引用", "垃圾回收"],
+        "code": "const memoryOptimize = () => { const obj = { a: 1 };\n const arr = [obj]; obj = null; console.log(arr); };",
+        "route": "MemoryManagement3"
       },
       {
         "name": "代码分割",
+        "id": 107,
         "description": "将代码拆分成小块按需加载",
         "importance": 5,
-        "tags": ["动态导入", "懒加载"]
+        "tags": ["动态导入", "懒加载"],
+        "code": "const codeSplit = () => { const module = await import('./module.js'); console.log(module); };",
+        "route": "CodeSplit"
       },
       {
         "name": "Web Workers",
+        "id": 108,
         "description": "后台线程执行CPU密集型任务",
         "importance": 4,
-        "tags": ["并行", "非阻塞"]
+        "tags": ["并行", "非阻塞"],
+        "code": "const webWorkers = () => { const worker = new Worker('worker.js');\n worker.postMessage('message');\n worker.onmessage = (event) => { console.log(event.data); }; };",
+        "route": "WebWorkers"
       }
     ]
   }

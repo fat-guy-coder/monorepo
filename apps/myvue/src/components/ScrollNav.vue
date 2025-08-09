@@ -1,8 +1,8 @@
 <template>
-  <nav class="nav" :class="{ foldNav: fold }">
+  <nav class="nav">
     <h2>
       {{ title ?? '目录' }}
-      <span class="fold" @click.stop="fold = !fold">{{ fold ? '展开' : '收起' }}</span>
+      <span class="fold" @click.stop="fold = !fold">{{ fold ? '收起' : '展开' }}</span>
     </h2>
     <ul class="list" :style="{ display: fold ? 'block' : 'none' }">
       <li
@@ -30,7 +30,7 @@
 // 组合式 API 逻辑
 import { defineProps, ref, type PropType, computed } from 'vue'
 
-const fold = ref(false)
+const fold = ref(true)
 
 interface Item {
   title?: string
