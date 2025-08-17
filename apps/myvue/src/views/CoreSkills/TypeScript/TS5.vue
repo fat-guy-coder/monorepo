@@ -178,7 +178,7 @@
         <a href="#" class="resource">
           <div class="resource-icon">🎥</div>
           <h3>视频教程</h3>
-          <p>TypeScript 5 新特性详解视频教程</p>
+          <p>TypeScript 5 新特性介绍视频教程</p>
         </a>
         <a href="#" class="resource">
           <div class="resource-icon">💻</div>
@@ -230,7 +230,7 @@ const filteredFeatures = computed(() => {
       (feature) =>
         feature.title.toLowerCase().includes(query) ||
         feature.description.toLowerCase().includes(query) ||
-        feature.scenarios.some((scene) => scene.toLowerCase().includes(query))
+        feature.scenarios.some((scene) => scene.toLowerCase().includes(query)),
     )
   }
 

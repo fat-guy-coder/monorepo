@@ -15,12 +15,22 @@
       </div>
     </div>
 
+    <ScrollNav
+      :list="navList"
+    />
+
     <div class="knowledge-grid">
-      <div v-for="(point, index) in knowledgePoints" :key="point.title" class="knowledge-card" :class="{
-        'hot': point.hotness >= 9,
-        'medium': point.hotness >= 7 && point.hotness < 9,
-        'new': point.isVue3
-      }">
+      <div
+        v-for="(point, index) in knowledgePoints"
+        :key="point.title"
+        :id="point.id"
+        class="knowledge-card"
+        :class="{
+          hot: point.hotness >= 9,
+          medium: point.hotness >= 7 && point.hotness < 9,
+          new: point.isVue3,
+        }"
+      >
         <div class="card-header">
           <span class="card-number">#{{ index + 1 }}</span>
           <div class="hotness">
@@ -41,7 +51,12 @@
         <div class="card-footer">
           <span class="interview-frequency">面试频率: {{ getFrequencyText(point.frequency) }}</span>
           <div class="importance">
-            <div v-for="star in 5" :key="star" class="star" :class="{ 'filled': star <= point.importance }"></div>
+            <div
+              v-for="star in 5"
+              :key="star"
+              class="star"
+              :class="{ filled: star <= point.importance }"
+            ></div>
           </div>
         </div>
       </div>
@@ -65,292 +80,43 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import ScrollNav from '@/components/ScrollNav.vue'
+import { computed, onMounted, ref } from 'vue'
 
 interface KnowledgePoint {
-  title: string;
-  description: string;
-  keyPoints?: string[];
-  hotness: number; // 1-10
-  frequency: number; // 1-10
-  importance: number; // 1-5
-  isVue3?: boolean;
+  title: string
+  id: string
+  description: string
+  keyPoints?: string[]
+  hotness: number // 1-10
+  frequency: number // 1-10
+  importance: number // 1-5
+  isVue3?: boolean
 }
 
-const knowledgePoints = ref<KnowledgePoint[]>([
-  {
-    title: '响应式原理',
-    description: 'Vue的核心特性，理解Object.defineProperty(Vue2)和Proxy(Vue3)的实现差异',
-    keyPoints: [
-      '数据劫持与依赖收集',
-      '发布-订阅模式',
-      'Vue3的Proxy优势',
-      '数组响应式处理'
-    ],
-    hotness: 10,
-    frequency: 10,
-    importance: 5
-  },
-  {
-    title: '组合式API (Composition API)',
-    description: 'Vue 3引入的新范式，解决了Options API在复杂组件中的碎片化问题',
-    keyPoints: [
-      'setup()函数',
-      'ref与reactive',
-      '生命周期钩子函数',
-      '与React Hooks的对比'
-    ],
-    hotness: 9.8,
-    frequency: 9.5,
-    importance: 5,
-    isVue3: true
-  },
-  {
-    title: '虚拟DOM与Diff算法',
-    description: 'Vue高性能渲染的核心，理解其工作原理对性能优化至关重要',
-    keyPoints: [
-      '虚拟DOM的作用与优势',
-      'Diff算法策略（同层比较）',
-      'key属性的重要性',
-      'Vue3的优化（静态提升等）'
-    ],
-    hotness: 9.5,
-    frequency: 9,
-    importance: 5
-  },
-  {
-    title: '组件通信',
-    description: '多种组件间通信方式的适用场景与实现原理',
-    keyPoints: [
-      'Props / Emit',
-      'Event Bus',
-      'Vuex / Pinia',
-      'provide / inject',
-      '$attrs / $listeners'
-    ],
-    hotness: 9.5,
-    frequency: 9.5,
-    importance: 5
-  },
-  {
-    title: 'Vue Router',
-    description: '官方路由管理库，SPA应用的核心',
-    keyPoints: [
-      '路由模式（hash/history）',
-      '导航守卫',
-      '路由懒加载',
-      '动态路由',
-      '路由元信息'
-    ],
-    hotness: 9.2,
-    frequency: 9,
-    importance: 5
-  },
-  {
-    title: '状态管理（Vuex/Pinia）',
-    description: '复杂应用状态管理的解决方案',
-    keyPoints: [
-      'Vuex核心概念（State, Getters, Mutations, Actions）',
-      'Pinia的优势与使用',
-      '模块化管理',
-      '状态持久化'
-    ],
-    hotness: 9.0,
-    frequency: 8.5,
-    importance: 4
-  },
-  {
-    title: '生命周期',
-    description: '理解Vue组件的创建、更新和销毁过程',
-    keyPoints: [
-      '主要生命周期钩子',
-      'Vue2 vs Vue3生命周期',
-      'setup中的生命周期',
-      '异步请求的合适位置'
-    ],
-    hotness: 8.8,
-    frequency: 9,
-    importance: 4
-  },
-  {
-    title: '指令系统',
-    description: 'Vue模板语法的核心，包括内置指令和自定义指令',
-    keyPoints: [
-      '常用指令（v-if, v-for, v-bind, v-on）',
-      'v-model原理与自定义',
-      '自定义指令',
-      '指令钩子函数'
-    ],
-    hotness: 8.5,
-    frequency: 8,
-    importance: 4
-  },
-  {
-    title: '计算属性与侦听器',
-    description: '响应式系统中的衍生数据和副作用处理',
-    keyPoints: [
-      'computed vs methods',
-      'watch vs watchEffect',
-      '深度监听',
-      '立即执行'
-    ],
-    hotness: 8.5,
-    frequency: 8.5,
-    importance: 4
-  },
-  {
-    title: '插槽（Slots）',
-    description: '组件内容分发的强大机制',
-    keyPoints: [
-      '默认插槽',
-      '具名插槽',
-      '作用域插槽',
-      '渲染作用域'
-    ],
-    hotness: 8.0,
-    frequency: 7.5,
-    importance: 3
-  },
-  {
-    title: 'Teleport组件',
-    description: 'Vue 3新增的组件，用于将内容渲染到DOM树的其他位置',
-    keyPoints: [
-      '解决z-index问题',
-      '模态框实现',
-      '与React Portal的对比'
-    ],
-    hotness: 7.8,
-    frequency: 7,
-    importance: 3,
-    isVue3: true
-  },
-  {
-    title: '性能优化',
-    description: '提升Vue应用性能的关键策略',
-    keyPoints: [
-      '代码分割',
-      '异步组件',
-      'keep-alive',
-      '虚拟滚动',
-      '减少不必要的响应式'
-    ],
-    hotness: 8.7,
-    frequency: 8,
-    importance: 4
-  },
-  {
-    title: '过渡与动画',
-    description: 'Vue提供的动画系统，用于元素进入/离开的过渡效果',
-    keyPoints: [
-      'transition组件',
-      'CSS过渡类名',
-      'JavaScript钩子',
-      '列表过渡'
-    ],
-    hotness: 7.0,
-    frequency: 6.5,
-    importance: 2
-  },
-  {
-    title: '服务端渲染（SSR）',
-    description: '提升首屏性能和SEO的解决方案',
-    keyPoints: [
-      'Nuxt.js框架',
-      'SSR原理',
-      '客户端激活（hydration）',
-      '数据预取'
-    ],
-    hotness: 7.5,
-    frequency: 6,
-    importance: 3
-  },
-  {
-    title: 'TypeScript集成',
-    description: 'Vue 3对TypeScript的全面支持',
-    keyPoints: [
-      '类型推导',
-      '组件类型声明',
-      'Composition API中的TS',
-      'defineComponent'
-    ],
-    hotness: 8.5,
-    frequency: 8,
-    importance: 4,
-    isVue3: true
-  },
-  {
-    title: '自定义渲染器',
-    description: 'Vue 3的底层能力，支持非DOM环境的渲染',
-    keyPoints: [
-      '渲染器原理',
-      '创建自定义渲染器',
-      '跨平台应用（小程序、Canvas等）'
-    ],
-    hotness: 6.5,
-    frequency: 5,
-    importance: 2,
-    isVue3: true
-  },
-  {
-    title: '混入（Mixins）',
-    description: 'Vue 2中复用组件逻辑的方式，Vue 3中被Composition API取代',
-    keyPoints: [
-      '基本使用',
-      '合并策略',
-      '与Composition API的对比',
-      '潜在问题'
-    ],
-    hotness: 7.0,
-    frequency: 6,
-    importance: 3
-  },
-  {
-    title: '错误处理',
-    description: '捕获和处理Vue应用中的错误',
-    keyPoints: [
-      '全局错误处理',
-      '错误边界（Error Boundaries）',
-      '异步错误捕获',
-      '渲染函数错误'
-    ],
-    hotness: 7.2,
-    frequency: 6.5,
-    importance: 3
-  },
-  {
-    title: '函数式组件',
-    description: '无状态、无实例的高性能组件',
-    keyPoints: [
-      '适用场景',
-      '性能优势',
-      'Vue 3中的变化'
-    ],
-    hotness: 6.8,
-    frequency: 6,
-    importance: 2
-  },
-  {
-    title: 'nextTick原理',
-    description: '理解Vue异步更新队列机制',
-    keyPoints: [
-      '更新批处理',
-      '微任务队列',
-      '使用场景',
-      '与setTimeout对比'
-    ],
-    hotness: 8.0,
-    frequency: 7.5,
-    importance: 4
-  }
-]);
+const knowledgePoints = ref<KnowledgePoint[]>([])
+
+const navList = computed(() => {
+  return knowledgePoints.value.map((item) => {
+    return {
+      name: item.title,
+      id: item.id,
+    }
+  })
+})
+
+onMounted(async () => {
+  const res = await import('@/views/FrameworksAndEngineering/JSON/HighFrequencyVue.json')
+  knowledgePoints.value = res.default as unknown as KnowledgePoint[]
+})
 
 const getFrequencyText = (frequency: number): string => {
-  if (frequency >= 9) return '极高';
-  if (frequency >= 8) return '高';
-  if (frequency >= 7) return '中高';
-  if (frequency >= 6) return '中等';
-  return '较低';
-};
+  if (frequency >= 9) return '极高'
+  if (frequency >= 8) return '高'
+  if (frequency >= 7) return '中高'
+  if (frequency >= 6) return '中等'
+  return '较低'
+}
 </script>
 
 <style scoped lang="less">

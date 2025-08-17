@@ -1,0 +1,220 @@
+[
+  {
+    "name": "数组",
+    "type": "线性结构",
+    "features": ["连续的内存空间", "固定大小（静态数组）", "通过索引直接访问元素", "元素类型相同"],
+    "purpose": "存储相同类型的数据集合，支持随机访问",
+    "scenarios": [
+      "需要快速随机访问元素",
+      "数据量固定且已知",
+      "多维数据表示（矩阵）",
+      "实现其他数据结构的基础"
+    ],
+    "efficiency": {
+      "access": "O(1)",
+      "search": "O(n)",
+      "insertion": "O(n)",
+      "deletion": "O(n)",
+      "memory": "低"
+    },
+    "route": "ArrayBasic"
+  },
+  {
+    "name": "链表",
+    "type": "线性结构",
+    "features": ["非连续的内存空间", "动态大小", "通过指针连接元素", "单向/双向/循环变体"],
+    "purpose": "高效插入和删除操作，动态内存分配",
+    "scenarios": [
+      "需要频繁插入/删除操作",
+      "实现栈、队列等数据结构",
+      "内存分配不确定的情况",
+      "实现LRU缓存"
+    ],
+    "efficiency": {
+      "access": "O(n)",
+      "search": "O(n)",
+      "insertion": "O(1)",
+      "deletion": "O(1)",
+      "memory": "中"
+    },
+    "route": "LinkedListBasic"
+  },
+  {
+    "name": "栈",
+    "type": "线性结构",
+    "features": [
+      "后进先出(LIFO)原则",
+      "仅在一端操作（顶部）",
+      "基本操作：push, pop, peek",
+      "递归算法实现的基础"
+    ],
+    "purpose": "管理具有后进先出特性的数据",
+    "scenarios": [
+      "函数调用栈",
+      "表达式求值",
+      "括号匹配检查",
+      "回溯算法（如迷宫求解）",
+      "浏览器的后退功能"
+    ],
+    "efficiency": {
+      "access": "O(n)",
+      "search": "O(n)",
+      "insertion": "O(1)",
+      "deletion": "O(1)",
+      "memory": "低"
+    },
+    "route": "StackBase"
+  },
+  {
+    "name": "队列",
+    "type": "线性结构",
+    "features": [
+      "先进先出(FIFO)原则",
+      "在队尾添加，队头删除",
+      "基本操作：enqueue, dequeue",
+      "有普通队列、双端队列、优先队列等变体"
+    ],
+    "purpose": "管理具有先进先出特性的数据",
+    "scenarios": ["任务调度", "缓冲处理", "广度优先搜索", "打印机任务队列", "消息队列系统"],
+    "efficiency": {
+      "access": "O(n)",
+      "search": "O(n)",
+      "insertion": "O(1)",
+      "deletion": "O(1)",
+      "memory": "低"
+    },
+    "route": "QueueBase"
+  },
+  {
+    "name": "哈希表",
+    "type": "散列结构",
+    "features": [
+      "键值对存储",
+      "通过哈希函数计算位置",
+      "平均时间复杂度O(1)",
+      "处理哈希冲突（开放寻址法、链地址法）"
+    ],
+    "purpose": "实现快速查找、插入和删除操作",
+    "scenarios": ["字典实现", "数据库索引", "缓存实现", "唯一性检查", "对象属性存储"],
+    "efficiency": {
+      "access": "O(1)",
+      "search": "O(1)",
+      "insertion": "O(1)",
+      "deletion": "O(1)",
+      "memory": "中高"
+    },
+    "route": "HashTableIntroduction"
+  },
+  {
+    "name": "树",
+    "type": "树形结构",
+    "features": ["非线性的分层数据结构", "由节点和边组成", "每个节点有零个或多个子节点", "除了根节点外，每个节点都有一个父节点"],
+    "purpose": "表示具有层级关系的数据",
+    "scenarios": ["文件系统结构", "表达式树", "数据压缩（哈夫曼编码）", "游戏决策树", "数据库索引"],
+    "efficiency": {
+      "access": "O(log n)",
+      "search": "O(log n)",
+      "insertion": "O(log n)",
+      "deletion": "O(log n)",
+      "memory": "中高"
+    },
+    "route": "TreeBasic"
+  },
+  {
+    "name": "二叉树",
+    "type": "树形结构",
+    "features": [
+      "每个节点最多两个子节点",
+      "有根节点、叶节点等概念",
+      "多种遍历方式（前序、中序、后序）",
+      "平衡二叉树可提高效率"
+    ],
+    "purpose": "层次化数据存储，高效搜索和排序",
+    "scenarios": ["文件系统结构", "表达式树", "数据压缩（哈夫曼编码）", "游戏决策树", "数据库索引"],
+    "efficiency": {
+      "access": "O(log n)",
+      "search": "O(log n)",
+      "insertion": "O(log n)",
+      "deletion": "O(log n)",
+      "memory": "中"
+    },
+    "route": "BinaryTree"
+  },
+  {
+    "name": "堆",
+    "type": "树形结构",
+    "features": [
+      "完全二叉树",
+      "堆序性质（最大堆/最小堆）",
+      "根节点总是最大/最小值",
+      "高效获取极值"
+    ],
+    "purpose": "高效获取和删除最大/最小值",
+    "scenarios": [
+      "优先队列实现",
+      "堆排序算法",
+      "图算法（如Dijkstra）",
+      "定时任务调度",
+      "求Top K问题"
+    ],
+    "efficiency": {
+      "access": "O(1)",
+      "search": "O(n)",
+      "insertion": "O(log n)",
+      "deletion": "O(log n)",
+      "memory": "中"
+    },
+    "route": "HeapIntroduction"
+  },
+  {
+    "name": "图",
+    "type": "图形结构",
+    "features": ["顶点和边的集合", "有向图/无向图", "有权图/无权图", "邻接矩阵/邻接表表示法"],
+    "purpose": "表示实体间复杂关系",
+    "scenarios": ["社交网络分析", "路径规划（GPS导航）", "推荐系统", "网络拓扑", "依赖关系分析"],
+    "efficiency": {
+      "access": "O(1)",
+      "search": "O(V+E)",
+      "insertion": "O(1)",
+      "deletion": "O(1)",
+      "memory": "高"
+    },
+    "route": "GraphBasic"
+  },
+  {
+    "name": "Trie树",
+    "type": "树形结构",
+    "features": ["前缀树或字典树", "节点表示字符串的字符", "共享公共前缀", "快速前缀搜索"],
+    "purpose": "高效存储和检索字符串集合",
+    "scenarios": ["自动补全", "拼写检查", "IP路由选择", "单词游戏", "搜索引擎建议"],
+    "efficiency": {
+      "access": "O(k)",
+      "search": "O(k)",
+      "insertion": "O(k)",
+      "deletion": "O(k)",
+      "memory": "高"
+    },
+    "route": "TrieTree"
+  },
+  {
+    "name": "并查集",
+    "type": "其他结构",
+    "features": ["处理不交集合并", "两种操作：查找和合并", "路径压缩优化", "按秩合并优化"],
+    "purpose": "高效处理元素分组和连通性问题",
+    "scenarios": [
+      "网络连接检测",
+      "朋友圈关系",
+      "图像处理连通区域",
+      "Kruskal最小生成树算法",
+      "动态连通性问题"
+    ],
+    "efficiency": {
+      "access": "O(α(n))",
+      "search": "O(α(n))",
+      "insertion": "O(1)",
+      "deletion": "O(1)",
+      "memory": "中"
+    },
+    "route": "UnionFindIntroduction"
+  }
+]

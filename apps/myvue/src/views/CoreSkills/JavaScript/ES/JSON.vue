@@ -1,7 +1,7 @@
 <template>
   <div class="json-guide">
     <header class="header">
-      <h1>JSON 技术详解</h1>
+      <h1>JSON 技术介绍</h1>
       <p>掌握现代 Web 开发的核心数据交换格式</p>
     </header>
 
@@ -17,7 +17,10 @@
           <div class="concept-card">
             <div class="concept-icon">🔄</div>
             <h3>什么是 JSON？</h3>
-            <p>JSON (JavaScript Object Notation) 是一种轻量级的数据交换格式。它基于 ECMAScript 的子集，采用完全独立于语言的文本格式，但使用了类似 C 语言家族的习惯。</p>
+            <p>
+              JSON (JavaScript Object Notation) 是一种轻量级的数据交换格式。它基于 ECMAScript
+              的子集，采用完全独立于语言的文本格式，但使用了类似 C 语言家族的习惯。
+            </p>
           </div>
 
           <div class="concept-card">
@@ -36,7 +39,8 @@
             <div class="concept-icon">🔢</div>
             <h3>基本结构</h3>
             <div class="code-sample">
-              <pre>{
+              <pre>
+{
   "name": "John",
   "age": 30,
   "isStudent": false,
@@ -45,7 +49,8 @@
     "street": "123 Main St",
     "city": "New York"
   }
-}</pre>
+}</pre
+              >
             </div>
           </div>
         </div>
@@ -64,9 +69,11 @@
             <h3>API 数据交换</h3>
             <p>客户端与服务器之间的数据传输标准格式</p>
             <div class="example">
-              <pre>fetch('/api/data')
+              <pre>
+fetch('/api/data')
   .then(response => response.json())
-  .then(data => console.log(data));</pre>
+  .then(data => console.log(data));</pre
+              >
             </div>
           </div>
 
@@ -75,11 +82,13 @@
             <h3>本地存储</h3>
             <p>在浏览器中存储结构化数据</p>
             <div class="example">
-              <pre>// 存储数据
+              <pre>
+// 存储数据
 localStorage.setItem('user', JSON.stringify(user));
 
 // 读取数据
-const user = JSON.parse(localStorage.getItem('user'));</pre>
+const user = JSON.parse(localStorage.getItem('user'));</pre
+              >
             </div>
           </div>
 
@@ -88,7 +97,8 @@ const user = JSON.parse(localStorage.getItem('user'));</pre>
             <h3>配置文件</h3>
             <p>应用程序和服务的配置文件格式</p>
             <div class="example">
-              <pre>// config.json
+              <pre>
+// config.json
 {
   "apiUrl": "https://api.example.com",
   "maxRetries": 3,
@@ -96,17 +106,18 @@ const user = JSON.parse(localStorage.getItem('user'));</pre>
     "darkMode": true,
     "notifications": false
   }
-}</pre>
+}</pre
+              >
             </div>
           </div>
         </div>
       </section>
 
-      <!-- JSON.stringify 详解 -->
+      <!-- JSON.stringify 介绍 -->
       <section class="stringify-section">
         <div class="section-header">
           <div class="icon">🔍</div>
-          <h2>JSON.stringify 详解</h2>
+          <h2>JSON.stringify 介绍</h2>
         </div>
 
         <div class="method-details">
@@ -212,11 +223,11 @@ const json = JSON.stringify(obj, null, 2);
         </div>
       </section>
 
-      <!-- JSON.parse 详解 -->
+      <!-- JSON.parse 介绍 -->
       <section class="parse-section">
         <div class="section-header">
           <div class="icon">🔍</div>
-          <h2>JSON.parse 详解</h2>
+          <h2>JSON.parse 介绍</h2>
         </div>
 
         <div class="method-details">
@@ -372,9 +383,11 @@ const obj = JSON.parse(json);
             <h3>循环引用</h3>
             <p>JSON.stringify 无法处理循环引用</p>
             <div class="example">
-              <pre>const obj = {};
+              <pre>
+const obj = {};
 obj.self = obj;
-JSON.stringify(obj); // 报错</pre>
+JSON.stringify(obj); // 报错</pre
+              >
             </div>
           </div>
 
@@ -475,7 +488,7 @@ JSON.stringify(obj); // 报错</pre>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref } from 'vue'
 
 const jsInput = ref(`{
   name: "John Doe",
@@ -488,37 +501,39 @@ const jsInput = ref(`{
   },
   birthDate: new Date(1990, 5, 15),
   score: null
-}`);
+}`)
 
-const jsonOutput = ref('');
-const jsOutput = ref('');
+const jsonOutput = ref('')
+const jsOutput = ref('')
 
 const convertToJson = () => {
   try {
     // 安全地评估输入字符串
-    const obj = new Function(`return (${jsInput.value})`)();
+    const obj = new Function(`return (${jsInput.value})`)()
 
     // 转换日期对象为字符串用于显示
-    const convertedObj = JSON.parse(JSON.stringify(obj, (key, value) => {
-      if (value instanceof Date) return value.toISOString();
-      return value;
-    }));
+    const convertedObj = JSON.parse(
+      JSON.stringify(obj, (key, value) => {
+        if (value instanceof Date) return value.toISOString()
+        return value
+      }),
+    )
 
-    jsonOutput.value = JSON.stringify(convertedObj, null, 2);
-    jsOutput.value = '';
+    jsonOutput.value = JSON.stringify(convertedObj, null, 2)
+    jsOutput.value = ''
   } catch (error) {
-    jsonOutput.value = `错误: ${error.message}`;
+    jsonOutput.value = `错误: ${error.message}`
   }
-};
+}
 
 const convertToJs = () => {
   try {
-    const obj = JSON.parse(jsonOutput.value);
-    jsOutput.value = JSON.stringify(obj, null, 2);
+    const obj = JSON.parse(jsonOutput.value)
+    jsOutput.value = JSON.stringify(obj, null, 2)
   } catch (error) {
-    jsOutput.value = `错误: ${error.message}`;
+    jsOutput.value = `错误: ${error.message}`
   }
-};
+}
 </script>
 
 <style lang="less" scoped>
@@ -596,14 +611,20 @@ const convertToJs = () => {
   }
 }
 
-.concept-grid, .usage-grid, .scenarios-grid, .cautions-grid {
+.concept-grid,
+.usage-grid,
+.scenarios-grid,
+.cautions-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 1.8rem;
   margin-bottom: 2.5rem;
 }
 
-.concept-card, .usage-card, .scenario-card, .caution-card {
+.concept-card,
+.usage-card,
+.scenario-card,
+.caution-card {
   background: @card-bg;
   border-radius: 16px;
   padding: 1.8rem;
@@ -816,7 +837,8 @@ const convertToJs = () => {
   }
 }
 
-.pros, .cons {
+.pros,
+.cons {
   background: @card-bg;
   border-radius: 16px;
   padding: 1.8rem;
@@ -876,7 +898,9 @@ ul {
   gap: 1.5rem;
 }
 
-.input-area, .output-area, .result-area {
+.input-area,
+.output-area,
+.result-area {
   h3 {
     color: @primary-color;
     margin-bottom: 1rem;

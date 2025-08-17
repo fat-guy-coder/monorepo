@@ -37,6 +37,7 @@
 <script setup lang="ts">
 import Nav from '@/components/ScrollNav.vue'
 import { defineEmits, onMounted, ref, onBeforeUnmount } from 'vue'
+// import { useAutoScroll } from '@/hooks/useAutoScroll'
 
 const emit = defineEmits(['goToByRouteName'])
 
@@ -65,7 +66,7 @@ const categories = ref<TipCategory[]>([])
 onMounted(async () => {
   const data = await import('./JSON/JSSmallTips.json')
   categories.value = data.default
-  console.log('onMounted')
+  // useAutoScroll({ name: 'JSSmallTips' })
 })
 
 onBeforeUnmount(() => {

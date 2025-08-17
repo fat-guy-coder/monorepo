@@ -95,7 +95,9 @@
               <div class="code-block">
                 <pre><code>/\d/y.test('123'); // true</code></pre>
               </div>
-              <p class="text-secondary">与 g 类似，但匹配位置是固定的，必须从正则表达式的当前索引开始匹配。</p>
+              <p class="text-secondary">
+                与 g 类似，但匹配位置是固定的，必须从正则表达式的当前索引开始匹配。
+              </p>
             </div>
 
             <div class="syntax-card">
@@ -141,6 +143,55 @@
                   <div class="code-block">
                     <pre><code>{{ method.example }}</code></pre>
                   </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 正则捕获分组 -->
+      <div class="card mb-xl">
+        <div class="card-header">
+          <h2 class="card-title">
+            <span class="card-icon">🎯</span>
+            replace方法
+          </h2>
+        </div>
+        <div class="card-body">
+          <div class="grid grid-1">
+            <div class="method-card">
+              <h3 class="text-lg font-semibold mb-md">
+                replace方法第一个参数是字符串或者正则表达式
+              </h3>
+              <div class="method-list">
+                <div class="code-block">
+                  <pre><code>const text = 'Hello, world!';
+const newText = text.replace('world', 'JavaScript');
+// 结果: "Hello, JavaScript!"</code></pre>
+                </div>
+                <p class="text-secondary">
+                  如果第一个参数是字符串,则只会替换第一个匹配项,如果第一个参数是正则表达式,则会替换所有匹配项(前提是正则表达式有g修饰符)。
+                </p>
+              </div>
+              <h3 class="text-lg font-semibold mb-md">replace方法第二个参数是字符串或者函数</h3>
+              <div class="method-list">
+                <p class="text-secondary">第二个参数是字符串</p>
+                <div class="code-block">
+                  <pre><code>\\字符串
+const text = 'Hello, world!';
+const newText = text.replace('world', 'JavaScript');
+// 结果: "Hello, JavaScript!"</code></pre>
+                </div>
+                <p class="text-secondary">第二个参数是函数</p>
+                <p>match为匹配到的字符串,p1,p2,p3为捕获分组,offset为匹配到的字符串的索引,string为原字符串</p>
+                <div class="code-block">
+                  <pre><code>//函数
+const text = 'Hello, world!';
+const newText = text.replace('world', (match, p1, p2, p3, offset, string) => {
+  return match.toUpperCase();
+});
+// 结果: "Hello, JavaScript!"</code></pre>
                 </div>
               </div>
             </div>
@@ -235,9 +286,13 @@ const html = text.replace(markdownRegex, '&lt;strong&gt;$1&lt;/strong&gt;');
                 </thead>
                 <tbody>
                   <tr v-for="item in brackets" :key="item.char">
-                    <td><code>{{ item.char }}</code></td>
+                    <td>
+                      <code>{{ item.char }}</code>
+                    </td>
                     <td>{{ item.desc }}</td>
-                    <td><code>{{ item.example }}</code></td>
+                    <td>
+                      <code>{{ item.example }}</code>
+                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -255,9 +310,13 @@ const html = text.replace(markdownRegex, '&lt;strong&gt;$1&lt;/strong&gt;');
                 </thead>
                 <tbody>
                   <tr v-for="item in metaCharacters" :key="item.char">
-                    <td :class="{ red: item.important }"><code>{{ item.char }}</code></td>
+                    <td :class="{ red: item.important }">
+                      <code>{{ item.char }}</code>
+                    </td>
                     <td :class="{ red: item.important }">{{ item.desc }}</td>
-                    <td :class="{ red: item.important }"><code>{{ item.example }}</code></td>
+                    <td :class="{ red: item.important }">
+                      <code>{{ item.example }}</code>
+                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -265,7 +324,9 @@ const html = text.replace(markdownRegex, '&lt;strong&gt;$1&lt;/strong&gt;');
 
             <div class="notice-box">
               <h4 class="text-md font-semibold mb-sm">正则元字符记忆口诀：</h4>
-              <p class="text-secondary">数字d、单词w、空白s(大写表相反,记得加斜杠！), . 表任意，边界换行回车制表符别忘了！</p>
+              <p class="text-secondary">
+                数字d、单词w、空白s(大写表相反,记得加斜杠！), . 表任意，边界换行回车制表符别忘了！
+              </p>
             </div>
 
             <h3 class="text-lg font-semibold mb-md mt-xl">量词</h3>
@@ -280,9 +341,13 @@ const html = text.replace(markdownRegex, '&lt;strong&gt;$1&lt;/strong&gt;');
                 </thead>
                 <tbody>
                   <tr v-for="item in quantifiers" :key="item.char">
-                    <td><code>{{ item.char }}</code></td>
+                    <td>
+                      <code>{{ item.char }}</code>
+                    </td>
                     <td>{{ item.desc }}</td>
-                    <td><code>{{ item.example }}</code></td>
+                    <td>
+                      <code>{{ item.example }}</code>
+                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -322,65 +387,66 @@ console.log('hahahehea'.replace(regExp, '$3 $2 $1'))</code></pre>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import '@/assets/css/unified-styles.css';
+import { ref } from 'vue'
+import '@/assets/css/unified-styles.css'
 
 const syntaxList = ref([
   {
     icon: '📌',
     title: '字面量创建',
     example: '/pattern/flags',
-    desc: '推荐使用字面量语法进行创建'
+    desc: '推荐使用字面量语法进行创建',
   },
   {
     icon: '⚙️',
     title: '构造函数',
     example: 'new RegExp("pattern", "flags")',
-    desc: '动态构建正则时使用'
+    desc: '动态构建正则时使用',
   },
   {
     icon: '🚩',
     title: '常用修饰符',
     example: 'g(全局) i(忽略大小写) m(多行)',
-    desc: '修改匹配行为'
-  }
-]);
+    desc: '修改匹配行为',
+  },
+])
 
 const regExpMethods = ref([
   {
     name: 'test()',
     desc: '测试是否匹配',
-    example: '/\\d+/.test("123"); // true'
+    example: '/\\d+/.test("123"); // true',
   },
   {
     name: 'exec()',
     desc: '获取匹配详情',
-    example: '/\\d+/.exec("abc123def"); // ["123"]'
-  }
-]);
+    example: '/\\d+/.exec("abc123def"); // ["123"]',
+  },
+])
 
 const stringMethods = ref([
   {
     name: 'match()',
     desc: '查找匹配结果',
-    example: '"123abc".match(/\\d+/); // ["123"]'
+    example: '"123abc".match(/\\d+/); // ["123"]',
   },
   {
     name: 'replace()',
     desc: '替换匹配内容',
-    example: '"hello".replace(/l/g, "L"); replace(/l/g, "$n") $n,n代表着分组的序号，序号是从1开始的 // "heLLo"'
+    example:
+      '"hello".replace(/l/g, "L"); replace(/l/g, "$n") $n,n代表着分组的序号，序号是从1开始的 // "heLLo"',
   },
   {
     name: 'matchAll()',
     desc: '查找所有匹配结果',
-    example: '"123abc".matchAll(/\\d+/g); // [Array Iterator]'
+    example: '"123abc".matchAll(/\\d+/g); // [Array Iterator]',
   },
   {
     name: 'replaceAll()',
     desc: '替换所有匹配内容',
-    example: '"hello".replaceAll(/l/g, "L"); // "heLLo"'
-  }
-]);
+    example: '"hello".replaceAll(/l/g, "L"); // "heLLo"',
+  },
+])
 
 const brackets = ref([
   { char: '[abc]', desc: '查找方括号之间的任何字符', example: '/[abc]/ → "abc"' },
@@ -391,8 +457,12 @@ const brackets = ref([
   { char: '[0-9]', desc: '匹配数字字符', example: '/[0-9]/ → "123"' },
   { char: '[adgk]', desc: '查找给定集合内的任何字符', example: '/[adgk]/ → "adgk"' },
   { char: '[^adgk]', desc: '查找给定集合外的任何字符', example: '/[adgk]/ → "cji"' },
-  { char: '[(red|blue|green)]', desc: '查找任何指定的选项', example: '/[(red|blue|green)]/ → "red"' },
-]);
+  {
+    char: '[(red|blue|green)]',
+    desc: '查找任何指定的选项',
+    example: '/[(red|blue|green)]/ → "red"',
+  },
+])
 
 const metaCharacters = ref([
   { char: '\\', desc: '转义字符', important: true, example: '/\\./ → ".' },
@@ -400,8 +470,17 @@ const metaCharacters = ref([
   { char: '\\w', desc: '数字、字母及下划线', important: true, example: '/\\w+/ → "hello"' },
   { char: '\\s', desc: '空白字符', important: true, example: '/\\s+/ → " "' },
   { char: '.', desc: '匹配任意字符', important: true, example: '/a.c/ → "abc"' },
-  { char: '(xyz)', desc: '()包裹xyz为一个匹配单元，捕获分组', important: true, example: '/^(xyz)d+/ → "xyz23"' },
-  { char: '(?:xyz)', desc: '(?:)包裹xyz为一个匹配单元，非捕获分组,$n不会捕获到分组', example: '/^(?:xyz)d+/ → "xyz23"' },
+  {
+    char: '(xyz)',
+    desc: '()包裹xyz为一个匹配单元，捕获分组',
+    important: true,
+    example: '/^(xyz)d+/ → "xyz23"',
+  },
+  {
+    char: '(?:xyz)',
+    desc: '(?:)包裹xyz为一个匹配单元，非捕获分组,$n不会捕获到分组',
+    example: '/^(?:xyz)d+/ → "xyz23"',
+  },
   { char: 'x(?=y)', desc: '匹配后面是y的x', important: true, example: '/x(?=y)/ → "xy"' },
   { char: 'x(!=y)', desc: '匹配后面不是y的x', example: '/x(!=y)/ → "xt"' },
   { char: '(?<=y)x', desc: '匹配前面是y的x', important: true, example: '/(?<=y)x/ → "yx"' },
@@ -418,8 +497,8 @@ const metaCharacters = ref([
   { char: '\\v', desc: '垂直制表符', example: '/\\v/ → "\\v"' },
   { char: '\\xxx', desc: '八进制字符', example: '/\\101/ → "A"' },
   { char: '\\xdd', desc: '十六进制字符', example: '/\\x41/ → "A"' },
-  { char: '\\uxxxx', desc: 'Unicode 字符', example: '/\\u{1F600}/ → "😀"' }
-]);
+  { char: '\\uxxxx', desc: 'Unicode 字符', example: '/\\u{1F600}/ → "😀"' },
+])
 
 const quantifiers = ref([
   { char: '+', desc: '匹配前一个字符一次或多次', example: '/a+/ → "aaa"' },
@@ -429,8 +508,8 @@ const quantifiers = ref([
   { char: '{n,}', desc: '匹配前一个字符至少n次', example: '/a{2,}/ → "aaa"' },
   { char: '{n}', desc: '匹配前一个字符恰好n次', example: '/a{2}/ → "aa"' },
   { char: '^n', desc: '匹配任何开头为 n 的字符串', example: '/^a/ → "aa"' },
-  { char: 'n$', desc: '匹配任何结尾为 n 的字符串', example: '/a$/ → "aa"' }
-]);
+  { char: 'n$', desc: '匹配任何结尾为 n 的字符串', example: '/a$/ → "aa"' },
+])
 </script>
 
 <style scoped>
@@ -501,7 +580,6 @@ const quantifiers = ref([
 
 /* 响应式调整 */
 @media (max-width: 768px) {
-
   .grid-2,
   .grid-3 {
     grid-template-columns: 1fr;

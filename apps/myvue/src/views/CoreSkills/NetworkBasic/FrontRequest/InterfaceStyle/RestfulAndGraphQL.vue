@@ -15,8 +15,7 @@
               <h3>Restful API</h3>
               <p>
                 表现层状态转移（REST）是一种软件架构风格，基于HTTP协议设计，
-                使用标准的HTTP方法（GET、POST、PUT、DELETE等）操作资源，
-                每个资源对应一个特定的URL。
+                使用标准的HTTP方法（GET、POST、PUT、DELETE等）操作资源， 每个资源对应一个特定的URL。
               </p>
               <div class="code-example">
                 <pre><code>// 获取用户列表
@@ -227,28 +226,18 @@ query {
             Restful和GraphQL并非相互替代的技术，而是各有优势的API设计方案。选择时应根据项目特点、团队熟悉度和实际需求综合考虑：
           </p>
           <ul class="summary-points">
-            <li>
-              <strong>小型项目或快速原型</strong>：优先考虑Restful，开发速度快，学习成本低
-            </li>
-            <li>
-              <strong>大型复杂应用</strong>：可考虑GraphQL，尤其是前端需求多变的场景
-            </li>
-            <li>
-              <strong>混合策略</strong>：不必局限于单一方案，可在不同模块使用最适合的API风格
-            </li>
-            <li>
-              <strong>团队因素</strong>：选择团队更熟悉的技术，或有足够时间学习新技术
-            </li>
-            <li>
-              <strong>渐进式采用</strong>：可先在部分功能中尝试GraphQL，验证其价值后再扩展
-            </li>
+            <li><strong>小型项目或快速原型</strong>：优先考虑Restful，开发速度快，学习成本低</li>
+            <li><strong>大型复杂应用</strong>：可考虑GraphQL，尤其是前端需求多变的场景</li>
+            <li><strong>混合策略</strong>：不必局限于单一方案，可在不同模块使用最适合的API风格</li>
+            <li><strong>团队因素</strong>：选择团队更熟悉的技术，或有足够时间学习新技术</li>
+            <li><strong>渐进式采用</strong>：可先在部分功能中尝试GraphQL，验证其价值后再扩展</li>
           </ul>
         </div>
       </section>
     </main>
 
     <footer class="footer">
-      <p>Restful与GraphQL对比详解 &copy; {{ new Date().getFullYear() }}</p>
+      <p>Restful与GraphQL对比介绍 &copy; {{ new Date().getFullYear() }}</p>
     </footer>
   </div>
 </template>
@@ -366,7 +355,7 @@ query {
         position: relative;
 
         &::before {
-          content: "•";
+          content: '•';
           color: #6366f1;
           font-weight: bold;
           position: absolute;
@@ -411,7 +400,8 @@ query {
   }
 
   .pros-cons-card {
-    .pros, .cons {
+    .pros,
+    .cons {
       margin-bottom: 15px;
 
       &:last-child {

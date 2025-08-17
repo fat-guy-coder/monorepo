@@ -16,14 +16,15 @@
         </Tooltip>
       </div>
       <div :class="Menucollapsed ? 'menu-collapsed' : 'menu'">
-        <Spin tip="Loading..." v-if="loading" class="loading" />
+        <Spin :spinning="loading" class="loading" />
         <Menu
-          v-else
           @click="goto"
           :collapsed="Menucollapsed"
-          :menus="menus"
+          v-if="!loading"
           :selectedKeys="selectedKeys"
           v-model="openKeys"
+          :menus="menus"
+          @dom-updated="menuDomUpdated"
         >
         </Menu>
       </div>
@@ -46,13 +47,12 @@
         </RouteTab>
       </div>
       <div class="mainView" id="mainView" @scroll="handleScroll">
-        <Spin tip="Loading..." :spinning="mainViewLoading" class="loading">
-          <router-view v-slot="{ Component }">
-            <transition name="fade" mode="out-in">
-              <component :is="Component" @goToByRouteName="gotoByName" />
-            </transition>
-          </router-view>
-        </Spin>
+        <Spin :spinning="mainViewLoading" class="mainViewLoading" v-if="activeKey !== '/'"> </Spin>
+        <router-view v-slot="{ Component }">
+          <transition name="fade" mode="out-in">
+            <component :is="Component" @goToByRouteName="gotoByName" />
+          </transition>
+        </router-view>
       </div>
     </div>
   </div>
@@ -61,14 +61,13 @@
 <script lang="ts" setup vapor>
 import Menu from '@/components/MainMenu/index.vue'
 import RouteTab from '@/components/RouteTab.vue'
-import { computed, ref, watch, onBeforeMount, onMounted, onUnmounted, nextTick } from 'vue'
+import { computed, ref, watch, onMounted, onUnmounted, nextTick } from 'vue'
 import {
   //addKeysToRoutes,
   findFatherKeysListByKey,
   findMatchingLabels,
   reWashMenus,
   findMenuItemByName,
-  // addKeysToRoutes,
   // deleteChild,
   // addChild,
   // changeLoading,
@@ -87,8 +86,6 @@ const menus = ref<Route[]>([])
 
 // const needLoadKeys = ref<string[]>([])
 
-let rawList: Route[] = []
-
 const container = ref<HTMLElement | null>(null)
 
 let contextMenu: HTMLElement | null = null
@@ -98,13 +95,6 @@ function closeContextMenu(e: MouseEvent) {
     store.toggleShowMenu(false)
   }
 }
-
-onMounted(() => {
-  contextMenu = document.getElementById('context-menu')
-  if (container.value) {
-    container.value.addEventListener('click', closeContextMenu)
-  }
-})
 
 onUnmounted(() => {
   if (container.value) {
@@ -119,9 +109,14 @@ onUnmounted(() => {
   }
 })
 
+//是初始加载菜单吗？
+// const initMenu = ref(true)
+
 const Menucollapsed = ref(false)
 
 const toggleCollapsed = async () => {
+  //切换菜单后，初始加载菜单为false
+  // initMenu.value = false
   loading.value = true
   Menucollapsed.value = !Menucollapsed.value
   await nextTick()
@@ -130,36 +125,46 @@ const toggleCollapsed = async () => {
 
 const loading = ref(false)
 
+const mainViewLoading = ref(false)
 
-onBeforeMount(async () => {
-  loading.value = true
-  // const { data, needLoadKeys: n } = await getMainMenu()
-  // menus.value = addKeysToRoutes(data as Route[])
-  // needLoadKeys.value = n
-  // rawList = data as Route[]
-  // const { data } = await request('/menu')
-  // menus.value = addKeysToRoutes(data.menu)
-  const { default: rawMenus } = await import('@/menu')
-  menus.value = rawMenus
-  rawList = rawMenus as Route[]
-  //rawList = data.menu
-  // const { default: data = [] } = await import('@/router/menu')
-  // menus.value = data as Route[]
-  // rawList = data as Route[]
-  loading.value = false
+onMounted(() => {
+  contextMenu = document.getElementById('context-menu')
+  if (container.value) {
+    container.value.addEventListener('click', closeContextMenu)
+  }
+  router.push(store.activeKey)
+  getMenus()
 })
 
 onUnmounted(() => {
   menus.value.length = 0
-  rawList.length = 0
 })
+
+const getMenus = async () => {
+  loading.value = true
+  mainViewLoading.value = true
+  // const { data, needLoadKeys: n } = await getMainMenu()
+  // menus.value = addKeysToRoutes(data as Route[])
+  // needLoadKeys.value = n
+  // const { data } = await request('/menu')
+  // menus.value = addKeysToRoutes(data.menu)
+  const { default: rawMenus } = await import('@/menu')
+  menus.value = rawMenus
+  loading.value = false
+  mainViewLoading.value = false
+}
+
+function menuDomUpdated() {
+  // 菜单dom更新后，打开父级菜单
+  expandMenu(store.activeKey)
+}
 
 const store = useTabistStore()
 
 store.$subscribe(
   (_, state) => {
-    sessionStorage.setItem('tabList', JSON.stringify(state.tabList))
-    sessionStorage.setItem('activeKey', state.activeKey)
+    localStorage.setItem('tabList', JSON.stringify(state.tabList))
+    localStorage.setItem('activeKey', state.activeKey)
   },
   { flush: 'sync' },
 )
@@ -207,25 +212,36 @@ const { sortTab, setCurrentDragIndex } = store
 
 const currentDragIndex = computed<number>(() => store.currentDragIndex)
 
-const mainViewLoading = ref(false)
-
 function tabClick(path: string) {
   if (path === activeKey.value) {
     return
   }
   mainViewLoading.value = true
+  router.push({ path }).then(() => {
+    mainViewLoading.value = false
+  })
   store.activateTabOnlyKey(path, () => {
-    if (!Menucollapsed.value) {
-      openKeys.value = findFatherKeysListByKey(path)
-    } else {
-      openKeys.value = []
+    if (path !== '/') {
+      if (!Menucollapsed.value) {
+        openKeys.value = findFatherKeysListByKey(path)
+      } else {
+        openKeys.value = []
+      }
     }
-    router.push({ path }).then(() => {
-      mainViewLoading.value = false
-    })
     nextTick(() => {
       scrollTo(path)
     })
+  })
+}
+
+function expandMenu(path: string) {
+  if (!Menucollapsed.value) {
+    openKeys.value = findFatherKeysListByKey(path)
+  } else {
+    openKeys.value = []
+  }
+  nextTick(() => {
+    scrollTo(path)
   })
 }
 
@@ -233,20 +249,28 @@ function removeTab(path: string) {
   store.removeTab(path, (p) => {
     openKeys.value = findFatherKeysListByKey(p)
     router.push({ path: p })
+    nextTick(() => {
+      scrollTo(p)
+    })
   })
 }
-
 function removeOther(path: string) {
+  router.push({ path })
   store.removeOther(path, (path) => {
     openKeys.value = findFatherKeysListByKey(path)
-    router.push({ path })
+    nextTick(() => {
+      scrollTo(path)
+    })
   })
 }
 
 function removeSide(index: number, side: 'left' | 'right', key: string) {
+  router.push({ path: key })
   store.removeSide(index, side, key, (path) => {
     openKeys.value = findFatherKeysListByKey(path)
-    router.push({ path })
+    nextTick(() => {
+      scrollTo(path)
+    })
   })
 }
 
@@ -255,12 +279,27 @@ function goto({
     path,
     name,
     originItemValue: { label },
+    redirect,
   },
-}: any) {
+}: {
+  item: {
+    path: string
+    name: string
+    originItemValue: { label: { props: { innerText: string } } }
+    redirect: { name: string }
+  }
+}) {
   if (path === activeKey.value) {
     return
   }
+  if (redirect) {
+    gotoByName(redirect.name, true)
+    return
+  }
   mainViewLoading.value = true
+  router.push({ path }).then(() => {
+    mainViewLoading.value = false
+  })
   store.activateTab(
     {
       path,
@@ -269,21 +308,28 @@ function goto({
     },
     (path) => {
       openKeys.value = findFatherKeysListByKey(path)
-      router.push({ path }).then(() => {
-        mainViewLoading.value = false
-      })
     },
   )
 }
 
-function gotoByName(name: string) {
-  const item = findMenuItemByName(name)
+function gotoByName(name: string, isRedirect: boolean = false) {
+  let item = findMenuItemByName(name)
+  if (name === 'home') {
+    item = {
+      label: '首页',
+      name: 'home',
+      path: '/',
+    }
+  }
   if (!item) {
     message.error('菜单不存在')
     return
   }
   const { title, path } = item as { title: string; path: string }
   mainViewLoading.value = true
+  router.push({ path }).then(() => {
+    mainViewLoading.value = false
+  })
   store.activateTab(
     {
       path,
@@ -291,10 +337,12 @@ function gotoByName(name: string) {
       label: title,
     },
     (path) => {
-      openKeys.value = findFatherKeysListByKey(path)
-      router.push({ path }).then(() => {
-        mainViewLoading.value = false
-      })
+      if (isRedirect) {
+        const keys = findFatherKeysListByKey(path)
+        openKeys.value = [...keys, ...openKeys.value]
+      } else {
+        openKeys.value = findFatherKeysListByKey(path)
+      }
       nextTick(() => {
         scrollTo(path)
       })
@@ -314,7 +362,7 @@ const scrollTo = (id: string) => {
     const timer = setTimeout(() => {
       element.scrollIntoView({ behavior: 'smooth', block: 'center' })
       clearTimeout(timer)
-    }, 500)
+    }, 300)
   }
 }
 
@@ -378,7 +426,7 @@ const scrollTo = (id: string) => {
 .loading {
   width: 100%;
   text-align: center;
-  line-height: 100%;
+  line-height: calc(100vh - 2.2rem);
 }
 
 li,
@@ -402,6 +450,7 @@ p {
   width: clamp(350px, 20vw, 400px);
   height: calc(100vh - 2.2rem);
   overflow: auto;
+  border-right: 1px solid rgba(212, 212, 212, 0.5);
 }
 
 .menu-collapsed {
@@ -429,5 +478,11 @@ p {
   position: relative;
   scroll-timeline-name: --myTimeline;
   scroll-timeline-axis: block;
+}
+.mainViewLoading {
+  width: 100%;
+  line-height: calc(100vh - 100px);
+  // height: calc(100vh - 100px);
+  text-align: center;
 }
 </style>

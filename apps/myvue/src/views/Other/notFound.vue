@@ -29,7 +29,7 @@
       <h1 class="title">页面迷失在太空中</h1>
 
       <p class="description">
-        我们似乎找不到您要查找的页面。<br>
+        我们似乎找不到您要查找的页面。<br />
         它可能已被移动、删除或从未存在过。
       </p>
 
@@ -52,12 +52,15 @@
 </template>
 
 <script setup lang="ts">
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
+
+const emit = defineEmits(['goToByRouteName'])
 
 const router = useRouter()
+// const route = useRoute()
 
 const goHome = () => {
-router.push('/')
+  emit('goToByRouteName', 'home')
 }
 
 const contactSupport = () => {
@@ -66,8 +69,6 @@ const contactSupport = () => {
 </script>
 
 <style lang="less" scoped>
-
-
 @primary-color: #4a6cf7;
 @secondary-color: #6c63ff;
 @text-color: #2d3748;
@@ -77,28 +78,52 @@ const contactSupport = () => {
 
 // 动画定义
 @keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-15px); }
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 0.7; transform: scale(1); }
-  50% { opacity: 0.3; transform: scale(1.05); }
+  0%,
+  100% {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.3;
+    transform: scale(1.05);
+  }
 }
 
 @keyframes rotate {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes orbit {
-  0% { transform: translateX(0) rotate(0deg); }
-  100% { transform: translateX(100px) rotate(360deg); }
+  0% {
+    transform: translateX(0) rotate(0deg);
+  }
+  100% {
+    transform: translateX(100px) rotate(360deg);
+  }
 }
 
 @keyframes wave {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-100%); }
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
 }
 
 .not-found-container {
@@ -167,7 +192,11 @@ const contactSupport = () => {
 .floating-element {
   position: absolute;
   border-radius: 50%;
-  background: linear-gradient(135deg, rgba(@primary-color, 0.15) 0%, rgba(@secondary-color, 0.15) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(@primary-color, 0.15) 0%,
+    rgba(@secondary-color, 0.15) 100%
+  );
   opacity: 0.6;
   filter: blur(2px);
   z-index: 0;
@@ -307,7 +336,8 @@ const contactSupport = () => {
   flex-wrap: wrap;
 }
 
-.home-button, .contact-button {
+.home-button,
+.contact-button {
   padding: 1rem 2rem;
   font-size: 1.1rem;
   font-weight: 600;

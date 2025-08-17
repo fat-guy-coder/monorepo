@@ -1,0 +1,412 @@
+[
+  {
+    "title": "响应式原理",
+    "id": "response",
+    "description": "Vue的核心特性，理解Object.defineProperty(Vue2)和Proxy(Vue3)的实现差异",
+    "keyPoints": ["数据劫持与依赖收集", "发布-订阅模式", "Vue3的Proxy优势", "数组响应式处理"],
+    "hotness": 10,
+    "frequency": 10,
+    "importance": 5
+  },
+  {
+    "title": "Vue 3响应式原理深入",
+    "id": "responseDeep",
+    "description": "深入理解Vue 3基于Proxy的响应式系统实现机制",
+    "keyPoints": ["Proxy与Reflect API", "依赖收集的优化", "effect作用域管理", "响应式系统与调度器"],
+    "hotness": 9.7,
+    "frequency": 8.5,
+    "importance": 5,
+    "isVue3": true
+  },
+  {
+    "title": "组合式API (Composition API)",
+    "id": "compositionApi",
+    "description": "Vue 3引入的新范式，解决了Options API在复杂组件中的碎片化问题",
+    "keyPoints": ["setup()函数", "ref与reactive", "生命周期钩子函数", "与React Hooks的对比"],
+    "hotness": 9.8,
+    "frequency": 9.5,
+    "importance": 5,
+    "isVue3": true
+  },
+  {
+    "title": "虚拟DOM与Diff算法",
+    "id": "virtualDom",
+    "description": "Vue高性能渲染的核心，理解其工作原理对性能优化至关重要",
+    "keyPoints": [
+      "虚拟DOM的作用与优势",
+      "Diff算法策略（同层比较）",
+      "key属性的重要性",
+      "Vue3的优化（静态提升等）"
+    ],
+    "hotness": 9.5,
+    "frequency": 9,
+    "importance": 5
+  },
+  {
+    "id": "componentCommunication",
+    "title": "组件通信",
+    "description": "多种组件间通信方式的适用场景与实现原理",
+    "keyPoints": [
+      "Props / Emit",
+      "Event Bus",
+      "Vuex / Pinia",
+      "provide / inject",
+      "$attrs / $listeners"
+    ],
+    "hotness": 9.5,
+    "frequency": 9.5,
+    "importance": 5
+  },
+  {
+    "title": "Composition API最佳实践",
+    "id": "compositionApiBestPractice",
+    "description": "组合式API在大型项目中的架构模式和设计原则",
+    "keyPoints": [
+      "逻辑复用与自定义hook",
+      "状态管理策略",
+      "组织复杂业务逻辑",
+      "与TypeScript的深度集成"
+    ],
+    "hotness": 9.5,
+    "frequency": 9.0,
+    "importance": 5,
+    "isVue3": true
+  },
+  {
+    "title": "Pinia状态管理",
+    "id": "pinia",
+    "description": "Vue 3官方推荐的状态管理库，替代Vuex的轻量级解决方案",
+    "keyPoints": ["Store定义与使用", "状态、getters、actions", "插件系统", "与Vue DevTools集成"],
+    "hotness": 9.6,
+    "frequency": 8.8,
+    "importance": 4,
+    "isVue3": true
+  },
+  {
+    "title": "Vite原理与优化",
+    "id": "vite",
+    "description": "理解下一代前端构建工具的工作原理和性能优势",
+    "keyPoints": ["ESM原生模块加载", "按需编译机制", "热模块替换优化", "插件开发与扩展"],
+    "hotness": 9.4,
+    "frequency": 8.5,
+    "importance": 4
+  },
+  {
+    "title": "Vue性能优化实践",
+    "id": "performanceOptimizationPractice",
+    "description": "生产环境中的具体性能优化技术和工具",
+    "keyPoints": ["组件懒加载策略", "虚拟滚动实现", "内存泄漏检测", "Chrome性能分析工具"],
+    "hotness": 9.3,
+    "frequency": 8.0,
+    "importance": 5
+  },
+  {
+    "title": "Vue Router",
+    "id": "vueRouter",
+    "description": "官方路由管理库，SPA应用的核心",
+    "keyPoints": ["路由模式（hash/history）", "导航守卫", "路由懒加载", "动态路由", "路由元信息"],
+    "hotness": 9.2,
+    "frequency": 9,
+    "importance": 5
+  },
+  {
+    "title": "响应式性能优化",
+    "id": "responsePerformanceOptimization",
+    "description": "减少不必要的响应式更新对性能的影响",
+    "keyPoints": ["shallowRef/shallowReactive", "markRaw优化", "计算属性缓存策略", "大型列表优化"],
+    "hotness": 9.2,
+    "frequency": 8.3,
+    "importance": 4,
+    "isVue3": true
+  },
+  {
+    "title": "Vue 3生态迁移策略",
+    "id": "vue3EcosystemMigration",
+    "description": "从Vue 2到Vue 3的平滑升级路径和注意事项",
+    "keyPoints": ["兼容性处理", "破坏性变更适配", "插件迁移策略", "自动化迁移工具"],
+    "hotness": 9.1,
+    "frequency": 7.0,
+    "importance": 4,
+    "isVue3": true
+  },
+  {
+    "title": "状态管理（Vuex/Pinia）",
+    "id": "stateManagement",
+    "description": "复杂应用状态管理的解决方案",
+    "keyPoints": [
+      "Vuex核心概念（State, Getters, Mutations, Actions）",
+      "Pinia的优势与使用",
+      "模块化管理",
+      "状态持久化"
+    ],
+    "hotness": 9.0,
+    "frequency": 8.5,
+    "importance": 4
+  },
+  {
+    "title": "自定义Hook开发",
+    "id": "customHook",
+    "description": "基于Composition API的可复用逻辑封装模式",
+    "keyPoints": ["逻辑抽象原则", "状态共享模式", "生命周期集成", "TypeScript类型支持"],
+    "hotness": 9.0,
+    "frequency": 8.2,
+    "importance": 4,
+    "isVue3": true
+  },
+  {
+    "title": "生命周期",
+    "id": "lifecycle",
+    "description": "理解Vue组件的创建、更新和销毁过程",
+    "keyPoints": [
+      "主要生命周期钩子",
+      "Vue2 vs Vue3生命周期",
+      "setup中的生命周期",
+      "异步请求的合适位置"
+    ],
+    "hotness": 8.8,
+    "frequency": 9,
+    "importance": 4
+  },
+  {
+    "title": "指令系统",
+    "id": "directiveSystem",
+    "description": "Vue模板语法的核心，包括内置指令和自定义指令",
+    "keyPoints": [
+      "常用指令（v-if, v-for, v-bind, v-on）",
+      "v-model原理与自定义",
+      "自定义指令",
+      "指令钩子函数"
+    ],
+    "hotness": 8.5,
+    "frequency": 8,
+    "importance": 4
+  },
+  {
+    "title": "计算属性与侦听器",
+    "id": "computedAndWatch",
+    "description": "响应式系统中的衍生数据和副作用处理",
+    "keyPoints": ["computed vs methods", "watch vs watchEffect", "深度监听", "立即执行"],
+    "hotness": 8.5,
+    "frequency": 8.5,
+    "importance": 4
+  },
+  {
+    "title": "插槽（Slots）",
+    "id": "slots",
+    "description": "组件内容分发的强大机制",
+    "keyPoints": ["默认插槽", "具名插槽", "作用域插槽", "渲染作用域"],
+    "hotness": 8.0,
+    "frequency": 7.5,
+    "importance": 3
+  },
+  {
+    "title": "Teleport组件",
+    "id": "teleport",
+    "description": "Vue 3新增的组件，用于将内容渲染到DOM树的其他位置",
+    "keyPoints": ["解决z-index问题", "模态框实现", "与React Portal的对比"],
+    "hotness": 7.8,
+    "frequency": 7,
+    "importance": 3,
+    "isVue3": true
+  },
+  {
+    "title": "性能优化",
+    "id": "performanceOptimization",
+          "description": "提升Vue应用性能的关键策略",
+    "keyPoints": ["代码分割", "异步组件", "keep-alive", "虚拟滚动", "减少不必要的响应式"],
+    "hotness": 8.7,
+    "frequency": 8,
+    "importance": 4
+  },
+  {
+    "title": "过渡与动画",
+    "id": "transitionAndAnimation",
+    "description": "Vue提供的动画系统，用于元素进入/离开的过渡效果",
+    "keyPoints": ["transition组件", "CSS过渡类名", "JavaScript钩子", "列表过渡"],
+    "hotness": 7.0,
+    "frequency": 6.5,
+    "importance": 2
+  },
+  {
+    "title": "服务端渲染（SSR）",
+    "id": "ssr",
+    "description": "提升首屏性能和SEO的解决方案",
+    "keyPoints": ["Nuxt.js框架", "SSR原理", "客户端激活（hydration）", "数据预取"],
+    "hotness": 7.5,
+    "frequency": 6,
+    "importance": 3
+  },
+  {
+    "title": "TypeScript集成",
+    "description": "Vue 3对TypeScript的全面支持",
+    "keyPoints": ["类型推导", "组件类型声明", "Composition API中的TS", "defineComponent"],
+    "hotness": 8.5,
+    "frequency": 8,
+    "importance": 4,
+    "isVue3": true
+  },
+  {
+    "title": "自定义渲染器",
+    "id": "customRenderer",
+    "description": "Vue 3的底层能力，支持非DOM环境的渲染",
+    "keyPoints": ["渲染器原理", "创建自定义渲染器", "跨平台应用（小程序、Canvas等）"],
+    "hotness": 6.5,
+    "frequency": 5,
+    "importance": 2,
+    "isVue3": true
+  },
+  {
+    "title": "混入（Mixins）",
+    "id": "mixins",
+    "description": "Vue 2中复用组件逻辑的方式，Vue 3中被Composition API取代",
+    "keyPoints": ["基本使用", "合并策略", "与Composition API的对比", "潜在问题"],
+    "hotness": 7.0,
+    "frequency": 6,
+    "importance": 3
+  },
+  {
+    "title": "错误处理",
+    "id": "errorHandling",
+    "description": "捕获和处理Vue应用中的错误",
+    "keyPoints": ["全局错误处理", "错误边界（Error Boundaries）", "异步错误捕获", "渲染函数错误"],
+    "hotness": 7.2,
+    "frequency": 6.5,
+    "importance": 3
+  },
+  {
+    "title": "函数式组件",
+    "id": "functionalComponent",
+    "description": "无状态、无实例的高性能组件",
+    "keyPoints": ["适用场景", "性能优势", "Vue 3中的变化"],
+    "hotness": 6.8,
+    "frequency": 6,
+    "importance": 2
+  },
+  {
+    "title": "nextTick原理",
+    "id": "nextTick",
+    "description": "理解Vue异步更新队列机制",
+    "keyPoints": ["更新批处理", "微任务队列", "使用场景", "与setTimeout对比"],
+    "hotness": 8.0,
+    "frequency": 7.5,
+    "importance": 4
+  },
+
+  {
+    "title": "Suspense组件",
+    "id": "suspense",
+    "description": "Vue 3新增的异步组件加载解决方案",
+    "keyPoints": ["异步组件加载状态管理", "与组合式API结合", "嵌套Suspense处理", "错误边界处理"],
+    "hotness": 8.5,
+    "frequency": 7.5,
+    "importance": 3,
+    "isVue3": true
+  },
+  {
+    "title": "渲染函数与JSX",
+    "id": "renderFunction",
+    "description": "使用JavaScript代替模板的灵活渲染方式",
+    "keyPoints": ["render函数原理", "JSX语法支持", "动态组件创建", "高阶组件实现"],
+    "hotness": 8.0,
+    "frequency": 7.0,
+    "importance": 3
+  },
+  {
+    "title": "动态组件与异步组件",
+    "id": "dynamicComponent",
+    "description": "按需加载和动态渲染组件的技术方案",
+    "keyPoints": [
+      "<component :is>用法",
+      "defineAsyncComponent",
+      "代码分割实现",
+      "加载状态与错误处理"
+    ],
+    "hotness": 8.2,
+    "frequency": 7.8,
+    "importance": 4
+  },
+  {
+    "title": "Vue与微前端架构",
+    "id": "vueMicroFrontend",
+    "description": "Vue在微前端方案中的实现和集成",
+    "keyPoints": ["模块联邦应用", "qiankun集成方案", "样式隔离策略", "状态共享机制"],
+    "hotness": 8.8,
+    "frequency": 7.5,
+    "importance": 4
+  },
+  {
+    "title": "Vue测试策略",
+    "id": "vueTestStrategy",
+    "description": "Vue组件的单元测试和端到端测试实现",
+    "keyPoints": ["Jest与Vue Test Utils", "组件渲染测试", "异步行为测试", "Cypress集成"],
+    "hotness": 8.5,
+    "frequency": 7.8,
+    "importance": 4
+  },
+  {
+    "title": "Vue安全实践",
+    "id": "vueSecurityPractice",
+        "description": "防止XSS攻击和其他安全漏洞的最佳实践",
+    "keyPoints": ["v-html安全处理", "内容安全策略(CSP)", "HTTP安全头配置", "服务端渲染安全"],
+    "hotness": 8.0,
+    "frequency": 7.0,
+    "importance": 3
+  },
+  {
+    "title": "Vue与Web Components", 
+    "id": "vueWebComponents",
+    "description": "使用Vue开发可复用的Web Components组件",
+    "keyPoints": ["defineCustomElement", "Vue组件转换", "属性与事件映射", "跨框架使用"],
+    "hotness": 7.8,
+    "frequency": 6.5,
+    "importance": 3,
+    "isVue3": true
+  },
+  {
+    "title": "状态管理设计模式",
+    "id": "stateManagementDesignPattern",
+    "description": "大型应用中状态管理的架构模式和最佳实践",
+    "keyPoints": ["领域驱动设计", "CQRS模式实现", "事件溯源", "状态规范化"],
+    "hotness": 8.7,
+    "frequency": 7.5,
+    "importance": 4
+  },
+  {
+    "title": "Vue DevTools高级用法",
+    "id": "vueDevToolsAdvancedUsage",
+    "description": "利用开发者工具进行调试和性能分析",
+    "keyPoints": ["时间旅行调试", "组件性能分析", "状态快照比较", "自定义插件开发"],
+    "hotness": 8.0,
+    "frequency": 7.2,
+    "importance": 3
+  },
+
+  {
+    "title": "Vue国际化(i18n)",
+    "id": "vueInternationalization",
+    "description": "多语言支持的实现方案和最佳实践",
+    "keyPoints": ["Vue I18n库集成", "动态语言切换", "按需加载语言包", "复数规则处理"],
+    "hotness": 7.5,
+    "frequency": 6.8,
+    "importance": 3
+  },
+  {
+    "title": "Vue与Canvas/WebGL集成",
+    "id": "vueCanvasWebGLIntegration",
+    "description": "在Vue中使用图形和动画的高级技术",
+    "keyPoints": ["Three.js集成", "响应式图形渲染", "动画性能优化", "离屏Canvas"],
+    "hotness": 7.2,
+    "frequency": 6.0,
+    "importance": 2
+  },
+  {
+    "title": "Vue 3源码架构",
+    "id": "vue3SourceCodeArchitecture",
+    "description": "理解Vue 3核心模块的设计和实现原理",
+    "keyPoints": ["编译器架构", "运行时核心", "响应式系统实现", "调度器设计"],
+    "hotness": 8.8,
+    "frequency": 7.0,
+    "importance": 4,
+    "isVue3": true
+  }
+]

@@ -1,7 +1,7 @@
 <template>
   <div class="template-strings-container">
     <div class="header">
-      <h1>ES6 模板字符串详解</h1>
+      <h1>ES6 模板字符串介绍</h1>
       <p class="subtitle">现代 JavaScript 的字符串处理利器</p>
       <div class="features-badge">
         <span class="feature">多行字符串</span>

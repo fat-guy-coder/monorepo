@@ -1,7 +1,7 @@
 <template>
   <div class="tls-container">
     <div class="header">
-      <h1>TLS/SSL 安全协议详解</h1>
+      <h1>TLS/SSL 安全协议介绍</h1>
       <p class="subtitle">保障互联网通信安全的加密技术</p>
       <div class="security-badges">
         <span class="badge">🔒 加密传输</span>
@@ -17,8 +17,10 @@
           <h2>TLS/SSL 是什么？</h2>
         </div>
         <div class="card-content">
-          <p><strong>TLS (Transport Layer Security)</strong> 和 <strong>SSL (Secure Sockets Layer)</strong>
-            是用于在互联网上提供安全通信的加密协议。</p>
+          <p>
+            <strong>TLS (Transport Layer Security)</strong> 和
+            <strong>SSL (Secure Sockets Layer)</strong> 是用于在互联网上提供安全通信的加密协议。
+          </p>
 
           <div class="evolution">
             <h3>协议演进</h3>
@@ -155,46 +157,113 @@
       <p class="section-description">TLS握手是建立安全连接的关键步骤</p>
 
       <div class="handshake-diagram">
-        <div class="participant client">
-          <div class="label">客户端</div>
+        <div class="end client">客户端</div>
+        <div class="steps-container">
+          <div class="step-label">第一步</div>
           <div class="steps">
-            <div class="step">1. ClientHello</div>
-            <div class="step">3. 验证证书</div>
-            <div class="step">5. 发送加密数据</div>
+            <div class="step">
+              <div>ClientHello➡️</div>
+              <div class="description">
+                <p class="message">message</p>
+                <p>支持的协议版本(TLS1.3)</p>
+                <p>加密套件（如TLS_AES_256_GCM_SHA384）</p>
+                <p>随机数(client_random)</p>
+              </div>
+              <div>ClientHello➡️</div>
+            </div>
+          </div>
+          <div class="step-label">第二步</div>
+          <div class="steps">
+            <div class="step">
+              <div>⬅️ServerHello</div>
+              <div class="description">
+                <p class="message">message</p>
+                <p>定好的 TLS 版本（双方都支持的最高版本）</p>
+                <p>客户端列表中选定的加密套件</p>
+                <p>随机数(server_random)</p>
+                <p>可选的扩展（如 SNI）</p>
+              </div>
+              <div>⬅️ServerHello</div>
+            </div>
+          </div>
+          <div class="step-label">第三步</div>
+          <div class="steps">
+            <div class="step">
+              <div>⬅️Certificate</div>
+              <div class="description">
+                <p class="message">message</p>
+                <p>服务器证书链（包括根证书）,证书签名算法,证书有效期</p>
+                <p>密钥共享信息(包含基于选定加密算法生成的临时公钥)</p>
+                <p>如果服务器需要验证客户端，则请求客户端证书(可选)</p>
+              </div>
+              <div>⬅️Certificate</div>
+            </div>
+          </div>
+          <div class="step-label">第四步</div>
+          <div class="steps">
+            <div class="step">
+              <div>⬅️server_hello_done</div>
+              <div class="description">
+                <p class="message">message</p>
+                <p>server_hello_done</p>
+              </div>
+              <div>⬅️ server_hello_done</div>
+            </div>
+          </div>
+          <div class="step-label">第五步</div>
+          <div class="steps">
+            <div class="step">
+              <div class="description">
+                <p class="message">validate</p>
+                <p>1. 客户端验证服务器证书的有效性（检查签名、有效期、域名匹配等）</p>
+                <p>
+                  3. 客户端生成预主密钥（第三个随机数）（pre-master
+                  secret），并结合client_random和client_random2和server_random，通过选定的加密算法生成会话密钥（master
+                  secret）
+                </p>
+                <p>4. 客户端使用服务器公钥加密预主密钥，并发送给服务器</p>
+                <p>5. 客户端发送加密的握手消息（Change Cipher Spec）</p>
+                <p>6. 客户端发送Finished消息，确认握手完成</p>
+              </div>
+              <div>➡️secret</div>
+              <div class="description">
+                <p class="message">message</p>
+                <p>客户端密钥共享信息（client_share）</p>
+                <p>临时公钥（与服务器的临时公钥配合完成密钥交换）</p>
+                <p>Change Cipher Spec(确定用商议好的算法和密钥在加密通信)</p>
+                <p>Finished</p>
+              </div>
+              <div>➡️secret</div>
+            </div>
+          </div>
+          <div class="step-label">第六步</div>
+          <div class="steps">
+            <div class="step">
+              <div>⬅️Finished</div>
+              <div class="description">
+                <p class="message">validate</p>
+                <p>1.服务器使用会话密钥解密 "Client Finished" 消息，验证握手完整性</p>
+                <p>服务器发送 "Server Finished" 消息</p>
+              </div>
+            </div>
+          </div>
+          <div class="step-label">握手完成</div>
+          <div class="steps">
+            <div class="step">
+              <div>➡️secret message</div>
+              <div class="description">
+                <p class="message">message</p>
+                <p>加密数据</p>
+              </div>
+              <div>⬅️secret message</div>
+            </div>
+          </div>
+          <div class="step-label">
+            若后续需要重新连接，可通过 "会话复用" 机制跳过部分步骤，提高连接效率
           </div>
         </div>
 
-        <div class="participant server">
-          <div class="label">服务器</div>
-          <div class="steps">
-            <div class="step">2. ServerHello</div>
-            <div class="step">4. ServerDone</div>
-            <div class="step">6. 接收加密数据</div>
-          </div>
-        </div>
-
-        <div class="connections">
-          <div class="connection">
-            <div class="arrow">↓</div>
-            <div class="description">支持的协议版本、加密套件、随机数</div>
-          </div>
-          <div class="connection">
-            <div class="arrow">↑</div>
-            <div class="description">选择的协议、服务器证书、随机数</div>
-          </div>
-          <div class="connection">
-            <div class="arrow">↓</div>
-            <div class="description">预主密钥（用服务器公钥加密）</div>
-          </div>
-          <div class="connection">
-            <div class="arrow">↑</div>
-            <div class="description">完成握手信号</div>
-          </div>
-          <div class="connection encrypted">
-            <div class="arrow">⇅</div>
-            <div class="description">加密的应用数据</div>
-          </div>
-        </div>
+        <div class="end server">服务器</div>
       </div>
 
       <div class="tls-versions">
@@ -223,7 +292,6 @@
         </div>
       </div>
     </div>
-
     <div class="algorithms-section">
       <h2>加密算法与技术</h2>
 
@@ -719,36 +787,74 @@ add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" alway
 }
 
 .handshake-diagram {
-  display: flex;
-  justify-content: space-between;
   position: relative;
   min-height: 400px;
   margin-bottom: 2rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+
+  .end {
+    width: 100px;
+    text-align: center;
+    line-height: auto;
+    align-content: center;
+  }
+  .client {
+    background-color: @light-bg;
+    border-radius: 8px;
+  }
+  .server {
+    background-color: @light-bg;
+    border-radius: 8px;
+  }
+
+  .steps-container {
+    flex: 1;
+    .step-label {
+      font-weight: 700;
+      padding: 0.5rem;
+      background-color: fade(@primary-color, 10%);
+      border-radius: 6px;
+      text-align: center;
+    }
+    .steps {
+      gap: 3rem;
+      flex: 1;
+
+      .step {
+        display: flex;
+        justify-content: space-around;
+        gap: 1rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        align-items: center;
+        .description {
+          background-color: rgba(34, 160, 245, 0.05);
+          border-radius: 8px;
+          text-align: center;
+        }
+        .message {
+          font-size: 0.8rem;
+          color: @text-light;
+
+          text-align: center;
+        }
+
+        .label {
+          font-weight: 700;
+          padding: 0.5rem;
+          background-color: fade(@primary-color, 10%);
+          border-radius: 6px;
+        }
+      }
+    }
+  }
 
   .participant {
     width: 200px;
     text-align: center;
-
-    .label {
-      font-weight: 700;
-      margin-bottom: 1rem;
-      padding: 0.5rem;
-      background-color: fade(@primary-color, 10%);
-      border-radius: 6px;
-    }
-
-    .steps {
-      display: flex;
-      flex-direction: column;
-      gap: 3rem;
-
-      .step {
-        padding: 1rem;
-        background-color: @light-bg;
-        border-radius: 8px;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-      }
-    }
+    display: flex;
   }
 
   .connections {

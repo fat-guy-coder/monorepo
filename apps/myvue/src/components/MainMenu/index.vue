@@ -12,14 +12,20 @@
 </template>
 
 <script lang="ts" setup>
-import { defineProps, defineModel } from 'vue'
-import { Menu, type ItemType } from 'ant-design-vue'
+import { defineProps, defineModel, nextTick } from 'vue'
+import { Menu } from 'ant-design-vue'
 
 const openKeys = defineModel<string[]>({
   type: Array,
 })
 
-const props = defineProps({
+const emit = defineEmits(['domUpdated'])
+
+nextTick(() => {
+  emit('domUpdated')
+})
+
+defineProps({
   selectedKeys: {
     type: Array<string>,
   },

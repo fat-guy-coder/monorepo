@@ -1,7 +1,7 @@
 <template>
   <div class="vuex-container">
     <header class="header">
-      <h1 class="title">Vuex 状态管理库详解</h1>
+      <h1 class="title">Vuex 状态管理库介绍</h1>
       <div class="subtitle">集中式状态管理解决方案</div>
     </header>
 
@@ -11,7 +11,8 @@
         <section class="section">
           <h2 class="section-title">Vuex 的作用</h2>
           <p class="paragraph">
-            Vuex 是 Vue.js 应用程序的<span class="highlight">状态管理模式 + 库</span>。它采用集中式存储管理应用的所有组件的状态，并以相应的规则保证状态以一种可预测的方式发生变化。
+            Vuex 是 Vue.js 应用程序的<span class="highlight">状态管理模式 + 库</span
+            >。它采用集中式存储管理应用的所有组件的状态，并以相应的规则保证状态以一种可预测的方式发生变化。
           </p>
           <div class="illustration">
             <div class="vuex-flow">
@@ -39,38 +40,46 @@
             <div class="concept-card getters">
               <h3>Getters</h3>
               <p>从 state 派生的计算属性</p>
-              <pre>getters: {
+              <pre>
+getters: {
   doubleCount: state => state.count * 2
-}</pre>
+}</pre
+              >
             </div>
             <div class="concept-card mutations">
               <h3>Mutations</h3>
               <p>唯一更改 state 的方法（同步）</p>
-              <pre>mutations: {
+              <pre>
+mutations: {
   increment(state, payload) {
     state.count += payload.amount
   }
-}</pre>
+}</pre
+              >
             </div>
             <div class="concept-card actions">
               <h3>Actions</h3>
               <p>提交 mutations，可包含异步操作</p>
-              <pre>actions: {
+              <pre>
+actions: {
   incrementAsync({ commit }, payload) {
     setTimeout(() => {
       commit('increment', payload)
     }, 1000', payload)
     }, 1000)
   }
-}</pre>
+}</pre
+              >
             </div>
             <div class="concept-card modules">
               <h3>Modules</h3>
               <p>将 store 分割成模块，每个模块拥有自己的 state、mutations 等</p>
-              <pre>const moduleA = {
+              <pre>
+const moduleA = {
   state: { ... },
   mutations: { ... }
-}</pre>
+}</pre
+              >
             </div>
           </div>
         </section>
@@ -89,7 +98,8 @@
               <div class="step-number">2</div>
               <div class="step-content">
                 <h3>创建 Store</h3>
-                <pre>// store/index.ts
+                <pre>
+// store/index.ts
 import { createStore } from 'vuex'
 
 export default createStore({
@@ -107,14 +117,16 @@ export default createStore({
   getters: {
     doubleCount: state => state.count * 2
   }
-})</pre>
+})</pre
+                >
               </div>
             </div>
             <div class="step">
               <div class="step-number">3</div>
               <div class="step-content">
                 <h3>在组件中使用</h3>
-                <pre>// Component.vue
+                <pre>
+// Component.vue
 import { useStore } from 'vuex'
 
 export default {
@@ -132,7 +144,8 @@ export default {
       incrementAsync
     }
   }
-}</pre>
+}</pre
+                >
               </div>
             </div>
           </div>
@@ -197,29 +210,30 @@ export default {
     </div>
 
     <footer class="footer">
-      <p>Vuex 是 Vue 生态中强大的状态管理解决方案，适用于中大型项目。对于新项目，可以考虑使用 Pinia 作为更现代的替代方案。</p>
+      <p>
+        Vuex 是 Vue 生态中强大的状态管理解决方案，适用于中大型项目。对于新项目，可以考虑使用 Pinia
+        作为更现代的替代方案。
+      </p>
     </footer>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed } from 'vue'
 
 // 这里可以添加一些响应式数据或逻辑
 const vuexInfo = {
   version: '4.x',
   githubStars: '28k+',
-  lastRelease: '2022-11-08'
-};
+  lastRelease: '2022-11-08',
+}
 
 const vuexStats = computed(() => {
-  return `Vuex ${vuexInfo.version} | GitHub Stars: ${vuexInfo.githubStars} | Last Release: ${vuexInfo.lastRelease}`;
-});
+  return `Vuex ${vuexInfo.version} | GitHub Stars: ${vuexInfo.githubStars} | Last Release: ${vuexInfo.lastRelease}`
+})
 </script>
 
 <style lang="less" scoped>
-
-
 // 颜色变量
 @primary-color: #42b983;
 @secondary-color: #35495e;
@@ -232,7 +246,13 @@ const vuexStats = computed(() => {
 
 // 基础样式
 .vuex-container {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family:
+    'Inter',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
@@ -314,7 +334,9 @@ const vuexStats = computed(() => {
   border-radius: 8px;
   background: white;
   box-shadow: @card-shadow;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 
   &:hover {
     transform: translateY(-5px);
@@ -346,23 +368,33 @@ const vuexStats = computed(() => {
   // 为不同概念添加颜色标识
   &.state {
     border-top: 4px solid #42b983;
-    h3 { color: #42b983; }
+    h3 {
+      color: #42b983;
+    }
   }
   &.getters {
     border-top: 4px solid #3498db;
-    h3 { color: #3498db; }
+    h3 {
+      color: #3498db;
+    }
   }
   &.mutations {
     border-top: 4px solid #9b59b6;
-    h3 { color: #9b59b6; }
+    h3 {
+      color: #9b59b6;
+    }
   }
   &.actions {
     border-top: 4px solid #e67e22;
-    h3 { color: #e67e22; }
+    h3 {
+      color: #e67e22;
+    }
   }
   &.modules {
     border-top: 4px solid #1abc9c;
-    h3 { color: #1abc9c; }
+    h3 {
+      color: #1abc9c;
+    }
   }
 }
 
@@ -446,9 +478,15 @@ const vuexStats = computed(() => {
     }
   }
 
-  .scenario-list li::before { color: #3498db; }
-  .pros-list li::before { color: #2ecc71; }
-  .cons-list li::before { color: #e74c3c; }
+  .scenario-list li::before {
+    color: #3498db;
+  }
+  .pros-list li::before {
+    color: #2ecc71;
+  }
+  .cons-list li::before {
+    color: #e74c3c;
+  }
 
   .alternatives {
     .alt {

@@ -11,8 +11,8 @@
         <h2 class="section-title">什么是 let 和 const？</h2>
         <div class="section-content">
           <p>
-            let 和 const 是 ES6（ECMAScript 2015）引入的新变量声明方式，用于解决 var 声明变量时的一些问题。
-            它们提供了块级作用域，使 JavaScript 变量管理更加严谨和可预测。
+            let 和 const 是 ES6（ECMAScript 2015）引入的新变量声明方式，用于解决 var
+            声明变量时的一些问题。 它们提供了块级作用域，使 JavaScript 变量管理更加严谨和可预测。
           </p>
           <div class="code-example">
             <pre><code>// var 声明
@@ -77,8 +77,8 @@ console.log(y); // ReferenceError: y is not defined</code></pre>
           <div class="principle-card">
             <h3>变量提升与暂时性死区</h3>
             <p>
-              let 和 const 声明的变量存在"暂时性死区"（Temporal Dead Zone），在声明之前使用会抛出错误，
-              这与 var 声明的变量会被提升到作用域顶部不同。
+              let 和 const 声明的变量存在"暂时性死区"（Temporal Dead
+              Zone），在声明之前使用会抛出错误， 这与 var 声明的变量会被提升到作用域顶部不同。
             </p>
             <div class="code-example">
               <pre><code>console.log(a); // undefined (var声明的变量提升)
@@ -95,7 +95,8 @@ const c = 3;</code></pre>
           <div class="principle-card">
             <h3>const 的不可变性</h3>
             <p>
-              const 声明的变量不能重新赋值，但对于对象和数组等引用类型，其内部属性或元素是可以修改的，
+              const
+              声明的变量不能重新赋值，但对于对象和数组等引用类型，其内部属性或元素是可以修改的，
               因为 const 只保证变量引用不变。
             </p>
             <div class="code-example">
@@ -113,41 +114,44 @@ numbers[0] = 0; // 允许修改元素</code></pre>
           </div>
 
           <section class="principle-card">
-        <h2 class="section-title">🧐 let/const 也有变量提升吗？</h2>
-        <div class="let-const-hoisting-explanation">
-          <p>
-            很多人以为 <code>let</code> 和 <code>const</code> 没有变量提升，其实它们也会被提升到当前作用域的顶部，
-            <strong>只是不会初始化</strong>。在声明之前访问会进入“暂存死区”（TDZ），导致 <code>ReferenceError</code>。
-          </p>
-          <div class="code-example">
-            <pre class="code-block"><code>console.log(b); // ReferenceError: Cannot access 'b' before initialization
+            <h2 class="section-title">🧐 let/const 也有变量提升吗？</h2>
+            <div class="let-const-hoisting-explanation">
+              <p>
+                很多人以为 <code>let</code> 和
+                <code>const</code> 没有变量提升，其实它们也会被提升到当前作用域的顶部，
+                <strong>只是不会初始化</strong>。在声明之前访问会进入“暂存死区”（TDZ），导致
+                <code>ReferenceError</code>。
+              </p>
+              <div class="code-example">
+                <pre
+                  class="code-block"
+                ><code>console.log(b); // ReferenceError: Cannot access 'b' before initialization
 let b = 20;
 
 console.log(c); // ReferenceError: Cannot access 'c' before initialization
 const c = 30;</code></pre>
-          </div>
-          <p>
-            <strong>原理解析：</strong> <br>
-            <code>let</code> 和 <code>const</code> 声明的变量在作用域开始时就已经“被创建”，
-            但在代码运行到声明语句之前，变量处于“未初始化”状态，不能被访问。
-            这就是为什么会报错，而不是像 <code>var</code> 那样返回 <code>undefined</code>。
-          </p>
-          <div class="code-example">
-            <pre class="code-block"><code>// 伪代码理解
+              </div>
+              <p>
+                <strong>原理解析：</strong> <br />
+                <code>let</code> 和 <code>const</code> 声明的变量在作用域开始时就已经“被创建”，
+                但在代码运行到声明语句之前，变量处于“未初始化”状态，不能被访问。
+                这就是为什么会报错，而不是像 <code>var</code> 那样返回 <code>undefined</code>。
+              </p>
+              <div class="code-example">
+                <pre class="code-block"><code>// 伪代码理解
 {
   // TDZ开始
   // 访问b会报错
   let b; // 声明提升到块顶部，但未初始化
   // 现在b可用
 }</code></pre>
-          </div>
-          <ul>
-            <li><strong>var：</strong> 声明提升+初始化为<code>undefined</code>，可提前访问</li>
-            <li><strong>let/const：</strong> 只提升声明，不初始化，提前访问报错</li>
-          </ul>
-        </div>
-      </section>
-
+              </div>
+              <ul>
+                <li><strong>var：</strong> 声明提升+初始化为<code>undefined</code>，可提前访问</li>
+                <li><strong>let/const：</strong> 只提升声明，不初始化，提前访问报错</li>
+              </ul>
+            </div>
+          </section>
         </div>
       </section>
 
@@ -158,21 +162,15 @@ const c = 30;</code></pre>
           <div class="improvement-list">
             <div class="improvement-item">
               <h3>1. 减少变量污染</h3>
-              <p>
-                块级作用域避免了变量泄露到外部作用域，减少了全局变量污染和意外的变量覆盖。
-              </p>
+              <p>块级作用域避免了变量泄露到外部作用域，减少了全局变量污染和意外的变量覆盖。</p>
             </div>
             <div class="improvement-item">
               <h3>2. 提高代码可读性</h3>
-              <p>
-                const 明确表示变量不会被重新赋值，让代码意图更清晰，提高了代码的可维护性。
-              </p>
+              <p>const 明确表示变量不会被重新赋值，让代码意图更清晰，提高了代码的可维护性。</p>
             </div>
             <div class="improvement-item">
               <h3>3. 减少错误</h3>
-              <p>
-                暂时性死区和不允许重复声明的特性，帮助开发者在编码阶段发现潜在错误。
-              </p>
+              <p>暂时性死区和不允许重复声明的特性，帮助开发者在编码阶段发现潜在错误。</p>
             </div>
             <div class="improvement-item">
               <h3>4. 循环中的表现</h3>
@@ -209,8 +207,7 @@ for (let i = 0; i < 3; i++) {
                 <li>函数内部需要多次修改的变量</li>
               </ul>
               <div class="code-snippet">
-                <code>let count = 0;
-count += 1; // 需要重新赋值，使用let</code>
+                <code>let count = 0; count += 1; // 需要重新赋值，使用let</code>
               </div>
             </div>
             <div class="use-case-card">
@@ -222,9 +219,10 @@ count += 1; // 需要重新赋值，使用let</code>
                 <li>导入模块和定义函数</li>
               </ul>
               <div class="code-snippet">
-                <code>const MAX_SIZE = 100;
-const user = { name: "John" };
-user.age = 25; // 允许，使用const</code>
+                <code
+                  >const MAX_SIZE = 100; const user = { name: "John" }; user.age = 25; //
+                  允许，使用const</code
+                >
               </div>
             </div>
           </div>
@@ -242,39 +240,35 @@ user.age = 25; // 允许，使用const</code>
                 在同一作用域内，let 和 const 不允许重复声明同一变量，也不允许与 var 声明的变量重名。
               </p>
               <div class="code-snippet error">
-                <code>let x = 1;
-let x = 2; // SyntaxError: Identifier 'x' has already been declared</code>
+                <code
+                  >let x = 1; let x = 2; // SyntaxError: Identifier 'x' has already been
+                  declared</code
+                >
               </div>
             </div>
             <div class="warning-item">
               <h3>2. const 初始化</h3>
-              <p>
-                const 声明的变量必须在声明时初始化，否则会报错。
-              </p>
+              <p>const 声明的变量必须在声明时初始化，否则会报错。</p>
               <div class="code-snippet error">
                 <code>const x; // SyntaxError: Missing initializer in const declaration</code>
               </div>
             </div>
             <div class="warning-item">
               <h3>3. 块级作用域边界</h3>
-              <p>
-                要注意块级作用域的边界，避免在作用域外访问 let/const 声明的变量。
-              </p>
+              <p>要注意块级作用域的边界，避免在作用域外访问 let/const 声明的变量。</p>
             </div>
             <div class="warning-item">
               <h3>4. 循环中的 const</h3>
               <p>
-                在 for 循环中不能使用 const 作为循环变量（因为需要重新赋值），但在 for...in 和 for...of 中可以。
+                在 for 循环中不能使用 const 作为循环变量（因为需要重新赋值），但在 for...in 和
+                for...of 中可以。
               </p>
               <div class="code-snippet">
-                <code>// 错误
-for (const i = 0; i < 3; i++) {} // TypeError: Assignment to constant variable
-
-// 正确
-const arr = [1, 2, 3];
-for (const item of arr) {
-  console.log(item);
-}</code>
+                <code
+                  >// 错误 for (const i = 0; i < 3; i++) {} // TypeError: Assignment to constant
+                  variable // 正确 const arr = [1, 2, 3]; for (const item of arr) {
+                  console.log(item); }</code
+                >
               </div>
             </div>
             <div class="warning-item">
@@ -303,7 +297,7 @@ for (const item of arr) {
     </main>
 
     <footer class="footer">
-      <p>ES6 let 与 const 详解 &copy; {{ new Date().getFullYear() }}</p>
+      <p>ES6 let 与 const 介绍 &copy; {{ new Date().getFullYear() }}</p>
     </footer>
   </div>
 </template>
@@ -406,7 +400,8 @@ for (const item of arr) {
     gap: 20px;
   }
 
-  .feature-card, .use-case-card {
+  .feature-card,
+  .use-case-card {
     background-color: #f8fafc;
     border-radius: 6px;
     padding: 20px;
@@ -500,7 +495,7 @@ for (const item of arr) {
       position: relative;
 
       &::before {
-        content: "•";
+        content: '•';
         color: #166534;
         font-weight: bold;
         position: absolute;
@@ -528,7 +523,8 @@ footer.footer {
     padding: 15px;
   }
 
-  .feature-grid, .use-case-grid {
+  .feature-grid,
+  .use-case-grid {
     grid-template-columns: 1fr;
   }
 

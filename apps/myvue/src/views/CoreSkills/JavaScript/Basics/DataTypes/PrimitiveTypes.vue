@@ -57,6 +57,7 @@ const exponential = 2e3;  // 2000</code></pre>
               <li>isNaN() - 检测NaN</li>
               <li>isFinite() - 检测有限数</li>
               <li>Number() - 转换为数字</li>
+              <li>toString(radix) - 转换为字符串 基数为2-36(进制)</li>
             </ul>
           </div>
           <div class="notice">
@@ -225,6 +226,7 @@ const product = bigInt1 * BigInt(2);</code></pre>
           <div class="methods">
             <h3>特点和用途</h3>
             <ul>
+              <li>toString(radix) - 转换为字符串 基数为2-36(进制)</li>
               <li class="method-item">可以表示任意大的整数</li>
               <li class="method-item">适用于大数运算和高精度计算</li>
               <li class="method-item">常用于金融计算和科学计算</li>

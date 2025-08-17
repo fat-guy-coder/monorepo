@@ -17,7 +17,9 @@
           <div class="concept-card">
             <div class="concept-icon">🔄</div>
             <h3>什么是发布订阅模式？</h3>
-            <p>发布订阅模式是一种消息范式，消息的发送者（发布者）不会直接将消息发送给特定的接收者（订阅者），而是通过消息通道广播消息，订阅者接收感兴趣的消息。</p>
+            <p>
+              发布订阅模式是一种消息范式，消息的发送者（发布者）不会直接将消息发送给特定的接收者（订阅者），而是通过消息通道广播消息，订阅者接收感兴趣的消息。
+            </p>
           </div>
 
           <div class="concept-card">
@@ -252,35 +254,23 @@ export default {
 
         <div class="demo-container">
           <div class="demo-controls">
-            <button class="publish-btn" @click="publishMessage">
-              发布消息事件
-            </button>
-            <button class="publish-btn" @click="publishAlert">
-              发布警告事件
-            </button>
-            <button class="subscribe-btn" @click="addSubscriber">
-              添加订阅者
-            </button>
+            <button class="publish-btn" @click="publishMessage">发布消息事件</button>
+            <button class="publish-btn" @click="publishAlert">发布警告事件</button>
+            <button class="subscribe-btn" @click="addSubscriber">添加订阅者</button>
           </div>
 
           <div class="subscribers-demo">
-            <div
-              v-for="(sub, index) in demoSubscribers"
-              :key="sub.id"
-              class="subscriber-card"
-            >
+            <div v-for="(sub, index) in demoSubscribers" :key="sub.id" class="subscriber-card">
               <div class="subscriber-header">
                 订阅者 #{{ index + 1 }}
-                <button class="unsubscribe-btn" @click="removeSubscriber(sub.id)">
-                  取消订阅
-                </button>
+                <button class="unsubscribe-btn" @click="removeSubscriber(sub.id)">取消订阅</button>
               </div>
               <div class="messages-container">
                 <div
                   v-for="(msg, i) in sub.messages"
                   :key="i"
                   class="message"
-                  :class="{'message-warning': msg.type === 'warning'}"
+                  :class="{ 'message-warning': msg.type === 'warning' }"
                 >
                   {{ msg.text }}
                 </div>
@@ -294,118 +284,126 @@ export default {
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, onMounted } from 'vue'
+
+interface Callback {
+  (...args: any[]): void
+}
 
 // 简单的事件总线实现
 class EventBus {
-  private events: Record<string, Function[]> = {};
+  private events: Record<string, Callback[]> = {}
 
-  subscribe(eventName: string, callback: Function) {
+  subscribe(eventName: string, callback: Callback) {
     if (!this.events[eventName]) {
-      this.events[eventName] = [];
+      this.events[eventName] = []
     }
-    this.events[eventName].push(callback);
+    this.events[eventName].push(callback)
 
     // 返回取消订阅函数
     return () => {
-      this.unsubscribe(eventName, callback);
-    };
-  }
-
-  publish(eventName: string, ...args: any[]) {
-    const callbacks = this.events[eventName];
-    if (callbacks) {
-      callbacks.forEach(callback => {
-        callback(...args);
-      });
+      this.unsubscribe(eventName, callback)
     }
   }
 
-  unsubscribe(eventName: string, callback: Function) {
-    const callbacks = this.events[eventName];
+  publish(eventName: string, ...args: Callback[]) {
+    const callbacks = this.events[eventName]
     if (callbacks) {
-      this.events[eventName] = callbacks.filter(cb => cb !== callback);
+      callbacks.forEach((callback) => {
+        callback(...args)
+      })
+    }
+  }
+
+  unsubscribe(eventName: string, callback: Callback) {
+    const callbacks = this.events[eventName]
+    if (callbacks) {
+      this.events[eventName] = callbacks.filter((cb) => cb !== callback)
     }
   }
 }
 
-const subscribers = ref<Array<{
-  id: number;
-  messages: Array<{type: string; text: string}>;
-}>>([]);
+const subscribers = ref<
+  Array<{
+    id: number
+    messages: Array<{ type: string; text: string }>
+  }>
+>([])
 
 // 创建全局事件总线实例
-const eventBus = new EventBus();
+const eventBus = new EventBus()
 
 // 代码标签页
 const codeTabs = [
   { id: 'typescript', label: 'TypeScript实现' },
-  { id: 'vue', label: 'Vue中使用' }
-];
-const activeCodeTab = ref('typescript');
+  { id: 'vue', label: 'Vue中使用' },
+]
+const activeCodeTab = ref('typescript')
 
 // 演示数据
-const demoSubscribers = ref<Array<{
-  id: number;
-  messages: Array<{type: string; text: string}>;
-}>>([]);
+const demoSubscribers = ref<
+  Array<{
+    id: number
+    messages: Array<{ type: string; text: string }>
+  }>
+>([])
 
-const eventLog = ref<string[]>([]);
-const subscriberId = ref(1);
+const eventLog = ref<string[]>([])
+const subscriberId = ref(1)
 
 // 添加订阅者
 const addSubscriber = () => {
-  const id = subscriberId.value++;
-  const messages: Array<{type: string; text: string}> = [];
+  const id = subscriberId.value++
+  const messages: Array<{ type: string; text: string }> = []
 
   // 订阅消息事件
   const unsubscribeMessage = eventBus.subscribe('message', (text: string) => {
-    messages.push({ type: 'info', text });
-  });
+    messages.push({ type: 'info', text })
+  })
 
   // 订阅警告事件
   const unsubscribeWarning = eventBus.subscribe('warning', (text: string) => {
-    messages.push({ type: 'warning', text });
-  });
+    messages.push({ type: 'warning', text })
+  })
 
   demoSubscribers.value.push({
     id,
-    messages
-  });
+    messages,
+  })
 
-  eventLog.value.push(`订阅者 #${id} 已注册`);
-};
+  eventLog.value.push(`订阅者 #${id} 已注册`)
+}
 
 // 移除订阅者
 const removeSubscriber = (id: number) => {
-  demoSubscribers.value = demoSubscribers.value.filter(sub => sub.id !== id);
-  eventLog.value.push(`订阅者 #${id} 已取消订阅`);
-};
+  demoSubscribers.value = demoSubscribers.value.filter((sub) => sub.id !== id)
+  eventLog.value.push(`订阅者 #${id} 已取消订阅`)
+}
 
 // 发布消息事件
 const publishMessage = () => {
-  const text = `消息事件 ${new Date().toLocaleTimeString()}`;
-  eventBus.publish('message', text);
-  eventLog.value.push(`发布消息: ${text}`);
-};
+  const text = `消息事件 ${new Date().toLocaleTimeString()}`
+  eventBus.publish('message', text)
+  eventLog.value.push(`发布消息: ${text}`)
+}
 
 // 发布警告事件
 const publishAlert = () => {
-  const text = `警告事件 ${new Date().toLocaleTimeString()}`;
-  eventBus.publish('warning', text);
-  eventLog.value.push(`发布警告: ${text}`);
-};
+  const text = `警告事件 ${new Date().toLocaleTimeString()}`
+  eventBus.publish('warning', text)
+  eventLog.value.push(`发布警告: ${text}`)
+}
 
 // 发布示例事件
 const publishEvent = () => {
-  publishMessage();
-};
+  publishMessage()
+}
 
 // 初始添加两个订阅者
 onMounted(() => {
-  addSubscriber();
-  addSubscriber();
-});
+  addSubscriber()
+  addSubscriber()
+})
 </script>
 
 <style lang="less" scoped>
@@ -427,6 +425,8 @@ onMounted(() => {
   background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
   min-height: 100vh;
   padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .header {
@@ -592,7 +592,9 @@ onMounted(() => {
   }
 }
 
-.publisher, .event-channel, .subscribers {
+.publisher,
+.event-channel,
+.subscribers {
   border-radius: 12px;
   padding: 1.5rem;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
@@ -847,7 +849,9 @@ pre {
   .diagram {
     grid-template-columns: 1fr;
 
-    .publisher, .event-channel, .subscribers {
+    .publisher,
+    .event-channel,
+    .subscribers {
       margin-bottom: 1.5rem;
     }
   }

@@ -2,7 +2,7 @@
   <div class="vm-module-container">
     <header class="header">
       <div class="title-wrapper">
-        <h1>Node.js VM 模块详解</h1>
+        <h1>Node.js VM 模块介绍</h1>
         <p class="subtitle">安全执行 JavaScript 代码的沙箱环境</p>
       </div>
     </header>
@@ -579,8 +579,6 @@ const securityItems = ref([
 </script>
 
 <style lang="less" scoped>
-
-
 // 颜色变量
 @primary-color: #4a6cf7;
 @primary-light: #e6eeff;

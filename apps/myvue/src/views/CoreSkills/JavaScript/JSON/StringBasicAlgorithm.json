@@ -1,0 +1,423 @@
+[
+  {
+    "id": "reverse",
+    "title": "字符串反转",
+    "description": "将字符串中的字符顺序完全反转",
+    "difficulty": "easy",
+    "type": ["变换"],
+    "icon": "🔁",
+    "steps": [
+      "将字符串拆分为字符数组",
+      "使用数组的reverse()方法反转数组",
+      "将反转后的数组重新连接成字符串"
+    ],
+    "solution": [
+      {
+        "index": 1,
+        "title": "使用数组的reverse()结合方法反转数组",
+        "description": "使用数组的reverse()结合方法反转数组",
+        "code": "function reverseString(str: string): string {\n    return str.split('').reverse().join('');\n}",
+        "timeComplexity": "O(n)",
+        "spaceComplexity": "O(1)",
+        "tips": "使用...展开字符串，将字符串转换为数组，然后使用数组的reverse()方法反转数组，最后将反转后的数组重新连接成字符串"
+      },
+      {
+        "index": 2,
+        "title": "使用双指针法反转字符串",
+        "description": "使用双指针法反转字符串，一个指针从头部开始，一个指针从尾部开始，交换两个指针指向的字符，直到两个指针相遇",
+        "code": "function reverseString(str: string): string {\n    let left = 0;\n    let right = str.length - 1;\n    let arr = str.split('');\n    while (left < right) {\n        [arr[left], arr[right]] = [arr[right], arr[left]];\n        left++;\n        right--;\n    }\n    return arr.join('');\n}",
+        "timeComplexity": "O(logn)",
+        "spaceComplexity": "O(1)"
+      },
+      {
+        "index": 3,
+        "title": "使用递归法反转字符串",
+        "description": "使用递归法反转字符串，如果字符串长度小于等于1，则直接返回字符串，否则将字符串的第一个字符和剩余字符串递归反转",
+        "code": "function reverseString(str: string): string {\n    if (str.length <= 1) return str;\n    return reverseString(str.slice(1)) + str[0];\n}",
+        "timeComplexity": "O(n)",
+        "spaceComplexity": "O(1)"
+      },
+      {
+        "index": 4,
+        "title": "使用栈反转字符串",
+        "description": "使用栈反转字符串，将字符串转换为数组，然后使用数组的reverse()方法反转数组，最后将反转后的数组重新连接成字符串",
+        "code": "function reverseString(str: string): string {\n    const stack = [];\n    for (let i = 0; i < str.length; i++) {\n        stack.push(str[i]);\n    }\n    return stack.reverse().join('');\n}",
+        "timeComplexity": "O(n)",
+        "spaceComplexity": "O(1)"
+      }
+    ],
+    "code": "function reverseString(str: string): string {\n    return str.split('').reverse().join('');\n}",
+    "timeComplexity": "O(n)",
+    "spaceComplexity": "O(1)"
+  },
+  {
+    "id": "palindrome",
+    "title": "回文检测",
+    "description": "判断一个字符串是否正序和倒序相同",
+    "difficulty": "easy",
+    "type": ["统计"],
+    "icon": "🔄",
+    "steps": [
+      "清理字符串（移除非字母数字字符并转为小写）",
+      "使用双指针法，一个从头部开始，一个从尾部开始",
+      "比较两个指针指向的字符是否相同",
+      "如果所有字符都匹配，则是回文"
+    ],
+    "code": "function isPalindrome(str: string): boolean {\n    const cleanStr = str.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();\n    let left = 0;\n    let right = cleanStr.length - 1;\n\n    while (left < right) {\n        if (cleanStr[left] !== cleanStr[right]) {\n            return false;\n        }\n        left++;\n        right--;\n    }\n    return true;\n}",
+    "timeComplexity": "O(n)",
+    "spaceComplexity": "O(1)"
+  },
+  {
+    "id": "vowel-count",
+    "title": "元音字母计数",
+    "description": "计算字符串中元音字母(a, e, i, o, u)的数量",
+    "difficulty": "easy",
+    "type": ["统计"],
+    "icon": "🔤",
+    "steps": [
+      "定义一个包含所有元音字母的集合",
+      "初始化计数器为0",
+      "遍历字符串中的每个字符",
+      "如果字符是元音字母（不区分大小写），则计数器加1"
+    ],
+    "code": "function countVowels(str: string): number {\n    const vowels = new Set(['a', 'e', 'i', 'o', 'u']);\n    let count = 0;\n\n    for (const char of str.toLowerCase()) {\n        if (vowels.has(char)) {\n            count++;\n        }\n    }\n    return count;\n}",
+    "timeComplexity": "O(n)",
+    "spaceComplexity": "O(1)"
+  },
+  {
+    "id": "anagram",
+    "title": "变位词检测",
+    "description": "判断两个字符串是否包含相同的字符并且数量相同（不考虑顺序）",
+    "difficulty": "easy",
+    "type": ["查找", "统计"],
+    "icon": "🧩",
+    "steps": [
+      "如果两个字符串长度不同，直接返回false",
+      "创建一个字符计数字典",
+      "遍历第一个字符串，统计每个字符出现的次数",
+      "遍历第二个字符串，减少计数器中对应字符的计数",
+      "如果所有计数都变为0，则是变位词"
+    ],
+    "code": "function areAnagrams(str1: string, str2: string): boolean {\n    if (str1.length !== str2.length) return false;\n\n    const charCount: Record<string, number> = {};\n\n    for (const char of str1) {\n        charCount[char] = (charCount[char] || 0) + 1;\n    }\n\n    for (const char of str2) {\n        if (!charCount[char]) return false;\n        charCount[char]--;\n    }\n\n    return Object.values(charCount).every(count => count === 0);\n}",
+    "timeComplexity": "O(n)",
+    "spaceComplexity": "O(1)"
+  },
+  {
+    "id": "capitalize",
+    "title": "首字母大写",
+    "description": "将字符串中每个单词的首字母转为大写",
+    "difficulty": "easy",
+    "type": ["变换", "查找"],
+    "icon": "✨",
+    "steps": [
+      "将字符串拆分为单词数组",
+      "遍历每个单词",
+      "将每个单词的首字母转为大写，其余字母转为小写",
+      "将处理后的单词重新连接成字符串"
+    ],
+    "code": "function capitalizeWords(str: string): string {\n    return str\n        .split(' ')\n        .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())\n        .join(' ');\n}",
+    "timeComplexity": "O(n)",
+    "spaceComplexity": "O(n)"
+  },
+  {
+    "id": "longestWord",
+    "title": "最长单词",
+    "description": "找出字符串中最长的单词",
+    "difficulty": "easy",
+    "type": ["统计"],
+    "icon": "📏",
+    "steps": [
+      "使用正则表达式或空格拆分字符串为单词数组",
+      "初始化最长单词为空字符串",
+      "遍历所有单词",
+      "比较每个单词的长度，保留最长的单词"
+    ],
+    "code": "function findLongestWord(str: string): string {\n    const words = str.split(/\\s+/);\n    let longestWord = '';\n\n    for (const word of words) {\n        if (word.length > longestWord.length) {\n            longestWord = word;\n        }\n    }\n\n    return longestWord;\n}",
+    "timeComplexity": "O(n)",
+    "spaceComplexity": "O(n)"
+  },
+  {
+    "id": "truncate",
+    "title": "字符串截断",
+    "description": "在指定长度处截断字符串，并添加省略号",
+    "difficulty": "easy",
+    "type": ["查找", "截取"],
+    "icon": "✂️",
+    "steps": [
+      "检查字符串长度是否超过最大长度",
+      "如果未超过，直接返回原字符串",
+      "如果超过，截取到最大长度减3的位置",
+      "在末尾添加省略号"
+    ],
+    "code": "function truncateString(str: string, maxLength: number): string {\n    if (str.length <= maxLength) return str;\n    return str.slice(0, maxLength - 3) + '...';\n}",
+    "timeComplexity": "O(1)",
+    "spaceComplexity": "O(1)"
+  },
+  {
+    "id": "charCount",
+    "title": "字符出现次数",
+    "description": "计算特定字符在字符串中出现的次数",
+    "difficulty": "easy",
+    "type": ["查找", "统计"],
+    "icon": "🔢",
+    "steps": [
+      "初始化计数器为0",
+      "遍历字符串中的每个字符",
+      "如果字符匹配目标字符（不区分大小写），计数器加1",
+      "返回计数结果"
+    ],
+    "code": "function countCharOccurrences(str: string, char: string): number {\n    const targetChar = char.toLowerCase();\n    let count = 0;\n\n    for (const c of str.toLowerCase()) {\n        if (c === targetChar) {\n            count++;\n        }\n    }\n\n    return count;\n}",
+    "timeComplexity": "O(n)",
+    "spaceComplexity": "O(1)"
+  },
+  {
+    "id": "removeDuplicates",
+    "title": "去除重复字符",
+    "description": "移除字符串中的重复字符，保持原有顺序",
+    "difficulty": "easy",
+    "type": ["查找", "截取"],
+    "icon": "🧹",
+    "steps": [
+      "创建一个Set来跟踪已见过的字符",
+      "创建一个结果字符串",
+      "遍历原字符串的每个字符",
+      "如果字符未见过，添加到结果中并记录到Set中",
+      "返回去重后的字符串"
+    ],
+    "code": "function removeDuplicates(str: string): string {\n    const seen = new Set<string>();\n    let result = '';\n\n    for (const char of str) {\n        if (!seen.has(char)) {\n            seen.add(char);\n            result += char;\n        }\n    }\n\n    return result;\n}",
+    "timeComplexity": "O(n)",
+    "spaceComplexity": "O(n)"
+  },
+  {
+    "id": "stringRotation",
+    "title": "字符串旋转",
+    "description": "判断一个字符串是否可以通过旋转另一个字符串得到",
+    "difficulty": "easy",
+    "type": ["查找", "统计"],
+    "icon": "🔄",
+    "steps": [
+      "检查两个字符串长度是否相等",
+      "将第一个字符串与自身连接",
+      "检查第二个字符串是否是连接后字符串的子串",
+      "如果是，则可以通过旋转得到"
+    ],
+    "code": "function isRotation(str1: string, str2: string): boolean {\n    if (str1.length !== str2.length) return false;\n    const concatenated = str1 + str1;\n    return concatenated.includes(str2);\n}",
+    "timeComplexity": "O(n)",
+    "spaceComplexity": "O(n)"
+  },
+  {
+    "id": "firstNonRepeating",
+    "title": "第一个非重复字符",
+    "description": "找到字符串中第一个只出现一次的字符",
+    "difficulty": "easy",
+    "type": ["查找", "统计"],
+    "icon": "🔍",
+    "steps": [
+      "创建一个Map来统计每个字符的出现次数",
+      "第一次遍历：统计所有字符的出现次数",
+      "第二次遍历：找到第一个计数为1的字符",
+      "如果没有找到，返回空字符串"
+    ],
+    "code": "function firstNonRepeatingChar(str: string): string {\n    const charCount = new Map<string, number>();\n\n    for (const char of str) {\n        charCount.set(char, (charCount.get(char) || 0) + 1);\n    }\n\n    for (const char of str) {\n        if (charCount.get(char) === 1) {\n            return char;\n        }\n    }\n\n    return '';\n}",
+    "timeComplexity": "O(n)",
+    "spaceComplexity": "O(n)"
+  },
+  {
+    "id": "stringCompression",
+    "title": "字符串压缩",
+    "description": "将连续重复字符压缩为字符+次数的格式",
+    "difficulty": "easy",
+    "type": ["变换", "统计"],
+    "icon": "🗜️",
+    "steps": [
+      "初始化结果字符串和计数器",
+      "遍历字符串，比较当前字符与前一个字符",
+      "如果相同，计数器加1",
+      "如果不同，将前一个字符和计数添加到结果中",
+      "处理最后一个字符组"
+    ],
+    "code": "function compressString(str: string): string {\n    if (str.length === 0) return str;\n\n    let result = '';\n    let count = 1;\n    let currentChar = str[0];\n\n    for (let i = 1; i < str.length; i++) {\n        if (str[i] === currentChar) {\n            count++;\n        } else {\n            result += currentChar + (count > 1 ? count : '');\n            currentChar = str[i];\n            count = 1;\n        }\n    }\n\n    result += currentChar + (count > 1 ? count : '');\n    return result;\n}",
+    "timeComplexity": "O(n)",
+    "spaceComplexity": "O(n)"
+  },
+  {
+    "id": "validParentheses",
+    "title": "有效括号",
+    "description": "判断字符串中的括号是否有效匹配",
+    "difficulty": "easy",
+    "type": ["查找", "统计"],
+    "icon": "📝",
+    "steps": [
+      "创建一个栈来存储左括号",
+      "遍历字符串中的每个字符",
+      "如果是左括号，压入栈中",
+      "如果是右括号，检查栈顶是否匹配",
+      "最后检查栈是否为空"
+    ],
+    "code": "function isValidParentheses(str: string): boolean {\n    const stack: string[] = [];\n    const pairs: Record<string, string> = {\n        ')': '(',\n        '}': '{',\n        ']': '['\n    };\n\n    for (const char of str) {\n        if (pairs[char]) {\n            if (stack.pop() !== pairs[char]) {\n                return false;\n            }\n        } else {\n            stack.push(char);\n        }\n    }\n\n    return stack.length === 0;\n}",
+    "timeComplexity": "O(n)",
+    "spaceComplexity": "O(n)"
+  },
+  {
+    "id": "longestCommonPrefix",
+    "title": "最长公共前缀",
+    "description": "找到字符串数组中最长的公共前缀",
+    "difficulty": "easy",
+    "type": ["查找"],
+    "icon": "🔗",
+    "steps": [
+      "如果数组为空，返回空字符串",
+      "以第一个字符串为基准",
+      "遍历第一个字符串的每个字符位置",
+      "检查其他字符串在相同位置是否匹配",
+      "返回匹配的最长前缀"
+    ],
+    "code": "function longestCommonPrefix(strs: string[]): string {\n    if (strs.length === 0) return '';\n    if (strs.length === 1) return strs[0];\n\n    let prefix = '';\n    const firstStr = strs[0];\n\n    for (let i = 0; i < firstStr.length; i++) {\n        const char = firstStr[i];\n        for (let j = 1; j < strs.length; j++) {\n            if (i >= strs[j].length || strs[j][i] !== char) {\n                return prefix;\n            }\n        }\n        prefix += char;\n    }\n\n    return prefix;\n}",
+    "timeComplexity": "O(S)",
+    "spaceComplexity": "O(1)"
+  },
+  {
+    "id": "wordFrequency",
+    "title": "单词频率统计",
+    "description": "统计字符串中每个单词出现的次数",
+    "difficulty": "easy",
+    "type": ["统计"],
+    "icon": "📊",
+    "steps": [
+      "清理字符串，移除非字母字符",
+      "将字符串转换为小写并拆分为单词",
+      "创建一个Map来统计单词频率",
+      "遍历单词数组，更新计数",
+      "返回单词频率映射"
+    ],
+    "code": "function getWordFrequency(str: string): Map<string, number> {\n    const cleanStr = str.replace(/[^a-zA-Z\\s]/g, '').toLowerCase();\n    const words = cleanStr.split(/\\s+/).filter(word => word.length > 0);\n    const frequency = new Map<string, number>();\n\n    for (const word of words) {\n        frequency.set(word, (frequency.get(word) || 0) + 1);\n    }\n\n    return frequency;\n}",
+    "timeComplexity": "O(n)",
+    "spaceComplexity": "O(n)"
+  },
+  {
+    "id": "stringPermutation",
+    "title": "字符串排列",
+    "description": "生成字符串的所有可能排列",
+    "difficulty": "medium",
+    "type": ["统计"],
+    "icon": "🎲",
+    "steps": [
+      "使用递归方法生成排列",
+      "如果字符串长度为1，返回该字符",
+      "对于每个字符，将其作为第一个字符",
+      "递归生成剩余字符的排列",
+      "合并所有排列结果"
+    ],
+    "code": "function generatePermutations(str: string): string[] {\n    if (str.length <= 1) return [str];\n\n    const permutations: string[] = [];\n\n    for (let i = 0; i < str.length; i++) {\n        const char = str[i];\n        const remaining = str.slice(0, i) + str.slice(i + 1);\n        const subPermutations = generatePermutations(remaining);\n\n        for (const perm of subPermutations) {\n            permutations.push(char + perm);\n        }\n    }\n\n    return permutations;\n}",
+    "timeComplexity": "O(n!)",
+    "spaceComplexity": "O(n!)"
+  },
+  {
+    "id": "stringEncoding",
+    "title": "字符串编码",
+    "description": "将字符串编码为字符+重复次数的格式",
+    "difficulty": "easy",
+    "type": ["变换", "统计"],
+    "icon": "🔐",
+    "steps": [
+      "初始化结果字符串和计数器",
+      "遍历字符串，统计连续相同字符",
+      "当字符改变时，将前一个字符和计数添加到结果",
+      "处理最后一个字符组",
+      "返回编码后的字符串"
+    ],
+    "code": "function encodeString(str: string): string {\n    if (str.length === 0) return str;\n\n    let result = '';\n    let count = 1;\n    let currentChar = str[0];\n\n    for (let i = 1; i < str.length; i++) {\n        if (str[i] === currentChar) {\n            count++;\n        } else {\n            result += currentChar + count;\n            currentChar = str[i];\n            count = 1;\n        }\n    }\n\n    result += currentChar + count;\n    return result;\n}",
+    "timeComplexity": "O(n)",
+    "spaceComplexity": "O(n)"
+  },
+  {
+    "id": "stringDecoding",
+    "title": "字符串解码",
+    "description": "将编码后的字符串解码为原始字符串",
+    "difficulty": "easy",
+    "type": ["变换", "统计"],
+    "icon": "🔓",
+    "steps": [
+      "初始化结果字符串",
+      "遍历编码字符串，提取字符和数字",
+      "将字符重复指定次数",
+      "添加到结果字符串中",
+      "返回解码后的字符串"
+    ],
+    "code": "function decodeString(str: string): string {\n    let result = '';\n    let i = 0;\n\n    while (i < str.length) {\n        const char = str[i];\n        i++;\n        let count = '';\n\n        while (i < str.length && /\\d/.test(str[i])) {\n            count += str[i];\n            i++;\n        }\n\n        const repeatCount = parseInt(count) || 1;\n        result += char.repeat(repeatCount);\n    }\n\n    return result;\n}",
+    "timeComplexity": "O(n)",
+    "spaceComplexity": "O(n)"
+  },
+  {
+    "id": "stringDifference",
+    "title": "字符串差异",
+    "description": "找到两个字符串的第一个不同字符位置",
+    "difficulty": "easy",
+    "type": ["查找"],
+    "icon": "🔍",
+    "steps": [
+      "找到两个字符串的最小长度",
+      "遍历到最小长度，比较对应位置的字符",
+      "如果发现不同，返回当前位置",
+      "如果都相同，检查长度差异",
+      "返回第一个不同位置或-1"
+    ],
+    "code": "function findFirstDifference(str1: string, str2: string): number {\n    const minLength = Math.min(str1.length, str2.length);\n\n    for (let i = 0; i < minLength; i++) {\n        if (str1[i] !== str2[i]) {\n            return i;\n        }\n    }\n\n    if (str1.length !== str2.length) {\n        return minLength;\n    }\n\n    return -1;\n}",
+    "timeComplexity": "O(min(n,m))",
+    "spaceComplexity": "O(1)"
+  },
+  {
+    "id": "stringReverseWords",
+    "title": "单词反转",
+    "description": "反转字符串中单词的顺序，但保持单词内部字符顺序",
+    "difficulty": "easy",
+    "type": ["变换"],
+    "icon": "🔄",
+    "steps": [
+      "将字符串按空格拆分为单词数组",
+      "反转单词数组的顺序",
+      "将反转后的单词重新连接成字符串",
+      "处理多个空格的情况",
+      "返回反转后的字符串"
+    ],
+    "code": "function reverseWords(str: string): string {\n    const words = str.trim().split(/\\s+/);\n    return words.reverse().join(' ');\n}",
+    "timeComplexity": "O(n)",
+    "spaceComplexity": "O(n)"
+  },
+  {
+    "id": "stringPatternMatching",
+    "title": "模式匹配",
+    "description": "检查字符串是否匹配给定的模式（支持通配符）",
+    "difficulty": "hard",
+    "type": ["统计"],
+    "icon": "🎯",
+    "steps": [
+      "使用动态规划或递归方法",
+      "处理通配符*（匹配任意字符序列）",
+      "处理通配符?（匹配单个字符）",
+      "比较模式字符和字符串字符",
+      "返回是否匹配的结果"
+    ],
+    "code": "function isMatch(s: string, p: string): boolean {\n    const dp: boolean[][] = Array(s.length + 1).fill(null).map(() => Array(p.length + 1).fill(false));\n    dp[0][0] = true;\n\n    for (let j = 1; j <= p.length; j++) {\n        if (p[j - 1] === '*') {\n            dp[0][j] = dp[0][j - 1];\n        }\n    }\n\n    for (let i = 1; i <= s.length; i++) {\n        for (let j = 1; j <= p.length; j++) {\n            if (p[j - 1] === '?' || p[j - 1] === s[i - 1]) {\n                dp[i][j] = dp[i - 1][j - 1];\n            } else if (p[j - 1] === '*') {\n                dp[i][j] = dp[i - 1][j] || dp[i][j - 1];\n            }\n        }\n    }\n\n    return dp[s.length][p.length];\n}",
+    "timeComplexity": "O(mn)",
+    "spaceComplexity": "O(mn)"
+  },
+  {
+    "id": "stringEditDistance",
+    "title": "编辑距离",
+    "description": "计算将一个字符串转换为另一个字符串所需的最少操作次数",
+    "difficulty": "hard",
+    "type": ["统计"],
+    "icon": "✏️",
+    "steps": [
+      "使用动态规划方法",
+      "创建二维数组存储子问题的解",
+      "考虑插入、删除、替换三种操作",
+      "填充动态规划表",
+      "返回最终的编辑距离"
+    ],
+    "code": "function editDistance(word1: string, word2: string): number {\n    const m = word1.length;\n    const n = word2.length;\n    const dp: number[][] = Array(m + 1).fill(null).map(() => Array(n + 1).fill(0));\n\n    for (let i = 0; i <= m; i++) {\n        dp[i][0] = i;\n    }\n    for (let j = 0; j <= n; j++) {\n        dp[0][j] = j;\n    }\n\n    for (let i = 1; i <= m; i++) {\n        for (let j = 1; j <= n; j++) {\n            if (word1[i - 1] === word2[j - 1]) {\n                dp[i][j] = dp[i - 1][j - 1];\n            } else {\n                dp[i][j] = Math.min(dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1]) + 1;\n            }\n        }\n    }\n\n    return dp[m][n];\n}",
+    "timeComplexity": "O(mn)",
+    "spaceComplexity": "O(mn)"
+  }
+]

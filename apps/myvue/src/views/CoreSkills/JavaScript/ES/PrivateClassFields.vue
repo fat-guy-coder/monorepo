@@ -2,7 +2,7 @@
   <div class="private-fields-container">
     <!-- 页面标题 -->
     <header class="page-header">
-      <h1 class="main-title">🔒 Class 私有字段详解</h1>
+      <h1 class="main-title">🔒 Class 私有字段介绍</h1>
       <p class="subtitle">ES2022 私有类成员与封装机制</p>
     </header>
 

@@ -1,7 +1,7 @@
 <template>
   <div class="umd-container">
     <div class="header">
-      <h1>UMD (Universal Module Definition) 详解</h1>
+      <h1>UMD (Universal Module Definition) 介绍</h1>
       <p class="subtitle">一种通用的 JavaScript 模块定义规范</p>
       <div class="compatibility-badges">
         <div class="badge">
@@ -31,7 +31,10 @@
           <h2>UMD 概念</h2>
         </div>
         <div class="card-content">
-          <p>UMD（Universal Module Definition）是一种通用的 JavaScript 模块定义规范，旨在兼容多种模块系统：</p>
+          <p>
+            UMD（Universal Module Definition）是一种通用的 JavaScript
+            模块定义规范，旨在兼容多种模块系统：
+          </p>
 
           <div class="definition">
             <h3>核心目标</h3>
@@ -366,7 +369,9 @@ MyLibrary.doSomething();</code></pre>
       <h2>UMD 在现代开发中的定位</h2>
       <div class="summary">
         <p>UMD 是 JavaScript 模块化发展历程中的重要一环，为不同模块系统之间提供了兼容方案。</p>
-        <p>在 ES 模块成为标准的今天，UMD 仍然是分发通用库的实用选择，特别是需要兼容旧环境的场景。</p>
+        <p>
+          在 ES 模块成为标准的今天，UMD 仍然是分发通用库的实用选择，特别是需要兼容旧环境的场景。
+        </p>
       </div>
       <div class="recommendation">
         <div class="icon">💡</div>

@@ -1,7 +1,7 @@
 <template>
   <div class="webcrypto-container">
     <header class="header">
-      <h1>WebCrypto API 详解</h1>
+      <h1>WebCrypto API 介绍</h1>
       <p>现代Web应用的安全加密解决方案</p>
     </header>
 
@@ -13,7 +13,10 @@
           <h2>概念解析</h2>
         </div>
         <div class="content">
-          <p class="definition">WebCrypto API 是一套浏览器原生提供的加密接口，用于在Web应用中执行各种加密操作，包括哈希生成、加密解密、数字签名和密钥管理等。</p>
+          <p class="definition">
+            WebCrypto API
+            是一套浏览器原生提供的加密接口，用于在Web应用中执行各种加密操作，包括哈希生成、加密解密、数字签名和密钥管理等。
+          </p>
 
           <div class="key-features">
             <h3>核心特性</h3>
@@ -457,16 +460,16 @@ async function signJWT(payload, privateKey) {
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref } from 'vue'
 
-const activeTab = ref(0);
+const activeTab = ref(0)
 
 const tabs = [
   { label: '密钥生成' },
   { label: '加密解密' },
   { label: '哈希生成' },
-  { label: '数字签名' }
-];
+  { label: '数字签名' },
+]
 </script>
 
 <style lang="less" scoped>
@@ -610,7 +613,7 @@ const tabs = [
         padding-left: 12px;
 
         &::before {
-          content: "•";
+          content: '•';
           position: absolute;
           left: 0;
           color: #3b82f6;
@@ -809,7 +812,7 @@ const tabs = [
         padding-left: 12px;
 
         &::before {
-          content: "•";
+          content: '•';
           position: absolute;
           left: 0;
           color: #3b82f6;
@@ -877,7 +880,8 @@ const tabs = [
     }
   }
 
-  .pros, .cons {
+  .pros,
+  .cons {
     h3 {
       font-size: 1.3rem;
       margin: 0 0 16px;
@@ -966,7 +970,8 @@ pre {
       width: 100%;
       border-collapse: collapse;
 
-      th, td {
+      th,
+      td {
         padding: 16px;
         text-align: left;
         border-bottom: 1px solid #e2e8f0;

@@ -1,7 +1,7 @@
 <template>
   <div class="gitlab-cicd-container">
     <header class="header">
-      <h1>GitLab CI/CD 配置流程详解</h1>
+      <h1>GitLab CI/CD 配置流程介绍</h1>
       <p>全面掌握现代持续集成与持续部署的配置方法</p>
     </header>
 
@@ -116,7 +116,7 @@
       </section>
 
       <section class="section">
-        <h2 class="section-title">.gitlab-ci.yml 文件结构详解</h2>
+        <h2 class="section-title">.gitlab-ci.yml 文件结构介绍</h2>
         <div class="section-content">
           <pre class="code-block"><code># 定义流水线阶段
 stages:
@@ -204,7 +204,7 @@ deploy-prod:
       </section>
 
       <section class="section">
-        <h2 class="section-title">关键配置详解</h2>
+        <h2 class="section-title">关键配置介绍</h2>
         <div class="section-content">
           <div class="config-details">
             <div class="config-card">

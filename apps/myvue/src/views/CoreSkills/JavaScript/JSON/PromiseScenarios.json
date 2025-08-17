@@ -1,0 +1,280 @@
+[
+  {
+    "id": "conaccumulation",
+    "title": "并发处理",
+    "difficulty": "中等",
+    "important": 5,
+    "description": "Promise处理并行，并发控制",
+    "children": [
+      {
+        "id": "queueControl",
+        "title": "利用队列控制并发数",
+        "difficulty": "较难",
+        "important": 5,
+        "description": "利用队列控制并发数，先进先出，谁先完成谁先从队列中移除，然后从队列中取出下一个任务执行,递归调用",
+        "steps": [
+          "1.创建队列",
+          "2.创建最大并发数",
+          "3.创建当前并发数",
+          "4.递归执行队列的任务",
+          "5.如果超出最大并发数，则等待",
+          "6.如果队列执行完，则返回结果"
+        ],
+        "tags": ["队列"],
+        "code": "class QueueControl {\n  queue = [];      // 任务执行队列\n  result = [];    // 结果存储数组\n  max = 4;        // 最大并发数\n  running = 0;    // 当前运行任务数\n  length = 0;     // 总任务数\n  \n  constructor(urls, max = 4) {\n    // 将URL转换为返回Promise的函数\n    this.queue = urls.map(url => () => fetch(url));\n    this.max = max;\n    this.length = urls.length;\n    this.run();   // 启动任务执行\n  }\n  \n  run() {\n    // 当队列中有任务且未达到最大并发时\n    if (this.queue.length > 0 && this.running < this.max) {\n      const task = this.queue.shift();  // 取出队列头部任务\n      this.running++;                   // 增加运行计数\n      \n      // 执行当前任务\n      task().then((res) => {\n        this.running--;                // 减少运行计数\n        this.result.push(res);         // 存储结果\n        \n        // 检查所有任务是否完成\n        if (this.result.length === this.length) {\n          this.finish();  // 完成处理\n          return;\n        }\n        \n        // 递归执行下一个任务\n        this.run();\n      });\n      \n      // 继续补充并发任务（关键：允许同时启动多个任务）\n      this.run();\n    }\n  }\n  \n  finish() {\n    // 返回所有结果的Promise\n    return Promise.all(this.result);\n  }\n}\n\n// 使用示例\nnew QueueControl(['1','2','3']).finish().then(res => {\n  console.log(res);  // 打印所有结果\n});"
+      },
+      {
+        "id": "raceControl",
+        "title": "利用race和for(while) await控制并发数",
+        "difficulty": "中等",
+        "important": 5,
+        "description": "利用race和for await控制并发数，谁先完成谁先从请求池移除，然后从队列中加入新的请求进入请求池，再次执行",
+        "steps": [
+          "1.创建请求池，并添加请求",
+          "2.创建最大并发数",
+          "3.创建当前并发数",
+          "4.循环执行",
+          "5.如果等于最大并发数，则执行race,谁先完成谁先出池，然后把下一个加进池中，如此往复",
+          "6.如果队列执行完，则返回所有结果"
+        ],
+        "tags": ["race", "set", "for await", "while await", "async function"],
+        "code": "async function raceControl(urls, max = 4) {\n  // 创建任务队列（每个任务返回Promise）\n  const queue = urls.map(url => () => fetch(url));\n  const set = new Set();   // 当前运行任务池\n  const result = [];       // 结果存储\n  const length = urls.length;  // 总任务数\n  \n  // 遍历所有任务\n  for (let i = 0; i < length; i++) {\n    const task = queue[i]();  // 执行任务获取Promise\n    set.add(task);            // 加入任务池\n    \n    // 任务完成处理\n    task.then((res) => {\n      set.delete(task);  // 从池中移除\n      result.push(res);  // 存储结果\n    }).catch(err => {\n      set.delete(task);\n      result.push(err);  // 存储错误\n    });\n    \n    // 当任务池达到最大并发数时\n    if (set.size >= max) {\n      // 使用Promise.race等待最快完成的任务\n      await Promise.race(set);\n    }\n  }\n  \n  // 返回所有结果的Promise\n  return Promise.all(result);\n}\n\n// 使用示例\nraceControl(['1', '2', '3']);"
+      },
+      {
+        "id": "asyncAwaitControl",
+        "title": "利用async和while循环控制并发数",
+        "difficulty": "中等",
+        "important": 5,
+        "description": "利用async和while循环控制并发数，谁先完成则扣除一个并发数,并执行下一个任务,递归调用",
+        "steps": [
+          "1.创建队列",
+          "2.创建最大并发数",
+          "3.创建当前并发数",
+          "4.递归循环执行",
+          "5.如果等于最大并发数，则停止循环并执行，等到promise完成释放一个并发数，然后继续循环",
+          "6.如果队列执行完，则返回所有结果"
+        ],
+        "tags": ["async function", "while"],
+        "code": "async function whileControl(urls, max = 4) {\n  // 创建任务队列\n  const queue = urls.map(url => () => fetch(url));\n  let current = 0;     // 当前并发任务数\n  const result = [];   // 结果存储\n  const length = urls.length;  // 总任务数\n  \n  // 递归执行函数\n  async function next() {\n    // 当并发数未满且队列有任务时\n    while (current < max && queue.length > 0) {\n      current++;  // 增加并发计数\n      const task = queue.shift();  // 取出任务\n      \n      // 执行任务\n      task().then((res) => {\n        current--;  // 减少并发计数\n        result.push(res);  // 存储结果\n        \n        // 检查所有任务是否完成\n        if (result.length === length) {\n          return Promise.all(result);  // 返回所有结果\n        }\n        \n        // 递归执行下一个任务\n        next();\n      });\n    }\n  }\n  \n  // 启动任务执行\n  await next();\n  return result;  // 返回结果\n}\n\n// 使用示例\nwhileControl(['1', '2', '3']);"
+      }
+    ]
+  },
+  {
+    "id": "serial",
+    "title": "串行处理",
+    "difficulty": "中等",
+    "important": 5,
+    "description": "串行处理,依次执行",
+    "children": [
+      {
+        "id": "serialControl",
+        "title": "传入数组，依次执行，需要拿到上一个结果",
+        "difficulty": "较难",
+        "important": 5,
+        "description": "利用for await或者while await//排队处理，需要拿到上一个结果(利用变量保存上一个结果再传入下一个promise)",
+        "steps": [
+          "1.async function",
+          "2.for await循环执行",
+          "3.while await循环执行",
+          "4.利用变量保存上一个结果再传入下一个promise",
+          "5.如果队列执行完，则返回所有结果"
+        ],
+        "tags": ["for await", "while await", "async function"],
+        "code": "//@params{Array} promises要执行的函数(函数返回promise)数组 函数接收一个参数(累加值)\n//@params{Array}callback 处理回调,如果是数组,会按序执行,接受两个参数(累加值,当前promise的结果)\nasync function serialControl(promises, callback) {\n  const length = promises.length;      // 总任务数\n  const callbackLength = callback?.length || 0;  // 回调数组长度\n  const results = [];                 // 每个任务结果\n  let accumulation = null;            // 累加值\n  \n  // 遍历所有任务\n  for (let i = 0; i < length; i++) {\n    // 确定当前回调函数 如果是数组则按次序执行(回调数组长度不够,会取最后一个执行到最后),如果单个则每次执行\n    const cb = callback \n      ? (Array.isArray(callback) \n        ? (i >= callbackLength ? callback[callbackLength - 1] : callback[i]) \n        : callback) \n      : null;\n    \n    // 执行当前任务并处理结果,这里内置累加值参数和callback功能重复,但是你还是两个都可以用\n    accumulation = await promises[i](accumulation).then(res => {\n      results.push(res);  // 存储结果\n      return cb ? cb(accumulation, res) : res;  // 应用回调\n    });\n  }\n  \n  // 返回所有结果和最终累加值\n  return { results, accumulation };\n}\n\n// 使用示例（无回调,使用内置累加值参数）\nserialControl([\n  () => new Promise((e) => setTimeout(() => e(1), 1000)),\n  (acc) => new Promise((e) => setTimeout(() => e(2), 1000)).then(e = > acc + 2),\n  (acc) => new Promise((e) => setTimeout(() => e(acc + 3), 1000))\n]).then(console.log);\n\n// 使用示例（有回调）\nserialControl([\n  () => new Promise((e) => setTimeout(() => e(1), 1000)),\n  () => new Promise((e) => setTimeout(() => e(2), 1000))\n], (acc, res) => acc + res).then(console.log);"
+      },
+      {
+        "id": "serialDealWithByReduce",
+        "title": "传入数组，需要拿到上一个结果后结合当前结果处理(串行处理结果)。",
+        "difficulty": "中等",
+        "important": 5,
+        "description": "利用reduce可以拿到上一个处理结果实现串行处理,累加器直接返回promise,回调里拿到上一个结果挂到then里处理，然后再返回",
+        "steps": [
+          "1.reduce实现串行处理",
+          "2.累加器直接返回promise,回调里拿到上一个结果挂到then里处理，然后再返回"
+        ],
+        "tags": ["reduce", "Promise.all"],
+        "code": "function serialDealWithByReduce(promises, callback) {\n  // 使用reduce串行处理Promise链\n  return promises.reduce((acc, curr) => {\n    return acc.then((res1) => {\n      // 执行当前任务\n      return curr(res1).then((res2) => {\n        // 应用回调处理结果\n        return callback ? callback(res1, res2) : res2;\n      });\n    });\n  }, Promise.resolve(null));  // 初始Promise\n}\n\n// 使用示例（内置参数处理）\nserialDealWithByReduce([\n  () => new Promise(e => setTimeout(() => e(1), 1000)),\n  (acc) => new Promise(e => setTimeout(() => e(acc + 2), 1000))\n]).then(console.log);\n\n// 使用示例（批量回调处理）\nserialDealWithByReduce([\n  () => new Promise(e => setTimeout(() => e(1), 1000)),\n  (acc) => new Promise(e => setTimeout(() => e(acc + 2), 1000))\n], (acc, res) => acc + res).then(console.log);",
+        "tips": "利用外部变量保存上一个结果，普通的循环也可以实现，每个循环里处理上一个结果，然后返回"
+      },
+      {
+        "id": "serialControlByLazyMan",
+        "title": "lazyMan实现",
+        "difficulty": "中等",
+        "important": 5,
+        "description": "利用队列和for await或者while await控制实现lazyMan",
+        "steps": [
+          "1.创建队列，并添加相关函数",
+          "2.按序循环(for await或者while await)执行队列中的函数"
+        ],
+        "tags": ["for await", "while await", "async function", "lazyMan"],
+        "code": "class LazyMan {\n  constructor() {\n    this.queue = [];  // 任务队列\n    // 异步启动执行（确保链式调用完成）\n    setTimeout(() => this.run(), 0);\n  }\n  \n  sleep(time) {\n    // 添加sleep任务\n    this.queue.push(() => {\n      return new Promise((resolve) => {\n        console.log(`Sleeping ${time}ms`);\n        setTimeout(resolve, time);\n      });\n    });\n    return this;  // 支持链式调用\n  }\n  \n  eat(food) {\n    // 添加eat任务\n    this.queue.push(() => {\n      return new Promise((resolve) => {\n        console.log(`Eating ${food}`);\n        resolve();\n      });\n    });\n    return this;\n  }\n  \n  sleepFirst(time) {\n    // 添加优先任务（插入队列头部）\n    this.queue.unshift(() => {\n      return new Promise((resolve) => {\n        console.log(`Sleeping first ${time}ms`);\n        setTimeout(resolve, time);\n      });\n    });\n    return this;\n  }\n  \n  async run() {\n    // 串行执行所有任务\n    for (const task of this.queue) {\n      await task();\n    }\n  }\n}\n\n// 使用示例\nconst lazyMan = new LazyMan();\nlazyMan.sleep(1000).eat('dinner').sleepFirst(500);"
+      },
+      {
+        "id": "otherSerial",
+        "title": "其他穿行处理场景(红绿灯、排队、串行请求)",
+        "difficulty": "中等",
+        "important": 5,
+        "description": "都是for await或者while await或者reduce实现",
+        "steps": ["1.reduce实现串行处理", "2.或者for await或者while await实现串行处理"],
+        "tags": ["reduce", "for await", "while await", "async function"],
+        "code": "async function serialControlByReduce(urls) {\n  // 创建任务队列\n  const queue = urls.map(url => () => fetch(url));\n  \n  // 使用reduce串行执行\n  return queue.reduce(\n    (acc, curr) => acc.then(() => curr()), \n    Promise.resolve()\n  );\n}\n\n// 使用示例\nserialControlByReduce(['1', '2', '3']);"
+      }
+    ]
+  },
+  {
+    "id": "timeout",
+    "title": "超时处理",
+    "difficulty": "简单",
+    "important": 5,
+    "description": "超时后触发超时回调",
+    "children": [
+      {
+        "id": "timeoutControl",
+        "title": "利用setTimeout控制超时",
+        "difficulty": "简单",
+        "important": 5,
+        "description": "利用promise的executor内setTimeout控制超时，超时后触发超时回调",
+        "steps": ["1.利用promise的executor内setTimeout控制超时", "2.超时后触发超时回调"],
+        "tags": ["setTimeout"],
+        "code": "function timeoutControl(url, delay = 1000) {\n  return new Promise((resolve, reject) => {\n    // 设置超时定时器\n    const timer = setTimeout(() => {\n      resolve('timeout');  // 超时处理\n    }, delay);\n    \n    // 发起实际请求\n    fetch(url)\n      .then(res => {\n        clearTimeout(timer);  // 清除定时器\n        resolve(res);         // 正常返回\n      })\n      .catch(err => {\n        clearTimeout(timer);\n        reject(err);          // 错误处理\n      });\n  });\n}\n\n// 使用示例\ntimeoutControl('api/data', 3000);"
+      },
+      {
+        "id": "timeoutControl",
+        "title": "利用Promise.race控制超时",
+        "difficulty": "简单",
+        "important": 5,
+        "description": "利用Promise.race或者any控制超时，超时后触发超时回调",
+        "steps": ["1.利用Promise.race或者any控制超时", "2.超时后触发超时回调"],
+        "tags": ["Promise.race"],
+        "code": "function timeoutControl(url, delay = 1000) {\n  // 创建实际请求\n  const fetchPromise = fetch(url);\n  \n  // 创建超时Promise\n  const timeoutPromise = new Promise((_, reject) => \n    setTimeout(() => reject('timeout'), delay)\n  );\n  \n  // 使用race竞争结果\n  return Promise.race([fetchPromise, timeoutPromise]);\n}\n\n// 使用示例\ntimeoutControl('api/data', 3000).catch(console.error);"
+      }
+    ]
+  },
+  {
+    "id": "request",
+    "title": "promise封装请求",
+    "difficulty": "简单",
+    "important": 5,
+    "description": "promise封装请求，返回promise",
+    "children": [
+      {
+        "id": "promiseFetch",
+        "title": "promise封装fetch请求",
+        "difficulty": "简单",
+        "important": 5,
+        "description": "promise封装fetch请求，并设置请求返回拦截器，返回promise",
+        "steps": ["1.拦截器在设置前处理请求参数", "2.拦截器在设置后处理请求返回", "3.返回promise"],
+        "tags": ["promise封装请求", "fetch"],
+        "tips": "更多功能可以参考axios的实现,readableStream和formData等",
+        "code": "function promiseRequest(config) {\n  const { \n    url, \n    method = 'GET', \n    data = null, \n    headers = {}, \n    requestInterceptor, \n    responseInterceptor \n  } = config;\n  \n  return new Promise((resolve, reject) => {\n    // 请求拦截处理\n    let finalConfig = { url, method, data, headers };\n    if (requestInterceptor) {\n      try {\n        finalConfig = requestInterceptor(finalConfig);\n      } catch (error) {\n        reject(error);\n        return;\n      }\n    }\n    \n    // 发起请求\n    fetch(finalConfig.url, {\n      method: finalConfig.method,\n      headers: finalConfig.headers,\n      body: finalConfig.data ? JSON.stringify(finalConfig.data) : null\n    })\n    .then(response => {\n      // 响应拦截处理\n      return responseInterceptor \n        ? responseInterceptor(response) \n        : response.json();\n    })\n    .then(resolve)\n    .catch(reject);\n  });\n}\n\n// 使用示例\npromiseRequest({\n  url: 'api/data',\n  method: 'POST',\n  data: { key: 'value' },\n  requestInterceptor: config => {\n    config.headers.Authorization = 'Bearer token';\n    return config;\n  },\n  responseInterceptor: res => res.json()\n}).then(console.log);"
+      },
+      {
+        "id": "promiseXhr",
+        "title": "promise封装xhr请求",
+        "difficulty": "简单",
+        "important": 5,
+        "description": "promise封装ajax请求，并设置请求返回拦截器，返回promise",
+        "steps": ["1.拦截器在设置前处理请求参数", "2.拦截器在设置后处理请求返回", "3.返回promise"],
+        "tags": ["promise封装请求", "xhr"],
+        "tips": "更多功能可以参考axios的实现,readableStream和formData等",
+        "code": "function promiseRequest(config) {\n  const { \n    url, \n    method = 'GET', \n    data = null, \n    headers = {}, \n    requestInterceptor, \n    responseInterceptor \n  } = config;\n  \n  return new Promise((resolve, reject) => {\n    // 请求拦截处理\n    let finalConfig = { url, method, data, headers };\n    if (requestInterceptor) {\n      try {\n        finalConfig = requestInterceptor(finalConfig);\n      } catch (error) {\n        reject(error);\n        return;\n      }\n    }\n    \n    const xhr = new XMLHttpRequest();\n    xhr.open(finalConfig.method, finalConfig.url);\n    \n    // 设置请求头\n    Object.entries(finalConfig.headers).forEach(([key, value]) => {\n      xhr.setRequestHeader(key, value);\n    });\n    \n    xhr.onload = () => {\n      if (xhr.status >= 200 && xhr.status < 300) {\n        // 响应拦截处理\n        const result = responseInterceptor \n          ? responseInterceptor(xhr.response) \n          : JSON.parse(xhr.response);\n        resolve(result);\n      } else {\n        reject(xhr.statusText);\n      }\n    };\n    \n    xhr.onerror = () => reject(xhr.statusText);\n    xhr.send(finalConfig.data ? JSON.stringify(finalConfig.data) : null);\n  });\n}\n\n// 使用示例\npromiseRequest({\n  url: 'api/data',\n  method: 'GET',\n  responseInterceptor: res => JSON.parse(res)\n}).then(console.log);"
+      },
+      {
+        "id": "promiseResource",
+        "title": "promise实现资源加载(img、script、css、link)",
+        "difficulty": "简单",
+        "important": 5,
+        "description": "promise实现资源加载，在资源的onload或者onerror中执行promise的resolve或者reject即可",
+        "steps": [
+          "1.获得资源的js对象",
+          "2.在资源的onload或者onerror中执行promise的resolve或者reject"
+        ],
+        "tags": ["promise封装请求", "onload", "onerror"],
+        "code": "function loadResource(url, type = 'script') {\n  return new Promise((resolve, reject) => {\n    let element;\n    \n    // 根据类型创建不同资源元素\n    switch (type) {\n      case 'script':\n        element = document.createElement('script');\n        element.src = url;\n        break;\n      case 'css':\n        element = document.createElement('link');\n        element.rel = 'stylesheet';\n        element.href = url;\n        break;\n      case 'img':\n        element = new Image();\n        element.src = url;\n        break;\n      default:\n        reject(new Error('Unsupported resource type'));\n        return;\n    }\n    \n    // 加载成功处理\n    element.onload = () => resolve(element);\n    \n    // 加载失败处理\n    element.onerror = () => \n      reject(new Error(`Failed to load ${url}`));\n    \n    // 添加到DOM（CSS和SCRIPT需要添加到head）\n    if (type === 'script' || type === 'css') {\n      document.head.appendChild(element);\n    }\n  });\n}\n\n// 使用示例\nloadResource('styles.css', 'css')\n  .then(() => console.log('CSS loaded'))\n  .catch(console.error);"
+      },
+      {
+        "id": "promiseRetry",
+        "title": "promise实现请求失败后再次请求",
+        "difficulty": "简单",
+        "important": 5,
+        "description": "promise实现请求失败后再次请求，利用promise的catch实现，在catch中再次请求(递归调用)",
+        "steps": ["1.利用promise的catch实现", "2.在catch中再次递归请求", "3.设置最大重试次数"],
+        "tags": ["promise封装请求", "失败重试", "递归"],
+        "code": "function retryRequest(url, options = {}, maxRetries = 3) {\n  return new Promise((resolve, reject) => {\n    // 递归请求函数\n    const attempt = (retryCount) => {\n      fetch(url, options)\n        .then(response => {\n          if (!response.ok) throw new Error('Response not OK');\n          resolve(response);\n        })\n        .catch(error => {\n          if (retryCount <= 0) {\n            reject(error);  // 重试次数用完\n            return;\n          }\n          \n          console.log(`Retrying (${maxRetries - retryCount + 1}/${maxRetries})...`);\n          \n          // 指数退避策略\n          const delay = Math.pow(2, maxRetries - retryCount) * 1000;\n          \n          // 延迟后重试\n          setTimeout(() => attempt(retryCount - 1), delay);\n        });\n    };\n    \n    attempt(maxRetries);  // 开始请求\n  });\n}\n\n// 使用示例\nretryRequest('api/data', {}, 3)\n  .then(res => res.json())\n  .then(console.log)\n  .catch(console.error);"
+      },
+      {
+        "id": "promiseCancel",
+        "title": "请求中断或者取消请求",
+        "difficulty": "简单",
+        "important": 5,
+        "description": "fetch请求中断或者取消请求，利用abortController实现,ajax使用xhr.abort()实现,这里其实不属于promise封装请求，只是提示一下",
+        "steps": ["1.利用abortController实现", "2.ajax使用xhr.abort()实现"],
+        "tags": ["promise封装请求", "abortController", "xhr.abort()"],
+        "code": "const controller = new AbortController();\nconst signal = controller.signal;\n\nfetch(url, { signal })\n  .then(response => {\n    console.log('请求成功');\n  })\n  .catch(error => {\n    if (error.name === 'AbortError') {\n      console.log('请求被中断');\n    } else {\n      console.log('请求失败');\n    }\n  });\n\n// 中断请求\ncontroller.abort();"
+      }
+    ]
+  },
+  {
+    "id": "function",
+    "title": "其他功能数实现",
+    "difficulty": "简单",
+    "important": 4,
+    "description": "功能和函数实现，利用promise的then实现",
+    "children": [
+      {
+        "id": "interruptPromise",
+        "title": "中断promise",
+        "difficulty": "简单",
+        "important": 5,
+        "description": "直接用withResolvers获得resolve和reject，然后调用然后reject或者resolve就可以了",
+        "steps": [
+          "1.withResolvers获得resolve和reject和promise",
+          "2.中断调用reject",
+          "3.提前完成调用resolve"
+        ],
+        "tags": ["withResolvers", "属性外置"],
+
+        "code": "const { resolve, reject, promise } = withResolvers();\npromise.then(res => {\n  console.log(res);\n});\n\nsetTimeout(() => {\n  resolve('完成');\n}, 2000);\n\n//提前完成 中断\nresolve('完成');\n//提前报错 中断\nreject('中断');",
+        "tips": "不使用withResolvers 使用其他变量保存出来也可以或者用类保存内部resolve和reject和promise实例"
+      },
+      {
+        "id": "asyncFunction",
+        "title": "实现async函数",
+        "difficulty": "简单",
+        "important": 5,
+        "description": "利用generator分段执行和参数互传的特点,promise自动触发next并传入参数,实现async函数",
+        "steps": [
+          "1.用generator函数模拟异步任务",
+          "2.拿到generator函数返回值",
+          "3.返回值value即为promise,在promise中触发next并传入参数,递归执行next"
+        ],
+        "tags": ["async函数", "generator", "promise"],
+        "code": "// 模拟异步任务\nfunction asyncTask(time, message) {\n  return new Promise(resolve => \n    setTimeout(() => resolve({ time, message }), time)\n  );\n}\n\n// 模拟async函数（使用Generator）\nfunction* asyncGenerator() {\n  // 第一步异步任务\n  const step1 = yield asyncTask(1000, '第一步完成');\n  console.log(step1);\n  \n  // 第二步异步任务（依赖第一步结果）\n  const step2 = yield asyncTask(step1.time + 500, step1.message + '后，第二步完成');\n  console.log(step2);\n}\n\n// 自动执行Generator\nfunction runGenerator(gen) {\n  const g = gen();  // 创建生成器\n  \n  function next(res) {\n    const { value, done } = g.next(res);  // 执行下一步\n    \n    // 检查是否完成\n    if (done) return;\n    \n    // 处理异步任务\n    value.then(result => {\n      next(result);  // 递归执行\n    });\n  }\n  \n  next();  // 启动执行\n}\n\n// 使用示例\nrunGenerator(asyncGenerator);"
+      },
+      {
+        "id": "redLightGreenLight",
+        "title": "利用promise和递归实现红绿灯",
+        "difficulty": "简单",
+        "important": 5,
+        "description": "利用递归实现红绿灯,利用promise的then返回实现递归,内部状态暂停，继续，修改，销毁",
+        "steps": [
+          "1.利用递归实现红绿灯",
+          "2.利用promise的then返回实现递归",
+          "3.内部状态暂停，继续，修改，销毁"
+        ],
+        "tags": ["红绿灯", "递归"],
+        "code": "class redLightGreenLight {\n  running = true; // 是否在运行\n  promise = null; // promise对象\n  // @params {Object} time 一个对象 redTime,reenTime,yellowTime,callbacks\n  // callbacks 一个数组，数组中每个元素是一个回调函数，用以替换默认的console.log\n  constructor(time) {\n    this.init(time);\n    // 免得解构赋值后this指向问题\n    this.run.call(this);\n    this.stop = this.stop.bind(this);\n    this.resume = this.resume.bind(this);\n    this.update = this.update.bind(this);\n    this.destroy = this.destroy.bind(this);\n  }\n\n  // 初始化信息\n  init(time) {\n    this.redTime = time?.redTime || 3;\n    this.greenTime = time?.greenTime || 2;\n    this.yellowTime = time?.yellowTime || 1;\n    this.callbacks = time?.callbacks || []; // 此数组可扩展，这里就只实现三个回调\n    const length = this.callbacks.length;\n    if (this.callbacks.length < 3) {\n      this.callbacks = [...this.callbacks, ...Array(3 - length).fill(console.log)]; // 如果长度小于3，则用console.log填充\n    }\n  }\n\n  run() {\n    if (!this.running) return; // 如果停止，直接返回,关闭递归(红绿灯)\n    this.promise = new Promise((resolve, reject) => {\n      if (!this.running || this.callbacks.length === 0) reject('停止');\n      const red = setTimeout(() => {\n        resolve();\n        this.callbacks[0]('红灯');\n        clearTimeout(red);\n      }, this.redTime * 1000);\n    }).then(() => {\n      // 返回promise,延迟执行\n      return new Promise((resolve, reject) => {\n        if (!this.running || this.callbacks.length === 0) reject('停止');\n        const green = setTimeout(() => {\n          resolve();\n          this.callbacks[1]('绿灯');\n          clearTimeout(green);\n        }, this.greenTime * 1000);\n      });\n    }).then(() => {\n      if (!this.running || this.callbacks.length === 0) return;\n      const yellow = setTimeout(() => {\n        this.callbacks[2]('黄灯');\n        // 递归执行 套娃罢了\n        this.run({ redTime: this.redTime, greenTime: this.greenTime, yellowTime: this.yellowTime });\n        clearTimeout(yellow);\n      }, this.yellowTime * 1000);\n    });\n  }\n\n  stop() {\n    this.running = false;\n  }\n  // 不传time恢复启动，如果已销毁，则不启动，传time强制启动，并更新时间\n  resume(time) {\n    if (this.running) return; // 如果正在运行，直接返回，防止多次调用\n    if (time) { // 如果time有值，则为强制启动\n      this.init(time);\n    } else {\n      if (!this.promise) {\n        console.log('已销毁');\n        return;\n      }\n    }\n    this.running = true;\n    this.run();\n  }\n  // 更新时间\n  update(time) {\n    this.init.call(this, time);\n  }\n  // 销毁\n  destroy() {\n    this.running = false;\n    this.promise = null;\n    this.callbacks = [];\n    this.redTime = 3;\n    this.greenTime = 2;\n    this.yellowTime = 1;\n  }\n}\n\nconst { stop, resume, update, destroy } = new redLightGreenLight();\n// stop();\n// resume();\n// update({ redTime: 1, greenTime: 2, yellowTime: 3 });\n// destroy();"
+      },
+      {
+        "id": "scheduler",
+        "title": "scheduler实现",
+        "difficulty": "中等",
+        "important": 4,
+        "description": "scheduler实现，开始，暂停，继续，重置，销毁(其实和红绿灯大同小异，只是多了并发数和任务数)",
+        "steps": ["1. 状态定义", "2.不同方法改变不同状态", "3.run方法中判断状态再递归执行"],
+        "tags": ["scheduler", "promise", "then"],
+        "code": "// Scheduler调度器：支持并发、暂停、继续、重置、销毁\nclass Scheduler {\n  constructor(tasks = [], concurrency = 2) {\n    this.tasks = tasks;           // 任务数组，每个任务是返回Promise的函数\n    this.concurrency = concurrency; // 最大并发数\n    this.idx = 0;                 // 当前任务索引\n    this.running = 0;             // 当前正在运行的任务数\n    this.results = [];            // 存储每个任务的结果\n    this.paused = false;          // 是否暂停\n    this.resolve = null;          // 最终resolve回调\n    this.reject = null;           // 最终reject回调\n    this.finished = false;        // 是否已完成\n    this._promise = null;         // 内部Promise对象\n    this._destroyed = false;      // 是否已销毁\n  }\n  // 启动调度器，返回一个Promise，所有任务完成后resolve\n  start() {\n    if (this._destroyed) throw new Error('Scheduler已销毁');\n    if (this._promise) return this._promise; // 已经启动直接返回\n    this._promise = new Promise((resolve, reject) => {\n      this.resolve = resolve;\n      this.reject = reject;\n      this._run(); // 启动任务调度\n    });\n    return this._promise;\n  }\n  // 暂停调度器\n  pause() {\n    this.paused = true;\n  }\n  // 继续调度器\n  resume() {\n    if (this._destroyed) throw new Error('Scheduler已销毁');\n    if (!this.paused) return; // 没有暂停无需继续\n    this.paused = false;\n    this._run(); // 继续调度\n  }\n  // 重置调度器到初始状态\n  reset() {\n    this.idx = 0;\n    this.running = 0;\n    this.results = [];\n    this.paused = false;\n    this.finished = false;\n    this._promise = null;\n    this._destroyed = false;\n  }\n  // 销毁调度器，释放所有资源\n  destroy() {\n    this._destroyed = true;\n    this.tasks = [];\n    this.results = [];\n    this.resolve = null;\n    this.reject = null;\n    this._promise = null;\n  }\n  // 内部运行方法，负责调度任务\n  _run() {\n    // 如果已完成或已销毁则不再调度\n    if (this.finished || this._destroyed) return;\n    // 只要未暂停、未超并发、还有任务就继续调度\n    while (!this.paused && this.running < this.concurrency && this.idx < this.tasks.length) {\n      const cur = this.idx++;    // 当前任务索引\n      this.running++;            // 增加运行中任务数\n      // 执行当前任务\n      Promise.resolve()\n        .then(() => this.tasks[cur]())\n        .then(res => {\n          this.results[cur] = res; // 保存结果\n          this.running--;          // 任务完成，减少运行数\n          // 判断是否全部完成（results长度等于任务数且没有undefined）\n          if (this.results.length === this.tasks.length && !this.results.includes(undefined)) {\n            this.finished = true;\n            this.resolve && this.resolve(this.results); // 全部完成resolve\n          } else {\n            this._run(); // 继续调度下一个\n          }\n        })\n        .catch(err => {\n          this.finished = true;\n          this.reject && this.reject(err); // 有任务失败直接reject\n        });\n    }\n  }\n}\n\n// 使用示例\nconst tasks = [\n  // 任务1：1秒后完成\n  () => new Promise(r => setTimeout(() => r('Task 1'), 1000)),\n  // 任务2：2秒后完成\n  () => new Promise(r => setTimeout(() => r('Task 2'), 2000)),\n  // 任务3：3秒后完成\n  () => new Promise(r => setTimeout(() => r('Task 3'), 3000))\n];\nconst sch = new Scheduler(tasks, 2); // 并发数为2\nsch.start().then(console.log).catch(console.error); // 启动并输出结果\n// sch.pause(); // 暂停\n// sch.resume(); // 继续\n// sch.reset(); // 重置\n// sch.destroy(); // 销毁"
+      }
+    ]
+  }
+]

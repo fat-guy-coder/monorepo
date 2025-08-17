@@ -1,7 +1,7 @@
 <template>
   <div class="error-handling-container">
     <header class="header">
-      <h1 class="title">JavaScript 错误处理详解</h1>
+      <h1 class="title">JavaScript 错误处理介绍</h1>
       <p class="subtitle">全面掌握错误类型、捕获机制与自定义错误处理</p>
     </header>
 
@@ -37,7 +37,9 @@
           <div class="prop-card">
             <div class="prop-name">message</div>
             <div class="prop-desc">人类可读的错误描述</div>
-            <pre class="prop-example"><code>console.error(err.message); // "Cannot read property 'x' of undefined"</code></pre>
+            <pre
+              class="prop-example"
+            ><code>console.error(err.message); // "Cannot read property 'x' of undefined"</code></pre>
           </div>
           <div class="prop-card">
             <div class="prop-name">stack</div>
@@ -184,50 +186,49 @@ function validateUser(user) {
 // 错误类型数据
 const errorTypes = [
   {
-    name: "Error",
-    description: "所有错误对象的基类，用于通用错误",
-    example: "throw new Error('发生错误');"
+    name: 'Error',
+    description: '所有错误对象的基类，用于通用错误',
+    example: "throw new Error('发生错误');",
   },
   {
-    name: "SyntaxError",
-    description: "语法错误，通常由代码解析问题引起",
-    example: "JSON.parse('{invalid json}');"
+    name: 'SyntaxError',
+    description: '语法错误，通常由代码解析问题引起',
+    example: "JSON.parse('{invalid json}');",
   },
   {
-    name: "TypeError",
-    description: "类型错误，当值不是预期类型时发生",
-    example: "null.someProperty;"
+    name: 'TypeError',
+    description: '类型错误，当值不是预期类型时发生',
+    example: 'null.someProperty;',
   },
   {
-    name: "ReferenceError",
-    description: "引用错误，当引用未声明的变量时发生",
-    example: "console.log(undeclaredVar);"
+    name: 'ReferenceError',
+    description: '引用错误，当引用未声明的变量时发生',
+    example: 'console.log(undeclaredVar);',
   },
   {
-    name: "RangeError",
-    description: "范围错误，当值超出有效范围时发生",
-    example: "new Array(-1);"
+    name: 'RangeError',
+    description: '范围错误，当值超出有效范围时发生',
+    example: 'new Array(-1);',
   },
   {
-    name: "URIError",
-    description: "URI错误，当URI处理函数使用不当时发生",
-    example: "decodeURIComponent('%');"
+    name: 'URIError',
+    description: 'URI错误，当URI处理函数使用不当时发生',
+    example: "decodeURIComponent('%');",
   },
   {
-    name: "AggregateError",
-    description: "聚合错误，包含多个错误（ES2021）",
-    example: "Promise.any([rejectedPromise]);"
+    name: 'AggregateError',
+    description: '聚合错误，包含多个错误（ES2021）',
+    example: 'Promise.any([rejectedPromise]);',
   },
   {
-    name: "EvalError",
-    description: "eval()函数相关错误（现代JS中较少使用）",
-    example: "eval = 42; // 严格模式下"
-  }
-];
+    name: 'EvalError',
+    description: 'eval()函数相关错误（现代JS中较少使用）',
+    example: 'eval = 42; // 严格模式下',
+  },
+]
 </script>
 
 <style lang="less" scoped>
-
 :root {
   --primary: #4361ee;
   --primary-light: #4895ef;
@@ -249,7 +250,11 @@ const errorTypes = [
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family:
+    'Inter',
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
   background: linear-gradient(135deg, #f5f7fa 0%, #e4e7f4 100%);
   min-height: 100vh;
   color: #333;
@@ -273,7 +278,6 @@ const errorTypes = [
     background: linear-gradient(45deg, var(--primary), var(--secondary));
     -webkit-background-clip: text;
     background-clip: text;
-
   }
 
   .subtitle {
@@ -355,14 +359,30 @@ const errorTypes = [
     font-weight: bold;
     color: white;
 
-    &.error { background: var(--danger); }
-    &.syntaxerror { background: var(--warning); }
-    &.typeerror { background: #9d4edd; }
-    &.referenceerror { background: #ff6b6b; }
-    &.rangeerror { background: #ff9e00; }
-    &.urierror { background: #06d6a0; }
-    &.aggregateerror { background: #3a86ff; }
-    &.evalerror { background: #8338ec; }
+    &.error {
+      background: var(--danger);
+    }
+    &.syntaxerror {
+      background: var(--warning);
+    }
+    &.typeerror {
+      background: #9d4edd;
+    }
+    &.referenceerror {
+      background: #ff6b6b;
+    }
+    &.rangeerror {
+      background: #ff9e00;
+    }
+    &.urierror {
+      background: #06d6a0;
+    }
+    &.aggregateerror {
+      background: #3a86ff;
+    }
+    &.evalerror {
+      background: #8338ec;
+    }
   }
 
   .error-info {
@@ -536,7 +556,8 @@ const errorTypes = [
       color: var(--primary);
     }
 
-    ul, ol {
+    ul,
+    ol {
       padding-left: 1.5rem;
     }
 

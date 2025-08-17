@@ -1,7 +1,7 @@
 <template>
   <div class="js-loading-container">
     <header class="header">
-      <h1>JavaScript <span class="highlight">加载方式</span>详解</h1>
+      <h1>JavaScript <span class="highlight">加载方式</span>介绍</h1>
       <p class="subtitle">探索不同加载方式对页面性能和用户体验的影响</p>
     </header>
 

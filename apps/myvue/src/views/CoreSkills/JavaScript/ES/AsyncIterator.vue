@@ -1,7 +1,7 @@
 <template>
   <div class="async-iterator-container">
     <header class="header">
-      <h1 class="title">JavaScript 异步迭代器详解</h1>
+      <h1 class="title">JavaScript 异步迭代器介绍</h1>
       <div class="subtitle">处理异步数据流的现代解决方案</div>
     </header>
 
@@ -10,7 +10,9 @@
         <div class="intro-icon">🔄</div>
         <div class="intro-content">
           <h3>异步迭代器是什么？</h3>
-          <p>异步迭代器允许我们遍历异步数据源，每次迭代返回一个 Promise，解决为迭代序列的下一个值。</p>
+          <p>
+            异步迭代器允许我们遍历异步数据源，每次迭代返回一个 Promise，解决为迭代序列的下一个值。
+          </p>
         </div>
       </div>
       <div class="intro-card">
@@ -100,7 +102,8 @@
             <div class="tab-content">
               <div v-show="activeTab === 0">
                 <h3>基本异步迭代器</h3>
-                <pre>// 创建异步迭代器
+                <pre>
+// 创建异步迭代器
 const asyncIterator = {
   data: [1, 2, 3],
   async next() {
@@ -126,12 +129,14 @@ const asyncIterator = {
   for await (const value of asyncIterator) {
     console.log(value); // 1 (延迟500ms), 2 (延迟500ms), 3 (延迟500ms)
   }
-})();</pre>
+})();</pre
+                >
               </div>
 
               <div v-show="activeTab === 1">
                 <h3>生成器函数实现异步迭代器</h3>
-                <pre>// 异步生成器函数
+                <pre>
+// 异步生成器函数
 async function* asyncGenerator() {
   const urls = [
     'https://api.example.com/page1',
@@ -157,12 +162,14 @@ async function* asyncGenerator() {
     console.log(pageData);
     // 每页数据
   }
-})();</pre>
+})();</pre
+                >
               </div>
 
               <div v-show="activeTab === 2">
                 <h3>处理Node.js文件流</h3>
-                <pre>import fs from 'fs';
+                <pre>
+import fs from 'fs';
 import readline from 'readline';
 
 async function processLargeFile(filePath) {
@@ -179,7 +186,8 @@ async function processLargeFile(filePath) {
   }
 }
 
-processLargeFile('large-data.txt');</pre>
+processLargeFile('large-data.txt');</pre
+                >
               </div>
             </div>
           </div>
@@ -254,7 +262,8 @@ processLargeFile('large-data.txt');</pre>
         <section class="section">
           <h2 class="section-title">兼容性解决方案</h2>
           <div class="polyfill">
-            <pre>// 为不支持的环境添加异步迭代支持
+            <pre>
+// 为不支持的环境添加异步迭代支持
 if (!Symbol.asyncIterator) {
   Symbol.asyncIterator = Symbol.for("Symbol.asyncIterator");
 }
@@ -269,7 +278,8 @@ function asyncIteratorPolyfill(iterable) {
       return Promise.resolve(iterable.next());
     }
   };
-}</pre>
+}</pre
+            >
           </div>
         </section>
       </aside>
@@ -281,7 +291,8 @@ function asyncIteratorPolyfill(iterable) {
       <div class="advanced-grid">
         <div class="advanced-card">
           <h3>组合异步迭代器</h3>
-          <pre>async function* mergeAsyncIterators(...iterators) {
+          <pre>
+async function* mergeAsyncIterators(...iterators) {
   for (const iterator of iterators) {
     for await (const value of iterator) {
       yield value;
@@ -297,12 +308,14 @@ const combined = mergeAsyncIterators(
 
 for await (const value of combined) {
   processValue(value);
-}</pre>
+}</pre
+          >
         </div>
 
         <div class="advanced-card">
           <h3>异步迭代器转换</h3>
-          <pre>async function* transformAsyncIterator(iterator, transformFn) {
+          <pre>
+async function* transformAsyncIterator(iterator, transformFn) {
   for await (const value of iterator) {
     yield transformFn(value);
   }
@@ -317,7 +330,8 @@ const transformedStream = transformAsyncIterator(
 
 for await (const item of transformedStream) {
   console.log(item);
-}</pre>
+}</pre
+          >
         </div>
       </div>
     </section>
@@ -341,21 +355,19 @@ for await (const item of transformedStream) {
         </div>
       </div>
 
-      <p class="summary">异步迭代器提供了一种优雅的方式来处理异步数据序列，是现代JavaScript应用中处理流式数据、分页API和大文件处理的强大工具。结合async/await语法，可以编写出简洁高效的异步代码。</p>
+      <p class="summary">
+        异步迭代器提供了一种优雅的方式来处理异步数据序列，是现代JavaScript应用中处理流式数据、分页API和大文件处理的强大工具。结合async/await语法，可以编写出简洁高效的异步代码。
+      </p>
     </footer>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref } from 'vue'
 
 // 标签页状态
-const tabs = ref([
-  { label: '基础示例' },
-  { label: 'API分页' },
-  { label: '文件处理' }
-]);
-const activeTab = ref(0);
+const tabs = ref([{ label: '基础示例' }, { label: 'API分页' }, { label: '文件处理' }])
+const activeTab = ref(0)
 
 // 浏览器支持数据
 const browserSupport = ref({
@@ -363,13 +375,11 @@ const browserSupport = ref({
   firefox: { version: 57, support: true },
   safari: { version: 11, support: true },
   edge: { version: 79, support: true },
-  node: { version: '10.0.0', support: true }
-});
+  node: { version: '10.0.0', support: true },
+})
 </script>
 
 <style lang="less" scoped>
-
-
 // 颜色变量
 @primary-color: #6e45e2;
 @secondary-color: #4a6cf7;
@@ -383,7 +393,13 @@ const browserSupport = ref({
 
 // 基础样式
 .async-iterator-container {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family:
+    'Inter',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
@@ -831,7 +847,8 @@ const browserSupport = ref({
 }
 
 // 代码样式
-code, pre {
+code,
+pre {
   font-family: 'Fira Code', Consolas, Monaco, 'Andale Mono', monospace;
 }
 

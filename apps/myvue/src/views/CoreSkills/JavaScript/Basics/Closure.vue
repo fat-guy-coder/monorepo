@@ -1,7 +1,7 @@
 <template>
   <div class="closure-container">
     <header class="header">
-      <h1>JavaScript闭包详解</h1>
+      <h1>JavaScript闭包介绍</h1>
       <p class="subtitle">理解闭包的概念、原理、应用场景及注意事项</p>
     </header>
 
@@ -296,8 +296,6 @@ console.log(factorial(5)); // 120 (从缓存读取)</code></pre>
 </script>
 
 <style lang="less" scoped>
-
-
 // 颜色变量
 @primary-color: #3498db;
 @secondary-color: #2c3e50;

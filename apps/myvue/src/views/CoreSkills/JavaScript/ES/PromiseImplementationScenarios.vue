@@ -2,8 +2,9 @@
   <div class="promise-scenarios-container">
     <!-- 页面标题 -->
     <header class="page-header">
-      <h1 class="main-title">🚀 Promise 实现场景详解</h1>
-      <p class="subtitle">掌握异步编程的核心模式与高级应用</p>
+      <h1 class="main-title">🚀 Promise 实现场景基本介绍</h1>
+      <p class="subtitle">了解异步编程的核心模式与高级应用，并实现基本场景</p>
+      <p><a @click="goToPromiseScenarios">Promise 场景实现</a></p>
     </header>
 
     <!-- 场景导航 -->
@@ -827,6 +828,12 @@ const runAsyncDemo = () => {
 
 
 };
+
+const emit = defineEmits(['goToByRouteName'])
+
+const goToPromiseScenarios = () => {
+  emit('goToByRouteName', 'PromiseScenarios')
+}
 </script>
 
 <style lang="less" scoped>
@@ -961,7 +968,7 @@ const runAsyncDemo = () => {
 // 实现网格
 .implementation-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
   gap: 2rem;
 
   @media (max-width: 992px) {

@@ -2,8 +2,10 @@
   <div class="linked-list-container">
     <header class="header">
       <h1>链表相关算法</h1>
-      <p class="subtitle">常用算法原理与实现思路详解</p>
+      <p class="subtitle">常用算法原理与实现思路介绍</p>
     </header>
+
+    <ScrollNav :list="list" show-back-to-top />
 
     <div class="search-box">
       <input type="text" v-model="searchTerm" placeholder="搜索链表算法..." class="search-input" />
@@ -13,24 +15,27 @@
     </div>
 
     <div class="stats-bar">
-      <div class="stat-item">
-        <span class="stat-value">{{ algorithms.length }}</span>
-        <span class="stat-label">种算法</span>
-      </div>
-      <div class="stat-item">
-        <span class="stat-value">12</span>
-        <span class="stat-label">常见问题</span>
-      </div>
-      <div class="stat-item">
-        <span class="stat-value">8</span>
-        <span class="stat-label">核心技巧</span>
-      </div>
+      <span
+        class="stat-value"
+        :class="{ active: activeType.includes('all') }"
+        @click="filterAlgorithms('all')"
+        >全部</span
+      >
+      <span
+        class="stat-value"
+        :class="{ active: activeType.includes(type) }"
+        v-for="type in typeList"
+        :key="type"
+        @click="filterAlgorithms(type)"
+        >{{ type }}</span
+      >
     </div>
 
     <div class="algorithm-list">
       <div
         v-for="(algo, index) in filteredAlgorithms"
         :key="algo.id"
+        :id="algo.id"
         class="algorithm-card"
         :class="{ featured: index < 3 }"
       >
@@ -44,6 +49,11 @@
 
         <div class="algorithm-description">
           <p>{{ algo.description }}</p>
+          <div class="algorithm-tags">
+            <span v-for="type in algo.type" :key="type" class="tag">
+              {{ type }}
+            </span>
+          </div>
         </div>
 
         <div class="algorithm-details">
@@ -55,20 +65,15 @@
             <span class="detail-label">空间复杂度:</span>
             <span class="detail-value">{{ algo.spaceComplexity }}</span>
           </div>
-          <div class="detail-item">
-            <span class="detail-label">核心思路:</span>
-            <span class="detail-value">{{ algo.coreIdea }}</span>
-          </div>
+        </div>
+
+        <div class="algorithm-idea">
+          <span class="detail-label">核心思路:</span>
+          <span class="detail-value">{{ algo.coreIdea }}</span>
         </div>
 
         <div class="algorithm-code">
           <pre>{{ algo.codeSnippet }}</pre>
-        </div>
-
-        <div class="algorithm-tags">
-          <span v-for="tag in algo.tags" :key="tag" class="tag">
-            {{ tag }}
-          </span>
         </div>
       </div>
     </div>
@@ -80,10 +85,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
+import ScrollNav from '@/components/ScrollNav.vue'
 
 interface Algorithm {
-  id: number
+  id: string
   title: string
   description: string
   timeComplexity: string
@@ -91,322 +97,102 @@ interface Algorithm {
   coreIdea: string
   codeSnippet: string
   difficulty: 'easy' | 'medium' | 'hard'
-  tags: string[]
+  type: string[]
 }
+
+type Type =
+  | '转换'
+  | '反转'
+  | '遍历'
+  | '归并'
+  | '分治'
+  | '哈希表'
+  | '快慢指针'
+  | '双(三)指针'
+  | '检测'
+  | '删除'
+  | '插入'
+  | '分割'
+  | '拷贝'
+  | '查找'
+  | '去重'
+  | '数学运算'
+  | '重排'
+  | '合并'
+  | '区间操作'
+  | '环'
+  | '递归'
 
 const searchTerm = ref('')
 
-const algorithms = ref<Algorithm[]>([
-  {
-    id: 1,
-    title: '反转链表',
-    description: '将链表中的节点顺序反转，使尾节点成为头节点',
-    timeComplexity: 'O(n)',
-    spaceComplexity: 'O(1)',
-    coreIdea: '使用三个指针（prev, current, next）遍历链表并改变指向',
-    codeSnippet: `function reverseList(head) {
-  let prev = null;
-  let current = head;
-  while (current) {
-    const next = current.next;
-    current.next = prev;
-    prev = current;
-    current = next;
-  }
-  return prev;
-}`,
-    difficulty: 'easy',
-    tags: ['双指针', '基础操作'],
-  },
-  {
-    id: 2,
-    title: '合并两个有序链表',
-    description: '将两个升序链表合并为一个新的升序链表',
-    timeComplexity: 'O(n+m)',
-    spaceComplexity: 'O(1)',
-    coreIdea: '使用虚拟头节点，比较两个链表节点大小，逐个连接',
-    codeSnippet: `function mergeTwoLists(l1, l2) {
-  const dummy = new ListNode(-1);
-  let current = dummy;
-  while (l1 && l2) {
-    if (l1.val < l2.val) {
-      current.next = l1;
-      l1 = l1.next;
-    } else {
-      current.next = l2;
-      l2 = l2.next;
-    }
-    current = current.next;
-  }
-  current.next = l1 || l2;
-  return dummy.next;
-}`,
-    difficulty: 'easy',
-    tags: ['双指针', '归并'],
-  },
-  {
-    id: 3,
-    title: '链表的中间结点',
-    description: '找到链表的中间节点，如果有两个中间节点则返回第二个',
-    timeComplexity: 'O(n)',
-    spaceComplexity: 'O(1)',
-    coreIdea: '使用快慢指针，快指针每次走两步，慢指针每次走一步',
-    codeSnippet: `function middleNode(head) {
-  let slow = head;
-  let fast = head;
-  while (fast && fast.next) {
-    slow = slow.next;
-    fast = fast.next.next;
-  }
-  return slow;
-}`,
-    difficulty: 'easy',
-    tags: ['快慢指针'],
-  },
-  {
-    id: 4,
-    title: '删除链表的倒数第N个结点',
-    description: '删除链表的倒数第n个节点并返回头节点',
-    timeComplexity: 'O(n)',
-    spaceComplexity: 'O(1)',
-    coreIdea: '使用快慢指针，快指针先走n步，然后快慢指针一起移动',
-    codeSnippet: `function removeNthFromEnd(head, n) {
-  const dummy = new ListNode(0, head);
-  let slow = dummy;
-  let fast = dummy;
-
-  for (let i = 0; i <= n; i++) {
-    fast = fast.next;
-  }
-
-  while (fast) {
-    slow = slow.next;
-    fast = fast.next;
-  }
-
-  slow.next = slow.next.next;
-  return dummy.next;
-}`,
-    difficulty: 'medium',
-    tags: ['双指针', '虚拟头节点'],
-  },
-  {
-    id: 5,
-    title: '环形链表检测',
-    description: '判断链表中是否存在环',
-    timeComplexity: 'O(n)',
-    spaceComplexity: 'O(1)',
-    coreIdea: 'Floyd判圈算法（龟兔赛跑），快指针每次走两步，慢指针走一步',
-    codeSnippet: `function hasCycle(head) {
-  if (!head) return false;
-
-  let slow = head;
-  let fast = head.next;
-
-  while (fast && fast.next) {
-    if (slow === fast) return true;
-    slow = slow.next;
-    fast = fast.next.next;
-  }
-
-  return false;
-}`,
-    difficulty: 'easy',
-    tags: ['快慢指针', 'Floyd算法'],
-  },
-  {
-    id: 6,
-    title: '环形链表入口点',
-    description: '如果链表有环，找到环的入口节点',
-    timeComplexity: 'O(n)',
-    spaceComplexity: 'O(1)',
-    coreIdea: '先使用快慢指针找到相遇点，然后一个指针从头开始，另一个从相遇点开始',
-    codeSnippet: `function detectCycle(head) {
-  if (!head) return null;
-
-  let slow = head;
-  let fast = head;
-  let hasCycle = false;
-
-  while (fast && fast.next) {
-    slow = slow.next;
-    fast = fast.next.next;
-    if (slow === fast) {
-      hasCycle = true;
-      break;
-    }
-  }
-
-  if (!hasCycle) return null;
-
-  slow = head;
-  while (slow !== fast) {
-    slow = slow.next;
-    fast = fast.next;
-  }
-
-  return slow;
-}`,
-    difficulty: 'medium',
-    tags: ['快慢指针', 'Floyd算法'],
-  },
-  {
-    id: 7,
-    title: '相交链表',
-    description: '找到两个链表相交的起始节点',
-    timeComplexity: 'O(n+m)',
-    spaceComplexity: 'O(1)',
-    coreIdea: '双指针分别遍历两个链表，到达尾部后交换到另一个链表头部',
-    codeSnippet: `function getIntersectionNode(headA, headB) {
-  let pA = headA;
-  let pB = headB;
-
-  while (pA !== pB) {
-    pA = pA ? pA.next : headB;
-    pB = pB ? pB.next : headA;
-  }
-
-  return pA;
-}`,
-    difficulty: 'easy',
-    tags: ['双指针', '链表遍历'],
-  },
-  {
-    id: 8,
-    title: '回文链表',
-    description: '判断链表是否为回文结构',
-    timeComplexity: 'O(n)',
-    spaceComplexity: 'O(1)',
-    coreIdea: '找到中点，反转后半部分，然后比较前后两部分',
-    codeSnippet: `function isPalindrome(head) {
-  // 找到中点
-  let slow = head;
-  let fast = head;
-  while (fast && fast.next) {
-    slow = slow.next;
-    fast = fast.next.next;
-  }
-
-  // 反转后半部分
-  let prev = null;
-  while (slow) {
-    const next = slow.next;
-    slow.next = prev;
-    prev = slow;
-    slow = next;
-  }
-
-  // 比较两部分
-  let left = head;
-  let right = prev;
-  while (right) {
-    if (left.val !== right.val) return false;
-    left = left.next;
-    right = right.next;
-  }
-
-  return true;
-}`,
-    difficulty: 'medium',
-    tags: ['快慢指针', '链表反转'],
-  },
-  {
-    id: 9,
-    title: '链表排序',
-    description: '在O(n log n)时间复杂度和常数级空间复杂度下对链表进行排序',
-    timeComplexity: 'O(n log n)',
-    spaceComplexity: 'O(log n)',
-    coreIdea: '使用归并排序，先分割链表再合并',
-    codeSnippet: `function sortList(head) {
-  if (!head || !head.next) return head;
-
-  // 分割链表
-  let slow = head;
-  let fast = head.next;
-  while (fast && fast.next) {
-    slow = slow.next;
-    fast = fast.next.next;
-  }
-  const mid = slow.next;
-  slow.next = null;
-
-  // 递归排序
-  const left = sortList(head);
-  const right = sortList(mid);
-
-  // 合并有序链表
-  return merge(left, right);
-}
-
-function merge(l1, l2) {
-  const dummy = new ListNode(0);
-  let current = dummy;
-
-  while (l1 && l2) {
-    if (l1.val < l2.val) {
-      current.next = l1;
-      l1 = l1.next;
-    } else {
-      current.next = l2;
-      l2 = l2.next;
-    }
-    current = current.next;
-  }
-
-  current.next = l1 || l2;
-  return dummy.next;
-}`,
-    difficulty: 'medium',
-    tags: ['归并排序', '递归'],
-  },
-  {
-    id: 10,
-    title: '旋转链表',
-    description: '将链表每个节点向右移动k个位置',
-    timeComplexity: 'O(n)',
-    spaceComplexity: 'O(1)',
-    coreIdea: '先成环，然后找到新的头节点并断开',
-    codeSnippet: `function rotateRight(head, k) {
-  if (!head || k === 0) return head;
-
-  // 计算链表长度并成环
-  let len = 1;
-  let tail = head;
-  while (tail.next) {
-    tail = tail.next;
-    len++;
-  }
-  tail.next = head;
-
-  // 计算实际需要移动的步数
-  const steps = len - (k % len);
-
-  // 找到新的尾节点并断开
-  let newTail = head;
-  for (let i = 0; i < steps - 1; i++) {
-    newTail = newTail.next;
-  }
-
-  const newHead = newTail.next;
-  newTail.next = null;
-
-  return newHead;
-}`,
-    difficulty: 'medium',
-    tags: ['链表成环', '链表遍历'],
-  },
+const typeList = ref<Type[]>([
+  '快慢指针',
+  '双(三)指针',
+  '转换',
+  '反转',
+  '环',
+  '遍历',
+  '归并',
+  '分治',
+  '哈希表',
+  '检测',
+  '删除',
+  '插入',
+  '分割',
+  '拷贝',
+  '查找',
+  '去重',
+  '数学运算',
+  '重排',
+  '合并',
+  '区间操作',
+  '递归',
 ])
 
+const algorithms = ref<Algorithm[]>([])
+
+const list = computed<{ name: string; id: string }[]>(() => {
+  return algorithms.value.map((algo) => {
+    return {
+      name: algo.title,
+      id: algo.id,
+    }
+  })
+})
+
+onMounted(async () => {
+  const res = await import('../JSON/LinkedListAlgorithmList.json')
+  algorithms.value = res.default as Algorithm[]
+})
+
 const filteredAlgorithms = computed(() => {
-  if (!searchTerm.value) return algorithms.value
+  if (!searchTerm.value && activeType.value.includes('all')) return algorithms.value
   const term = searchTerm.value.toLowerCase()
   return algorithms.value.filter(
     (algo) =>
-      algo.title.toLowerCase().includes(term) ||
-      algo.description.toLowerCase().includes(term) ||
-      algo.tags.some((tag) => tag.toLowerCase().includes(term)),
+      (algo.title.toLowerCase().includes(term) ||
+        algo.description.toLowerCase().includes(term) ||
+        algo.type.some((tag) => tag.toLowerCase().includes(term))) &&
+      activeType.value.some((t) => algo.type.includes(t)),
   )
 })
+
+const activeType = ref<(Type | 'all')[]>(['all'])
+
+const filterAlgorithms = (type: Type | 'all') => {
+  if (type === 'all') {
+    activeType.value = ['all']
+  } else {
+    if (activeType.value.includes(type)) {
+      activeType.value = activeType.value.filter((t) => t !== type)
+      if (activeType.value.length === 0) {
+        activeType.value = ['all']
+      }
+    } else {
+      activeType.value = [...activeType.value, type].filter((t) => t !== 'all')
+    }
+  }
+}
 </script>
 
 <style lang="less" scoped>
@@ -492,29 +278,25 @@ const filteredAlgorithms = computed(() => {
 
 .stats-bar {
   display: flex;
-  justify-content: center;
-  gap: 40px;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
   margin-bottom: 30px;
 
-  .stat-item {
+  .stat-value {
     text-align: center;
     padding: 15px 25px;
     background: @card-bg;
     border-radius: 10px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    min-width: 120px;
-
-    .stat-value {
-      display: block;
-      font-size: 2rem;
-      font-weight: bold;
-      color: @primary-color;
-      margin-bottom: 5px;
+    cursor: pointer;
+    &:hover {
+      background: @primary-color;
+      color: white;
     }
-
-    .stat-label {
-      color: @text-light;
-      font-size: 0.9rem;
+    &.active {
+      background: @primary-color;
+      color: white;
     }
   }
 }
@@ -614,6 +396,16 @@ const filteredAlgorithms = computed(() => {
   margin-bottom: 20px;
   padding-bottom: 15px;
   border-bottom: 1px solid @border-color;
+}
+
+.algorithm-idea {
+  .detail-label {
+    font-weight: 600;
+    color: @text-color;
+    margin-right: 8px;
+    min-width: 90px;
+  }
+  margin-bottom: 20px;
 }
 
 .algorithm-details {

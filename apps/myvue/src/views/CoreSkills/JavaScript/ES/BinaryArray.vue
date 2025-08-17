@@ -1,6 +1,6 @@
 <template>
   <div class="binary-arrays">
-    <h1>ECMAScript 二进制数组详解</h1>
+    <h1>ECMAScript 二进制数组介绍</h1>
 
     <!-- 概览 -->
     <div class="overview">

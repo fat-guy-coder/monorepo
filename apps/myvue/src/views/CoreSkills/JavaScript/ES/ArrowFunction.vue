@@ -5,7 +5,7 @@
       <header class="page-header">
         <h1 class="page-title">
           <span class="card-icon">➡️</span>
-          ES6 箭头函数详解
+          ES6 箭头函数介绍
         </h1>
         <p class="page-subtitle">现代JavaScript的核心特性：简洁、强大且独特的函数表达式</p>
       </header>
@@ -132,7 +132,9 @@
   }
 }</code></pre>
               </div>
-              <p class="text-secondary">箭头函数的this，在函数定义时绑定，无法通过call/apply/bind运行时改变</p>
+              <p class="text-secondary">
+                箭头函数的this，在函数定义时绑定，无法通过call/apply/bind运行时改变
+              </p>
             </div>
           </div>
 
@@ -283,7 +285,9 @@ const evens = numbers.filter(<span class="code-good">n => n % 2 === 0</span>);</
   }
 };</span></code></pre>
               </div>
-              <p class="text-secondary">箭头函数的this在定义时已绑定，无法通过call/apply/bind改变</p>
+              <p class="text-secondary">
+                箭头函数的this在定义时已绑定，无法通过call/apply/bind改变
+              </p>
             </div>
           </div>
         </div>
@@ -358,9 +362,7 @@ const evens = numbers.filter(<span class="code-good">n => n % 2 === 0</span>);</
       <!-- 页脚 -->
       <div class="card">
         <div class="card-body">
-          <p class="text-center text-secondary">
-            ES6 特性详解 | 箭头函数 | Vue 3 技术演示
-          </p>
+          <p class="text-center text-secondary">ES6 特性介绍 | 箭头函数 | Vue 3 技术演示</p>
           <p class="text-center text-secondary">
             理解箭头函数的特性，编写更简洁、可维护的JavaScript代码
           </p>
@@ -371,11 +373,11 @@ const evens = numbers.filter(<span class="code-good">n => n % 2 === 0</span>);</
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import '@/assets/css/unified-styles.css';
+import { ref } from 'vue'
+import '@/assets/css/unified-styles.css'
 
 // 示例响应式数据
-const activeSection = ref('syntax');
+const activeSection = ref('syntax')
 </script>
 
 <style scoped>
@@ -559,7 +561,6 @@ const activeSection = ref('syntax');
 
 /* 响应式调整 */
 @media (max-width: 768px) {
-
   .grid-2,
   .grid-3 {
     grid-template-columns: 1fr;

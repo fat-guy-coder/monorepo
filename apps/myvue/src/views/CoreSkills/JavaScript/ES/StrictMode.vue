@@ -5,7 +5,7 @@
       <header class="page-header">
         <h1 class="page-title">
           <span class="card-icon">🔒</span>
-          JavaScript 严格模式详解
+          JavaScript 严格模式介绍
         </h1>
         <p class="page-subtitle">提升代码质量与安全性的关键特性</p>
       </header>
@@ -327,7 +327,9 @@ console.log(x); // 抛出 ReferenceError</code></pre>
               <div class="rec-number">1</div>
               <div class="rec-content">
                 <h3 class="text-lg font-semibold mb-sm">新项目默认启用</h3>
-                <p class="text-secondary">所有新JavaScript项目都应启用严格模式，以提高代码质量和安全性。</p>
+                <p class="text-secondary">
+                  所有新JavaScript项目都应启用严格模式，以提高代码质量和安全性。
+                </p>
               </div>
             </div>
 
@@ -343,7 +345,9 @@ console.log(x); // 抛出 ReferenceError</code></pre>
               <div class="rec-number">3</div>
               <div class="rec-content">
                 <h3 class="text-lg font-semibold mb-sm">避免全局启用</h3>
-                <p class="text-secondary">在合并多个脚本的项目中，避免全局启用，以防止非严格模式脚本出现问题。</p>
+                <p class="text-secondary">
+                  在合并多个脚本的项目中，避免全局启用，以防止非严格模式脚本出现问题。
+                </p>
               </div>
             </div>
 
@@ -371,17 +375,17 @@ console.log(x); // 抛出 ReferenceError</code></pre>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import '@/assets/css/unified-styles.css';
+import { ref } from 'vue'
+import '@/assets/css/unified-styles.css'
 
 // 严格模式检测
 const isStrictMode = (() => {
-  'use strict';
-  return !this;
-})();
+  'use strict'
+  return !this
+})()
 
 // 示例数据
-const strictModeStatus = ref(isStrictMode ? '已启用' : '未启用');
+const strictModeStatus = ref(isStrictMode ? '已启用' : '未启用')
 </script>
 
 <style scoped>
@@ -529,7 +533,6 @@ const strictModeStatus = ref(isStrictMode ? '已启用' : '未启用');
 
 /* 响应式调整 */
 @media (max-width: 768px) {
-
   .grid-2,
   .grid-3 {
     grid-template-columns: 1fr;

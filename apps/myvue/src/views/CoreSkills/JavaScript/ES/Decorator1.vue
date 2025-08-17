@@ -1,7 +1,7 @@
 <template>
   <div class="decorator-container">
     <div class="header">
-      <h1>ES装饰器详解</h1>
+      <h1>ES装饰器介绍</h1>
       <p class="subtitle">元编程利器 - 用声明式语法增强代码功能</p>
       <div class="proposal-status">Stage 2 Proposal</div>
     </div>
@@ -11,7 +11,8 @@
         <div class="pattern-icon">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
             <path
-              d="M19 4h-1V3c0-.55-.45-1-1-1s-1 .45-1 1v1H8V3c0-.55-.45-1-1-1s-1 .45-1 1v1H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2zm-7 5h5v5h-5v-5z" />
+              d="M19 4h-1V3c0-.55-.45-1-1-1s-1 .45-1 1v1H8V3c0-.55-.45-1-1-1s-1 .45-1 1v1H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2zm-7 5h5v5h-5v-5z"
+            />
           </svg>
         </div>
         <div class="pattern-info">
@@ -311,10 +312,11 @@ console.log(p.expensiveCalculation); // 输出: 从缓存中获取 expensiveCalc
           <h3>使用场景</h3>
           <div class="case-grid">
             <div class="case-card">
-              <div class="case-icon" style="background-color: #FF6B6B;">
+              <div class="case-icon" style="background-color: #ff6b6b">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white">
                   <path
-                    d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm0 4c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm6 12H6v-1.4c0-2 4-3.1 6-3.1s6 1.1 6 3.1V19z" />
+                    d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm0 4c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm6 12H6v-1.4c0-2 4-3.1 6-3.1s6 1.1 6 3.1V19z"
+                  />
                 </svg>
               </div>
               <h4>元数据标记</h4>
@@ -322,10 +324,11 @@ console.log(p.expensiveCalculation); // 输出: 从缓存中获取 expensiveCalc
             </div>
 
             <div class="case-card">
-              <div class="case-icon" style="background-color: #4ECDC4;">
+              <div class="case-icon" style="background-color: #4ecdc4">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white">
                   <path
-                    d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM9 11H7V9h2v2zm4 0h-2V9h2v2zm4 0h-2V9h2v2z" />
+                    d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM9 11H7V9h2v2zm4 0h-2V9h2v2zm4 0h-2V9h2v2z"
+                  />
                 </svg>
               </div>
               <h4>日志记录</h4>
@@ -333,10 +336,11 @@ console.log(p.expensiveCalculation); // 输出: 从缓存中获取 expensiveCalc
             </div>
 
             <div class="case-card">
-              <div class="case-icon" style="background-color: #118AB2;">
+              <div class="case-icon" style="background-color: #118ab2">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white">
                   <path
-                    d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-8 12H9v-2h2v2zm0-4H9V7h2v4zm4 4h-2v-2h2v2zm0-4h-2V7h2v4z" />
+                    d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-8 12H9v-2h2v2zm0-4H9V7h2v4zm4 4h-2v-2h2v2zm0-4h-2V7h2v4z"
+                  />
                 </svg>
               </div>
               <h4>依赖注入</h4>
@@ -344,10 +348,11 @@ console.log(p.expensiveCalculation); // 输出: 从缓存中获取 expensiveCalc
             </div>
 
             <div class="case-card">
-              <div class="case-icon" style="background-color: #FFD166;">
+              <div class="case-icon" style="background-color: #ffd166">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white">
                   <path
-                    d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" />
+                    d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"
+                  />
                 </svg>
               </div>
               <h4>验证与转换</h4>
@@ -355,10 +360,11 @@ console.log(p.expensiveCalculation); // 输出: 从缓存中获取 expensiveCalc
             </div>
 
             <div class="case-card">
-              <div class="case-icon" style="background-color: #9B5DE5;">
+              <div class="case-icon" style="background-color: #9b5de5">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white">
                   <path
-                    d="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H3V5h18v14zM8 15c0-1.66 1.34-3 3-3 .35 0 .69.07 1 .18V10c0-.55.45-1 1-1s1 .45 1 1v1h2V10c0-1.79-1.46-3.27-3.25-3L11 8.25v1.51c1.25.54 2 1.76 2 3.24 0 1.66-1.34 3-3 3s-3-1.34-3-3H8z" />
+                    d="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H3V5h18v14zM8 15c0-1.66 1.34-3 3-3 .35 0 .69.07 1 .18V10c0-.55.45-1 1-1s1 .45 1 1v1h2V10c0-1.79-1.46-3.27-3.25-3L11 8.25v1.51c1.25.54 2 1.76 2 3.24 0 1.66-1.34 3-3 3s-3-1.34-3-3H8z"
+                  />
                 </svg>
               </div>
               <h4>性能优化</h4>
@@ -366,10 +372,11 @@ console.log(p.expensiveCalculation); // 输出: 从缓存中获取 expensiveCalc
             </div>
 
             <div class="case-card">
-              <div class="case-icon" style="background-color: #06D6A0;">
+              <div class="case-icon" style="background-color: #06d6a0">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white">
                   <path
-                    d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z" />
+                    d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"
+                  />
                 </svg>
               </div>
               <h4>访问控制</h4>
@@ -445,7 +452,7 @@ console.log(p.expensiveCalculation); // 输出: 从缓存中获取 expensiveCalc
           <h3>框架中的装饰器应用</h3>
           <div class="framework-grid">
             <div class="framework-card">
-              <div class="framework-logo" style="background-color: #c3002f;">
+              <div class="framework-logo" style="background-color: #c3002f">
                 <span>NG</span>
               </div>
               <div class="framework-info">
@@ -465,7 +472,7 @@ export class AppComponent {
             </div>
 
             <div class="framework-card">
-              <div class="framework-logo" style="background-color: #42b883;">
+              <div class="framework-logo" style="background-color: #42b883">
                 <span>VU</span>
               </div>
               <div class="framework-info">
@@ -488,7 +495,7 @@ export default class HelloWorld extends Vue {
             </div>
 
             <div class="framework-card">
-              <div class="framework-logo" style="background-color: #000000;">
+              <div class="framework-logo" style="background-color: #000000">
                 <span>TS</span>
               </div>
               <div class="framework-info">
@@ -507,7 +514,7 @@ export default class HelloWorld extends Vue {
             </div>
 
             <div class="framework-card">
-              <div class="framework-logo" style="background-color: #764abc;">
+              <div class="framework-logo" style="background-color: #764abc">
                 <span>RX</span>
               </div>
               <div class="framework-info">
@@ -538,9 +545,9 @@ export class CatsController {
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref } from 'vue'
 
-const activeType = ref<'class' | 'method' | 'property' | 'param' | 'accessor'>('method');
+const activeType = ref<'class' | 'method' | 'property' | 'param' | 'accessor'>('method')
 </script>
 
 <style scoped lang="less">
@@ -557,15 +564,15 @@ const activeType = ref<'class' | 'method' | 'property' | 'param' | 'accessor'>('
   min-height: 100vh;
   position: relative;
   .proposal-status {
-      position: absolute;
-      top: 2rem;
-      right: 2rem;
-      background: @warning-color;
-      color: white;
-      padding: 0.5rem 1rem;
-      border-radius: 4px;
-      transform: rotate(5deg);
-    }
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    background: @warning-color;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    transform: rotate(5deg);
+  }
 
   .header {
     text-align: center;
@@ -655,7 +662,7 @@ const activeType = ref<'class' | 'method' | 'property' | 'param' | 'accessor'>('
           align-items: center;
 
           &::before {
-            content: "";
+            content: '';
             display: inline-block;
             width: 8px;
             height: 8px;
@@ -678,7 +685,7 @@ const activeType = ref<'class' | 'method' | 'property' | 'param' | 'accessor'>('
           padding-left: 1.5rem;
 
           &::before {
-            content: "•";
+            content: '•';
             color: #673ab7;
             position: absolute;
             left: 0;
@@ -721,7 +728,7 @@ const activeType = ref<'class' | 'method' | 'property' | 'param' | 'accessor'>('
           gap: 1rem;
           justify-content: center;
 
-          >div {
+          > div {
             padding: 1rem;
             border-radius: 6px;
             background: white;
@@ -785,7 +792,7 @@ const activeType = ref<'class' | 'method' | 'property' | 'param' | 'accessor'>('
             font-weight: 600;
 
             &::after {
-              content: "";
+              content: '';
               position: absolute;
               bottom: -1px;
               left: 0;

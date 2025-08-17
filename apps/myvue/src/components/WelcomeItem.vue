@@ -1,5 +1,6 @@
 <template>
   <div class="item">
+    <p>Hello Vitest</p>
     <i>
       <slot name="icon"></slot>
     </i>

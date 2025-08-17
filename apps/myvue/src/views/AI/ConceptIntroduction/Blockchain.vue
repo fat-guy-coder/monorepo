@@ -23,7 +23,7 @@
         </div>
       </div>
       <div class="hero-content">
-        <h1>区块链技术详解</h1>
+        <h1>区块链技术介绍</h1>
         <p class="subtitle">分布式账本技术的革命性创新</p>
         <div class="hero-stats">
           <div class="stat">
@@ -286,7 +286,7 @@
       <div class="section token-section">
         <div class="section-header">
           <div class="section-icon">🪙</div>
-          <h2>区块链代币详解</h2>
+          <h2>区块链代币介绍</h2>
         </div>
         <div class="section-content">
           <div class="token-types">

@@ -162,7 +162,7 @@ apps/
 }</code></pre>
               </div>
 
-              <h4>配置项详解：</h4>
+              <h4>配置项介绍：</h4>
               <table class="config-table">
                 <thead>
                   <tr>
@@ -672,8 +672,6 @@ npx @turbo/codemod create-turbo-config --from=rush</code></pre>
 </script>
 
 <style lang="less" scoped>
-
-
 // 颜色变量
 @primary-color: #6c5ce7;
 @secondary-color: #5d4de0;

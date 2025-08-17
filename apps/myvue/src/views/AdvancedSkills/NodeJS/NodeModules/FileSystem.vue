@@ -1,7 +1,7 @@
 <template>
   <div class="fs-container">
     <header class="header">
-      <h1>Node.js fs模块详解</h1>
+      <h1>Node.js fs模块介绍</h1>
       <p class="subtitle">文件系统操作基本指南 - 包含所有API及使用示例</p>
     </header>
 
@@ -402,9 +402,7 @@ watcher.close();`,
     added: '0.1',
     description: '停止监视文件或目录的变化',
     usage: `fs.unwatchFile('file.txt');`,
-    params: [
-      { name: 'filename', description: '文件/目录路径' },
-    ],
+    params: [{ name: 'filename', description: '文件/目录路径' }],
   },
   {
     name: 'fs.createReadStream',
@@ -531,8 +529,6 @@ const filteredApis = computed(() => {
 </script>
 
 <style lang="less" scoped>
-
-
 // 颜色变量
 @primary-color: #4285f4;
 @secondary-color: #34a853;

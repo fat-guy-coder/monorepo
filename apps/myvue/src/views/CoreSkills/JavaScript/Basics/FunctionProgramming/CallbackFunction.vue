@@ -1,7 +1,7 @@
 <template>
   <div class="callback-container">
     <header class="header">
-      <h1>JavaScript 回调函数详解</h1>
+      <h1>JavaScript 回调函数介绍</h1>
       <p>深入理解回调机制的核心概念与应用实践</p>
     </header>
 
@@ -521,7 +521,8 @@ asyncOperation((err, data) => {
     grid-template-columns: 1fr;
   }
 
-  .pros, .cons {
+  .pros,
+  .cons {
     h2 {
       font-size: 1.4rem;
       margin-bottom: 15px;
@@ -538,7 +539,7 @@ asyncOperation((err, data) => {
       padding-left: 10px;
 
       &::before {
-        content: "•";
+        content: '•';
         position: absolute;
         left: 0;
         color: #2b6cb0;

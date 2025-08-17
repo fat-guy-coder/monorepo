@@ -108,7 +108,7 @@
       <div class="section api-section">
         <div class="section-header">
           <div class="section-icon">🔧</div>
-          <h2>核心API详解</h2>
+          <h2>核心API介绍</h2>
         </div>
         <div class="section-content">
           <!-- createInterface -->

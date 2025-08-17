@@ -214,6 +214,42 @@ to  {top:200px;}
         <div class="demo2"></div>
         <div class="demo3"></div>
       </div>
+      <div class="example-card">
+        <pre>@keyframes demo1 {
+  from {
+    transform: rotate3d(0, 0, 0, 0deg);
+  }
+
+  to {
+    transform: rotate3d(1, 1, 1, 360deg);
+  }
+}</pre>
+        <pre>@keyframes demo2 {
+  0% {
+    transform: rotateZ(0deg) scale(1);
+  }
+
+  50% {
+    transform: rotateZ(360deg) scale(0.5);
+    border-radius: 50%;
+  }
+
+  100% {
+    transform: rotateZ(0deg) scale(1);
+  }
+}</pre>
+        <pre>@keyframes demo3 {
+  0% {
+    transform: scale(0);
+    background: rgba(255, 255, 255, 0);
+  }
+
+  100% {
+    transform: scale(1);
+    background: rgba(255, 0, 0, 1);
+  }
+}</pre>
+      </div>
     </section>
   </div>
 </template>
@@ -246,7 +282,7 @@ span {
 }
 
 .section-title {
-  color: #fff;
+  color: #000;
 }
 
 .animation-guide {

@@ -1,7 +1,7 @@
 <template>
   <div class="execution-context-container">
     <header class="header">
-      <h1>JavaScript 执行上下文详解</h1>
+      <h1>JavaScript 执行上下文介绍</h1>
       <p>深入理解 JavaScript 代码执行的底层机制</p>
     </header>
 
@@ -13,7 +13,10 @@
           <h2>概念解析</h2>
         </div>
         <div class="content">
-          <p class="definition">执行上下文（Execution Context）是 JavaScript 代码执行时的环境抽象，包含了代码执行所需的所有信息。</p>
+          <p class="definition">
+            执行上下文（Execution Context）是 JavaScript
+            代码执行时的环境抽象，包含了代码执行所需的所有信息。
+          </p>
 
           <div class="analogy">
             <div class="analogy-card">
@@ -124,7 +127,7 @@
           </div>
 
           <div class="creation-details">
-            <h3>变量对象（VO）详解</h3>
+            <h3>变量对象（VO）介绍</h3>
             <div class="vo-details">
               <div class="vo-phase">
                 <h4>创建阶段</h4>
@@ -166,12 +169,15 @@ VO = {
       <section class="card stack">
         <div class="section-header">
           <div class="icon">📚</div>
-          <h2>执行栈 <a @click="goToByRouteName('AsyncProgrammingIntroduce')">跳转详细</a> </h2>
+          <h2>执行栈 <a @click="goToByRouteName('AsyncProgrammingIntroduce')">跳转详细</a></h2>
         </div>
 
         <div class="content">
           <div class="stack-explanation">
-            <p>执行栈（调用栈）是一个 LIFO（后进先出）结构，用于存储代码执行期间创建的所有执行上下文。</p>
+            <p>
+              执行栈（调用栈）是一个
+              LIFO（后进先出）结构，用于存储代码执行期间创建的所有执行上下文。
+            </p>
 
             <div class="stack-visualization">
               <div class="stack-item top">
@@ -242,7 +248,10 @@ console.log('全局结束');</code></pre>
 
         <div class="content">
           <div class="scope-explanation">
-            <p>作用域链是执行上下文的属性，用于解析变量和函数。它是当前上下文变量对象 + 所有父级上下文变量对象的集合。</p>
+            <p>
+              作用域链是执行上下文的属性，用于解析变量和函数。它是当前上下文变量对象 +
+              所有父级上下文变量对象的集合。
+            </p>
 
             <div class="scope-example">
               <pre><code>var globalVar = 'global';
@@ -337,7 +346,10 @@ console.log(p.name); // Alice</code></pre>
     <footer class="footer">
       <div class="summary">
         <h3>关键要点</h3>
-        <p>执行上下文是 JavaScript 代码执行的底层环境，包含变量对象、作用域链和 this 绑定。理解执行上下文对于掌握作用域、闭包和 this 机制至关重要。</p>
+        <p>
+          执行上下文是 JavaScript 代码执行的底层环境，包含变量对象、作用域链和 this
+          绑定。理解执行上下文对于掌握作用域、闭包和 this 机制至关重要。
+        </p>
       </div>
       <div class="copyright">JavaScript 核心机制 | 深入理解执行上下文</div>
     </footer>
@@ -345,11 +357,11 @@ console.log(p.name); // Alice</code></pre>
 </template>
 
 <script setup lang="ts">
-const emit = defineEmits(['goToByRouteName']);
+const emit = defineEmits(['goToByRouteName'])
 
 const goToByRouteName = (routeName: string) => {
-  emit('goToByRouteName', routeName);
-};
+  emit('goToByRouteName', routeName)
+}
 
 // 组件逻辑为空，仅用于展示
 </script>

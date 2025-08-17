@@ -1,7 +1,7 @@
 <template>
   <div class="prototype-pollution-container">
     <header class="header">
-      <h1>JavaScript 原型污染详解</h1>
+      <h1>JavaScript 原型污染介绍</h1>
       <p>深入理解原型污染的原理、危害与防御措施</p>
     </header>
 
@@ -13,7 +13,10 @@
           <h2>原型污染概念</h2>
         </div>
         <div class="content">
-          <p class="definition">原型污染（Prototype Pollution）是指攻击者通过篡改 JavaScript 对象的原型链，向应用程序注入恶意属性或方法的安全漏洞。</p>
+          <p class="definition">
+            原型污染（Prototype Pollution）是指攻击者通过篡改 JavaScript
+            对象的原型链，向应用程序注入恶意属性或方法的安全漏洞。
+          </p>
 
           <div class="analogy">
             <div class="analogy-card">
@@ -57,7 +60,10 @@
             <div class="step-number">1</div>
             <div class="step-content">
               <h3>原型链基础</h3>
-              <p>JavaScript 中每个对象都有一个原型（__proto__），当访问对象属性时，会沿着原型链向上查找</p>
+              <p>
+                JavaScript
+                中每个对象都有一个原型（__proto__），当访问对象属性时，会沿着原型链向上查找
+              </p>
               <pre><code>const obj = {};
 obj.__proto__.isAdmin = true; // 污染原型
 
@@ -182,7 +188,9 @@ safeObj.isAdmin = true; // 不会污染原型链</code></pre>
             <div class="method">
               <h3>2. 输入验证与过滤</h3>
               <ul>
-                <li>过滤包含<code>__proto__</code>、<code>constructor</code>或<code>prototype</code>的键名</li>
+                <li>
+                  过滤包含<code>__proto__</code>、<code>constructor</code>或<code>prototype</code>的键名
+                </li>
                 <li>使用安全JSON解析（如<code>JSON.parse()</code>）</li>
                 <li>使用Map代替Object存储键值对</li>
               </ul>
@@ -271,7 +279,9 @@ _.get({}, 'a.b.c'); // 安全访问</code></pre>
     <footer class="footer">
       <div class="summary">
         <h3>关键要点</h3>
-        <p>原型污染是JavaScript中严重的安全漏洞，通过篡改原型对象影响整个应用。防御的关键在于：安全对象操作、严格输入验证、使用安全库和定期安全审计。</p>
+        <p>
+          原型污染是JavaScript中严重的安全漏洞，通过篡改原型对象影响整个应用。防御的关键在于：安全对象操作、严格输入验证、使用安全库和定期安全审计。
+        </p>
       </div>
       <div class="copyright">JavaScript安全最佳实践 | 保持警惕，保护应用</div>
     </footer>
@@ -422,7 +432,7 @@ _.get({}, 'a.b.c'); // 安全访问</code></pre>
         padding-left: 12px;
 
         &::before {
-          content: "•";
+          content: '•';
           position: absolute;
           left: 0;
           color: #ef4444;
@@ -602,7 +612,8 @@ _.get({}, 'a.b.c'); // 安全访问</code></pre>
       grid-template-columns: 1fr;
     }
 
-    .do, .dont {
+    .do,
+    .dont {
       padding: 20px;
       border-radius: 12px;
 

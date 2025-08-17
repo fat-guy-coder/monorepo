@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <header class="header">
-      <h1 class="title">webpack resolve 配置详解</h1>
+      <h1 class="title">webpack resolve 配置介绍</h1>
       <p class="subtitle">深入理解模块解析配置选项</p>
     </header>
 
@@ -37,7 +37,8 @@
               <h4>属性：</h4>
               <ul>
                 <li v-for="(prop, pIndex) in item.properties" :key="pIndex">
-                  <code>{{ prop.name }}</code>: {{ prop.description }}
+                  <code>{{ prop.name }}</code
+                  >: {{ prop.description }}
                 </li>
               </ul>
             </div>
@@ -54,23 +55,23 @@
 
 <script setup lang="ts">
 interface ConfigProperty {
-  name: string;
-  description: string;
+  name: string
+  description: string
 }
 
 interface ResolveConfigItem {
-  name: string;
-  type: string;
-  description: string;
-  example?: string;
-  properties?: ConfigProperty[];
+  name: string
+  type: string
+  description: string
+  example?: string
+  properties?: ConfigProperty[]
 }
 
 const resolveConfigItems: ResolveConfigItem[] = [
   {
-    name: "resolve.alias",
-    type: "object",
-    description: "创建 import 或 require 的别名，来简化模块引入路径。",
+    name: 'resolve.alias',
+    type: 'object',
+    description: '创建 import 或 require 的别名，来简化模块引入路径。',
     example: `{
   alias: {
     '@': path.resolve(__dirname, 'src/'),
@@ -79,109 +80,111 @@ const resolveConfigItems: ResolveConfigItem[] = [
 }`,
     properties: [
       {
-        name: "别名键值对",
-        description: "键为别名，值为对应的实际路径"
-      }
-    ]
+        name: '别名键值对',
+        description: '键为别名，值为对应的实际路径',
+      },
+    ],
   },
   {
-    name: "resolve.extensions",
-    type: "string[]",
-    description: "自动解析确定的扩展。默认值为 ['.js', '.json', '.wasm']，添加空字符串可以表示不解析扩展名。",
+    name: 'resolve.extensions',
+    type: 'string[]',
+    description:
+      "自动解析确定的扩展。默认值为 ['.js', '.json', '.wasm']，添加空字符串可以表示不解析扩展名。",
     example: `{
   extensions: ['.js', '.vue', '.json', '.ts', '']
 }`,
     properties: [
       {
-        name: "扩展名数组",
-        description: "按顺序尝试解析的文件扩展名"
-      }
-    ]
+        name: '扩展名数组',
+        description: '按顺序尝试解析的文件扩展名',
+      },
+    ],
   },
   {
-    name: "resolve.mainFiles",
-    type: "string[]",
+    name: 'resolve.mainFiles',
+    type: 'string[]',
     description: "解析目录时要使用的文件名。默认值为 ['index']。",
     example: `{
   mainFiles: ['index', 'main']
-}`
+}`,
   },
   {
-    name: "resolve.modules",
-    type: "string[]",
+    name: 'resolve.modules',
+    type: 'string[]',
     description: "告诉 webpack 解析模块时应该搜索的目录。默认值为 ['node_modules']。",
     example: `{
   modules: ['node_modules', path.resolve(__dirname, 'src/components')]
-}`
+}`,
   },
   {
-    name: "resolve.descriptionFiles",
-    type: "string[]",
+    name: 'resolve.descriptionFiles',
+    type: 'string[]',
     description: "用于描述的 JSON 文件。默认值为 ['package.json']。",
     example: `{
   descriptionFiles: ['package.json', 'bower.json']
-}`
+}`,
   },
   {
-    name: "resolve.enforceExtension",
-    type: "boolean",
-    description: "如果为 true，则不允许无扩展名的文件。默认值为 false。",
+    name: 'resolve.enforceExtension',
+    type: 'boolean',
+    description: '如果为 true，则不允许无扩展名的文件。默认值为 false。',
     example: `{
   enforceExtension: false
-}`
+}`,
   },
   {
-    name: "resolve.enforceModuleExtension",
-    type: "boolean",
-    description: "对模块是否需要带文件扩展名的要求。只有在 module.rules 中没有为模块设置 test 时才会生效。",
+    name: 'resolve.enforceModuleExtension',
+    type: 'boolean',
+    description:
+      '对模块是否需要带文件扩展名的要求。只有在 module.rules 中没有为模块设置 test 时才会生效。',
     example: `{
   enforceModuleExtension: false
-}`
+}`,
   },
   {
-    name: "resolve.unsafeCache",
-    type: "boolean | RegExp | RegExp[]",
-    description: "启用不安全缓存。默认值为 true。缓存会导致模块解析结果被缓存，可能会影响热更新。",
+    name: 'resolve.unsafeCache',
+    type: 'boolean | RegExp | RegExp[]',
+    description: '启用不安全缓存。默认值为 true。缓存会导致模块解析结果被缓存，可能会影响热更新。',
     example: `{
   unsafeCache: /src\/util/
-}`
+}`,
   },
   {
-    name: "resolve.cacheWithContext",
-    type: "boolean",
-    description: "如果为 true，则使用请求上下文作为缓存键。默认值为 true。",
+    name: 'resolve.cacheWithContext',
+    type: 'boolean',
+    description: '如果为 true，则使用请求上下文作为缓存键。默认值为 true。',
     example: `{
   cacheWithContext: true
-}`
+}`,
   },
   {
-    name: "resolve.plugins",
-    type: "Plugin[]",
-    description: "应用于解析过程的插件数组。例如，可使用 DirectoryNamedWebpackPlugin 等插件。",
+    name: 'resolve.plugins',
+    type: 'Plugin[]',
+    description: '应用于解析过程的插件数组。例如，可使用 DirectoryNamedWebpackPlugin 等插件。',
     example: `{
   plugins: [new DirectoryNamedWebpackPlugin()]
-}`
+}`,
   },
   {
-    name: "resolve.symlinks",
-    type: "boolean",
-    description: "是否将符号链接解析到它们的符号链接位置。默认值为 true。",
+    name: 'resolve.symlinks',
+    type: 'boolean',
+    description: '是否将符号链接解析到它们的符号链接位置。默认值为 true。',
     example: `{
   symlinks: true
-}`
+}`,
   },
   {
-    name: "resolve.cachePredicate",
-    type: "(request: Request) => boolean",
-    description: "决定请求是否应该被缓存的函数。返回 true 表示缓存，false 表示不缓存。",
+    name: 'resolve.cachePredicate',
+    type: '(request: Request) => boolean',
+    description: '决定请求是否应该被缓存的函数。返回 true 表示缓存，false 表示不缓存。',
     example: `{
   cachePredicate: (request) => {
     // 不缓存 node_modules 下的模块
     return !request.path.includes('node_modules');
   }
-}`
-  }
-];
+}`,
+  },
+]
 </script>
 
 <style scoped lang="less">
@@ -239,7 +242,9 @@ const resolveConfigItems: ResolveConfigItem[] = [
     border-radius: 8px;
     padding: 20px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-    transition: transform 0.2s, box-shadow 0.2s;
+    transition:
+      transform 0.2s,
+      box-shadow 0.2s;
 
     &:hover {
       transform: translateY(-2px);

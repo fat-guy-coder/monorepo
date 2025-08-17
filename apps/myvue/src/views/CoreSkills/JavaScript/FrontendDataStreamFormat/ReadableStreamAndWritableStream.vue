@@ -1,7 +1,7 @@
 <template>
   <div class="stream-container">
     <header class="header">
-      <h1>JavaScript 流处理详解</h1>
+      <h1>JavaScript 流处理介绍</h1>
       <p>深入理解 ReadableStream 和 WritableStream 的强大功能</p>
     </header>
 
@@ -351,7 +351,10 @@ logStream.pipeTo(clientWritable);</code></pre>
     <footer class="footer">
       <div class="summary">
         <h3>关键要点</h3>
-        <p>ReadableStream 和 WritableStream 提供了处理大型或实时数据的高效机制。通过流式处理，可以显著减少内存占用，提高应用响应性，并构建复杂的数据处理管道。</p>
+        <p>
+          ReadableStream 和 WritableStream
+          提供了处理大型或实时数据的高效机制。通过流式处理，可以显著减少内存占用，提高应用响应性，并构建复杂的数据处理管道。
+        </p>
       </div>
       <div class="copyright">JavaScript 流处理 API | 现代 Web 开发的核心技术</div>
     </footer>
@@ -777,7 +780,8 @@ logStream.pipeTo(clientWritable);</code></pre>
     }
   }
 
-  .pros, .cons {
+  .pros,
+  .cons {
     h3 {
       font-size: 1.3rem;
       margin: 0 0 16px;

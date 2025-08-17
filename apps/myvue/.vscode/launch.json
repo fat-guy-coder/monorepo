@@ -5,14 +5,29 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "type": "msedge",
+      "name": "Launch Edge",
       "request": "launch",
-      "name": "Vue: Edge",
-      "url": "http://localhost:5173",
-      "webRoot": "${workspaceFolder}/src",
+      "type": "msedge",
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceFolder}",
       "sourceMapPathOverrides": {
-        "webpack:///src/*": "${webRoot}/*"
-      }
+        "webpack:///src/*": "${webRoot}/*",
+        "/@vite/*": "${webRoot}/@vite/*"
+      },
+      "version": "stable"
     }
+    // {
+    //   "type": "msedge",
+    //   "request": "attach",
+    //   "name": "Vue: Edge",
+    //   "url": "http://localhost:9222",
+    //   "webRoot": "${workspaceFolder}",
+    //   "sourceMapPathOverrides": {
+    //     "webpack:///src/*": "${webRoot}/*",
+    //     "/@vite/*": "${webRoot}/@vite/*"
+    //   },
+    //   "sourceMaps": true,
+    //   "port": 3000
+    // }
   ]
 }

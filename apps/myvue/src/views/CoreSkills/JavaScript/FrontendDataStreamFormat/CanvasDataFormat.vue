@@ -1,7 +1,7 @@
 <template>
   <div class="canvas-data-container">
     <header class="header">
-      <h1>Canvas 数据流处理详解</h1>
+      <h1>Canvas 数据流处理介绍</h1>
       <p>掌握 Canvas 数据的获取、转换与处理技巧</p>
     </header>
 
@@ -14,7 +14,10 @@
         </div>
         <div class="content">
           <div class="definition">
-            <p>Canvas 数据流处理指的是从 HTML5 Canvas 元素获取图像数据，并将其转换为各种格式（如 ImageData、Data URL、Blob、ArrayBuffer 等）的技术。</p>
+            <p>
+              Canvas 数据流处理指的是从 HTML5 Canvas 元素获取图像数据，并将其转换为各种格式（如
+              ImageData、Data URL、Blob、ArrayBuffer 等）的技术。
+            </p>
           </div>
 
           <div class="workflow">
@@ -464,7 +467,11 @@ for (let i = 0; i < len; i += 4) {
     <footer class="footer">
       <div class="summary">
         <h3>关键要点</h3>
-        <p>Canvas 数据流处理是 Web 图像操作的核心技术。掌握 ImageData 的获取与操作，以及各种格式的转换方法，可以解锁强大的图像处理能力。合理优化性能并注意安全限制，可以创建高效的 Canvas 应用。</p>
+        <p>
+          Canvas 数据流处理是 Web 图像操作的核心技术。掌握 ImageData
+          的获取与操作，以及各种格式的转换方法，可以解锁强大的图像处理能力。合理优化性能并注意安全限制，可以创建高效的
+          Canvas 应用。
+        </p>
       </div>
       <div class="copyright">Canvas 数据流处理 | 现代 Web 图像处理的基础</div>
     </footer>
@@ -694,7 +701,7 @@ for (let i = 0; i < len; i += 4) {
         padding-left: 12px;
 
         &::before {
-          content: "•";
+          content: '•';
           position: absolute;
           left: 0;
           color: #3b82f6;
@@ -868,7 +875,8 @@ for (let i = 0; i < len; i += 4) {
       grid-template-columns: 1fr;
     }
 
-    .do, .dont {
+    .do,
+    .dont {
       padding: 20px;
       border-radius: 12px;
 
@@ -924,7 +932,7 @@ for (let i = 0; i < len; i += 4) {
         padding-left: 12px;
 
         &::before {
-          content: "•";
+          content: '•';
           position: absolute;
           left: 0;
           color: #3b82f6;

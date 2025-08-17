@@ -2,42 +2,7 @@
   <div class="tree-introduction">
     <!-- 标题和概述部分 -->
     <header>
-      <h1>数据结构：树（Tree）</h1>
-      <div class="tree-visualization">
-        <div class="tree">
-          <div class="node root">Root</div>
-          <div class="branch">
-            <div class="node">Node A</div>
-            <div class="sub-branches">
-              <div class="branch">
-                <div class="node leaf">Leaf A1</div>
-              </div>
-              <div class="branch">
-                <div class="node leaf">Leaf A2</div>
-              </div>
-            </div>
-          </div>
-          <div class="branch">
-            <div class="node">Node B</div>
-            <div class="sub-branches">
-              <div class="branch">
-                <div class="node">Node B1</div>
-                <div class="sub-branches">
-                  <div class="branch">
-                    <div class="node leaf">Leaf B1a</div>
-                  </div>
-                </div>
-              </div>
-              <div class="branch">
-                <div class="node leaf">Leaf B2</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <p class="overview">
-        树是一种非线性的分层数据结构，由节点和边组成。每个节点有零个或多个子节点，除了根节点外，每个节点都有一个父节点。树结构广泛用于表示具有层级关系的数据。
-      </p>
+      <h1>树的分类</h1>
     </header>
 
     <!-- 树类型介绍部分 -->
@@ -45,10 +10,9 @@
       <h2>常见树类型介绍</h2>
       <div class="type-cards">
         <!-- 二叉树 -->
-        <div class="type-card" :class="{ expanded: activeCard === 0 }">
-          <div class="card-header" @click="toggleCard(0)">
+        <div class="type-card">
+          <div class="card-header">
             <h3>二叉树 (Binary Tree)</h3>
-            <span class="toggle-icon">{{ activeCard === 0 ? '−' : '+' }}</span>
           </div>
           <div class="card-content">
             <div class="properties">
@@ -93,10 +57,9 @@
         </div>
 
         <!-- 二叉搜索树 -->
-        <div class="type-card" :class="{ expanded: activeCard === 1 }">
-          <div class="card-header" @click="toggleCard(1)">
+        <div class="type-card">
+          <div class="card-header">
             <h3>二叉搜索树 (BST)</h3>
-            <span class="toggle-icon">{{ activeCard === 1 ? '−' : '+' }}</span>
           </div>
           <div class="card-content">
             <div class="properties">
@@ -142,10 +105,9 @@
         </div>
 
         <!-- AVL树 -->
-        <div class="type-card" :class="{ expanded: activeCard === 2 }">
-          <div class="card-header" @click="toggleCard(2)">
+        <div class="type-card">
+          <div class="card-header">
             <h3>AVL树</h3>
-            <span class="toggle-icon">{{ activeCard === 2 ? '−' : '+' }}</span>
           </div>
           <div class="card-content">
             <div class="properties">
@@ -187,6 +149,9 @@
                   <h3>普通BST</h3>
                   <pre class="ascii-art">{{ CommonTree }}</pre>
                 </div>
+              </div>
+              <div class="property">
+                <h4>图形结构</h4>
                 <div>
                   <h3>AVLTree</h3>
                   <pre class="ascii-art">{{ AVLTree }}</pre>
@@ -196,10 +161,9 @@
           </div>
         </div>
         <!-- 2-3树 -->
-        <div class="type-card" :class="{ expanded: activeCard === 2 }">
-          <div class="card-header" @click="toggleCard(2)">
+        <div class="type-card">
+          <div class="card-header">
             <h3>2-3树</h3>
-            <span class="toggle-icon">{{ activeCard === 2 ? '−' : '+' }}</span>
           </div>
           <div class="card-content">
             <div class="properties">
@@ -209,7 +173,6 @@
                   <li>2-3树是一种多路平衡搜索树，它的每个节点最多有三个子节点</li>
                   <li>2-3树的每个节点要么有1个键，要么有2个键</li>
                   <li>2-3树的每个节点要么是2节点，要么是3节点</li>
-
                 </ul>
               </div>
               <div class="property">
@@ -233,19 +196,18 @@
                   <li>2-3树的查找性能接近AVL树</li>
                 </ul>
               </div>
-              <div class="property">
+              <div class="property-column2">
                 <h4>图形结构</h4>
-                <img class="object-image" :src="TwoThreeTree" alt="">
+                <img class="object-image" :src="TwoThreeTree" alt="" />
               </div>
             </div>
           </div>
         </div>
 
         <!-- 红黑树 -->
-        <div class="type-card" :class="{ expanded: activeCard === 3 }">
-          <div class="card-header" @click="toggleCard(3)">
+        <div class="type-card">
+          <div class="card-header">
             <h3>红黑树</h3>
-            <span class="toggle-icon">{{ activeCard === 3 ? '−' : '+' }}</span>
           </div>
           <div class="card-content">
             <div class="properties">
@@ -285,19 +247,18 @@
                   <li>文件系统</li>
                 </ul>
               </div>
-              <div class="property">
+              <div class="property-column2">
                 <h4>图形结构</h4>
-                <img class="tree-image" :src="RedBlackTree" alt="">
+                <img class="tree-image" :src="RedBlackTree" alt="" />
               </div>
             </div>
           </div>
         </div>
 
         <!-- B树 -->
-        <div class="type-card" :class="{ expanded: activeCard === 4 }">
-          <div class="card-header" @click="toggleCard(4)">
+        <div class="type-card">
+          <div class="card-header">
             <h3>B树</h3>
-            <span class="toggle-icon">{{ activeCard === 4 ? '−' : '+' }}</span>
           </div>
           <div class="card-content">
             <div class="properties">
@@ -335,19 +296,18 @@
                   <li>大型数据存储系统</li>
                 </ul>
               </div>
-              <div class="property">
+              <div class="property-column2">
                 <h4>图形结构</h4>
-                <img class="object-image" :src="BTree" alt="">
+                <img class="object-image" :src="BTree" alt="" />
               </div>
             </div>
           </div>
         </div>
 
         <!-- B+树 -->
-        <div class="type-card" :class="{ expanded: activeCard === 5 }">
-          <div class="card-header" @click="toggleCard(5)">
+        <div class="type-card">
+          <div class="card-header">
             <h3>B+树</h3>
-            <span class="toggle-icon">{{ activeCard === 5 ? '−' : '+' }}</span>
           </div>
           <div class="card-content">
             <div class="properties">
@@ -389,10 +349,9 @@
         </div>
 
         <!-- Trie树 -->
-        <div class="type-card" :class="{ expanded: activeCard === 5 }">
-          <div class="card-header" @click="toggleCard(5)">
+        <div class="type-card">
+          <div class="card-header">
             <h3>Trie树（字典树）</h3>
-            <span class="toggle-icon">{{ activeCard === 5 ? '−' : '+' }}</span>
           </div>
           <div class="card-content">
             <div class="properties">
@@ -437,26 +396,17 @@
     </section>
 
     <footer>
-      <p>树结构是计算机科学中最重要的数据结构之一，理解不同树类型的特点和应用场景对于设计高效算法和系统至关重要。</p>
+      <p>
+        树结构是计算机科学中最重要的数据结构之一，理解不同树类型的特点和应用场景对于设计高效算法和系统至关重要。
+      </p>
     </footer>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import RedBlackTree from '@/assets/js/rbtree.svg';
-import BTree from '@/assets/js/b-tree.png';
-import TwoThreeTree from '@/assets/js/23-tree.webp';
-
-const activeCard = ref<number | null>(0);
-
-const toggleCard = (index: number) => {
-  if (activeCard.value === index) {
-    activeCard.value = null;
-  } else {
-    activeCard.value = index;
-  }
-};
+import RedBlackTree from '@/assets/js/rbtree.svg'
+import BTree from '@/assets/js/b-tree.png'
+import TwoThreeTree from '@/assets/js/23-tree.webp'
 
 const BinaryTree = `
           A
@@ -487,8 +437,6 @@ const CommonTree = `
      2
     /
   1`
-
-
 </script>
 
 <style scoped lang="less">
@@ -544,86 +492,6 @@ const CommonTree = `
     }
   }
 
-  .tree-visualization {
-    display: flex;
-    justify-content: center;
-    margin: 30px 0;
-
-    .tree {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-
-      .node {
-        background-color: @secondary-color;
-        color: white;
-        border-radius: 50%;
-        width: 70px;
-        height: 70px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 10px;
-        font-weight: bold;
-        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-        position: relative;
-        z-index: 2;
-
-        &.root {
-          background-color: @primary-color;
-          width: 80px;
-          height: 80px;
-        }
-
-        &.leaf {
-          background-color: #d68c45;
-          width: 60px;
-          height: 60px;
-        }
-      }
-
-      .branch {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        position: relative;
-
-        &::before {
-          content: '';
-          position: absolute;
-          top: -20px;
-          height: 20px;
-          width: 2px;
-          background-color: #888;
-        }
-      }
-
-      .sub-branches {
-        display: flex;
-        justify-content: center;
-        position: relative;
-        padding-top: 20px;
-
-        &::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          height: 2px;
-          width: 100%;
-          background-color: #888;
-        }
-
-        .branch {
-          margin: 0 20px;
-
-          &::before {
-            top: -22px;
-          }
-        }
-      }
-    }
-  }
-
   .tree-types {
     margin: 40px 0;
 
@@ -638,7 +506,7 @@ const CommonTree = `
 
     .type-cards {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
       gap: 20px;
     }
 
@@ -692,6 +560,12 @@ const CommonTree = `
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
           gap: 20px;
+
+          .property-column2 {
+            width: 100%;
+            height: 100%;
+            grid-column: span 2;
+          }
 
           .property {
             h4 {

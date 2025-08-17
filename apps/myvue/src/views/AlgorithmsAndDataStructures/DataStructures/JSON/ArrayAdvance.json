@@ -1,0 +1,308 @@
+[
+  {
+    "id": "flatten",
+    "title": "数组扁平化",
+    "type": "变换",
+    "description": "将多层嵌套数组扁平化为一维数组",
+    "steps": ["1. 使用reduce方法，将数组合并", "2. 使用递归，将数组扁平化"],
+    "icon": "📏",
+    "category": "advanced",
+    "timeComplexity": "O(n)",
+    "spaceComplexity": "O(n)",
+    "code": "function flattenArray(arr: any[]): any[] {\n  return arr.reduce((flat, item) =>\n    flat.concat(Array.isArray(item) ?\n      flattenArray(item) : item\n  ), []);\n}"
+  },
+  {
+    "id": "rotate",
+    "title": "数组旋转",
+    "type": "变换",
+    "description": "将数组向右旋转指定位置",
+    "icon": "🔄",
+    "category": "advanced",
+    "steps": [
+      "1. 计算实际旋转次数（取模避免无效旋转）",
+      "2. 分割数组为后rotations个元素和剩余元素",
+      "3. 拼接两部分形成旋转后数组"
+    ],
+    "timeComplexity": "O(n)",
+    "spaceComplexity": "O(n)",
+    "code": "function rotateArray(arr: any[], k: number): any[] {\n  const rotations = k % arr.length;\n  return [\n    ...arr.slice(-rotations),\n    ...arr.slice(0, arr.length - rotations)\n  ];\n}"
+  },
+  {
+    "id": "partition",
+    "title": "数组分区",
+    "type": "分类",
+    "description": "根据条件将数组划分为两部分",
+    "icon": "⚖️",
+    "category": "advanced",
+    "steps": [
+      "1. 初始化两个结果数组（满足条件/不满足条件）",
+      "2. 遍历原数组检查每个元素",
+      "3. 根据条件函数将元素分配到对应数组"
+    ],
+    "timeComplexity": "O(n)",
+    "spaceComplexity": "O(n)",
+    "code": "function partitionArray(arr: any[], predicate: (item: any) => boolean): any[][] {\n  const trueArr = [];\n  const falseArr = [];\n  arr.forEach(item =>\n    predicate(item) ? trueArr.push(item) : falseArr.push(item)\n  );\n  return [trueArr, falseArr];\n}"
+  },
+  {
+    "id": "zip",
+    "title": "数组zip操作",
+    "type": "变换",
+    "description": "将多个数组合并为一个元组数组",
+    "icon": "🤐",
+    "category": "advanced",
+    "steps": [
+      "1. 获取所有输入数组的最大长度",
+      "2. 创建新数组（长度=最大长度）",
+      "3. 为每个位置创建元组（包含各数组当前位置元素）"
+    ],
+    "timeComplexity": "O(n)",
+    "spaceComplexity": "O(n)",
+    "code": "function zipArrays(...arrays: any[][]): any[][] {\n  const maxLength = Math.max(...arrays.map(arr => arr.length));\n  return Array.from({ length: maxLength }, (_, i) =>\n    arrays.map(arr => arr[i])\n  );\n}"
+  },
+  {
+    "id": "cartesian",
+    "title": "笛卡尔积",
+    "type": "组合",
+    "description": "计算多个数组的笛卡尔积，生成所有可能的组合。笛卡尔积表示两个集合中所有可能的有序对。",
+    "icon": "✖️",
+    "category": "advanced",
+    "steps": [
+      "1. 初始化为包含空数组的数组",
+      "2. 对每个输入数组执行reduce操作",
+      "3. 将当前数组元素与累积结果中的每个数组组合"
+    ],
+    "timeComplexity": "O(∏nᵢ)",
+    "spaceComplexity": "O(∏nᵢ)",
+    "code": "function cartesianProduct<T>(...arrays: T[][]): T[][] {\n  return arrays.reduce((acc, arr) =>\n    acc.flatMap(x =>\n      arr.map(y => [...x, y])\n    ), [[]]\n  );\n}"
+  },
+  {
+    "id": "permutation",
+    "title": "全排列",
+    "type": "统计",
+    "description": "生成数组元素的所有可能排列",
+    "icon": "🔄",
+    "category": "advanced",
+    "steps": [
+      "1. 基线条件：长度≤1时返回单元素数组",
+      "2. 遍历每个元素作为当前位置候选",
+      "3. 递归生成剩余元素的全排列",
+      "4. 将当前元素与每个排列组合"
+    ],
+    "timeComplexity": "O(n!)",
+    "spaceComplexity": "O(n!)",
+    "code": "function permutations<T>(arr: T[]): T[][] {\n  if (arr.length <= 1) return [arr];\n\n  const result: T[][] = [];\n  for (let i = 0; i < arr.length; i++) {\n    const current = arr[i];\n    const remaining = [...arr.slice(0, i), ...arr.slice(i + 1)];\n    const remainingPerms = permutations(remaining);\n    for (const perm of remainingPerms) {\n      result.push([current, ...perm]);\n    }\n  }\n  return result;\n}"
+  },
+  {
+    "id": "sliding-window",
+    "title": "滑动窗口最大值",
+    "type": "统计",
+    "description": "使用双端队列高效求解滑动窗口最大值",
+    "icon": "📊",
+    "category": "advanced",
+    "steps": [
+      "1. 初始化结果数组和双端队列（存索引）",
+      "2. 遍历数组元素：",
+      "   a. 移除越界的队列头部",
+      "   b. 从尾部移除小于当前值的元素",
+      "   c. 将当前索引加入队列",
+      "   d. 窗口形成后记录队列头部对应值"
+    ],
+    "timeComplexity": "O(n)",
+    "spaceComplexity": "O(k)",
+    "code": "function maxSlidingWindow(nums: number[], k: number): number[] {\n  const result: number[] = [];\n  const deque: number[] = [];\n\n  for (let i = 0; i < nums.length; i++) {\n    if (deque.length > 0 && deque[0] === i - k) {\n      deque.shift();\n    }\n    while (deque.length > 0 && nums[i] >= nums[deque[deque.length - 1]]) {\n      deque.pop();\n    }\n    deque.push(i);\n    if (i >= k - 1) {\n      result.push(nums[deque[0]]);\n    }\n  }\n  return result;\n}"
+  },
+  {
+    "id": "lis",
+    "title": "最长递增子序列",
+    "type": "统计",
+    "description": "使用动态规划和二分查找高效求解最长递增子序列。最长递增子序列表示一个序列中所有元素都递增的子序列。",
+    "icon": "📈",
+    "category": "advanced",
+    "steps": [
+      "1. 初始化tails数组（存储递增序列尾元素）",
+      "2. 遍历每个数字：",
+      "   a. 二分查找插入位置",
+      "   b. 替换tails中该位置的值",
+      "   c. 若位置在末尾则扩展数组",
+      "3. tails长度即为结果"
+    ],
+    "timeComplexity": "O(n log n)",
+    "spaceComplexity": "O(n)",
+    "code": "function longestIncreasingSubsequence(nums: number[]): number {\n  const tails: number[] = [];\n  for (const num of nums) {\n    let left = 0, right = tails.length;\n    while (left < right) {\n      const mid = Math.floor((left + right) / 2);\n      if (tails[mid] < num) left = mid + 1;\n      else right = mid;\n    }\n    if (left === tails.length) tails.push(num);\n    else tails[left] = num;\n  }\n  return tails.length;\n}"
+  },
+  {
+    "id": "difference-array",
+    "title": "差分数组",
+    "type": "统计",
+    "description": "高效处理数组区间更新操作。差分数组表示一个序列中每个元素与前一个元素的差。",
+    "icon": "🧮",
+    "category": "advanced",
+    "steps": [
+      "1. 构造差分数组：diff[i]=nums[i]-nums[i-1]",
+      "2. 区间更新：",
+      "   a. 起始位置加增量",
+      "   b. 结束位置后一位减增量",
+      "3. 还原数组：前缀和累加diff数组"
+    ],
+    "timeComplexity": "O(1) 更新 / O(n) 查询",
+    "spaceComplexity": "O(n)",
+    "code": "class DifferenceArray {\n  private diff: number[];\n\n  constructor(nums: number[]) {\n    this.diff = new Array(nums.length);\n    this.diff[0] = nums[0];\n    for (let i = 1; i < nums.length; i++) {\n      this.diff[i] = nums[i] - nums[i - 1];\n    }\n  }\n\n  increment(start: number, end: number, val: number): void {\n    this.diff[start] += val;\n    if (end + 1 < this.diff.length) {\n      this.diff[end + 1] -= val;\n    }\n  }\n\n  getResult(): number[] {\n    const result = new Array(this.diff.length);\n    result[0] = this.diff[0];\n    for (let i = 1; i < this.diff.length; i++) {\n      result[i] = result[i - 1] + this.diff[i];\n    }\n    return result;\n  }\n}"
+  },
+  {
+    "id": "prefix-sum",
+    "title": "前缀和数组",
+    "type": "统计",
+    "description": "高效计算数组任意区间和",
+    "icon": "∑",
+    "category": "advanced",
+    "steps": [
+      "1. 构建前缀和数组：prefix[i+1]=prefix[i]+nums[i]",
+      "2. 初始化prefix[0]=0",
+      "3. 区间和计算：prefix[j+1]-prefix[i]"
+    ],
+    "timeComplexity": "O(n) 预处理 / O(1) 查询",
+    "spaceComplexity": "O(n)",
+    "code": "class PrefixSum {\n  private prefix: number[];\n\n  constructor(nums: number[]) {\n    this.prefix = new Array(nums.length + 1).fill(0);\n    for (let i = 0; i < nums.length; i++) {\n      this.prefix[i + 1] = this.prefix[i] + nums[i];\n    }\n  }\n\n  queryRange(i: number, j: number): number {\n    return this.prefix[j + 1] - this.prefix[i];\n  }\n}"
+  },
+  {
+    "id": "quickselect",
+    "title": "快速选择算法",
+    "type": "统计",
+    "description": "高效查找数组中第K大的元素。快速选择算法是快速排序的变种，用于在未排序的数组中找到第K大的元素。",
+    "icon": "⚡",
+    "category": "advanced",
+    "steps": [
+      "1. 确定目标索引（第k大→n-k）",
+      "2. 递归分区：",
+      "   a. 选取基准分区数组",
+      "   b. 根据分区索引与目标位置关系",
+      "   c. 选择左/右分区递归",
+      "3. 分区函数：",
+      "   a. 选取右端为基准",
+      "   b. 移动小于基准的元素",
+      "   c. 交换基准到正确位置"
+    ],
+    "timeComplexity": "平均 O(n) / 最差 O(n²)",
+    "spaceComplexity": "O(1)",
+    "code": "function findKthLargest(nums: number[], k: number): number {\n  const indexToFind = nums.length - k;\n  return quickSelect(nums, 0, nums.length - 1, indexToFind);\n}\n\nfunction quickSelect(arr: number[], left: number, right: number, indexToFind: number): number {\n  const partitionIndex = partition(arr, left, right);\n  if (partitionIndex === indexToFind) return arr[partitionIndex];\n  if (partitionIndex < indexToFind)\n    return quickSelect(arr, partitionIndex + 1, right, indexToFind);\n  else\n    return quickSelect(arr, left, partitionIndex - 1, indexToFind);\n}\n\nfunction partition(arr: number[], left: number, right: number): number {\n  const pivot = arr[right];\n  let partitionIndex = left;\n  for (let j = left; j < right; j++) {\n    if (arr[j] < pivot) {\n      [arr[partitionIndex], arr[j]] = [arr[j], arr[partitionIndex]];\n      partitionIndex++;\n    }\n  }\n  [arr[partitionIndex], arr[right]] = [arr[right], arr[partitionIndex]];\n  return partitionIndex;\n}"
+  },
+  {
+    "id": "array-shuffle",
+    "title": "数组洗牌",
+    "type": "变换",
+    "description": "使用Fisher-Yates算法高效随机打乱数组顺序",
+    "icon": "🎲",
+    "category": "advanced",
+    "steps": [
+      "1. 从后向前遍历数组",
+      "2. 为每个位置生成随机索引(0到当前位置)",
+      "3. 交换当前元素与随机位置元素"
+    ],
+    "timeComplexity": "O(n)",
+    "spaceComplexity": "O(1)",
+    "code": "function shuffleArray<T>(arr: T[]): T[] {\n  const result = [...arr];\n  for (let i = result.length - 1; i > 0; i--) {\n    const j = Math.floor(Math.random() * (i + 1));\n    [result[i], result[j]] = [result[j], result[i]];\n  }\n  return result;\n}"
+  },
+  {
+    "id": "array-group",
+    "title": "数组分组",
+    "type": "分类",
+    "description": "根据指定键函数将数组元素分组到字典对象",
+    "icon": "🗂️",
+    "category": "advanced",
+    "steps": [
+      "1. 初始化空对象作为结果容器",
+      "2. 遍历数组的每个元素",
+      "3. 使用键函数计算分组键",
+      "4. 将元素添加到对应分组数组"
+    ],
+    "timeComplexity": "O(n)",
+    "spaceComplexity": "O(n)",
+    "code": "function groupBy<T>(arr: T[], keyFunc: (item: T) => string): Record<string, T[]> {\n  return arr.reduce((acc, item) => {\n    const key = keyFunc(item);\n    if (!acc[key]) acc[key] = [];\n    acc[key].push(item);\n    return acc;\n  }, {} as Record<string, T[]>);\n}"
+  },
+  {
+    "id": "array-max-subarray",
+    "title": "最大子数组和",
+    "type": "统计",
+    "description": "使用Kadane算法查找连续子数组的最大和",
+    "icon": "📊",
+    "category": "advanced",
+    "steps": [
+      "1. 初始化当前和与最大和为第一个元素",
+      "2. 遍历数组(从第二个元素开始)",
+      "3. 更新当前和(取当前元素或当前和+当前元素)",
+      "4. 更新最大和(取当前和与之前最大和的较大值)"
+    ],
+    "timeComplexity": "O(n)",
+    "spaceComplexity": "O(1)",
+    "code": "function maxSubarraySum(nums: number[]): number {\n  if (nums.length === 0) return 0;\n  \n  let currentSum = nums[0];\n  let maxSum = nums[0];\n  \n  for (let i = 1; i < nums.length; i++) {\n    currentSum = Math.max(nums[i], currentSum + nums[i]);\n    maxSum = Math.max(maxSum, currentSum);\n  }\n  \n  return maxSum;\n}"
+  },
+  {
+    "id": "array-spiral",
+    "title": "螺旋矩阵",
+    "type": "变换",
+    "description": "将二维数组按螺旋顺序转换为一维数组",
+    "icon": "🌀",
+    "category": "advanced",
+    "steps": [
+      "1. 初始化方向(右、下、左、上)和边界",
+      "2. 按当前方向遍历直到边界",
+      "3. 调整边界并切换到下一个方向",
+      "4. 重复直到所有元素遍历完成"
+    ],
+    "timeComplexity": "O(m*n)",
+    "spaceComplexity": "O(m*n)",
+    "code": "function spiralOrder(matrix: number[][]): number[] {\n  if (matrix.length === 0) return [];\n  \n  const result: number[] = [];\n  let top = 0, bottom = matrix.length - 1;\n  let left = 0, right = matrix[0].length - 1;\n  \n  while (top <= bottom && left <= right) {\n    // Traverse right\n    for (let i = left; i <= right; i++) {\n      result.push(matrix[top][i]);\n    }\n    top++;\n    \n    // Traverse down\n    for (let i = top; i <= bottom; i++) {\n      result.push(matrix[i][right]);\n    }\n    right--;\n    \n    if (top <= bottom) {\n      // Traverse left\n      for (let i = right; i >= left; i--) {\n        result.push(matrix[bottom][i]);\n      }\n      bottom--;\n    }\n    \n    if (left <= right) {\n      // Traverse up\n      for (let i = bottom; i >= top; i--) {\n        result.push(matrix[i][left]);\n      }\n      left++;\n    }\n  }\n  \n  return result;\n}"
+  },
+  {
+    "id": "array-rainwater",
+    "title": "接雨水问题",
+    "type": "统计",
+    "description": "计算柱子之间能容纳的雨水量",
+    "icon": "🌧️",
+    "category": "advanced",
+    "steps": [
+      "1. 初始化左右指针和左右最大高度",
+      "2. 当左指针小于右指针时循环",
+      "3. 更新左右两侧最大高度",
+      "4. 根据较小高度计算当前可存水量",
+      "5. 移动较小高度对应的指针"
+    ],
+    "timeComplexity": "O(n)",
+    "spaceComplexity": "O(1)",
+    "code": "function trapRainwater(heights: number[]): number {\n  let left = 0, right = heights.length - 1;\n  let leftMax = 0, rightMax = 0;\n  let water = 0;\n  \n  while (left < right) {\n    if (heights[left] < heights[right]) {\n      if (heights[left] >= leftMax) {\n        leftMax = heights[left];\n      } else {\n        water += leftMax - heights[left];\n      }\n      left++;\n    } else {\n      if (heights[right] >= rightMax) {\n        rightMax = heights[right];\n      } else {\n        water += rightMax - heights[right];\n      }\n      right--;\n    }\n  }\n  \n  return water;\n}"
+  },
+  {
+    "id": "array-product",
+    "title": "除自身外的乘积",
+    "type": "变换",
+    "description": "计算数组中每个元素除自身外所有元素的乘积",
+    "icon": "✖️",
+    "category": "advanced",
+    "steps": [
+      "1. 初始化结果数组和左右乘积变量",
+      "2. 从左向右遍历计算左侧乘积",
+      "3. 从右向左遍历计算右侧乘积",
+      "4. 合并左右乘积得到最终结果"
+    ],
+    "timeComplexity": "O(n)",
+    "spaceComplexity": "O(1)",
+    "code": "function productExceptSelf(nums: number[]): number[] {\n  const n = nums.length;\n  const result = new Array(n);\n  \n  // 计算左侧乘积\n  result[0] = 1;\n  for (let i = 1; i < n; i++) {\n    result[i] = result[i - 1] * nums[i - 1];\n  }\n  \n  // 计算右侧乘积并合并\n  let rightProduct = 1;\n  for (let i = n - 1; i >= 0; i--) {\n    result[i] *= rightProduct;\n    rightProduct *= nums[i];\n  }\n  \n  return result;\n}"
+  },
+  {
+    "id": "array-missing-positive",
+    "title": "缺失的第一个正数",
+    "type": "查找",
+    "description": "在未排序数组中查找缺失的最小正整数",
+    "icon": "🔍",
+    "category": "advanced",
+    "steps": [
+      "1. 处理非正数元素(设为n+1)",
+      "2. 遍历数组标记存在元素(索引对应值取负)",
+      "3. 查找第一个未标记的正数索引",
+      "4. 若都标记则返回n+1"
+    ],
+    "timeComplexity": "O(n)",
+    "spaceComplexity": "O(1)",
+    "code": "function firstMissingPositive(nums: number[]): number {\n  const n = nums.length;\n  \n  // 将所有非正数标记为n+1\n  for (let i = 0; i < n; i++) {\n    if (nums[i] <= 0) {\n      nums[i] = n + 1;\n    }\n  }\n  \n  // 标记存在的正数\n  for (let i = 0; i < n; i++) {\n    const num = Math.abs(nums[i]);\n    if (num <= n) {\n      nums[num - 1] = -Math.abs(nums[num - 1]);\n    }\n  }\n  \n  // 查找第一个未标记的正数\n  for (let i = 0; i < n; i++) {\n    if (nums[i] > 0) {\n      return i + 1;\n    }\n  }\n  \n  return n + 1;\n}"
+  }
+]

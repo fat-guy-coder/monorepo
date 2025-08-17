@@ -1,7 +1,7 @@
 <template>
   <div class="iterator-container">
     <header class="header">
-      <h1 class="title">JavaScript 迭代器详解</h1>
+      <h1 class="title">JavaScript 迭代器介绍</h1>
       <div class="subtitle">掌握遍历数据结构的核心机制</div>
     </header>
 
@@ -269,8 +269,6 @@ const iteratorExamples = ref([
 </script>
 
 <style lang="less" scoped>
-
-
 // 颜色变量
 @primary-color: #4a6cf7;
 @secondary-color: #6e45e2;

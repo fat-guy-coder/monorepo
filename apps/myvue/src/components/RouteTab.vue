@@ -31,7 +31,6 @@
       <template #tab>
         <div
           @click.right.prevent.stop="openMenu(pane.path, $event, index)"
-          :id="pane.path"
           :data-id="pane.path"
           class="tab-item"
           :draggable="pane.path !== '/'"
@@ -99,7 +98,6 @@ const openMenu = (targetKey: string, e: MouseEvent, index: number) => {
   } else {
     emit('toggleShowMenu', !showContextMenu)
   }
-  console.log('openMenu')
   position.value = { X: e.clientX, Y: e.clientY }
   currentIndex.value = index
 }

@@ -29,7 +29,12 @@
       alignItems: gridOptions.alignItems,
       gap: `${gridOptions.gap}px`,
     }">
-      <div v-for="(item, index) in gridItems" :key="index" class="grid-item" :style="{
+      <div v-for="(item, index) in gridItems" :key="index" class="grid-item" :style="index === selectedItem ? {
+        gridColumn: gridItems[selectedItem].gridColumn,
+        gridRow: gridItems[selectedItem].gridRow,
+        alignSelf: gridItems[selectedItem].alignSelf,
+        backgroundColor: itemColors[index],
+      } : {
         gridColumn: item.gridColumn,
         gridRow: item.gridRow,
         alignSelf: item.alignSelf,
@@ -52,7 +57,15 @@
   gap: {{ gridOptions.gap }}px;
   justify-content: {{ gridOptions.justifyContent }};
   align-items: {{ gridOptions.alignItems }};
-}</code></pre>
+}
+
+.grid-item:nth-child({{ selectedItem + 1 }}) {
+  grid-column: {{ gridItems[selectedItem].gridColumn }};
+  grid-row: {{ gridItems[selectedItem].gridRow }};
+  align-self: {{ gridItems[selectedItem].alignSelf }};
+}
+
+</code></pre>
     </div>
 
     <div class="controls-section">
@@ -113,6 +126,7 @@ column-gap: 30px;//列间距
         <div class="control-item">
           <h3>grid-column</h3>
           <button v-for="col in columnSpanPresets" :key="col.value"
+            :class="{ active: gridItems[selectedItem].gridColumn === col.value }"
             @click="updateItemProperty('gridColumn', col.value)">
             {{ col.label }}
           </button>
@@ -120,7 +134,9 @@ column-gap: 30px;//列间距
 
         <div class="control-item">
           <h3>grid-row</h3>
-          <button v-for="row in rowSpanPresets" :key="row.value" @click="updateItemProperty('gridRow', row.value)">
+          <button v-for="row in rowSpanPresets" :key="row.value"
+            :class="{ active: gridItems[selectedItem].gridRow === row.value }"
+            @click="updateItemProperty('gridRow', row.value)">
             {{ row.label }}
           </button>
         </div>
@@ -128,6 +144,7 @@ column-gap: 30px;//列间距
         <div class="control-item">
           <h3>对齐覆盖</h3>
           <button v-for="align in selfAlignPresets" :key="align.value"
+            :class="{ active: gridItems[selectedItem].alignSelf === align.value }"
             @click="updateItemProperty('alignSelf', align.value)">
             {{ align.label }}
           </button>

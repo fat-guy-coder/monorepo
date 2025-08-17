@@ -1,10 +1,13 @@
 <template>
   <div class="spread-operator-container">
-    <h1 class="main-title">ES6展开运算符（...）详解</h1>
+    <h1 class="main-title">ES6展开运算符（...）介绍</h1>
 
     <div class="card concept">
       <h2>概念与定义</h2>
-      <p>展开运算符（Spread Operator）是ES6引入的一种语法，使用三个连续的点（<code>...</code>）表示。它允许在需要多个元素的地方展开可迭代对象（如数组、字符串、Map、Set等）或对象字面量。</p>
+      <p>
+        展开运算符（Spread
+        Operator）是ES6引入的一种语法，使用三个连续的点（<code>...</code>）表示。它允许在需要多个元素的地方展开可迭代对象（如数组、字符串、Map、Set等）或对象字面量。
+      </p>
       <div class="highlight-box">
         <pre><code>// 基本语法
 const newArray = [...iterable];
@@ -197,12 +200,15 @@ sum(...numbers); // 6</code></pre>
 </script>
 
 <style lang="less" scoped>
-
 .spread-operator-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 24px;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family:
+    'Inter',
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
   color: #333;
   background: #f8fafc;
   line-height: 1.6;
@@ -220,13 +226,15 @@ sum(...numbers); // 6</code></pre>
   .card {
     background: white;
     border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     padding: 24px;
     margin-bottom: 24px;
-    transition: transform 0.2s, box-shadow 0.2s;
+    transition:
+      transform 0.2s,
+      box-shadow 0.2s;
 
     &:hover {
-      box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
       transform: translateY(-2px);
     }
 
@@ -350,7 +358,8 @@ sum(...numbers); // 6</code></pre>
       grid-template-columns: 1fr;
     }
 
-    .pros, .cons {
+    .pros,
+    .cons {
       ul {
         padding-left: 20px;
         margin: 0;

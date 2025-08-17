@@ -1,0 +1,125 @@
+[
+  {
+    "id": "reverseList",
+    "title": "反转链表",
+    "description": "将链表中的节点顺序反转，使尾节点成为头节点",
+    "timeComplexity": "O(n)",
+    "spaceComplexity": "O(1)",
+    "coreIdea": "使用三个指针（prev, current, next）遍历链表并改变指向",
+    "codeSnippet": "function reverseList(head) {\n  let prev = null;\nlet current = head;\nwhile (current) {\nconst next = current.next;\ncurrent.next = prev;\nprev = current;\ncurrent = next;\n}\nreturn prev;\n}",
+    "difficulty": "easy",
+    "tags": ["双指针", "基础操作"]
+  },
+  {
+    "id": "mergeTwoLists",
+    "title": "合并两个有序链表",
+    "description": "将两个升序链表合并为一个新的升序链表",
+    "timeComplexity": "O(n+m)",
+    "spaceComplexity": "O(1)",
+    "coreIdea": "使用虚拟头节点，比较两个链表节点大小，逐个连接",
+    "codeSnippet": "function mergeTwoLists(l1, l2) {\nconst dummy = new ListNode(-1);\nlet current = dummy;\nwhile (l1 && l2) {\nif (l1.val < l2.val) {\ncurrent.next = l1;\nl1 = l1.next;\n} else {\ncurrent.next = l2;\nl2 = l2.next;\n}\ncurrent = current.next;\n}\ncurrent.next = l1 || l2;\nreturn dummy.next;\n}",
+
+    "difficulty": "easy",
+    "tags": ["双指针", "归并"]
+  },
+  {
+    "id": "middleNode",
+    "title": "链表的中间结点",
+    "description": "找到链表的中间节点，如果有两个中间节点则返回第二个",
+    "timeComplexity": "O(n)",
+    "spaceComplexity": "O(1)",
+    "coreIdea": "使用快慢指针，快指针每次走两步，慢指针每次走一步",
+    "codeSnippet": "function middleNode(head) {\nlet slow = head;\nlet fast = head;\nwhile (fast && fast.next) {\nslow = slow.next;\nfast = fast.next.next;\n}\nreturn slow;\n}",
+
+    "difficulty": "easy",
+    "tags": ["快慢指针"]
+  },
+  {
+    "id": "removeNthFromEnd",
+    "title": "删除链表的倒数第N个结点",
+    "description": "删除链表的倒数第n个节点并返回头节点",
+    "timeComplexity": "O(n)",
+    "spaceComplexity": "O(1)",
+    "coreIdea": "使用快慢指针，快指针先走n步，然后快慢指针一起移动",
+    "codeSnippet": "function removeNthFromEnd(head, n) {\nconst dummy = new ListNode(0, head);\nslow = dummy;\nfast = dummy;\nfor (let i = 0; i <= n; i++) {\nfast = fast.next;\n}\nwhile (fast) {\nslow = slow.next;\nfast = fast.next;\n}\nslow.next = slow.next.next;\nreturn dummy.next;\n}",
+    "difficulty": "medium",
+    "tags": ["双指针", "虚拟头节点"]
+  },
+  {
+    "id": "hasCycle",
+    "title": "环形链表检测",
+    "description": "判断链表中是否存在环",
+    "timeComplexity": "O(n)",
+    "spaceComplexity": "O(1)",
+    "coreIdea": "Floyd判圈算法（龟兔赛跑），快指针每次走两步，慢指针走一步",
+    "codeSnippet": "function hasCycle(head) {\nif (!head) return false;\nlet slow = head;\nlet fast = head.next;\nwhile (fast && fast.next) {\nif (slow === fast) return true;\nslow = slow.next;\nfast = fast.next.next;\n}\nreturn false;\n}",
+    "difficulty": "easy",
+    "tags": ["快慢指针", "Floyd算法"]
+  },
+  {
+    "id": "detectCycle",
+    "title": "环形链表入口点",
+    "description": "如果链表有环，找到环的入口节点",
+    "timeComplexity": "O(n)",
+    "spaceComplexity": "O(1)",
+    "coreIdea": "先使用快慢指针找到相遇点，然后一个指针从头开始，另一个从相遇点开始",
+    "codeSnippet": "function detectCycle(head) {\nif (!head) return null;\nlet slow = head;\nlet fast = head;\nlet hasCycle = false;\nwhile (fast && fast.next) {\nslow = slow.next;\nfast = fast.next.next;\nif (slow === fast) {\nhasCycle = true;\nbreak;\n}\n}\nif (!hasCycle) return null;\nslow = head;\nwhile (slow !== fast) {\nslow = slow.next;\nfast = fast.next;\n}\nreturn slow;\n}",
+    "difficulty": "medium",
+    "tags": ["快慢指针", "Floyd算法"]
+  },
+  {
+    "id": "getIntersectionNode",
+    "title": "相交链表",
+    "description": "找到两个链表相交的起始节点",
+    "timeComplexity": "O(n+m)",
+    "spaceComplexity": "O(1)",
+    "coreIdea": "双指针分别遍历两个链表，到达尾部后交换到另一个链表头部",
+    "codeSnippet": "function getIntersectionNode(headA, headB) {\nlet pA = headA;\nlet pB = headB;\nwhile (pA !== pB) {\npA = pA ? pA.next : headB;\npB = pB ? pB.next : headA;\n}\nreturn pA;\n}",
+    "difficulty": "easy",
+    "tags": ["双指针", "链表遍历"]
+  },
+  {
+    "id": "isPalindrome",
+    "title": "回文链表",
+    "description": "判断链表是否为回文结构",
+    "timeComplexity": "O(n)",
+    "spaceComplexity": "O(1)",
+    "coreIdea": "找到中点，反转后半部分，然后比较前后两部分",
+    "codeSnippet": "function isPalindrome(head) {\nlet slow = head;\nlet fast = head;\nwhile (fast && fast.next) {\nslow = slow.next;\nfast = fast.next.next;\n}\nlet prev = null;\nwhile (slow) {\nconst next = slow.next;\nslow.next = prev;\nprev = slow;\nslow = next;\n}\nlet left = head;\nlet right = prev;\nwhile (right) {\nif (left.val !== right.val) return false;\nleft = left.next;\nright = right.next;\n}\nreturn true;\n}",
+    "difficulty": "medium",
+    "tags": ["快慢指针", "链表反转"]
+  },
+  {
+    "id": "sortList",
+    "title": "链表排序",
+    "description": "在O(n log n)时间复杂度和常数级空间复杂度下对链表进行排序",
+    "timeComplexity": "O(n log n)",
+    "spaceComplexity": "O(log n)",
+    "coreIdea": "使用归并排序，先分割链表再合并",
+    "codeSnippet": "function sortList(head) {\nif (!head || !head.next) return head;\nlet slow = head;\nlet fast = head.next;\nwhile (fast && fast.next) {\nslow = slow.next;\nfast = fast.next.next;\n}\nconst mid = slow.next;\nslow.next = null;\nconst left = sortList(head);\nconst right = sortList(mid);\nreturn merge(left, right);\n}",
+    "difficulty": "medium",
+    "tags": ["归并排序", "递归"]
+  },
+  {
+    "id": "rotateRight",
+    "title": "旋转链表",
+    "description": "将链表每个节点向右移动k个位置",
+    "timeComplexity": "O(n)",
+    "spaceComplexity": "O(1)",
+    "coreIdea": "先成环，然后找到新的头节点并断开",
+    "codeSnippet": "function rotateRight(head, k) {\nif (!head || k === 0) return head;\nlet len = 1;\nlet tail = head;\nwhile (tail.next) {\ntail = tail.next;\nlen++;\n}\ntail.next = head;\nconst steps = len - (k % len);\nlet newTail = head;\nfor (let i = 0; i < steps - 1; i++) {\nnewTail = newTail.next;\n}\nconst newHead = newTail.next;\nnewTail.next = null;\nreturn newHead;\n}",
+    "difficulty": "medium",
+    "tags": ["链表成环", "链表遍历"]
+  },
+  {
+    "id": "oddEvenList",
+    "title": "链表的奇偶重排",
+    "description": "将链表的奇数节点和偶数节点分别排在一起",
+    "timeComplexity": "O(n)",
+    "spaceComplexity": "O(1)",
+    "coreIdea": "使用两个指针，一个指向奇数节点，一个指向偶数节点",
+    "codeSnippet": "function oddEvenList(head) {\nif (!head || !head.next) return head;\nlet odd = head;\nlet even = head.next;\nlet evenHead = even;\nwhile (even && even.next) {\nodd.next = even.next;\nodd = odd.next;\neven.next = odd.next;\neven = even.next;\n}\nodd.next = evenHead;\nreturn head;\n}",
+    "difficulty": "medium",
+    "tags": ["双指针", "链表遍历"]
+  }
+]

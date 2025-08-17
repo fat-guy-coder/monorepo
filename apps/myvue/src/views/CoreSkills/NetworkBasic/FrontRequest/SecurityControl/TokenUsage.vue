@@ -13,7 +13,9 @@
             <div class="concept-card">
               <div class="concept-icon">🔑</div>
               <h3>什么是Token</h3>
-              <p>Token是服务器生成的加密字符串，用于验证用户身份和权限。它取代了传统的Session机制，成为现代Web应用的标准身份验证方式。</p>
+              <p>
+                Token是服务器生成的加密字符串，用于验证用户身份和权限。它取代了传统的Session机制，成为现代Web应用的标准身份验证方式。
+              </p>
             </div>
             <div class="concept-card">
               <div class="concept-icon">🔄</div>
@@ -35,29 +37,43 @@
               <div class="composition-item">
                 <h3>Header</h3>
                 <p>包含令牌类型和签名算法</p>
-                <pre>{
+                <pre>
+{
   "alg": "HS256",
   "typ": "JWT"
-}</pre>
+}</pre
+                >
+                <h4>编码：base64UrlEncode(其他hash算法)</h4>
               </div>
               <div class="composition-item">
                 <h3>Payload</h3>
                 <p>包含声明（用户信息、权限等）</p>
-                <pre>{
+                <pre>
+{
   "sub": "1234567890",
   "name": "John Doe",
   "admin": true,
   "exp": 1620000000
-}</pre>
+}</pre
+                >
+                <h4>编码：base64UrlEncode(其他hash算法)</h4>
               </div>
               <div class="composition-item">
                 <h3>Signature</h3>
                 <p>使用密钥对编码后的Header和Payload进行签名</p>
-                <pre>HMACSHA256(
-  base64UrlEncode(header) + "." +
-  base64UrlEncode(payload),
-  secret
-)</pre>
+                <pre>
+HMACSHA256(//使用(头里面设置的算法)HMAC算法，使用服务器端密钥对编码后的Header和Payload进行签名
+  base64UrlEncode(header) + "." +//编码后的Header和Payload
+  base64UrlEncode(payload),//编码后的Header和Payload
+  secret//服务器端密钥
+)</pre
+                >
+              </div>
+              <div class="composition-item">
+                <h3>token</h3>
+                <p>
+                  token=base64UrlEncode(header) + "." + base64UrlEncode(payload) + "." + signature
+                </p>
               </div>
             </div>
           </section>
@@ -249,6 +265,77 @@
     </div>
 
     <section class="section">
+      <h2>Access Token 与 Refresh Token 介绍</h2>
+      <div class="token-detail-container">
+        <div class="token-detail-card">
+          <h3>Access Token（访问令牌）</h3>
+          <p>
+            <strong>Access Token</strong>
+            是用户成功登录后，服务器颁发给前端的短期有效令牌。前端每次请求受保护的资源或API时，都需要携带该令牌，服务器通过验证令牌来判断用户身份和权限。
+          </p>
+          <ul>
+            <li>有效期短（如几分钟到一小时）</li>
+            <li>暴露风险低，适合频繁校验</li>
+            <li>通常存储在内存、localStorage或cookie中</li>
+          </ul>
+        </div>
+        <div class="token-detail-card">
+          <h3>Refresh Token（刷新令牌）</h3>
+          <p>
+            <strong>Refresh Token</strong> 是一种长期有效的令牌，主要用于获取新的 Access Token。当
+            Access Token 过期后，前端可以用 Refresh Token 向服务器申请新的 Access
+            Token，而无需重新登录。
+          </p>
+          <ul>
+            <li>有效期长（如7天、30天）</li>
+            <li>只在需要续期时发送，暴露频率低</li>
+            <li>建议只存储在 HttpOnly Cookie，防止 XSS 攻击</li>
+          </ul>
+        </div>
+      </div>
+      <div class="why-two-tokens">
+        <h3>为什么需要 Access Token 和 Refresh Token 两种令牌？</h3>
+        <ol>
+          <li>
+            <strong>安全性提升：</strong>Access Token
+            有效期短，即使被窃取，攻击者可利用的时间也有限。Refresh Token
+            只在续期时使用，暴露频率低，降低被盗风险。
+          </li>
+          <li>
+            <strong>用户体验更好：</strong>用户 Access Token 过期后，无需重新登录，前端可自动用
+            Refresh Token 换取新令牌，实现“无感续期”。
+          </li>
+          <li>
+            <strong>权限控制灵活：</strong>可以单独吊销 Refresh
+            Token，实现强制下线等安全策略，而不影响已发放的 Access Token。
+          </li>
+          <li>
+            <strong>分离职责：</strong>Access Token 只用于访问资源，Refresh Token
+            只用于续期，降低单一令牌被滥用的风险。
+          </li>
+        </ol>
+        <div class="tips">
+          <strong>小贴士：</strong>前端应避免将 Refresh Token 暴露给 JavaScript，推荐存储在 HttpOnly
+          Cookie 中，最大限度防止 XSS 攻击。
+        </div>
+      </div>
+
+      <div class="why-two-tokens">
+        <h3>1.通过 Set-Cookie 响应头，将长期有效的 Refresh Token 设置为 HttpOnly Cookie</h3>
+        <h3>2.Access Token 过期时：自动用 Refresh Token 接口 刷新 Access Token</h3>
+        <h3>
+          3.HttpOnly Cookie 会由浏览器自动携带到同域的请求中（符合 Cookie 的域名、路径、 Secure
+          等属性配置）
+        </h3>
+        <h3>
+          4.当 Access Token 过期时，前端只需向后端的 “刷新令牌接口” 发送请求，浏览器会自动把
+          HttpOnly 的 Refresh Token 带入请求，后端验证通过后返回新的 Access Token，前端用新 Token
+          继续请求接口。
+        </h3>
+      </div>
+    </section>
+
+    <section class="section">
       <h2>Token使用场景</h2>
       <div class="use-cases">
         <div class="use-case-card">
@@ -289,26 +376,31 @@
       <div class="code-examples">
         <div class="code-block">
           <h3>存储Token</h3>
-          <pre>// 存储到localStorage
+          <pre>
+// 存储到localStorage
 localStorage.setItem('auth_token', token);
 
 // 存储到cookie（推荐HttpOnly）
-document.cookie = `auth_token=${token}; Secure; HttpOnly; SameSite=Strict;`;</pre>
+document.cookie = `auth_token=${token}; Secure; HttpOnly; SameSite=Strict;`;</pre
+          >
         </div>
 
         <div class="code-block">
           <h3>发送请求</h3>
-          <pre>// 使用Axios发送带Token的请求
+          <pre>
+// 使用Axios发送带Token的请求
 axios.get('/api/protected', {
   headers: {
     Authorization: `Bearer ${token}`
   }
-});</pre>
+});</pre
+          >
         </div>
 
         <div class="code-block">
           <h3>处理Token过期</h3>
-          <pre>// 使用Axios拦截器处理401错误
+          <pre>
+// 使用Axios拦截器处理401错误
 axios.interceptors.response.use(
   response => response,
   error => {
@@ -318,33 +410,91 @@ axios.interceptors.response.use(
     }
     return Promise.reject(error);
   }
-);</pre>
+);</pre
+          >
+        </div>
+      </div>
+    </section>
+    <section class="section">
+      <h2>Token安全限制与常见攻击方式</h2>
+      <div class="security-limitations">
+        <ul>
+          <li>
+            <strong>易受XSS攻击：</strong>
+            如果Token存储在<code>localStorage</code>或<code>sessionStorage</code>，一旦前端存在XSS漏洞，攻击者可轻松窃取Token。
+          </li>
+          <li>
+            <strong>Token被盗用：</strong>
+            Token一旦被截获（如通过中间人攻击或浏览器插件），攻击者可冒充用户进行操作，直到Token过期。
+          </li>
+          <li>
+            <strong>Token重放攻击：</strong>
+            攻击者获取到Token后，可以在有效期内多次使用，造成安全隐患。
+          </li>
+          <li>
+            <strong>CSRF风险：</strong>
+            如果Token存储在Cookie且未设置<code>SameSite</code>属性，可能被用于跨站请求伪造攻击。
+          </li>
+          <li>
+            <strong>刷新Token机制被滥用：</strong>
+            如果Refresh Token保护不当，攻击者可长期维持会话，难以及时失效。
+          </li>
+        </ul>
+        <h3>常见破解手段</h3>
+        <ul>
+          <li>
+            <strong>XSS脚本注入：</strong>
+            通过注入恶意脚本，读取<code>localStorage</code>或<code>sessionStorage</code>中的Token。
+          </li>
+          <li>
+            <strong>中间人攻击（MITM）：</strong>
+            在未加密的HTTP传输中拦截Token，或通过伪造证书窃取Token。
+          </li>
+          <li><strong>社工/钓鱼：</strong> 诱导用户在钓鱼网站输入Token或登录凭据。</li>
+          <li><strong>Token重放：</strong> 捕获有效Token后，在有效期内反复使用，绕过身份验证。</li>
+          <li>
+            <strong>暴力破解：</strong>
+            针对弱签名算法或过期机制不严的Token，尝试伪造或猜测有效Token。
+          </li>
+        </ul>
+        <div class="security-tips">
+          <strong>安全建议：</strong>
+          <ul>
+            <li>优先将Token存储在<code>HttpOnly</code> Cookie，防止JS读取。</li>
+            <li>始终使用HTTPS加密传输Token。</li>
+            <li>Token设置短有效期，并结合Refresh Token机制。</li>
+            <li>对敏感操作增加二次验证（如MFA、多因子认证）。</li>
+            <li>后端校验Token唯一性、来源IP、设备指纹等，防止重放。</li>
+            <li>定期轮换密钥，及时失效被盗Token。</li>
+          </ul>
         </div>
       </div>
     </section>
 
     <footer class="footer">
-      <p>Token是现代Web应用安全架构的核心组件，正确实现Token机制可以显著提升应用的安全性和用户体验</p>
+      <p>
+        Token是现代Web应用安全架构的核心组件，正确实现Token机制可以显著提升应用的安全性和用户体验
+      </p>
     </footer>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref } from 'vue'
 
 // 示例数据
 const tokenLifespans = ref([
   { type: 'Access Token', duration: '15-30分钟', purpose: '短期资源访问' },
   { type: 'Refresh Token', duration: '7-30天', purpose: '获取新Access Token' },
-  { type: 'ID Token', duration: '与Access Token相同', purpose: '传递用户身份信息' }
-]);
+  { type: 'ID Token', duration: '与Access Token相同', purpose: '传递用户身份信息' },
+])
 
 const securityThreats = ref([
   { threat: 'XSS攻击', risk: '高', prevention: '使用HttpOnly Cookie, CSP' },
   { threat: 'CSRF攻击', risk: '中', prevention: 'SameSite Cookie, CSRF Token' },
   { threat: 'Token盗窃', risk: '高', prevention: 'HTTPS, 短有效期, Refresh Token轮换' },
-  { threat: 'Token重放', risk: '中', prevention: 'JTI声明, 短期有效' }
-]);
+  { threat: 'Token重放', risk: '中', prevention: 'JTI声明, 短期有效' },
+])
 </script>
 
 <style lang="less" scoped>
@@ -355,7 +505,9 @@ const securityThreats = ref([
 @text-color: #202124;
 @light-bg: #f8f9fa;
 @border-color: #dadce0;
-@card-shadow: 0 1px 2px rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
+@card-shadow:
+  0 1px 2px rgba(60, 64, 67, 0.3),
+  0 1px 3px 1px rgba(60, 64, 67, 0.15);
 
 * {
   box-sizing: border-box;
@@ -464,8 +616,25 @@ const securityThreats = ref([
   display: flex;
   gap: 20px;
 
-  &>.section {
+  & > .section {
     flex: 1;
+  }
+}
+
+.security-limitations {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  ul {
+    padding-left: 20px;
+    border: 1px solid @border-color;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: @card-shadow;
+    margin-bottom: 20px;
+    li {
+      margin-bottom: 8px;
+    }
   }
 }
 
@@ -473,6 +642,27 @@ const securityThreats = ref([
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 15px;
+}
+
+.token-detail-container {
+  display: flex;
+  gap: 20px;
+  .token-detail-card {
+    flex: 1;
+    border: 1px solid @border-color;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: @card-shadow;
+    margin-bottom: 20px;
+  }
+}
+
+.why-two-tokens {
+  flex: 1;
+  border: 1px solid @border-color;
+  border-radius: 8px;
+  padding: 30px;
+  box-shadow: @card-shadow;
 }
 
 .composition-item {
@@ -620,7 +810,7 @@ const securityThreats = ref([
     align-items: center;
 
     &:before {
-      content: "✓";
+      content: '✓';
       color: @secondary-color;
       font-weight: bold;
       margin-right: 10px;
@@ -738,7 +928,6 @@ table {
 }
 
 @media (max-width: 768px) {
-
   .concept-grid,
   .composition-container,
   .token-types,

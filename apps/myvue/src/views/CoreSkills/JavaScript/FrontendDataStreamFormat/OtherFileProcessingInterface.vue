@@ -1,7 +1,7 @@
 <template>
   <div class="file-apis-container">
     <header class="header">
-      <h1>JavaScript 文件处理接口详解</h1>
+      <h1>JavaScript 文件处理接口介绍</h1>
       <p>探索 FileReader、ReadableStream 和 WritableStream 之外的文件处理能力</p>
     </header>
 
@@ -14,7 +14,10 @@
         </div>
         <div class="content">
           <div class="api-intro">
-            <p>Blob（Binary Large Object）表示不可变的原始数据类文件对象，是 JavaScript 中处理二进制数据的基础。</p>
+            <p>
+              Blob（Binary Large Object）表示不可变的原始数据类文件对象，是 JavaScript
+              中处理二进制数据的基础。
+            </p>
           </div>
 
           <div class="usage">
@@ -86,7 +89,9 @@ console.log(url); // blob:https://example.com/...</code></pre>
         </div>
         <div class="content">
           <div class="api-intro">
-            <p>File 对象继承自 Blob，提供了关于文件的元信息（如文件名、最后修改时间、MIME 类型等）。</p>
+            <p>
+              File 对象继承自 Blob，提供了关于文件的元信息（如文件名、最后修改时间、MIME 类型等）。
+            </p>
           </div>
 
           <div class="usage">
@@ -384,7 +389,9 @@ const text = decoder.decode(decompressedData);</code></pre>
         </div>
         <div class="content">
           <div class="api-intro">
-            <p>提供对沙盒文件系统的访问，允许创建、读取和操作文件和目录（主要用于 Chrome 扩展）。</p>
+            <p>
+              提供对沙盒文件系统的访问，允许创建、读取和操作文件和目录（主要用于 Chrome 扩展）。
+            </p>
           </div>
 
           <div class="usage">
@@ -658,7 +665,7 @@ readDirectory(fs.root);</code></pre>
       padding-left: 12px;
 
       &::before {
-        content: "•";
+        content: '•';
         position: absolute;
         left: 0;
         color: #3b82f6;
@@ -677,7 +684,8 @@ readDirectory(fs.root);</code></pre>
     grid-template-columns: 1fr;
   }
 
-  .pros, .cons {
+  .pros,
+  .cons {
     background: #f8fafc;
     border-radius: 12px;
     padding: 20px;
@@ -775,7 +783,8 @@ pre {
       border-collapse: collapse;
       margin-bottom: 20px;
 
-      th, td {
+      th,
+      td {
         padding: 16px;
         text-align: left;
         border-bottom: 1px solid #e2e8f0;

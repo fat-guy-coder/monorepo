@@ -218,7 +218,7 @@ import { onMounted, ref, onUnmounted } from 'vue'
 const codeText = ref('')
 
 onMounted(async () => {
-  const { code } = await import('./promise.ts')
+  const { code } = await import('./PromiseCorrelation/promise.ts')
   codeText.value = code
 })
 onUnmounted(() => {

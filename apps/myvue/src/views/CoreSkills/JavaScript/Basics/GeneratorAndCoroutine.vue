@@ -1,7 +1,7 @@
 <template>
   <div class="generator-guide">
     <h1 class="title">JavaScript 生成器与协程</h1>
-    <h4>这为进阶知识铺垫，可先了解，后续再深入。<router-link :to="{ name: 'Generator' }">ES6 生成器</router-link></h4>
+    <h4>这为进阶知识铺垫，可先了解，后续再深入。<a @click="handleClick">ES6 生成器</a></h4>
 
     <!-- 概念介绍 -->
     <section class="card concept-section">
@@ -134,6 +134,12 @@ const co = coroutine();
 co.next(); // 启动
 co.next(42); // 传递值
 co.next(100); // 继续处理`;
+
+const emit = defineEmits(['goToByRouteName'])
+
+const handleClick = () => {
+  emit('goToByRouteName', 'Generator')
+}
 </script>
 
 <style lang="less">

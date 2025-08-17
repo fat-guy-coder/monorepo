@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <header class="header">
-      <h1 class="title">JS模块加载引用类型详解</h1>
+      <h1 class="title">JS模块加载引用类型介绍</h1>
       <p class="subtitle">深入理解模块间引用类型共享的"坑"与解决方案</p>
     </header>
 
@@ -16,11 +16,15 @@
       <section class="core-question">
         <h2>核心问题</h2>
         <div class="question-card">
-          <p class="question">1. 导出文件中后续（通过setTimeout异步）改变引用类型中的值，导入文件中的值会变吗？</p>
+          <p class="question">
+            1. 导出文件中后续（通过setTimeout异步）改变引用类型中的值，导入文件中的值会变吗？
+          </p>
           <p class="answer highlight">会变！因为模块导出的是引用类型的引用，而非副本</p>
         </div>
         <div class="question-card">
-          <p class="question">2. 导入文件中改变（通过setTimeout异步）引用类型中的值，导出文件中的值会变吗？</p>
+          <p class="question">
+            2. 导入文件中改变（通过setTimeout异步）引用类型中的值，导出文件中的值会变吗？
+          </p>
           <p class="answer highlight">会变！因为双方共享同一个引用地址</p>
         </div>
       </section>
@@ -31,16 +35,19 @@
           <p>JavaScript模块系统中，对于引用类型的处理遵循以下原则：</p>
           <ul class="principle-list">
             <li>
-              <span class="keyword">引用传递</span>：模块导出的引用类型（对象、数组等）是按引用传递的，而非值传递
+              <span class="keyword">引用传递</span
+              >：模块导出的引用类型（对象、数组等）是按引用传递的，而非值传递
             </li>
             <li>
-              <span class="keyword">单一实例</span>：模块在应用中只被加载一次，导出的对象在整个应用中是单一实例
+              <span class="keyword">单一实例</span
+              >：模块在应用中只被加载一次，导出的对象在整个应用中是单一实例
             </li>
             <li>
               <span class="keyword">共享引用</span>：所有导入该模块的地方，获取的都是同一个引用地址
             </li>
             <li>
-              <span class="keyword">动态关联</span>：当通过该引用修改对象属性时，所有持有该引用的地方都会感知到变化
+              <span class="keyword">动态关联</span
+              >：当通过该引用修改对象属性时，所有持有该引用的地方都会感知到变化
             </li>
           </ul>
           <p class="warning">
@@ -177,7 +184,7 @@ export default createStore();</code></pre>
     </main>
 
     <footer class="footer">
-      <p>JavaScript模块系统详解 &copy; {{ new Date().getFullYear() }}</p>
+      <p>JavaScript模块系统介绍 &copy; {{ new Date().getFullYear() }}</p>
     </footer>
   </div>
 </template>
@@ -272,7 +279,8 @@ export default createStore();</code></pre>
     }
   }
 
-  .principle, .summary {
+  .principle,
+  .summary {
     .card {
       background-color: #fff;
       border-radius: 6px;

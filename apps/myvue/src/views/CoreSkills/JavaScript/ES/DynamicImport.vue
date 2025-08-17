@@ -1,7 +1,7 @@
 <template>
   <div class="dynamic-import-container">
     <div class="header">
-      <h1>ES 动态导入 `import()` 详解</h1>
+      <h1>ES 动态导入 `import()` 介绍</h1>
       <p class="subtitle">按需加载模块的现代 JavaScript 技术</p>
       <div class="features-badge">
         <span class="feature">代码分割</span>
@@ -19,7 +19,10 @@
           <h2>动态导入概念</h2>
         </div>
         <div class="card-content">
-          <p>动态导入 `import()` 是 ECMAScript 2020 引入的一种语法，允许在运行时异步加载 JavaScript 模块。</p>
+          <p>
+            动态导入 `import()` 是 ECMAScript 2020 引入的一种语法，允许在运行时异步加载 JavaScript
+            模块。
+          </p>
 
           <div class="comparison">
             <h3>与静态导入对比</h3>

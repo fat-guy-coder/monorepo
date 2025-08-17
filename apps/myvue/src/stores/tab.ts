@@ -9,7 +9,7 @@ export type Tab = {
 }
 
 export const useTabistStore = defineStore('tablist', () => {
-  const list = sessionStorage.getItem('tabList') ? JSON.parse(sessionStorage.getItem('tabList') as string) as Tab[] : null
+  const list = localStorage.getItem('tabList') ? JSON.parse(localStorage.getItem('tabList') as string) as Tab[] : null
   //激活标签列表
   const tabList = ref<Tab[]>(list ? list : [
     {
@@ -19,7 +19,7 @@ export const useTabistStore = defineStore('tablist', () => {
     },
   ])
   //激活标签的path
-  const activeKey = ref<string>(sessionStorage.getItem('activeKey') || '/')
+  const activeKey = ref<string>(localStorage.getItem('activeKey') || '/')
 
 
   //移除标签

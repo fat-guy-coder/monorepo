@@ -13,11 +13,17 @@
         <h2>🔍 Reflect 概述</h2>
         <div class="info-box">
           <h3>什么是 Reflect？</h3>
-          <p>Reflect 是 ES6 引入的一个新的全局对象，它提供了拦截 JavaScript 操作的方法。这些方法与 Proxy 处理器的方法相同，但 Reflect 是静态方法，不是构造函数。</p>
+          <p>
+            Reflect 是 ES6 引入的一个新的全局对象，它提供了拦截 JavaScript 操作的方法。这些方法与
+            Proxy 处理器的方法相同，但 Reflect 是静态方法，不是构造函数。
+          </p>
 
           <h3>设计目的</h3>
           <ol>
-            <li><strong>语言内部方法的统一化：</strong>将 Object 对象的一些明显属于语言内部的方法（如 Object.defineProperty）放到 Reflect 对象上</li>
+            <li>
+              <strong>语言内部方法的统一化：</strong>将 Object 对象的一些明显属于语言内部的方法（如
+              Object.defineProperty）放到 Reflect 对象上
+            </li>
             <li><strong>更合理的返回值：</strong>修改某些 Object 方法的返回结果，让操作更可预测</li>
             <li><strong>函数式编程：</strong>让对象操作变成函数式调用，而不是命令式</li>
             <li><strong>与 Proxy 配合：</strong>为 Proxy 提供默认行为</li>
@@ -27,7 +33,7 @@
 
       <!-- 核心方法 -->
       <section id="methods" class="method-card">
-        <h2>🎯 核心方法详解</h2>
+        <h2>🎯 核心方法介绍</h2>
 
         <div class="method-item">
           <h3>1. Reflect.get(target, propertyKey[, receiver])</h3>
@@ -896,7 +902,12 @@ console.log(validateUser(user)); // true
   max-width: 1000px;
   margin: 0 auto;
   padding: 1rem;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family:
+    'Inter',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    sans-serif;
   line-height: 1.5;
   color: #2c3e50;
   background: #f8f9fa;
@@ -987,7 +998,8 @@ console.log(validateUser(user)); // true
     font-size: 1.1rem;
   }
 
-  ol, ul {
+  ol,
+  ul {
     margin: 0.75rem 0;
     padding-left: 1.25rem;
 
@@ -1091,7 +1103,8 @@ console.log(validateUser(user)); // true
     background: white;
     font-size: 0.85rem;
 
-    th, td {
+    th,
+    td {
       padding: 0.75rem 1rem;
       text-align: left;
       border-bottom: 1px solid #e5e7eb;
@@ -1185,7 +1198,8 @@ console.log(validateUser(user)); // true
   .comparison-table {
     font-size: 0.75rem;
 
-    th, td {
+    th,
+    td {
       padding: 0.5rem 0.75rem;
     }
   }

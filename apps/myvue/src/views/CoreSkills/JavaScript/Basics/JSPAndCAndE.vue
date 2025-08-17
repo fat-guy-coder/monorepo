@@ -1,7 +1,7 @@
 <template>
   <div class="js-execution-container">
     <header class="header">
-      <h1>浏览器执行JavaScript流程详解</h1>
+      <h1>浏览器执行JavaScript流程介绍</h1>
       <p class="subtitle">从下载到执行的全过程解析</p>
     </header>
 
@@ -411,8 +411,6 @@ console.log('结束');
 </script>
 
 <style lang="less" scoped>
-
-
 // 颜色变量
 @primary-color: #1976d2;
 @secondary-color: #0d47a1;

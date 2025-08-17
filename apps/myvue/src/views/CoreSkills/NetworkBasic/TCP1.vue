@@ -175,6 +175,34 @@
         </section>
 
         <section class="section">
+          <h2>什么是 TCP 三次握手？</h2>
+          <div class="handshake-intro">
+            <p>
+              <strong>TCP 三次握手</strong>是指在建立一个可靠的 TCP
+              连接时，客户端与服务器之间需要经过三次消息的交换。这样做的目的是为了保证双方都具备发送和接收数据的能力，并且网络是畅通的。
+            </p>
+            <ol>
+              <li>
+                <strong>第一次握手：</strong>客户端向服务器发送
+                <code>SYN</code>（同步序列编号）包，表示请求建立连接。
+              </li>
+              <li>
+                <strong>第二次握手：</strong>服务器收到 <code>SYN</code> 后，回复
+                <code>SYN-ACK</code> 包，表示同意连接并确认收到客户端的请求。
+              </li>
+              <li>
+                <strong>第三次握手：</strong>客户端收到 <code>SYN-ACK</code> 后，再发送一个
+                <code>ACK</code> 包，表示连接建立成功。
+              </li>
+            </ol>
+            <p>完成三次握手后，客户端和服务器就可以开始安全、可靠的数据传输了。</p>
+            <div class="tips">
+              <strong>小贴士：</strong>三次握手可以防止重复的连接请求，确保双方都准备好通信。
+            </div>
+          </div>
+        </section>
+
+        <section class="section">
           <h2>协议使用场景</h2>
           <div class="use-cases">
             <div class="use-case tcp">
@@ -413,7 +441,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref } from 'vue'
 
 // TCP 标志位数据
 const tcpFlags = ref([
@@ -422,8 +450,8 @@ const tcpFlags = ref([
   { name: 'PSH', desc: '接收方应尽快交付数据' },
   { name: 'RST', desc: '重置连接' },
   { name: 'SYN', desc: '同步序列号，建立连接' },
-  { name: 'FIN', desc: '发送方结束发送' }
-]);
+  { name: 'FIN', desc: '发送方结束发送' },
+])
 </script>
 
 <style lang="less" scoped>
@@ -824,7 +852,7 @@ const tcpFlags = ref([
       position: relative;
 
       &:before {
-        content: "•";
+        content: '•';
         position: absolute;
         left: 0;
         color: @primary-color;
@@ -1069,7 +1097,6 @@ ul {
 }
 
 @media (max-width: 768px) {
-
   .protocol-intro,
   .use-cases,
   .packet-structures,

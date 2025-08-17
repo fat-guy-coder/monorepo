@@ -2,7 +2,7 @@
   <div class="mouse-events-container">
     <header class="header">
       <div class="title-wrapper">
-        <h1>JavaScript鼠标事件详解</h1>
+        <h1>JavaScript鼠标事件介绍</h1>
         <p class="subtitle">全面掌握鼠标交互的核心机制</p>
       </div>
       <div class="demo-area">
@@ -84,7 +84,7 @@
       </section>
 
       <section class="events-section">
-        <h2 class="section-title">鼠标事件类型详解</h2>
+        <h2 class="section-title">鼠标事件类型介绍</h2>
 
         <div class="events-grid">
           <div
@@ -645,8 +645,6 @@ onUnmounted(() => {
 </script>
 
 <style lang="less" scoped>
-
-
 // 颜色变量
 @primary-color: #4a6cf7;
 @primary-light: #e6eeff;

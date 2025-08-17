@@ -274,6 +274,17 @@ import '@/assets/css/unified-styles.css'
 
 ### 更新日志
 
+#### v1.1.0 (2024-12-15)
+
+- 修复控制台报错问题
+  - 删除 HomeView.vue 中未定义的变量引用 `console.log(a)`
+  - 解决了 "ReferenceError: a is not defined" 错误
+- 优化代码质量，移除调试代码
+- 统一AI模型图标样式
+  - 调整所有图标为统一的100x100默认尺寸
+  - 统一viewBox为50x50，确保图标居中显示
+  - 优化图标路径坐标，保持视觉一致性
+
 #### v1.0.0 (2024-01-01)
 
 - 创建统一样式系统

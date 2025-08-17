@@ -1,397 +1,297 @@
 <template>
-  <div class="container">
+  <div class="generator-container">
     <header class="header">
-      <h1 class="title">Vitest 测试框架使用指南</h1>
-      <p class="subtitle">基于Vite的极速单元测试解决方案</p>
+      <h1>ES6 Generator 介绍</h1>
+      <p>一种可以暂停和恢复执行的函数，为异步编程和迭代控制提供强大支持</p>
     </header>
 
-    <main class="main-content">
-      <!-- 基本介绍 -->
+    <main class="content">
       <section class="section">
-        <h2 class="section-title">什么是Vitest？</h2>
+        <div class="section-header">
+          <h2><i class="icon">⚙️</i> Generator 是什么？</h2>
+          <div class="divider"></div>
+        </div>
         <div class="section-content">
           <p>
-            Vitest是一个基于Vite的单元测试框架，由Vue团队核心成员开发，专为Vite项目设计。
-            它提供了与Jest兼容的API，同时利用Vite的极速HMR能力，实现了更快的测试速度和更好的开发体验。
+            <span class="highlight">Generator（生成器）</span>是 ES6
+            引入的一种特殊函数，它可以在执行过程中多次暂停和恢复。
           </p>
-          <div class="feature-list">
-            <div class="feature-item">⚡️ 基于Vite，启动和热更新速度极快</div>
-            <div class="feature-item">🔄 与Jest API高度兼容，易于迁移</div>
-            <div class="feature-item">🔧 零配置支持TypeScript、JSX</div>
-            <div class="feature-item">📦 内置断言、模拟和覆盖率报告</div>
-            <div class="feature-item">🔗 与Vite生态系统无缝集成</div>
-            <div class="feature-item">🎭 支持多线程测试，提升执行效率</div>
-          </div>
-        </div>
-      </section>
+          <p>
+            与传统函数不同，生成器函数在调用时不会立即执行，而是返回一个生成器对象，该对象遵循可迭代协议和迭代器协议。
+          </p>
 
-      <!-- 安装与配置 -->
-      <section class="section">
-        <h2 class="section-title">安装与基本配置</h2>
-        <div class="section-content">
-          <div class="installation-steps">
-            <div class="step">
-              <h3>1. 安装Vitest</h3>
-              <div class="code-example">
-                <pre><code># 使用npm
-npm install --save-dev vitest
-
-# 使用yarn
-yarn add --dev vitest
-
-# 使用pnpm
-pnpm add -D vitest</code></pre>
-              </div>
-              <p class="note">对于Vue项目，建议同时安装@vuedx/test-utils或@vue/test-utils</p>
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-title">基本语法</span>
+              <button class="copy-button" @click="copyCode('basicSyntax')">复制</button>
             </div>
-
-            <div class="step">
-              <h3>2. 配置Vitest</h3>
-              <p>可以在vite.config.ts中添加配置：</p>
-              <div class="code-example">
-                <pre><code>// vite.config.ts
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
-
-export default defineConfig({
-  plugins: [vue()],
-  test: {
-    // 启用类似Jest的全局测试API
-    globals: true,
-    // 模拟浏览器环境
-    environment: 'jsdom',
-    // 测试文件匹配模式
-    include: ['**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
-    // 代码覆盖率配置
-    coverage: {
-      reporter: ['text', 'json', 'html']
-    }
-  }
-})</code></pre>
-              </div>
-            </div>
-
-            <div class="step">
-              <h3>3. 添加测试脚本</h3>
-              <p>在package.json中添加：</p>
-              <div class="code-example">
-                <pre><code>"scripts": {
-  "test": "vitest",
-  "test:watch": "vitest watch",
-  "test:run": "vitest run",
-  "test:coverage": "vitest run --coverage"
-}</code></pre>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- 基本用法 -->
-      <section class="section">
-        <h2 class="section-title">基本用法</h2>
-        <div class="section-content">
-          <p>Vitest测试文件通常命名为*.test.ts、*.spec.ts，或放在__tests__目录下。</p>
-
-          <div class="example-card">
-            <h3>简单测试示例</h3>
-            <p>创建math.ts文件：</p>
-            <div class="code-example">
-              <pre><code>// math.ts
-export function sum(a: number, b: number): number {
-  return a + b;
+            <pre><code ref="basicSyntax">function* myGenerator() {
+  yield '第一个值';
+  yield '第二个值';
+  return '最终结果';
 }
 
-export function multiply(a: number, b: number): number {
-  return a * b;
+const gen = myGenerator();
+console.log(gen.next().value); // '第一个值'
+console.log(gen.next().value); // '第二个值'
+console.log(gen.next().value); // '最终结果'</code></pre>
+          </div>
+
+          <div class="feature-list">
+            <div class="feature">
+              <div class="feature-icon">📌</div>
+              <div>
+                <h3>主要特点</h3>
+                <ul>
+                  <li>使用 <code>function*</code> 语法声明</li>
+                  <li>使用 <code>yield</code> 关键字暂停执行并返回值</li>
+                  <li>通过 <code>next()</code> 方法恢复执行</li>
+                  <li>可以双向通信（传入值和返回值）</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-header">
+          <h2><i class="icon">🔧</i> 核心特性</h2>
+          <div class="divider"></div>
+        </div>
+        <div class="section-content">
+          <div class="feature-grid">
+            <div class="feature-card">
+              <div class="feature-icon">🔄</div>
+              <h3>yield 表达式</h3>
+              <p>
+                生成器函数执行到 yield 时会暂停，并将 yield 后面的表达式值作为返回对象的 value 值。
+              </p>
+            </div>
+
+            <div class="feature-card">
+              <div class="feature-icon">⏯️</div>
+              <h3>next() 方法</h3>
+              <p>恢复生成器的执行，返回一个包含 value 和 done 属性的对象。</p>
+            </div>
+
+            <div class="feature-card">
+              <div class="feature-icon">📨</div>
+              <h3>双向通信</h3>
+              <p>next() 方法可以接收参数，该参数会作为上一个 yield 表达式的返回值。</p>
+            </div>
+          </div>
+
+          <div class="code-block">
+            <div class="code-header">
+              <span class="code-title">双向通信示例</span>
+              <button class="copy-button" @click="copyCode('twoWayExample')">复制</button>
+            </div>
+            <pre><code ref="twoWayExample">function* twoWayGenerator() {
+  const name = yield "你的名字是?";
+  const age = yield `你好 ${name}, 你多大了?`;
+  return `${name}今年${age}岁`;
+}
+
+const gen = twoWayGenerator();
+console.log(gen.next().value); // "你的名字是?"
+console.log(gen.next("小明").value); // "你好 小明, 你多大了?"
+console.log(gen.next(25).value); // "小明今年25岁"</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-header">
+          <h2><i class="icon">🚀</i> 适用场景</h2>
+          <div class="divider"></div>
+        </div>
+        <div class="section-content">
+          <div class="use-case">
+            <div class="use-case-header">
+              <div class="use-case-icon">💤</div>
+              <h3>惰性求值</h3>
+            </div>
+            <p>生成器可以按需生成值，避免一次性计算所有值，节省内存。</p>
+          </div>
+
+          <div class="use-case">
+            <div class="use-case-header">
+              <div class="use-case-icon">⏳</div>
+              <h3>异步编程</h3>
+            </div>
+            <p>配合 Promise 可以实现类似 async/await 的同步风格异步代码。</p>
+
+            <div class="code-block">
+              <div class="code-header">
+                <span class="code-title">异步操作控制流</span>
+                <button class="copy-button" @click="copyCode('asyncExample')">复制</button>
+              </div>
+              <pre><code ref="asyncExample">function asyncTask(time) {
+  return new Promise(resolve =>
+    setTimeout(resolve, time)
+  );
+}
+
+function* asyncGenerator() {
+  yield asyncTask(1000);
+  console.log('第一步完成');
+  yield asyncTask(1500);
+  console.log('第二步完成');
+}
+
+// 运行生成器
+function runGenerator(gen) {
+  const g = gen();
+  function next() {
+    const result = g.next();
+    if (result.done) return;
+    result.value.then(next);
+  }
+  next();
+}
+
+runGenerator(asyncGenerator);</code></pre>
+            </div>
+          </div>
+
+          <div class="use-case">
+            <div class="use-case-header">
+              <div class="use-case-icon">∞</div>
+              <h3>无限数据流</h3>
+            </div>
+            <p>可以创建无限序列而不会耗尽内存。</p>
+
+            <div class="code-block">
+              <div class="code-header">
+                <span class="code-title">斐波那契数列</span>
+                <button class="copy-button" @click="copyCode('fibonacciExample')">复制</button>
+              </div>
+              <pre><code ref="fibonacciExample">function* fibonacci() {
+  let [a, b] = [0, 1];
+  while (true) {
+    yield a;
+    [a, b] = [b, a + b];
+  }
+}
+
+const fib = fibonacci();
+console.log(fib.next().value); // 0
+console.log(fib.next().value); // 1
+console.log(fib.next().value); // 1
+console.log(fib.next().value); // 2
+// 可以无限继续...</code></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-header">
+          <h2><i class="icon">📌</i> 注意事项</h2>
+          <div class="divider"></div>
+        </div>
+        <div class="section-content">
+          <div class="note-card">
+            <div class="note-icon">ℹ️</div>
+            <p>生成器函数调用时不会执行函数体，而是返回生成器对象</p>
+          </div>
+
+          <div class="note-card">
+            <div class="note-icon">ℹ️</div>
+            <p>每次调用生成器函数都会返回一个新的生成器对象</p>
+          </div>
+
+          <div class="note-card">
+            <div class="note-icon">ℹ️</div>
+            <p>使用 <code>return()</code> 方法可以提前终止生成器</p>
+          </div>
+
+          <div class="note-card">
+            <div class="note-icon">ℹ️</div>
+            <p><code>throw()</code> 方法可以在生成器内部抛出异常</p>
+          </div>
+
+          <div class="note-card">
+            <div class="note-icon">ℹ️</div>
+            <p>生成器对象同时也是可迭代对象，可以使用 <code>for...of</code> 循环</p>
+          </div>
+
+          <div class="comparison">
+            <h3>生成器与普通函数的对比</h3>
+            <div class="comparison-grid">
+              <div class="comparison-item">
+                <h4>普通函数</h4>
+                <ul>
+                  <li>运行到结束（Run to completion）</li>
+                  <li>一次性执行所有代码</li>
+                  <li>无法暂停和恢复</li>
+                  <li>返回单个值</li>
+                </ul>
+              </div>
+
+              <div class="comparison-item">
+                <h4>生成器函数</h4>
+                <ul>
+                  <li>运行-暂停-继续（Run-pause-continue）</li>
+                  <li>可分步执行</li>
+                  <li>可暂停和恢复多次</li>
+                  <li>可返回多个值</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-header">
+          <h2><i class="icon">🧪</i> 交互示例</h2>
+          <div class="divider"></div>
+        </div>
+        <div class="section-content">
+          <div class="example-container">
+            <h3>可重置计数器</h3>
+            <div class="code-block">
+              <div class="code-header">
+                <span class="code-title">实现代码</span>
+                <button class="copy-button" @click="copyCode('counterExample')">复制</button>
+              </div>
+              <pre><code ref="counterExample">function* resetableCounter() {
+  let count = 0;
+  while (true) {
+    const reset = yield count;
+    if (reset) {
+      count = 0;
+    } else {
+      count++;
+    }
+  }
 }</code></pre>
             </div>
 
-            <p>创建对应的测试文件math.test.ts：</p>
-            <div class="code-example">
-              <pre><code>// math.test.ts
-import { sum, multiply } from './math';
-import { describe, it, expect } from 'vitest';
-
-// 测试套件
-describe('math functions', () => {
-  // 单个测试用例
-  it('should return sum of two numbers', () => {
-    expect(sum(1, 2)).toBe(3);
-    expect(sum(-1, 1)).toBe(0);
-  });
-
-  it('should return product of two numbers', () => {
-    expect(multiply(2, 3)).toBe(6);
-    expect(multiply(0, 5)).toBe(0);
-  });
-});</code></pre>
+            <div class="example-controls">
+              <button class="control-button" @click="runCounter('next')">
+                <i>▶️</i> 下一步 (next)
+              </button>
+              <button class="control-button" @click="runCounter('reset')">
+                <i>🔄</i> 重置 (reset)
+              </button>
             </div>
 
-            <p>运行测试：</p>
-            <div class="code-example">
-              <pre><code># 运行所有测试
-npm test
-
-# 运行测试并生成覆盖率报告
-npm run test:coverage</code></pre>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- 核心API -->
-      <section class="section">
-        <h2 class="section-title">核心API与断言方法</h2>
-        <div class="section-content">
-          <div class="api-grid">
-            <!-- 测试结构API -->
-            <div class="api-card">
-              <h3>测试结构</h3>
-              <div class="api-item">
-                <code>describe(name, fn)</code>
-                <p>定义测试套件，用于分组相关测试</p>
+            <div class="example-output">
+              <div class="output-header">
+                <span>执行输出</span>
+                <button class="clear-button" @click="clearOutput">清空</button>
               </div>
-              <div class="api-item">
-                <code>it(name, fn, timeout)</code>
-                <p>定义单个测试用例，别名test()</p>
+              <div class="output-content">
+                <div v-for="(output, index) in counterOutputs" :key="index" class="output-line">
+                  <span class="output-prefix">&gt;</span> {{ output }}
+                </div>
+                <div v-if="counterOutputs.length === 0" class="empty-output">
+                  点击"下一步"按钮执行生成器
+                </div>
               </div>
-              <div class="api-item">
-                <code>beforeAll(fn, timeout)</code>
-                <p>在所有测试开始前执行一次</p>
-              </div>
-              <div class="api-item">
-                <code>afterAll(fn, timeout)</code>
-                <p>在所有测试完成后执行一次</p>
-              </div>
-              <div class="api-item">
-                <code>beforeEach(fn, timeout)</code>
-                <p>每个测试用例开始前执行</p>
-              </div>
-              <div class="api-item">
-                <code>afterEach(fn, timeout)</code>
-                <p>每个测试用例完成后执行</p>
-              </div>
-            </div>
-
-            <!-- 常用断言 -->
-            <div class="api-card">
-              <h3>常用断言</h3>
-              <div class="api-item">
-                <code>expect(value)</code>
-                <p>创建一个断言对象，用于测试值</p>
-              </div>
-              <div class="api-item">
-                <code>toBe(value)</code>
-                <p>使用===比较值，适用于基本类型</p>
-              </div>
-              <div class="api-item">
-                <code>toEqual(value)</code>
-                <p>递归比较对象的每个属性，适用于对象</p>
-              </div>
-              <div class="api-item">
-                <code>toBeTruthy()</code>
-                <p>测试值是否为真（非空、非0等）</p>
-              </div>
-              <div class="api-item">
-                <code>toBeFalsy()</code>
-                <p>测试值是否为假（null、0、''等）</p>
-              </div>
-              <div class="api-item">
-                <code>toBeNull()</code>
-                <p>测试值是否为null</p>
-              </div>
-            </div>
-
-            <!-- 更多断言 -->
-            <div class="api-card">
-              <h3>扩展断言</h3>
-              <div class="api-item">
-                <code>toBeGreaterThan(number)</code>
-                <p>测试值是否大于指定数字</p>
-              </div>
-              <div class="api-item">
-                <code>toBeLessThan(number)</code>
-                <p>测试值是否小于指定数字</p>
-              </div>
-              <div class="api-item">
-                <code>toContain(item)</code>
-                <p>测试数组是否包含指定元素</p>
-              </div>
-              <div class="api-item">
-                <code>toMatch(regexp)</code>
-                <p>测试字符串是否匹配正则表达式</p>
-              </div>
-              <div class="api-item">
-                <code>toThrow(error)</code>
-                <p>测试函数是否抛出指定错误</p>
-              </div>
-              <div class="api-item">
-                <code>not</code>
-                <p>否定后续断言，如expect(a).not.toBe(b)</p>
-              </div>
-            </div>
-
-            <!-- 异步测试 -->
-            <div class="api-card">
-              <h3>异步测试</h3>
-              <div class="api-item">
-                <code>async/await</code>
-                <p>使用异步函数处理异步测试</p>
-              </div>
-              <div class="api-item">
-                <code>resolves</code>
-                <p>测试Promise是否成功解析</p>
-              </div>
-              <div class="api-item">
-                <code>rejects</code>
-                <p>测试Promise是否拒绝</p>
-              </div>
-              <div class="code-snippet">
-                <code>// 异步测试示例
-it('fetches data correctly', async () => {
-  const fetchData = () => Promise.resolve({ id: 1 });
-  await expect(fetchData()).resolves.toEqual({ id: 1 });
-});</code>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- 模拟功能 -->
-      <section class="section">
-        <h2 class="section-title">模拟功能(Mocking)</h2>
-        <div class="section-content">
-          <p>Vitest提供强大的模拟功能，支持模拟函数、模块和时间等，语法与Jest类似但性能更好。</p>
-
-          <div class="example-card">
-            <h3>模拟函数</h3>
-            <div class="code-example">
-              <pre><code>import { it, expect, vi } from 'vitest';
-
-it('tests mock functions', () => {
-  // 创建模拟函数
-  const mockFn = vi.fn((a, b) => a + b);
-
-  // 调用模拟函数
-  mockFn(2, 3);
-
-  // 断言函数被调用
-  expect(mockFn).toHaveBeenCalled();
-  // 断言调用次数
-  expect(mockFn).toHaveBeenCalledTimes(1);
-  // 断言调用参数
-  expect(mockFn).toHaveBeenCalledWith(2, 3);
-  // 断言返回值
-  expect(mockFn(2, 3)).toBe(5);
-});</code></pre>
-            </div>
-          </div>
-
-          <div class="example-card">
-            <h3>模拟模块</h3>
-            <div class="code-example">
-              <pre><code>import { it, expect, vi } from 'vitest';
-import { getUser } from './api';
-
-// 模拟axios模块
-vi.mock('axios', () => ({
-  default: {
-    get: vi.fn()
-  }
-}));
-
-import axios from 'axios';
-
-it('fetches user data', async () => {
-  // 设置模拟返回值
-  axios.get.mockResolvedValue({
-    data: { id: 1, name: 'John Doe' }
-  });
-
-  const user = await getUser(1);
-
-  expect(axios.get).toHaveBeenCalledWith('/users/1');
-  expect(user).toEqual({ id: 1, name: 'John Doe' });
-});</code></pre>
-            </div>
-          </div>
-
-          <div class="example-card">
-            <h3>模拟时间</h3>
-            <div class="code-example">
-              <pre><code>import { it, expect, vi, beforeEach, afterEach } from 'vitest';
-
-it('tests timer function', () => {
-  vi.useFakeTimers();
-
-  const callback = vi.fn();
-  setTimeout(callback, 1000);
-
-  // 快进时间
-  vi.advanceTimersByTime(1000);
-
-  expect(callback).toHaveBeenCalled();
-
-  vi.useRealTimers();
-});</code></pre>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- 快照测试 -->
-      <section class="section">
-        <h2 class="section-title">快照测试</h2>
-        <div class="section-content">
-          <p>快照测试用于确保UI组件或数据结构不会意外更改，Vitest会将结果与存储的快照进行比较。</p>
-
-          <div class="example-card">
-            <div class="code-example">
-              <pre><code>// 组件快照测试示例
-import { it, expect } from 'vitest';
-import { mount } from '@vue/test-utils';
-import Button from './Button.vue';
-
-it('renders button correctly', () => {
-  const wrapper = mount(Button, {
-    props: { label: 'Click me' }
-  });
-
-  // 创建或比较快照
-  expect(wrapper.html()).toMatchSnapshot();
-});</code></pre>
-            </div>
-            <p class="note">
-              当组件预期更改时，使用<code>vitest run --updateSnapshot</code>更新快照。
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <!-- 与Jest的区别 -->
-      <section class="section">
-        <h2 class="section-title">Vitest与Jest的主要区别</h2>
-        <div class="section-content">
-          <div class="comparison-table">
-            <div class="comparison-item">
-              <strong>启动速度</strong>：Vitest基于Vite，启动速度比Jest快2-10倍
-            </div>
-            <div class="comparison-item">
-              <strong>热更新</strong>：Vitest支持测试热更新，修改测试后无需重新启动
-            </div>
-            <div class="comparison-item">
-              <strong>配置</strong>：Vitest可与Vite配置合并，减少配置重复
-            </div>
-            <div class="comparison-item">
-              <strong>类型支持</strong>：原生支持TypeScript，无需额外配置
-            </div>
-            <div class="comparison-item">
-              <strong>生态系统</strong>：Jest生态更成熟，但Vitest正在快速增长
-            </div>
-            <div class="comparison-item">
-              <strong>多线程</strong>：两者都支持，但Vitest的实现更高效
             </div>
           </div>
         </div>
@@ -399,243 +299,553 @@ it('renders button correctly', () => {
     </main>
 
     <footer class="footer">
-      <p>Vitest使用指南 &copy; {{ new Date().getFullYear() }}</p>
+      <p>
+        Generator 是 JavaScript 中强大的异步编程和流程控制工具 | 在实际开发中，async/await
+        通常更易用，但理解 Generator 有助于深入理解 JavaScript 异步机制
+      </p>
     </footer>
   </div>
 </template>
 
 <script setup lang="ts">
-// 组件逻辑部分，当前为静态展示
+import { ref } from 'vue'
+
+const counterOutputs = ref<string[]>([])
+let counterGenerator: Generator | null = null
+
+function* resetableCounter() {
+  let count = 0
+  while (true) {
+    const reset: boolean = yield count
+    if (reset) {
+      count = 0
+    } else {
+      count++
+    }
+  }
+}
+
+function initCounter() {
+  counterGenerator = resetableCounter()
+  counterOutputs.value = []
+  counterOutputs.value.push('生成器已初始化，调用 next() 开始执行')
+}
+
+function runCounter(action: 'next' | 'reset') {
+  if (!counterGenerator) initCounter()
+
+  try {
+    if (action === 'reset') {
+      const result = counterGenerator!.next(true)
+      counterOutputs.value.push(
+        `counter.next(true) => { value: ${result.value}, done: ${result.done} }`,
+      )
+    } else {
+      const result = counterGenerator!.next()
+      counterOutputs.value.push(
+        `counter.next() => { value: ${result.value}, done: ${result.done} }`,
+      )
+    }
+  } catch (error) {
+    counterOutputs.value.push(`错误: ${error}`)
+  }
+}
+
+function clearOutput() {
+  counterOutputs.value = []
+}
+
+function copyCode(refName: string) {
+  const codeElement = document.querySelector(`[ref="${refName}"]`)
+  if (codeElement) {
+    const code = codeElement.textContent || ''
+    navigator.clipboard.writeText(code).then(() => {
+      alert('代码已复制到剪贴板')
+    })
+  }
+}
+
+// 初始化生成器
+initCounter()
 </script>
 
-<style scoped lang="less">
-.container {
+<style lang="less" scoped>
+.generator-container {
+  font-family:
+    'Inter',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    Oxygen,
+    Ubuntu,
+    sans-serif;
+  background-color: #f8fafc;
+  color: #334155;
+  line-height: 1.6;
+  min-height: 100vh;
+  padding: 20px;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 20px;
-  background-color: #f9fafb;
-  color: #334155;
-  font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-  line-height: 1.7;
 }
 
 .header {
   text-align: center;
+  padding: 40px 20px;
   margin-bottom: 30px;
-  padding-bottom: 15px;
-  border-bottom: 1px solid #e2e8f0;
+  background: linear-gradient(135deg, #3b82f6, #60a5fa);
+  border-radius: 16px;
+  color: white;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
 
-  .title {
-    color: #1e293b;
-    margin: 0 0 10px 0;
-    font-size: 1.8rem;
+  h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+    letter-spacing: -0.5px;
   }
 
-  .subtitle {
-    color: #64748b;
-    margin: 0;
+  p {
     font-size: 1.1rem;
-    font-weight: 400;
+    max-width: 700px;
+    margin: 0 auto;
+    opacity: 0.9;
   }
 }
 
-.main-content {
-  .section {
-    margin-bottom: 40px;
+.content {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 30px;
+  margin-bottom: 40px;
+}
 
-    .section-title {
-      color: #1e293b;
-      border-bottom: 2px solid #dbeafe;
-      padding-bottom: 8px;
-      margin-top: 0;
-      margin-bottom: 20px;
-      font-size: 1.4rem;
-    }
+.section {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.03);
+  border: 1px solid #e2e8f0;
+  padding: 30px;
+  transition: all 0.3s ease;
 
-    .section-content {
-      background-color: #fff;
-      padding: 25px;
-      border-radius: 8px;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-    }
+  &:hover {
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+    transform: translateY(-3px);
   }
+}
 
-  .code-example {
-    background-color: #f8fafc;
-    border-radius: 6px;
-    margin: 15px 0;
-    overflow-x: auto;
-    border: 1px solid #e2e8f0;
+.section-header {
+  margin-bottom: 25px;
 
-    pre {
-      margin: 0;
-      padding: 15px;
-
-      code {
-        font-family: 'Fira Code', monospace;
-        font-size: 0.9rem;
-        color: #0f172a;
-      }
-    }
-  }
-
-  .code-snippet {
-    background-color: #f8fafc;
-    border-radius: 4px;
-    padding: 10px;
-    margin: 10px 0;
-    font-family: 'Fira Code', monospace;
-    font-size: 0.85rem;
-    border: 1px solid #e2e8f0;
-    overflow-x: auto;
-  }
-
-  .feature-list {
+  h2 {
+    font-size: 1.8rem;
+    color: #1e40af;
     display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin: 20px 0;
+    align-items: center;
+    gap: 12px;
 
-    .feature-item {
-      background-color: #f0fdf4;
-      border: 1px solid #dcfce7;
-      border-radius: 4px;
-      padding: 8px 12px;
-      font-size: 0.9rem;
-      color: #15803d;
+    .icon {
+      background: #dbeafe;
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
     }
   }
 
-  .installation-steps {
-    .step {
-      margin-bottom: 25px;
-
-      &:last-child {
-        margin-bottom: 0;
-      }
-
-      h3 {
-        margin-top: 0;
-        color: #1e293b;
-        margin-bottom: 10px;
-        font-size: 1.1rem;
-      }
-    }
+  .divider {
+    height: 2px;
+    background: linear-gradient(90deg, #3b82f6, #93c5fd);
+    margin-top: 15px;
+    border-radius: 2px;
   }
+}
 
-  .example-card {
-    background-color: #f8fafc;
-    border-radius: 6px;
-    padding: 20px;
+.section-content {
+  p {
     margin-bottom: 20px;
-    border: 1px solid #e2e8f0;
+    font-size: 1.05rem;
+    color: #475569;
+    line-height: 1.7;
+  }
+
+  .highlight {
+    background: #dbeafe;
+    color: #1e40af;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 500;
+  }
+}
+
+.code-block {
+  background: #f1f5f9;
+  border-radius: 12px;
+  overflow: hidden;
+  margin: 25px 0;
+  border: 1px solid #e2e8f0;
+
+  .code-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 20px;
+    background-color: #e2e8f0;
+    border-bottom: 1px solid #cbd5e1;
+
+    .code-title {
+      font-weight: 600;
+      color: #1e293b;
+    }
+
+    .copy-button {
+      background: #3b82f6;
+      color: white;
+      border: none;
+      padding: 6px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 500;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+
+      &:hover {
+        background: #2563eb;
+      }
+    }
+  }
+
+  pre {
+    padding: 20px;
+    overflow-x: auto;
+  }
+
+  code {
+    font-family: 'Fira Code', Consolas, Monaco, monospace;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #1e293b;
+  }
+}
+
+.feature-list {
+  margin: 25px 0;
+
+  .feature {
+    display: flex;
+    gap: 20px;
+    background: #f1f5f9;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+
+    .feature-icon {
+      font-size: 1.8rem;
+    }
 
     h3 {
-      margin-top: 0;
-      color: #1e293b;
-      margin-bottom: 15px;
-      font-size: 1.1rem;
+      margin-bottom: 12px;
+      color: #1e40af;
     }
 
-    &:last-child {
+    ul {
+      padding-left: 25px;
+
+      li {
+        margin-bottom: 10px;
+        position: relative;
+
+        &:before {
+          content: '•';
+          color: #3b82f6;
+          font-weight: bold;
+          position: absolute;
+          left: -18px;
+        }
+      }
+    }
+  }
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  margin: 25px 0;
+
+  .feature-card {
+    background: #f1f5f9;
+    border-radius: 12px;
+    padding: 25px;
+    transition: all 0.3s;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .feature-icon {
+      font-size: 2rem;
+      margin-bottom: 15px;
+    }
+
+    h3 {
+      color: #1e40af;
+      margin-bottom: 12px;
+      font-size: 1.3rem;
+    }
+
+    p {
+      color: #475569;
+      font-size: 1rem;
       margin-bottom: 0;
     }
   }
+}
 
-  .api-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
-  }
+.use-case {
+  margin-bottom: 30px;
 
-  .api-card {
-    background-color: #f8fafc;
-    border-radius: 6px;
-    padding: 20px;
-    border: 1px solid #e2e8f0;
+  .use-case-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+
+    .use-case-icon {
+      font-size: 1.8rem;
+      background: #dbeafe;
+      width: 50px;
+      height: 50px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
     h3 {
-      margin-top: 0;
-      color: #1e293b;
-      margin-bottom: 15px;
-      font-size: 1.1rem;
-      padding-bottom: 8px;
-      border-bottom: 1px dashed #e2e8f0;
+      font-size: 1.4rem;
+      color: #1e40af;
     }
-
-    .api-item {
-      margin-bottom: 15px;
-
-      &:last-child {
-        margin-bottom: 0;
-      }
-
-      code {
-        display: block;
-        background-color: #eff6ff;
-        color: #1e40af;
-        padding: 5px 8px;
-        border-radius: 3px;
-        margin-bottom: 5px;
-        font-family: 'Fira Code', monospace;
-        font-size: 0.9rem;
-      }
-
-      p {
-        margin: 0;
-        font-size: 0.95rem;
-      }
-    }
-  }
-
-  .comparison-table {
-    margin-top: 15px;
-
-    .comparison-item {
-      padding: 12px 15px;
-      border-bottom: 1px solid #e2e8f0;
-
-      &:last-child {
-        border-bottom: none;
-      }
-
-      strong {
-        color: #1e293b;
-        margin-right: 8px;
-      }
-    }
-  }
-
-  .note {
-    color: #64748b;
-    font-size: 0.95rem;
-    margin-top: 10px;
-    padding: 8px 12px;
-    background-color: #f1f5f9;
-    border-radius: 4px;
   }
 }
 
-footer.footer {
-  margin-top: 50px;
-  padding-top: 20px;
-  border-top: 1px solid #e2e8f0;
+.note-card {
+  display: flex;
+  gap: 15px;
+  align-items: flex-start;
+  background: #f1f5f9;
+  padding: 18px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+
+  .note-icon {
+    font-size: 1.4rem;
+    margin-top: 2px;
+  }
+
+  p {
+    margin: 0;
+    flex: 1;
+  }
+}
+
+.comparison {
+  margin-top: 30px;
+
+  h3 {
+    font-size: 1.4rem;
+    color: #1e40af;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .comparison-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+
+    .comparison-item {
+      background: #f1f5f9;
+      border-radius: 12px;
+      padding: 25px;
+      transition: all 0.3s;
+
+      &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      }
+
+      h4 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #1e40af;
+        font-size: 1.3rem;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #dbeafe;
+      }
+
+      ul {
+        padding-left: 25px;
+
+        li {
+          margin-bottom: 12px;
+          position: relative;
+
+          &:before {
+            content: '•';
+            color: #3b82f6;
+            font-weight: bold;
+            position: absolute;
+            left: -18px;
+          }
+        }
+      }
+    }
+  }
+}
+
+.example-container {
+  background: #f8fafc;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  padding: 25px;
+
+  h3 {
+    font-size: 1.5rem;
+    color: #1e40af;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+}
+
+.example-controls {
+  display: flex;
+  gap: 15px;
+  margin: 20px 0;
+
+  .control-button {
+    flex: 1;
+    background: #3b82f6;
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1.05rem;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+    &:hover {
+      background: #2563eb;
+      transform: translateY(-2px);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+}
+
+.example-output {
+  background: #1e293b;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-top: 20px;
+
+  .output-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 20px;
+    background-color: #0f172a;
+    color: #94a3b8;
+    font-weight: 500;
+
+    .clear-button {
+      background: #475569;
+      color: white;
+      border: none;
+      padding: 5px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.9rem;
+
+      &:hover {
+        background: #64748b;
+      }
+    }
+  }
+
+  .output-content {
+    padding: 20px;
+    min-height: 150px;
+    max-height: 300px;
+    overflow-y: auto;
+
+    .output-line {
+      color: #cbd5e1;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.95rem;
+      margin-bottom: 8px;
+      display: flex;
+
+      .output-prefix {
+        color: #94a3b8;
+        margin-right: 10px;
+      }
+    }
+
+    .empty-output {
+      color: #94a3b8;
+      font-style: italic;
+      text-align: center;
+      padding: 30px 0;
+    }
+  }
+}
+
+.footer {
   text-align: center;
-  color: #94a3b8;
-  font-size: 0.9rem;
+  padding: 30px;
+  color: #64748b;
+  font-size: 0.95rem;
+  border-top: 1px solid #e2e8f0;
+  margin-top: 20px;
 }
 
 @media (max-width: 768px) {
-  .container {
-    padding: 15px;
+  .header {
+    padding: 30px 15px;
+
+    h1 {
+      font-size: 2rem;
+    }
+
+    p {
+      font-size: 1rem;
+    }
   }
 
-  .api-grid {
-    grid-template-columns: 1fr;
+  .section {
+    padding: 20px;
   }
 
-  .header .title {
+  .section-header h2 {
     font-size: 1.5rem;
+  }
+
+  .example-controls {
+    flex-direction: column;
   }
 }
 </style>

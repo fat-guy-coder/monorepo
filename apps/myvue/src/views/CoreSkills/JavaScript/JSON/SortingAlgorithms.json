@@ -1,0 +1,295 @@
+[
+  {
+    "name": "冒泡排序",
+    "shortDesc": "通过重复比较相邻元素并交换顺序错误的元素",
+    "color": "#FF6B6B",
+    "tags": ["简单", "稳定", "教学"],
+    "complexity": {
+      "time": "O(n²)",
+      "best": "O(n)",
+      "avg": "O(n²)",
+      "worst": "O(n²)",
+      "space": "O(1)"
+    },
+    "steps": [
+      "1. 比较相邻的元素。如果第一个比第二个大，就交换它们两个；",
+      "2. 对每一对相邻元素作同样的工作，从开始第一对到结尾的最后一对，这样在最后的元素应该会是最大的数；",
+      "3. 针对所有的元素重复以上的步骤，除了最后一个；",
+      "4. 重复步骤1~3，直到排序完成。"
+    ],
+    "stable": true,
+    "idea": "重复遍历数组，比较相邻元素，如果顺序错误就交换它们。每一轮遍历都会将最大的元素'冒泡'到正确的位置。",
+    "code": "function bubbleSort(arr: number[]): number[] {\n  const n = arr.length;\n  for (let i = 0; i < n - 1; i++) {\n    let swapped = false;\n    for (let j = 0; j < n - i - 1; j++) {\n      if (arr[j] > arr[j + 1]) {\n        [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];\n        swapped = true;\n      }\n    }\n    if (!swapped) break;\n  }\n  return arr;\n}",
+    "scenario": "教学场景、小型数组排序、已经基本有序的数组",
+    "performance": "对于小型或基本有序的数组表现良好，但对于大型数组性能很差。",
+    "pros": ["实现简单，易于理解", "空间复杂度低 (O(1))", "对于已经基本有序的数组效率较高"],
+    "cons": ["时间复杂度高，平均为O(n²)", "对于大型数据集效率低下", "交换操作频繁"]
+  },
+  {
+    "name": "选择排序",
+    "shortDesc": "每次从未排序部分选择最小元素放到已排序部分末尾",
+    "color": "#4ECDC4",
+    "tags": ["简单", "原地", "教学"],
+    "complexity": {
+      "time": "O(n²)",
+      "best": "O(n²)",
+      "avg": "O(n²)",
+      "worst": "O(n²)",
+      "space": "O(1)"
+    },
+    "steps": [
+      "1. 从数组中找到最小（大）元素，存放到排序序列的起始位置",
+      "2. 从剩余未排序元素中继续寻找最小（大）元素，然后放到已排序序列的末尾",
+      "3. 重复第二步，直到所有元素均排序完毕"
+    ],
+    "stable": false,
+    "idea": "将数组分为已排序和未排序两部分，每次从未排序部分找到最小元素，将其放到已排序部分的末尾。",
+    "code": "function selectionSort(arr: number[]): number[] {\n  const n = arr.length;\n  for (let i = 0; i < n - 1; i++) {\n    let minIndex = i;\n    for (let j = i + 1; j < n; j++) {\n      if (arr[j] < arr[minIndex]) {\n        minIndex = j;\n      }\n    }\n    if (minIndex !== i) {\n      [arr[i], arr[minIndex]] = [arr[minIndex], arr[i]];\n    }\n  }\n  return arr;\n}",
+
+
+    "scenario": "教学场景、小型数组排序、交换成本较高的场景",
+    "performance": "时间复杂度始终为O(n²)，无论输入数据的初始状态如何。",
+    "pros": ["实现简单", "空间复杂度低 (O(1))", "交换次数较少，最多进行n-1次交换"],
+    "cons": ["时间复杂度高，始终为O(n²)", "不稳定排序", "对于大型数据集效率低下"]
+  },
+  {
+    "name": "插入排序",
+    "shortDesc": "构建有序序列，逐个插入未排序元素到正确位置",
+    "color": "#FFD166",
+    "tags": ["简单", "稳定", "小规模"],
+    "complexity": {
+      "time": "O(n²)",
+      "best": "O(n)",
+      "avg": "O(n²)",
+      "worst": "O(n²)",
+      "space": "O(1)"
+    },
+    "steps": [
+      "1. 从第一个元素开始，该元素可以认为已经被排序",
+      "2. 取出下一个元素，在已经排序的元素序列中从后向前扫描",
+      "3. 如果该元素（已排序）大于新元素，将该元素移到下一位置",
+      "4. 重复步骤3，直到找到已排序的元素小于或者等于新元素的位置",
+      "5. 将新元素插入到该位置后",
+      "6. 重复步骤2~5"
+    ],
+    "stable": true,
+    "idea": "将数组分为已排序和未排序两部分，每次取一个未排序元素，在已排序部分中找到合适的位置插入。",
+    "code": "function insertionSort(arr: number[]): number[] {\n  const n = arr.length;\n  for (let i = 1; i < n; i++) {\n    const current = arr[i];\n    let j = i - 1;\n    while (j >= 0 && arr[j] > current) {\n      arr[j + 1] = arr[j];\n      j--;\n    }\n    arr[j + 1] = current;\n  }\n  return arr;\n}",
+    "scenario": "小型数组排序、基本有序的数组、作为高级排序算法的小数组优化",
+    "performance": "对于小型或基本有序的数组非常高效，最坏情况为O(n²)。",
+    "pros": ["实现简单", "对于小型数据集效率高", "对于基本有序的数组效率高", "稳定排序"],
+    "cons": ["平均和最坏时间复杂度为O(n²)", "对于大型无序数组效率低下", "需要大量移动元素"]
+  },
+  {
+    "name": "快速排序",
+    "shortDesc": "分治策略，选取基准分区并递归排序",
+    "color": "#06D6A0",
+    "tags": ["高效", "分治", "常用"],
+    "complexity": {
+      "time": "O(n log n)",
+      "best": "O(n log n)",
+      "avg": "O(n log n)",
+      "worst": "O(n²)",
+      "space": "O(log n)"
+    },
+    "steps": [
+      "1. 从数列中挑出一个元素，称为'基准'（pivot）",
+      "2. 重新排序数列，所有元素比基准值小的摆放在基准前面，所有元素比基准值大的摆在基准的后面（相同的数可以到任一边）。在这个分区退出之后，该基准就处于数列的中间位置。这个称为分区（partition）操作",
+      "3. 递归地（recursive）把小于基准值元素的子数列和大于基准值元素的子数列排序"
+    ],  
+    "stable": false,
+    "idea": "选择一个基准元素，将数组分为两部分：小于基准的部分和大于基准的部分，然后递归地对这两部分进行排序。",
+    "code": "function quickSort(arr: number[], low: number = 0, high: number = arr.length - 1): number[] {\n  if (low < high) {\n    const pivotIndex = partition(arr, low, high);\n    quickSort(arr, low, pivotIndex - 1);\n    quickSort(arr, pivotIndex + 1, high);\n  }\n  return arr;\n}",
+    "scenario": "通用排序、大型数据集、需要原地排序的场景",
+    "performance": "平均情况下非常高效，是最快的通用排序算法之一，但最坏情况下会退化为O(n²)。",
+    "pros": [
+      "平均时间复杂度为O(n log n)，性能优异",
+      "原地排序，空间复杂度低",
+      "在实践中通常比其他O(n log n)算法更快"
+    ],
+    "cons": ["最坏情况时间复杂度为O(n²)", "不稳定排序", "递归实现可能导致堆栈溢出"]
+  },
+  {
+    "name": "归并排序",
+    "shortDesc": "分治策略，递归分割数组合并有序序列",
+    "color": "#118AB2",
+    "tags": ["稳定", "高效", "分治"],
+    "complexity": {
+      "time": "O(n log n)",
+      "best": "O(n log n)",
+      "avg": "O(n log n)",
+      "worst": "O(n log n)",
+      "space": "O(n)"
+    },
+    "steps": [
+      "1. 将数组递归地分成两半，直到每个子数组只有一个元素",
+      "2. 合并这些有序子数组来构建完整的有序数组"
+    ],
+    "stable": true,
+    "idea": "将数组递归地分成两半，直到每个子数组只有一个元素，然后合并这些有序子数组来构建完整的有序数组。",
+    "code": "function mergeSort(arr: number[]): number[] {\n  if (arr.length <= 1) {\n    return arr;\n  }\n\n  const mid = Math.floor(arr.length / 2);\n  const left = mergeSort(arr.slice(0, mid));\n  const right = mergeSort(arr.slice(mid));\n\n  return merge(left, right);\n}",
+    "scenario": "大型数据集、需要稳定排序的场景、链表排序、外部排序",
+    "performance": "时间复杂度始终为O(n log n)，性能稳定，但需要额外空间。",
+    "pros": ["时间复杂度稳定为O(n log n)", "稳定排序", "适用于大型数据集", "适合并行化处理"],
+    "cons": ["需要O(n)的额外空间", "递归实现可能导致堆栈溢出", "对于小型数组可能不如插入排序高效"]
+  },
+  {
+    "name": "堆排序",
+    "shortDesc": "利用堆数据结构排序，构建最大堆/最小堆",
+    "color": "#073B4C",
+    "tags": ["原地", "高效", "堆结构"],
+    "complexity": {
+      "time": "O(n log n)",
+      "best": "O(n log n)",
+      "avg": "O(n log n)",
+      "worst": "O(n log n)",
+      "space": "O(1)"
+    },
+    "steps": [
+      "1. 构建最大堆（或最小堆）",
+      "2. 重复提取堆顶元素（最大值或最小值）并重新调整堆结构",
+      "3. 重复步骤2，直到所有元素均排序完毕"
+    ],
+    "stable": false,
+    "idea": "将数组视为完全二叉树，构建最大堆（或最小堆），然后重复提取堆顶元素（最大值或最小值）并重新调整堆结构。",
+    "code": "function heapSort(arr: number[]): number[] {\n  const n = arr.length;\n  for (let i = Math.floor(n / 2) - 1; i >= 0; i--) {\n    heapify(arr, n, i);\n  }\n  for (let i = n - 1; i > 0; i--) {\n    [arr[0], arr[i]] = [arr[i], arr[0]];\n    heapify(arr, i, 0);\n  }\n  return arr;\n}",
+    "scenario": "需要原地排序的大型数据集、实时系统（时间复杂度稳定）",
+    "performance": "时间复杂度始终为O(n log n)，不需要额外空间，但缓存不友好。",
+    "pros": [
+      "时间复杂度稳定为O(n log n)",
+      "原地排序，空间复杂度为O(1)",
+      "不受输入数据影响，性能稳定"
+    ],
+    "cons": ["不稳定排序", "缓存不友好", "实现相对复杂", "对于小型数组效率不高"]
+  },
+  {
+    "name": "计数排序",
+    "shortDesc": "非比较排序，统计元素出现次数",
+    "color": "#EF476F",
+    "tags": ["非比较", "整数", "高效"],
+    "complexity": {
+      "time": "O(n + k)",
+      "best": "O(n + k)",
+      "avg": "O(n + k)",
+      "worst": "O(n + k)",
+      "space": "O(n + k)"
+    },
+    "steps": [
+      "1. 统计数组中每个元素出现的次数",
+      "2. 用一个新数组(计数数组)计算累加计数",
+      "3. 根据计数数组重建有序数组"
+    ],
+    "stable": true,
+    "idea": "统计数组中每个元素出现的次数，然后根据计数重建有序数组。适用于整数排序且范围不大的场景。",
+    "code": "function countingSort(arr: number[]): number[] {\n  if (arr.length === 0) return arr;\n  const max = Math.max(...arr);\n  const min = Math.min(...arr);\n  const range = max - min + 1;\n  const count = new Array(range).fill(0);\n  for (const num of arr) {\n    count[num - min]++;\n  }\n  for (let i = 1; i < range; i++) {\n    count[i] += count[i - 1];\n  }\n  const output = new Array(arr.length);\n  for (let i = arr.length - 1; i >= 0; i--) {\n    const num = arr[i];\n    const pos = count[num - min] - 1;\n    output[pos] = num;\n    count[num - min]--;\n  }\n  return output;\n}",
+    "scenario": "整数排序、元素范围不大的数据集、作为基数排序的子程序",
+    "performance": "当元素范围k不是很大时，性能优异，时间复杂度为O(n + k)。",
+    "pros": ["线性时间复杂度O(n + k)", "稳定排序", "对于整数排序非常高效"],
+    "cons": ["仅适用于整数排序", "需要知道输入数据的范围", "当范围k很大时，空间开销大"]
+  },
+  {
+    "name": "桶排序",
+    "shortDesc": "将元素分到有限数量的桶里，各桶分别排序",
+    "color": "#FF9E00",
+    "tags": ["分布", "高效", "浮点数"],
+    "complexity": {
+      "time": "O(n + k)",
+      "best": "O(n)",
+      "avg": "O(n + k)",
+      "worst": "O(n²)",
+      "space": "O(n + k)"
+    },
+    "steps": [
+      "1. 将数组根据元素值范围分到有限数量的桶中",
+      "2. 每个桶再分别排序（可以使用其他排序算法或递归桶排序）",
+      "3. 最后合并结果"
+    ],
+    "stable": true,
+    "idea": "将数组分到有限数量的桶中，每个桶再分别排序（可以使用其他排序算法或递归桶排序），最后合并结果。",
+    "code": "function bucketSort(arr, bucketSize = 5) {\n  if (arr.length === 0) return arr;\n  const min = Math.min(...arr);\n  const max = Math.max(...arr);\n  const bucketCount = Math.floor((max - min) / bucketSize) + 1;\n  const buckets = new Array(bucketCount);\n  for (let i = 0; i < buckets.length; i++) {\n    buckets[i] = [];\n  }\n  for (let i = 0; i < arr.length; i++) {\n    const bucketIndex = Math.floor((arr[i] - min) / bucketSize);\n    buckets[bucketIndex].push(arr[i]);\n  }\n  const sortedArray = [];\n  for (let i = 0; i < buckets.length; i++) {\n    if (buckets[i]) {\n      insertionSort(buckets[i]);\n      sortedArray.push(...buckets[i]);\n    }\n  }\n  return sortedArray;\n}",
+    "scenario": "均匀分布的数据、浮点数排序、外部排序",
+    "performance": "当输入数据均匀分布时性能优异，最坏情况为O(n²)。",
+    "pros": ["当数据分布均匀时效率高", "适用于浮点数排序", "可以并行处理各桶"],
+    "cons": ["最坏情况时间复杂度为O(n²)", "需要额外空间", "性能依赖于数据分布和桶的数量"]
+  },
+  {
+    "name": "基数排序",
+    "shortDesc": "按位排序，从最低有效位到最高有效位",
+    "color": "#9B5DE5",
+    "tags": ["非比较", "整数", "字符串"],
+    "complexity": {
+      "time": "O(nk)",
+      "best": "O(nk)",
+      "avg": "O(nk)",
+      "worst": "O(nk)",
+      "space": "O(n + k)"
+    },
+    "steps": [
+      "1. 将整数按位数切割成不同的数字，然后按每个位数分别比较排序（通常使用计数排序作为子程序）",
+      "2. 重复步骤1，直到所有位数都排序完毕"
+    ],
+    "stable": true,
+    "idea": "将整数按位数切割成不同的数字，然后按每个位数分别比较排序（通常使用计数排序作为子程序）。",
+    "code": "function radixSort(arr: number[]): number[] {\n  const max = Math.max(...arr);\n  const maxDigits = String(max).length;\n\n  for (let digit = 0; digit < maxDigits; digit++) {\n    const buckets = Array.from({ length: 10 }, () => []);\n\n    for (const num of arr) {\n      const digitValue = getDigit(num, digit);\n      buckets[digitValue].push(num);\n    }\n\n    arr = buckets.flat();\n  }\n\n  return arr;\n}",   
+    "scenario": "整数排序、字符串排序、固定长度的键排序",
+    "performance": "当键的长度k较小且固定时，性能优异，时间复杂度为O(nk)。",
+    "pros": ["对于固定长度的键效率高", "稳定排序", "适用于整数和字符串排序"],
+    "cons": ["仅适用于整数或可分割为键的元素", "需要额外的存储空间", "当键的长度很大时效率降低"]
+  },
+  {
+    "name": "Tim排序",
+    "shortDesc": "混合排序，结合归并排序和插入排序",
+    "color": "#00BBF9",
+    "tags": ["混合", "高效", "Python内置"],
+    "complexity": {
+      "time": "O(n log n)",
+      "best": "O(n)",
+      "avg": "O(n log n)",
+      "worst": "O(n log n)",
+      "space": "O(n)"
+    },
+    "steps": [
+      "1. 查找数据中的有序片段（run）",
+      "2. 使用插入排序扩展这些片段",
+      "3. 使用归并排序合并这些片段",
+      "4. 重复步骤1~3，直到所有元素均排序完毕"
+    ],
+    "stable": true,
+    "idea": "TimSort是插入排序和归并排序的混合算法。它查找数据中的有序片段（run），使用插入排序扩展这些片段，然后使用归并排序合并这些片段。",
+    "code": "function timSort(arr: number[]): number[] {\n  const MIN_MERGE = 32;\n  const n = arr.length;\n\n  if (n <= MIN_MERGE) {\n    return insertionSort(arr);\n  }\n\n  let minRun = minRunLength(n);\n\n  for (let start = 0; start < n; start += minRun) {\n    const end = Math.min(start + minRun - 1, n - 1);\n    insertionSort(arr, start, end);\n  }\n\n  for (let size = minRun; size < n; size = 2 * size) {\n    for (let left = 0; left < n; left += 2 * size) {\n      const mid = left + size - 1;\n      const right = Math.min(left + 2 * size - 1, n - 1);\n\n      if (mid < right) {\n        merge(arr, left, mid, right);\n      }\n    }\n  }\n\n  return arr;\n}", 
+    "scenario": "通用排序（Python内置排序）、实际应用、混合数据",
+    "performance": "在多种数据情况下表现优异，特别是对部分有序的数据，是实际应用中高效的排序算法。",
+    "pros": [
+      "在多种情况下表现优异",
+      "稳定排序",
+      "利用输入数据中的现有顺序",
+      "Python和Java等语言的内置排序算法"
+    ],
+    "cons": ["实现复杂", "需要额外空间", "对小数组可能不如纯插入排序高效"]
+  },
+  {
+    "name": "竞标赛排序",
+    "shortDesc": "将数组视为一棵完全二叉树，每个节点代表一个元素，每个节点与其左右子节点进行比较，选择较大的元素作为父节点。",
+    "color": "#00BBF9",
+    "tags": ["分治", "稳定", "高效"],
+    "complexity": {
+      "time": "O(n log n)",
+      "best": "O(n log n)",
+      "avg": "O(n log n)",
+      "worst": "O(n log n)",
+      "space": "O(n)"
+    },
+    "steps": [
+      "1. 将数组视为一棵完全二叉树，每个节点代表一个元素",
+      "2. 每个节点与其左右子节点进行比较，选择较大的元素作为父节点",
+      "3. 重复步骤2，直到所有元素均排序完毕"
+    ],
+    "stable": true,
+    "idea": "将数组视为一棵完全二叉树，每个节点代表一个元素，每个节点与其左右子节点进行比较，选择较大的元素作为父节点。",
+    "code": "function tournamentSort(arr: number[]): number[] {\n  const n = arr.length;\n  const tree = new Array(2 * n - 1);\n  for (let i = 0; i < n; i++) {\n    tree[i + n - 1] = arr[i];\n  }\n  for (let i = n - 2; i >= 0; i--) {\n    tree[i] = Math.max(tree[2 * i + 1], tree[2 * i + 2]);\n  }\n\n  const result = [];\n  for (let i = 0; i < n; i++) {\n    result.push(getMax(tree, i));\n  }\n  return result;\n}",
+    "scenario": "需要稳定排序的场景",
+    "performance": "时间复杂度为O(n log n)",
+    "pros": ["稳定排序", "高效", "适用于需要稳定排序的场景"],
+    "cons": ["需要额外的空间", "不适用于大型数据集"]
+  }
+]

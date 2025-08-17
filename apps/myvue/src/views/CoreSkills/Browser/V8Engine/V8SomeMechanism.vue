@@ -3,7 +3,7 @@
     <!-- 头部区域 -->
     <div class="header">
       <div class="title-container">
-        <h1>V8 JavaScript引擎机制详解</h1>
+        <h1>V8 JavaScript引擎机制介绍</h1>
         <p>探索Google Chrome背后的高性能JavaScript执行引擎</p>
       </div>
       <div class="engine-tag">
@@ -21,7 +21,9 @@
           </div>
           <div class="content">
             <h2>V8引擎是什么？</h2>
-            <p>V8是由Google开发的开源高性能JavaScript和WebAssembly引擎，用C++编写。它是Chrome浏览器和Node.js的核心组件，负责将JavaScript代码编译成机器码并执行。</p>
+            <p>
+              V8是由Google开发的开源高性能JavaScript和WebAssembly引擎，用C++编写。它是Chrome浏览器和Node.js的核心组件，负责将JavaScript代码编译成机器码并执行。
+            </p>
             <div class="key-facts">
               <div class="fact">
                 <div class="fact-icon">⚡</div>
@@ -142,7 +144,9 @@
         </h2>
         <div class="bytecode-section">
           <div class="bytecode-explanation">
-            <p>Ignition生成的字节码是V8架构的关键创新，它取代了早期的全代码生成器，提供了多项优势：</p>
+            <p>
+              Ignition生成的字节码是V8架构的关键创新，它取代了早期的全代码生成器，提供了多项优势：
+            </p>
 
             <div class="benefit">
               <div class="benefit-icon">📉</div>
@@ -350,14 +354,13 @@ Frame size 0
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref } from 'vue'
 
 // 用于控制活动标签页的状态
-const activeTab = ref('overview');
+const activeTab = ref('overview')
 </script>
 
 <style lang="less" scoped>
-
 .v8-engine-container {
   max-width: 1200px;
   margin: 0 auto;
@@ -566,12 +569,14 @@ const activeTab = ref('overview');
   }
 }
 
-.performance-reasons, .optimization-tips {
+.performance-reasons,
+.optimization-tips {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 1.5rem;
 
-  .reason-card, .tip-card {
+  .reason-card,
+  .tip-card {
     background: #f1f5f9;
     border-radius: 12px;
     padding: 1.8rem 1.5rem;
@@ -583,7 +588,8 @@ const activeTab = ref('overview');
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
     }
 
-    .reason-icon, .tip-icon {
+    .reason-icon,
+    .tip-icon {
       font-size: 2.5rem;
       margin-bottom: 1rem;
     }
@@ -658,7 +664,8 @@ const activeTab = ref('overview');
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
 
-  .javascript-code, .bytecode-code {
+  .javascript-code,
+  .bytecode-code {
     background: white;
     border-radius: 8px;
     padding: 1rem;
@@ -769,7 +776,8 @@ const activeTab = ref('overview');
 }
 
 @media (max-width: 992px) {
-  .architecture, .bytecode-section {
+  .architecture,
+  .bytecode-section {
     grid-template-columns: 1fr;
   }
 

@@ -1,7 +1,7 @@
 <template>
   <div class="microtask-container">
     <header class="header">
-      <h1>JavaScript queueMicrotask 详解</h1>
+      <h1>JavaScript queueMicrotask 介绍</h1>
       <p>深入理解微任务队列机制及其应用</p>
     </header>
 
@@ -13,7 +13,10 @@
           <h2>概念解析</h2>
         </div>
         <div class="content">
-          <p class="definition"><code>queueMicrotask()</code> 是一个将函数添加到微任务队列的全局方法，用于在当前任务完成后、渲染前执行。</p>
+          <p class="definition">
+            <code>queueMicrotask()</code>
+            是一个将函数添加到微任务队列的全局方法，用于在当前任务完成后、渲染前执行。
+          </p>
 
           <div class="event-loop">
             <h3>事件循环中的位置</h3>
@@ -292,7 +295,10 @@ function processUpdates() {
     </div>
 
     <footer class="footer">
-      <p>queueMicrotask 提供了一种高效管理异步操作的方式，合理使用可以优化应用性能，但需注意避免过度使用导致微任务队列过载</p>
+      <p>
+        queueMicrotask
+        提供了一种高效管理异步操作的方式，合理使用可以优化应用性能，但需注意避免过度使用导致微任务队列过载
+      </p>
     </footer>
   </div>
 </template>
@@ -467,7 +473,7 @@ function processUpdates() {
         display: inline-block;
 
         &:after {
-          content: "优先级";
+          content: '优先级';
           margin-left: 4px;
         }
       }
@@ -512,7 +518,8 @@ function processUpdates() {
 
 /* 使用方法样式 */
 .usage {
-  .basic-usage, .advanced-usage {
+  .basic-usage,
+  .advanced-usage {
     margin-bottom: 24px;
 
     h3 {
@@ -596,7 +603,8 @@ function processUpdates() {
     }
   }
 
-  .pros, .cons {
+  .pros,
+  .cons {
     h3 {
       font-size: 1.3rem;
       margin: 0 0 16px;

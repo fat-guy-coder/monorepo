@@ -2,7 +2,7 @@
   <div class="web-server-container">
     <!-- 标题区域 -->
     <section class="hero-section">
-      <h1 class="hero-title">Web服务器详解</h1>
+      <h1 class="hero-title">Web服务器介绍</h1>
       <div class="hero-subtitle">互联网世界的核心基础设施</div>
       <div class="hero-stats">
         <div class="stat-card">
@@ -127,7 +127,7 @@
           <div class="device-icon">💻</div>
           <div class="device-label">客户端</div>
         </div>
-        <div class="protocol-arrow">⇄ HTTP(S)  ⇄</div>
+        <div class="protocol-arrow">⇄ HTTP(S) ⇄</div>
         <div class="protocol-server">
           <div class="device-icon">🖥️</div>
           <div class="device-label">Web服务器</div>
@@ -321,20 +321,18 @@
 
 <script setup lang="ts">
 // 组件逻辑
-import { ref } from 'vue';
+import { ref } from 'vue'
 
 // 示例数据 - 实际应用中可替换为API获取的数据
 const serverStats = ref({
   apacheUsage: 23.5,
   nginxUsage: 35.1,
   iisUsage: 15.3,
-  others: 26.1
-});
+  others: 26.1,
+})
 </script>
 
 <style lang="less" scoped>
-
-
 // 颜色变量
 @primary-color: #4a6cf7;
 @secondary-color: #6e45e2;
@@ -348,7 +346,13 @@ const serverStats = ref({
 
 // 基础样式
 .web-server-container {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family:
+    'Inter',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem 1.5rem;
@@ -495,12 +499,14 @@ const serverStats = ref({
   }
 }
 
-.components-grid, .features-grid {
+.components-grid,
+.features-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 1.5rem;
 
-  .component-card, .feature-card {
+  .component-card,
+  .feature-card {
     background: white;
     padding: 1.75rem 1.5rem;
     border-radius: 12px;
@@ -514,7 +520,8 @@ const serverStats = ref({
       box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
     }
 
-    .component-icon, .feature-icon {
+    .component-icon,
+    .feature-icon {
       font-size: 2.5rem;
       margin-bottom: 1rem;
       color: @primary-color;
@@ -602,7 +609,9 @@ const serverStats = ref({
   border-radius: 12px;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
 
-  .protocol-client, .protocol-server, .protocol-database {
+  .protocol-client,
+  .protocol-server,
+  .protocol-database {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -839,7 +848,8 @@ const serverStats = ref({
   }
 
   .comparison-table {
-    .table-header, .table-row {
+    .table-header,
+    .table-row {
       flex-direction: column;
     }
 

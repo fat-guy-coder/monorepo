@@ -5,6 +5,7 @@
       <span class="fold" @click.stop="fold = !fold">{{ fold ? '收起' : '展开' }}</span>
     </h2>
     <ul class="list" :style="{ display: fold ? 'block' : 'none' }">
+      <li v-if="showBackToTop" @click="scrollToTop" class="nav-item">回到顶部</li>
       <li
         v-for="(item, index) in newList"
         :key="index"
@@ -36,10 +37,15 @@ interface Item {
   title?: string
   id: string
   children?: Item[]
+  [key: string]: any
 }
 
-type NavItem = Item & {
-  [index: string]: any
+const scrollToTop = () => {
+  let element = document.getElementById('mainView')
+  if (element) {
+    element.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+  element = null
 }
 
 const newList = computed(() => {
@@ -49,9 +55,9 @@ const newList = computed(() => {
       title: item[title || 'name'],
       id: item[id || 'id'],
       children: props.showChild
-        ? item[children || 'children'].map((child: NavItem) => {
+        ? item[children || 'children'].map((child: Item) => {
             return {
-              title: child[title || 'name'],
+              title: child[title  || 'name'],
               id: child[id || 'id'],
             }
           })
@@ -72,7 +78,7 @@ const props = defineProps({
     required: false,
   },
   list: {
-    type: Array<NavItem>,
+    type: Array<Item>,
     required: true,
   },
   showChild: {
@@ -98,6 +104,16 @@ const props = defineProps({
     required: false,
     default: 'top-right',
   },
+  scrollTo: {
+    type: String as PropType<'center' | 'end' | 'start' | 'nearest'>,
+    required: false,
+    default: 'center',
+  },
+  showBackToTop: {
+    type: Boolean,
+    required: false,
+    default: false,
+  },
 })
 
 // 响应式状态
@@ -107,7 +123,7 @@ const scrollTo = (event: Event, id: string) => {
   }
   const element = document.getElementById(id)
   if (element) {
-    element.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    element.scrollIntoView({ behavior: 'smooth', block: props.scrollTo })
   }
 }
 </script>

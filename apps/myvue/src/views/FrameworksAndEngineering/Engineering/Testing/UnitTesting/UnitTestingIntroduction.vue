@@ -1,7 +1,7 @@
 <template>
   <div class="unit-test-container">
     <header class="header">
-      <h1>前端 <span class="highlight">单元测试</span> 详解</h1>
+      <h1>前端 <span class="highlight">单元测试</span> 介绍</h1>
       <p class="subtitle">构建可靠前端应用的基石</p>
     </header>
 
@@ -11,7 +11,9 @@
         <div class="intro-content">
           <div class="intro-text">
             <h2><i class="fas fa-flask"></i> 什么是单元测试？</h2>
-            <p>单元测试是针对软件中最小可测试单元（通常是函数或组件）进行的验证过程，确保其按预期工作。</p>
+            <p>
+              单元测试是针对软件中最小可测试单元（通常是函数或组件）进行的验证过程，确保其按预期工作。
+            </p>
           </div>
           <div class="testing-pyramid">
             <div class="pyramid-layer end-to-end">
@@ -110,7 +112,8 @@
         <div class="code-examples">
           <div class="example-card">
             <h3><i class="fas fa-code"></i> 测试纯函数示例</h3>
-            <pre>// 被测函数
+            <pre>
+// 被测函数
 function sum(a, b) {
   return a + b;
 }
@@ -118,12 +121,14 @@ function sum(a, b) {
 // 测试用例
 test('adds 1 + 2 to equal 3', () => {
   expect(sum(1, 2)).toBe(3);
-});</pre>
+});</pre
+            >
           </div>
 
           <div class="example-card">
             <h3><i class="fab fa-vuejs"></i> Vue 组件测试示例</h3>
-            <pre>import { mount } from '@vue/test-utils';
+            <pre>
+import { mount } from '@vue/test-utils';
 import Button from './Button.vue';
 
 test('renders button with correct text', () => {
@@ -135,7 +140,8 @@ test('renders button with correct text', () => {
 
   expect(wrapper.text()).toContain('Submit');
   expect(wrapper.attributes('type')).toBe('button');
-});</pre>
+});</pre
+            >
           </div>
         </div>
       </section>
@@ -234,7 +240,9 @@ test('renders button with correct text', () => {
             <div class="practice-number">2</div>
             <div class="practice-content">
               <h3>遵循 FIRST 原则</h3>
-              <p>Fast（快速）、Independent（独立）、Repeatable（可重复）、Self-Validating（自验证）、Timely（及时）</p>
+              <p>
+                Fast（快速）、Independent（独立）、Repeatable（可重复）、Self-Validating（自验证）、Timely（及时）
+              </p>
             </div>
           </div>
 
@@ -274,7 +282,9 @@ test('renders button with correct text', () => {
         <div class="coverage-chart">
           <div class="chart-container">
             <div class="coverage-metric">
-              <div class="metric-value" :style="{ '--percentage': coverageData.statements }">85%</div>
+              <div class="metric-value" :style="{ '--percentage': coverageData.statements }">
+                85%
+              </div>
               <div class="metric-label">语句覆盖率</div>
             </div>
             <div class="coverage-metric">
@@ -282,7 +292,9 @@ test('renders button with correct text', () => {
               <div class="metric-label">分支覆盖率</div>
             </div>
             <div class="coverage-metric">
-              <div class="metric-value" :style="{ '--percentage': coverageData.functions }">90%</div>
+              <div class="metric-value" :style="{ '--percentage': coverageData.functions }">
+                90%
+              </div>
               <div class="metric-label">函数覆盖率</div>
             </div>
             <div class="coverage-metric">
@@ -306,41 +318,38 @@ test('renders button with correct text', () => {
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref } from 'vue'
 
 // 测试覆盖率数据
 const coverageData = ref({
   statements: 85,
   branches: 75,
   functions: 90,
-  lines: 87
-});
+  lines: 87,
+})
 
 // 单元测试优点
 const pros = ref([
-  "提高代码质量和可靠性",
-  "减少回归缺陷，增强重构信心",
-  "作为代码文档，说明功能预期行为",
-  "促进模块化设计，降低耦合度",
-  "缩短调试时间，提高开发效率",
-  "支持持续集成和自动化部署"
-]);
+  '提高代码质量和可靠性',
+  '减少回归缺陷，增强重构信心',
+  '作为代码文档，说明功能预期行为',
+  '促进模块化设计，降低耦合度',
+  '缩短调试时间，提高开发效率',
+  '支持持续集成和自动化部署',
+])
 
 // 单元测试缺点
 const cons = ref([
-  "初期增加开发时间和成本",
-  "需要学习测试框架和工具",
-  "过度测试可能导致维护负担",
-  "无法发现集成问题或设计缺陷",
-  "测试代码本身也需要维护",
-  "可能产生虚假安全感（覆盖率高≠质量高）"
-]);
+  '初期增加开发时间和成本',
+  '需要学习测试框架和工具',
+  '过度测试可能导致维护负担',
+  '无法发现集成问题或设计缺陷',
+  '测试代码本身也需要维护',
+  '可能产生虚假安全感（覆盖率高≠质量高）',
+])
 </script>
 
 <style lang="less" scoped>
-
-
-
 :root {
   --primary: #4361ee;
   --primary-light: #eef2ff;
@@ -364,7 +373,15 @@ const cons = ref([
 }
 
 .unit-test-container {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+  font-family:
+    'Inter',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    Oxygen,
+    Ubuntu,
+    sans-serif;
   background: linear-gradient(135deg, #f8f9fa 0%, #f0f4ff 100%);
   color: var(--dark);
   line-height: 1.6;
@@ -543,10 +560,22 @@ const cons = ref([
     margin: 0 auto 20px;
     font-size: 2rem;
 
-    &.bug { background: rgba(231, 29, 54, 0.1); color: var(--danger); }
-    &.docs { background: rgba(67, 97, 238, 0.1); color: var(--primary); }
-    &.refactor { background: rgba(46, 196, 182, 0.1); color: var(--success); }
-    &.design { background: rgba(255, 159, 28, 0.1); color: var(--warning); }
+    &.bug {
+      background: rgba(231, 29, 54, 0.1);
+      color: var(--danger);
+    }
+    &.docs {
+      background: rgba(67, 97, 238, 0.1);
+      color: var(--primary);
+    }
+    &.refactor {
+      background: rgba(46, 196, 182, 0.1);
+      color: var(--success);
+    }
+    &.design {
+      background: rgba(255, 159, 28, 0.1);
+      color: var(--warning);
+    }
   }
 
   h3 {
@@ -686,9 +715,15 @@ const cons = ref([
     border-radius: 0 0 0 12px;
     font-weight: bold;
 
-    &.high { background: var(--success); }
-    &.medium { background: var(--warning); }
-    &.low { background: var(--danger); }
+    &.high {
+      background: var(--success);
+    }
+    &.medium {
+      background: var(--warning);
+    }
+    &.low {
+      background: var(--danger);
+    }
   }
 }
 
@@ -702,7 +737,8 @@ const cons = ref([
     grid-template-columns: 1fr;
   }
 
-  .pros, .cons {
+  .pros,
+  .cons {
     border-radius: 12px;
     padding: 30px;
   }
@@ -818,10 +854,7 @@ const cons = ref([
       position: relative;
       background:
         radial-gradient(closest-side, white 79%, transparent 80% 100%),
-        conic-gradient(
-          var(--success) calc(var(--percentage) * 1%),
-          #e2e8f0 0
-        );
+        conic-gradient(var(--success) calc(var(--percentage) * 1%), #e2e8f0 0);
 
       &::before {
         content: attr(data-value);

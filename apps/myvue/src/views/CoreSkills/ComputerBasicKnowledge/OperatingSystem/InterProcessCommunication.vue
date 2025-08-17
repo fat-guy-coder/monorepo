@@ -5,10 +5,11 @@
         <div class="logo-icon">
           <svg viewBox="0 0 24 24">
             <path
-              d="M4,4H20A2,2 0 0,1 22,6V18A2,2 0 0,1 20,20H4A2,2 0 0,1 2,18V6A2,2 0 0,1 4,4M4,6V18H20V6H4M8,8H16V10H8V8M8,11H16V13H8V11M8,14H16V16H8V14Z" />
+              d="M4,4H20A2,2 0 0,1 22,6V18A2,2 0 0,1 20,20H4A2,2 0 0,1 2,18V6A2,2 0 0,1 4,4M4,6V18H20V6H4M8,8H16V10H8V8M8,11H16V13H8V11M8,14H16V16H8V14Z"
+            />
           </svg>
         </div>
-        <div class="logo-text">进程间通信详解</div>
+        <div class="logo-text">进程间通信介绍</div>
       </div>
       <h1>深入理解进程间通信(IPC)机制</h1>
       <p class="subtitle">现代操作系统中进程协作的核心技术</p>
@@ -26,12 +27,17 @@
             <div class="overview-card">
               <div class="card-icon">🔒</div>
               <h3>什么是IPC</h3>
-              <p>进程间通信(Inter-Process Communication, IPC)是指操作系统提供的，允许不同进程之间进行数据交换和通信的机制。</p>
+              <p>
+                进程间通信(Inter-Process Communication,
+                IPC)是指操作系统提供的，允许不同进程之间进行数据交换和通信的机制。
+              </p>
             </div>
             <div class="overview-card">
               <div class="card-icon">⚙️</div>
               <h3>为什么需要IPC</h3>
-              <p>进程拥有独立的内存空间，彼此隔离。IPC打破这种隔离，使进程能够协同工作，共享数据和资源。</p>
+              <p>
+                进程拥有独立的内存空间，彼此隔离。IPC打破这种隔离，使进程能够协同工作，共享数据和资源。
+              </p>
             </div>
             <div class="overview-card">
               <div class="card-icon">🌐</div>
@@ -89,8 +95,12 @@
         <div class="section-content">
           <div class="ipc-tabs">
             <div class="tab-buttons">
-              <button v-for="(method, index) in ipcMethods" :key="index" :class="{ active: activeTab === index }"
-                @click="activeTab = index">
+              <button
+                v-for="(method, index) in ipcMethods"
+                :key="index"
+                :class="{ active: activeTab === index }"
+                @click="activeTab = index"
+              >
                 {{ method.title }}
               </button>
             </div>
@@ -138,7 +148,8 @@
 
                   <h4>代码示例（C语言）</h4>
                   <div class="code-block">
-                    <pre>#include &lt;unistd.h&gt;
+                    <pre>
+#include &lt;unistd.h&gt;
 
 int main() {
   int fd[2];
@@ -155,7 +166,8 @@ int main() {
     printf("Received: %s\n", buf);
     close(fd[0]);
   }
-}</pre>
+}</pre
+                    >
                   </div>
                 </div>
 
@@ -184,7 +196,9 @@ int main() {
             <div class="tab-content" v-if="activeTab === 1">
               <div class="ipc-card">
                 <h3>消息队列 (Message Queue)</h3>
-                <p class="description">消息的链表结构，存储在内核中，进程可以向队列中添加消息或从中读取消息。</p>
+                <p class="description">
+                  消息的链表结构，存储在内核中，进程可以向队列中添加消息或从中读取消息。
+                </p>
 
                 <div class="ipc-details">
                   <div class="details-grid">
@@ -227,7 +241,8 @@ int main() {
 
                   <h4>代码示例（C语言）</h4>
                   <div class="code-block">
-                    <pre>#include &lt;sys/msg.h&gt;
+                    <pre>
+#include &lt;sys/msg.h&gt;
 
 struct msg_buffer {
   long msg_type;
@@ -247,7 +262,8 @@ int main() {
   printf("Received: %s\n", message.msg_text);
 
   msgctl(msgid, IPC_RMID, NULL); // 删除队列
-}</pre>
+}</pre
+                    >
                   </div>
                 </div>
 
@@ -324,7 +340,8 @@ int main() {
 
                   <h4>代码示例（C语言）</h4>
                   <div class="code-block">
-                    <pre>#include &lt;sys/shm.h&gt;
+                    <pre>
+#include &lt;sys/shm.h&gt;
 
 int main() {
   key_t key = ftok("shmfile", 65);
@@ -342,7 +359,8 @@ int main() {
   // 分离共享内存
   shmdt(str);
   shmctl(shmid, IPC_RMID, NULL); // 删除共享内存
-}</pre>
+}</pre
+                    >
                   </div>
                 </div>
 
@@ -533,9 +551,9 @@ int main() {
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref } from 'vue'
 
-const activeTab = ref(0);
+const activeTab = ref(0)
 
 const ipcMethods = [
   { title: '管道' },
@@ -543,8 +561,8 @@ const ipcMethods = [
   { title: '共享内存' },
   { title: '信号量' },
   { title: '信号' },
-  { title: '套接字' }
-];
+  { title: '套接字' },
+]
 </script>
 
 <style lang="less" scoped>
@@ -773,7 +791,7 @@ const ipcMethods = [
       position: relative;
 
       &::before {
-        content: "";
+        content: '';
         position: absolute;
         width: 100%;
         height: 2px;
@@ -783,7 +801,7 @@ const ipcMethods = [
       }
 
       &::after {
-        content: "▼";
+        content: '▼';
         position: absolute;
         right: 0;
         top: 50%;

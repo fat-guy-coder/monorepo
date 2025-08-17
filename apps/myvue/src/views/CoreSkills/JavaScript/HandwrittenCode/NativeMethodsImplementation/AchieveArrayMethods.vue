@@ -10,7 +10,10 @@
         <div class="overview-icon">🔍</div>
         <div class="overview-content">
           <h2>为什么要手写数组方法？</h2>
-          <p>手写实现数组原生方法能帮助我们深入理解 JavaScript 的核心原理，提升编程能力，并在面试中展示扎实的基础知识。</p>
+          <p>
+            手写实现数组原生方法能帮助我们深入理解 JavaScript
+            的核心原理，提升编程能力，并在面试中展示扎实的基础知识。
+          </p>
           <div class="benefits">
             <div class="benefit">
               <div class="benefit-icon">🧠</div>
@@ -34,8 +37,12 @@
     </div>
 
     <div class="methods-grid">
-      <div v-for="method in methods" :key="method.name" class="method-card"
-        :class="{ expanded: expandedMethod === method.name }">
+      <div
+        v-for="method in methods"
+        :key="method.name"
+        class="method-card"
+        :class="{ expanded: expandedMethod === method.name }"
+      >
         <div class="method-header" @click="toggleMethod(method.name)">
           <div class="method-icon">{{ method.icon }}</div>
           <h3>{{ method.name }}</h3>
@@ -87,7 +94,8 @@
             <h3>Array.prototype.flat</h3>
           </div>
           <div class="implementation">
-            <pre>Array.prototype.myFlat = function(depth = 1) {
+            <pre>
+Array.prototype.myFlat = function(depth = 1) {
   const result = [];
 
   const flatten = (arr, currentDepth) => {
@@ -102,7 +110,8 @@
 
   flatten(this, depth);
   return result;
-};</pre>
+};</pre
+            >
           </div>
         </div>
 
@@ -112,7 +121,8 @@
             <h3>Array.prototype.reduceRight</h3>
           </div>
           <div class="implementation">
-            <pre>Array.prototype.myReduceRight = function(callback, initialValue) {
+            <pre>
+Array.prototype.myReduceRight = function(callback, initialValue) {
   let accumulator = initialValue;
   let startIndex = this.length - 1;
 
@@ -129,7 +139,8 @@
   }
 
   return accumulator;
-};</pre>
+};</pre
+            >
           </div>
         </div>
       </div>
@@ -143,9 +154,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref } from 'vue'
 
-const expandedMethod = ref('map');
+const expandedMethod = ref('map')
 const methods = ref([
   {
     name: 'Array.prototype.map',
@@ -156,7 +167,7 @@ const methods = ref([
       '返回一个新数组，不改变原数组',
       '遍历所有元素，包括空槽',
       '回调函数接受三个参数：当前元素、索引、原数组',
-      '如果数组是稀疏的，回调函数不会在空槽上调用'
+      '如果数组是稀疏的，回调函数不会在空槽上调用',
     ],
     implementation: `Array.prototype.myMap = function(callback, thisArg) {
   // 检查回调是否为函数
@@ -181,7 +192,7 @@ const methods = ref([
 const doubled = numbers.myMap(num => num * 2);
 
 console.log(doubled);`,
-    result: ''
+    result: '',
   },
   {
     name: 'Array.prototype.filter',
@@ -192,7 +203,7 @@ console.log(doubled);`,
       '返回一个新数组，不改变原数组',
       '新数组只包含通过测试的元素',
       '回调函数应返回布尔值',
-      '空槽会被跳过'
+      '空槽会被跳过',
     ],
     implementation: `Array.prototype.myFilter = function(callback, thisArg) {
   if (typeof callback !== 'function') {
@@ -215,7 +226,7 @@ console.log(doubled);`,
 const evenNumbers = numbers.myFilter(num => num % 2 === 0);
 
 console.log(evenNumbers);`,
-    result: ''
+    result: '',
   },
   {
     name: 'Array.prototype.find',
@@ -226,7 +237,7 @@ console.log(evenNumbers);`,
       '返回第一个满足条件的元素',
       '如果没有找到则返回 undefined',
       '不改变原数组',
-      '在找到第一个匹配项后停止遍历'
+      '在找到第一个匹配项后停止遍历',
     ],
     implementation: `Array.prototype.myFind = function(callback, thisArg) {
   if (typeof callback !== 'function') {
@@ -252,7 +263,7 @@ console.log(evenNumbers);`,
 
 const user = users.myFind(user => user.id === 2);
 console.log(user);`,
-    result: ''
+    result: '',
   },
   {
     name: 'Array.prototype.findIndex',
@@ -263,7 +274,7 @@ console.log(user);`,
       '返回第一个满足条件的元素的索引',
       '如果没有找到则返回 -1',
       '不改变原数组',
-      '在找到第一个匹配项后停止遍历'
+      '在找到第一个匹配项后停止遍历',
     ],
     implementation: `Array.prototype.myFindIndex = function(callback, thisArg) {
   if (typeof callback !== 'function') {
@@ -286,19 +297,14 @@ const isLarge = num => num > 10;
 const index = numbers.myFindIndex(isLarge);
 
 console.log(index);`,
-    result: ''
+    result: '',
   },
   {
     name: 'Array.prototype.every',
     icon: '✅',
     summary: '测试一个数组内的所有元素是否都能通过指定函数的测试',
     thinking: '遍历数组，对每个元素应用测试函数，如果所有元素都通过测试则返回 true',
-    behaviors: [
-      '返回布尔值',
-      '空数组调用返回 true',
-      '遇到第一个 false 立即返回',
-      '不改变原数组'
-    ],
+    behaviors: ['返回布尔值', '空数组调用返回 true', '遇到第一个 false 立即返回', '不改变原数组'],
     implementation: `Array.prototype.myEvery = function(callback, thisArg) {
   if (typeof callback !== 'function') {
     throw new TypeError(callback + ' is not a function');
@@ -320,19 +326,14 @@ const allAboveTen = numbers.myEvery(num => num > 10);
 const allAboveFour = numbers.myEvery(num => num > 4);
 
 console.log(allAboveTen, allAboveFour);`,
-    result: ''
+    result: '',
   },
   {
     name: 'Array.prototype.some',
     icon: '🔶',
     summary: '测试数组中是否至少有一个元素通过了提供的函数测试',
     thinking: '遍历数组，对每个元素应用测试函数，如果至少有一个元素通过测试则返回 true',
-    behaviors: [
-      '返回布尔值',
-      '空数组调用返回 false',
-      '遇到第一个 true 立即返回',
-      '不改变原数组'
-    ],
+    behaviors: ['返回布尔值', '空数组调用返回 false', '遇到第一个 true 立即返回', '不改变原数组'],
     implementation: `Array.prototype.mySome = function(callback, thisArg) {
   if (typeof callback !== 'function') {
     throw new TypeError(callback + ' is not a function');
@@ -354,7 +355,7 @@ const hasEven = numbers.mySome(num => num % 2 === 0);
 const hasNegative = numbers.mySome(num => num < 0);
 
 console.log(hasEven, hasNegative);`,
-    result: ''
+    result: '',
   },
   {
     name: 'Array.prototype.reduce',
@@ -365,7 +366,7 @@ console.log(hasEven, hasNegative);`,
       '返回一个值',
       '如果没有初始值，则第一个元素作为初始值',
       '空数组调用且无初始值会报错',
-      '可以用于数组求和、扁平化等多种操作'
+      '可以用于数组求和、扁平化等多种操作',
     ],
     implementation: `Array.prototype.myReduce = function(callback, initialValue) {
   if (typeof callback !== 'function') {
@@ -409,7 +410,7 @@ const sum = numbers.myReduce((acc, curr) => acc + curr, 0);
 const product = numbers.myReduce((acc, curr) => acc * curr, 1);
 
 console.log(sum, product);`,
-    result: ''
+    result: '',
   },
   {
     name: 'Array.prototype.sort',
@@ -420,7 +421,7 @@ console.log(sum, product);`,
       '原地排序（改变原数组）',
       '默认排序顺序是将元素转换为字符串比较',
       '可以接受比较函数',
-      '不稳定排序（V8使用TimSort，稳定）'
+      '不稳定排序（V8使用TimSort，稳定）',
     ],
     implementation: `Array.prototype.mySort = function(compareFn) {
   // 默认比较函数
@@ -465,7 +466,7 @@ console.log(sum, product);`,
 numbers.mySort((a, b) => a - b);
 
 console.log(numbers);`,
-    result: ''
+    result: '',
   },
   {
     name: 'Array.prototype.forEach',
@@ -476,7 +477,7 @@ console.log(numbers);`,
       '不返回任何值',
       '不能中途终止（除非抛出异常）',
       '不改变原数组（除非在回调中改变）',
-      '跳过空槽'
+      '跳过空槽',
     ],
     implementation: `Array.prototype.myForEach = function(callback, thisArg) {
   if (typeof callback !== 'function') {
@@ -496,48 +497,72 @@ console.log(numbers);`,
 fruits.myForEach((fruit, index) => {
   console.log(\`\${index + 1}. \${fruit}\`);
 });`,
-    result: ''
-  }
-]);
+    result: '',
+  },
+  {
+    name: 'Array.prototype.at',
+    icon: '🔄',
+    summary: '返回数组中指定位置的元素',
+    thinking: '返回数组中指定位置的元素',
+    behaviors: [
+      '返回指定位置的元素',
+      '如果索引为负数，则从数组末尾开始计算',
+      '如果索引超出范围，则返回 undefined',
+      '不改变原数组',
+    ],
+    implementation: `Array.prototype.myAt = function(index) {
+      const array = Object(this);
+      const length = array.length >>> 0;
+      const i = index < 0 ? length + index : index;
+      return i in array ? array[i] : undefined;
+    };`,
+    example: `const fruits = ['apple', 'banana', 'cherry'];
+const first = fruits.myAt(0);
+const last = fruits.myAt(-1);
+
+console.log(first, last);`,
+    result: '',
+  },
+])
 
 const toggleMethod = (methodName: string) => {
-  expandedMethod.value = expandedMethod.value === methodName ? '' : methodName;
-};
+  expandedMethod.value = expandedMethod.value === methodName ? '' : methodName
+}
 
 const runExample = (methodName: string) => {
-  const method = methods.value.find(m => m.name === methodName);
-  if (!method) return;
+  const method = methods.value.find((m) => m.name === methodName)
+  if (!method) return
 
   try {
     // 创建一个安全的执行环境
     const fn = new Function(`
       // 添加 polyfill
       if (!Array.prototype.myMap) {
-        Array.prototype.myMap = ${methods.value.find(m => m.name === 'Array.prototype.map')?.implementation};
+        Array.prototype.myMap = ${methods.value.find((m) => m.name === 'Array.prototype.map')?.implementation};
       }
       if (!Array.prototype.myFilter) {
-        Array.prototype.myFilter = ${methods.value.find(m => m.name === 'Array.prototype.filter')?.implementation};
+        Array.prototype.myFilter = ${methods.value.find((m) => m.name === 'Array.prototype.filter')?.implementation};
       }
       if (!Array.prototype.myFind) {
-        Array.prototype.myFind = ${methods.value.find(m => m.name === 'Array.prototype.find')?.implementation};
+        Array.prototype.myFind = ${methods.value.find((m) => m.name === 'Array.prototype.find')?.implementation};
       }
       if (!Array.prototype.myFindIndex) {
-        Array.prototype.myFindIndex = ${methods.value.find(m => m.name === 'Array.prototype.findIndex')?.implementation};
+        Array.prototype.myFindIndex = ${methods.value.find((m) => m.name === 'Array.prototype.findIndex')?.implementation};
       }
       if (!Array.prototype.myEvery) {
-        Array.prototype.myEvery = ${methods.value.find(m => m.name === 'Array.prototype.every')?.implementation};
+        Array.prototype.myEvery = ${methods.value.find((m) => m.name === 'Array.prototype.every')?.implementation};
       }
       if (!Array.prototype.mySome) {
-        Array.prototype.mySome = ${methods.value.find(m => m.name === 'Array.prototype.some')?.implementation};
+        Array.prototype.mySome = ${methods.value.find((m) => m.name === 'Array.prototype.some')?.implementation};
       }
       if (!Array.prototype.myReduce) {
-        Array.prototype.myReduce = ${methods.value.find(m => m.name === 'Array.prototype.reduce')?.implementation};
+        Array.prototype.myReduce = ${methods.value.find((m) => m.name === 'Array.prototype.reduce')?.implementation};
       }
       if (!Array.prototype.mySort) {
-        Array.prototype.mySort = ${methods.value.find(m => m.name === 'Array.prototype.sort')?.implementation};
+        Array.prototype.mySort = ${methods.value.find((m) => m.name === 'Array.prototype.sort')?.implementation};
       }
       if (!Array.prototype.myForEach) {
-        Array.prototype.myForEach = ${methods.value.find(m => m.name === 'Array.prototype.forEach')?.implementation};
+        Array.prototype.myForEach = ${methods.value.find((m) => m.name === 'Array.prototype.forEach')?.implementation};
       }
 
       // 执行示例代码
@@ -546,14 +571,14 @@ const runExample = (methodName: string) => {
       })();
 
       return typeof result === 'object' ? JSON.stringify(result) : String(result);
-    `);
+    `)
 
-    const result = fn();
-    method.result = result;
+    const result = fn()
+    method.result = result
   } catch (error) {
-    method.result = `错误: ${(error as Error).message}`;
+    method.result = `错误: ${(error as Error).message}`
   }
-};
+}
 </script>
 
 <style lang="less" scoped>

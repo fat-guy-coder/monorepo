@@ -60,7 +60,7 @@
 
       <div class="columns">
         <section class="lazy-loading">
-          <h2><span class="icon">🦥</span> 懒加载详解</h2>
+          <h2><span class="icon">🦥</span> 懒加载介绍</h2>
           <div class="card">
             <h3>实现原理</h3>
             <p>懒加载的核心思想是延迟加载非关键资源，直到用户需要它们时再加载。</p>
@@ -171,7 +171,7 @@ lazyImages.forEach(img => {
         </section>
 
         <section class="preloading">
-          <h2><span class="icon">⚡</span> 预加载详解</h2>
+          <h2><span class="icon">⚡</span> 预加载介绍</h2>
           <div class="card">
             <h3>实现原理</h3>
             <p>预加载的核心是提前获取后续页面所需的关键资源。</p>
@@ -519,8 +519,6 @@ const activeTab = ref('vue')
 </script>
 
 <style lang="less" scoped>
-
-
 // 颜色变量
 @primary-color: #4a6cf7;
 @secondary-color: #657ef8;

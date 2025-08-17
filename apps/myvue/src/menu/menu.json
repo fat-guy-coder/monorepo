@@ -256,6 +256,26 @@
                 "name": "MediaQueries"
               },
               {
+                "label": "📦 容器查询(Container Queries)(布局) 🌟",
+                "name": "ContainerQueries"
+              },
+              {
+                "label": "📏 宽高比(Aspect Ratio)(布局) ⭐⭐",
+                "name": "AspectRatio"
+              },
+              {
+                "label": "📐 对象适应和对象位置(Object Fit & Object Position)(布局) ⭐⭐",
+                "name": "ObjectFit"
+              },
+              {
+                "label": "🔷 形状(Shapes)(布局) ⭐",
+                "name": "Shapes"
+              },
+              {
+                "label": "➗ CSS函数(计算) ⭐⭐⭐",
+                "name": "CSSFunctions"
+              },
+              {
                 "label": "⏱️ 过渡(Transition)(动画) ⭐⭐⭐",
                 "name": "Transition"
               },
@@ -266,10 +286,6 @@
               {
                 "label": "🔄 变换(Transform)(特效) ⭐⭐⭐",
                 "name": "Transform"
-              },
-              {
-                "label": "➗ CSS函数(计算) ⭐⭐⭐",
-                "name": "CSSFunctions"
               },
               {
                 "label": "🌈 渐变(gradient)(特效) ⭐⭐⭐",
@@ -308,24 +324,8 @@
                 "name": "BlendModes"
               },
               {
-                "label": "📐 对象适应和对象位置(Object Fit & Object Position)(布局) ⭐⭐",
-                "name": "ObjectFit"
-              },
-              {
-                "label": "🔷 形状(Shapes)(布局) ⭐",
-                "name": "Shapes"
-              },
-              {
                 "label": "📜 滚动捕捉(Scroll Snap)(交互) ⭐",
                 "name": "ScrollSnap"
-              },
-              {
-                "label": "📦 容器查询(Container Queries)(布局) 🌟",
-                "name": "ContainerQueries"
-              },
-              {
-                "label": "📏 宽高比(Aspect Ratio)(布局) ⭐⭐",
-                "name": "AspectRatio"
               },
               {
                 "label": "📦 contain(独立渲染)(渲染优化) ⭐",
@@ -581,7 +581,7 @@
                 "name": "Operators"
               },
               {
-                "label": "🔢 运算符优先级和运算符进阶使用 ⭐⭐⭐",
+                "label": "🔢 运算符优先级 ⭐⭐⭐",
                 "name": "OperatorPriorityAndAdvancedUsage"
               },
               {
@@ -641,8 +641,23 @@
                     "name": "CallbackFunction"
                   },
                   {
+                    "label": "🔍 函子与Monad ⭐⭐⭐",
+                    "name": "FunctorAndMonad"
+                  },
+                  {
                     "label": "🔍 递归函数 ⭐⭐⭐",
                     "name": "RecursionFunction"
+                  },
+                  {
+                    "label": "🔍 尾递归 ⭐⭐⭐",
+                    "name": "TailRecursion",
+                    "redirect": {
+                      "name": "TailCall"
+                    }
+                  },
+                  {
+                    "label": "🔍 蹦床函数 ⭐⭐⭐",
+                    "name": "BounceFunction"
                   },
                   {
                     "label": "🔧 eval和with ⭐⭐⭐",
@@ -779,6 +794,10 @@
                   {
                     "label": "🔍 宏任务 ⭐⭐⭐",
                     "name": "MacroTask"
+                  },
+                  {
+                    "label": "🔍 定时器 ⭐⭐⭐",
+                    "name": "Timer"
                   },
                   {
                     "label": "🔍 微任务 ⭐⭐⭐",
@@ -943,6 +962,10 @@
               {
                 "label": "⚙️ Generator(生成器) ⭐⭐",
                 "name": "Generator"
+              },
+              {
+                "label": "🔍 协程与让权 ⭐⭐",
+                "name": "CoroutineAndYield"
               },
               {
                 "label": "📜 Iterator(迭代器) ⭐⭐",
@@ -1191,8 +1214,16 @@
                     "name": "AchieveInstanceof"
                   },
                   {
+                    "label": "📊 实现字符串原生方法 ⭐⭐⭐",
+                    "name": "AchieveStringMethods"
+                  },
+                  {
                     "label": "📊 实现数组原生方法 ⭐⭐⭐",
                     "name": "AchieveArrayMethods"
+                  },
+                  {
+                    "label": "📊 实现对象原生方法 ⭐⭐⭐",
+                    "name": "AchieveObjectMethods"
                   },
                   {
                     "label": "📞 call,apply,bind实现 ⭐⭐⭐",
@@ -1207,83 +1238,161 @@
                     "name": "JSONStringifyAndParse"
                   },
                   {
-                    "label": "🤝 Promise 实现 ⭐⭐",
-                    "name": "PromiseImplementation"
+                    "label": "🤝 Promise 相关 ⭐⭐",
+                    "name": "PromiseCorrelation",
+                    "children": [
+                      {
+                        "label": "🤝 Promise实现 ⭐⭐⭐",
+                        "name": "PromiseImplementation"
+                      },
+                      {
+                        "label": "🤝 Promise场景 ⭐⭐⭐",
+                        "name": "PromiseScenarios"
+                      }
+                    ]
                   }
                 ]
               },
               {
-                "label": "⚙️ 功能实现 ⭐⭐⭐",
-                "name": "FunImplementation",
-                "children": [
-                  {
-                    "label": "🔄 判断空对象 ⭐⭐⭐",
-                    "name": "JudgeEmptyObject"
-                  },
-                  {
-                    "label": "⏳ 防抖节流(Debounce/Throttle) ⭐⭐⭐",
-                    "name": "DebounceThrottle"
-                  },
-                  {
-                    "label": "🔄 实现双向绑定 ⭐⭐",
-                    "name": "AchieveBidirectionalBind"
-                  },
-                  {
-                    "label": "🍛 实现柯里化 ⭐⭐",
-                    "name": "AchieveCurry"
-                  },
-                  {
-                    "label": "🧭 实现前端路由 ⭐⭐",
-                    "name": "AchieveFrontendRouter"
-                  }
-                ]
-              },
-              {
-                "label": "📐 设计模式实现 ⭐⭐",
+                "label": "📐 设计模式实现 ⭐⭐⭐",
                 "name": "DesignPatternImplementation",
                 "children": [
                   {
-                    "label": "👤 单例模式实现 ⭐⭐",
+                    "label": "👤 单例模式实现 ⭐⭐⭐",
                     "name": "SingletonPattern"
                   },
                   {
-                    "label": "👁️ 观察者模式实现 ⭐⭐",
+                    "label": "👁️ 观察者模式实现 ⭐⭐⭐",
                     "name": "ObserverPattern"
                   },
                   {
-                    "label": "📢 发布订阅模式实现 ⭐⭐",
+                    "label": "📢 发布订阅模式实现 ⭐⭐⭐",
                     "name": "PublishSubscribeImplementation"
                   },
                   {
-                    "label": "🔄 工厂模式实现 ⭐⭐",
+                    "label": "🔄 工厂模式实现 ⭐⭐⭐",
                     "name": "FactoryPattern"
+                  },
+                  {
+                    "label": "🔄 策略模式实现 ⭐⭐⭐",
+                    "name": "StrategyPattern"
+                  },
+                  {
+                    "label": "🔄 状态模式实现 ⭐⭐",
+                    "name": "StatePattern"
                   },
                   {
                     "label": "🔄 代理模式实现 ⭐⭐",
                     "name": "ProxyPattern"
                   },
                   {
-                    "label": "🔄 装饰器模式实现 ⭐⭐",
+                    "label": "🔄 命令模式实现 ⭐⭐",
+                    "name": "CommandPattern"
+                  },
+                  {
+                    "label": "🔄 迭代器模式实现 ⭐⭐",
+                    "name": "IteratorPattern"
+                  },
+                  {
+                    "label": "🔄 装饰器模式实现 ⭐",
                     "name": "DecoratorPattern"
                   },
                   {
-                    "label": "🔄 适配器模式实现 ⭐⭐",
+                    "label": "🔄 适配器模式实现 ⭐",
                     "name": "AdapterPattern"
                   },
+
                   {
-                    "label": "🔄 策略模式实现 ⭐⭐",
-                    "name": "StrategyPattern"
+                    "label": "🔄 责任链模式实现 ⭐",
+                    "name": "ChainOfResponsibilityPattern"
+                  },
+
+                  {
+                    "label": "🔄 模板方法模式实现 ⭐",
+                    "name": "TemplateMethodPattern"
+                  },
+
+                  {
+                    "label": "🔄 组合模式实现 ⭐",
+                    "name": "CompositePattern"
+                  },
+                  {
+                    "label": "🔄 享元模式实现 ⭐",
+                    "name": "FlyweightPattern"
                   }
                 ]
               },
               {
-                "label": "📊 数据相关 ⭐⭐⭐",
-                "name": "DataRelated",
+                "label": "⚙️ 功能实现 ⭐⭐",
+                "name": "FunImplementation",
                 "children": [
                   {
-                    "label": "🔢 手写基础算法 ⭐⭐⭐",
+                    "label": "🔄 实现斐波那契 ⭐⭐⭐",
+                    "name": "AchieveFibonacci"
+                  },
+                  {
+                    "label": "🔄 判断空对象 ⭐⭐⭐",
+                    "name": "JudgeEmptyObject"
+                  },
+                  {
+                    "label": "🔄 闭包相关 ⭐⭐⭐",
+                    "name": "ClosureRelated"
+                  },
+                  {
+                    "label": "⏳ 防抖节流(Debounce/Throttle) ⭐⭐⭐",
+                    "name": "DebounceThrottle"
+                  },
+                  {
+                    "label": "🍛 实现柯里化 ⭐⭐",
+                    "name": "AchieveCurry"
+                  },
+                  {
+                    "label": "🔄 实现双向绑定 ⭐⭐",
+                    "name": "AchieveBidirectionalBind"
+                  },
+                  {
+                    "label": "🧭 实现前端路由 ⭐⭐",
+                    "name": "AchieveFrontendRouter"
+                  },
+                  {
+                    "label": "🔄 资源懒加载 ⭐⭐⭐",
+                    "name": "AchieveLazyLoad"
+                  },
+                  {
+                    "label": "🔄 实现大文件上传 ⭐⭐⭐",
+                    "name": "AchieveBigFileUpload"
+                  }
+                ]
+              },
+              {
+                "label": "🔄 手写算法 ⭐⭐",
+                "name": "HandwrittenAlgorithm",
+                "children": [
+                  {
+                    "label": "🔄 手写基础算法 ⭐⭐",
                     "name": "HandwrittenBasicAlgorithm",
                     "children": [
+                      {
+                        "label": "🔄 字符串相关算法 ⭐⭐⭐",
+                        "name": "StringRelatedAlgorithm",
+                        "children": [
+                          {
+                            "label": "🔄 字符串基础算法 ⭐⭐⭐",
+                            "name": "StringBasicAlgorithm"
+                          },
+                          {
+                            "label": "🔄 字符串进阶算法 ⭐",
+                            "name": "StringAdvancedAlgorithm"
+                          },
+                          {
+                            "label": "🔄 更多 ⭐",
+                            "name": "MoreStringAlgorithm",
+                            "redirect": {
+                              "name": "StringMatchingAlgorithmIntroduction"
+                            }
+                          }
+                        ]
+                      },
                       {
                         "label": "🔢 数组相关算法 ⭐⭐⭐",
                         "name": "ArrayRelatedAlgorithm",
@@ -1297,96 +1406,116 @@
                             "name": "Deduplication"
                           },
                           {
-                            "label": "🥞 数组扁平化(Array Flattening) ⭐⭐⭐",
-                            "name": "ArrayFlattening"
+                            "label": "🔄 数组基本算法 ⭐⭐⭐",
+                            "name": "ArrayBasicAlgorithm"
                           },
                           {
-                            "label": "🔄 数组其他算法 ⭐⭐⭐",
-                            "name": "ArrayOtherAlgorithm"
+                            "label": "🔄 数组进阶算法 ⭐",
+                            "name": "ArrayAdvancedAlgorithm",
+                            "redirect": {
+                              "name": "ArrayAdvanced"
+                            }
                           }
                         ]
+                      },
+                      {
+                        "label": "🔄 栈相关算法 ⭐⭐⭐",
+                        "name": "StackRelatedAlgorithm",
+                        "redirect": {
+                          "name": "StackAlgorithm"
+                        }
+                      },
+                      {
+                        "label": "🔄 队列相关算法 ⭐⭐⭐",
+                        "name": "QueueRelatedAlgorithm",
+                        "redirect": {
+                          "name": "QueueAlgorithm"
+                        }
                       },
                       {
                         "label": "🔢 链表相关算法 ⭐⭐⭐",
                         "name": "LinkedListRelatedAlgorithm",
                         "redirect": {
-                          "name": "LinkedListBasicAlgorithmt"
+                          "name": "LinkedListBasicAlgorithm"
                         }
                       },
                       {
-                        "label": "🔄 树关算法 ⭐⭐⭐",
+                        "label": "🔄 树相关算法 ⭐⭐⭐",
                         "name": "BinaryTreeRelatedAlgorithm",
                         "children": [
                           {
-                            "label": "🔄 列表转树和树转列表 ⭐⭐⭐",
-                            "name": "ListToTreeAndTreeToList",
-                            "redirect": {
-                              "name": "TreeStructureDataProcessing"
-                            }
+                            "label": "🌳 树型结构数据基础处理 ⭐⭐⭐",
+                            "name": "TreeStructureDataProcessing"
                           },
                           {
-                            "label": "🔄 二叉树遍历 ⭐⭐⭐",
-                            "name": "BinaryTreeTraversal"
+                            "label": "🔄 生成二叉树 ⭐⭐⭐",
+                            "name": "BinaryTreeGeneration"
+                          },
+                          {
+                            "label": "🔄 更多 ⭐⭐⭐",
+                            "name": "MoreBinaryTreeAlgorithm",
+                            "redirect": {
+                              "name": "TreeBasicAlgorithm"
+                            }
                           }
                         ]
                       },
                       {
-                        "label": "🔄 字符串相关算法 ⭐⭐⭐",
-                        "name": "StringRelatedAlgorithm",
+                        "label": "🔄 图相关算法 ⭐⭐",
+                        "name": "GraphRelatedAlgorithm",
                         "children": [
                           {
-                            "label": "🔄 字符串反转 ⭐⭐⭐",
-                            "name": "ReverseString"
+                            "label": "🔄 图的遍历 ⭐⭐⭐",
+                            "name": "GraphTraversal"
                           }
                         ]
                       },
                       {
-                        "label": "🔍 二分查找 ⭐⭐",
-                        "name": "BinarySearch"
+                        "label": "🔄 基础查找算法 ⭐⭐⭐",
+                        "name": "BasicSearchAlgorithm",
+                        "children": [
+                          {
+                            "label": "🔍 二分查找 ⭐⭐",
+                            "name": "BinarySearch"
+                          }
+                        ]
                       },
                       {
-                        "label": "🔢 斐波那契数列 ⭐⭐",
-                        "name": "Fibonacci"
+                        "label": "🔢 动态规划 ⭐⭐",
+                        "name": "DynamicProgrammingHandwritten",
+                        "redirect": {
+                          "name": "DynamicProgrammingSimpleDP"
+                        }
+                      },
+                      {
+                        "label": "🔄 贪心算法 ⭐⭐⭐",
+                        "name": "GreedyAlgorithm",
+                        "redirect": {
+                          "name": "GreedyAlgorithmProblem"
+                        }
                       }
                     ]
                   },
                   {
-                    "label": "🔄 数据结构的实现(Data Structure Implementation) ⭐⭐",
-                    "name": "DataStructureImplementation",
+                    "label": "🔄 手写进阶算法 ⭐",
+                    "name": "HandwrittenAdvancedAlgorithm",
                     "children": [
                       {
-                        "label": "📚 栈、队列、链表的实现(Stack, Queue, Linked List Implementation) ⭐⭐",
-                        "name": "StackImplementation"
+                        "label": "🔄 实现虚拟dom-diff ⭐⭐",
+                        "name": "AchieveDomDiff"
                       },
                       {
-                        "label": "🔄 树的实现(Binary Tree Implementation) ⭐⭐",
-                        "name": "BinaryTreeImplementation"
+                        "label": "🔄 实现LRU ⭐⭐",
+                        "name": "AchieveLRU"
                       },
                       {
-                        "label": "🔄 图的实现(Binary Tree Implementation) ⭐⭐",
-                        "name": "BinaryTreeImplementation"
-                      },
-                      {
-                        "label": "📚 哈希表的实现(Hash Table Implementation) ⭐⭐",
-                        "name": "HashTableImplementation"
-                      },
-                      {
-                        "label": "🔄 堆的实现(Heap Implementation) ⭐⭐",
-                        "name": "HeapImplementation"
+                        "label": "🔄 最长递增子序列 ⭐⭐",
+                        "name": "LongestIncreasingSubsequence",
+                        "redirect": {
+                          "name": "LongestIncreasingSubsequence2"
+                        }
                       }
                     ]
-                  },
-                  {
-                    "label": "✖️ 阶乘(Factorial) ⭐⭐",
-                    "name": "Factorial"
-                  },
-                  {
-                    "label": "➕ 求和(Sum)，求积(Product)，求差(Difference)，求交(Intersection)，求并(Union)，求补(Complement) ⭐⭐⭐",
-                    "name": "Sum"
-                  },
-                  {
-                    "label": "📈 求最大值(Max)，求最小值(Min)，求平均值(Average)，求中位数(Median)，求众数(Mode)，求方差(Variance)，求标准差(Standard Deviation) ⭐⭐⭐",
-                    "name": "Max"
                   }
                 ]
               }
@@ -1505,6 +1634,10 @@
             "name": "DeclarationFile"
           },
           {
+            "label": "🔄 类型体操 ⭐⭐⭐",
+            "name": "TypeTreadmill"
+          },
+          {
             "label": "📜 TS代码规范 ⭐⭐⭐",
             "name": "TSCodeSpecification"
           },
@@ -1587,6 +1720,10 @@
                 "name": "ProcessAndThread"
               },
               {
+                "label": "🔄 进程与线程一些概念 ⭐⭐",
+                "name": "ProcessAndThreadConcepts"
+              },
+              {
                 "label": "🤝 进程间通信 ⭐⭐",
                 "name": "InterProcessCommunication"
               },
@@ -1613,10 +1750,6 @@
             "name": "CharacterEncoding"
           },
           {
-            "label": "🔤 霍夫曼编码 ⭐⭐⭐",
-            "name": "HuffmanEncoding"
-          },
-          {
             "label": "🧮 基础算法 ⭐⭐⭐",
             "name": "BasicAlgorithm",
             "children": [
@@ -1637,8 +1770,8 @@
               },
               {
                 "label": "🔄 动态规划 ⭐⭐⭐",
-                "name": "DynamicProgramming1",
-                "redirect": { "name": "DynamicProgramming" }
+                "name": "DynamicProgrammingBasic",
+                "redirect": { "name": "DynamicProgramming1" }
               },
               {
                 "label": "🔄 贪心算法 ⭐⭐⭐",
@@ -1668,7 +1801,10 @@
             "children": [
               {
                 "label": "🔄 数组 ⭐⭐⭐",
-                "name": "Array2"
+                "name": "Array2",
+                "redirect": {
+                  "name": "ArrayBasic"
+                }
               },
               {
                 "label": "🔄 链表 ⭐⭐⭐",
@@ -1679,7 +1815,10 @@
               },
               {
                 "label": "🔄 栈 ⭐⭐⭐",
-                "name": "Stack1"
+                "name": "Stack1",
+                "redirect": {
+                  "name": "StackBasic"
+                }
               },
               {
                 "label": "🔄 队列 ⭐⭐⭐",
@@ -1715,6 +1854,10 @@
           {
             "label": "⌨️ CMD命令 ⭐⭐⭐",
             "name": "CMDCommand"
+          },
+          {
+            "label": "⌨️ mac命令 ⭐⭐⭐",
+            "name": "macCommand"
           }
         ]
       },
@@ -1940,6 +2083,10 @@
                 "name": "WebServer"
               },
               {
+                "label": "🔄 tcp/udp服务器 ⭐⭐⭐",
+                "name": "TcpUdpServer"
+              },
+              {
                 "label": "🔄 node server ⭐⭐⭐",
                 "name": "NodeServer",
                 "redirect": {
@@ -2009,6 +2156,10 @@
           {
             "label": "🖼️ 浏览器渲染图层 ⭐⭐",
             "name": "BrowserRenderingLayer"
+          },
+          {
+            "label": "🔄 浏览器资源缓存 ⭐⭐⭐",
+            "name": "BrowserResourceCache"
           }
         ]
       },
@@ -2261,7 +2412,13 @@
                     "label": "꼬리 尾调用和尾递归 ⭐⭐",
                     "name": "TailCall"
                   },
-
+                  {
+                    "label": "🔍 蹦床函数 ⭐⭐⭐",
+                    "name": "BounceFunction2",
+                    "redirect": {
+                      "name": "BounceFunction"
+                    }
+                  },
                   {
                     "label": "🌳 代码层面合理利用tree-shaking ⭐⭐",
                     "name": "TreeShaking"
@@ -3134,13 +3291,24 @@
                         "name": "OtherUsefulLoader"
                       },
                       {
-                        "label": "📜 babel-loader ⭐⭐⭐",
-                        "name": "BabelLoader"
+                        "label": "📜 babel ⭐⭐⭐",
+                        "name": "Babel",
+                        "children": [
+                          {
+                            "label": "🔄 babel-loader ⭐⭐⭐",
+                            "name": "BabelLoader"
+                          },
+                          {
+                            "label": "🔧 babel-runtime ⭐⭐⭐",
+                            "name": "BabelRuntime"
+                          },
+                          {
+                            "label": "🔧 babel的插件 ⭐⭐⭐",
+                            "name": "BabelPlugin"
+                          }
+                        ]
                       },
-                      {
-                        "label": "🔧 babel-runtime ⭐⭐⭐",
-                        "name": "BabelRuntime"
-                      },
+
                       {
                         "label": "✍️ 怎么实现一个loader ⭐⭐⭐",
                         "name": "HowToImplementALoader"
@@ -3610,27 +3778,21 @@
     "name": "AlgorithmsAndDataStructures",
     "children": [
       {
-        "label": "🧭 前端要掌握的算法和数据结构 ⭐⭐⭐",
-        "name": "FrontAlgorithms",
-        "children": [
-          {
-            "label": "📜 前端要掌握的算法概览 ⭐⭐⭐",
-            "name": "FrontAlgorithmsOverview"
-          },
-          {
-            "label": "🔄 前端要掌握的数据结构 ⭐⭐⭐",
-            "name": "FrontDataStructures"
-          },
-          {
-            "label": "🌳 树型结构数据处理 ⭐⭐⭐",
-            "name": "TreeStructureDataProcessing"
-          }
-        ]
-      },
-      {
         "label": "🧱 数据结构 ⭐⭐⭐",
         "name": "DataStructures",
         "children": [
+          {
+            "label": "🧱 数据结构介绍 ⭐⭐⭐",
+            "name": "DataStructuresIntroduction"
+          },
+          {
+            "label": "📚 栈 ⭐⭐",
+            "name": "Stack",
+            "children": [
+              { "label": "📚 栈基础介绍 ⭐⭐⭐", "name": "StackBase" },
+              { "label": "📚 栈的相关算法 ⭐⭐⭐", "name": "StackAlgorithm" }
+            ]
+          },
           {
             "label": "🔢 数组 ⭐⭐⭐",
             "name": "ArrayOperations",
@@ -3653,14 +3815,6 @@
             ]
           },
           {
-            "label": "📚 栈 ⭐⭐",
-            "name": "Stack",
-            "children": [
-              { "label": "📚 栈基础介绍 ⭐⭐⭐", "name": "StackBase" },
-              { "label": "📚 栈的相关算法 ⭐⭐⭐", "name": "StackAlgorithm" }
-            ]
-          },
-          {
             "label": "🔄 队列 ⭐⭐",
             "name": "Queue",
             "children": [
@@ -3678,8 +3832,12 @@
             "label": "🌳 树⭐⭐⭐",
             "name": "Trees",
             "children": [
+              { "label": "🌳 树基础介绍 ⭐⭐⭐", "name": "TreeBasic" },
               { "label": "🌳 树的分类 ⭐⭐⭐", "name": "TreeClassification" },
-              { "label": "🌳 树的遍历 ⭐⭐⭐", "name": "TreeTraversal" }
+              { "label": "🌳 Trie树 ⭐⭐⭐", "name": "TrieTree" },
+              { "label": "🌳 霍夫曼树 ⭐⭐⭐", "name": "HuffmanTree" },
+              { "label": "🌳 树的遍历 ⭐⭐⭐", "name": "TreeTraversal" },
+              { "label": "🌳 树的相关基础算法 ⭐⭐⭐", "name": "TreeBasicAlgorithm" }
             ]
           },
           {
@@ -3708,17 +3866,27 @@
             ]
           },
           {
-            "label": "🔑 桶 ⭐⭐",
-            "name": "Bucket",
+            "label": "🔑 并查集 ⭐⭐⭐",
+            "name": "UnionFind",
             "children": [
-              { "label": "🔑 桶介绍 ⭐⭐", "name": "BucketIntroduction" },
-              { "label": "🔑 桶相关算法 ⭐⭐", "name": "BucketAlgorithm" }
+              { "label": "🔑 并查集介绍 ⭐⭐⭐", "name": "UnionFindIntroduction" },
+              { "label": "🔑 并查集实现 ⭐⭐⭐", "name": "UnionFindImplementation" }
             ]
           },
           {
             "label": "🔑 其他数据结构 ⭐⭐⭐",
             "name": "OtherDataStructures",
-            "children": [{ "label": "🔑 布隆过滤器 ⭐⭐⭐", "name": "BloomFilter" }]
+            "children": [
+              {
+                "label": "🔑 桶 ⭐⭐",
+                "name": "Bucket",
+                "children": [
+                  { "label": "🔑 桶介绍 ⭐⭐", "name": "BucketIntroduction" },
+                  { "label": "🔑 桶相关算法 ⭐⭐", "name": "BucketAlgorithm" }
+                ]
+              },
+              { "label": "🔑 布隆过滤器 ⭐⭐⭐", "name": "BloomFilter" }
+            ]
           }
         ]
       },
@@ -3779,8 +3947,22 @@
             "name": "AlgorithmClassification",
             "children": [
               {
+                "label": "🔄 算法分类介绍 ⭐⭐⭐",
+                "name": "AlgorithmClassificationIntroduction"
+              },
+              {
                 "label": "🔢 排序算法 ⭐⭐⭐",
-                "name": "SortingAlgorithm"
+                "name": "SortingAlgorithmIntroduction",
+                "children": [
+                  {
+                    "label": "🔢 排序算法 ⭐⭐⭐",
+                    "name": "SortingAlgorithm"
+                  },
+                  {
+                    "label": "🔢 其他排序算法 ⭐⭐⭐",
+                    "name": "OtherSortingAlgorithm"
+                  }
+                ]
               },
               {
                 "label": "🔍 递归算法 ⭐⭐⭐",
@@ -3797,7 +3979,11 @@
                 ]
               },
               {
-                "label": "📈 动态规划 ⭐⭐⭐",
+                "label": "🔄 分治算法 ⭐⭐⭐",
+                "name": "DivideAndConquerAlgorithm2"
+              },
+              {
+                "label": "📈 动态规划 ⭐⭐",
                 "name": "DynamicProgramming",
                 "children": [
                   {
@@ -3871,7 +4057,7 @@
                 ]
               },
               {
-                "label": "🔍 搜索算法 ⭐⭐⭐",
+                "label": "🔍 搜索算法 ⭐⭐",
                 "name": "SearchAlgorithm",
                 "children": [
                   {
@@ -3915,8 +4101,8 @@
                 "name": "MappingAlgorithm",
                 "children": [
                   {
-                    "label": "🔄 LZ77算法 ⭐⭐⭐",
-                    "name": "LZ77Algorithm"
+                    "label": "🔄  VLQ算法 ⭐⭐",
+                    "name": "VLQ"
                   },
                   {
                     "label": "💡 hash算法 ⭐",
@@ -3945,6 +4131,14 @@
                     "name": "HuffmanEncoding1"
                   },
                   {
+                    "label": "🔄 LZ77算法 ⭐⭐⭐",
+                    "name": "LZ77Algorithm"
+                  },
+                  {
+                    "label": "🔄 DEFLATE算法 ⭐⭐⭐",
+                    "name": "DEFLATEAlgorithm"
+                  },
+                  {
                     "label": "🔄 引用计数 ⭐⭐⭐",
                     "name": "ReferenceCounting"
                   }
@@ -3955,10 +4149,6 @@
                 "name": "OtherAlgorithm",
                 "children": [
                   {
-                    "label": "🔄 分治算法 ⭐⭐⭐",
-                    "name": "DivideAndConquerAlgorithm2"
-                  },
-                  {
                     "label": "🔄 窗口算法 ⭐⭐⭐",
                     "name": "SlidingWindowAlgorithm",
                     "children": [
@@ -3967,6 +4157,68 @@
                         "name": "LRUAlgorithm"
                       }
                     ]
+                  },
+                  {
+                    "label": "🔄 boids算法 ⭐⭐⭐",
+                    "name": "BoidsAlgorithm"
+                  },
+                  {
+                    "label": "🔄 布隆过滤器 ⭐⭐⭐",
+                    "name": "BloomFilter"
+                  }
+                ]
+              },
+              {
+                "label": "🔄 字符串算法 ⭐⭐⭐",
+                "name": "StringAlgorithm",
+                "children": [
+                  {
+                    "label": "🔄 字符串匹配算法 ⭐⭐⭐",
+                    "name": "StringMatchingAlgorithm",
+                    "children": [
+                      {
+                        "label": "🔄 字符串匹配算法介绍 ⭐⭐⭐",
+                        "name": "StringMatchingAlgorithmIntroduction"
+                      },
+                      {
+                        "label": "🔄 BF和RK hash ⭐⭐⭐",
+                        "name": "BFAndRKHash"
+                      },
+                      {
+                        "label": "🔄 KMP ⭐⭐⭐",
+                        "name": "KMP"
+                      },
+                      {
+                        "label": "🔄 BM ⭐⭐⭐",
+                        "name": "BM"
+                      },
+                      {
+                        "label": "🔄 sunday ⭐⭐⭐",
+                        "name": "Sunday"
+                      }
+                    ]
+                  },
+                  {
+                    "label": "🔄 字符串编辑距离算法 ⭐⭐⭐",
+                    "name": "StringEditDistanceAlgorithm"
+                  },
+                  {
+                    "label": "🔄 字符串排列算法 ⭐⭐⭐",
+                    "name": "StringPermutationAlgorithm"
+                  },
+                  {
+                    "label": "🔄 字符串压缩算法 ⭐⭐⭐",
+                    "name": "StringCompressionAlgorithm"
+                  }
+                ]
+              },
+              {
+                "label": "🔄 高级算法 ⭐⭐⭐",
+                "name": "AdvancedAlgorithm",
+                "children": [
+                  {
+                    "label": "🔄 高级算法概览 ⭐⭐⭐",
+                    "name": "AdvancedAlgorithmOverview"
                   }
                 ]
               }
@@ -4029,6 +4281,10 @@
             "name": "NodeModules",
             "children": [
               {
+                "label": "📦 常用模块 ⭐⭐",
+                "name": "NodeCommonModules"
+              },
+              {
                 "label": "📁 fs(文件系统) ⭐⭐⭐",
                 "name": "FileSystem"
               },
@@ -4053,12 +4309,12 @@
                 "name": "cryptoAdvanced"
               },
               {
-                "label": "🔄 cluster(集群) ⭐⭐⭐",
-                "name": "Cluster"
-              },
-              {
                 "label": "🔄 child_process(子进程) ⭐⭐⭐",
                 "name": "ChildProcess"
+              },
+              {
+                "label": "🌊 stream(流) ⭐⭐⭐",
+                "name": "Stream"
               },
               {
                 "label": "🔄 process(进程) ⭐⭐⭐",
@@ -4073,10 +4329,6 @@
                 "name": "Readline"
               },
               {
-                "label": "🌊 stream(流) ⭐⭐",
-                "name": "Stream"
-              },
-              {
                 "label": "🖥️ os(操作系统) ⭐",
                 "name": "OS"
               },
@@ -4087,10 +4339,6 @@
               {
                 "label": "🛠️ util(实用工具) ⭐",
                 "name": "Util"
-              },
-              {
-                "label": "👶 child_process(子进程) ⭐",
-                "name": "ChildProcess"
               },
               {
                 "label": "📦 vm(虚拟机) ⭐",
@@ -4574,75 +4822,82 @@
                 "name": "MobileHtml5Adaptation"
               },
               {
+                "label": "🔧  uni-app 🌟",
+                "name": "UniApp"
+              },
+              {
+                "label": "📱 小程序 🌟",
+                "name": "MiniProgram",
+                "children": [
+                  {
+                    "label": "📚 小程序基础知识 ⭐",
+                    "name": "MiniProgramBasicKnowledge"
+                  },
+                  {
+                    "label": "📚 小程序常用组件 ⭐",
+                    "name": "WeChatCommonComponents"
+                  },
+                  {
+                    "label": "📚 小程序常用API ⭐",
+                    "name": "WeChatCommonAPI"
+                  },
+                  {
+                    "label": "� 小程序高阶组件与API ⭐",
+                    "name": "WeChatHighOrderComponentsAndAPI"
+                  }
+                ]
+              },
+              {
                 "label": "🔄 arkjs 🌟",
                 "name": "Arkjs"
               }
             ]
           },
           {
-            "label": "🖥️ Electron ⭐",
-            "name": "Electron",
+            "label": "🔄 桌面端 ⭐",
+            "name": "DesktopEnd",
             "children": [
               {
-                "label": "📦 核心概念 ⭐",
-                "name": "CoreConcepts"
-              },
-              {
-                "label": "🔄 核心功能和接口 ⭐⭐⭐",
-                "name": "CoreFeaturesAndInterfaces"
-              },
-              {
-                "label": "🔄 生命周期 ⭐⭐⭐",
-                "name": "ElectronLifeCycle"
-              },
-              {
-                "label": "🔄 Native API ⭐⭐⭐",
-                "name": "NativeAPI"
-              },
-              {
-                "label": "🤝 IPC(进程间通信) ⭐",
-                "name": "IPC"
-              },
-              {
-                "label": "🔄 相关生态与工具 ⭐⭐⭐",
-                "name": "RelatedEcosystemAndTools"
-              },
-              {
-                "label": "📦 打包与发布 ⭐",
-                "name": "PackagingAndPublishing"
-              },
-              {
-                "label": "🔒 安全性 ⭐",
-                "name": "Security"
+                "label": "🖥️ Electron ⭐",
+                "name": "Electron",
+                "children": [
+                  {
+                    "label": "📦 核心概念 ⭐",
+                    "name": "CoreConcepts"
+                  },
+                  {
+                    "label": "🔄 核心功能和接口 ⭐⭐⭐",
+                    "name": "CoreFeaturesAndInterfaces"
+                  },
+                  {
+                    "label": "🔄 生命周期 ⭐⭐⭐",
+                    "name": "ElectronLifeCycle"
+                  },
+                  {
+                    "label": "🔄 Native API ⭐⭐⭐",
+                    "name": "NativeAPI"
+                  },
+                  {
+                    "label": "🤝 IPC(进程间通信) ⭐",
+                    "name": "IPC"
+                  },
+                  {
+                    "label": "🔄 相关生态与工具 ⭐⭐⭐",
+                    "name": "RelatedEcosystemAndTools"
+                  },
+                  {
+                    "label": "📦 打包与发布 ⭐",
+                    "name": "PackagingAndPublishing"
+                  },
+                  {
+                    "label": "🔒 安全性 ⭐",
+                    "name": "Security"
+                  }
+                ]
               }
             ]
           },
-          {
-            "label": "📱 小程序 🌟",
-            "name": "MiniProgram",
-            "children": [
-              {
-                "label": "📚 小程序基础知识 ⭐",
-                "name": "MiniProgramBasicKnowledge"
-              },
-              {
-                "label": "📚 小程序常用组件 ⭐",
-                "name": "WeChatCommonComponents"
-              },
-              {
-                "label": "📚 小程序常用API ⭐",
-                "name": "WeChatCommonAPI"
-              },
-              {
-                "label": "� 小程序高阶组件与API ⭐",
-                "name": "WeChatHighOrderComponentsAndAPI"
-              },
-              {
-                "label": "🔧 小程序框架 uni-app ⭐",
-                "name": "UniApp"
-              }
-            ]
-          },
+
           {
             "label": "🐧 linux系统 ⭐",
             "name": "LinuxSystem",
@@ -4934,8 +5189,32 @@
     "name": "AI",
     "children": [
       {
-        "label": "🤖 怎么使用AI协助开发 ⭐⭐⭐",
-        "name": "HowToUseAIToHelpDevelop"
+        "label": "🤖 AI类型 ⭐⭐⭐",
+        "name": "AIType",
+        "children": [
+          {
+            "label": "🤖 代码相关 ⭐⭐⭐",
+            "name": "CodeRelated",
+            "children": [
+              {
+                "label": "🤖 目前代码模型和编辑器对比 ⭐⭐⭐",
+                "name": "CodeModelAndEditorComparison"
+              },
+              {
+                "label": "🤖 claude(首推) ⭐⭐⭐",
+                "name": "Claude"
+              },
+              {
+                "label": "🤖 cursor(次推) ⭐⭐⭐",
+                "name": "Cursor"
+              },
+              {
+                "label": "🤖 copilot ⭐⭐⭐",
+                "name": "Copilot"
+              }
+            ]
+          }
+        ]
       },
       {
         "label": "🤖 概念介绍 ⭐⭐⭐",
@@ -4963,7 +5242,19 @@
     "children": [
       {
         "label": "🔧 实用工具 ⭐⭐⭐",
-        "name": "UsefulTools"
+        "name": "UsefulTools",
+        "children": [
+          {
+            "label": "🔧 浏览器扩展 ⭐⭐⭐",
+            "name": "BrowserExtension",
+            "children": [
+              {
+                "label": "🔧 build tools ⭐",
+                "name": "BrowserTools"
+              }
+            ]
+          }
+        ]
       },
       {
         "label": "🔧 奇奇怪怪的工具 🌟 ",

@@ -2,7 +2,7 @@
   <div class="stack-algorithms-container">
     <!-- 标题区域 -->
     <header class="header">
-      <h1>栈相关算法详解</h1>
+      <h1>栈相关算法介绍</h1>
       <p>掌握数据结构核心，解决复杂问题</p>
     </header>
 
@@ -160,7 +160,7 @@
     </div>
 
     <footer class="footer">
-      <p>栈相关算法详解 | 数据结构与算法核心知识</p>
+      <p>栈相关算法介绍 | 数据结构与算法核心知识</p>
       <p>© 2023 计算机科学基础</p>
     </footer>
   </div>

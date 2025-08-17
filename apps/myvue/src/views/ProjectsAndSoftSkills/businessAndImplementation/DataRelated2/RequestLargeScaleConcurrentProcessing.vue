@@ -173,7 +173,9 @@
         </div>
         <div class="card-content">
           <div class="code-section">
-            <pre class="code-block"><code>import axios, { AxiosRequestConfig, CancelTokenSource } from 'axios';
+            <pre
+              class="code-block"
+            ><code>import axios, { AxiosRequestConfig, CancelTokenSource } from 'axios';
 
 // 请求任务接口
 interface RequestTask {
@@ -335,39 +337,40 @@ export async function fetchWithQueue(url: string, params?: any) {
         <div class="card-content">
           <div class="code-section">
             <pre class="code-block"><code>
-+async sendRequest(forms, max=4,errcontinue=true,errcb?) {
-+  return new Promise((resolve) => {
-+    const len = forms.length;
-+    let idx = 0;// 当前请求索引
-+    let counter = 0;// 当前并发数
-+    const start = async (errindex)=> {
-+      // 未完成, 有通道
-+      while (idx < len  && counter< max  ) {
-+        counter += 1; // 占用通道
-+        console.log(idx, "start");
-+        const form = forms[errindex||idx].form;
+async function sendRequest(forms, max=4,errcontinue=true,errcb?) {
+  return new Promise((resolve) => {
+    const len = forms.length;
+    let idx = 0;// 当前请求索引
+    let counter = 0;// 当前并发数
+    const start = (errindex)=> {
+      // 未完成, 有通道
+      while (idx < len  && counter<= max  ) {
+        counter += 1; // 占用通道
+        console.log(idx, "start");
+        const form = forms[errindex||idx].form;
          if(!errindex){
           idx++
          }
-+        request({
-+          url: '/upload',
-+          data: form,
-+        }).then(() => {
-+          counter -= 1;// 释放通道
-+          if ((idx+1 )=== len) {// 所有请求完成
-+            resolve();
-+          } else {
-+            start();// 递归
-+          }
-+        }).catch(err => {
-+         errcb&&errcb(idx,err)//第几条请求失败并处理
+        request({
+          url: '/upload',
+          data: form,
+        }).then(() => {
+          counter -= 1;// 释放通道
+          if ((idx+1 )=== len) {// 所有请求完成
+            resolve();
+          } else {
+              start();// 递归
+          }
+        }).catch(err => {
+         errcb&&errcb(idx,err)//第几条请求失败并处理
           errcontinue&&start(idx)//失败后是否继续
-+        });
-+      }
-+    }
-+    start();
-+  });
-+}
+        });
+      }
+    }
+    start();
+    return Promise.all(promises);
+  });
+}
 
 sendRequest(list,4,(idx,err)=>{
   console.log(err);
@@ -504,8 +507,12 @@ async function fetchUserDetails(userIds: string[]) {
           <div class="visualization">
             <div class="chunk-process">
               <div class="chunks">
-                <div v-for="(chunk, index) in chunks" :key="index" class="chunk"
-                  :class="{ active: currentChunk === index }">
+                <div
+                  v-for="(chunk, index) in chunks"
+                  :key="index"
+                  class="chunk"
+                  :class="{ active: currentChunk === index }"
+                >
                   <div class="chunk-label">分片 {{ index + 1 }}</div>
                   <div class="chunk-data">
                     <div v-for="item in chunk" :key="item" class="data-item">
@@ -730,15 +737,13 @@ async function loadData() {
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted } from 'vue'
 // import { main } from './req';
-
 
 // main()
 
-
 // 问题背景数据
-const pendingRequests = ref(8);
+const pendingRequests = ref(8)
 
 // 请求分片演示数据
 const chunks = ref<number[][]>([
@@ -747,40 +752,39 @@ const chunks = ref<number[][]>([
   [11, 12, 13, 14, 15],
   [16, 17, 18, 19, 20],
   [21, 22, 23, 24, 25],
-  [26, 27, 28, 29, 30]
-]);
-const currentChunk = ref(-1);
-const progress = ref(0);
-
+  [26, 27, 28, 29, 30],
+])
+const currentChunk = ref(-1)
+const progress = ref(0)
 
 // 模拟分片请求
 const startChunkedRequests = async () => {
-  progress.value = 0;
-  currentChunk.value = -1;
+  progress.value = 0
+  currentChunk.value = -1
 
   for (let i = 0; i < chunks.value.length; i++) {
-    currentChunk.value = i;
+    currentChunk.value = i
 
     // 模拟请求延迟
-    await new Promise(resolve => setTimeout(resolve, 800));
+    await new Promise((resolve) => setTimeout(resolve, 800))
 
     // 更新进度
-    progress.value = Math.round(((i + 1) / chunks.value.length) * 100);
+    progress.value = Math.round(((i + 1) / chunks.value.length) * 100)
   }
-};
+}
 
 // 重置分片
 const resetChunks = () => {
-  currentChunk.value = -1;
-  progress.value = 0;
-};
+  currentChunk.value = -1
+  progress.value = 0
+}
 
 // 初始动画
 onMounted(() => {
   setInterval(() => {
-    pendingRequests.value = Math.floor(Math.random() * 10) + 3;
-  }, 2000);
-});
+    pendingRequests.value = Math.floor(Math.random() * 10) + 3
+  }, 2000)
+})
 </script>
 
 <style lang="less" scoped>
@@ -844,7 +848,9 @@ onMounted(() => {
   padding: 24px;
   box-shadow: 0 4px 12px @shadow;
   border: 1px solid @border;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 
   &:hover {
     transform: translateY(-5px);
@@ -1358,7 +1364,7 @@ onMounted(() => {
       padding-left: 25px;
 
       &::before {
-        content: "•";
+        content: '•';
         color: @primary;
         font-weight: bold;
         position: absolute;

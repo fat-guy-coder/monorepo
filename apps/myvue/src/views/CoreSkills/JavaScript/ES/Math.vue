@@ -54,6 +54,164 @@
       </div>
     </section>
 
+    <!-- Math.random() 底层实现机制 -->
+    <section class="random-mechanism-card">
+      <h3>🎲 Math.random() 底层实现机制</h3>
+      <div class="mechanism-content">
+        <div class="mechanism-overview">
+          <h4>🔧 实现原理</h4>
+          <p>Math.random() 使用伪随机数生成器(PRNG)算法，通常基于线性同余法(LCG)实现。</p>
+        </div>
+
+        <div class="algorithm-details">
+          <h4>📊 线性同余法公式</h4>
+          <div class="formula-box">
+            <code>X<sub>n+1</sub> = (a × X<sub>n</sub> + c) mod m</code>
+          </div>
+          <div class="parameter-list">
+            <div class="parameter-item">
+              <span class="param-name">a (乘数):</span>
+              <span class="param-value">通常选择较大的质数</span>
+            </div>
+            <div class="parameter-item">
+              <span class="param-name">c (增量):</span>
+              <span class="param-value">通常为奇数</span>
+            </div>
+            <div class="param-item">
+              <span class="param-name">m (模数):</span>
+              <span class="param-value">2<sup>32</sup> 或 2<sup>64</sup></span>
+            </div>
+            <div class="parameter-item">
+              <span class="param-name">X<sub>0</sub> (种子):</span>
+              <span class="param-value">初始值，通常基于时间戳</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="implementation-steps">
+          <h4>⚙️ 实现步骤</h4>
+          <div class="step-list">
+            <div class="step-item">
+              <span class="step-number">1</span>
+              <div class="step-content">
+                <strong>种子初始化</strong>
+                <p>使用当前时间戳、进程ID等作为初始种子值</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <span class="step-number">2</span>
+              <div class="step-content">
+                <strong>线性变换</strong>
+                <p>应用线性同余公式生成下一个随机数</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <span class="step-number">3</span>
+              <div class="step-content">
+                <strong>归一化处理</strong>
+                <p>将生成的整数除以模数，得到[0,1)区间的小数</p>
+              </div>
+            </div>
+            <div class="step-item">
+              <span class="step-number">4</span>
+              <div class="step-content">
+                <strong>精度控制</strong>
+                <p>控制输出精度，通常为53位浮点数</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="browser-implementations">
+          <h4>🌐 不同浏览器的实现</h4>
+          <div class="browser-grid">
+            <div class="browser-item">
+              <div class="browser-header">
+                <span class="browser-icon">🦊</span>
+                <span class="browser-name">Firefox</span>
+              </div>
+              <p>使用 xorshift 算法，周期为 2<sup>128</sup>-1</p>
+            </div>
+            <div class="browser-item">
+              <div class="browser-header">
+                <span class="browser-icon">🌐</span>
+                <span class="browser-name">Chrome</span>
+              </div>
+              <p>使用 xorshift128+ 算法，性能更优</p>
+            </div>
+            <div class="browser-item">
+              <div class="browser-header">
+                <span class="browser-icon">🦁</span>
+                <span class="browser-name">Safari</span>
+              </div>
+              <p>基于 arc4random 算法，安全性更高</p>
+            </div>
+            <div class="browser-item">
+              <div class="browser-header">
+                <span class="browser-icon">⚡</span>
+                <span class="browser-name">Edge</span>
+              </div>
+              <p>使用与Chrome相同的 xorshift128+ 算法</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="security-considerations">
+          <h4>🔒 安全性考虑</h4>
+          <div class="security-list">
+            <div class="security-item warning">
+              <span class="security-icon">⚠️</span>
+              <div class="security-content">
+                <strong>不可用于加密</strong>
+                <p>Math.random() 是伪随机数，可预测，不适合密码学应用</p>
+              </div>
+            </div>
+            <div class="security-item info">
+              <span class="security-icon">ℹ️</span>
+              <div class="security-content">
+                <strong>适合一般用途</strong>
+                <p>游戏、动画、测试等场景使用完全安全</p>
+              </div>
+            </div>
+            <div class="security-item success">
+              <span class="security-icon">✅</span>
+              <div class="security-content">
+                <strong>加密需求使用</strong>
+                <p>crypto.getRandomValues() 提供真随机数</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="code-example">
+          <h4>💻 模拟实现示例</h4>
+          <pre><code>class SimpleRandom {
+  constructor(seed = Date.now()) {
+    this.seed = seed;
+  }
+
+  // 简单的线性同余法实现
+  next() {
+    this.seed = (this.seed * 1664525 + 1013904223) % Math.pow(2, 32);
+    return this.seed / Math.pow(2, 32);
+  }
+
+  // 生成指定范围的随机数
+  random(min = 0, max = 1) {
+    return min + (max - min) * this.next();
+  }
+}
+
+// 使用示例
+const random = new SimpleRandom();
+console.log(random.random()); // [0, 1)
+console.log(random.random(1, 10)); // [1, 10)</code></pre>
+        </div>
+      </div>
+    </section>
+
+
+
     <!-- 注意事项 -->
     <section class="notice-card">
       <h3>⚠️ 注意事项</h3>
@@ -70,6 +228,7 @@
 import { defineComponent, reactive } from 'vue'
 
 export default defineComponent({
+  name: 'MathDocumentation',
   setup() {
     const mathConstants = reactive({
       PI: {
@@ -239,6 +398,7 @@ export default defineComponent({
 .properties-card,
 .methods-card,
 .es6-methods-card,
+.random-mechanism-card,
 .notice-card {
   background: #ffffff;
   border-radius: 12px;
@@ -328,5 +488,205 @@ code {
 
 .icon {
   margin-right: 0.5rem;
+}
+
+/* Math.random() 机制样式 */
+.random-mechanism-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.mechanism-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.mechanism-overview h4,
+.algorithm-details h4,
+.implementation-steps h4,
+.browser-implementations h4,
+.security-considerations h4,
+.code-example h4 {
+  color: #000;
+  margin-bottom: 1rem;
+  font-size: 1.2em;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+  padding-bottom: 0.5rem;
+}
+
+.formula-box {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 1.5rem;
+  border-radius: 8px;
+  text-align: center;
+  margin: 1rem 0;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.formula-box code {
+  font-size: 1.3em;
+  color: #000;
+  font-weight: 600;
+}
+
+.parameter-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.parameter-item {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 1rem;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.param-name {
+  font-weight: 600;
+  color: #ffd700;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.param-value {
+  color: #ffffff;
+  font-size: 0.9em;
+}
+
+.step-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.step-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 1rem;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.step-number {
+  background: #ffd700;
+  color: #333;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.step-content strong {
+  color: #ffd700;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.step-content p {
+  color: #ffffff;
+  margin: 0;
+  font-size: 0.9em;
+}
+
+.browser-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.browser-item {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 1rem;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  text-align: center;
+}
+
+.browser-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.browser-icon {
+  font-size: 1.5em;
+}
+
+.browser-name {
+  font-weight: 600;
+  color: #ffd700;
+}
+
+.browser-item p {
+  color: #ffffff;
+  font-size: 0.9em;
+  margin: 0;
+}
+
+.security-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.security-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1rem;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.security-item.warning {
+  background: rgba(255, 193, 7, 0.2);
+  border-color: rgba(255, 193, 7, 0.4);
+}
+
+.security-item.info {
+  background: rgba(23, 162, 184, 0.2);
+  border-color: rgba(23, 162, 184, 0.4);
+}
+
+.security-item.success {
+  background: rgba(40, 167, 69, 0.2);
+  border-color: rgba(40, 167, 69, 0.4);
+}
+
+.security-icon {
+  font-size: 1.2em;
+  flex-shrink: 0;
+}
+
+.security-content strong {
+  color: #ffd700;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.security-content p {
+  color: #ffffff;
+  margin: 0;
+  font-size: 0.9em;
+}
+
+.code-example pre {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.code-example code {
+  color: #ffffff;
 }
 </style>

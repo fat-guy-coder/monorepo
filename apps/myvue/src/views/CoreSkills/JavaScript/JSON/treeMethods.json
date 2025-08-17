@@ -1,0 +1,155 @@
+[
+  {
+    "id": 1,
+    "title": "深度优先遍历(DFS)",
+    "description": "利用递归或栈实现沿着树的深度遍历树的节点，尽可能深的搜索树的分支",
+    "tags": ["遍历", "递归", "迭代"],
+    "category": "遍历方法",
+    "complexity": "O(n)",
+    "codeExample": true,
+    "code": "function dfs(node) {\n  if (!node) return;\n  console.log(node.val);\n  dfs(node.left);\n  dfs(node.right);\n}"
+  },
+  {
+    "id": 2,
+    "title": "前序遍历",
+    "description": "访问根节点 -> 前序遍历左子树 -> 前序遍历右子树，利用递归或栈实现",
+    "tags": ["DFS", "遍历"],
+    "category": "遍历方法",
+    "complexity": "O(n)",
+    "codeExample": true,
+    "code": "function preOrder(node) {\n  if (!node) return;\n  console.log(node.val);\n  preOrder(node.left);\n  preOrder(node.right);\n}"
+  },
+  {
+    "id": 3,
+    "title": "中序遍历",
+    "description": "中序遍历左子树 -> 访问根节点 -> 中序遍历右子树，利用递归或栈实现",
+    "tags": ["DFS", "遍历"],
+    "category": "遍历方法",
+    "complexity": "O(n)",
+    "codeExample": true,
+    "code": "function inOrder(node) {\n  if (!node) return;\n  inOrder(node.left);\n  console.log(node.val);\n  inOrder(node.right);\n}"
+  },
+  {
+    "id": 4,
+    "title": "后序遍历",
+    "description": "后序遍历左子树 -> 后序遍历右子树 -> 访问根节点，利用递归或栈实现",
+    "tags": ["DFS", "遍历"],
+    "category": "遍历方法",
+    "complexity": "O(n)",
+    "codeExample": true,
+    "code": "function postOrder(node) {\n  if (!node) return;\n  postOrder(node.left);\n  postOrder(node.right);\n  console.log(node.val);\n}"
+  },
+  {
+    "id": 5,
+    "title": "广度优先遍历(BFS)",
+    "description": "层级遍历，逐层访问树的所有节点，利用队列实现",
+    "tags": ["遍历", "队列"],
+    "category": "遍历方法",
+    "complexity": "O(n)",
+    "codeExample": true,
+    "code": "function bfs(node) {\n  if (!node) return;\n  const queue = [node];\n  while (queue.length) {\n    const current = queue.shift();\n    console.log(current.val);\n    if (current.left) queue.push(current.left);\n    if (current.right) queue.push(current.right);\n  }\n}"
+  },
+
+  {
+    "id": 6,
+    "title": "查找节点",
+    "description": "在树中查找特定节点，可使用DFS或BFS实现",
+    "tags": ["查找", "DFS", "BFS"],
+    "category": "查找方法",
+    "complexity": "O(n)",
+    "codeExample": true,
+    "code": "function findNode(node, target) {\n  if (!node) return null;\n  if (node.val === target) return node;\n  return findNode(node.left, target) || findNode(node.right, target);\n}"
+  },
+  {
+    "id": 7,
+    "title": "查找父节点",
+    "description": "获取指定节点的父节点引用，DFS或BFS实现",
+    "tags": ["查找", "遍历"],
+    "category": "查找方法",
+    "complexity": "O(n)",
+    "codeExample": true,
+    "code": "function findParent(node, target) {\n  if (!node) return null;\n  if (node.left && node.left.val === target) return node;\n  if (node.right && node.right.val === target) return node;\n  return findParent(node.left, target) || findParent(node.right, target);\n}"
+  },
+  {
+    "id": 8,
+    "title": "查找路径",
+    "description": "获取从根节点到目标节点的路径，DFS或BFS实现",
+    "tags": ["查找", "路径"],
+    "category": "查找方法",
+    "complexity": "O(h)",
+    "codeExample": true,
+    "code": "function findPath(node, target) {\n  if (!node) return [];\n  if (node.val === target) return [node.val];\n  const leftPath = findPath(node.left, target);\n  if (leftPath.length) return [node.val, ...leftPath];\n  const rightPath = findPath(node.right, target);\n  if (rightPath.length) return [node.val, ...rightPath];\n  return [];\n}"
+  },
+
+  {
+    "id": 9,
+    "title": "树转列表(扁平化)",
+    "description": "将树结构转换为扁平列表结构，保留层级关系，DFS或BFS实现",
+    "tags": ["转换", "DFS", "BFS"],
+    "category": "转换方法",
+    "complexity": "O(n)",
+    "codeExample": true,
+    "code": "function flattenTree(node) {\n  if (!node) return [];\n  const result = [];\n  const stack = [node];\n  while (stack.length) {\n    const current = stack.pop();\n    result.push(current);\n    if (current.right) stack.push(current.right);\n    if (current.left) stack.push(current.left);\n  }\n  return result;\n}"
+  },
+  {
+    "id": 10,
+    "title": "列表转树",
+    "description": "将扁平列表转换成树形结构，通常需要id和pid字段，利用map和递归实现",
+    "tags": ["转换", "重构"],
+    "category": "转换方法",
+    "complexity": "O(n)",
+    "codeExample": true,
+    "code": "function listToTree(list) {\n  const map = new Map()\n  let root = null\n  for (const item of list) {\n    map.set(item.id, item);\n  }\n  for (const item of list) {\n    if (item.pid === 0 || !item.pid) {\n      root = item;\n    } else {\n      const parent = map.get(item.pid);\n      if (parent) {\n        parent.children = parent.children || [];\n        parent.children.push(item);\n      }\n    }\n  }\n  return root\n}"
+  },
+  {
+    "id": 11,
+    "title": "树节点过滤",
+    "description": "根据条件过滤树节点，保留符合条件的节点及其祖先节点，利用递归实现",
+    "tags": ["转换", "过滤", "递归"],
+    "category": "转换方法",
+    "complexity": "O(n)",
+    "codeExample": true,
+    "code": "function filterTree(node, condition) {\n  if (!node) return null;\n  if (condition(node)) return node;\n  node.left = filterTree(node.left, condition);\n  node.right = filterTree(node.right, condition);\n  return node;\n}"
+  },
+
+  {
+    "id": 12,
+    "title": "双端对比算法",
+    "description": "同时从新旧树的两端(头头、尾尾、头尾、尾头)开始比对，高效处理常见变动",
+    "tags": ["Diff", "对比", "优化"],
+    "category": "对比方法",
+    "complexity": "O(n)",
+    "codeExample": true,
+    "code": "function diffTrees(oldTree, newTree) {\n  if (!oldTree && !newTree) return [];\n  if (!oldTree) return newTree;\n  if (!newTree) return oldTree;\n  const result = [];\n  if (oldTree.val !== newTree.val) {\n    result.push({ type: 'replace', old: oldTree, new: newTree });\n  }\n  result.push(...diffTrees(oldTree.left, newTree.left));\n  result.push(...diffTrees(oldTree.right, newTree.right));\n  return result;\n}"
+  },
+  {
+    "id": 13,
+    "title": "最长递增子序列",
+    "description": "用于最小化节点移动操作，优化树节点变更处理，利用动态规划或者贪心算法和二分查找实现",
+    "tags": ["Diff", "算法"],
+    "category": "对比方法",
+    "complexity": "O(n log n)",
+    "codeExample": true,
+    "code": "function longestIncreasingSubsequence(arr) {\n  if (!arr.length) return [];\n  const dp = Array(arr.length).fill(1);\n  const result = [arr[0]];\n  for (let i = 1; i < arr.length; i++) {\n    for (let j = 0; j < i; j++) {\n      if (arr[i] > arr[j] && dp[j] + 1 > dp[i]) {\n        dp[i] = dp[j] + 1;\n        result[i] = arr[j];\n      }\n    }\n  }\n  return result;\n}"
+  },
+  {
+    "id": 14,
+    "title": "树结构差异检测",
+    "description": "比较两棵树的结构差异，识别节点增删改，利用递归实现",
+    "tags": ["Diff", "对比"],
+    "category": "对比方法",
+    "complexity": "O(n)",
+    "codeExample": true,
+    "code": "function diffTreeStructure(oldTree, newTree) {\n  if (!oldTree && !newTree) return [];\n  if (!oldTree) return newTree;\n  if (!newTree) return oldTree;\n  const result = [];\n  if (oldTree.val !== newTree.val) {\n    result.push({ type: 'replace', old: oldTree, new: newTree });\n  }\n  result.push(...diffTreeStructure(oldTree.left, newTree.left));\n  result.push(...diffTreeStructure(oldTree.right, newTree.right));\n  return result;\n}"
+  },
+  {
+    "id": 15,
+    "title": "节点复用策略",
+    "description": "通过key属性复用已有节点，减少DOM操作，利用递归实现",
+    "tags": ["优化", "性能"],
+    "category": "对比方法",
+    "complexity": "O(1)",
+    "codeExample": true,
+    "code": "function reuseNodes(oldTree, newTree) {\n  if (!oldTree && !newTree) return [];\n  if (!oldTree) return newTree;\n  if (!newTree) return oldTree;\n  const result = [];\n  if (oldTree.val !== newTree.val) {\n    result.push({ type: 'replace', old: oldTree, new: newTree });\n  }\n  result.push(...reuseNodes(oldTree.left, newTree.left));\n  result.push(...reuseNodes(oldTree.right, newTree.right));\n  return result;\n}"
+  }
+]

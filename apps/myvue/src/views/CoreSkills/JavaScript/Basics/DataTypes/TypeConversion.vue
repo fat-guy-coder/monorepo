@@ -4,19 +4,23 @@
 
     <h2>JavaScript的隐式类型转换和显式类型转换</h2>
 
-
     <h3>
       <p>
         隐式类型转换:在执行操作时，JavaScript自动将某些数据类型转换为适当的类型以完成操作。这通常发生在进行比较或运算时，例如将数字与字符串相加时，JavaScript会自动将数字转换为字符串，进行字符串拼接。
       </p>
       <p>
-        显式类型转换:开发者显式地调用转换方法（如 `Number()`, `String()`, `Boolean()`）将数据从一种类型转换为另一种类型。显式转换通常用于确保值的类型符合预期。
+        显式类型转换:开发者显式地调用转换方法（如 `Number()`, `String()`,
+        `Boolean()`）将数据从一种类型转换为另一种类型。显式转换通常用于确保值的类型符合预期。
       </p>
     </h3>
 
     <div class="control-panel">
-      <button v-for="tab in tabs" :key="tab" @click="currentTab = tab"
-        :class="['tab-btn', { active: currentTab === tab }]">
+      <button
+        v-for="tab in tabs"
+        :key="tab"
+        @click="currentTab = tab"
+        :class="['tab-btn', { active: currentTab === tab }]"
+      >
         {{ tab }}
       </button>
     </div>
@@ -24,18 +28,52 @@
     <div class="content">
       <section v-show="currentTab === '隐式转换'" class="conversion-section">
         <h2 class="subtitle">常见隐式转换场景</h2>
+        <div class="implicit-conversion-detail">
+          <h2>隐式转换时会调用一些方法</h2>
+          <h3>
+            1. 对象转基本类型: 先调用 valueOf 方法，如果返回基本类型，则使用该值；否则调用 toString
+            方法，如果返回基本类型，则使用该值；否则抛出 TypeError 异常。<i class="notice"
+              >注意：这个方法可以被重写，重写后可以返回任何值，下列的方法都可以被重写(window.Number=function(){return
+              1})</i
+            >
+          </h3>
+          <h3>
+            2. 基本类型转数字: 先调用 Number 方法，如果返回 NaN，则调用 parseInt 方法，如果返回
+            NaN，则调用 parseFloat 方法。
+          </h3>
+          <h3>
+            3. 基本类型转布尔值: 先调用 Boolean 方法，如果返回 NaN，则调用 parseInt 方法，如果返回
+            NaN，则调用 parseFloat 方法。
+          </h3>
+          <h3>
+            4. 基本类型转字符串: 先调用 String 方法，如果返回 NaN，则调用 parseInt 方法，如果返回
+            NaN，则调用 parseFloat 方法。
+          </h3>
+        </div>
+
         <div class="examples">
-          <div v-for="(example, index) in implicitExamples" :key="'implicit' + index" class="example-card"
-            @click="showDetails(example)">
+          <div
+            v-for="(example, index) in implicitExamples"
+            :key="'implicit' + index"
+            class="example-card"
+            @click="showDetails(example)"
+          >
             <div class="code-block">
               <pre>{{ example.expression }}</pre>
             </div>
             <div class="result" :style="{ color: resultColor(example.result) }">
               ⇒ {{ example.result }}
             </div>
-            <div v-if="selectedExample === example" class="explanation">
+            <div class="explanation">
               <p>{{ example.explanation }}</p>
               <p class="type-info">转换过程: {{ example.process }}</p>
+            </div>
+            <div class="detail">
+              <p class="tips" v-if="example.tips">{{ example.tips }}</p>
+              <a class="expand" v-if="example.detail" @click="expandDetail(index)">{{
+                example.expand ? '收起' : '展开'
+              }}</a>
+              <p v-show="example.expand">{{ example.detail }}</p>
             </div>
           </div>
         </div>
@@ -43,14 +81,32 @@
 
       <section v-show="currentTab === '显式转换'" class="conversion-section">
         <h2 class="subtitle">显式转换方法</h2>
+        <h3>
+          <i class="notice"
+            >注意：对象转换为基本类型值时，如果对象有Symbol.toPrimitive方法，则调用该方法</i
+          >
+        </h3>
+        <h3>
+          <i class="notice"
+            >注意：对象调用toString()时，如果对象有Symbol.toStringTag方法，则调用该方法</i
+          >
+          <a @click="goToSymbol">跳转Symbol</a>
+        </h3>
         <div class="examples">
-          <div v-for="(example, index) in explicitExamples" :key="'explicit' + index" class="example-card"
-            @click="showDetails(example)">
+          <div
+            v-for="(example, index) in explicitExamples"
+            :key="'explicit' + index"
+            class="example-card"
+            @click="showDetails(example)"
+          >
             <div class="code-block">
               <pre>{{ example.expression }}</pre>
             </div>
             <div class="result" :style="{ color: resultColor(example.result) }">
               ⇒ {{ example.result }}
+            </div>
+            <div class="detail" v-if="example.detail">
+              <p>{{ example.detail }}</p>
             </div>
             <div v-if="selectedExample === example" class="explanation">
               <p>{{ example.explanation }}</p>
@@ -60,8 +116,12 @@
         </div>
       </section>
       <section class="table-section">
-        <h2 class="subtitle">使用不同的数值转换为数字(Number), 字符串(String), 布尔值(Boolean) <a
-            href="https://www.runoob.com/js/js-type-conversion.html" target="_blank">摘自菜鸟教程</a> </h2>
+        <h2 class="subtitle">
+          使用不同的数值转换为数字(Number), 字符串(String), 布尔值(Boolean)
+          <a href="https://www.runoob.com/js/js-type-conversion.html" target="_blank"
+            >摘自菜鸟教程</a
+          >
+        </h2>
         <h2 class="pay-attention">
           <span>Number([20])===20</span>
           <span>Boolean('0')===true</span>
@@ -227,25 +287,40 @@ interface Example {
   explanation: string
   process?: string
   returnType?: string
+  tips?: string
+  detail?: string
+  expand?: boolean
 }
 
 const currentTab = ref('隐式转换')
 const selectedExample = ref<Example | null>(null)
 const tabs = ['隐式转换', '显式转换']
 
+const expandDetail = (index: number) => {
+  implicitExamples.value[index].expand = !implicitExamples.value[index].expand
+}
+
 // ... existing code ...
-const implicitExamples: Example[] = [
+const implicitExamples = ref<Example[]>([
   {
     expression: '"5" + 2',
     result: '"52"',
     explanation: '数值转换为字符串',
     process: '2 → "2" → 字符串拼接',
+    tips: '用+号拼接时,会优先转为字符串后拼接',
+    detail:
+      '用+号拼接时，会优先调用toString()方法，如果toString()方法返回的是基本类型，则直接拼接，如果返回的是对象，则调用valueOf()方法，如果valueOf()方法返回的是基本类型，则直接拼接，如果返回的是对象，则调用toString()方法，如果toString()方法返回的是基本类型，则直接拼接，如果返回的是对象，则抛出TypeError异常',
+    expand: false,
   },
   {
     expression: '"5" - 2',
     result: '3',
     explanation: '字符串转换为数值',
     process: '"5" → 5 → 执行减法',
+    tips: '用-号拼接时,会优先转为数值后计算接',
+    detail:
+      '用-号拼接时，会优先调用toString()方法，如果toString()方法返回的是基本类型，则直接拼接，如果返回的是对象，则调用valueOf()方法，如果valueOf()方法返回的是基本类型，则直接拼接，如果返回的是对象，则调用toString()方法，如果toString()方法返回的是基本类型，则直接拼接，如果返回的是对象，则抛出TypeError异常',
+    expand: false,
   },
   {
     expression: 'null == undefined',
@@ -264,19 +339,32 @@ const implicitExamples: Example[] = [
     expression: '1 + "1"',
     result: '"11"',
     explanation: '数值转换为字符串',
+    tips: '用+号拼接时,会优先转为字符串后拼接',
     process: '1 → "1" → 字符串拼接',
   },
   {
     expression: 'true + 1',
     result: '2',
-    explanation: '布尔值转换为数值',
+    explanation: '布尔值根据另一侧类型转换后计算',
     process: 'true → 1 → 1 + 1',
   },
   {
     expression: 'false + 1',
     result: '1',
-    explanation: '布尔值转换为数值',
+    explanation: '布尔值根据另一侧类型转换后计算',
     process: 'false → 0 → 0 + 1',
+  },
+  {
+    expression: '"1" + true',
+    result: '"1true"',
+    explanation: '布尔值根据另一侧类型转换后计算',
+    process: 'true → "true" → 字符串拼接',
+  },
+  {
+    expression: '"1" + false',
+    result: '"1false"',
+    explanation: '布尔值根据另一侧类型转换后计算',
+    process: 'false → "false" → 字符串拼接',
   },
   {
     expression: '"" == 0',
@@ -285,7 +373,7 @@ const implicitExamples: Example[] = [
     process: '"" → 0 → 比较 0 == 0',
   },
   // ... existing code ...
-]
+])
 // ... existing code ...
 
 const explicitExamples: Example[] = [
@@ -312,6 +400,7 @@ const explicitExamples: Example[] = [
     result: 'true',
     explanation: '双非运算符转换',
     returnType: 'boolean',
+    detail: '!!null === false',
   },
   // 新增的显式转换场景
   {
@@ -319,12 +408,15 @@ const explicitExamples: Example[] = [
     result: '10',
     explanation: '字符串转换为整数',
     returnType: 'number',
+    detail:
+      'parseInt("10.5",10)第二个参数为进制数(将字符串以指定进制的数字转换为10进制)，默认是10进制',
   },
   {
     expression: 'parseFloat("10.5")',
     result: '10.5',
     explanation: '字符串转换为浮点数',
     returnType: 'number',
+    detail: 'parseFloat("10.5") 和 parseFloat("10.5",10) 的区别,第二个参数也是进制',
   },
   {
     expression: 'String(true)',
@@ -375,6 +467,10 @@ const resultColor = (result: string) => {
   if (result === 'false') return '#69b1ff' // false颜色
   return '#ffc53d' // 数字颜色
 }
+const emit = defineEmits(['goToByRouteName'])
+const goToSymbol = () => {
+  emit('goToByRouteName', 'Symbol')
+}
 </script>
 
 <style lang="less" scoped>
@@ -386,6 +482,12 @@ const resultColor = (result: string) => {
 
 pre {
   color: #fff;
+}
+
+.implicit-conversion-detail {
+  .notice {
+    color: #ff4d4f;
+  }
 }
 
 .main-container {

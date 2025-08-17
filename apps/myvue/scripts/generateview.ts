@@ -1,4 +1,4 @@
-import { existsSync, mkdirSync, writeFileSync,readFileSync } from 'fs';
+import { existsSync, mkdirSync, writeFileSync, readFileSync } from 'fs';
 import path from 'path';
 import menu from '../src/menu';
 
@@ -67,7 +67,7 @@ function generateView(menu: MenuItem[], basePath: string) {
     const itemPath = path.join(basePath, item.name);
     if (item.children) {
       // Create directory
-      if (existsSync(itemPath)) {
+      if (!existsSync(itemPath)) {
         mkdirSync(itemPath, { recursive: true });
       }
       // Recursively generate subdirectories and files
@@ -75,7 +75,7 @@ function generateView(menu: MenuItem[], basePath: string) {
     } else {
       // Create single vue file
       const vueFilePath = `${itemPath}.vue`;
-      if (!existsSync(vueFilePath)) {
+      if (!existsSync(vueFilePath)&&!item.redirect) {
         writeFileSync(vueFilePath, `<template>\n  <div>${item.title}</div>\n</template>\n<script lang="ts" setup>\n</script>\n<style scoped>\n</style>\n`);
       }
     }

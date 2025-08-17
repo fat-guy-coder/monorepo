@@ -2,7 +2,7 @@
   <div class="function-params-container">
     <!-- 标题区域 -->
     <header class="header">
-      <h1>JavaScript 函数参数详解</h1>
+      <h1>JavaScript 函数参数介绍</h1>
       <p>掌握参数默认值、Rest 参数、Arguments 对象、形参与实参</p>
     </header>
 
@@ -417,7 +417,7 @@ Total arguments: 4
     </div>
 
     <footer class="footer">
-      <p>JavaScript 函数参数详解 | 掌握参数处理的核心技术</p>
+      <p>JavaScript 函数参数介绍 | 掌握参数处理的核心技术</p>
       <p>© 2023 JavaScript 高级编程指南</p>
     </footer>
   </div>

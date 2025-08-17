@@ -1,7 +1,7 @@
 <template>
   <div class="operator-container">
     <header class="header">
-      <h1>JavaScript <span class="highlight">运算符优先级</span>与进阶使用</h1>
+      <h1>JavaScript <span class="highlight">运算符优先级</span></h1>
       <p class="subtitle">掌握运算符规则，编写更高效、更清晰的代码</p>
     </header>
 
@@ -14,6 +14,27 @@
         <p class="section-description">
           运算符优先级决定了表达式中运算的执行顺序。优先级高的运算符会先于优先级低的运算符执行。
         </p>
+
+        <!-- <table class="priority-table">
+          <thead class="table-header">
+            <tr>
+              <th class="table-cell">优先级</th>
+              <th class="table-cell">运算符类型</th>
+              <th class="table-cell">运算符</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(item, index) in priorityData" :key="index" class="table-row">
+              <td class="table-cell">{{ item.priority }}</td>
+              <td class="table-cell">{{ item.type }}</td>
+              <td class="table-cell">
+                <span v-for="(op, opIndex) in item.operators" :key="opIndex" class="operator-tag">
+                  {{ op }}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table> -->
 
         <div class="priority-table">
           <div class="table-header">
@@ -29,6 +50,39 @@
                 {{ op }}
               </span>
             </div>
+          </div>
+        </div>
+
+        <div class="memory-tips-section">
+          <h3 class="examples-title">
+            <i class="icon fas fa-brain"></i>
+            运算符优先级记忆口诀
+          </h3>
+          <div class="memory-tips-content">
+            <p>
+              记住常见运算符优先级，可以用下面的口诀帮助记忆（从高到低）：
+            </p>
+            <ul class="memory-tips-list">
+              <li><b>单括号、点方括，函数调用最优先</b></li>
+              <li><b>一元运算（! ~ ++ -- + - typeof等）紧随其后</b></li>
+              <li><b>乘除取余（* / %）快于加减（+ -）</b></li>
+              <li><b>移位（<< >> >>>）比大小（&lt; &gt; &lt;= &gt;=）先</b></li>
+              <li><b>等于不等（== != === !==）再后面</b></li>
+              <li><b>按位与（&）再按位异或（^）再按位或（|）</b></li>
+              <li><b>逻辑与（&&）优于逻辑或（||）</b></li>
+              <li><b>三元（?:）赋值（=）最后来</b></li>
+              <li><b>逗号（,）最低</b></li>
+            </ul>
+            <p>
+              <span style="color:#228be6;font-weight:bold;">口诀助记：</span>
+              <br>
+              <span style="color:#555;">
+                <b>括点方，单目先，乘除加减移位连，大小等于按位转，逻辑三元赋值完，逗号最低别忘全。</b>
+              </span>
+            </p>
+            <p style="font-size:0.95em;color:#888;">
+              （口诀解释：括号、点、方括号、函数调用优先，单目运算符次之，乘除加减移位依次排，比较、等于、按位、逻辑、三元、赋值、逗号依次降低）
+            </p>
           </div>
         </div>
 
@@ -121,7 +175,7 @@
 </template>
 
 <script setup lang="ts">
-import { Button,Input } from 'ant-design-vue';
+import { Button } from 'ant-design-vue';
 import { ref } from 'vue';
 
 // 运算符优先级数据
@@ -333,7 +387,25 @@ evaluateExpression();
   max-width: 1200px;
   margin: 0 auto;
 }
-
+.memory-tips-section{
+  margin-top: 20px;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  .memory-tips-content{
+    p{
+      margin-bottom: 10px;
+    }
+  }
+  .memory-tips-list{
+    li{
+      margin-bottom: 10px;
+      padding-left: 20px;
+      font-size: 1.1rem;
+    }
+  }
+}
 .header {
   text-align: center;
   margin-bottom: 40px;
@@ -422,11 +494,23 @@ evaluateExpression();
     background: var(--primary);
     color: white;
     font-weight: 600;
+    justify-content: flex-start;
+    border:1px solid rgb(162, 210, 255);
 
     .header-item {
       padding: 15px;
       flex: 1;
-      text-align: center;
+      // text-align: center;
+      &:nth-child(1){
+        flex: 0.5;
+        text-align: center;
+      }
+      &:nth-child(2){
+        flex: 1.5;
+      }
+      &:nth-child(3){
+        flex: 2;
+      }
     }
   }
 

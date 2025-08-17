@@ -5,7 +5,7 @@
       <p class="subtitle">深入解析三种数据结构的性能差异</p>
     </header>
 
-    <Nav class="toc" :list="sections" />
+    <Nav :list="sections" />
 
     <div class="content-wrapper">
       <!-- 概述 -->
@@ -431,7 +431,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import CodeBlock from '../Components/CodeBlock.vue'
+import CodeBlock from '@/components/CodeBlock.vue'
 import Nav from '@/components/ScrollNav.vue'
 import testResults from '../JSON/dataStructurePerformence.json'
 
@@ -553,8 +553,6 @@ const drawChart = (canvas: HTMLCanvasElement, data: TestResults[Operation]) => {
 
     drawBar()
 
-
-
     function drawBar() {
       // Array
       const arrayHeight = (item.arrayAverage / maxValue) * chartHeight || 2
@@ -572,7 +570,7 @@ const drawChart = (canvas: HTMLCanvasElement, data: TestResults[Operation]) => {
       ctx.fillRect(x + barWidth * 2, canvas.height - 50 - mapHeight, barWidth, mapHeight)
 
       // Set
-        const setHeight = (item.setAverage / maxValue) * chartHeight || 2
+      const setHeight = (item.setAverage / maxValue) * chartHeight || 2
       ctx.fillStyle = colors.set
       ctx.fillRect(x + barWidth * 3, canvas.height - 50 - setHeight, barWidth, setHeight)
     }
@@ -1119,9 +1117,7 @@ class ConfigManager {
 }
 
 .examples-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-  gap: 1rem;
+
 
   .example-item {
     background: #f9fafb;

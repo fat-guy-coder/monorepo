@@ -21,7 +21,7 @@
 
     <div class="content">
       <div class="techniques-section">
-        <h2 class="section-title">图片加载技术详解</h2>
+        <h2 class="section-title">图片加载技术介绍</h2>
 
         <div class="technique-cards">
           <!-- 传统IMG标签 -->
@@ -573,9 +573,9 @@ module: {
 
 <script setup lang="ts">
 // 这里可以添加响应式逻辑
-import { ref } from 'vue';
+import { ref } from 'vue'
 
-const activeTechnique = ref('responsive');
+const activeTechnique = ref('responsive')
 </script>
 
 <style lang="less" scoped>
@@ -662,7 +662,7 @@ const activeTechnique = ref('responsive');
   font-size: 1.8rem;
 
   &::after {
-    content: "";
+    content: '';
     display: block;
     width: 60px;
     height: 4px;
@@ -761,7 +761,7 @@ const activeTechnique = ref('responsive');
     align-items: center;
 
     &::before {
-      content: "🖥️";
+      content: '🖥️';
       margin-right: 0.5rem;
     }
   }
@@ -792,7 +792,7 @@ const activeTechnique = ref('responsive');
     align-items: center;
 
     &::before {
-      content: "✅";
+      content: '✅';
       margin-right: 0.5rem;
     }
   }
@@ -807,7 +807,7 @@ const activeTechnique = ref('responsive');
       padding-left: 0.5rem;
 
       &::before {
-        content: "•";
+        content: '•';
         position: absolute;
         left: -0.7rem;
         color: @primary-color;
@@ -840,7 +840,7 @@ const activeTechnique = ref('responsive');
       color: #10b981;
 
       &::before {
-        content: "👍";
+        content: '👍';
         margin-right: 0.5rem;
       }
     }
@@ -849,7 +849,7 @@ const activeTechnique = ref('responsive');
       color: #ef4444;
 
       &::before {
-        content: "👎";
+        content: '👎';
         margin-right: 0.5rem;
       }
     }
@@ -921,7 +921,7 @@ const activeTechnique = ref('responsive');
       padding-left: 1.5rem;
 
       &::before {
-        content: "➡️";
+        content: '➡️';
         position: absolute;
         left: 0;
         color: @primary-color;

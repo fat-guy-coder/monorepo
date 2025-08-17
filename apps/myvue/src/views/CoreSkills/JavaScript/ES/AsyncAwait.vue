@@ -1,87 +1,44 @@
 <template>
-  <div class="async-function-guide">
-    <header class="guide-header">
-      <div class="header-content">
-        <h1>Async/Await 指南</h1>
-        <p>使用现代JavaScript优雅处理异步操作</p>
-      </div>
-      <div class="header-graphic">
-        <div class="async-graphic">
-          <div class="promise-circle" v-for="n in 3" :key="n" :style="`--delay: ${n * 0.3}s`"></div>
-        </div>
-      </div>
+  <div class="async-container">
+    <header>
+      <h1><i class="fas fa-bolt"></i> JavaScript Async/Await 介绍</h1>
+      <p class="subtitle">现代JavaScript异步编程的核心技术</p>
     </header>
 
-    <div class="content-container">
-      <div class="quick-summary">
-        <div class="summary-card">
-          <div class="summary-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-              <path d="M12,1L3,5v6c0,5.55,3.84,10.74,9,12c5.16-1.26,9-6.45,9-12V5L12,1z M19,11c0,1.85-0.51,3.65-1.38,5.21l-1.45-1.45 c1.29-1.94,1.07-4.58-0.64-6.29c-1.95-1.95-5.12-1.95-7.07,0c-1.95,1.95-1.95,5.12,0,7.07c1.71,1.71,4.35,1.92,6.29,0.64 l1.45,1.45C17.76,17.45,15.46,19,13,19c-3.87,0-7-3.13-7-7s3.13-7,7-7S19,7.13,19,11z M14,12c0-1.11-0.89-2-2-2s-2,0.89-2,2 s0.89,2,2,2S14,13.11,14,12z"/>
-            </svg>
+    <div class="content-grid">
+      <!-- 概述部分 -->
+      <section class="card overview">
+        <h2><i class="fas fa-info-circle"></i> Async函数概述</h2>
+        <p>
+          Async函数是ES2017引入的异步编程解决方案，它建立在Promise之上，使用<code>async</code>和<code>await</code>关键字让异步代码拥有同步代码的书写结构和可读性。
+        </p>
+
+        <div class="feature-list">
+          <div class="feature">
+            <i class="fas fa-check-circle"></i>
+            <h3>作用</h3>
+            <p>简化异步操作，避免回调地狱，使异步代码更易读、维护</p>
           </div>
-          <div>
-            <h3>核心概念</h3>
-            <p>让异步代码像同步代码一样可读</p>
+          <div class="feature">
+            <i class="fas fa-check-circle"></i>
+            <h3>特点</h3>
+            <p>语法简洁，错误处理更直观，与Promise完美兼容</p>
+          </div>
+          <div class="feature">
+            <i class="fas fa-check-circle"></i>
+            <h3>兼容性</h3>
+            <p>所有现代浏览器和Node.js 7.6+均支持</p>
           </div>
         </div>
+      </section>
 
-        <div class="summary-card">
-          <div class="summary-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-              <path d="M9.01 14H2v2h7.01v3L13 15l-3.99-4v3zm5.98-1v-3H22V8h-7.01V5L11 9l3.99 4z"/>
-            </svg>
-          </div>
-          <div>
-            <h3>语法糖</h3>
-            <p>基于Promise的语法糖</p>
-          </div>
-        </div>
-
-        <div class="summary-card">
-          <div class="summary-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-              <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm-.22-13h-.06c-.4 0-.72.32-.72.72v4.72c0 .35.18.68.49.86l4.15 2.49c.34.2.78.1.98-.24.21-.34.1-.79-.25-.99l-3.87-2.3V7.72c0-.4-.32-.72-.72-.72z"/>
-            </svg>
-          </div>
-          <div>
-            <h3>错误处理</h3>
-            <p>使用try/catch处理错误</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="main-content">
-        <section class="content-section">
-          <h2 class="section-title">
-            <span class="title-icon">⏱️</span>
-            什么是Async函数？
-          </h2>
-          <div class="section-content">
-            <p>Async函数是ES2017引入的异步编程解决方案，它建立在Promise之上，使得异步代码的编写和阅读更加直观。</p>
-
-            <div class="definition-card">
-              <h3>核心特点：</h3>
-              <ul>
-                <li>使用<code>async</code>关键字声明函数</li>
-                <li>函数内部可以使用<code>await</code>关键字</li>
-                <li>总是返回一个Promise对象</li>
-                <li>让异步代码拥有同步代码的外观</li>
-              </ul>
-            </div>
-          </div>
-        </section>
-
-        <section class="content-section">
-          <h2 class="section-title">
-            <span class="title-icon">💡</span>
-            基本用法
-          </h2>
-          <div class="section-content">
-            <div class="code-block">
-              <pre><code class="javascript">// 声明async函数
+      <!-- 基本用法 -->
+      <section class="card usage">
+        <h2><i class="fas fa-code"></i> 基本用法</h2>
+        <div class="code-block">
+          <pre><code>// 声明async函数
 async function fetchData() {
-  // 使用await等待Promise解决
+  // 使用await等待异步操作完成
   const response = await fetch('https://api.example.com/data');
   const data = await response.json();
   return data;
@@ -89,851 +46,700 @@ async function fetchData() {
 
 // 调用async函数
 fetchData()
-  .then(data => console.log(data))
-  .catch(error => console.error(error));</code></pre>
-            </div>
+  .then(data => console.log('Data:', data))
+  .catch(error => console.error('Error:', error));</code></pre>
+        </div>
 
-            <div class="usage-grid">
-              <div class="usage-item">
-                <div class="usage-icon">✅</div>
-                <h3>简化Promise链</h3>
-                <p>避免多层.then()嵌套</p>
-              </div>
-
-              <div class="usage-item">
-                <div class="usage-icon">🔄</div>
-                <h3>顺序执行</h3>
-                <p>让异步操作顺序执行</p>
-              </div>
-
-              <div class="usage-item">
-                <div class="usage-icon">🚦</div>
-                <h3>错误处理</h3>
-                <p>使用try/catch捕获错误</p>
-              </div>
+        <div class="key-points">
+          <div class="point">
+            <i class="fas fa-key"></i>
+            <div>
+              <h3>async关键字</h3>
+              <p>用于声明异步函数，函数会隐式返回一个Promise对象</p>
             </div>
           </div>
-        </section>
-
-        <section class="content-section">
-          <h2 class="section-title">
-            <span class="title-icon">📝</span>
-            返回值解析
-          </h2>
-          <div class="section-content">
-            <div class="return-value-table">
-              <div class="table-header">
-                <div>返回值类型</div>
-                <div>Promise状态</div>
-                <div>示例</div>
-              </div>
-
-              <div class="table-row">
-                <div>普通值</div>
-                <div>fulfilled</div>
-                <div><code>return 42;</code> → Promise.resolve(42)</div>
-              </div>
-
-              <div class="table-row">
-                <div>Promise对象</div>
-                <div>取决于Promise</div>
-                <div><code>return fetch(...);</code> → 原始Promise</div>
-              </div>
-
-              <div class="table-row">
-                <div>抛出错误</div>
-                <div>rejected</div>
-                <div><code>throw new Error(...);</code> → Promise.reject(error)</div>
-              </div>
-
-              <div class="table-row">
-                <div>无返回值</div>
-                <div>fulfilled(undefined)</div>
-                <div><code>return;</code> → Promise.resolve(undefined)</div>
-              </div>
+          <div class="point">
+            <i class="fas fa-key"></i>
+            <div>
+              <h3>await关键字</h3>
+              <p>只能在async函数内部使用，用于等待Promise完成</p>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        <section class="content-section">
-          <h2 class="section-title">
-            <span class="title-icon">🔁</span>
-            for await...of 循环
-          </h2>
-          <div class="section-content">
-            <p>用于遍历异步可迭代对象，按顺序处理每个异步操作：</p>
+      <!-- 执行顺序 -->
+      <section class="card execution">
+        <h2><i class="fas fa-sort-amount-down"></i> 执行顺序</h2>
+        <div class="execution-flow">
+          <div class="step">
+            <div class="step-number">1</div>
+            <h3>进入async函数</h3>
+            <p>同步执行await之前的代码</p>
+          </div>
+          <div class="arrow"><i class="fas fa-arrow-right"></i></div>
+          <div class="step">
+            <div class="step-number">2</div>
+            <h3>遇到await</h3>
+            <p>暂停执行，等待Promise解决</p>
+          </div>
+          <div class="arrow"><i class="fas fa-arrow-right"></i></div>
+          <div class="step">
+            <div class="step-number">3</div>
+            <h3>Promise解决</h3>
+            <p>继续执行await之后的代码</p>
+          </div>
+          <div class="arrow"><i class="fas fa-arrow-right"></i></div>
+          <div class="step">
+            <div class="step-number">4</div>
+            <h3>函数结束</h3>
+            <p>返回的Promise状态变为fulfilled</p>
+          </div>
+        </div>
 
-            <div class="code-block">
-              <pre><code class="javascript">async function processMultipleRequests(urls) {
-  for await (const response of fetchUrls(urls)) {
-    console.log('Received:', response);
-  }
+        <div class="example">
+          <h3>执行顺序示例：</h3>
+          <div class="code-block">
+            <pre><code>async function example() {
+  console.log('开始执行');
+
+  // 遇到await - 暂停执行
+  const result = await new Promise(resolve =>
+    setTimeout(() => resolve('数据加载完成'), 1000)
+  );
+
+  console.log(result); // 1秒后执行
+  console.log('继续执行');
+
+  return '完成';
 }
 
-async function* fetchUrls(urls) {
-  for (const url of urls) {
-    const response = await fetch(url);
-    yield response.json();
+console.log('调用前');
+example().then(res => console.log(res));
+console.log('调用后');</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- 返回值处理 -->
+      <section class="card return-value">
+        <h2><i class="fas fa-undo"></i> 返回值处理</h2>
+        <div class="return-types">
+          <div class="type">
+            <div class="type-header">
+              <i class="fas fa-check-square"></i>
+              <h3>返回普通值</h3>
+            </div>
+            <p>async函数返回的值会被包装为已解决的Promise</p>
+            <div class="code-block small">
+              <pre><code>async function success() {
+  return 42; // 等同于 Promise.resolve(42)
+}
+
+success().then(value =>
+  console.log(value) // 42
+);</code></pre>
+            </div>
+          </div>
+
+          <div class="type">
+            <div class="type-header">
+              <i class="fas fa-exclamation-triangle"></i>
+              <h3>抛出错误</h3>
+            </div>
+            <p>抛出异常会被捕获并返回拒绝状态的Promise</p>
+            <div class="code-block small">
+              <pre><code>async function fail() {
+  throw new Error('出错了!');
+}
+
+fail().catch(error =>
+  console.error(error.message) // '出错了!'
+);</code></pre>
+            </div>
+          </div>
+
+          <div class="type">
+            <div class="type-header">
+              <i class="fas fa-sync-alt"></i>
+              <h3>返回Promise</h3>
+            </div>
+            <p>返回的Promise会直接作为async函数的返回值</p>
+            <div class="code-block small">
+              <pre><code>async function getData() {
+  return fetch('/api/data')
+    .then(response => response.json());
+}
+
+// 等同于
+async function getData() {
+  const response = await fetch('/api/data');
+  return response.json();
+}</code></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 错误处理 -->
+      <section class="card error-handling">
+        <h2><i class="fas fa-bug"></i> 错误处理</h2>
+        <div class="error-methods">
+          <div class="method">
+            <h3>try/catch</h3>
+            <p>在async函数内部捕获错误</p>
+            <div class="code-block">
+              <pre><code>async function fetchWithTryCatch() {
+  try {
+    const response = await fetch('...');
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('请求失败:', error);
+    return null;
   }
 }</code></pre>
             </div>
+          </div>
 
-            <div class="use-cases">
-              <h3>适用场景：</h3>
+          <div class="method">
+            <h3>.catch()方法</h3>
+            <p>在调用处捕获错误</p>
+            <div class="code-block">
+              <pre><code>async function fetchData() {
+  const response = await fetch('...');
+  return response.json();
+}
+
+fetchData()
+  .then(data => console.log(data))
+  .catch(error => console.error('错误:', error));</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="best-practice">
+          <h3><i class="fas fa-lightbulb"></i> 最佳实践</h3>
+          <ul>
+            <li>在async函数内部使用try/catch处理预期错误</li>
+            <li>在调用链的末端使用.catch()处理未捕获异常</li>
+            <li>对于多个并行操作，使用Promise.all()优化性能</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 原理分析 -->
+      <section class="card principle">
+        <h2><i class="fas fa-cogs"></i> 底层原理</h2>
+        <div class="principle-content">
+          <p>Async函数本质上是Generator函数的语法糖，由以下部分组成：</p>
+
+          <div class="generator-comparison">
+            <div class="generator">
+              <h3>Generator实现</h3>
+              <div class="code-block">
+                <pre><code>function* fetchGenerator() {
+  const response = yield fetch('...');
+  const data = yield response.json();
+  return data;
+}
+
+// 使用执行器管理Generator
+function run(generator) {
+  const iterator = generator();
+
+  function handle(result) {
+    if (result.done) return result.value;
+    return result.value.then(data =>
+      handle(iterator.next(data))
+    );
+  }
+
+  return handle(iterator.next());
+}
+
+run(fetchGenerator);</code></pre>
+              </div>
+            </div>
+
+            <div class="async-equivalent">
+              <h3>Async函数等价实现</h3>
+              <div class="code-block">
+                <pre><code>async function fetchAsync() {
+  const response = await fetch('...');
+  const data = await response.json();
+  return data;
+}</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="transformation">
+            <h3><i class="fas fa-exchange-alt"></i> 转换过程</h3>
+            <p>Async函数在编译时会被转换为：</p>
+            <ol>
+              <li>Generator函数</li>
+              <li>自动执行器（类似co库）</li>
+              <li>返回Promise的包装器</li>
+            </ol>
+          </div>
+        </div>
+      </section>
+
+      <!-- 总结 -->
+      <section class="card summary">
+        <h2><i class="fas fa-clipboard-check"></i> 总结</h2>
+        <div class="summary-content">
+          <div class="pros-cons">
+            <div class="pros">
+              <h3>优点</h3>
               <ul>
-                <li>按顺序处理多个API请求</li>
-                <li>处理Node.js流数据</li>
-                <li>分页数据获取</li>
-                <li>读取大文件分块处理</li>
+                <li><i class="fas fa-plus-circle"></i> 代码更简洁易读</li>
+                <li><i class="fas fa-plus-circle"></i> 错误处理更直观</li>
+                <li><i class="fas fa-plus-circle"></i> 同步编程思维处理异步</li>
+                <li><i class="fas fa-plus-circle"></i> 与Promise完美兼容</li>
+              </ul>
+            </div>
+            <div class="cons">
+              <h3>注意事项</h3>
+              <ul>
+                <li><i class="fas fa-exclamation-circle"></i> await只能在async函数中使用</li>
+                <li><i class="fas fa-exclamation-circle"></i> 过度串行化可能影响性能</li>
+                <li><i class="fas fa-exclamation-circle"></i> 顶层作用域不能直接使用await</li>
               </ul>
             </div>
           </div>
-        </section>
 
-        <section class="content-section">
-          <h2 class="section-title">
-            <span class="title-icon">⚖️</span>
-            最佳实践
-          </h2>
-          <div class="section-content">
-            <div class="best-practices">
-              <div class="practice-card good">
-                <h3>✅ 推荐做法</h3>
-                <ul>
-                  <li>始终使用try/catch处理错误</li>
-                  <li>合理使用Promise.all()并行请求</li>
-                  <li>为异步函数添加明确的返回类型</li>
-                  <li>使用AbortController取消请求</li>
-                </ul>
-              </div>
-
-              <div class="practice-card bad">
-                <h3>❌ 避免做法</h3>
-                <ul>
-                  <li>在顶层模块使用await</li>
-                  <li>在循环中不必要地顺序await</li>
-                  <li>忽略错误处理</li>
-                  <li>过度使用async/await导致性能问题</li>
-                </ul>
-              </div>
-            </div>
+          <div class="final-thoughts">
+            <h3>使用建议</h3>
+            <p>Async/await是现代JavaScript异步编程的首选方案，尤其适用于：</p>
+            <ul>
+              <li>需要顺序执行的异步操作</li>
+              <li>复杂异步逻辑需要清晰代码结构</li>
+              <li>需要同步方式处理错误</li>
+            </ul>
+            <p>
+              对于并行操作，结合使用<code>Promise.all()</code>和<code>Promise.race()</code>可以达到最佳性能。
+            </p>
           </div>
-        </section>
-
-        <section class="content-section">
-          <h2 class="section-title">
-            <span class="title-icon">🛠️</span>
-            在Vue中的使用示例
-          </h2>
-          <div class="section-content">
-            <div class="vue-example">
-              <div class="example-controls">
-                <button @click="fetchUserData" :disabled="loading">
-                  {{ loading ? '加载中...' : '获取用户数据' }}
-                </button>
-                <button @click="fetchMultipleData" :disabled="loading">
-                  并行请求
-                </button>
-              </div>
-
-              <div class="example-output">
-                <div v-if="loading" class="loading-indicator">
-                  <div class="spinner"></div>
-                  <p>正在获取数据...</p>
-                </div>
-
-                <div v-else-if="userData" class="result-card">
-                  <h3>用户信息</h3>
-                  <pre>{{ JSON.stringify(userData, null, 2) }}</pre>
-                </div>
-
-                <div v-else class="welcome-message">
-                  <p>点击上方按钮开始异步请求</p>
-                </div>
-
-                <div v-if="multipleData.length" class="result-card">
-                  <h3>并行请求结果</h3>
-                  <ul>
-                    <li v-for="(item, index) in multipleData" :key="index">
-                      请求 {{ index + 1 }}: {{ item.title }}
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-
-            <div class="code-block">
-              <pre><code class="typescript">import { ref } from 'vue';
-
-export default {
-  setup() {
-    const userData = ref(null);
-    const multipleData = ref([]);
-    const loading = ref(false);
-
-    // 基本的async函数
-    const fetchUserData = async () => {
-      try {
-        loading.value = true;
-        const response = await fetch(
-          'https://jsonplaceholder.typicode.com/users/1'
-        );
-        userData.value = await response.json();
-      } catch (error) {
-        console.error('获取用户数据失败:', error);
-      } finally {
-        loading.value = false;
-      }
-    };
-
-    // 并行请求
-    const fetchMultipleData = async () => {
-      try {
-        loading.value = true;
-        const [todo1, todo2, todo3] = await Promise.all([
-          fetch('https://jsonplaceholder.typicode.com/todos/1'),
-          fetch('https://jsonplaceholder.typicode.com/todos/2'),
-          fetch('https://jsonplaceholder.typicode.com/todos/3')
-        ]);
-
-        multipleData.value = [
-          await todo1.json(),
-          await todo2.json(),
-          await todo3.json()
-        ];
-      } catch (error) {
-        console.error('并行请求失败:', error);
-      } finally {
-        loading.value = false;
-      }
-    };
-
-    return {
-      userData,
-      multipleData,
-      loading,
-      fetchUserData,
-      fetchMultipleData
-    };
-  }
-};</code></pre>
-            </div>
-          </div>
-        </section>
-      </div>
+        </div>
+      </section>
     </div>
 
-    <footer class="guide-footer">
-      <p>© 2023 Async/Await使用指南 | 在Vue中优雅处理异步操作</p>
+    <footer>
+      <p>JavaScript异步编程 &copy; 2023 - 深入理解Async/Await</p>
     </footer>
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref } from 'vue';
-
-const userData = ref<any>(null);
-const multipleData = ref<any[]>([]);
-const loading = ref(false);
-
-// 基本的async函数示例
-const fetchUserData = async () => {
-  try {
-    loading.value = true;
-    userData.value = null;
-    multipleData.value = [];
-
-    // 模拟网络延迟
-    await new Promise(resolve => setTimeout(resolve, 1200));
-
-    const response = await fetch(
-      'https://jsonplaceholder.typicode.com/users/1'
-    );
-    userData.value = await response.json();
-  } catch (error) {
-    console.error('获取用户数据失败:', error);
-  } finally {
-    loading.value = false;
-  }
-};
-
-// 并行请求示例
-const fetchMultipleData = async () => {
-  try {
-    loading.value = true;
-    userData.value = null;
-    multipleData.value = [];
-
-    // 模拟网络延迟
-    await new Promise(resolve => setTimeout(resolve, 800));
-
-    const urls = [
-      'https://jsonplaceholder.typicode.com/todos/1',
-      'https://jsonplaceholder.typicode.com/todos/2',
-      'https://jsonplaceholder.typicode.com/todos/3'
-    ];
-
-    const responses = await Promise.all(
-      urls.map(url => fetch(url).then(res => res.json()))
-    );
-
-    multipleData.value = responses;
-  } catch (error) {
-    console.error('并行请求失败:', error);
-  } finally {
-    loading.value = false;
-  }
-};
-</script>
+<script setup lang="ts"></script>
 
 <style lang="less" scoped>
-
-
-:root {
-  --primary: #4361ee;
-  --primary-light: #4895ef;
-  --primary-dark: #3f37c9;
-  --secondary: #f72585;
-  --success: #4cc9f0;
-  --warning: #f8961e;
-  --error: #e63946;
-  --background: #f9fafb;
-  --card-bg: #ffffff;
-  --text-primary: #1f2937;
-  --text-secondary: #4b5563;
-  --border: #e5e7eb;
-  --border-radius: 12px;
-  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
-  --shadow-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.03);
-  --transition: all 0.3s ease;
-}
-
-.async-function-guide {
-  font-family: 'Inter', sans-serif;
+.async-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 20px 40px;
-  color: var(--text-primary);
-  background-color: var(--background);
-  line-height: 1.6;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
 }
 
-.guide-header {
-  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+header {
+  background: linear-gradient(135deg, #4b6cb7 0%, #182848 100%);
   color: white;
-  border-radius: var(--border-radius);
-  padding: 40px;
-  margin: 30px 0 40px;
+  padding: 2rem;
+  text-align: center;
+}
+
+header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  box-shadow: var(--shadow);
-
-  .header-content {
-    max-width: 600px;
-
-    h1 {
-      font-size: 2.8rem;
-      font-weight: 700;
-      margin-bottom: 15px;
-      line-height: 1.2;
-    }
-
-    p {
-      font-size: 1.2rem;
-      opacity: 0.9;
-      margin: 0;
-    }
-  }
-
-  .header-graphic {
-    .async-graphic {
-      position: relative;
-      width: 200px;
-      height: 200px;
-
-      .promise-circle {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        border-radius: 50%;
-        border: 3px dashed rgba(255, 255, 255, 0.3);
-        animation: rotate 8s linear infinite;
-        animation-delay: var(--delay);
-
-        &:nth-child(2) {
-          width: 70%;
-          height: 70%;
-          top: 15%;
-          left: 15%;
-        }
-
-        &:nth-child(3) {
-          width: 40%;
-          height: 40%;
-          top: 30%;
-          left: 30%;
-        }
-      }
-    }
-  }
+  justify-content: center;
+  gap: 15px;
 }
 
-.quick-summary {
+.subtitle {
+  font-size: 1.2rem;
+  opacity: 0.9;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.content-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 20px;
-  margin-bottom: 40px;
-
-  .summary-card {
-    background: var(--card-bg);
-    border-radius: var(--border-radius);
-    padding: 25px;
-    display: flex;
-    align-items: center;
-    box-shadow: var(--shadow);
-    transition: var(--transition);
-    border-top: 4px solid var(--primary);
-
-    &:hover {
-      transform: translateY(-5px);
-      box-shadow: var(--shadow-hover);
-    }
-
-    .summary-icon {
-      width: 60px;
-      height: 60px;
-      background: rgba(67, 97, 238, 0.1);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-right: 20px;
-
-      svg {
-        width: 30px;
-        height: 30px;
-        fill: var(--primary);
-      }
-    }
-
-    h3 {
-      font-size: 1.3rem;
-      margin-bottom: 8px;
-    }
-
-    p {
-      color: var(--text-secondary);
-      margin: 0;
-      font-size: 0.95rem;
-    }
-  }
-}
-
-.main-content {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 40px;
-}
-
-.content-section {
-  background: var(--card-bg);
-  border-radius: var(--border-radius);
+  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+  gap: 25px;
   padding: 30px;
-  box-shadow: var(--shadow);
-
-  .section-title {
-    font-size: 1.6rem;
-    color: var(--primary);
-    margin-top: 0;
-    margin-bottom: 25px;
-    padding-bottom: 15px;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-
-    .title-icon {
-      margin-right: 12px;
-      font-size: 1.4rem;
-    }
-  }
 }
 
-.definition-card {
-  background: rgba(67, 97, 238, 0.05);
-  border-left: 4px solid var(--primary);
-  border-radius: 0 var(--border-radius) var(--border-radius) 0;
-  padding: 20px;
-  margin-top: 20px;
-
-  h3 {
-    margin-top: 0;
-    color: var(--primary);
-  }
-
-  ul {
-    padding-left: 20px;
-    margin: 15px 0 0;
-
-    li {
-      margin-bottom: 10px;
-      line-height: 1.5;
-    }
-  }
+.card {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+  padding: 25px;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
-.code-block {
-  background: #2d2d2d;
-  border-radius: 8px;
-  overflow: hidden;
-  margin: 20px 0;
-
-  pre {
-    margin: 0;
-    padding: 20px;
-    overflow-x: auto;
-
-    code {
-      font-family: 'Fira Code', monospace;
-      font-size: 0.95rem;
-      color: #f8f8f2;
-      line-height: 1.5;
-    }
-  }
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
 }
 
-.usage-grid {
+.card h2 {
+  color: #2c3e50;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #f0f4f8;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.feature-list {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 20px;
-  margin-top: 25px;
-
-  .usage-item {
-    background: rgba(72, 149, 239, 0.05);
-    border-radius: var(--border-radius);
-    padding: 20px;
-    text-align: center;
-
-    .usage-icon {
-      font-size: 2rem;
-      margin-bottom: 15px;
-    }
-
-    h3 {
-      margin: 0 0 8px;
-      font-size: 1.2rem;
-    }
-
-    p {
-      color: var(--text-secondary);
-      margin: 0;
-      font-size: 0.95rem;
-    }
-  }
-}
-
-.return-value-table {
-  display: grid;
-  grid-template-columns: 1fr 1fr 2fr;
-  border: 1px solid var(--border);
-  border-radius: var(--border-radius);
-  overflow: hidden;
-
-  .table-header, .table-row {
-    display: contents;
-
-    > div {
-      padding: 15px;
-    }
-  }
-
-  .table-header {
-    > div {
-      background: var(--primary);
-      color: white;
-      font-weight: 600;
-      text-align: center;
-    }
-  }
-
-  .table-row {
-    > div {
-      background: var(--card-bg);
-      border-bottom: 1px solid var(--border);
-
-      &:nth-child(3) {
-        font-family: 'Fira Code', monospace;
-        font-size: 0.9rem;
-      }
-    }
-
-    &:nth-child(even) > div {
-      background: rgba(67, 97, 238, 0.03);
-    }
-
-    &:last-child > div {
-      border-bottom: none;
-    }
-  }
-}
-
-.use-cases {
-  background: rgba(76, 201, 240, 0.05);
-  border-radius: var(--border-radius);
-  padding: 20px;
   margin-top: 20px;
-
-  h3 {
-    margin-top: 0;
-    color: var(--success);
-  }
-
-  ul {
-    padding-left: 20px;
-    margin: 15px 0 0;
-
-    li {
-      margin-bottom: 10px;
-      line-height: 1.5;
-    }
-  }
 }
 
-.best-practices {
+.feature {
+  background: #f8fafc;
+  padding: 20px;
+  border-radius: 8px;
+  border-left: 4px solid #4b6cb7;
+}
+
+.feature i {
+  color: #4b6cb7;
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.feature h3 {
+  font-size: 1.2rem;
+  margin-bottom: 8px;
+  color: #2c3e50;
+}
+
+.code-block {
+  background: #e2e8f0;
+  color: #2d3748;
+  padding: 20px;
+  border-radius: 8px;
+  font-family: 'Fira Code', monospace;
+  font-size: 15px;
+  line-height: 1.5;
+  overflow-x: auto;
+  margin: 20px 0;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.code-block.small {
+  font-size: 14px;
+  padding: 15px;
+}
+
+pre {
+  margin: 0;
+}
+
+code {
+  font-family: 'Fira Code', monospace;
+}
+
+.key-points {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-top: 25px;
+}
+
+.point {
+  display: flex;
+  gap: 15px;
+  align-items: flex-start;
+}
+
+.point i {
+  color: #4b6cb7;
+  font-size: 1.5rem;
+  margin-top: 5px;
+}
+
+.point h3 {
+  color: #2c3e50;
+  margin-bottom: 5px;
+}
+
+.execution-flow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 25px 0;
+}
+
+.step {
+  background: #f0f7ff;
+  border: 1px solid #d0e0f0;
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+  flex: 1;
+  max-width: 200px;
+}
+
+.step-number {
+  width: 40px;
+  height: 40px;
+  background: #4b6cb7;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  margin: 0 auto 15px;
+}
+
+.step h3 {
+  font-size: 1.1rem;
+  margin-bottom: 8px;
+  color: #2c3e50;
+}
+
+.arrow {
+  color: #4b6cb7;
+  font-size: 1.5rem;
+}
+
+.return-types {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  margin-top: 25px;
+}
+
+.type {
+  background: #f9fbfd;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.type-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.type-header i {
+  font-size: 1.3rem;
+}
+
+.type-header h3 {
+  color: #2c3e50;
+}
+
+.error-methods {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 25px;
-
-  .practice-card {
-    border-radius: var(--border-radius);
-    padding: 25px;
-
-    h3 {
-      margin-top: 0;
-      padding-bottom: 15px;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-    }
-
-    ul {
-      padding-left: 20px;
-
-      li {
-        margin-bottom: 12px;
-        line-height: 1.5;
-      }
-    }
-
-    &.good {
-      background: rgba(76, 201, 240, 0.08);
-      border-top: 4px solid var(--success);
-    }
-
-    &.bad {
-      background: rgba(230, 57, 70, 0.08);
-      border-top: 4px solid var(--error);
-    }
-  }
+  margin-top: 20px;
 }
 
-.vue-example {
-  .example-controls {
-    display: flex;
-    gap: 15px;
-    margin-bottom: 25px;
-
-    button {
-      padding: 12px 24px;
-      background: var(--primary);
-
-      border: none;
-      border-radius: 8px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: var(--transition);
-      font-size: 1rem;
-
-      &:hover {
-        background: var(--primary-dark);
-        transform: translateY(-2px);
-      }
-
-      &:active {
-        transform: translateY(0);
-      }
-
-      &:disabled {
-        background: var(--border);
-        cursor: not-allowed;
-        transform: none;
-      }
-
-      &:nth-child(2) {
-        background: var(--secondary);
-
-        &:hover {
-          background: darken(#f72585, 10%);
-        }
-      }
-    }
-  }
-
-  .example-output {
-    background: var(--card-bg);
-    border-radius: var(--border-radius);
-    padding: 25px;
-    min-height: 200px;
-    box-shadow: var(--shadow);
-
-    .loading-indicator {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 15px;
-
-      .spinner {
-        width: 50px;
-        height: 50px;
-        border: 4px solid rgba(67, 97, 238, 0.2);
-        border-top: 4px solid var(--primary);
-        border-radius: 50%;
-        animation: spin 1s linear infinite;
-      }
-
-      p {
-        margin: 0;
-        color: var(--text-secondary);
-      }
-    }
-
-    .welcome-message {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 150px;
-
-      p {
-        font-size: 1.1rem;
-        color: var(--text-secondary);
-      }
-    }
-
-    .result-card {
-      background: rgba(67, 97, 238, 0.03);
-      border-radius: 8px;
-      padding: 20px;
-      margin-top: 20px;
-
-      h3 {
-        margin-top: 0;
-        color: var(--primary);
-        font-size: 1.2rem;
-      }
-
-      pre {
-        background: rgba(0, 0, 0, 0.02);
-        padding: 15px;
-        border-radius: 6px;
-        overflow-x: auto;
-        font-size: 0.9rem;
-      }
-
-      ul {
-        padding-left: 20px;
-        margin: 15px 0 0;
-
-        li {
-          margin-bottom: 8px;
-        }
-      }
-    }
-  }
+.method h3 {
+  color: #2c3e50;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #f0f4f8;
 }
 
-.guide-footer {
+.best-practice {
+  background: #f0f7ff;
+  border-left: 4px solid #4b6cb7;
+  padding: 20px;
+  border-radius: 0 8px 8px 0;
+  margin-top: 25px;
+}
+
+.best-practice h3 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+  color: #2c3e50;
+}
+
+.best-practice ul {
+  padding-left: 25px;
+}
+
+.best-practice li {
+  margin-bottom: 8px;
+}
+
+.generator-comparison {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 25px;
+  margin-top: 25px;
+}
+
+.generator,
+.async-equivalent {
+  background: #f8fafc;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.generator h3,
+.async-equivalent h3 {
+  color: #2c3e50;
+  margin-bottom: 15px;
   text-align: center;
-  padding: 30px 0 10px;
-  margin-top: 50px;
-  color: var(--text-secondary);
-  font-size: 0.95rem;
-  border-top: 1px solid var(--border);
 }
 
-@keyframes rotate {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+.transformation {
+  background: #f0f7ff;
+  padding: 25px;
+  border-radius: 8px;
+  margin-top: 25px;
 }
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+.transformation h3 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+  color: #2c3e50;
 }
 
-@media (max-width: 900px) {
-  .guide-header {
+.transformation ol {
+  padding-left: 30px;
+}
+
+.transformation li {
+  margin-bottom: 10px;
+}
+
+.summary-content {
+  display: grid;
+  gap: 25px;
+}
+
+.pros-cons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 25px;
+}
+
+.pros,
+.cons {
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.pros {
+  background: #f0f7ff;
+}
+
+.cons {
+  background: #fff0f0;
+}
+
+.pros h3,
+.cons h3 {
+  color: #2c3e50;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.pros ul,
+.cons ul {
+  padding-left: 25px;
+}
+
+.pros li,
+.cons li {
+  margin-bottom: 10px;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.final-thoughts {
+  background: #f8fafc;
+  padding: 25px;
+  border-radius: 8px;
+}
+
+.final-thoughts h3 {
+  color: #2c3e50;
+  margin-bottom: 15px;
+}
+
+.final-thoughts p {
+  margin-bottom: 15px;
+}
+
+.final-thoughts ul {
+  padding-left: 25px;
+  margin-bottom: 15px;
+}
+
+footer {
+  text-align: center;
+  padding: 25px;
+  background: #f0f4f8;
+  color: #4a5568;
+  font-size: 0.9rem;
+}
+
+/* 响应式设计 */
+@media (max-width: 1100px) {
+  .content-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .key-points,
+  .error-methods,
+  .pros-cons,
+  .generator-comparison {
+    grid-template-columns: 1fr;
+  }
+
+  .execution-flow {
     flex-direction: column;
-    text-align: center;
-    gap: 30px;
-
-    .header-graphic {
-      order: -1;
-    }
+    gap: 20px;
   }
 
-  .return-value-table {
-    grid-template-columns: 1fr;
-
-    .table-header {
-      display: none;
-    }
-
-    .table-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      padding: 15px;
-      border-bottom: 1px solid var(--border);
-
-      > div {
-        padding: 0;
-        border: none;
-
-        &:first-child {
-          grid-column: 1 / 2;
-          font-weight: 600;
-        }
-
-        &:nth-child(2) {
-          grid-column: 2 / 3;
-        }
-
-        &:nth-child(3) {
-          grid-column: 1 / 3;
-        }
-      }
-    }
+  .step {
+    max-width: 100%;
+    width: 100%;
   }
 
-  .best-practices {
-    grid-template-columns: 1fr;
+  .arrow {
+    transform: rotate(90deg);
   }
 }
 
 @media (max-width: 600px) {
-  .quick-summary {
-    grid-template-columns: 1fr;
+  header h1 {
+    font-size: 1.8rem;
   }
 
-  .guide-header {
-    padding: 30px 20px;
-
-    h1 {
-      font-size: 2.2rem;
-    }
+  .subtitle {
+    font-size: 1rem;
   }
 
-  .content-section {
-    padding: 25px 20px;
+  .card {
+    padding: 20px 15px;
   }
 }
 </style>

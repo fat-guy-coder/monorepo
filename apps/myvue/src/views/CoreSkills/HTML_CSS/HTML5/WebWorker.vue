@@ -1,7 +1,7 @@
 <template>
   <div class="web-worker-container">
     <header class="header">
-      <h1>Web Worker 技术详解</h1>
+      <h1>Web Worker 技术介绍</h1>
       <p>在 Vue 应用中实现多线程处理</p>
     </header>
 

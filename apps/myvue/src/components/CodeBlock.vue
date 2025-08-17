@@ -4,31 +4,39 @@
     <div class="code-toolbar" v-if="!hiddenToolbar">
       <span class="language-tag">{{ formattedLanguage }}</span>
       <span v-if="title" class="title">{{ title }}</span>
-      <button class="copy-button" @click="handleCopy" :disabled="isCopying" :aria-label="`复制${language}代码`">
+      <button
+        class="copy-button"
+        @click="handleCopy"
+        :disabled="isCopying"
+        :aria-label="`复制${language}代码`"
+      >
         <span class="copy-icon" :class="{ copying: isCopying }">📋</span>
         <span class="copy-status">{{ copyStatusText }}</span>
       </button>
     </div>
 
     <!-- 代码显示区域 -->
-    <pre ref="preElement" class="code-block"
-      :class="[`language-${language}`, { 'line-numbers': lineNumbers }]"><code class="code-content">{{ code }}</code></pre>
+    <pre
+      ref="preElement"
+      class="code-block"
+      :class="[`language-${language}`, 'language-bash']"
+    ><code class="code-content">{{ code }}</code></pre>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, onMounted, watch, nextTick } from 'vue'
-import Prism from 'prismjs'
-import 'prismjs/themes/prism-tomorrow.css'
-import 'prismjs/plugins/line-numbers/prism-line-numbers.css'
+import { highlightElement } from 'prismjs'
+import 'prismjs/themes/prism-solarizedlight.min.css'
 import 'prismjs/plugins/toolbar/prism-toolbar.css'
 
 // 加载常用语言和插件
 import 'prismjs/components/prism-javascript'
 import 'prismjs/components/prism-typescript'
 import 'prismjs/components/prism-json'
-import 'prismjs/components/prism-markup-templating'
-import 'prismjs/plugins/line-numbers/prism-line-numbers.js'
+
+// import 'prismjs/components/prism-markup-templating'
+// import 'prismjs/plugins/line-numbers/prism-line-numbers.js'
 
 type Language = 'js' | 'ts' | 'html' | 'json'
 
@@ -65,7 +73,7 @@ const formattedLanguage = computed(() => {
 // 高亮代码
 const highlightCode = () => {
   if (preElement.value) {
-    Prism.highlightElement(preElement.value.querySelector('code')!)
+    highlightElement(preElement.value.querySelector('code')!)
   }
 }
 
@@ -108,7 +116,7 @@ watch(
   position: relative;
   margin: 1.5rem 0;
   border-radius: 8px;
-  overflow: hidden;
+
   background: #2d2d2d;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
@@ -171,7 +179,7 @@ watch(
 .code-block {
   margin: 0;
   padding: 1.5rem !important;
-  overflow-x: auto;
+  overflow: inherit;
 }
 
 .code-content {
@@ -181,7 +189,7 @@ watch(
 }
 
 /* 滚动条样式 */
-.code-block::-webkit-scrollbar {
+/* .code-block::-webkit-scrollbar {
   height: 6px;
 }
 
@@ -196,7 +204,7 @@ watch(
 
 .code-block::-webkit-scrollbar-thumb:hover {
   background: #718096;
-}
+} */
 
 /* 行号样式 */
 :deep(.line-numbers .line-numbers-rows) {

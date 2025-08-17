@@ -2,7 +2,7 @@
   <div class="filereader-container">
     <header class="header">
       <h1 class="title">JavaScript FileReader API</h1>
-      <p class="subtitle">浏览器文件读取功能详解</p>
+      <p class="subtitle">浏览器文件读取功能介绍</p>
     </header>
 
     <div class="content-section">
@@ -10,17 +10,14 @@
       <div class="concept-grid">
         <div class="concept-card">
           <h3>FileReader 是什么</h3>
-          <p>FileReader 是浏览器提供的 API，允许 Web 应用程序<strong>异步读取</strong>用户计算机上的文件内容。</p>
+          <p>
+            FileReader 是浏览器提供的 API，允许 Web
+            应用程序<strong>异步读取</strong>用户计算机上的文件内容。
+          </p>
           <div class="feature-list">
-            <div class="feature">
-              <span class="icon">🔄</span> 异步读取文件
-            </div>
-            <div class="feature">
-              <span class="icon">📁</span> 支持多种文件类型
-            </div>
-            <div class="icon">
-              <span class="icon">⚡</span> 事件驱动API
-            </div>
+            <div class="feature"><span class="icon">🔄</span> 异步读取文件</div>
+            <div class="feature"><span class="icon">📁</span> 支持多种文件类型</div>
+            <div class="icon"><span class="icon">⚡</span> 事件驱动API</div>
           </div>
         </div>
         <div class="concept-card">
@@ -50,7 +47,7 @@
           </div>
         </div>
         <div class="code-content">
-          <CodeBlock :code="tabs[activeTab].code"  language="js" />
+          <CodeBlock :code="tabs[activeTab].code" language="js" />
         </div>
       </div>
     </div>
@@ -93,7 +90,9 @@
           </thead>
           <tbody>
             <tr v-for="event in events" :key="event.name">
-              <td><code>{{ event.name }}</code></td>
+              <td>
+                <code>{{ event.name }}</code>
+              </td>
               <td>{{ event.desc }}</td>
             </tr>
           </tbody>
@@ -197,10 +196,10 @@ reader.readAsArrayBuffer(chunk);</code></pre>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import CodeBlock from '@/components/CodeBlock.vue';
+import { ref } from 'vue'
+import CodeBlock from '@/components/CodeBlock.vue'
 
-const activeTab = ref(0);
+const activeTab = ref(0)
 
 const tabs = [
   {
@@ -211,7 +210,7 @@ reader.onload = (e) => {
   const content = e.target.result;
   console.log('文件内容:', content);
 };
-reader.readAsText(file, 'UTF-8');`
+reader.readAsText(file, 'UTF-8');`,
   },
   {
     label: '读取DataURL',
@@ -221,7 +220,7 @@ reader.onload = (e) => {
   const dataUrl = e.target.result;
   imgElement.src = dataUrl;
 };
-reader.readAsDataURL(file);`
+reader.readAsDataURL(file);`,
   },
   {
     label: '读取二进制',
@@ -231,7 +230,7 @@ reader.onload = (e) => {
   const arrayBuffer = e.target.result;
   // 处理二进制数据...
 };
-reader.readAsArrayBuffer(file);`
+reader.readAsArrayBuffer(file);`,
   },
   {
     label: '事件监听',
@@ -249,9 +248,9 @@ reader.onload = (e) => console.log('读取完成');
 reader.onerror = () => console.error('读取错误');
 reader.onloadend = () => console.log('读取结束');
 
-reader.readAsText(file);`
-  }
-];
+reader.readAsText(file);`,
+  },
+]
 
 const events = [
   { name: 'onloadstart', desc: '开始读取时触发' },
@@ -259,8 +258,8 @@ const events = [
   { name: 'onload', desc: '读取成功完成时触发' },
   { name: 'onabort', desc: '读取被中止时触发' },
   { name: 'onerror', desc: '读取发生错误时触发' },
-  { name: 'onloadend', desc: '读取结束时触发(无论成功或失败)' }
-];
+  { name: 'onloadend', desc: '读取结束时触发(无论成功或失败)' },
+]
 </script>
 
 <style lang="less" scoped>
@@ -268,7 +267,11 @@ const events = [
   max-width: 1000px;
   margin: 0 auto;
   padding: 2rem;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family:
+    'Inter',
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
   color: #2c3e50;
   background-color: #fff;
   line-height: 1.6;
@@ -483,7 +486,8 @@ const events = [
     width: 100%;
     border-collapse: collapse;
 
-    th, td {
+    th,
+    td {
       padding: 0.8rem 1.2rem;
       text-align: left;
       border-bottom: 1px solid #eaecef;
@@ -568,7 +572,8 @@ const events = [
   gap: 1.5rem;
   margin: 1.5rem 0;
 
-  .pros, .cons {
+  .pros,
+  .cons {
     background-color: #fff;
     border-radius: 8px;
     padding: 1.2rem;

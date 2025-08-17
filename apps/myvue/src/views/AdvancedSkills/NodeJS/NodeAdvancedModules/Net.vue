@@ -19,8 +19,12 @@
       <nav class="sidebar">
         <div class="section-title">核心内容</div>
         <ul>
-          <li v-for="item in navItems" :key="item.id" :class="{ active: activeSection === item.id }"
-            @click="activeSection = item.id">
+          <li
+            v-for="item in navItems"
+            :key="item.id"
+            :class="{ active: activeSection === item.id }"
+            @click="activeSection = item.id"
+          >
             <span>{{ item.title }}</span>
           </li>
         </ul>
@@ -39,7 +43,10 @@
               <div class="concept-card">
                 <div class="concept-icon">📦</div>
                 <h3>什么是 Net 模块？</h3>
-                <p>Net 模块是 Node.js 的核心模块，提供了基于流的 TCP 网络通信能力，用于创建 TCP 服务器和客户端。</p>
+                <p>
+                  Net 模块是 Node.js 的核心模块，提供了基于流的 TCP 网络通信能力，用于创建 TCP
+                  服务器和客户端。
+                </p>
               </div>
               <div class="concept-card">
                 <div class="concept-icon">⚙️</div>
@@ -49,7 +56,10 @@
               <div class="concept-card">
                 <div class="concept-icon">🔌</div>
                 <h3>与 HTTP 模块的关系</h3>
-                <p>HTTP 模块基于 Net 模块构建，在 TCP 基础上实现了 HTTP 协议。Net 模块更底层，提供更基础的控制。</p>
+                <p>
+                  HTTP 模块基于 Net 模块构建，在 TCP 基础上实现了 HTTP 协议。Net
+                  模块更底层，提供更基础的控制。
+                </p>
               </div>
             </div>
 
@@ -277,8 +287,20 @@
             <div class="full-example">
               <h3>完整示例：TCP 聊天服务器</h3>
               <div class="example-tabs">
-                <div class="tab" :class="{ active: activeTab === 'server' }" @click="activeTab = 'server'">服务器代码</div>
-                <div class="tab" :class="{ active: activeTab === 'client' }" @click="activeTab = 'client'">客户端代码</div>
+                <div
+                  class="tab"
+                  :class="{ active: activeTab === 'server' }"
+                  @click="activeTab = 'server'"
+                >
+                  服务器代码
+                </div>
+                <div
+                  class="tab"
+                  :class="{ active: activeTab === 'client' }"
+                  @click="activeTab = 'client'"
+                >
+                  客户端代码
+                </div>
               </div>
 
               <div class="example-content">
@@ -533,26 +555,24 @@ if (cluster.isMaster) {
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref } from 'vue'
 
 // 导航项
 const navItems = ref([
   { id: 'concept', title: '概念与作用' },
   { id: 'api', title: '核心 API' },
   { id: 'usecases', title: '使用场景' },
-  { id: 'best', title: '最佳实践' }
-]);
+  { id: 'best', title: '最佳实践' },
+])
 
 // 当前活动部分
-const activeSection = ref('concept');
+const activeSection = ref('concept')
 
 // 示例标签页
-const activeTab = ref('server');
+const activeTab = ref('server')
 </script>
 
 <style lang="less" scoped>
-
-
 // 颜色变量
 @primary-color: #339933; // Node.js 绿色
 @primary-dark: #267326;
@@ -565,7 +585,9 @@ const activeTab = ref('server');
 
 // 混合
 .box-shadow {
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.05),
+    0 2px 4px -1px rgba(0, 0, 0, 0.03);
 }
 
 .transition {
@@ -574,13 +596,24 @@ const activeTab = ref('server');
 
 // 全局样式
 .net-container {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  font-family:
+    'Inter',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    Oxygen,
+    Ubuntu,
+    Cantarell,
+    sans-serif;
   background-color: @background;
   color: @text-color;
   min-height: 100vh;
   line-height: 1.6;
   padding: 0;
   margin: 0;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .header {

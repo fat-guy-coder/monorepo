@@ -24,6 +24,9 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/api/, ''), // 路径重写
       },
     },
+    // open: true, // 启动时自动打开浏览器
+    port: 3000, // 指定端口号
+
   },
   plugins: [
     vue(),
@@ -48,6 +51,7 @@ export default defineConfig({
   ],
   build: {
     outDir,
+    // sourcemap: true,
     rollupOptions: {
       treeshake: {
         moduleSideEffects: false,
@@ -63,5 +67,8 @@ export default defineConfig({
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
     },
+  },
+  esbuild: {
+    sourcemap: true, // 对Vue单文件组件启用sourcemap
   },
 })

@@ -2,7 +2,7 @@
   <div class="rebase-container">
     <header class="header">
       <div class="title-wrapper">
-        <h1>Git Rebase 详解</h1>
+        <h1>Git Rebase 介绍</h1>
         <p class="subtitle">优雅地整合分支变更</p>
       </div>
       <div class="demo-area">
@@ -334,8 +334,6 @@ const bestPractices = ref([
 </script>
 
 <style lang="less" scoped>
-
-
 // 颜色变量
 @primary-color: #4a6cf7;
 @primary-light: #e6eeff;

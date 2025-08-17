@@ -1,7 +1,7 @@
 <template>
   <div class="linked-list-container">
     <div class="header">
-      <h1>链表进阶算法详解</h1>
+      <h1>链表基础算法介绍</h1>
       <p class="subtitle">掌握链表操作的高级技巧与应用场景</p>
       <div class="complexity-badges">
         <div class="badge">

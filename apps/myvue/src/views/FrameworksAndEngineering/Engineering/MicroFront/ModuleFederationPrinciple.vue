@@ -360,7 +360,7 @@ shared: {
     </div>
 
     <footer class="footer">
-      <p>Webpack 模块联邦原理详解 © 2023 | 前端架构与工程化</p>
+      <p>Webpack 模块联邦原理介绍 © 2023 | 前端架构与工程化</p>
       <p class="version">Webpack 5+ | 模块联邦 API v1.0</p>
     </footer>
   </div>

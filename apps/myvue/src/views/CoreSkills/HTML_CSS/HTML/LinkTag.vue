@@ -1,7 +1,7 @@
 <template>
   <div class="link-container">
     <header class="header">
-      <h1>HTML <span class="highlight">&lt;link&gt;</span> 标签详解</h1>
+      <h1>HTML <span class="highlight">&lt;link&gt;</span> 标签介绍</h1>
       <p class="subtitle">掌握网页资源链接的核心技术</p>
     </header>
 
@@ -13,7 +13,11 @@
         </div>
         <div class="intro-content">
           <h2>什么是 &lt;link&gt; 标签？</h2>
-          <p>&lt;link&gt; 标签是 HTML 文档头部的重要元素，用于在当前文档和外部资源之间建立联系。它通常位于 &lt;head&gt; 部分，不显示在页面内容中，但对网页功能和性能有重大影响。</p>
+          <p>
+            &lt;link&gt; 标签是 HTML
+            文档头部的重要元素，用于在当前文档和外部资源之间建立联系。它通常位于 &lt;head&gt;
+            部分，不显示在页面内容中，但对网页功能和性能有重大影响。
+          </p>
         </div>
       </section>
 
@@ -23,19 +27,22 @@
           <i class="fas fa-code"></i>
           基本语法
         </h2>
-        <pre class="code-block">&lt;link rel="<span class="attr-value">stylesheet</span>" href="<span class="attr-value">styles.css</span>"&gt;</pre>
+        <pre
+          class="code-block"
+        >&lt;link rel="<span class="attr-value">stylesheet</span>" href="<span class="attr-value">styles.css</span>"&gt;</pre>
       </section>
 
       <!-- 核心属性 -->
       <section class="attributes-section">
         <h2 class="section-title">
           <i class="fas fa-cog"></i>
-          核心属性详解
+          核心属性介绍
         </h2>
 
         <div class="attributes-grid">
           <div v-for="(attr, index) in attributes" :key="index" class="attribute-card">
-            <h3 class="attr-title">{{ attr.name }}
+            <h3 class="attr-title">
+              {{ attr.name }}
               <span class="attr-required" v-if="attr.required">*必需</span>
             </h3>
             <p class="attr-description">{{ attr.description }}</p>
@@ -156,7 +163,7 @@
             <div class="step-number">4</div>
             <div class="step-content">
               <h3>资源加载</h3>
-              <p>CSS: 阻塞渲染<br>JS: 根据 async/defer 行为不同<br>Preload: 高优先级加载</p>
+              <p>CSS: 阻塞渲染<br />JS: 根据 async/defer 行为不同<br />Preload: 高优先级加载</p>
             </div>
           </div>
 
@@ -164,7 +171,7 @@
             <div class="step-number">5</div>
             <div class="step-content">
               <h3>资源应用</h3>
-              <p>CSS: 构建 CSSOM<br>JS: 执行脚本<br>图标: 显示在标签页</p>
+              <p>CSS: 构建 CSSOM<br />JS: 执行脚本<br />图标: 显示在标签页</p>
             </div>
           </div>
         </div>
@@ -178,7 +185,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref } from 'vue'
 
 // 属性数据
 const attributes = ref([
@@ -194,16 +201,16 @@ const attributes = ref([
       { value: 'dns-prefetch', description: '提前进行DNS解析' },
       { value: 'preconnect', description: '提前建立连接（DNS+TCP+TLS）' },
       { value: 'modulepreload', description: '预加载ES模块' },
-      { value: 'alternate', description: '链接到文档的替代版本' }
+      { value: 'alternate', description: '链接到文档的替代版本' },
     ],
-    example: '<link rel="stylesheet" href="styles.css">'
+    example: '<link rel="stylesheet" href="styles.css">',
   },
   {
     name: 'href',
     required: true,
     description: '指定链接资源的URL路径',
     values: null,
-    example: '<link href="https://example.com/styles.css">'
+    example: '<link href="https://example.com/styles.css">',
   },
   {
     name: 'as',
@@ -214,9 +221,9 @@ const attributes = ref([
       { value: 'style', description: 'CSS样式表' },
       { value: 'font', description: '字体文件' },
       { value: 'image', description: '图像文件' },
-      { value: 'fetch', description: '通过fetch或XHR请求的资源' }
+      { value: 'fetch', description: '通过fetch或XHR请求的资源' },
     ],
-    example: '<link rel="preload" href="font.woff2" as="font">'
+    example: '<link rel="preload" href="font.woff2" as="font">',
   },
   {
     name: 'type',
@@ -227,9 +234,9 @@ const attributes = ref([
       { value: 'text/javascript', description: 'JavaScript文件' },
       { value: 'image/x-icon', description: 'ICO格式图标' },
       { value: 'image/png', description: 'PNG图像' },
-      { value: 'font/woff2', description: 'WOFF2字体' }
+      { value: 'font/woff2', description: 'WOFF2字体' },
     ],
-    example: '<link rel="stylesheet" href="styles.css" type="text/css">'
+    example: '<link rel="stylesheet" href="styles.css" type="text/css">',
   },
   {
     name: 'media',
@@ -239,9 +246,9 @@ const attributes = ref([
       { value: 'screen', description: '计算机屏幕' },
       { value: 'print', description: '打印预览模式' },
       { value: '(max-width: 600px)', description: '视口宽度小于600px' },
-      { value: '(orientation: portrait)', description: '竖屏模式' }
+      { value: '(orientation: portrait)', description: '竖屏模式' },
     ],
-    example: '<link rel="stylesheet" href="print.css" media="print">'
+    example: '<link rel="stylesheet" href="print.css" media="print">',
   },
   {
     name: 'crossorigin',
@@ -249,102 +256,99 @@ const attributes = ref([
     description: '处理跨域请求的CORS设置',
     values: [
       { value: 'anonymous', description: '跨域请求不带凭据' },
-      { value: 'use-credentials', description: '跨域请求带凭据' }
+      { value: 'use-credentials', description: '跨域请求带凭据' },
     ],
-    example: '<link rel="preconnect" href="https://cdn.example.com" crossorigin>'
-  }
-]);
+    example: '<link rel="preconnect" href="https://cdn.example.com" crossorigin>',
+  },
+])
 
 // 使用场景
 const scenarios = ref([
   {
-    title: "加载CSS样式表",
-    icon: "fas fa-paint-brush",
-    description: "最常见的用途，用于链接外部CSS文件，控制网页样式",
-    example: '<link rel="stylesheet" href="styles/main.css">'
+    title: '加载CSS样式表',
+    icon: 'fas fa-paint-brush',
+    description: '最常见的用途，用于链接外部CSS文件，控制网页样式',
+    example: '<link rel="stylesheet" href="styles/main.css">',
   },
   {
-    title: "网站图标 (Favicon)",
-    icon: "fas fa-icons",
-    description: "设置显示在浏览器标签页和收藏夹中的网站图标",
-    example: '<link rel="icon" href="favicon.ico" type="image/x-icon">'
+    title: '网站图标 (Favicon)',
+    icon: 'fas fa-icons',
+    description: '设置显示在浏览器标签页和收藏夹中的网站图标',
+    example: '<link rel="icon" href="favicon.ico" type="image/x-icon">',
   },
   {
-    title: "资源预加载",
-    icon: "fas fa-bolt",
-    description: "使用preload提前加载关键资源，加速页面渲染",
-    example: '<link rel="preload" href="font.woff2" as="font" crossorigin>'
+    title: '资源预加载',
+    icon: 'fas fa-bolt',
+    description: '使用preload提前加载关键资源，加速页面渲染',
+    example: '<link rel="preload" href="font.woff2" as="font" crossorigin>',
   },
   {
-    title: "DNS预解析",
-    icon: "fas fa-globe",
-    description: "提前解析第三方资源的域名，减少连接时间",
-    example: '<link rel="dns-prefetch" href="https://cdn.example.com">'
+    title: 'DNS预解析',
+    icon: 'fas fa-globe',
+    description: '提前解析第三方资源的域名，减少连接时间',
+    example: '<link rel="dns-prefetch" href="https://cdn.example.com">',
   },
   {
-    title: "连接预建立",
-    icon: "fas fa-handshake",
-    description: "提前建立与第三方资源的连接（DNS+TCP+TLS）",
-    example: '<link rel="preconnect" href="https://fonts.googleapis.com">'
+    title: '连接预建立',
+    icon: 'fas fa-handshake',
+    description: '提前建立与第三方资源的连接（DNS+TCP+TLS）',
+    example: '<link rel="preconnect" href="https://fonts.googleapis.com">',
   },
   {
-    title: "替代资源",
-    icon: "fas fa-exchange-alt",
-    description: "提供文档的替代版本（如打印样式表、RSS源等）",
-    example: '<link rel="alternate" type="application/rss+xml" href="feed.xml">'
-  }
-]);
+    title: '替代资源',
+    icon: 'fas fa-exchange-alt',
+    description: '提供文档的替代版本（如打印样式表、RSS源等）',
+    example: '<link rel="alternate" type="application/rss+xml" href="feed.xml">',
+  },
+])
 
 // 优缺点
 const pros = ref([
-  "解耦HTML与外部资源，提高代码可维护性",
-  "支持并行加载，提高页面加载性能",
-  "通过preload/prefetch优化关键资源加载",
-  "支持媒体查询，实现响应式资源加载",
-  "浏览器缓存机制可减少重复下载"
-]);
+  '解耦HTML与外部资源，提高代码可维护性',
+  '支持并行加载，提高页面加载性能',
+  '通过preload/prefetch优化关键资源加载',
+  '支持媒体查询，实现响应式资源加载',
+  '浏览器缓存机制可减少重复下载',
+])
 
 const cons = ref([
-  "CSS加载会阻塞页面渲染（可通过媒体类型优化）",
-  "过多链接资源会增加HTTP请求数量",
-  "预加载不当可能浪费带宽",
-  "浏览器兼容性问题（如preload在旧浏览器不支持）",
-  "配置不当可能导致资源加载顺序问题"
-]);
+  'CSS加载会阻塞页面渲染（可通过媒体类型优化）',
+  '过多链接资源会增加HTTP请求数量',
+  '预加载不当可能浪费带宽',
+  '浏览器兼容性问题（如preload在旧浏览器不支持）',
+  '配置不当可能导致资源加载顺序问题',
+])
 
 // 最佳实践
 const practices = ref([
   {
-    title: "关键CSS内联",
-    description: "首屏关键CSS内联在HTML中，其余CSS通过link加载"
+    title: '关键CSS内联',
+    description: '首屏关键CSS内联在HTML中，其余CSS通过link加载',
   },
   {
-    title: "合理使用preload",
-    description: "仅对关键资源使用preload（如首屏字体、关键CSS）"
+    title: '合理使用preload',
+    description: '仅对关键资源使用preload（如首屏字体、关键CSS）',
   },
   {
-    title: "添加crossorigin属性",
-    description: "对字体等跨域资源添加crossorigin属性"
+    title: '添加crossorigin属性',
+    description: '对字体等跨域资源添加crossorigin属性',
   },
   {
-    title: "使用媒体查询",
-    description: "对非关键CSS使用media属性避免渲染阻塞"
+    title: '使用媒体查询',
+    description: '对非关键CSS使用media属性避免渲染阻塞',
   },
   {
-    title: "预连接关键域名",
-    description: "对关键第三方资源使用preconnect"
+    title: '预连接关键域名',
+    description: '对关键第三方资源使用preconnect',
   },
   {
-    title: "资源压缩与缓存",
-    description: "启用gzip/brotli压缩，设置合理缓存策略"
-  }
-]);
+    title: '资源压缩与缓存',
+    description: '启用gzip/brotli压缩，设置合理缓存策略',
+  },
+])
 </script>
 
 <style lang="less" scoped>
-
-
-
 :root {
   --primary: #4361ee;
   --primary-light: #eef2ff;
@@ -368,7 +372,15 @@ const practices = ref([
 }
 
 .link-container {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+  font-family:
+    'Inter',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    Oxygen,
+    Ubuntu,
+    sans-serif;
   background: linear-gradient(135deg, #f8f9fa 0%, #f0f4ff 100%);
   color: var(--dark);
   line-height: 1.6;
@@ -653,7 +665,8 @@ const practices = ref([
     grid-template-columns: 1fr;
   }
 
-  .pros, .cons {
+  .pros,
+  .cons {
     border-radius: 12px;
     padding: 30px;
   }

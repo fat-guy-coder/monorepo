@@ -323,8 +323,6 @@ onMounted(() => {
 </script>
 
 <style lang="less" scoped>
-
-
 * {
   box-sizing: border-box;
   margin: 0;

@@ -2,7 +2,7 @@
   <div class="border-image-container">
     <!-- 头部区域 -->
     <div class="header">
-      <h1>CSS border-image 详解</h1>
+      <h1>CSS border-image 介绍</h1>
       <p>掌握边界图像的强大功能，创建精美的边框效果</p>
     </div>
 
@@ -11,7 +11,11 @@
       <!-- 概念介绍区 -->
       <div class="concept-section">
         <h2>什么是 border-image？</h2>
-        <p>CSS <code>border-image</code> 属性允许使用图像作为元素的边框，而不是传统的纯色边框。它提供了强大的功能，可以将单个图像分割为九个区域，分别用于边框的各个部分。</p>
+        <p>
+          CSS
+          <code>border-image</code>
+          属性允许使用图像作为元素的边框，而不是传统的纯色边框。它提供了强大的功能，可以将单个图像分割为九个区域，分别用于边框的各个部分。
+        </p>
 
         <div class="image-slice-diagram">
           <div class="diagram-container">
@@ -57,7 +61,7 @@
 
       <!-- 语法区 -->
       <div class="syntax-section">
-        <h2>语法详解</h2>
+        <h2>语法介绍</h2>
         <div class="syntax-card">
           <pre><code>border-image: source slice / width / outset repeat;</code></pre>
 
@@ -120,17 +124,17 @@ border-image-repeat: stretch repeat; /* 水平拉伸，垂直重复 */</code></p
 
           <div class="control-group">
             <label>图像分割 (slice)</label>
-            <input type="text" v-model="borderImageSlice" placeholder="例如: 30 或 30% fill">
+            <input type="text" v-model="borderImageSlice" placeholder="例如: 30 或 30% fill" />
           </div>
 
           <div class="control-group">
             <label>边框宽度 (width)</label>
-            <input type="text" v-model="borderImageWidth" placeholder="例如: 20px">
+            <input type="text" v-model="borderImageWidth" placeholder="例如: 20px" />
           </div>
 
           <div class="control-group">
             <label>边框外延 (outset)</label>
-            <input type="text" v-model="borderImageOutset" placeholder="例如: 10px">
+            <input type="text" v-model="borderImageOutset" placeholder="例如: 10px" />
           </div>
 
           <div class="control-group">
@@ -154,7 +158,7 @@ border-image-repeat: stretch repeat; /* 水平拉伸，垂直重复 */</code></p
               borderImageSlice: borderImageSlice,
               borderImageWidth: borderImageWidth,
               borderImageOutset: borderImageOutset,
-              borderImageRepeat: borderImageRepeat
+              borderImageRepeat: borderImageRepeat,
             }"
           >
             <div class="box-content">
@@ -219,23 +223,35 @@ border-image-repeat: stretch repeat; /* 水平拉伸，垂直重复 */</code></p
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed } from 'vue'
 
 // 边框图像源选项
 const imageSources = ref([
   { label: '线性渐变', value: 'linear-gradient(45deg, #ff8a00, #e52e71)' },
   { label: '径向渐变', value: 'radial-gradient(circle, #4e79c7, #e15759)' },
-  { label: '圆点图案', value: 'url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'20\' height=\'20\'><circle cx=\'10\' cy=\'10\' r=\'3\' fill=\'%234e79c7\'/></svg>")' },
-  { label: '条纹图案', value: 'url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'20\' height=\'20\'><rect width=\'20\' height=\'10\' fill=\'%23e15759\'/></svg>")' },
-  { label: '装饰边框', value: 'url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'40\' height=\'40\'><path d=\'M10,10 Q20,5 30,10 T50,10\' stroke=\'%23e15759\' fill=\'none\'/></svg>")' },
-]);
+  {
+    label: '圆点图案',
+    value:
+      "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20'><circle cx='10' cy='10' r='3' fill='%234e79c7'/></svg>\")",
+  },
+  {
+    label: '条纹图案',
+    value:
+      "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20'><rect width='20' height='10' fill='%23e15759'/></svg>\")",
+  },
+  {
+    label: '装饰边框',
+    value:
+      "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40'><path d='M10,10 Q20,5 30,10 T50,10' stroke='%23e15759' fill='none'/></svg>\")",
+  },
+])
 
 // 响应式状态
-const borderImageSource = ref(imageSources.value[0].value);
-const borderImageSlice = ref('30');
-const borderImageWidth = ref('30px');
-const borderImageOutset = ref('0');
-const borderImageRepeat = ref('stretch');
+const borderImageSource = ref(imageSources.value[0].value)
+const borderImageSlice = ref('30')
+const borderImageWidth = ref('30px')
+const borderImageOutset = ref('0')
+const borderImageRepeat = ref('stretch')
 
 // 生成的CSS代码
 const generatedCode = computed(() => {
@@ -245,12 +261,11 @@ const generatedCode = computed(() => {
   border-image-width: ${borderImageWidth.value};
   border-image-outset: ${borderImageOutset.value};
   border-image-repeat: ${borderImageRepeat.value};
-}`;
-});
+}`
+})
 </script>
 
 <style lang="less" scoped>
-
 @primary-color: #4e79c7;
 @secondary-color: #e15759;
 @light-bg: #f8fafc;
@@ -370,10 +385,18 @@ const generatedCode = computed(() => {
     color: @primary-color;
   }
 
-  .top-left { border-top-left-radius: 6px; }
-  .top-right { border-top-right-radius: 6px; }
-  .bottom-left { border-bottom-left-radius: 6px; }
-  .bottom-right { border-bottom-right-radius: 6px; }
+  .top-left {
+    border-top-left-radius: 6px;
+  }
+  .top-right {
+    border-top-right-radius: 6px;
+  }
+  .bottom-left {
+    border-bottom-left-radius: 6px;
+  }
+  .bottom-right {
+    border-bottom-right-radius: 6px;
+  }
 
   .slice-label {
     position: absolute;
@@ -419,15 +442,47 @@ const generatedCode = computed(() => {
     align-items: center;
     justify-content: center;
 
-    &.top-left { top: 10px; left: 10px; }
-    &.top-center { top: 10px; left: 50%; transform: translateX(-50%); }
-    &.top-right { top: 10px; right: 10px; }
-    &.middle-left { top: 50%; left: 10px; transform: translateY(-50%); }
-    &.middle-center { top: 50%; left: 50%; transform: translate(-50%, -50%); }
-    &.middle-right { top: 50%; right: 10px; transform: translateY(-50%); }
-    &.bottom-left { bottom: 10px; left: 10px; }
-    &.bottom-center { bottom: 10px; left: 50%; transform: translateX(-50%); }
-    &.bottom-right { bottom: 10px; right: 10px; }
+    &.top-left {
+      top: 10px;
+      left: 10px;
+    }
+    &.top-center {
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    &.top-right {
+      top: 10px;
+      right: 10px;
+    }
+    &.middle-left {
+      top: 50%;
+      left: 10px;
+      transform: translateY(-50%);
+    }
+    &.middle-center {
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    &.middle-right {
+      top: 50%;
+      right: 10px;
+      transform: translateY(-50%);
+    }
+    &.bottom-left {
+      bottom: 10px;
+      left: 10px;
+    }
+    &.bottom-center {
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    &.bottom-right {
+      bottom: 10px;
+      right: 10px;
+    }
   }
 }
 
@@ -496,7 +551,8 @@ const generatedCode = computed(() => {
         margin-bottom: 0.5rem;
       }
 
-      select, input {
+      select,
+      input {
         width: 100%;
         padding: 0.7rem;
         border: 1px solid @border-color;
@@ -627,12 +683,14 @@ const generatedCode = computed(() => {
 
 .dotted-border {
   border: 30px solid;
-  border-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20'><circle cx='10' cy='10' r='3' fill='%234e79c7'/></svg>") 30 round;
+  border-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20'><circle cx='10' cy='10' r='3' fill='%234e79c7'/></svg>")
+    30 round;
 }
 
 .decorative-border {
   border: 30px solid;
-  border-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40'><path d='M10,10 Q20,5 30,10 T50,10' stroke='%23e15759' fill='none'/></svg>") 30;
+  border-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40'><path d='M10,10 Q20,5 30,10 T50,10' stroke='%23e15759' fill='none'/></svg>")
+    30;
 }
 
 .dual-color-border {

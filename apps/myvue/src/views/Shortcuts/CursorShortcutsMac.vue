@@ -113,7 +113,7 @@ const categories: Category[] = [
 </script>
 
 <style lang="less" scoped>
-@import url('https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@400;500;600&display=swap');
+
 
 .shortcuts-container {
   max-width: 900px;

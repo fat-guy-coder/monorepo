@@ -97,11 +97,11 @@
       </div>
     </div>
 
-    <!-- API详解 -->
+    <!-- API介绍 -->
     <div class="section">
       <div class="section-header">
         <div class="section-icon">🔧</div>
-        <h2>child_process API详解</h2>
+        <h2>child_process API介绍</h2>
       </div>
       <div class="section-content">
         <div class="api-tabs">

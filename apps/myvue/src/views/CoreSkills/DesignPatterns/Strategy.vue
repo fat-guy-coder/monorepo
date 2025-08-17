@@ -3,7 +3,7 @@
     <!-- 头部区域 -->
     <div class="header">
       <div class="title-container">
-        <h1>策略模式详解</h1>
+        <h1>策略模式介绍</h1>
         <p>定义算法族，分别封装，使它们可以互相替换</p>
       </div>
       <div class="pattern-tag">
@@ -18,12 +18,17 @@
         <div class="overview-card">
           <div class="icon">
             <svg viewBox="0 0 24 24" width="48" height="48">
-              <path d="M21,16.5C21,16.88 20.79,17.21 20.47,17.38L12.57,21.82C12.41,21.94 12.21,22 12,22C11.79,22 11.59,21.94 11.43,21.82L3.53,17.38C3.21,17.21 3,16.88 3,16.5V7.5C3,7.12 3.21,6.79 3.53,6.62L11.43,2.18C11.59,2.06 11.79,2 12,2C12.21,2 12.41,2.06 12.57,2.18L20.47,6.62C20.79,6.79 21,7.12 21,7.5V16.5M12,4.15L5,7.76V16.24L12,19.85L19,16.24V7.76L12,4.15M12,7C13.66,7 15,8.34 15,10C15,11.66 13.66,13 12,13C10.34,13 9,11.66 9,10C9,8.34 10.34,7 12,7Z" />
+              <path
+                d="M21,16.5C21,16.88 20.79,17.21 20.47,17.38L12.57,21.82C12.41,21.94 12.21,22 12,22C11.79,22 11.59,21.94 11.43,21.82L3.53,17.38C3.21,17.21 3,16.88 3,16.5V7.5C3,7.12 3.21,6.79 3.53,6.62L11.43,2.18C11.59,2.06 11.79,2 12,2C12.21,2 12.41,2.06 12.57,2.18L20.47,6.62C20.79,6.79 21,7.12 21,7.5V16.5M12,4.15L5,7.76V16.24L12,19.85L19,16.24V7.76L12,4.15M12,7C13.66,7 15,8.34 15,10C15,11.66 13.66,13 12,13C10.34,13 9,11.66 9,10C9,8.34 10.34,7 12,7Z"
+              />
             </svg>
           </div>
           <div class="content">
             <h2>模式概览</h2>
-            <p>策略模式(Strategy Pattern)定义了一系列算法，并将每个算法封装起来，使它们可以相互替换。策略模式让算法的变化独立于使用它的客户端。</p>
+            <p>
+              策略模式(Strategy
+              Pattern)定义了一系列算法，并将每个算法封装起来，使它们可以相互替换。策略模式让算法的变化独立于使用它的客户端。
+            </p>
             <div class="key-points">
               <div class="point">
                 <div class="point-icon">✓</div>
@@ -59,7 +64,9 @@
               <li><strong>避开收费</strong>：优先考虑经济因素</li>
               <li><strong>风景路线</strong>：优先考虑观光体验</li>
             </ul>
-            <p>导航系统封装了各种路线算法，用户可以根据当前需求选择最合适的策略，而导航系统本身的结构保持不变。</p>
+            <p>
+              导航系统封装了各种路线算法，用户可以根据当前需求选择最合适的策略，而导航系统本身的结构保持不变。
+            </p>
           </div>
         </div>
       </div>
@@ -224,7 +231,8 @@
           <div class="relation">
             <div class="relation-icon">🔄</div>
             <div class="relation-text">
-              <strong>策略 vs 状态</strong>：两者结构相似，但意图不同。策略模式中策略彼此独立，状态模式中状态可以相互转换。
+              <strong>策略 vs 状态</strong
+              >：两者结构相似，但意图不同。策略模式中策略彼此独立，状态模式中状态可以相互转换。
             </div>
           </div>
           <div class="relation">
@@ -246,14 +254,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref } from 'vue'
 
 const tabs = ref([
   { id: 'typescript', label: 'TypeScript 实现' },
-  { id: 'javascript', label: 'JavaScript 实现' }
-]);
+  { id: 'javascript', label: 'JavaScript 实现' },
+])
 
-const activeTab = ref('typescript');
+const activeTab = ref('typescript')
 
 const typescriptCode = `// 策略接口
 interface SortingStrategy {
@@ -302,7 +310,7 @@ const sorter = new Sorter(new BubbleSort());
 console.log(sorter.sort(data)); // 使用冒泡排序
 
 sorter.setStrategy(new QuickSort());
-console.log(sorter.sort(data)); // 使用快速排序`;
+console.log(sorter.sort(data)); // 使用快速排序`
 
 const javascriptCode = `// 策略接口（在JS中是隐式的）
 class SortingStrategy {
@@ -351,11 +359,10 @@ const sorter = new Sorter(new BubbleSort());
 console.log(sorter.sort(data)); // 使用冒泡排序
 
 sorter.setStrategy(new QuickSort());
-console.log(sorter.sort(data)); // 使用快速排序`;
+console.log(sorter.sort(data)); // 使用快速排序`
 </script>
 
 <style lang="less" scoped>
-
 .strategy-pattern-container {
   max-width: 1200px;
   margin: 0 auto;
@@ -730,7 +737,8 @@ console.log(sorter.sort(data)); // 使用快速排序`;
   grid-template-columns: 1fr 1fr;
   gap: 2rem;
 
-  .pros, .cons {
+  .pros,
+  .cons {
     border-radius: 12px;
     padding: 1.8rem;
 
