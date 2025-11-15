@@ -4,6 +4,24 @@
     "name": "CoreSkills",
     "children": [
       {
+        "label": "🌐 关于前端 ⭐⭐⭐",
+        "name": "AboutFrontend",
+        "children": [
+          {
+            "label": "🌐 前端是什么 ⭐⭐⭐",
+            "name": "FrontendIsWhat"
+          },
+          {
+            "label": "💰 前端薪资统计 🌟",
+            "name": "FrontendSalary"
+          }
+        ]
+      },
+      {
+        "label": "🌐 前端基础三要素 ⭐⭐⭐",
+        "name": "FrontendBasicThreeElements"
+      },
+      {
         "label": "🌐 HTML & CSS ⭐⭐⭐",
         "name": "HTML_CSS",
         "children": [
@@ -11,6 +29,10 @@
             "label": "📄 HTML ⭐⭐⭐",
             "name": "HTML",
             "children": [
+              {
+                "label": "📋 HTML面试知识点 ⭐⭐⭐",
+                "name": "HtmlInterviewKnowledgepPoints"
+              },
               {
                 "label": "❓ 什么是HTML ⭐⭐⭐",
                 "name": "WhatIsHtml"
@@ -57,6 +79,10 @@
             "label": "🎨 CSS ⭐⭐⭐",
             "name": "CSS",
             "children": [
+              {
+                "label": "📋 CSS知识点 ⭐⭐⭐",
+                "name": "CssKnowledgepPoints"
+              },
               {
                 "label": "📘 什么是css ⭐⭐⭐",
                 "name": "CSSProfile"
@@ -236,8 +262,8 @@
             "name": "CSS3",
             "children": [
               {
-                "label": "🔍 CSS3概览 ⭐⭐⭐",
-                "name": "CSS3Overview"
+                "label": "📋 CSS3面试知识点 ⭐⭐⭐",
+                "name": "Css3InterviewKnowledgepPoints"
               },
               {
                 "label": "📏 Flexbox(布局) ⭐⭐⭐",
@@ -362,6 +388,10 @@
               {
                 "label": "🔍 CSS3一些其他属性 ⭐⭐",
                 "name": "CSS3OtherAttributes"
+              },
+              {
+                "label": "🔍 CSS3概览 ⭐⭐⭐",
+                "name": "CSS3Overview"
               }
             ]
           },
@@ -370,19 +400,23 @@
             "name": "HTML5",
             "children": [
               {
-                "label": "🏛️ 语义化标签 ⭐⭐⭐",
+                "label": "📋 HTML5面试知识点 ⭐⭐⭐",
+                "name": "Html5InterviewKnowledgepPoints"
+              },
+              {
+                "label": "🏛️ 语义化标签(标签) ⭐⭐⭐",
                 "name": "SemanticTags"
               },
               {
-                "label": "📝 表单元素 ⭐⭐⭐",
+                "label": "📝 表单元素(表单增强) ⭐⭐⭐",
                 "name": "FormElements"
               },
               {
-                "label": "🎨 Canvas ⭐⭐",
+                "label": "🎨 Canvas(画布) ⭐⭐",
                 "name": "Canvas"
               },
               {
-                "label": "📐 SVG ⭐⭐",
+                "label": "📐 SVG(矢量图) ⭐⭐",
                 "name": "SVG"
               },
               {
@@ -398,31 +432,31 @@
                 "name": "DragDrop"
               },
               {
-                "label": "👷 Web Worker ⭐⭐",
+                "label": "👷 Web Worker(多线程) ⭐⭐",
                 "name": "WebWorker"
               },
               {
-                "label": "🔄 sharedWorker ⭐⭐⭐",
+                "label": "🔄 sharedWorker(共享线程) ⭐⭐⭐",
                 "name": "SharedWorker"
               },
               {
-                "label": "🔄 BroadcastChannel ⭐⭐⭐",
+                "label": "🔄 BroadcastChannel(广播通道) ⭐⭐⭐",
                 "name": "BroadcastChannel"
               },
               {
-                "label": "💾 Web Storage ⭐⭐⭐",
+                "label": "💾 Web Storage(本地存储) ⭐⭐⭐",
                 "name": "WebStorage"
               },
               {
-                "label": "🗄️ IndexDB ⭐⭐⭐",
+                "label": "🗄️ IndexDB(数据库) ⭐⭐⭐",
                 "name": "IndexDB"
               },
               {
-                "label": "🔌 Web Socket ⭐⭐",
+                "label": "🔌 Web Socket(双工通信) ⭐⭐",
                 "name": "WebSocket"
               },
               {
-                "label": "⏳ lazyload ⭐⭐⭐",
+                "label": "⏳ lazyload(懒加载) ⭐⭐⭐",
                 "name": "LazyLoad"
               },
               {
@@ -438,7 +472,7 @@
                 "name": "PictureInPicture"
               },
               {
-                "label": "🔢 更强大的file API 🌟",
+                "label": "🔢 更强大的file API(文件API) 🌟",
                 "name": "FileAPI"
               },
               {
@@ -462,14 +496,6 @@
                 "name": "WebAuthn"
               }
             ]
-          },
-          {
-            "label": "📋 HTML(5)知识点 ⭐⭐⭐",
-            "name": "HtmlKnowledgepPoints"
-          },
-          {
-            "label": "📋 CSS知识点 ⭐⭐⭐",
-            "name": "CssKnowledgepPoints"
           }
         ]
       },
@@ -2604,6 +2630,26 @@
                 "name": "ResourceLoadFailure"
               }
             ]
+          },
+          {
+            "label": "🔄 代码相关 ⭐⭐⭐",
+            "name": "CodeRelated2",
+            "children": [
+              {
+                "label": "🔄 表单引擎 ⭐⭐⭐",
+                "name": "FormEngine",
+                "children": [
+                  {
+                    "label": "🔄 表单引擎介绍 ⭐⭐⭐",
+                    "name": "FormEngineIntroduction"
+                  },
+                  {
+                    "label": "🔄 表单引擎实现 ⭐⭐⭐",
+                    "name": "FormEngineImplementation"
+                  }
+                ]
+              }
+            ]
           }
         ]
       },
@@ -2715,7 +2761,7 @@
     ]
   },
   {
-    "label": "🏗️ 框架与工程化 ⭐⭐⭐",
+    "label": "🏗️ 框架与工程化 ⭐⭐",
     "name": "FrameworksAndEngineering",
     "children": [
       {
@@ -2821,6 +2867,10 @@
           {
             "label": "🔄 React18新特性 ⭐⭐⭐",
             "name": "React18NewFeatures"
+          },
+          {
+            "label": "📜 React19新特性 ⭐⭐",
+            "name": "ReactNewFeatures"
           },
           {
             "label": "🔧 React底层原理 ⭐⭐⭐",
@@ -3000,23 +3050,23 @@
                 "name": "KeepAliveAndCommonProblems"
               },
               {
-                "label": "🔄 vue项目的权限控制",
+                "label": "🔄 vue项目的权限控制⭐⭐⭐",
                 "name": "VuePermission"
               },
               {
-                "label": "🔄 vue异步组件",
+                "label": "🔄 vue异步组件⭐⭐⭐",
                 "name": "VueAsyncComponent"
               },
               {
-                "label": "🔄 vue错误处理",
+                "label": "🔄 vue错误处理⭐⭐⭐",
                 "name": "VueErrorProcess"
               },
               {
-                "label": "🔄 observable",
+                "label": "🔄 observable🌟",
                 "name": "VueObservable"
               },
               {
-                "label": "🔄 TransitionAndTransitionGroup",
+                "label": "🔄 TransitionAndTransitionGroup⭐⭐",
                 "name": "TransitionAndTransitionGroup"
               }
             ]
@@ -3117,6 +3167,10 @@
             ]
           },
           {
+            "label": "📜 Vue3 ⭐⭐⭐",
+            "name": "Vue3Overview"
+          },
+          {
             "label": "📜 Vue3与Vue2的区别 ⭐⭐⭐",
             "name": "Vue3AndVue2Difference"
           },
@@ -3183,23 +3237,33 @@
         "name": "ReactVsVue"
       },
       {
-        "label": "🔄 Svelte ⭐",
-        "name": "Svelte"
-      },
-      {
-        "label": "🔄 Solid 🌟",
-        "name": "Solid"
-      },
-      {
         "label": "🔄 angular 🌟",
         "name": "Angular"
       },
       {
-        "label": "🔄 htmlxjs 🌟",
-        "name": "Htmlxjs"
+        "label": "🔄 Svelte 🌟",
+        "name": "Svelte"
       },
       {
-        "label": "💚 SSR框架 ⭐",
+        "label": "🔄 其他前端框架 🌟",
+        "name": "OtherFrontendFrameworks",
+        "children": [
+          {
+            "label": "🔄 Solid 🌟",
+            "name": "Solid"
+          },
+          {
+            "label": "🔄 htmlxjs 🌟",
+            "name": "Htmlxjs"
+          }
+        ]
+      },
+      {
+        "label": "🔄 前端框架对比 🌟",
+        "name": "FrontendFrameworkComparison"
+      },
+      {
+        "label": "💚 SSR框架 🌟",
         "name": "SSRFramework",
         "children": [
           {
@@ -3211,12 +3275,12 @@
             "name": "HydrationAndDehydration"
           },
           {
-            "label": "🔄 Nuxt.js ⭐",
-            "name": "Nuxt"
+            "label": "🔄 Next.js 🌟",
+            "name": "Nextjs"
           },
           {
-            "label": "🔄 Next.js ⭐",
-            "name": "Nextjs"
+            "label": "🔄 Nuxt.js 🌟",
+            "name": "Nuxt"
           }
         ]
       },
@@ -3228,6 +3292,10 @@
             "label": "🔧 构建工具 ⭐⭐⭐",
             "name": "BuildTools",
             "children": [
+              {
+                "label": "🔧 构建工具介绍 ⭐⭐⭐",
+                "name": "BuildToolsIntroduction"
+              },
               {
                 "label": "📦 Webpack ⭐⭐⭐",
                 "name": "Webpack",
@@ -3457,19 +3525,19 @@
                 ]
               },
               {
-                "label": "🆚  webpack与vite的区别 ⭐⭐⭐",
+                "label": "🆚   webpack与vite的区别 ⭐⭐⭐",
                 "name": "WebpackAndViteDifference"
               },
               {
-                "label": "🔧 ESBuild ⭐⭐⭐",
+                "label": "🔧 ESBuild 🌟",
                 "name": "ESBuild"
               },
               {
-                "label": "🔧 Roolup ⭐⭐",
+                "label": "🔧 Roolup 🌟",
                 "name": "Rollup"
               },
               {
-                "label": "🔧 Gulp ⭐⭐",
+                "label": "🔧 Gulp 🌟",
                 "name": "Gulp"
               }
             ]
@@ -3778,6 +3846,10 @@
     "name": "AlgorithmsAndDataStructures",
     "children": [
       {
+        "label": "🧠 为什么要学习算法与数据结构 ⭐⭐⭐",
+        "name": "WhyAlgorithmsAndDataStructures"
+      },
+      {
         "label": "🧱 数据结构 ⭐⭐⭐",
         "name": "DataStructures",
         "children": [
@@ -3798,7 +3870,7 @@
             "name": "ArrayOperations",
             "children": [
               { "label": "🔢 数组基础 ⭐⭐⭐", "name": "ArrayBasic" },
-              { "label": "🔢 数组进阶 ⭐⭐⭐", "name": "ArrayAdvanced" }
+              { "label": "🔢 数组相关算法 ⭐⭐⭐", "name": "ArrayAlgorithm" }
             ]
           },
           {
@@ -3829,23 +3901,32 @@
             ]
           },
           {
+            "label": "🔑 哈希表 ⭐⭐",
+            "name": "HashTable",
+            "children": [
+              { "label": "🔑 哈希表介绍 ⭐⭐", "name": "HashTableIntroduction" },
+              { "label": "🔑 哈希表实现 ⭐⭐", "name": "HashTableImplementation" },
+              { "label": "🔑 哈希表的相关算法 ⭐⭐", "name": "HashTableAlgorithm" }
+            ]
+          },
+          {
             "label": "🌳 树⭐⭐⭐",
             "name": "Trees",
             "children": [
               { "label": "🌳 树基础介绍 ⭐⭐⭐", "name": "TreeBasic" },
               { "label": "🌳 树的分类 ⭐⭐⭐", "name": "TreeClassification" },
               { "label": "🌳 Trie树 ⭐⭐⭐", "name": "TrieTree" },
+              {
+                "label": "🌳 二叉树和二叉搜索树 ⭐⭐⭐",
+                "name": "BinaryTreeAndBinarySearchTree"
+              },
+              { "label": "🌳 2-3树 ⭐⭐⭐", "name": "2-3Tree" },
+              { "label": "🌳 B树和B+树 ⭐⭐⭐", "name": "BTreeAndBPlusTree" },
+              { "label": "🌳 红黑树 ⭐⭐⭐", "name": "RedBlackTree" },
+              { "label": "🌳 线段树 ⭐⭐⭐", "name": "SegmentTree" },
               { "label": "🌳 霍夫曼树 ⭐⭐⭐", "name": "HuffmanTree" },
               { "label": "🌳 树的遍历 ⭐⭐⭐", "name": "TreeTraversal" },
-              { "label": "🌳 树的相关基础算法 ⭐⭐⭐", "name": "TreeBasicAlgorithm" }
-            ]
-          },
-          {
-            "label": "🌐 图 ⭐⭐",
-            "name": "Graph",
-            "children": [
-              { "label": "🌐 图介绍 ⭐⭐", "name": "GraphBasic" },
-              { "label": "🌐 图相关算法 ⭐⭐", "name": "GraphAlgorithm1" }
+              { "label": "🌳 树的相关算法 ⭐⭐⭐", "name": "TreeBasicAlgorithm" }
             ]
           },
           {
@@ -3857,35 +3938,34 @@
             ]
           },
           {
-            "label": "🔑 哈希表 ⭐⭐",
-            "name": "HashTable",
+            "label": "🔍 图 ⭐⭐",
+            "name": "Graph",
             "children": [
-              { "label": "🔑 哈希表介绍 ⭐⭐", "name": "HashTableIntroduction" },
-              { "label": "🔑 哈希表实现 ⭐⭐", "name": "HashTableImplementation" },
-              { "label": "🔑 哈希表的相关算法 ⭐⭐", "name": "HashTableAlgorithm" }
+              { "label": "🔍 图介绍 ⭐⭐", "name": "GraphBasic" },
+              { "label": "🔍 图的分类 ⭐⭐", "name": "GraphClassification" },
+              { "label": "🔍 图的存储方式 ⭐⭐", "name": "GraphStorageWay" },
+              { "label": "🔍 图相关算法 ⭐⭐", "name": "GraphAlgorithm1" },
+              { "label": "🔍 Dijkstra算法 ⭐⭐", "name": "DijkstraAlgorithm1" },
+              { "label": "🔍 Floyd算法 ⭐⭐", "name": "FloydAlgorithm" },
+              { "label": "🔍 Bellman-Ford算法 ⭐⭐", "name": "BellmanFordAlgorithm" },
+              { "label": "🔍 Prim和Kruskal算法 ⭐⭐", "name": "PrimAndKruskalAlgorithm" },
+              { "label": "🔍 拓扑排序 ⭐⭐", "name": "TopologicalSorting" }
             ]
           },
           {
-            "label": "🔑 并查集 ⭐⭐⭐",
-            "name": "UnionFind",
-            "children": [
-              { "label": "🔑 并查集介绍 ⭐⭐⭐", "name": "UnionFindIntroduction" },
-              { "label": "🔑 并查集实现 ⭐⭐⭐", "name": "UnionFindImplementation" }
-            ]
-          },
-          {
-            "label": "🔑 其他数据结构 ⭐⭐⭐",
+            "label": "🔑 其他数据结构 🌟",
             "name": "OtherDataStructures",
             "children": [
               {
-                "label": "🔑 桶 ⭐⭐",
-                "name": "Bucket",
-                "children": [
-                  { "label": "🔑 桶介绍 ⭐⭐", "name": "BucketIntroduction" },
-                  { "label": "🔑 桶相关算法 ⭐⭐", "name": "BucketAlgorithm" }
-                ]
+                "label": "🔑 其他数据结构介绍 ⭐⭐⭐",
+                "name": "OtherDataStructuresIntroduction"
               },
-              { "label": "🔑 布隆过滤器 ⭐⭐⭐", "name": "BloomFilter" }
+              { "label": "🔑 跳表 ⭐⭐⭐", "name": "SkipList" },
+              { "label": "🔑 布隆过滤器 ⭐⭐⭐", "name": "BloomFilter" },
+              {
+                "label": "🔑 并查集 ⭐⭐⭐",
+                "name": "UnionFind"
+              }
             ]
           }
         ]
@@ -3897,6 +3977,10 @@
           {
             "label": "🧮 算法介绍 ⭐⭐⭐",
             "name": "AlgorithmIntroduction"
+          },
+          {
+            "label": "🧮 60种常用算法 ⭐⭐⭐",
+            "name": "60Algorithms"
           },
           {
             "label": "📚 算法基础 ⭐⭐⭐",
@@ -4161,10 +4245,6 @@
                   {
                     "label": "🔄 boids算法 ⭐⭐⭐",
                     "name": "BoidsAlgorithm"
-                  },
-                  {
-                    "label": "🔄 布隆过滤器 ⭐⭐⭐",
-                    "name": "BloomFilter"
                   }
                 ]
               },
@@ -4281,84 +4361,112 @@
             "name": "NodeModules",
             "children": [
               {
-                "label": "📦 常用模块 ⭐⭐",
-                "name": "NodeCommonModules"
-              },
-              {
-                "label": "📁 fs(文件系统) ⭐⭐⭐",
+                "label": "📁 fs (文件系统) ⭐⭐⭐",
                 "name": "FileSystem"
               },
               {
-                "label": "🌐 http(HTTP模块) ⭐⭐⭐",
-                "name": "HTTP"
-              },
-              {
-                "label": "🛤️ path(路径处理) ⭐⭐⭐",
+                "label": "🛤️ path (路径处理) ⭐⭐⭐",
                 "name": "Path"
               },
               {
-                "label": "🔄 buffer(缓冲区) ⭐⭐⭐",
-                "name": "Buffer"
+                "label": "🌐 http (HTTP模块) ⭐⭐⭐",
+                "name": "HTTP"
               },
               {
-                "label": "🔒 crypto(加密) ⭐⭐⭐",
-                "name": "Crypto"
+                "label": "🌐 https (HTTPS模块) ⭐⭐",
+                "name": "HTTPS"
               },
               {
-                "label": "🔄 crypto进阶(加密) ⭐⭐⭐",
-                "name": "cryptoAdvanced"
-              },
-              {
-                "label": "🔄 child_process(子进程) ⭐⭐⭐",
-                "name": "ChildProcess"
-              },
-              {
-                "label": "🌊 stream(流) ⭐⭐⭐",
+                "label": "🌊 stream (流) ⭐⭐⭐",
                 "name": "Stream"
               },
               {
-                "label": "🔄 process(进程) ⭐⭐⭐",
-                "name": "Process"
-              },
-              {
-                "label": "🔧 process.nextTick ⭐⭐⭐",
-                "name": "ProcessNextTick"
-              },
-              {
-                "label": "📄 readline(逐行读取) ⭐⭐",
-                "name": "Readline"
-              },
-              {
-                "label": "🖥️ os(操作系统) ⭐",
-                "name": "OS"
-              },
-              {
-                "label": "📅 events(事件处理) ⭐",
+                "label": "📅 events (事件处理) ⭐⭐",
                 "name": "Events2"
               },
               {
-                "label": "🛠️ util(实用工具) ⭐",
+                "label": "🖥️ os (操作系统) ⭐⭐",
+                "name": "OS"
+              },
+              {
+                "label": "🔄 process (进程) ⭐⭐",
+                "name": "Process"
+              },
+              {
+                "label": "🔧 process.nextTick ⭐⭐",
+                "name": "ProcessNextTick"
+              },
+              {
+                "label": "📦 child_process (子进程) ⭐⭐",
+                "name": "ChildProcess"
+              },
+              {
+                "label": "🔄 buffer (缓冲区) ⭐⭐",
+                "name": "Buffer"
+              },
+              {
+                "label": "🛠️ util (实用工具) ⭐⭐",
                 "name": "Util"
               },
               {
-                "label": "📦 vm(虚拟机) ⭐",
-                "name": "VM"
+                "label": "📦 crypto (加密) ⭐⭐",
+                "name": "Crypto"
               },
               {
-                "label": "📦 assert(断言) ⭐",
-                "name": "Assert"
+                "label": "🔄 crypto进阶 (加密) ⭐",
+                "name": "cryptoAdvanced"
               },
               {
-                "label": "📦 zlib(压缩) ⭐",
-                "name": "Zlib"
+                "label": "📦 net (网络) ⭐⭐",
+                "name": "Net"
               },
               {
-                "label": "📦 querystring(查询字符串) ⭐",
+                "label": "🌐 dns (域名解析) ⭐",
+                "name": "DNS"
+              },
+              {
+                "label": "🔒 tls (安全/加密) ⭐",
+                "name": "TLS"
+              },
+              {
+                "label": "📦 url (网址解析) ⭐",
+                "name": "URL"
+              },
+              {
+                "label": "📦 querystring (查询字符串) ⭐",
                 "name": "QueryString"
               },
               {
-                "label": "📦 url(网址解析) ⭐",
-                "name": "URL"
+                "label": "📦 readline (逐行读取) ⭐",
+                "name": "Readline"
+              },
+              {
+                "label": "📦 assert (断言) ⭐",
+                "name": "Assert"
+              },
+              {
+                "label": "📦 zlib (压缩) ⭐",
+                "name": "Zlib"
+              },
+              {
+                "label": "📦 vm (虚拟机) ⭐",
+                "name": "VM"
+              },
+              {
+                "label": "🗂️ module (模块管理) ⭐",
+                "name": "Module"
+              },
+              {
+                "label": "📂 punycode (国际化域名处理) ⭐",
+                "name": "Punycode"
+              },
+              {
+                "label": "📝 timers (定时器) ⭐",
+                "name": "Timers"
+              },
+              {
+                "label": "📂 domain (错误处理) ⭐",
+                "name": "Domain"
               }
             ]
           },
@@ -4367,20 +4475,40 @@
             "name": "NodeAdvancedModules",
             "children": [
               {
-                "label": "📦 cluster(集群) ⭐",
+                "label": "📦 cluster (集群) ⭐",
                 "name": "Cluster"
               },
               {
-                "label": "🌐 dns(域名解析) ⭐",
-                "name": "DNS"
+                "label": "🌐 dgram (UDP数据报) ⭐",
+                "name": "Dgram"
               },
               {
-                "label": "🌐 net(网络) ⭐",
+                "label": "🗂️ inspector (调试) ⭐",
+                "name": "Inspector"
+              },
+              {
+                "label": "🔗 net (网络) ⭐",
                 "name": "Net"
               },
               {
-                "label": "🔒 tls(安全) ⭐",
+                "label": "🧪 perf_hooks (性能分析) ⭐",
+                "name": "PerfHooks"
+              },
+              {
+                "label": "🛠️ repl (交互解释器) ⭐",
+                "name": "REPL"
+              },
+              {
+                "label": "🔒 tls (安全) ⭐",
                 "name": "TLS"
+              },
+              {
+                "label": "🔍 trace_events (追踪事件) ⭐",
+                "name": "TraceEvents"
+              },
+              {
+                "label": "⏰ worker_threads (线程) ⭐",
+                "name": "WorkerThreads"
               }
             ]
           },
@@ -4541,6 +4669,14 @@
                 "name": "CanvasBase",
                 "children": [
                   {
+                    "label": "🔄 canvas介绍 ⭐",
+                    "name": "CanvasIntroduction"
+                  },
+                  {
+                    "label": "🔄 canvasAPI ⭐",
+                    "name": "CanvasAPI"
+                  },
+                  {
                     "label": "🔄 canvas基础图形 ⭐⭐⭐",
                     "name": "CanvasBaseShape"
                   },
@@ -4559,16 +4695,16 @@
                 "name": "CanvasAdvanced",
                 "children": [
                   {
-                    "label": "🔄 数字图像处理 ⭐⭐⭐",
+                    "label": "🔄 数字图像处理 ⭐",
                     "name": "DigitalImageProcessing"
                   },
                   {
-                    "label": "🔄 图像识别 ⭐⭐⭐",
+                    "label": "🔄 图像识别 🌟",
                     "name": "ImageRecognition"
                   },
                   {
-                    "label": "🔄 绘制图形 ⭐⭐⭐",
-                    "name": "DrawShape"
+                    "label": "🔄 数字化绘制图形 ⭐⭐",
+                    "name": "DigitalDrawShape"
                   },
                   {
                     "label": "🔄 事件处理 ⭐⭐⭐",
@@ -4581,12 +4717,20 @@
                 "name": "CanvasLibrary",
                 "children": [
                   {
-                    "label": "🧊 WebGL ⭐",
+                    "label": "🧊 WebGL 🌟",
                     "name": "WebGL",
                     "children": [
                       {
                         "label": "📚 WebGL基础 ⭐",
                         "name": "WebGLBase"
+                      },
+                      {
+                        "label": "📚 WebGL学习路线 ⭐",
+                        "name": "WebGLLearningRoadmap"
+                      },
+                      {
+                        "label": "📚 WebGL渲染流程 ⭐",
+                        "name": "WebGLRenderProcess"
                       },
                       {
                         "label": "🔄 顶点着色器 ⭐",
@@ -4615,7 +4759,7 @@
                     "name": "Echarts"
                   },
                   {
-                    "label": "🧊 three.js ⭐",
+                    "label": "🧊 three.js 🌟",
                     "name": "ThreeJs",
                     "children": [
                       {
@@ -4625,23 +4769,89 @@
                       {
                         "label": "🔄 three.js基础 ⭐⭐⭐",
                         "name": "ThreeJsBase"
+                      },
+                      {
+                        "label": "🔄 three.js学习路线 ⭐⭐⭐",
+                        "name": "ThreeJsLearningRoadmap"
+                      },
+                      {
+                        "label": "🔄 three.js基础三要素 ⭐⭐⭐",
+                        "name": "ThreeJsBaseThreeElements"
+                      },
+                      {
+                        "label": "🔄 three.js相机 ⭐⭐⭐",
+                        "name": "ThreeJsCamera"
+                      },
+                      {
+                        "label": "🔄 three.js场景 ⭐⭐⭐",
+                        "name": "ThreeJsScene"
+                      },
+                      {
+                        "label": "🔄 three.js网格 ⭐⭐⭐",
+                        "name": "ThreeJsMesh"
+                      },
+                      {
+                        "label": "🔄 three.js轨道控制器 ⭐⭐⭐",
+                        "name": "ThreeJsOrbitControls"
+                      },
+                      {
+                        "label": "🔄 three.js材质 ⭐⭐⭐",
+                        "name": "ThreeJsMaterial"
+                      },
+                      {
+                        "label": "🔄 three.js纹理 ⭐⭐⭐",
+                        "name": "ThreeJsTexture"
+                      },
+                      {
+                        "label": "🔄 three.js贴图 ⭐⭐⭐",
+                        "name": "ThreeJsSticker"
+                      },
+                      {
+                        "label": "🔄 three.js灯光 ⭐⭐⭐",
+                        "name": "ThreeJsLight"
+                      },
+                      {
+                        "label": "🔄 three.js阴影 ⭐⭐⭐",
+                        "name": "ThreeJsShadow"
+                      },
+                      {
+                        "label": "🔄 three.js抗锯齿 ⭐⭐⭐",
+                        "name": "ThreeJsAntialiasing"
+                      },
+                      {
+                        "label": "🔄 three.js的性能优化 ⭐⭐⭐",
+                        "name": "ThreeJsPerformanceOptimization"
                       }
                     ]
                   },
                   {
-                    "label": "🚀 g6 ⭐",
+                    "label": "🚀 babylon 🌟",
+                    "name": "BabylonJs",
+                    "children": [
+                      {
+                        "label": "🔄 babylon介绍 ⭐⭐⭐",
+                        "name": "BabylonJsIntroduction"
+                      },
+                      {
+                        "label": "🔄 babylon基础 ⭐⭐⭐",
+                        "name": "BabylonJsBase"
+                      }
+                    ]
+                  },
+                  {
+                    "label": "🚀 g6 🌟",
                     "name": "G6"
                   },
                   {
-                    "label": "🚀 fabric ⭐",
+                    "label": "🚀 fabric 🌟",
                     "name": "FabricJs"
                   },
                   {
-                    "label": "🚀 konva ⭐",
+                    "label": "🚀 konva 🌟",
                     "name": "Konva"
                   },
                   {
-                    "label": "🚀 d3 ⭐",
+                    "label": "🚀 d3 🌟",
                     "name": "D3js"
                   }
                 ]
@@ -4690,11 +4900,6 @@
             ]
           }
         ]
-      },
-      {
-        "label": "📹 视频处理 ⭐",
-        "name": "VideoProcessing",
-        "children": []
       },
       {
         "label": "🔍 动画相关 ⭐⭐⭐",
@@ -4775,15 +4980,15 @@
         ]
       },
       {
-        "label": "💡 前端(2020-2025)新技术⭐⭐⭐",
+        "label": "💡 前端(2020-2025)新技术 🌟",
         "name": "NewTechnology",
         "children": [
           {
-            "label": "🔄 新技术列表 ⭐⭐⭐",
+            "label": "🔄 新技术列表 🌟",
             "name": "NewTechnologyList"
           },
           {
-            "label": "💡 WebGPU ⭐⭐⭐",
+            "label": "💡 WebGPU 🌟",
             "name": "WebGPU",
             "children": [
               {
@@ -4793,14 +4998,14 @@
             ]
           },
           {
-            "label": "💡 WebAssembly ⭐⭐⭐",
+            "label": "💡 WebAssembly 🌟",
             "name": "WebAssembly1",
             "redirect": {
               "name": "WebAssembly"
             }
           },
           {
-            "label": "📞 WebRTC ⭐⭐",
+            "label": "📞 WebRTC 🌟",
             "name": "WebRTC"
           }
         ]
@@ -4822,8 +5027,12 @@
                 "name": "MobileHtml5Adaptation"
               },
               {
-                "label": "🔧  uni-app 🌟",
+                "label": "📱 uni-app 🌟",
                 "name": "UniApp"
+              },
+              {
+                "label": "📱 flutter ⭐",
+                "name": "Flutter"
               },
               {
                 "label": "📱 小程序 🌟",
@@ -4858,6 +5067,10 @@
             "name": "DesktopEnd",
             "children": [
               {
+                "label": "🔄 桌面端框架对比 ⭐",
+                "name": "DesktopFrameworkComparison"
+              },
+              {
                 "label": "🖥️ Electron ⭐",
                 "name": "Electron",
                 "children": [
@@ -4880,6 +5093,10 @@
                   {
                     "label": "🤝 IPC(进程间通信) ⭐",
                     "name": "IPC"
+                  },
+                  {
+                    "label": "🔄 Electron性能优化 ⭐⭐⭐",
+                    "name": "ElectronPerformanceOptimization"
                   },
                   {
                     "label": "🔄 相关生态与工具 ⭐⭐⭐",
@@ -4913,6 +5130,11 @@
             ]
           }
         ]
+      },
+      {
+        "label": "📹 音视频处理 🌟",
+        "name": "AudioAndVideoProcessing",
+        "children": []
       },
       {
         "label": "💡 其他语言🌟",

@@ -19,7 +19,7 @@
         <div class="features-list">
           <div v-for="feature in version.features" :key="feature.name" class="feature-item" :id="feature.id">
             <h3 class="feature-name">
-              {{ feature.name }} <a @click="handleClick(feature.route)">跳转详细</a>
+               <a @click="handleClick(feature.route)">{{ feature.name }}</a>
             </h3>
             <p class="feature-desc">{{ feature.description }}</p>
             <pre class="feature-code"><code>{{ feature.code }}</code></pre>

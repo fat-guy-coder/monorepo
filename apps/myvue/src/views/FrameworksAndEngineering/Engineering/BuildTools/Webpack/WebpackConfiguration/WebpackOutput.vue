@@ -308,7 +308,7 @@ module.exports = {
 
     <!-- 页脚 -->
     <div class="footer">
-      <p>Webpack Output 配置指南 | 构建优化最佳实践 | © 2023</p>
+      <p>Webpack Output 配置指南 | 构建优化最佳实践 | </p>
     </div>
   </div>
 </template>

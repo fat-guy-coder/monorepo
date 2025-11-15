@@ -644,7 +644,7 @@ console.log(attrs) // { class: 'custom-style', 'data-tooltip': '提示信息' }<
     </main>
 
     <footer class="footer">
-      <p>Vue 3 组件通信指南 © 2023 | 基于 Vue 3.3+ 最佳实践</p>
+      <p>Vue 3 组件通信指南  | 基于 Vue 3.3+ 最佳实践</p>
     </footer>
   </div>
 </template>

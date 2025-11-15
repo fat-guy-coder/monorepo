@@ -508,7 +508,7 @@
         </div>
       </div>
       <div class="footer-bottom">
-        <div class="copyright">© 2023 网络架构与技术 | 负载均衡专家指南</div>
+        <div class="copyright"> 网络架构与技术 | 负载均衡专家指南</div>
         <div class="stats">页面生成于服务器负载最低时段 <span class="load-value">{{ serverLoad }}%</span></div>
       </div>
     </footer>

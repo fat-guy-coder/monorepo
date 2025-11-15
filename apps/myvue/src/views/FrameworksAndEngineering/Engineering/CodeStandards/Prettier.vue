@@ -349,7 +349,7 @@ const matrix = [
 
     <!-- 页脚 -->
     <div class="footer">
-      <p>Prettier — 让代码格式化变得简单 | 官方文档：<a href="https://prettier.io/" target="_blank">prettier.io</a> | © 2023</p>
+      <p>Prettier — 让代码格式化变得简单 | 官方文档：<a href="https://prettier.io/" target="_blank">prettier.io</a> | </p>
     </div>
   </div>
 </template>

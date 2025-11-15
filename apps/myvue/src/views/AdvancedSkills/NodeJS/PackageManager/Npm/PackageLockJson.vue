@@ -664,7 +664,7 @@ npm install</code></pre>
 
     <footer class="footer">
       <p>package-lock.json 基本介绍 | Vue3 + TypeScript 实现</p>
-      <p>© 2023 Node.js 开发文档</p>
+      <p> Node.js 开发文档</p>
     </footer>
   </div>
 </template>

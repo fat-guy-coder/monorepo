@@ -330,7 +330,7 @@ fn main(@builtin(global_invocation_id) id: vec3&lt;u32&gt;) {
     </div>
 
     <footer>
-      <p>WebGPU技术指南 © 2023 | 使用Vue3 + TypeScript实现</p>
+      <p>WebGPU技术指南  | 使用Vue3 + TypeScript实现</p>
     </footer>
   </div>
 </template>

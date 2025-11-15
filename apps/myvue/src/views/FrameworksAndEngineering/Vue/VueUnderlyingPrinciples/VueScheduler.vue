@@ -163,7 +163,7 @@ const scheduler = new Scheduler();</code></pre>
     </div>
 
     <footer class="footer">
-      <p>© 2023 Vue Scheduler 基础介绍 | 理解 Vue 响应式系统的核心机制</p>
+      <p> Vue Scheduler 基础介绍 | 理解 Vue 响应式系统的核心机制</p>
     </footer>
   </div>
 </template>

@@ -156,7 +156,7 @@ module.exports = {
     </div>
 
     <footer class="footer">
-      <p>© 2023 Webpack 核心机制解析 | 深入理解前端构建工具</p>
+      <p> Webpack 核心机制解析 | 深入理解前端构建工具</p>
     </footer>
   </div>
 </template>

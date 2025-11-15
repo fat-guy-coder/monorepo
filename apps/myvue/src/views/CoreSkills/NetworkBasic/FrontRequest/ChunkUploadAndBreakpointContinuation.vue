@@ -315,7 +315,7 @@ async function resumeUpload(file: File, fileId: string) {
     </div>
 
     <footer class="footer-section">
-      <p>© 2023 分片上传与断点续传技术 | Vue3实现示例</p>
+      <p> 分片上传与断点续传技术 | Vue3实现示例</p>
       <p>大文件上传的理想解决方案</p>
     </footer>
   </div>

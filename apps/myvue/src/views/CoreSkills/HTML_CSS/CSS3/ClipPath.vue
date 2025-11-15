@@ -269,7 +269,7 @@ clip-path: polygon(50% 0%, 100% 50%,
           <a href="#" class="footer-link">交互式工具</a>
           <a href="#" class="footer-link">示例库</a>
         </div>
-        <div class="footer-copyright">© 2023 CSS Clip-Path基本指南 | 现代Web设计技术</div>
+        <div class="footer-copyright"> CSS Clip-Path基本指南 | 现代Web设计技术</div>
       </div>
     </footer>
   </div>

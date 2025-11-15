@@ -393,7 +393,7 @@ if (performance.memory) {
     </div>
 
     <footer class="perf-footer">
-      <p>© 2023 前端性能监控指南 | Performance API v2</p>
+      <p> 前端性能监控指南 | Performance API v2</p>
       <div class="browser-support">
         支持浏览器: Chrome, Firefox, Edge, Safari 11+
       </div>

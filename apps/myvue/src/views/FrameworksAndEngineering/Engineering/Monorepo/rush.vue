@@ -397,7 +397,7 @@ rush publish</pre
     </div>
 
     <footer>
-      <p>© 2023 JavaScript Monorepo 解决方案 | Rush.js 权威指南</p>
+      <p> JavaScript Monorepo 解决方案 | Rush.js 权威指南</p>
       <p class="tip">
         提示：Rush 适用于大型项目，对于小型项目建议使用更简单的工具如 Lerna 或 Yarn Workspaces
       </p>

@@ -283,7 +283,7 @@ function Welcome(props) {
     </div>
 
     <footer class="footer">
-      <p>© 2023 React框架学习指南 | 使用Vue3制作</p>
+      <p> React框架学习指南 | 使用Vue3制作</p>
       <p>React是Facebook的注册商标</p>
     </footer>
   </div>
@@ -339,6 +339,8 @@ const activeSection = ref('overview');
   line-height: 1.6;
   padding: 0;
   margin: 0;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .header {

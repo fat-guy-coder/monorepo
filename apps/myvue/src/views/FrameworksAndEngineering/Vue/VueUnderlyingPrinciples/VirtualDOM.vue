@@ -351,7 +351,7 @@ setTimeout(() => {
     </div>
 
     <footer class="footer">
-      <p>© 2023 Vue 虚拟 DOM 基础介绍 | 深入理解现代前端框架的核心渲染机制</p>
+      <p> Vue 虚拟 DOM 基础介绍 | 深入理解现代前端框架的核心渲染机制</p>
     </footer>
   </div>
 </template>

@@ -437,7 +437,7 @@ console.log(decompressed === input); // true</code></pre>
     </div>
 
     <footer class="footer">
-      <p>LZ77算法详解 © 2023 | 数据压缩核心技术</p>
+      <p>LZ77算法详解  | 数据压缩核心技术</p>
       <div class="links">
         <a href="#">数据压缩</a> •
         <a href="#">信息论</a> •

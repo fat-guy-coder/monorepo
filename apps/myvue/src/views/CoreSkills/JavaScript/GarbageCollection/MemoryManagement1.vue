@@ -296,7 +296,7 @@ setInterval(() => {
     </main>
 
     <footer>
-      <p>© 2023 浏览器内存管理指南 | 使用Vue3和TypeScript实现</p>
+      <p> 浏览器内存管理指南 | 使用Vue3和TypeScript实现</p>
     </footer>
   </div>
 </template>

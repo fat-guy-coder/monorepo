@@ -375,7 +375,7 @@ function ChildComponent() {
         <a href="#">合成事件源码分析</a>
         <a href="#">事件系统最佳实践</a>
       </div>
-      <p class="copyright">© 2023 React事件机制基础介绍 | 前端技术专题</p>
+      <p class="copyright"> React事件机制基础介绍 | 前端技术专题</p>
     </footer>
   </div>
 </template>

@@ -365,7 +365,7 @@ const reducer = (state = initialState, action) =>
     </div>
 
     <footer class="footer">
-      <p>函子与Monad详解 © 2023 | 函数式编程核心概念</p>
+      <p>函子与Monad详解  | 函数式编程核心概念</p>
       <div class="links">
         <a href="#">函数式编程</a> •
         <a href="#">类型系统</a> •

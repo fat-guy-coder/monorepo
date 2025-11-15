@@ -486,7 +486,7 @@ entry: path.resolve(__dirname, 'src/index.js')</pre>
 
     <!-- 页脚 -->
     <div class="footer">
-      <p>Webpack Entry 配置基础介绍 | 构建起点 | © 2023</p>
+      <p>Webpack Entry 配置基础介绍 | 构建起点 | </p>
       <div class="footer-links">
         <a href="https://webpack.js.org/concepts/entry-points/" target="_blank">官方文档</a>
         <a href="https://github.com/webpack/webpack" target="_blank">GitHub</a>

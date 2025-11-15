@@ -3,6 +3,7 @@
     <header class="header">
       <h1>Nuxt.js 框架介绍</h1>
       <p class="subtitle">基于 Vue.js 的通用应用框架</p>
+      <p><a href="https://nuxtjs.org.cn/" target="_blank">官方文档</a></p>
     </header>
 
     <div class="intro-section">

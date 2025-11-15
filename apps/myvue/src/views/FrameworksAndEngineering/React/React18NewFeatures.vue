@@ -517,7 +517,7 @@ root.render(
         </div>
       </div>
       <div class="footer-copyright">
-        <p>© 2023 React 18 特性指南 | 本页面使用 Vue3 制作</p>
+        <p> React 18 特性指南 | 本页面使用 Vue3 制作</p>
         <p>React 是 Facebook 的注册商标</p>
       </div>
     </footer>
@@ -575,6 +575,8 @@ const activeSection = ref('concurrent');
   line-height: 1.6;
   padding: 0;
   margin: 0;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .header {

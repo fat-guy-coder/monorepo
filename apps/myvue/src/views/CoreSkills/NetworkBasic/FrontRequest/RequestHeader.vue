@@ -120,7 +120,7 @@ axios.get('/api/data', {
     </div>
 
     <footer class="page-footer">
-      <p>© 2023 HTTP请求头基本介绍 | Vue3技术演示</p>
+      <p> HTTP请求头基本介绍 | Vue3技术演示</p>
     </footer>
   </div>
 </template>

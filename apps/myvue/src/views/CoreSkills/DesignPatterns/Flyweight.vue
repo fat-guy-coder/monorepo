@@ -459,7 +459,7 @@ forest.render();</code></pre>
     </div>
 
     <div class="footer">
-      <p>设计模式 | 结构型模式 | 享元模式 © 2023</p>
+      <p>设计模式 | 结构型模式 | 享元模式 </p>
     </div>
   </div>
 </template>

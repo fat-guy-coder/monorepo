@@ -577,7 +577,7 @@ module.exports = {
     </div>
 
     <div class="footer">
-      <p>© 2023 Webpack Optimization 配置指南 | 构建优化，性能提升</p>
+      <p> Webpack Optimization 配置指南 | 构建优化，性能提升</p>
     </div>
   </div>
 </template>

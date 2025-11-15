@@ -409,7 +409,7 @@
     </div>
 
     <footer class="footer">
-      <p>© 2023 TypeScript代码规范指南 | 编写可维护的类型安全代码</p>
+      <p> TypeScript代码规范指南 | 编写可维护的类型安全代码</p>
       <p>本页面使用Vue3、TypeScript、Setup语法、LESS和Scoped样式构建</p>
     </footer>
   </div>

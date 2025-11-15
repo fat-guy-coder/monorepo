@@ -450,7 +450,7 @@ function setupGlobalLogoutListener() {
     </div>
 
     <footer>
-      <p>单点登录实现指南 © 2023 | 使用Vue3 + TypeScript实现</p>
+      <p>单点登录实现指南  | 使用Vue3 + TypeScript实现</p>
     </footer>
   </div>
 </template>

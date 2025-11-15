@@ -358,7 +358,7 @@ function App() {
       </div>
 
       <div class="footer-copyright">
-        <p>© 2023 前端架构研究组 | Webpack 模块联邦技术指南 v2.1</p>
+        <p> 前端架构研究组 | Webpack 模块联邦技术指南 v2.1</p>
       </div>
     </footer>
   </div>

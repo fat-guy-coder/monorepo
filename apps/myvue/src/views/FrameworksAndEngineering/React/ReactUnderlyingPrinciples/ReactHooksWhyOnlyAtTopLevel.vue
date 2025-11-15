@@ -367,7 +367,7 @@ module.exports = {
     </div>
 
     <footer class="footer">
-      <p>© 2023 React Hooks 原理解析 | 使用 Vue3 制作</p>
+      <p> React Hooks 原理解析 | 使用 Vue3 制作</p>
       <p>React 是 Facebook 的注册商标</p>
     </footer>
   </div>

@@ -263,7 +263,7 @@ bus.publish('message', '你好，发布订阅模式！');</pre>
     </div>
 
     <footer class="footer">
-      <p>© 2023 设计模式基本介绍 | 发布订阅模式是构建松散耦合、可扩展系统的强大工具</p>
+      <p> 设计模式基本介绍 | 发布订阅模式是构建松散耦合、可扩展系统的强大工具</p>
     </footer>
   </div>
 </template>

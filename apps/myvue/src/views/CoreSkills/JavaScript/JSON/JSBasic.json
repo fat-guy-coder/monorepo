@@ -5,48 +5,88 @@
     "items": [
       {
         "name": "原始类型",
-        "description": "6种原始数据类型：Undefined、Null、Boolean、Number、String、Symbol",
+        "description": "7种原始数据类型：Undefined、Null、Boolean、Number、String、Symbol、BigInt",
         "importance": 5,
         "examples": [
           "typeof null === 'object'",
-          "let sym = Symbol('desc')"
-        ]
+          "let sym = Symbol('desc')",
+          "typeof 10n === 'bigint'",
+          "typeof undefined === 'undefined'"
+        ],
+        "route": "PrimitiveTypes"
       },
       {
         "name": "对象类型",
-        "description": "Object 类型及内置对象",
+        "description": "引用数据类型，包括 Object 及其子类型（Array、Function、Date、RegExp、Error、Map、Set 等）",
         "importance": 5,
         "examples": [
           "{} 对象字面量",
-          "new Object()"
-        ]
+          "new Object()",
+          "[] 数组",
+          "function fn() {}",
+          "new Date()",
+          "new Map()"
+        ],
+        "route": "ReferenceTypesIntroduce"
       },
       {
         "name": "类型检测",
-        "description": "typeof、instanceof、Object.prototype.toString",
+        "description": "typeof、instanceof、Object.prototype.toString、Array.isArray、constructor 属性",
         "importance": 5,
         "examples": [
           "typeof [] === 'object'",
-          "[] instanceof Array"
-        ]
+          "[] instanceof Array",
+          "Object.prototype.toString.call(null) // '[object Null]'",
+          "Array.isArray([1,2,3])",
+          "foo.constructor === Function"
+        ],
+        "route": "TypeChecking"
       },
       {
         "name": "类型转换",
-        "description": "显式和隐式类型转换规则",
+        "description": "显式和隐式类型转换规则，包括转换字符串、数字和布尔值",
         "importance": 5,
         "examples": [
           "Number('123')",
-          "'1' + 2 === '12'"
-        ]
+          "'1' + 2 === '12'",
+          "'1' - 2 === -1",
+          "Boolean('') === false",
+          "parseInt('10abc') === 10"
+        ],
+        "route": "TypeConversion"
       },
       {
         "name": "真值假值",
-        "description": "falsy 值列表和 truthy 值",
+        "description": "falsy 和 truthy 含义及常见 falsy 值（false, 0, '', null, undefined, NaN）",
         "importance": 4,
         "examples": [
           "!!0 === false",
-          "!!{} === true"
-        ]
+          "!!{} === true",
+          "!!'' === false",
+          "!!NaN === false",
+          "if (value) { /* 真值判断 */ }"
+        ],
+        "route": "TypeConversion"
+      },
+      {
+        "name": "值与引用",
+        "description": "基本类型按值传递，引用类型按共享引用传递",
+        "importance": 4,
+        "examples": [
+          "let a = 1; let b = a; b++; // a 不变",
+          "let obj1 = {}; let obj2 = obj1; obj2.x = 1; // obj1.x === 1"
+        ],
+        "route": "ValueVsReference"
+      },
+      {
+        "name": "解构赋值",
+        "description": "数组和对象的解构赋值",
+        "importance": 3,
+        "examples": [
+          "const [a, b] = [1, 2]",
+          "const {x, y} = {x: 3, y: 4}"
+        ],
+        "route": "Destructuring"
       }
     ]
   },
@@ -56,246 +96,360 @@
     "items": [
       {
         "name": "var/let/const",
-        "description": "三种变量声明方式区别",
+        "description": "三种变量声明方式及其区别，如作用域、提升、是否可重新赋值",
         "importance": 5,
         "examples": [
           "var 的函数作用域",
-          "let 的暂时性死区"
-        ]
+          "let 的块级作用域与暂时性死区",
+          "const 声明常量不可被重新赋值"
+        ],
+        "route": "Variables"
       },
       {
         "name": "作用域链",
-        "description": "词法作用域和变量查找规则",
+        "description": "词法作用域、变量查找规则、全局/函数/块级作用域",
         "importance": 5,
         "examples": [
           "内层函数访问外层变量",
-          "with 改变作用域链（已废弃）"
-        ]
+          "with 改变作用域链（已废弃）",
+          "块级作用域（let/const）"
+        ],
+        "route": "Scope"
       },
       {
         "name": "闭包",
-        "description": "函数记住并访问其词法作用域",
+        "description": "函数记住并访问其词法作用域；常用于数据私有化和工厂函数",
         "importance": 5,
         "examples": [
           "函数返回函数",
-          "模块模式"
-        ]
+          "模块模式",
+          "for 循环内 setTimeout 使用闭包"
+        ],
+        "route": "Closure"
       },
       {
         "name": "提升",
-        "description": "变量和函数声明提升",
+        "description": "var 与 function 声明提升（hoisting），let/const 不提升",
         "importance": 4,
         "examples": [
-          "var 变量提升",
-          "函数声明提升"
-        ]
+          "var 变量提升：console.log(a); var a=1;",
+          "函数声明提升：foo() function foo(){}",
+          "let/const TDZ（暂时性死区）"
+        ],
+        "route": "Variables"
       },
       {
         "name": "全局变量",
-        "description": "全局作用域和全局对象属性",
+        "description": "全局作用域、window全局对象属性、严格模式下限制、全局变量污染问题",
         "importance": 3,
         "examples": [
           "window 对象上的全局变量",
+          "未声明直接赋值自动成为全局变量",
           "全局变量污染问题"
-        ]
+        ],
+        "route": "GlobalVariables"
+      },
+      {
+        "name": "块级作用域",
+        "description": "ES6 新增块级作用域（let/const），避免变量提升污染和变量泄漏",
+        "importance": 3,
+        "examples": [
+          "{ let x = 10; } // x 在外部不可访问",
+          "for (let i=0; i<5; i++) {} // i 仅在 for 内有效"
+        ],
+        "route": "BlockScope"
       }
     ]
   },
   {
     "name": "函数",
-    "description": "函数相关核心概念",
+    "description": "函数相关核心概念及高阶用法",
     "items": [
       {
         "name": "函数声明 vs 函数表达式",
-        "description": "两种定义方式的区别",
+        "description": "两种定义方式的区别，声明提升行为，命名与匿名表达式",
         "importance": 4,
         "examples": [
-          "function foo() {}",
-          "const foo = function() {}"
-        ]
+          "function foo() {} // 声明",
+          "const foo = function() {} // 表达式",
+          "(function() {})() // IIFE"
+        ],
+        "route": "FunctionProgrammingIntroduce"
+      },
+      {
+        "name": "箭头函数",
+        "description": "简洁函数书写，this 绑定静态&不可变，不能作为构造函数（无 prototype）",
+        "importance": 4,
+        "examples": [
+          "const add = (a, b) => a + b",
+          "arr.map(x => x * x)",
+          "(a) => ({x: a})"
+        ],
+        "route": "ArrowFunction"
       },
       {
         "name": "this 绑定",
-        "description": "this 的四种绑定规则",
+        "description": "this 的四种绑定规则（默认、隐式、显式、new）、箭头函数的 this",
         "importance": 5,
         "examples": [
           "默认绑定（严格模式）",
-          "new 绑定优先级"
-        ]
+          "obj.method() // 隐式绑定",
+          "func.call(context, arg1, arg2)",
+          "new 绑定优先级",
+          "箭头函数的 this"
+        ],
+        "route": "ThisBinding"
       },
       {
-        "name": "arguments 对象",
-        "description": "类数组参数对象",
+        "name": "arguments 对象与剩余参数",
+        "description": "arguments 为类数组，rest 参数为真数组，更推荐使用剩余参数",
         "importance": 3,
         "examples": [
           "arguments.length",
-          "Array.from(arguments)"
-        ]
+          "Array.from(arguments)",
+          "function(...args) { return args; }"
+        ],
+        "route": "DefaultAndRestParameters"
       },
       {
         "name": "call/apply/bind",
-        "description": "显式绑定 this 的方法",
+        "description": "显式绑定 this 的方法，参数传递区别，函数柯里化",
         "importance": 5,
         "examples": [
           "func.call(context, arg1, arg2)",
+          "func.apply(context, [arg1, arg2])",
           "bind 的柯里化"
-        ]
+        ],
+        "route": "ThisBinding"
       },
       {
         "name": "立即执行函数(IIFE)",
-        "description": "定义即执行的函数表达式",
+        "description": "定义即执行的函数表达式，常用于作用域隔离",
         "importance": 4,
         "examples": [
           "(function() {})()",
+          "(function(){ /* ... */ })()",
           "模块封装"
-        ]
+        ],
+        "route": "IIFE"
       },
       {
         "name": "高阶函数",
-        "description": "接收或返回函数的函数",
+        "description": "接收或返回函数的函数，函数式编程基础",
         "importance": 4,
         "examples": [
           "数组的 map/filter",
-          "函数装饰器"
-        ]
+          "函数装饰器",
+          "函数柯里化"
+        ],
+        "route": "HigherOrderFunction"
       },
       {
         "name": "递归",
-        "description": "函数调用自身",
+        "description": "函数调用自身，解决分解与嵌套问题，需注意边界条件及栈溢出",
         "importance": 3,
         "examples": [
           "阶乘实现",
-          "递归优化（尾调用）"
-        ]
+          "递归优化（尾调用）",
+          "遍历树结构"
+        ],
+        "route": "Recursion"
+      },
+      {
+        "name": "默认参数",
+        "description": "函数参数默认值写法",
+        "importance": 2,
+        "examples": [
+          "function fn(x=10) {}"
+        ],
+        "route": "DefaultAndRestParameters"
       }
     ]
   },
   {
     "name": "对象和原型",
-    "description": "对象系统与原型链机制",
+    "description": "对象系统与原型链机制及类相关特性",
     "items": [
       {
         "name": "属性描述符",
-        "description": "数据属性和访问器属性",
+        "description": "数据属性和访问器属性，相关特性如 writable、enumerable、configurable、getter/setter",
         "importance": 4,
         "examples": [
-          "Object.getOwnPropertyDescriptor",
-          "configurable 特性"
-        ]
+          "Object.getOwnPropertyDescriptor(obj, 'key')",
+          "configurable 特性",
+          "Object.defineProperty(obj, 'k', {get(){return 1;}})"
+        ],
+        "route": "ObjectDescriptor"
       },
       {
         "name": "原型链",
-        "description": "对象间的原型继承关系",
+        "description": "对象间的原型继承关系、__proto__ 和 prototype 区别、原型链终点",
         "importance": 5,
         "examples": [
           "__proto__ 属性",
-          "Object.prototype 原型顶端"
-        ]
+          "Object.prototype 原型顶端",
+          "person instanceof Object"
+        ],
+        "route": "Prototype1"
       },
       {
         "name": "构造函数",
-        "description": "new 操作符的工作原理",
+        "description": "new 操作符的原理、构造函数属性和原型属性区别",
         "importance": 5,
         "examples": [
           "function Person() {}",
+          "new Person()",
           "new 的四个步骤"
-        ]
+        ],
+        "route": "CreateObject"
       },
       {
         "name": "instanceof",
-        "description": "检测构造函数的 prototype 是否在原型链上",
+        "description": "检测构造函数的 prototype 是否在实例的原型链上，常用于类型判断",
         "importance": 4,
         "examples": [
           "[] instanceof Array",
           "手动实现 instanceof"
-        ]
+        ],
+        "route": "AchieveInstanceof"
       },
       {
         "name": "继承实现",
-        "description": "各种继承方式的实现",
+        "description": "各种继承方式的实现，如原型链继承、借用构造函数、组合继承、ES6 class 继承",
         "importance": 5,
         "examples": [
           "原型链继承",
-          "组合继承（最常用）"
-        ]
+          "组合继承（最常用）",
+          "class B extends A {}"
+        ],
+        "route": "Inheritance"
       },
       {
         "name": "Object 静态方法",
-        "description": "Object 上的工具方法",
+        "description": "Object 上的常用工具方法和静态方法，如对象枚举与合并",
         "importance": 4,
         "examples": [
           "Object.keys()",
-          "Object.assign()"
-        ]
+          "Object.assign()",
+          "Object.entries()",
+          "Object.freeze()"
+        ],
+        "route": "Object1"
       },
       {
         "name": "for...in 遍历",
-        "description": "遍历对象可枚举属性（包括原型链）",
+        "description": "遍历对象可枚举属性（包括原型链），与 Object.keys()、Object.values() 区别",
         "importance": 3,
         "examples": [
           "结合 hasOwnProperty 过滤",
-          "与 Object.keys() 区别"
-        ]
+          "与 Object.keys() 区别",
+          "for...of 用于遍历可迭代对象"
+        ],
+        "route": "ForIn"
+      },
+      {
+        "name": "对象拷贝",
+        "description": "浅拷贝和深拷贝，常用拷贝方法及注意事项",
+        "importance": 3,
+        "examples": [
+          "Object.assign({}, obj)",
+          "...扩展运算符",
+          "深拷贝：JSON.parse(JSON.stringify(obj))"
+        ],
+        "route": "ObjectCopy"
       }
     ]
   },
   {
     "name": "数组",
-    "description": "数组相关操作和方法",
+    "description": "数组的使用、常用方法及高级操作",
     "items": [
       {
         "name": "数组创建",
-        "description": "多种数组创建方式",
+        "description": "多种数组创建方式，包括字面量、Array 构造器、Array.of、Array.from",
         "importance": 4,
         "examples": [
           "数组字面量 []",
-          "new Array(5)"
-        ]
+          "new Array(5)",
+          "Array.of(1,2,3)",
+          "Array.from('abc')"
+        ],
+        "route": "Array1"
       },
       {
         "name": "数组方法",
-        "description": "常用数组操作方法",
+        "description": "常用数组操作方法，如增删、切片，ES6 新增方法等",
         "importance": 5,
         "examples": [
           "push/pop/shift/unshift",
-          "slice/splice"
-        ]
+          "slice/splice",
+          "includes/find/indexOf",
+          "at 方法"
+        ],
+        "route": "Array"
       },
       {
         "name": "迭代方法",
-        "description": "数组的高阶函数方法",
+        "description": "数组的高阶函数方法（forEach、map、filter、every、some、reduce、reduceRight、find、findIndex）",
         "importance": 5,
         "examples": [
           "forEach/map/filter",
-          "reduce/reduceRight"
-        ]
+          "reduce/reduceRight",
+          "some/every"
+        ],
+        "route": "Array"
       },
       {
         "name": "数组检测",
-        "description": "判断是否为数组",
+        "description": "判断是否为数组，区分数组与类数组对象",
         "importance": 4,
         "examples": [
           "Array.isArray()",
-          "Object.prototype.toString.call()"
-        ]
+          "Object.prototype.toString.call([]) === '[object Array]'"
+        ],
+        "route": "Array"
       },
       {
         "name": "稀疏数组",
-        "description": "包含空位的数组",
+        "description": "包含空位的数组，稀疏数组下的遍历注意事项",
         "importance": 3,
         "examples": [
           "new Array(3)",
-          "1 in [undefined, undefined]"
-        ]
+          "1 in [undefined, undefined]",
+          "[,2].length === 2"
+        ],
+        "route": "Array"
       },
       {
-        "name": "类数组转换",
-        "description": "将类数组转为真实数组",
+        "name": "类数组与转换",
+        "description": "常见类数组对象、如何将其转为真正数组",
         "importance": 3,
         "examples": [
           "Array.from(arguments)",
-          "[].slice.call(arguments)"
-        ]
+          "[].slice.call(arguments)",
+          "NodeList、arguments 是类数组"
+        ],
+        "route": "Array"
+      },
+      {
+        "name": "数组解构和展开",
+        "description": "ES6 解构赋值与扩展运算符在数组中的应用",
+        "importance": 2,
+        "examples": [
+          "const [a, b] = arr",
+          "[...arr1, ...arr2]"
+        ],
+        "route": "Destructuring"
+      },
+      {
+        "name": "多维数组",
+        "description": "创建和遍历二维/多维数组",
+        "importance": 2,
+        "examples": [
+          "[[1,2],[3,4]]",
+          "matrix[1][1] === 4"
+        ],
+        "route": "Array"
       }
     ]
   },
@@ -305,57 +459,80 @@
     "items": [
       {
         "name": "事件循环",
-        "description": "调用栈、任务队列和微任务",
+        "description": "调用栈、任务队列和微任务（event loop）、宏任务与微任务的关系",
         "importance": 5,
         "examples": [
           "setTimeout 延迟",
-          "Promise 微任务"
-        ]
+          "Promise 微任务",
+          "Event Loop 先执行同步，后执行微任务再宏任务"
+        ],
+        "route": "AsyncProgrammingIntroduce"
       },
       {
         "name": "回调函数",
-        "description": "异步编程的基础模式",
+        "description": "异步编程的基础模式，Node.js 风格回调，回调地狱问题与防止方法",
         "importance": 4,
         "examples": [
           "Node.js 错误优先回调",
-          "回调地狱问题"
-        ]
+          "回调地狱问题",
+          "回调函数命名习惯"
+        ],
+        "route": "CallbackFunction"
       },
       {
         "name": "定时器",
-        "description": "setTimeout 和 setInterval",
+        "description": "setTimeout、setInterval 用法及最小延迟，clearTimeout/clearInterval 清除定时器",
         "importance": 4,
         "examples": [
           "clearTimeout 取消",
-          "定时器最小延迟"
-        ]
+          "定时器最小延迟",
+          "setInterval 性能注意"
+        ],
+        "route": "Timer"
       },
       {
         "name": "Promise",
-        "description": "异步编程的解决方案",
+        "description": "Promise 的基本用法、状态、链式调用、异常处理与并发控制",
         "importance": 5,
         "examples": [
           "then/catch/finally",
-          "Promise.all/race"
-        ]
+          "Promise.all / Promise.race",
+          "Promise.resolve / Promise.reject"
+        ],
+        "route": "Promise"
       },
       {
-        "name": "生成器",
-        "description": "function* 和 yield 语法",
+        "name": "async/await",
+        "description": "基于 Promise 的语法糖，按同步方式编写异步代码，错误捕获",
+        "importance": 4,
+        "examples": [
+          "async function fn() {}",
+          "await Promise.resolve(1)",
+          "try/catch 错误捕获"
+        ],
+        "route": "AsyncAwait"
+      },
+      {
+        "name": "生成器与协程",
+        "description": "function* 与 yield，手动迭代，协程实现原理",
         "importance": 3,
         "examples": [
+          "function* g() { yield 1; }",
           "手动迭代 next()",
-          "协程实现"
-        ]
+          "生成器中间状态"
+        ],
+        "route": "Generator"
       },
       {
         "name": "错误处理",
-        "description": "try/catch 和错误捕获",
+        "description": "try/catch/finally，Promise 错误捕获，throw 抛出异常，自定义错误类型",
         "importance": 4,
         "examples": [
           "throw 抛出错误",
-          "Error 对象类型"
-        ]
+          "Error 对象类型",
+          "Promise.catch 捕获 Promise 错误"
+        ],
+        "route": "ErrorHandling"
       }
     ]
   },
@@ -365,66 +542,80 @@
     "items": [
       {
         "name": "window 对象",
-        "description": "浏览器全局对象",
+        "description": "浏览器全局对象，提供定时器、对话框等API",
         "importance": 4,
         "examples": [
           "window.location",
-          "window.navigator"
-        ]
+          "window.navigator",
+          "window.setTimeout"
+        ],
+        "route": "Window"
       },
       {
         "name": "DOM 树",
-        "description": "文档节点树结构",
+        "description": "文档节点树结构，包含元素节点、文本节点、注释节点等",
         "importance": 4,
         "examples": [
           "document 对象",
-          "节点类型（Node.ELEMENT_NODE）"
-        ]
+          "节点类型（Node.ELEMENT_NODE）",
+          "document.body.firstChild"
+        ],
+        "route": "DOMTree"
       },
       {
         "name": "DOM 查询",
-        "description": "查找 DOM 元素的方法",
+        "description": "查找 DOM 元素的方法：getElementById、querySelector、getElementsByClassName 等",
         "importance": 5,
         "examples": [
           "getElementById",
-          "querySelectorAll"
-        ]
+          "querySelectorAll",
+          "document.getElementsByTagName"
+        ],
+        "route": "DOMAddDeleteModifyQuery"
       },
       {
         "name": "DOM 操作",
-        "description": "增删改查 DOM 元素",
+        "description": "增删改查 DOM 元素，属性操作、样式操作、classList",
         "importance": 5,
         "examples": [
           "appendChild",
-          "removeChild"
-        ]
+          "removeChild",
+          "setAttribute",
+          "element.classList.add('a')"
+        ],
+        "route": "DOMAddDeleteModifyQuery"
       },
       {
         "name": "事件模型",
-        "description": "DOM 事件流和事件处理",
+        "description": "DOM 事件流（捕获、冒泡）、事件监听、事件对象、事件委托",
         "importance": 5,
         "examples": [
           "addEventListener",
-          "事件冒泡和捕获"
-        ]
+          "事件冒泡和捕获",
+          "event.stopPropagation()"
+        ],
+        "route": "EventsIntroduce"
       },
       {
         "name": "事件对象",
-        "description": "事件触发时的 event 对象",
+        "description": "事件触发时的 event 对象，常见属性与方法，当前元素及冒泡路径",
         "importance": 4,
         "examples": [
           "event.preventDefault()",
-          "event.target vs event.currentTarget"
-        ]
+          "event.target vs event.currentTarget",
+          "event.stopPropagation()"
+        ],
+        "route": "EventsIntroduce"
       },
       {
         "name": "事件委托",
-        "description": "利用冒泡优化事件处理",
+        "description": "利用冒泡优化事件处理，提高性能和兼容动态元素",
         "importance": 4,
         "examples": [
           "列表项点击委托",
           "动态元素事件处理"
-        ]
+        ],
+        "route": "EventsIntroduce"
       }
     ]
   },
@@ -434,66 +625,89 @@
     "items": [
       {
         "name": "JSON",
-        "description": "数据交换格式",
+        "description": "轻量级数据交换格式，JSON.stringify/parse 用法，局限与注意事项",
         "importance": 5,
         "examples": [
-          "JSON.stringify",
-          "JSON.parse"
-        ]
+          "JSON.stringify({x:1})",
+          "JSON.parse('{\"x\":1}')",
+          "无效：JSON.stringify({x: undefined}) // undefined 会被忽略"
+        ],
+        "route": "JSON"
       },
       {
         "name": "Date",
-        "description": "日期和时间处理",
+        "description": "日期和时间处理，常用方法与格式化技巧",
         "importance": 4,
         "examples": [
           "new Date()",
-          "Date.now() 时间戳"
-        ]
+          "Date.now() 时间戳",
+          "date.getFullYear()"
+        ],
+        "route": "Date"
       },
       {
         "name": "正则表达式",
-        "description": "RegExp 对象和模式匹配",
+        "description": "RegExp 对象、正则语法、常用方法 test/match/exec/replace",
         "importance": 4,
         "examples": [
           "/pattern/flags",
-          "test() 和 exec()"
-        ]
+          "test() 和 exec()",
+          "'abc'.match(/a/)",
+          "str.replace(/\\d+/g, '#')"
+        ],
+        "route": "RegExp1"
       },
       {
         "name": "严格模式",
-        "description": "use strict 指令",
+        "description": "use strict 指令，严格模式下的限制与安全策略",
         "importance": 3,
         "examples": [
+          "'use strict';",
           "消除静默错误",
           "简化变量使用"
-        ]
+        ],
+        "route": "UseStrict"
       },
       {
         "name": "eval",
-        "description": "执行字符串代码（慎用）",
+        "description": "执行字符串代码（慎用），作用域隔离问题，性能与安全风险",
         "importance": 2,
         "examples": [
           "eval('2+2')",
           "安全问题和性能影响"
-        ]
+        ],
+        "route": "Eval"
       },
       {
         "name": "with",
-        "description": "改变作用域链（已废弃）",
+        "description": "改变作用域链（已废弃），严格模式禁用 with，导致难以优化代码",
         "importance": 1,
         "examples": [
           "with(obj) { a = 1 }",
           "严格模式禁用"
-        ]
+        ],
+        "route": "EvalAndWith"
       },
       {
         "name": "标签语句",
-        "description": "带标签的 break 和 continue",
+        "description": "带标签的 break 和 continue，适合跳出多重嵌套循环",
         "importance": 2,
         "examples": [
           "outer: for(...) { break outer }",
           "跳出多层循环"
-        ]
+        ],
+        "route": "FlowControl"
+      },
+      {
+        "name": "短路运算和三元表达式",
+        "description": "逻辑短路用法，&&、|| 的返回值，三元表达式条件判断场景",
+        "importance": 2,
+        "examples": [
+          "val && doSomething()",
+          "user.name ? user.name : '匿名用户'",
+          "n = n || 10"
+        ],
+        "route": "ShortCircuit"
       }
     ]
   }

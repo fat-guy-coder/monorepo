@@ -1,5 +1,5 @@
 <template>
-  <div>🔑 并查集实现 ⭐⭐⭐</div>
+  <div>📦 net (网络) ⭐⭐</div>
 </template>
 <script lang="ts" setup>
 </script>

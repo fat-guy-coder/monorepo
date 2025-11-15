@@ -531,7 +531,7 @@ quasar build -m ssr</pre>
     </main>
 
     <footer class="footer">
-      <p>© 2023 Vue SSR技术基础介绍 | 提升应用性能与SEO优化</p>
+      <p> Vue SSR技术基础介绍 | 提升应用性能与SEO优化</p>
       <div class="footer-links">
         <a href="https://vuejs.org" target="_blank">Vue官网</a>
         <a href="https://nuxtjs.org" target="_blank">Nuxt.js</a>

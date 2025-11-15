@@ -94,7 +94,7 @@
     </div>
 
     <footer class="footer">
-      <p>Husky 配置指南 © 2023 | 提升代码质量与团队协作</p>
+      <p>Husky 配置指南  | 提升代码质量与团队协作</p>
       <div class="footer-links">
         <a href="https://typicode.github.io/husky/" target="_blank">官方文档</a>
         <a href="https://github.com/typicode/husky" target="_blank">GitHub 仓库</a>

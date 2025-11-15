@@ -14,7 +14,7 @@
         ],
         "version": "ES6",
         "example": "let x = 10;\nconst PI = 3.14;",
-        "route": "letConst",
+        "route": "LetConst",
         "browserSupport": [
           {
             "b": "c",
@@ -83,7 +83,7 @@
         ],
         "version": "ES6",
         "example": "const sum = (a, b) => a + b;",
-        "route": "arrowFunction",
+        "route": "ArrowFunction",
         "browserSupport": [
           {
             "b": "c",
@@ -152,7 +152,7 @@
         ],
         "version": "ES6",
         "example": "const greeting = `Hello, ${name}!`;",
-        "route": "templateString",
+        "route": "TemplateString",
         "browserSupport": [
           {
             "b": "c",
@@ -221,7 +221,7 @@
         ],
         "version": "ES6",
         "example": "const { name, age } = person;",
-        "route": "destructuring",
+        "route": "Destructuring",
         "browserSupport": [
           {
             "b": "c",

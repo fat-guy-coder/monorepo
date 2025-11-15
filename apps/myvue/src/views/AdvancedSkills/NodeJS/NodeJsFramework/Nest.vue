@@ -442,7 +442,7 @@ const app = await NestFactory.createMicroservice(AppModule, {
     </main>
 
     <footer class="footer">
-      <p>© 2023 Nest.js 框架指南 | 构建可扩展的企业级 Node.js 应用 | 文档: docs.nestjs.com</p>
+      <p> Nest.js 框架指南 | 构建可扩展的企业级 Node.js 应用 | 文档: docs.nestjs.com</p>
     </footer>
   </div>
 </template>

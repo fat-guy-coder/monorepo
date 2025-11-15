@@ -236,7 +236,7 @@ const libraries = ref([
     </main>
 
     <footer class="footer">
-      <p>© 2023 SolidJS 介绍 | 使用 Vue 3 + TypeScript 构建</p>
+      <p> SolidJS 介绍 | 使用 Vue 3 + TypeScript 构建</p>
       <p>数据来源：SolidJS 官方文档及社区资源</p>
     </footer>
   </div>

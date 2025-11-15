@@ -373,7 +373,7 @@ window.addEventListener('scroll', () => {
 
     <footer class="footer">
       <p>CSS 视差滚动技术指南 | 创建引人入胜的网页体验</p>
-      <p>© 2023 现代Web设计技术</p>
+      <p> 现代Web设计技术</p>
     </footer>
   </div>
 </template>

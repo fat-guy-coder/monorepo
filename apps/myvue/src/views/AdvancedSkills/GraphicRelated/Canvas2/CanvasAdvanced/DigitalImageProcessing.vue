@@ -212,7 +212,7 @@
     </div>
 
     <footer class="footer">
-      <p>© 2023 JavaScript Canvas图像处理指南 | 使用Vue 3和TypeScript实现</p>
+      <p> JavaScript Canvas图像处理指南 | 使用Vue 3和TypeScript实现</p>
     </footer>
   </div>
 </template>

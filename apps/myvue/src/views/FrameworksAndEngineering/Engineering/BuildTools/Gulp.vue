@@ -516,7 +516,7 @@ exports.build = series(
 
     <!-- 页脚 -->
     <div class="footer">
-      <p>Gulp.js 任务自动化基础介绍 | 基于流的构建工具 | © 2023</p>
+      <p>Gulp.js 任务自动化基础介绍 | 基于流的构建工具 | </p>
       <div class="footer-links">
         <a href="https://gulpjs.com" target="_blank">官方文档</a>
         <a href="https://github.com/gulpjs/gulp" target="_blank">GitHub 仓库</a>

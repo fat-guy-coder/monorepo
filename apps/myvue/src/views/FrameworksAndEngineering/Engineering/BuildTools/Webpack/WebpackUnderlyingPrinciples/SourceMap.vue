@@ -615,7 +615,7 @@ new webpack.SourceMapDevToolPlugin({
 
     <footer class="footer">
       <p>Webpack Source Map 基本介绍 | Vue3 + TypeScript 实现</p>
-      <p>© 2023 Webpack 高级开发技术</p>
+      <p> Webpack 高级开发技术</p>
     </footer>
   </div>
 </template>

@@ -238,7 +238,7 @@
 
     <!-- 页脚 -->
     <div class="footer">
-      <p>动态规划算法基础介绍 | 使用 Vue3 + TypeScript 构建 | © 2023</p>
+      <p>动态规划算法基础介绍 | 使用 Vue3 + TypeScript 构建 | </p>
       <div class="actions">
         <button class="action-btn">
           <i class="fas fa-download"></i> 导出PDF

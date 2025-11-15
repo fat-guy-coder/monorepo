@@ -527,7 +527,7 @@ openssl x509 -req -days 365 -in server.csr -CA ca-cert.pem -CAkey ca-key.pem -CA
         </div>
       </div>
       <div class="footer-copyright">
-        <p>© 2023 Node.js TLS 模块指南 | 使用 Vue3 制作</p>
+        <p> Node.js TLS 模块指南 | 使用 Vue3 制作</p>
         <p>Node.js 是 OpenJS Foundation 的商标</p>
       </div>
     </footer>

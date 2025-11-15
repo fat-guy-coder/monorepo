@@ -114,9 +114,8 @@ watch(
 
 .code-block-container {
   position: relative;
-  margin: 1.5rem 0;
+  margin: 0rem 0;
   border-radius: 8px;
-
   background: #2d2d2d;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }

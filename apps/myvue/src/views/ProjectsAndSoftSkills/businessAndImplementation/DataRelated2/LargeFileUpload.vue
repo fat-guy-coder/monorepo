@@ -468,7 +468,7 @@ async function startUpload(file: File) {
     </div>
 
     <footer>
-      <p>大文件上传解决方案 © 2023 | 使用Vue3 + TypeScript实现</p>
+      <p>大文件上传解决方案  | 使用Vue3 + TypeScript实现</p>
     </footer>
   </div>
 </template>

@@ -598,7 +598,7 @@ export default i18n;</code></pre>
     </div>
 
     <footer class="footer">
-      <p>© 2023 前端国际化方案指南 | 构建全球化的Web应用</p>
+      <p> 前端国际化方案指南 | 构建全球化的Web应用</p>
       <p>根据项目需求选择最适合的国际化方案</p>
     </footer>
   </div>

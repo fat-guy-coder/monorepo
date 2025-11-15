@@ -651,7 +651,7 @@ console.log('Load event:', navigation.loadEventEnd);</code></pre>
 
     <footer class="footer">
       <p>JavaScript Window 全局类接口参考指南 | 使用 Vue 3 + TypeScript 构建</p>
-      <p>© 2023 现代 Web 开发技术栈</p>
+      <p> 现代 Web 开发技术栈</p>
     </footer>
   </div>
 </template>

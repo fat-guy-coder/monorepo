@@ -414,7 +414,7 @@ const result = secureEval('a + b', context); // 3</code></pre>
       </div>
 
       <div class="footer-copyright">
-        <p>© 2023 Web安全实验室 | JavaScript沙箱技术研究 v1.5</p>
+        <p> Web安全实验室 | JavaScript沙箱技术研究 v1.5</p>
       </div>
     </footer>
   </div>

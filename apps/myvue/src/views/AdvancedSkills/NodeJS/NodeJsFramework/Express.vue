@@ -402,7 +402,7 @@
 
     <footer class="footer">
       <div class="footer-content">
-        <p>© 2023 Express框架基础介绍 | Node.js Web应用开发利器</p>
+        <p> Express框架基础介绍 | Node.js Web应用开发利器</p>
         <p>本页面使用Vue3、TypeScript、Setup语法、LESS和Scoped样式构建</p>
       </div>
       <div class="express-stats">

@@ -439,7 +439,7 @@
     </div>
 
     <footer class="performance-footer">
-      <p>© 2023 前端性能优化指南 | 基于Google Core Web Vitals和W3C性能标准</p>
+      <p> 前端性能优化指南 | 基于Google Core Web Vitals和W3C性能标准</p>
     </footer>
   </div>
 </template>

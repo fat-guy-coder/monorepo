@@ -319,7 +319,7 @@
     </div>
 
     <footer class="footer">
-      <p>React原理基础介绍 © 2023 | 基于React v18+核心架构</p>
+      <p>React原理基础介绍  | 基于React v18+核心架构</p>
     </footer>
   </div>
 </template>

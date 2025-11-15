@@ -186,7 +186,7 @@ createApp(App)
     </div>
 
     <footer class="footer">
-      <p>© 2023 Vue插件指南 | 使用Vue3 + TypeScript + Setup语法</p>
+      <p> Vue插件指南 | 使用Vue3 + TypeScript + Setup语法</p>
     </footer>
   </div>
 </template>

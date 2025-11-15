@@ -355,7 +355,7 @@ function reset() {
     </main>
 
     <footer class="footer">
-      <p>© 2023 Vue错误处理指南 | 构建更健壮的Vue应用</p>
+      <p> Vue错误处理指南 | 构建更健壮的Vue应用</p>
       <div class="links">
         <a href="#"><i class="fab fa-vuejs"></i> Vue官方文档</a>
         <a href="#"><i class="fab fa-github"></i> 示例代码</a>

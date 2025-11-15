@@ -557,7 +557,7 @@ console.log(iterator.next().value); // 4</code></pre>
     </div>
 
     <div class="footer">
-      <p>设计模式 | 行为型模式 | 迭代器模式 © 2023</p>
+      <p>设计模式 | 行为型模式 | 迭代器模式 </p>
     </div>
   </div>
 </template>

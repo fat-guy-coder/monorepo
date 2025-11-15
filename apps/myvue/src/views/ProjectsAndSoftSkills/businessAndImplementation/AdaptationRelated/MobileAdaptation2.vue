@@ -103,7 +103,7 @@
     </div>
 
     <footer class="footer">
-      <p>© 2023 移动端适配方案指南 | 构建跨设备一致的用户体验</p>
+      <p> 移动端适配方案指南 | 构建跨设备一致的用户体验</p>
     </footer>
   </div>
 </template>

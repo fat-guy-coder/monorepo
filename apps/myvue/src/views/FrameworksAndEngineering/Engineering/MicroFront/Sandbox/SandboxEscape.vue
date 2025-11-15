@@ -97,7 +97,7 @@
     <footer>
       <p>安全提示：在生产环境中执行不受信任的JS代码时，必须采取多重防护措施</p>
       <div class="footer-links">
-        <span>© 2023 Web安全实验室</span>
+        <span> Web安全实验室</span>
         <span>沙箱逃逸研究报告 v1.2</span>
       </div>
     </footer>

@@ -417,7 +417,7 @@ const name = user.name || '未知用户';
     </div>
 
     <footer>
-      <p>React 错误处理指南 © 2023 | 使用 Vue 3 + TypeScript 实现</p>
+      <p>React 错误处理指南  | 使用 Vue 3 + TypeScript 实现</p>
     </footer>
   </div>
 </template>

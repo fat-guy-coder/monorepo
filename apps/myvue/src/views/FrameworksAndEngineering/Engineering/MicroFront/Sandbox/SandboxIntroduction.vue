@@ -330,7 +330,7 @@
       </div>
 
       <div class="footer-copyright">
-        <p>© 2023 前端安全实验室 | 沙箱技术指南 v1.4</p>
+        <p> 前端安全实验室 | 沙箱技术指南 v1.4</p>
       </div>
     </footer>
   </div>

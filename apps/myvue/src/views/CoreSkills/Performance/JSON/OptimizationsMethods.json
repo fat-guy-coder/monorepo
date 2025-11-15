@@ -24,6 +24,41 @@
       "name": "HTTP/2推送",
       "description": "服务器主动推送关键资源",
       "scenarios": ["关键CSS/JS", "首屏优化"]
+    },
+    {
+      "name": "图片优化",
+      "description": "使用webp、AVIF等现代图片格式，响应式图片和适当压缩",
+      "scenarios": ["移动端图片展示", "大图展示页面"]
+    },
+    {
+      "name": "字体优化 (Font Optimization)",
+      "description": "子集化和懒加载字体，加速首屏，减少网络请求",
+      "scenarios": ["自定义字体", "字体体积较大的页面"]
+    },
+    {
+      "name": "按需加载 (On-demand Loading)",
+      "description": "仅在用户需要时加载资源，比如动态引入js或css",
+      "scenarios": ["弹窗组件", "低频功能"]
+    },
+    {
+      "name": "内联关键CSS/JS",
+      "description": "将关键的CSS/JS直接写入HTML，减少首屏请求次数",
+      "scenarios": ["首屏加速", "无外部依赖的部分内容"]
+    },
+    {
+      "name": "图片精灵 (Sprite)",
+      "description": "合并小图片为一张，减少HTTP请求",
+      "scenarios": ["大量小图标", "按钮状态图片"]
+    },
+    {
+      "name": "资源优先级管理",
+      "description": "合理设置资源的加载优先级",
+      "scenarios": ["多资源并行加载", "首页优化"]
+    },
+    {
+      "name": "异步加载第三方库",
+      "description": "通过异步方式引入非核心第三方库",
+      "scenarios": ["广告脚本", "分析/监控平台"]
     }
   ],
   "renderingOptimizations": [
@@ -51,6 +86,36 @@
       "name": "离屏渲染",
       "description": "提前渲染不可见内容",
       "scenarios": ["复杂动画准备", "快速切换视图"]
+    },
+    {
+      "name": "异步渲染 (Async Rendering)",
+      "description": "将耗时渲染操作拆分到多帧完成，减少主线程卡顿",
+      "scenarios": ["大数据渲染", "动画交互"]
+    },
+    {
+      "name": "批量DOM操作",
+      "description": "批量而非逐次更新DOM，减少回流和重绘次数",
+      "scenarios": ["表格渲染", "大规模节点更新"]
+    },
+    {
+      "name": "合成层优化 (Layer Promotion)",
+      "description": "通过transform/opacity促使浏览器单独生成渲染层，提高动画性能",
+      "scenarios": ["复杂动效", "页面滚动"]
+    },
+    {
+      "name": "content-visibility",
+      "description": "仅渲染可见内容，加速隐藏/未在视口内容的渲染",
+      "scenarios": ["长文档", "大量独立模块"]
+    },
+    {
+      "name": "will-change",
+      "description": "提前告知浏览器将要改变的属性以优化渲染",
+      "scenarios": ["滑动动画", "渐变切换"]
+    },
+    {
+      "name": "减少重排技巧（如：documentFragment、display:none）",
+      "description": "使用合适的DOM API或CSS技巧减少多次重排重绘",
+      "scenarios": ["大批量插入节点", "表格批量渲染"]
     }
   ],
   "jsOptimizations": [
@@ -78,6 +143,36 @@
       "name": "内存管理",
       "description": "避免内存泄漏和过度消耗",
       "scenarios": ["长时间运行的SPA", "数据密集型应用"]
+    },
+    {
+      "name": "懒加载组件 (Component Lazy Loading)",
+      "description": "按需动态加载页面/组件代码，减少初始包体积",
+      "scenarios": ["多页面应用", "大型组件库"]
+    },
+    {
+      "name": "依赖升级与精简",
+      "description": "移除冗余依赖，升级依赖版本以获得更好的性能",
+      "scenarios": ["npm模块整理", "旧项目优化"]
+    },
+    {
+      "name": "事件代理 (Event Delegation)",
+      "description": "通过代理减少事件监听器数量，提高事件处理性能",
+      "scenarios": ["大量可交互元素", "动态生成节点"]
+    },
+    {
+      "name": "惰性初始化",
+      "description": "需要时才初始化变量或实例，降低初始负载",
+      "scenarios": ["大对象", "低频业务模块"]
+    },
+    {
+      "name": "函数缓存（Memoization）",
+      "description": "缓存高频但重复的函数调用结果，避免重复计算",
+      "scenarios": ["复杂计算", "数据处理"]
+    },
+    {
+      "name": "使用原生API/方法替代",
+      "description": "尽量使用浏览器原生方法减少 polyfill 和第三方实现",
+      "scenarios": ["性能敏感代码", "基础库升级"]
     }
   ],
   "networkOptimizations": [
@@ -105,6 +200,36 @@
       "name": "服务端渲染 (SSR)",
       "description": "首屏服务端生成HTML",
       "scenarios": ["SEO敏感页面", "慢速网络环境"]
+    },
+    {
+      "name": "异步请求 (AJAX/Fetch优化)",
+      "description": "优化数据请求与响应，减少不必要的网络流量",
+      "scenarios": ["页面数据加载", "实时数据"]
+    },
+    {
+      "name": "HTTP/3",
+      "description": "基于QUIC的新一代协议，减少延迟和丢包对性能影响",
+      "scenarios": ["高延迟环境", "移动网络"]
+    },
+    {
+      "name": "合并请求 (Request Batching)",
+      "description": "将多个数据合并为一次请求，减少请求数量",
+      "scenarios": ["多资源加载", "批量操作"]
+    },
+    {
+      "name": "去重请求/幂等请求",
+      "description": "防止短时间内重复发起多次相同的请求",
+      "scenarios": ["自动补全", "搜索推荐"]
+    },
+    {
+      "name": "使用合适的CDN/边缘节点",
+      "description": "根据用户地理位置选择最快节点",
+      "scenarios": ["全球分布用户", "视频/图片资源"]
+    },
+    {
+      "name": "分片上传和断点续传",
+      "description": "大文件传输分片，降低失败重传的损耗",
+      "scenarios": ["大文件上传", "弱网环境"]
     }
   ],
   "uxOptimizations": [
@@ -132,6 +257,36 @@
       "name": "离线体验",
       "description": "Service Worker缓存",
       "scenarios": ["PWA应用", "不稳定网络"]
+    },
+    {
+      "name": "FMP/LCP优化",
+      "description": "优化关键渲染指标（如最大内容绘制、首次有意义绘制）",
+      "scenarios": ["首屏加载", "SEO敏感页面"]
+    },
+    {
+      "name": "懒加载交互元素",
+      "description": "仅在需要时加载交互型内容/功能模块",
+      "scenarios": ["分页加载", "低频操作区"]
+    },
+    {
+      "name": "占位动画 (Loading Animations)",
+      "description": "使用加载动画提升等待体验",
+      "scenarios": ["资源加载时间较长", "异步数据请求"]
+    },
+    {
+      "name": "无障碍优化",
+      "description": "提升辅助功能和键盘无障碍，让更多用户顺畅体验",
+      "scenarios": ["表单", "模态框"]
+    },
+    {
+      "name": "响应式与适配优化",
+      "description": "自适应多终端和 DPI，提升跨端体验",
+      "scenarios": ["移动端Web", "多分辨率设备"]
+    },
+    {
+      "name": "エラー边界 (Error Boundary)/降级体验",
+      "description": "出现异常时显示备用界面或功能，避免全局崩溃",
+      "scenarios": ["数据异常", "网络失败"]
     }
   ],
   "buildOptimizations": [
@@ -159,6 +314,36 @@
       "name": "现代模式构建",
       "description": "生成现代和传统两种包",
       "scenarios": ["渐进式增强"]
+    },
+    {
+      "name": "Tree Shaking（构建侧）",
+      "description": "配置构建工具删除未被使用的代码",
+      "scenarios": ["Webpack/Rollup项目", "优化最终包体积"]
+    },
+    {
+      "name": "多线程/多进程构建",
+      "description": "利用硬件多核加快构建速度",
+      "scenarios": ["大型项目", "持续集成流水线"]
+    },
+    {
+      "name": "分环境配置",
+      "description": "开发、测试、生产分离配置，减少不必要依赖",
+      "scenarios": ["多环境部署", "环境隔离"]
+    },
+    {
+      "name": "Source Map优化",
+      "description": "根据情况选择生成/上传 Source Map，平衡调试和性能",
+      "scenarios": ["线上调试", "安全性要求"]
+    },
+    {
+      "name": "包体积分析与瘦身",
+      "description": "发现大体积依赖与无用代码，针对性瘦身",
+      "scenarios": ["依赖过多", "速度变慢"]
+    },
+    {
+      "name": "CI/CD自动化优化",
+      "description": "在自动化流程中加入构建缓存、跳过无变更步骤",
+      "scenarios": ["持续集成", "自动化部署"]
     }
   ]
 }

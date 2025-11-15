@@ -336,7 +336,7 @@
     </div>
 
     <footer class="footer">
-      <p>© 2023 Node.js Process模块基础介绍 | 深入理解Node.js核心环境接口</p>
+      <p> Node.js Process模块基础介绍 | 深入理解Node.js核心环境接口</p>
       <p>本页面使用Vue3、TypeScript、Setup语法、LESS和Scoped样式构建</p>
     </footer>
   </div>

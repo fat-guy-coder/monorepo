@@ -493,7 +493,7 @@ Content-Security-Policy: frame-ancestors trusted.com *.trusted-domain.com</pre>
           <a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/X-Frame-Options" target="_blank">MDN文档</a>
           <a href="https://csp.withgoogle.com/docs/index.html" target="_blank">CSP参考</a>
         </div>
-        <p>© 2023 Web安全指南 | 保护用户免受点击劫持攻击</p>
+        <p> Web安全指南 | 保护用户免受点击劫持攻击</p>
       </div>
     </footer>
   </div>

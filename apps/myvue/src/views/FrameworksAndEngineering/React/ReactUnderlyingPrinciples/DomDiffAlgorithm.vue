@@ -354,7 +354,7 @@
     </main>
 
     <footer class="footer">
-      <p>© 2023 React Diff算法解析 | 深入理解React核心机制</p>
+      <p> React Diff算法解析 | 深入理解React核心机制</p>
       <div class="links">
         <a href="#"><i class="fab fa-react"></i> React官方文档</a>
         <a href="#"><i class="fab fa-github"></i> 算法源码</a>

@@ -566,7 +566,7 @@ module: {
 
     <footer class="footer">
       <p>图片加载优化指南 | 提升用户体验与网站性能</p>
-      <p>© 2023 前端性能优化实践手册</p>
+      <p> 前端性能优化实践手册</p>
     </footer>
   </div>
 </template>

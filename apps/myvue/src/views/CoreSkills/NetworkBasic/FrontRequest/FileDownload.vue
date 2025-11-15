@@ -311,7 +311,7 @@ saveAs('https://example.com/image.png', 'image.png');</pre>
     </div>
 
     <footer>
-      <p>前端下载方案指南 © 2023 | 使用Vue3 + TypeScript实现</p>
+      <p>前端下载方案指南  | 使用Vue3 + TypeScript实现</p>
     </footer>
   </div>
 </template>

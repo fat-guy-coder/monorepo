@@ -154,7 +154,7 @@
     <footer>
       <p>重要提示：iframe沙箱是强大的安全工具，但配置不当可能留下安全漏洞</p>
       <div class="footer-links">
-        <span>© 2023 Web安全实验室</span>
+        <span> Web安全实验室</span>
         <span>沙箱技术研究报告 v1.3</span>
         <span>最后更新: 2023年6月15日</span>
       </div>

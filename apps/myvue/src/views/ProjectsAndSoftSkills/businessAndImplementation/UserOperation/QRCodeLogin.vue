@@ -278,7 +278,7 @@ function showScanSuccess() {
     </div>
 
     <footer>
-      <p>二维码登录实现指南 © 2023 | 使用Vue3 + TypeScript实现</p>
+      <p>二维码登录实现指南  | 使用Vue3 + TypeScript实现</p>
     </footer>
   </div>
 </template>

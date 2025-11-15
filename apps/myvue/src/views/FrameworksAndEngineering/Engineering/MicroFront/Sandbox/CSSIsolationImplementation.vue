@@ -420,7 +420,7 @@ function MyComponent() {
       </div>
 
       <div class="footer-copyright">
-        <p>© 2023 前端架构实验室 | CSS样式隔离技术指南 v1.2</p>
+        <p> 前端架构实验室 | CSS样式隔离技术指南 v1.2</p>
       </div>
     </footer>
   </div>

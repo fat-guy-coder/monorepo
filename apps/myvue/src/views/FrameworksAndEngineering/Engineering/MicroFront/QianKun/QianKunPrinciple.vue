@@ -590,7 +590,7 @@ appExports.bootstrap().then(() => {
         <a href="https://github.com/umijs/qiankun" target="_blank">GitHub仓库</a>
         <a href="https://www.yuque.com/umijs/qiankun" target="_blank">最佳实践</a>
       </div>
-      <p class="copyright">© 2023 微前端技术研究 | 乾坤原理剖析</p>
+      <p class="copyright"> 微前端技术研究 | 乾坤原理剖析</p>
     </footer>
   </div>
 </template>

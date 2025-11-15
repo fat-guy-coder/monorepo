@@ -277,7 +277,7 @@ function tailRecursive(n, acc = 1) {
     </div>
 
     <footer class="footer">
-      <p>蹦床函数技术详解 © 2023 | 函数式编程核心技术</p>
+      <p>蹦床函数技术详解  | 函数式编程核心技术</p>
       <div class="links">
         <a href="#">尾调用优化</a> •
         <a href="#">递归与迭代</a> •

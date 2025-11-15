@@ -278,7 +278,7 @@ adapter.play('mp4', 'new_video.mp4');</code></pre>
 
     <footer class="footer">
       <p>适配器模式是解决接口不兼容问题的优雅方案，能够在不修改现有代码的情况下实现组件协作</p>
-      <p>© 2023 设计模式基础介绍 | 适配器模式</p>
+      <p> 设计模式基础介绍 | 适配器模式</p>
     </footer>
   </div>
 </template>

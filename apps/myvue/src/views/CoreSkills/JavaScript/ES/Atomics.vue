@@ -117,7 +117,7 @@ self.onmessage = () => {
     </div>
 
     <footer class="footer">
-      <p>© 2023 JavaScript 并发编程指南 | 使用 Vue 3 + TypeScript 构建</p>
+      <p> JavaScript 并发编程指南 | 使用 Vue 3 + TypeScript 构建</p>
     </footer>
   </div>
 </template>

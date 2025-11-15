@@ -382,7 +382,7 @@ function evalRPN(tokens: string[]): number {
     </div>
 
     <footer>
-      <p>© 2023 数据结构学习指南 | 栈（Stack）专题</p>
+      <p> 数据结构学习指南 | 栈（Stack）专题</p>
       <p class="tip">提示：栈是计算机科学中最重要的基础数据结构之一，掌握其原理和应用对编程至关重要</p>
     </footer>
   </div>

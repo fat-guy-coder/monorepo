@@ -303,7 +303,7 @@ delete data.count; // 触发 delete</code></pre>
     </div>
 
     <footer class="footer">
-      <p>© 2023 Vue响应式系统研究 | Proxy与defineProperty对比分析</p>
+      <p> Vue响应式系统研究 | Proxy与defineProperty对比分析</p>
       <p>理解底层原理，编写更高效的Vue应用</p>
     </footer>
   </div>

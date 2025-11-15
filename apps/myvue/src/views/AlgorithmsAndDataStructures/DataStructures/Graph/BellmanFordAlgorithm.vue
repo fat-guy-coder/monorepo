@@ -1,5 +1,5 @@
 <template>
-  <div>🔄 绘制图形 ⭐⭐⭐</div>
+  <div>🔍 Bellman-Ford算法 ⭐⭐</div>
 </template>
 <script lang="ts" setup>
 </script>

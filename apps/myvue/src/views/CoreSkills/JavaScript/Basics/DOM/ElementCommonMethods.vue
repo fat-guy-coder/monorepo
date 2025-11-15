@@ -87,7 +87,7 @@
     </div>
 
     <div class="footer">
-      <p>DOM API 参考手册 © 2023 | 包含 {{ apis.length }} 个常用 DOM 方法和属性</p>
+      <p>DOM API 参考手册  | 包含 {{ apis.length }} 个常用 DOM 方法和属性</p>
     </div>
   </div>
 </template>

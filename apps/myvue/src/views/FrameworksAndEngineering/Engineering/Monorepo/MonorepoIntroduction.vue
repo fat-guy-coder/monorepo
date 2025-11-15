@@ -392,7 +392,7 @@ export default {
     </main>
 
     <footer class="footer">
-      <p>Monorepo 技术指南 © 2023 | 简化复杂项目，提升协作效率 | 推荐工具：Nx, Turborepo, PNPM</p>
+      <p>Monorepo 技术指南  | 简化复杂项目，提升协作效率 | 推荐工具：Nx, Turborepo, PNPM</p>
     </footer>
   </div>
 </template>

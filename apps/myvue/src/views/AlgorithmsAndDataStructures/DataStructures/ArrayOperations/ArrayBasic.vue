@@ -450,7 +450,7 @@ function maxSubarraySum(nums: number[], k: number): number {
     </div>
 
     <footer>
-      <p>© 2023 数据结构学习指南 | 数组（Array）专题</p>
+      <p> 数据结构学习指南 | 数组（Array）专题</p>
       <p class="tip">提示：数组是几乎所有高级数据结构的基础，深入理解数组对编程至关重要</p>
     </footer>
   </div>

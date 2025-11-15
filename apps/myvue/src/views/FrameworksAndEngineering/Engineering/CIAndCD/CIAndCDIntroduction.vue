@@ -145,7 +145,7 @@
 
     <!-- 页脚 -->
     <footer class="footer">
-      <p>© 2023 前端工程化实践 | 使用Vue3 + TypeScript构建</p>
+      <p> 前端工程化实践 | 使用Vue3 + TypeScript构建</p>
       <p>持续集成，持续部署，持续进步！</p>
     </footer>
   </div>

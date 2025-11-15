@@ -190,7 +190,7 @@
 
     <footer class="footer">
       <p>JavaScript 资源清理最佳实践 | 提升应用性能与稳定性</p>
-      <p>© 2023 前端性能优化指南</p>
+      <p> 前端性能优化指南</p>
     </footer>
   </div>
 </template>

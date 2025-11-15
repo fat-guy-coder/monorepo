@@ -447,7 +447,7 @@ gzip_min_length 256;</code></pre>
     </div>
 
     <footer class="footer">
-      <p>Gzip压缩技术详解 © 2023 | 网络性能优化核心</p>
+      <p>Gzip压缩技术详解  | 网络性能优化核心</p>
       <div class="links">
         <a href="#">HTTP协议</a> •
         <a href="#">Web性能优化</a> •

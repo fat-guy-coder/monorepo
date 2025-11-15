@@ -190,7 +190,7 @@
     </div>
 
     <footer class="footer">
-      <p>© 2023 面试算法指南 | 数据来源于Top 10科技公司面试题库分析</p>
+      <p> 面试算法指南 | 数据来源于Top 10科技公司面试题库分析</p>
     </footer>
   </div>
 </template>

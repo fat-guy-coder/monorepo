@@ -484,7 +484,7 @@ pnpm -r --workspace-concurrency=4 run build</pre>
 
     <!-- 页脚 -->
     <div class="footer">
-      <p>PNPM Workspace 基础介绍 | 高效 Monorepo 管理方案 | © 2023</p>
+      <p>PNPM Workspace 基础介绍 | 高效 Monorepo 管理方案 | </p>
       <div class="footer-links">
         <a href="https://pnpm.io/workspaces" target="_blank">官方文档</a>
         <a href="https://pnpm.io/filtering" target="_blank">过滤命令</a>

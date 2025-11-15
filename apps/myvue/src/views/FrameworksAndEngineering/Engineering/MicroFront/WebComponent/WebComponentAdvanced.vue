@@ -453,7 +453,7 @@ updateData(data) {
     </div>
 
     <footer class="guide-footer">
-      <p>© 2023 WebComponent高级使用指南 | 使用Vue 3 + TypeScript实现</p>
+      <p> WebComponent高级使用指南 | 使用Vue 3 + TypeScript实现</p>
     </footer>
   </div>
 </template>

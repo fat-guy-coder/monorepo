@@ -190,7 +190,7 @@
     </div>
 
     <footer class="footer">
-      <p>© 2023 JavaScript拷贝机制基础介绍 | 在Vue中实现可视化演示</p>
+      <p> JavaScript拷贝机制基础介绍 | 在Vue中实现可视化演示</p>
     </footer>
   </div>
 </template>

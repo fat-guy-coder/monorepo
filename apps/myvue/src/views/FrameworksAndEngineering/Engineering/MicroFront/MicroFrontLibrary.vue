@@ -285,7 +285,7 @@
       </div>
 
       <div class="footer-copyright">
-        <p>© 2023 前端架构实验室 | 微前端技术指南 v2.0</p>
+        <p> 前端架构实验室 | 微前端技术指南 v2.0</p>
       </div>
     </footer>
   </div>

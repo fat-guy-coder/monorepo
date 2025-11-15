@@ -411,7 +411,7 @@ router.get('/api/users/:id', async (ctx) => {
     </main>
 
     <footer class="footer">
-      <p>© 2023 Koa.js框架指南 | 轻量高效的Node.js Web框架</p>
+      <p> Koa.js框架指南 | 轻量高效的Node.js Web框架</p>
     </footer>
   </div>
 </template>

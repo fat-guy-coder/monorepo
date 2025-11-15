@@ -266,7 +266,7 @@ New-Item -ItemType SymbolicLink -Path "symlink" -Target "target"</pre>
     </div>
 
     <footer>
-      <p>文件系统链接指南 © 2023 | 使用Vue3 + TypeScript实现</p>
+      <p>文件系统链接指南  | 使用Vue3 + TypeScript实现</p>
     </footer>
   </div>
 </template>

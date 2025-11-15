@@ -208,7 +208,7 @@
     </div>
 
     <footer class="footer">
-      <p>© 2023 Webpack SplitChunks 配置指南 | 使用 Vue 3 和 TypeScript 实现</p>
+      <p> Webpack SplitChunks 配置指南 | 使用 Vue 3 和 TypeScript 实现</p>
     </footer>
   </div>
 </template>

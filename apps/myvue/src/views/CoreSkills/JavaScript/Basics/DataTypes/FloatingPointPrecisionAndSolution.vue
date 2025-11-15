@@ -371,7 +371,7 @@ function floatEqual(a, b, epsilon = 1e-10) {
     </div>
 
     <footer class="footer">
-      <p>© 2023 JavaScript 浮点数精度问题基础介绍 | 理解与解决计算机中的小数问题</p>
+      <p> JavaScript 浮点数精度问题基础介绍 | 理解与解决计算机中的小数问题</p>
       <p>IEEE 754 是浮点数表示的国际标准，被几乎所有现代计算机系统采用</p>
     </footer>
   </div>

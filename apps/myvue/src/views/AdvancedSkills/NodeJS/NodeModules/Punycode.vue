@@ -1,5 +1,5 @@
 <template>
-  <div>🔄 React基础知识 ⭐⭐⭐</div>
+  <div>📂 punycode (国际化域名处理) ⭐</div>
 </template>
 <script lang="ts" setup>
 </script>

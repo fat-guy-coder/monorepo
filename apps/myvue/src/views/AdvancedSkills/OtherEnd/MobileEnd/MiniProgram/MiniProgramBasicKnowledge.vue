@@ -433,7 +433,7 @@ const user = wx.getStorageSync('userInfo')</pre>
         </div>
       </div>
       <div class="copyright">
-        © 2023 小程序开发指南 | 使用Vue3 + TypeScript实现
+         小程序开发指南 | 使用Vue3 + TypeScript实现
       </div>
     </footer>
   </div>

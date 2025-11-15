@@ -505,7 +505,7 @@
     </div>
 
     <div class="footer">
-      <p>BOM 对象参考手册 © 2023 | 包含 5 个核心 BOM 对象，{{ apiCount }} 个 API</p>
+      <p>BOM 对象参考手册  | 包含 5 个核心 BOM 对象，{{ apiCount }} 个 API</p>
     </div>
   </div>
 </template>

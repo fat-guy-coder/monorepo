@@ -415,7 +415,7 @@ scroll-timeline: --myTimeline;//简写
           <a href="#" class="footer-link">示例库</a>
           <a href="#" class="footer-link">CanIUse</a>
         </div>
-        <div class="footer-copyright">© 2023 CSS滚动动画指南 | 现代Web动画技术</div>
+        <div class="footer-copyright"> CSS滚动动画指南 | 现代Web动画技术</div>
       </div>
     </footer>
   </div>

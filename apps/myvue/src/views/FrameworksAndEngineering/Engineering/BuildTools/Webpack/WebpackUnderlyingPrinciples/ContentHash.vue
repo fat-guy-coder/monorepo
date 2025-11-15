@@ -374,7 +374,7 @@ module.exports = {
     </div>
 
     <footer class="footer">
-      <p>© 2023 Webpack ContentHash 基础介绍 | 使用 Vue 3 和 TypeScript 实现</p>
+      <p> Webpack ContentHash 基础介绍 | 使用 Vue 3 和 TypeScript 实现</p>
     </footer>
   </div>
 </template>

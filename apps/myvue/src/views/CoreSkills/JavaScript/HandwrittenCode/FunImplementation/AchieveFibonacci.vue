@@ -128,7 +128,7 @@
     </div>
 
     <footer class="footer">
-      <p>© 2023 算法与数学之美 | 斐波那契数列专题</p>
+      <p> 算法与数学之美 | 斐波那契数列专题</p>
     </footer>
   </div>
 </template>

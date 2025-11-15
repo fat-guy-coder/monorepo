@@ -233,7 +233,7 @@ const debouncedSearch = useDebounce(() => {
     </div>
 
     <footer class="dt-footer">
-      <p>© 2023 前端性能优化指南 | 防抖与节流</p>
+      <p> 前端性能优化指南 | 防抖与节流</p>
     </footer>
   </div>
 </template>

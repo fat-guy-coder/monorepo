@@ -390,7 +390,7 @@ Access-Control-Request-Headers: Content-Type</pre>
     </section>
 
     <footer class="footer">
-      <p>© 2023 前端跨域解决方案指南 | 使用Vue 3 + TypeScript实现</p>
+      <p> 前端跨域解决方案指南 | 使用Vue 3 + TypeScript实现</p>
       <p>同源策略是浏览器的安全基石，跨域解决方案需在安全与功能间取得平衡</p>
     </footer>
   </div>

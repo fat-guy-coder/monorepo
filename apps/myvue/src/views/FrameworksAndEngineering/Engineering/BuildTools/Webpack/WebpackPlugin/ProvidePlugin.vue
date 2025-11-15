@@ -549,7 +549,7 @@ declare const _: typeof import('lodash');</pre>
 
     <!-- 页脚 -->
     <div class="footer">
-      <p>Webpack ProvidePlugin 基础介绍 | 模块注入工具 | © 2023</p>
+      <p>Webpack ProvidePlugin 基础介绍 | 模块注入工具 | </p>
       <div class="footer-links">
         <a href="https://webpack.js.org/plugins/provide-plugin/" target="_blank">官方文档</a>
         <a href="https://github.com/webpack/webpack" target="_blank">GitHub</a>

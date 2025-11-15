@@ -652,7 +652,7 @@ module.exports = {
     </div>
 
     <footer>
-      <p>微前端架构指南 © 2023 | 使用Vue3 + TypeScript实现</p>
+      <p>微前端架构指南  | 使用Vue3 + TypeScript实现</p>
     </footer>
   </div>
 </template>

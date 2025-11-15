@@ -215,7 +215,7 @@
     </div>
 
     <footer class="footer">
-      <p>© 2023 CSS遮罩效果指南 | 使用Vue 3 + TypeScript实现</p>
+      <p> CSS遮罩效果指南 | 使用Vue 3 + TypeScript实现</p>
     </footer>
   </div>
 </template>

@@ -425,7 +425,7 @@ import '@babel/polyfill'; // 全局 polyfill
         </ul>
       </div>
       <div class="copyright">
-        © 2023 Babel 生态系统指南 | 使用 Vue3 + TypeScript 实现
+         Babel 生态系统指南 | 使用 Vue3 + TypeScript 实现
       </div>
     </footer>
   </div>

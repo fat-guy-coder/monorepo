@@ -288,7 +288,7 @@ animate();</code></pre>
 
     <footer class="footer">
       <p>Three.js 是开源的WebGL库，由Ricardo Cabello (Mr.doob) 创建</p>
-      <p>© 2023 Three.js 学习指南 | Vue组件示例</p>
+      <p> Three.js 学习指南 | Vue组件示例</p>
     </footer>
   </div>
 </template>

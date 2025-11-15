@@ -408,7 +408,7 @@
     </div>
 
     <footer class="footer">
-      <p>© 2023 Node.js 框架对比指南 | Express、Koa 和 NestJS 的全面比较</p>
+      <p> Node.js 框架对比指南 | Express、Koa 和 NestJS 的全面比较</p>
       <p>本页面使用 Vue3、TypeScript、Setup 语法、LESS 和 Scoped 样式构建</p>
     </footer>
   </div>
@@ -428,17 +428,12 @@ const nestVersion = ref('9.0.0');
 
 
 .framework-comparison {
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  }
-
-  background: linear-gradient(135deg, #f8f9fa 0%, #eef2f6 100%);
-  color: #2c3e50;
-  min-height: 100vh;
-  padding: 20px;
+   max-width: 1200px;
+   margin: 0 auto;
+   background: linear-gradient(135deg, #f8f9fa 0%, #eef2f6 100%);
+   color: #2c3e50;
+   min-height: 100vh;
+   padding: 20px;
 
   .header {
     text-align: center;

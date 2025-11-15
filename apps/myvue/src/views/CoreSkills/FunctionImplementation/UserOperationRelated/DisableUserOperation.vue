@@ -410,7 +410,7 @@ Object.defineProperty(window, 'MutationObserver', {
 
     <!-- 页脚 -->
     <footer class="footer">
-      <p>© 2023 前端安全解决方案 | 前端限制措施只能增加操作难度，无法替代服务端安全措施</p>
+      <p> 前端安全解决方案 | 前端限制措施只能增加操作难度，无法替代服务端安全措施</p>
       <p>重要提示：前端安全应作为整体安全策略的一部分，而非唯一防线</p>
     </footer>
   </div>

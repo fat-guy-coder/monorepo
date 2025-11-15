@@ -462,7 +462,7 @@ console.log(productB1.operationB()); // 输出: 产品B1的操作</code></pre>
     </div>
 
     <div class="footer">
-      <p>设计模式 | 创建型模式 | 工厂模式 © 2023</p>
+      <p>设计模式 | 创建型模式 | 工厂模式 </p>
     </div>
   </div>
 </template>

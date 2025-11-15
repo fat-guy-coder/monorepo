@@ -385,7 +385,7 @@ function unmount() {
           <a href="#">qiankun 微前端</a>
         </div>
         <div class="footer-copyright">
-          © 2023 微前端技术解析 | 基于 qiankun 框架
+           微前端技术解析 | 基于 qiankun 框架
         </div>
       </div>
     </footer>

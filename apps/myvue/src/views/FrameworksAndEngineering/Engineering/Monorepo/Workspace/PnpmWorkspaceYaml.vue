@@ -116,7 +116,7 @@ link-workspace-packages: true</pre>
     </div>
 
     <footer class="footer">
-      <p>PNPM Workspace 配置指南 © 2023 | 高效 Monorepo 管理</p>
+      <p>PNPM Workspace 配置指南  | 高效 Monorepo 管理</p>
       <div class="footer-links">
         <a href="https://pnpm.io/workspaces" target="_blank">官方文档</a>
         <a href="https://pnpm.io/pnpm-workspace_yaml" target="_blank">配置参考</a>

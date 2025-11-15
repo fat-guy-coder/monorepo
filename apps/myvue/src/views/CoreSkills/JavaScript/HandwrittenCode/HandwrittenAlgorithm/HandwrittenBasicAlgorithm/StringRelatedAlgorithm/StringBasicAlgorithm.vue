@@ -233,7 +233,7 @@
     </div>
 
     <footer class="footer">
-      <p>© 2023 JavaScript 算法精选 | 共 {{ filteredAlgorithms.length }} 个算法</p>
+      <p> JavaScript 算法精选 | 共 {{ filteredAlgorithms.length }} 个算法</p>
     </footer>
   </div>
 </template>

@@ -252,7 +252,7 @@ export default {
     </div>
 
     <footer class="guide-footer">
-      <p>© 2023 AbortController 使用指南 | 在 Vue 中实现优雅的异步控制</p>
+      <p> AbortController 使用指南 | 在 Vue 中实现优雅的异步控制</p>
     </footer>
   </div>
 </template>

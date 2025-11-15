@@ -650,7 +650,7 @@ new HtmlWebpackIncludeAssetsPlugin({
 
     <!-- 页脚 -->
     <div class="footer">
-      <p>Webpack DllPlugin 基础介绍 | 构建性能优化方案 | © 2023</p>
+      <p>Webpack DllPlugin 基础介绍 | 构建性能优化方案 | </p>
       <div class="footer-links">
         <a href="https://webpack.js.org/plugins/dll-plugin/" target="_blank">官方文档</a>
         <a href="https://github.com/webpack/webpack" target="_blank">GitHub</a>

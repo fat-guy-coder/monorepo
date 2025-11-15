@@ -329,7 +329,7 @@
     </div>
 
     <footer class="devtools-footer">
-      <p>© 2023 前端性能优化指南 | DevTools 性能分析</p>
+      <p> 前端性能优化指南 | DevTools 性能分析</p>
       <div class="footer-links">
         <a href="#">Chrome DevTools 文档</a>
         <a href="#">Firefox 性能工具</a>

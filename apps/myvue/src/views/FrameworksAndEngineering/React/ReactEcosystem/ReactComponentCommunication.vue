@@ -601,7 +601,7 @@ function ScrollToTop() {
     </main>
 
     <footer class="footer">
-      <p>© 2023 React Router 指南 | 构建现代化单页面应用</p>
+      <p> React Router 指南 | 构建现代化单页面应用</p>
       <div class="links">
         <a href="#"><i class="fab fa-react"></i> React Router 文档</a>
         <a href="#"><i class="fab fa-github"></i> 示例代码</a>

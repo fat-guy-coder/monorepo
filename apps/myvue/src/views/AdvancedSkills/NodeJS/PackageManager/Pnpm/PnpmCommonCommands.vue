@@ -98,7 +98,7 @@
     </div>
 
     <footer class="footer">
-      <p>PNPM 命令参考手册 © 2023 | 前端开发与工程化工具</p>
+      <p>PNPM 命令参考手册  | 前端开发与工程化工具</p>
       <p class="version-info">PNPM 版本: 8.x | 最后更新: {{ currentDate }}</p>
     </footer>
   </div>

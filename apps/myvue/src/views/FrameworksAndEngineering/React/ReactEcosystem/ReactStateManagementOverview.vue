@@ -517,7 +517,7 @@ function Counter() {
     </main>
 
     <footer class="footer">
-      <p>© 2023 React Redux指南 | 构建可预测的状态管理</p>
+      <p> React Redux指南 | 构建可预测的状态管理</p>
       <div class="links">
         <a href="#"><i class="fab fa-react"></i> React文档</a>
         <a href="#"><i class="fab fa-redux"></i> Redux文档</a>

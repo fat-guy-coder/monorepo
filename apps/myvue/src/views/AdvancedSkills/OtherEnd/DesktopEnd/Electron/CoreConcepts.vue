@@ -270,7 +270,7 @@ ipcRenderer.on('app-update', (event, update) => {
     <!-- 页脚 -->
     <div class="footer">
       <div class="footer-content">
-        <p>Electron {{ electronVersion }} | Vue3 技术文档 | © 2023</p>
+        <p>Electron {{ electronVersion }} | Vue3 技术文档 | </p>
         <div class="electron-apps">
           <span>知名 Electron 应用：</span>
           <div class="app-icons">

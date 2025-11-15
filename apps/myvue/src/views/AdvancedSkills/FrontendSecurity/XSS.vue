@@ -448,7 +448,7 @@ safeOutput.innerHTML =
     </div>
 
     <footer class="footer">
-      <p>© 2023 Web安全中心 | XSS防护是每个开发者的责任</p>
+      <p> Web安全中心 | XSS防护是每个开发者的责任</p>
     </footer>
   </div>
 </template>

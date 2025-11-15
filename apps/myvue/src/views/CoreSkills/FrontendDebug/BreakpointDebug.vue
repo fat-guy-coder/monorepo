@@ -215,7 +215,7 @@ userId === 'admin'</code></pre>
 
     <footer class="footer">
       <p>前端断点调试指南 | 使用Vue3 + TypeScript实现</p>
-      <p>© 2023 前端开发工具集</p>
+      <p> 前端开发工具集</p>
     </footer>
   </div>
 </template>

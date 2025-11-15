@@ -364,7 +364,7 @@ loadingTask.promise.then(pdf => {
     </main>
 
     <footer class="footer">
-      <p>© 2023 前端开发技术文档 | PDF预览实现方案</p>
+      <p> 前端开发技术文档 | PDF预览实现方案</p>
       <p>根据项目需求和安全要求选择合适的PDF预览方案</p>
     </footer>
   </div>

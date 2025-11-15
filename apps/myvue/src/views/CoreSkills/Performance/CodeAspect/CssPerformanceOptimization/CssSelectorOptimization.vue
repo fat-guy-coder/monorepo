@@ -278,7 +278,7 @@ div:first-child {
     </div>
 
     <footer class="optimization-footer">
-      <p>© 2023 前端性能优化指南 | CSS选择器优化</p>
+      <p> 前端性能优化指南 | CSS选择器优化</p>
     </footer>
   </div>
 </template>

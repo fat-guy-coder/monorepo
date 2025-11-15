@@ -571,7 +571,7 @@
     </div>
 
     <div class="footer">
-      <p>Svelte © 2023 | 编译优先的Web框架 | GitHub Stars: 70k+</p>
+      <p>Svelte  | 编译优先的Web框架 | GitHub Stars: 70k+</p>
     </div>
   </div>
 </template>

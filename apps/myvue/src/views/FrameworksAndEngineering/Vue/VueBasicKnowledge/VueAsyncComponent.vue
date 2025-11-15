@@ -402,7 +402,7 @@ function loadAdvanced() {
           <a href="#" class="footer-link">示例项目</a>
         </div>
         <div class="footer-copyright">
-          © 2023 Vue异步组件基本指南 | 基于Vue 3 Composition API
+           Vue异步组件基本指南 | 基于Vue 3 Composition API
         </div>
       </div>
     </footer>

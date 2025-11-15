@@ -518,7 +518,7 @@ mobileBuild.runBuild();</code></pre>
     </div>
 
     <div class="footer">
-      <p>设计模式 | 行为型模式 | 模板方法模式 © 2023</p>
+      <p>设计模式 | 行为型模式 | 模板方法模式 </p>
     </div>
   </div>
 </template>

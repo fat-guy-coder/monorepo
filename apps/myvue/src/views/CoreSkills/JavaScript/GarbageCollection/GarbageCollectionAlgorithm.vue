@@ -351,7 +351,7 @@ pool.push(obj);</code></pre>
     </main>
 
     <footer>
-      <p>© 2023 浏览器垃圾回收机制基本介绍 | 使用Vue3和TypeScript实现</p>
+      <p> 浏览器垃圾回收机制基本介绍 | 使用Vue3和TypeScript实现</p>
     </footer>
   </div>
 </template>

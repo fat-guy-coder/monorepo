@@ -77,7 +77,7 @@
               <span class="param-name">c (增量):</span>
               <span class="param-value">通常为奇数</span>
             </div>
-            <div class="param-item">
+            <div class="parameter-item">
               <span class="param-name">m (模数):</span>
               <span class="param-value">2<sup>32</sup> 或 2<sup>64</sup></span>
             </div>
@@ -212,6 +212,225 @@ console.log(random.random(1, 10)); // [1, 10)</code></pre>
 
 
 
+    <!-- crypto.getRandomValues() 真随机数 -->
+    <section class="crypto-random-card">
+      <h3>🔐 crypto.getRandomValues() 真随机数</h3>
+      <div class="crypto-content">
+        <div class="crypto-overview">
+          <h4>🔑 真随机数概述</h4>
+          <p>crypto.getRandomValues() 是 Web Crypto API 提供的方法，用于生成密码学安全的真随机数，与 Math.random() 的伪随机数有本质区别。</p>
+        </div>
+
+        <div class="random-comparison">
+          <h4>📊 真随机数 vs 伪随机数对比</h4>
+          <div class="comparison-grid">
+            <div class="comparison-item true-random">
+              <div class="comparison-header">
+                <span class="comparison-icon">✅</span>
+                <span class="comparison-title">真随机数 (crypto.getRandomValues)</span>
+              </div>
+              <ul class="comparison-features">
+                <li>基于硬件熵源（热噪声、量子效应等）</li>
+                <li>完全不可预测</li>
+                <li>密码学安全</li>
+                <li>适合加密、密钥生成</li>
+                <li>性能相对较低</li>
+              </ul>
+            </div>
+            <div class="comparison-item pseudo-random">
+              <div class="comparison-header">
+                <span class="comparison-icon">⚠️</span>
+                <span class="comparison-title">伪随机数 (Math.random)</span>
+              </div>
+              <ul class="comparison-features">
+                <li>基于确定性算法</li>
+                <li>可预测（知道种子值）</li>
+                <li>不适合加密</li>
+                <li>适合游戏、动画</li>
+                <li>性能极高</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="entropy-sources">
+          <h4>🌊 熵源类型</h4>
+          <div class="entropy-grid">
+            <div class="entropy-item">
+              <div class="entropy-header">
+                <span class="entropy-icon">⚡</span>
+                <span class="entropy-name">硬件熵源</span>
+              </div>
+              <p>CPU热噪声、内存访问时间、硬盘寻道时间等物理现象</p>
+            </div>
+            <div class="entropy-item">
+              <div class="entropy-header">
+                <span class="entropy-icon">🌐</span>
+                <span class="entropy-name">系统熵源</span>
+              </div>
+              <p>系统事件、用户输入、网络延迟等不可预测事件</p>
+            </div>
+            <div class="entropy-item">
+              <div class="entropy-header">
+                <span class="entropy-icon">🔬</span>
+                <span class="entropy-name">量子熵源</span>
+              </div>
+              <p>量子隧道效应、放射性衰变等量子现象</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="usage-examples">
+          <h4>💻 使用方法</h4>
+          <div class="example-grid">
+            <div class="example-item">
+              <h5>基础用法</h5>
+              <pre><code>// 生成 16 字节的随机数
+const randomBytes = new Uint8Array(16);
+crypto.getRandomValues(randomBytes);
+console.log(randomBytes); // Uint8Array(16) [123, 45, 67, ...]</code></pre>
+            </div>
+            <div class="example-item">
+              <h5>生成随机整数</h5>
+              <pre><code>// 生成 [1, 100] 范围的随机整数
+function getRandomInt(min, max) {
+  const range = max - min + 1;
+  const bytes = new Uint8Array(4);
+  crypto.getRandomValues(bytes);
+  const value = new DataView(bytes.buffer).getUint32(0);
+  return min + (value % range);
+}
+
+console.log(getRandomInt(1, 100)); // 1-100 之间的随机数</code></pre>
+            </div>
+            <div class="example-item">
+              <h5>生成随机字符串</h5>
+              <pre><code>// 生成随机字符串
+function generateRandomString(length) {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const bytes = new Uint8Array(length);
+  crypto.getRandomValues(bytes);
+
+  let result = '';
+  for (let i = 0; i < length; i++) {
+    result += chars[bytes[i] % chars.length];
+  }
+  return result;
+}
+
+console.log(generateRandomString(16)); // 16位随机字符串</code></pre>
+            </div>
+            <div class="example-item">
+              <h5>生成密钥</h5>
+              <pre><code>// 生成 AES 密钥
+function generateAESKey() {
+  const key = new Uint8Array(32); // 256位密钥
+  crypto.getRandomValues(key);
+  return key;
+}
+
+const aesKey = generateAESKey();
+console.log('AES Key:', aesKey);</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <div class="security-features">
+          <h4>🛡️ 安全特性</h4>
+          <div class="security-grid">
+            <div class="security-feature">
+              <span class="feature-icon">🔒</span>
+              <div class="feature-content">
+                <strong>不可预测性</strong>
+                <p>即使知道所有历史输出，也无法预测下一个值</p>
+              </div>
+            </div>
+            <div class="security-feature">
+              <span class="feature-icon">🎯</span>
+              <div class="feature-content">
+                <strong>均匀分布</strong>
+                <p>生成的随机数在值域内均匀分布，无偏差</p>
+              </div>
+            </div>
+            <div class="security-feature">
+              <span class="feature-icon">⚔️</span>
+              <div class="feature-content">
+                <strong>抗攻击性</strong>
+                <p>抵抗各种密码学攻击，包括侧信道攻击</p>
+              </div>
+            </div>
+            <div class="security-feature">
+              <span class="feature-icon">🌍</span>
+              <div class="feature-content">
+                <strong>标准兼容</strong>
+                <p>符合 NIST SP 800-90A 等国际标准</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="browser-support">
+          <h4>🌐 浏览器兼容性</h4>
+          <div class="browser-support-grid">
+            <div class="browser-support-item supported">
+              <span class="browser-name">Chrome</span>
+              <span class="version">11+</span>
+            </div>
+            <div class="browser-support-item supported">
+              <span class="browser-name">Firefox</span>
+              <span class="version">21+</span>
+            </div>
+            <div class="browser-support-item supported">
+              <span class="browser-name">Safari</span>
+              <span class="version">11+</span>
+            </div>
+            <div class="browser-support-item supported">
+              <span class="browser-name">Edge</span>
+              <span class="version">12+</span>
+            </div>
+            <div class="browser-support-item supported">
+              <span class="browser-name">IE</span>
+              <span class="version">11+</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="best-practices">
+          <h4>📋 最佳实践</h4>
+          <div class="practices-list">
+            <div class="practice-item">
+              <span class="practice-icon">🎯</span>
+              <div class="practice-content">
+                <strong>选择合适的数组类型</strong>
+                <p>根据需要的数值范围选择 Uint8Array、Uint16Array、Uint32Array 等</p>
+              </div>
+            </div>
+            <div class="practice-item">
+              <span class="practice-icon">⚡</span>
+              <div class="practice-content">
+                <strong>避免过度调用</strong>
+                <p>批量生成随机数，避免频繁调用影响性能</p>
+              </div>
+            </div>
+            <div class="practice-item">
+              <span class="practice-icon">🔐</span>
+              <div class="practice-content">
+                <strong>安全存储</strong>
+                <p>生成的随机数应安全存储，避免泄露</p>
+              </div>
+            </div>
+            <div class="practice-item">
+              <span class="practice-icon">🧪</span>
+              <div class="practice-content">
+                <strong>测试验证</strong>
+                <p>在关键应用中验证随机数的质量和分布</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- 注意事项 -->
     <section class="notice-card">
       <h3>⚠️ 注意事项</h3>
@@ -219,6 +438,7 @@ console.log(random.random(1, 10)); // [1, 10)</code></pre>
         <li>浮点数计算存在精度问题，需注意舍入误差</li>
         <li>参数类型不符合要求时返回NaN</li>
         <li>ES6新增方法需考虑浏览器兼容性</li>
+        <li>crypto.getRandomValues() 需要HTTPS环境或localhost</li>
       </ul>
     </section>
   </div>
@@ -688,5 +908,245 @@ code {
 
 .code-example code {
   color: #ffffff;
+}
+
+/* crypto.getRandomValues() 样式 */
+.crypto-random-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  margin-bottom: 2rem;
+}
+
+.crypto-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.crypto-overview h4,
+.random-comparison h4,
+.entropy-sources h4,
+.usage-examples h4,
+.security-features h4,
+.browser-support h4,
+.best-practices h4 {
+  color: #000;
+  margin-bottom: 1rem;
+  font-size: 1.2em;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+  padding-bottom: 0.5rem;
+}
+
+.comparison-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.comparison-item {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.comparison-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.comparison-icon {
+  font-size: 1.5em;
+}
+
+.comparison-title {
+  font-weight: 600;
+  color: #ffd700;
+  font-size: 1.1em;
+}
+
+.comparison-features {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.comparison-features li {
+  color: #ffffff;
+  margin-bottom: 0.5rem;
+  padding-left: 1rem;
+  position: relative;
+}
+
+.comparison-features li::before {
+  content: "•";
+  color: #ffd700;
+  position: absolute;
+  left: 0;
+}
+
+.entropy-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.entropy-item {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 1rem;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  text-align: center;
+}
+
+.entropy-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.entropy-icon {
+  font-size: 1.5em;
+}
+
+.entropy-name {
+  font-weight: 600;
+  color: #ffd700;
+}
+
+.entropy-item p {
+  color: #ffffff;
+  font-size: 0.9em;
+  margin: 0;
+}
+
+.example-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.example-item {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 1rem;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.example-item h5 {
+  color: #ffd700;
+  margin-bottom: 0.5rem;
+  font-size: 1em;
+}
+
+.example-item pre {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  margin: 0;
+}
+
+.example-item code {
+  color: #ffffff;
+}
+
+.security-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.security-feature {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 1rem;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.feature-icon {
+  font-size: 1.2em;
+  flex-shrink: 0;
+}
+
+.feature-content strong {
+  color: #ffd700;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.feature-content p {
+  color: #ffffff;
+  margin: 0;
+  font-size: 0.9em;
+}
+
+.browser-support-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+}
+
+.browser-support-item {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 1rem;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  text-align: center;
+}
+
+.browser-support-item.supported {
+  background: rgba(40, 167, 69, 0.2);
+  border-color: rgba(40, 167, 69, 0.4);
+}
+
+.browser-name {
+  display: block;
+  font-weight: 600;
+  color: #ffd700;
+  margin-bottom: 0.5rem;
+}
+
+.version {
+  color: #ffffff;
+  font-size: 0.9em;
+}
+
+.practices-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.practice-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 1rem;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.practice-icon {
+  font-size: 1.2em;
+  flex-shrink: 0;
+}
+
+.practice-content strong {
+  color: #ffd700;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.practice-content p {
+  color: #ffffff;
+  margin: 0;
+  font-size: 0.9em;
 }
 </style>

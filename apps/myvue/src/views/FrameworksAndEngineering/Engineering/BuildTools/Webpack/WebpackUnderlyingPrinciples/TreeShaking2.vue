@@ -392,7 +392,7 @@ _.debounce(...);</pre>
         </div>
       </div>
       <div class="copyright">
-        © 2023 前端性能优化指南 | 使用 Vue3 + TypeScript 实现
+         前端性能优化指南 | 使用 Vue3 + TypeScript 实现
       </div>
     </footer>
 

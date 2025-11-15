@@ -581,7 +581,7 @@ http.createServer((req, res) => {
         </div>
       </div>
       <div class="footer-bottom">
-        <div class="copyright">© 2023 HTTP缓存技术 | 协商缓存权威指南</div>
+        <div class="copyright"> HTTP缓存技术 | 协商缓存权威指南</div>
         <div class="stats">
           <span class="cache-hits">本页缓存命中: <span class="metric-value">4次</span></span>
           <span class="bandwidth-saved">带宽节省: <span class="metric-value">1.2MB</span></span>

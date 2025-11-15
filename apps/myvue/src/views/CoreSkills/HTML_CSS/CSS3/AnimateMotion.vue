@@ -355,7 +355,7 @@ if (!CSS.supports('offset-path', 'path("")')) {
           <a href="#" class="footer-link">Polyfill</a>
         </div>
         <div class="footer-copyright">
-          © 2023 CSS路径动画基本指南 | 现代CSS动画技术
+           CSS路径动画基本指南 | 现代CSS动画技术
         </div>
       </div>
     </footer>

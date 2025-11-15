@@ -189,7 +189,7 @@
     </main>
 
     <footer class="footer">
-      <p>© 2023 Node.js 模块机制详解 | 使用 Vue 3 + TypeScript 实现</p>
+      <p> Node.js 模块机制详解 | 使用 Vue 3 + TypeScript 实现</p>
       <p>深入理解 Node.js 模块系统，构建更高效的应用程序</p>
     </footer>
   </div>

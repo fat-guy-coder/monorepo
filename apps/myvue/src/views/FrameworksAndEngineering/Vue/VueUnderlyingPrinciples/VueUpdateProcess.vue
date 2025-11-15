@@ -276,7 +276,7 @@ function flushSchedulerQueue() {
     </div>
 
     <div class="footer">
-      <p>© 2023 Vue.js 核心机制 | 更新流程是 Vue 响应式系统的核心</p>
+      <p> Vue.js 核心机制 | 更新流程是 Vue 响应式系统的核心</p>
     </div>
   </div>
 </template>

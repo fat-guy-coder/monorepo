@@ -616,7 +616,7 @@ document.addEventListener('click', handleClick);</pre>
           <a href="https://web.dev/rendering-performance/" target="_blank">渲染性能优化</a>
           <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API" target="_blank">Web Workers文档</a>
         </div>
-        <p>© 2023 浏览器架构指南 | 理解进程与线程，构建高性能Web应用</p>
+        <p> 浏览器架构指南 | 理解进程与线程，构建高性能Web应用</p>
       </div>
     </footer>
   </div>

@@ -651,7 +651,7 @@ export default {
 
     <!-- 页脚 -->
     <div class="footer">
-      <p>Rollup - JavaScript 模块打包器 | 库开发首选 | © 2023</p>
+      <p>Rollup - JavaScript 模块打包器 | 库开发首选 | </p>
       <div class="footer-links">
         <a href="https://rollupjs.org/" target="_blank">官方文档</a>
         <a href="https://github.com/rollup/rollup" target="_blank">GitHub</a>

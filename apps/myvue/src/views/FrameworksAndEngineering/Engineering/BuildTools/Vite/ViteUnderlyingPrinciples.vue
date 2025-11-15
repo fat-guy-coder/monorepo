@@ -609,7 +609,7 @@ export default {
 
     <!-- 页脚 -->
     <div class="footer">
-      <p>Vite 底层原理基础介绍 | 下一代前端工具核心机制 | © 2023</p>
+      <p>Vite 底层原理基础介绍 | 下一代前端工具核心机制 | </p>
       <div class="footer-links">
         <a href="https://vitejs.dev" target="_blank">官方文档</a>
         <a href="https://vitejs.dev/guide/why.html" target="_blank">为什么选择 Vite</a>

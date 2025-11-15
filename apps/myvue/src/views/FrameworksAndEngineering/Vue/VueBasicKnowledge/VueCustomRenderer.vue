@@ -637,7 +637,7 @@ const inspector = {
           <a href="https://github.com/vuejs/core" target="_blank">Vue源码</a>
           <a href="https://github.com/troisjs/trois" target="_blank">TroisJS案例</a>
         </div>
-        <p>© 2023 Vue高级渲染技术 | 自定义渲染器开发指南</p>
+        <p> Vue高级渲染技术 | 自定义渲染器开发指南</p>
       </div>
     </footer>
   </div>

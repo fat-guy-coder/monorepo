@@ -306,7 +306,7 @@ describe('Login Test', () => {
     </main>
 
     <footer class="footer">
-      <p>前端测试最佳实践 © 2023 | 覆盖单元测试、集成测试、E2E测试 | 推荐测试覆盖率：70-80%</p>
+      <p>前端测试最佳实践  | 覆盖单元测试、集成测试、E2E测试 | 推荐测试覆盖率：70-80%</p>
     </footer>
   </div>
 </template>

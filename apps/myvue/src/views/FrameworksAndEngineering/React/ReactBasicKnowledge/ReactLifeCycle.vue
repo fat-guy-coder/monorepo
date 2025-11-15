@@ -829,7 +829,7 @@ render() {
     </div>
 
     <footer class="footer">
-      <p>© 2023 React 生命周期指南 | 使用 Vue3 制作</p>
+      <p> React 生命周期指南 | 使用 Vue3 制作</p>
       <p>React 是 Facebook 的注册商标</p>
     </footer>
   </div>

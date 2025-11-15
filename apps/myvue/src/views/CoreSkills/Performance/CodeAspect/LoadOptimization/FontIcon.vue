@@ -150,7 +150,7 @@ import '@iconfont/iconfont.css'</code></pre>
     </div>
 
     <footer class="footer">
-      <p>© 2023 前端性能优化指南 | 字体图标可减少高达90%的图标资源体积</p>
+      <p> 前端性能优化指南 | 字体图标可减少高达90%的图标资源体积</p>
     </footer>
   </div>
 </template>

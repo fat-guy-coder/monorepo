@@ -564,7 +564,7 @@ console.log(getValue()); // undefined</pre>
     </main>
 
     <footer class="footer">
-      <p>© 2023 JavaScript this指向指南 | 掌握上下文绑定的核心机制</p>
+      <p> JavaScript this指向指南 | 掌握上下文绑定的核心机制</p>
     </footer>
   </div>
 </template>

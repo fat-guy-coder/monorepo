@@ -76,7 +76,7 @@
     </div>
 
     <footer class="footer">
-      <p>© 2023 JavaScript 闭包算法 | 共 {{ totalAlgorithms }} 个算法</p>
+      <p> JavaScript 闭包算法 | 共 {{ totalAlgorithms }} 个算法</p>
     </footer>
   </div>
 </template>

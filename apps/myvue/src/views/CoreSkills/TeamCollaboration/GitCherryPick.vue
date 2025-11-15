@@ -313,7 +313,7 @@ console.log('Incoming cherry-pick code');
     </main>
 
     <footer class="footer">
-      <p>Git Cherry-Pick 技术指南 © 2023 | 精准选择提交，灵活管理代码 | 使用前请务必理解其工作原理</p>
+      <p>Git Cherry-Pick 技术指南  | 精准选择提交，灵活管理代码 | 使用前请务必理解其工作原理</p>
     </footer>
   </div>
 </template>

@@ -384,7 +384,7 @@ function stripClosest(strip, d) {
 
     <!-- 页脚 -->
     <footer class="footer">
-      <p>分治算法总结 © 2023 | 递归是解决问题的艺术，分治是高效解决问题的科学</p>
+      <p>分治算法总结  | 递归是解决问题的艺术，分治是高效解决问题的科学</p>
     </footer>
   </div>
 </template>

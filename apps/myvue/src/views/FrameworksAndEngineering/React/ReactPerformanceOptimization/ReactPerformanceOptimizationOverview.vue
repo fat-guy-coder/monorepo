@@ -497,7 +497,7 @@ module.exports = {
     </div>
 
     <footer>
-      <p>© 2023 React性能优化指南 | 提升应用性能的最佳实践</p>
+      <p> React性能优化指南 | 提升应用性能的最佳实践</p>
       <p class="tip">提示：性能优化应基于实际测量，避免过早和过度优化</p>
     </footer>
   </div>

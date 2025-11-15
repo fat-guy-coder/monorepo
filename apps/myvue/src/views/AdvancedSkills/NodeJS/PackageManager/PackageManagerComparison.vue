@@ -753,7 +753,7 @@ npm install</code></pre>
 
     <footer class="footer">
       <p>npm vs Yarn vs pnpm 深度对比 | Vue3 + TypeScript 实现</p>
-      <p>© 2023 前端工程化研究</p>
+      <p> 前端工程化研究</p>
     </footer>
   </div>
 </template>

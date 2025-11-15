@@ -207,7 +207,7 @@
     </div>
 
     <footer class="footer">
-      <p>© 2023 Canvas事件处理指南 | 使用Vue 3和TypeScript实现</p>
+      <p> Canvas事件处理指南 | 使用Vue 3和TypeScript实现</p>
     </footer>
   </div>
 </template>

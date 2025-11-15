@@ -303,7 +303,7 @@ setInterval(() => {
 
     <div class="footer">
       <p>Document Picture-in-Picture API | 增强的多任务Web体验</p>
-      <p>© 2023 Web技术演进手册 | 版本 1.0.0</p>
+      <p> Web技术演进手册 | 版本 1.0.0</p>
     </div>
   </div>
 </template>

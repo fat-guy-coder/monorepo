@@ -518,7 +518,7 @@ module.exports = {
     </div>
 
     <div class="footer">
-      <p>Webpack 代码分割技术 | 优化前端性能的艺术 | © 2023</p>
+      <p>Webpack 代码分割技术 | 优化前端性能的艺术 | </p>
     </div>
   </div>
 </template>

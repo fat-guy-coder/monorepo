@@ -338,7 +338,7 @@ const factorial = trampoline(function f(n, acc = 1) {
     </div>
 
     <footer class="footer">
-      <p>© 2023 JavaScript性能优化 | 尾递归与尾调用专题</p>
+      <p> JavaScript性能优化 | 尾递归与尾调用专题</p>
     </footer>
   </div>
 </template>

@@ -200,7 +200,7 @@
 
     <footer class="footer">
       <p>JavaScript 内存管理深度指南 | 使用 Vue 3 + TypeScript 构建</p>
-      <p>© 2023 高性能 Web 应用开发</p>
+      <p> 高性能 Web 应用开发</p>
     </footer>
   </div>
 </template>

@@ -488,7 +488,7 @@ library: {
 
     <!-- 页脚 -->
     <div class="footer">
-      <p>Webpack Library 配置基础介绍 | JavaScript 库打包指南 | © 2023</p>
+      <p>Webpack Library 配置基础介绍 | JavaScript 库打包指南 | </p>
       <div class="footer-links">
         <a href="https://webpack.js.org/configuration/output/#outputlibrary" target="_blank">官方文档</a>
         <a href="https://github.com/webpack/webpack" target="_blank">GitHub</a>

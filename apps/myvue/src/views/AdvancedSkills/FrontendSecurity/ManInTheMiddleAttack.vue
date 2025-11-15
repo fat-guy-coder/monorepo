@@ -287,7 +287,7 @@ Referrer-Policy: no-referrer-when-downgrade</code></pre>
 
     <footer class="footer">
       <p>中间人攻击是Web应用面临的主要威胁之一。通过实施HTTPS、配置安全头部和用户教育，可以显著降低风险。</p>
-      <p>© 2023 前端安全实践指南 | 最后更新: 2023年10月</p>
+      <p> 前端安全实践指南 | 最后更新: 2023年10月</p>
     </footer>
   </div>
 </template>

@@ -201,7 +201,7 @@
     </div>
 
     <footer class="footer">
-      <p>© 2023 JavaScript空对象检测指南 | 在Vue中实现实时测试</p>
+      <p> JavaScript空对象检测指南 | 在Vue中实现实时测试</p>
     </footer>
   </div>
 </template>

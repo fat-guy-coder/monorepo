@@ -179,7 +179,7 @@ console.log('转换后的Blob:', blob);</pre>
     </div>
 
     <footer class="footer">
-      <p>© 2023 DataURL技术文档 | 使用Vue3(TS + Setup)实现</p>
+      <p> DataURL技术文档 | 使用Vue3(TS + Setup)实现</p>
     </footer>
   </div>
 </template>

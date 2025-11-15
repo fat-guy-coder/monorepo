@@ -414,7 +414,7 @@ function recursive(n: number): number {
     </main>
 
     <footer>
-      <p>© 2023 算法复杂度基础介绍 | 使用Vue3和TypeScript实现</p>
+      <p> 算法复杂度基础介绍 | 使用Vue3和TypeScript实现</p>
     </footer>
   </div>
 </template>

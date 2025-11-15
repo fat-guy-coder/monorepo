@@ -395,7 +395,7 @@
         </div>
       </div>
       <div class="copyright">
-        © 2023 网络架构知识分享 | 代理技术基础介绍
+         网络架构知识分享 | 代理技术基础介绍
       </div>
     </footer>
   </div>

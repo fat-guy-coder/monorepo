@@ -319,7 +319,7 @@ try {
     </div>
 
     <footer class="footer">
-      <p>© 2023 JavaScript 设计模式实践 | 代理模式实现</p>
+      <p> JavaScript 设计模式实践 | 代理模式实现</p>
     </footer>
   </div>
 </template>

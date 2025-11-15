@@ -89,41 +89,24 @@ const newArr = [...arr, 4];
 
           <div class="principle-card">
             <div class="principle-icon">
-              <i class="fas fa-project-diagram"></i>
+              <i class="fas fa-ban"></i>
             </div>
-            <h3>函数组合</h3>
-            <p>将多个简单函数组合成更复杂的功能</p>
+            <h3>单一职责原则</h3>
+            <p>一个函数只做一件事</p>
             <div class="code-example">
-              <pre><code>const compose = (f, g) => x => f(g(x));
+              <pre><code>function handle(num) {
+  return num * 2
+}
 
-const toUpperCase = str => str.toUpperCase();
-const exclaim = str => `${str}!`;
-
-const shout = compose(exclaim, toUpperCase);
-
-shout('hello'); // "HELLO!"</code></pre>
+function handle2(num) {
+  return num * 3
+}</code></pre>
             </div>
           </div>
 
-          <div class="principle-card">
-            <div class="principle-icon">
-              <i class="fas fa-arrows-alt-h"></i>
-            </div>
-            <h3>高阶函数</h3>
-            <p>接收函数作为参数或返回函数的函数</p>
-            <div class="code-example">
-              <pre><code>// 接受函数作为参数
-const numbers = [1, 2, 3];
-const doubled = numbers.map(n => n * 2);
 
-// 返回函数
-const multiplier = factor =>
-  number => number * factor;
 
-const double = multiplier(2);
-double(5); // 10</code></pre>
-            </div>
-          </div>
+
         </div>
       </section>
 
@@ -158,6 +141,37 @@ add5(3); // 8</code></pre>
 
 const multiply = (a, b) => a * b;
 const double = partial(multiply, 2);
+double(5); // 10</code></pre>
+            </div>
+          </div>
+          <div class="type-card">
+            <h3>函数组合</h3>
+            <p>将多个简单函数组合成更复杂的功能</p>
+            <div class="code-example">
+              <pre><code>const compose = (f, g) => x => f(g(x));
+
+const toUpperCase = str => str.toUpperCase();
+const exclaim = str => `${str}!`;
+
+const shout = compose(exclaim, toUpperCase);
+
+shout('hello'); // "HELLO!"</code></pre>
+            </div>
+          </div>
+
+          <div class="type-card">
+            <h3>高阶函数</h3>
+            <p>接收函数作为参数或返回函数的函数</p>
+            <div class="code-example">
+              <pre><code>// 接受函数作为参数
+const numbers = [1, 2, 3];
+const doubled = numbers.map(n => n * 2);
+
+// 返回函数
+const multiplier = factor =>
+  number => number * factor;
+
+const double = multiplier(2);
 double(5); // 10</code></pre>
             </div>
           </div>
@@ -312,7 +326,7 @@ new Maybe(5)
     </main>
 
     <footer class="footer">
-      <p>© 2023 JavaScript函数式编程指南 | 使用Vue 3和TypeScript构建</p>
+      <p> JavaScript函数式编程指南 | 使用Vue 3和TypeScript构建</p>
       <div class="footer-links">
         <a href="#"><i class="fab fa-github"></i> GitHub</a>
         <a href="#"><i class="fab fa-codepen"></i> CodePen</a>

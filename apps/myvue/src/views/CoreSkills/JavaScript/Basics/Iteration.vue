@@ -438,7 +438,7 @@ for (let i = 4; i < arr.length; i++) {
 
     <footer class="footer">
       <p>JavaScript 循环方法最佳实践 | 性能数据基于 Chrome 115 测试</p>
-      <p>© 2023 前端性能优化指南</p>
+      <p> 前端性能优化指南</p>
     </footer>
   </div>
 </template>

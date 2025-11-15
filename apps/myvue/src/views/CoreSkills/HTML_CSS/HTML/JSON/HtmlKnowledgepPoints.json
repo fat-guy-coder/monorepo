@@ -1,0 +1,600 @@
+{
+  "highFrequency": [
+    {
+      "id": 1,
+      "title": "DOCTYPE的作用",
+      "content": "DOCTYPE声明位于HTML文档最前面，告诉浏览器使用哪种HTML或XHTML规范来解析文档。",
+      "example": "<!DOCTYPE html>",
+      "importance": 3,
+      "frequency": 3,
+      "route": "DOCTYPE"
+    },
+    {
+      "id": 2,
+      "title": "HTML语义化",
+      "content": "使用恰当的标签表达内容含义，提高可访问性和SEO效果。",
+      "example": "<header><nav><main><article><section><aside><footer>",
+      "importance": 3,
+      "frequency": 3,
+      "route": "SemanticTags"
+    },
+    {
+      "id": 3,
+      "title": "块级元素 vs 行内元素",
+      "content": "块级元素独占一行，可设置宽高；行内元素不独占一行，不可设置宽高。常见块级元素：div、p、h1-h6、ul、li。常见行内元素：span、a、strong、em、img、input等。",
+      "example": "块级：div, p, h1-h6, ul, li\n行内：span, a, strong, em, img",
+      "importance": 3,
+      "frequency": 3,
+      "route": "BlockInlineElement"
+    },
+    {
+      "id": 4,
+      "title": "HTML5新特性",
+      "content": "HTML5带来了语义化标签（header, section, article, footer等）、本地存储（localStorage, sessionStorage）、多媒体标签（audio, video）、Canvas、表单控件增强（新input type属性）、Geolocation API、拖放API、Web Workers等重要特性。",
+      "example": "<section>, <audio>, <video>, <canvas>, <input type=\"date\">",
+      "importance": 3,
+      "frequency": 2,
+      "route": "HTML5Features"
+    },
+    {
+      "id": 5,
+      "title": "src和href的区别",
+      "content": "src用于替换当前元素内容（常用于img、script等），会发起请求并替换自身内容；href用于建立当前文档与引用资源之间的关系（如link、a标签）。",
+      "example": "src: <img src=\"image.jpg\">\nhref: <link href=\"style.css\">",
+      "importance": 2,
+      "frequency": 2,
+      "route": "SrcVsHref"
+    },
+    {
+      "id": 6,
+      "title": "defer和async的区别",
+      "content": "defer和async都是script标签的属性：defer脚本会延迟到文档解析完成后按顺序执行，async脚本下载完成后立即执行，不能保证顺序。",
+      "example": "<script defer src=\"script.js\"></script>\n<script async src=\"script.js\"></script>",
+      "importance": 3,
+      "frequency": 2,
+      "route": "DeferVsAsync"
+    },
+    {
+      "id": 7,
+      "title": "HTML全局属性",
+      "content": "所有HTML元素共有的属性，如id、class、style、title、data-*、lang、tabindex、contenteditable等。",
+      "example": "<div id=\"demo\" class=\"box\" data-info=\"123\"></div>",
+      "importance": 2,
+      "frequency": 2,
+      "route": "GlobalAttributes"
+    },
+    {
+      "id": 8,
+      "title": "iframe的优缺点",
+      "content": "优点：可嵌入第三方内容，实现沙箱隔离；缺点：SEO不友好，性能开销大、易引发安全问题。原生属性如sandbox可增强安全性。",
+      "example": "<iframe src=\"https://example.com\" sandbox></iframe>",
+      "importance": 1,
+      "frequency": 1,
+      "route": "IframeAdvDisadv"
+    },
+    {
+      "id": 9,
+      "title": "Canvas vs SVG",
+      "content": "Canvas基于像素，适合高性能游戏或图像处理，操作灵活但不易编辑；SVG基于矢量，适合图标、图表、动画，支持事件模型，易编辑，缩放不失真。",
+      "example": "<canvas id=\"myCanvas\"></canvas>\n<svg width=\"100\" height=\"100\"></svg>",
+      "importance": 2,
+      "frequency": 2,
+      "route": "CanvasVsSVG"
+    },
+    {
+      "id": 10,
+      "title": "Web Worker",
+      "content": "在后台线程运行JavaScript，不阻塞主线程。适合复杂计算、数据处理等场景，提高页面流畅度（但不能操作DOM）。",
+      "example": "const worker = new Worker('worker.js');",
+      "importance": 2,
+      "frequency": 1,
+      "route": "WebWorker"
+    },
+    {
+      "id": 11,
+      "title": "meta标签的常用用途",
+      "content": "meta标签用于设置文档字符集、作者、描述、关键字、视口、自动刷新等，影响SEO与移动端显示效果。",
+      "example": "<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">",
+      "importance": 3,
+      "frequency": 3,
+      "route": "MetaTags"
+    },
+    {
+      "id": 12,
+      "title": "无障碍（Accessibility）基本实践",
+      "content": "合理使用语义化标签、aria相关属性、alt描述、tabindex和label提升页面对残障人士友好性，满足WCAG规范。",
+      "example": "<img src=\"logo.png\" alt=\"公司logo\">\n<button aria-label=\"关闭\">×</button>",
+      "importance": 3,
+      "frequency": 2,
+      "route": "Accessibility"
+    },
+    {
+      "id": 13,
+      "title": "link标签与常见关系类型",
+      "content": "link标签定义文档与外部资源的关系（如样式、图标、预加载等），常用rel属性有stylesheet、icon、preload、dns-prefetch、preconnect等。",
+      "example": "<link rel=\"stylesheet\" href=\"style.css\">\n<link rel=\"preload\" href=\"font.ttf\" as=\"font\">",
+      "importance": 2,
+      "frequency": 2,
+      "route": "LinkTags"
+    },
+    {
+      "id": 14,
+      "title": "HTML实体(Entity)与转义字符",
+      "content": "在HTML中使用实体防止显示特殊字符出错，如&lt;表示<、&amp;表示&。适用于文本内容、属性等。",
+      "example": "常见实体：&lt; &gt; &amp; &quot; &apos; &copy;",
+      "importance": 2,
+      "frequency": 2,
+      "route": "HTMLEntity"
+    },
+    {
+      "id": 15,
+      "title": "input类型补全（HTML5新增类型）",
+      "content": "input新增支持email、url、number、date、color、range等类型，增强表单体验和原生校验功能。",
+      "example": "<input type=\"email\">\n<input type=\"date\">",
+      "importance": 2,
+      "frequency": 2,
+      "route": "InputType"
+    },
+    {
+      "id": 16,
+      "title": "autofocus与autocomplete",
+      "content": "autofocus使输入框页面加载后自动聚焦，autocomplete控制是否自动填写。合理运用提升用户体验。",
+      "example": "<input type=\"text\" autofocus autocomplete=\"on\">",
+      "importance": 2,
+      "frequency": 2,
+      "route": "AutofocusAutocomplete"
+    },
+    {
+      "id": 17,
+      "title": "custom data-*属性",
+      "content": "data-*属性可以自定义存储页面元素的相关数据，可通过JS访问，实现组件、交互、跟踪等多种用途。",
+      "example": "<div data-id=\"1\" data-user=\"zhangsan\"></div>",
+      "importance": 2,
+      "frequency": 2,
+      "route": "DataAttr"
+    },
+    {
+      "id": 18,
+      "title": "内容可编辑（contenteditable）",
+      "content": "contenteditable属性让元素内容可被用户直接编辑，适用于富文本、可编辑区域实现。",
+      "example": "<div contenteditable=\"true\">可编辑内容</div>",
+      "importance": 1,
+      "frequency": 1,
+      "route": "ContentEditable"
+    },
+    {
+      "id": 19,
+      "title": "模板(template)和插槽(slot)",
+      "content": "template标签用于声明可复用模板，不渲染内容；slot为Web组件提供内容分发能力，常配合自定义元素使用。",
+      "example": "<template><div>模板内容</div></template>\n<slot name=\"main\"></slot>",
+      "importance": 1,
+      "frequency": 1,
+      "route": "TemplateSlot"
+    }
+  ],
+  "semantic": [
+    {
+      "id": 1,
+      "title": "header",
+      "content": "定义文档或章节的页眉，通常包含logo、导航等。",
+      "example": "<header><h1>网站标题</h1><nav>...</nav></header>",
+      "importance": 2,
+      "frequency": 2
+    },
+    {
+      "id": 2,
+      "title": "nav",
+      "content": "定义导航链接的部分。",
+      "example": "<nav><a href=\"/home\">首页</a><a href=\"/about\">关于</a></nav>",
+      "importance": 2,
+      "frequency": 2
+    },
+    {
+      "id": 3,
+      "title": "main",
+      "content": "定义文档的主要内容，一个页面只能有一个。",
+      "example": "<main><article>...</article><aside>...</aside></main>",
+      "importance": 3,
+      "frequency": 2
+    },
+    {
+      "id": 4,
+      "title": "article",
+      "content": "定义独立的自包含内容，如博客文章、新闻等。",
+      "example": "<article><h2>文章标题</h2><p>文章内容...</p></article>",
+      "importance": 2,
+      "frequency": 2
+    },
+    {
+      "id": 5,
+      "title": "section",
+      "content": "定义文档中的节，通常有标题。",
+      "example": "<section><h2>章节标题</h2><p>章节内容...</p></section>",
+      "importance": 2,
+      "frequency": 2
+    },
+    {
+      "id": 6,
+      "title": "aside",
+      "content": "定义与主要内容相关但不是必需的内容，如侧边栏。",
+      "example": "<aside><h3>相关链接</h3><ul>...</ul></aside>",
+      "importance": 2,
+      "frequency": 1
+    },
+    {
+      "id": 7,
+      "title": "footer",
+      "content": "定义文档或章节的页脚，通常包含版权信息等。",
+      "example": "<footer><p>&copy; 2024 公司名称</p></footer>",
+      "importance": 2,
+      "frequency": 2
+    },
+    {
+      "id": 8,
+      "title": "figure和figcaption",
+      "content": "figure定义独立内容，figcaption为其定义标题。",
+      "example": "<figure><img src=\"image.jpg\"><figcaption>图片说明</figcaption></figure>",
+      "importance": 1,
+      "frequency": 1
+    },
+    {
+      "id": 9,
+      "title": "time",
+      "content": "定义日期或时间，datetime属性指定机器可读的格式。",
+      "example": "<time datetime=\"2024-12-01\">2024年12月1日</time>",
+      "importance": 1,
+      "frequency": 1
+    },
+    {
+      "id": 10,
+      "title": "mark",
+      "content": "定义需要突出显示或标记的文本。",
+      "example": "<p>这是一段<mark>重要</mark>的文本</p>",
+      "importance": 1,
+      "frequency": 1
+    },
+    {
+      "id": 11,
+      "title": "address",
+      "content": "表示与文档相关的人或组织的联系信息，通常在footer中使用。",
+      "example": "<address>Contact: example@example.com</address>",
+      "importance": 1,
+      "frequency": 1
+    }
+  ],
+  "form": [
+    {
+      "id": 1,
+      "title": "input类型",
+      "content": "HTML5新增多种input类型，提供更好的输入体验和验证，如email、url、number、date、color、range、search等。",
+      "example": "email, url, tel, number, date, color, range, search",
+      "importance": 3,
+      "frequency": 3
+    },
+    {
+      "id": 2,
+      "title": "placeholder属性",
+      "content": "提供输入字段的提示信息，用户开始输入时消失。",
+      "example": "<input type=\"text\" placeholder=\"请输入用户名\">",
+      "importance": 2,
+      "frequency": 3
+    },
+    {
+      "id": 3,
+      "title": "required属性",
+      "content": "指定输入字段为必填项，提交时会进行验证。",
+      "example": "<input type=\"text\" required>",
+      "importance": 2,
+      "frequency": 2
+    },
+    {
+      "id": 4,
+      "title": "pattern属性",
+      "content": "使用正则表达式验证输入格式。",
+      "example": "<input type=\"text\" pattern=\"[A-Za-z]{3}\">",
+      "importance": 2,
+      "frequency": 2
+    },
+    {
+      "id": 5,
+      "title": "autocomplete属性",
+      "content": "控制浏览器是否自动填充表单字段。",
+      "example": "<input type=\"text\" autocomplete=\"on|off\">",
+      "importance": 1,
+      "frequency": 1
+    },
+    {
+      "id": 6,
+      "title": "datalist元素",
+      "content": "为input提供预定义选项列表，让用户方便输入。",
+      "example": "<input list=\"browsers\"><datalist id=\"browsers\"><option value=\"Chrome\"></datalist>",
+      "importance": 1,
+      "frequency": 1
+    },
+    {
+      "id": 7,
+      "title": "fieldset和legend",
+      "content": "fieldset分组表单元素，legend定义分组标题。",
+      "example": "<fieldset><legend>个人信息</legend>...</fieldset>",
+      "importance": 1,
+      "frequency": 1
+    },
+    {
+      "id": 8,
+      "title": "label的for属性",
+      "content": "将label与表单控件关联，提高可访问性和可用性。对于无障碍极为重要。",
+      "example": "<label for=\"username\">用户名</label><input id=\"username\">",
+      "importance": 3,
+      "frequency": 2
+    },
+    {
+      "id": 9,
+      "title": "textarea元素",
+      "content": "定义多行文本输入框，rows和cols属性控制大小。",
+      "example": "<textarea rows=\"4\" cols=\"50\"></textarea>",
+      "importance": 2,
+      "frequency": 2
+    },
+    {
+      "id": 10,
+      "title": "select和option",
+      "content": "创建下拉选择列表，option定义选项。",
+      "example": "<select><option value=\"1\">选项1</option></select>",
+      "importance": 2,
+      "frequency": 2
+    },
+    {
+      "id": 11,
+      "title": "表单验证总结",
+      "content": "HTML5表单内置验证包括required、min、max、pattern、type等；也可以用JS自定义验证。配合novalidate关闭原生校验。",
+      "example": "<form novalidate>...</form>",
+      "importance": 2,
+      "frequency": 2
+    }
+  ],
+  "media": [
+    {
+      "id": 1,
+      "title": "audio元素",
+      "content": "嵌入音频内容，支持多种音频格式。controls属性控制显示播放控件。",
+      "example": "<audio controls><source src=\"audio.mp3\" type=\"audio/mpeg\"></audio>",
+      "importance": 2,
+      "frequency": 2
+    },
+    {
+      "id": 2,
+      "title": "video元素",
+      "content": "嵌入视频内容，支持多种视频格式。常用属性有controls、autoplay、muted、poster等。",
+      "example": "<video controls width=\"250\"><source src=\"video.mp4\" type=\"video/mp4\"></video>",
+      "importance": 2,
+      "frequency": 2
+    },
+    {
+      "id": 3,
+      "title": "source元素",
+      "content": "为media元素指定多个媒体源，浏览器会选择第一个支持的格式。",
+      "example": "<video><source src=\"movie.mp4\" type=\"video/mp4\"><source src=\"movie.ogg\" type=\"video/ogg\"></video>",
+      "importance": 1,
+      "frequency": 1
+    },
+    {
+      "id": 4,
+      "title": "track元素",
+      "content": "为media元素指定字幕或其他文本轨道，支持多语言及辅助功能。",
+      "example": "<video><track kind=\"subtitles\" src=\"subtitles_en.vtt\" srclang=\"en\"></video>",
+      "importance": 1,
+      "frequency": 1
+    },
+    {
+      "id": 5,
+      "title": "picture元素",
+      "content": "响应式图片，根据设备特性加载不同图片，提升适配与性能。",
+      "example": "<picture><source media=\"(min-width: 800px)\" srcset=\"large.jpg\"><img src=\"small.jpg\"></picture>",
+      "importance": 2,
+      "frequency": 1
+    },
+    {
+      "id": 6,
+      "title": "img的srcset和sizes",
+      "content": "响应式图片属性，根据屏幕尺寸和像素密度加载不同图片。",
+      "example": "<img srcset=\"small.jpg 500w, large.jpg 1000w\" sizes=\"(max-width: 600px) 500px, 1000px\" src=\"fallback.jpg\">",
+      "importance": 2,
+      "frequency": 2
+    },
+    {
+      "id": 7,
+      "title": "alt属性和无障碍",
+      "content": "img标签应合理设置alt属性，提升SEO和可访问性。无图片时可展示alt文本。",
+      "example": "<img src=\"logo.png\" alt=\"官网Logo\">",
+      "importance": 3,
+      "frequency": 2
+    }
+  ],
+  "performance": [
+    {
+      "id": 1,
+      "title": "图片懒加载",
+      "content": "使用loading=\"lazy\"属性延迟加载视口外的图片，提升初始渲染速度。",
+      "example": "<img src=\"image.jpg\" loading=\"lazy\" alt=\"...\">",
+      "importance": 3,
+      "frequency": 2
+    },
+    {
+      "id": 2,
+      "title": "预加载关键资源",
+      "content": "使用rel=\"preload\"预加载关键CSS、字体等资源，确保首屏需求快速响应。",
+      "example": "<link rel=\"preload\" href=\"style.css\" as=\"style\">",
+      "importance": 2,
+      "frequency": 2
+    },
+    {
+      "id": 3,
+      "title": "预连接重要域名",
+      "content": "使用rel=\"preconnect\"预先建立到重要第三方域名的连接，减少延迟。",
+      "example": "<link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">",
+      "importance": 1,
+      "frequency": 1
+    },
+    {
+      "id": 4,
+      "title": "DNS预解析",
+      "content": "使用rel=\"dns-prefetch\"预先解析域名，提升首屏加载体验。",
+      "example": "<link rel=\"dns-prefetch\" href=\"//cdn.example.com\">",
+      "importance": 1,
+      "frequency": 1
+    },
+    {
+      "id": 5,
+      "title": "异步加载脚本",
+      "content": "使用async或defer属性异步加载非关键JavaScript，防止阻塞页面解析。",
+      "example": "<script src=\"analytics.js\" async></script>",
+      "importance": 2,
+      "frequency": 2
+    },
+    {
+      "id": 6,
+      "title": "图片格式选择",
+      "content": "根据场景选择合适的图片格式：WebP、AVIF等现代格式，提升加载速度和质量。",
+      "importance": 2,
+      "frequency": 2
+    },
+    {
+      "id": 7,
+      "title": "减少重绘重排",
+      "content": "减少样式和DOM频繁修改，合并DOM操作，充分利用文档片段(fragment)。",
+      "importance": 1,
+      "frequency": 1
+    }
+  ],
+  "storage": [
+    {
+      "id": 1,
+      "title": "localStorage",
+      "content": "本地存储，数据永久保存，同源策略限制，适合持久化较小数据。",
+      "example": "localStorage.setItem(\"key\", \"value\");\nlocalStorage.getItem(\"key\");",
+      "importance": 3,
+      "frequency": 3
+    },
+    {
+      "id": 2,
+      "title": "sessionStorage",
+      "content": "会话存储，数据在标签页关闭后清除，生命周期短。",
+      "example": "sessionStorage.setItem(\"key\", \"value\");\nsessionStorage.getItem(\"key\");",
+      "importance": 2,
+      "frequency": 2
+    },
+    {
+      "id": 3,
+      "title": "Cookie",
+      "content": "小型文本数据（约4KB），可设置过期时间，每次请求都会发送到服务器。适用于认证、跨页面跟踪等。",
+      "example": "document.cookie = \"name=value; expires=date; path=/\"",
+      "importance": 3,
+      "frequency": 3
+    },
+    {
+      "id": 4,
+      "title": "IndexedDB",
+      "content": "浏览器内置数据库，支持大量结构化数据存储，更适合大型数据本地缓存，例如离线应用。",
+      "example": "const request = indexedDB.open('MyDB', 1);",
+      "importance": 2,
+      "frequency": 1
+    },
+    {
+      "id": 5,
+      "title": "Web Storage比较",
+      "content": "localStorage和sessionStorage与Cookie区别：容量更大、不会自动随请求发送，安全性更高。Cookie适合小数据和服务端通信。",
+      "importance": 2,
+      "frequency": 2
+    }
+  ],
+  "other": [
+    {
+      "id": 1,
+      "title": "meta标签",
+      "content": "提供关于HTML文档的元数据，如字符集、视口设置、SEO描述等。",
+      "example": "<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">",
+      "importance": 3,
+      "frequency": 3
+    },
+    {
+      "id": 2,
+      "title": "link标签",
+      "content": "定义文档与外部资源的关系，如样式表、图标、字体、预加载等。",
+      "example": "<link rel=\"stylesheet\" href=\"styles.css\">\n<link rel=\"icon\" href=\"favicon.ico\">",
+      "importance": 2,
+      "frequency": 3
+    },
+    {
+      "id": 3,
+      "title": "base标签",
+      "content": "指定页面中所有相对URL的基础URL（仅允许一个base标签）。",
+      "example": "<base href=\"https://example.com/\">",
+      "importance": 1,
+      "frequency": 1
+    },
+    {
+      "id": 4,
+      "title": "HTML实体",
+      "content": "用于显示保留字符或特殊符号，常用于输出内容防止XSS、标签错误。",
+      "example": "&lt; &gt; &amp; &quot; &copy; &nbsp;",
+      "importance": 2,
+      "frequency": 2
+    },
+    {
+      "id": 5,
+      "title": "data-*属性",
+      "content": "用于存储自定义数据，可通过JavaScript访问（dataset）。适用于组件封装、页面交互。",
+      "example": "<div data-user-id=\"123\" data-role=\"admin\"></div>",
+      "importance": 2,
+      "frequency": 2
+    },
+    {
+      "id": 6,
+      "title": "contenteditable属性",
+      "content": "使元素内容可编辑，适用于富文本实现。",
+      "example": "<div contenteditable=\"true\">可编辑内容</div>",
+      "importance": 1,
+      "frequency": 1
+    },
+    {
+      "id": 7,
+      "title": "draggable属性",
+      "content": "定义元素是否可拖动，配合原生Drag API实现拖放交互。",
+      "example": "<div draggable=\"true\">可拖动元素</div>",
+      "importance": 1,
+      "frequency": 1
+    },
+    {
+      "id": 8,
+      "title": "template元素",
+      "content": "定义可重复使用的HTML模板，不会立即渲染，仅作为DOM结构存放。",
+      "example": "<template id=\"user-template\"><div class=\"user\"></div></template>",
+      "importance": 1,
+      "frequency": 1
+    },
+    {
+      "id": 9,
+      "title": "slot元素",
+      "content": "Web组件的插槽，配合自定义元素分发内容。",
+      "example": "<slot name=\"header\"></slot>",
+      "importance": 1,
+      "frequency": 1
+    },
+    {
+      "id": 10,
+      "title": "details和summary",
+      "content": "创建可折叠的内容区域，details容器，summary为展开/收起标题。",
+      "example": "<details><summary>点击查看详情</summary><p>详细内容...</p></details>",
+      "importance": 1,
+      "frequency": 1
+    },
+    {
+      "id": 11,
+      "title": "lang属性与国际化",
+      "content": "设置html、元素的lang属性，有利于SEO、无障碍与搜索引擎解析多语言内容。",
+      "example": "<html lang=\"zh-CN\">",
+      "importance": 2,
+      "frequency": 1
+    }
+  ]
+}

@@ -161,7 +161,7 @@
 
     <footer class="footer">
       <p>栈相关算法介绍 | 数据结构与算法核心知识</p>
-      <p>© 2023 计算机科学基础</p>
+      <p> 计算机科学基础</p>
     </footer>
   </div>
 </template>

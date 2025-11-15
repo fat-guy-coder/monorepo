@@ -79,7 +79,7 @@
     </div>
 
     <footer class="footer">
-      <p>链表算法总结 © 2023 | 前端开发与算法学习</p>
+      <p>链表算法总结  | 前端开发与算法学习</p>
     </footer>
   </div>
 </template>

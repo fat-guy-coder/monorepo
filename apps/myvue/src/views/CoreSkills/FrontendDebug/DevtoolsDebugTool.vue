@@ -298,7 +298,7 @@ copy(variable) // 复制变量到剪贴板</pre>
 
     <!-- 页脚 -->
     <div class="footer">
-      <p>浏览器开发者工具 DevTools 基础介绍 | 前端调试必备手册 | © 2023</p>
+      <p>浏览器开发者工具 DevTools 基础介绍 | 前端调试必备手册 | </p>
       <div class="footer-links">
         <a href="https://developer.chrome.com/docs/devtools/" target="_blank">Chrome DevTools</a>
         <a href="https://firefox-source-docs.mozilla.org/devtools-user/index.html" target="_blank">Firefox DevTools</a>

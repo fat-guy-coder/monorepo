@@ -312,7 +312,7 @@
     </div>
 
     <footer class="footer">
-      <p>React Fiber架构解析 © 2023 | 基于React v18+实现原理</p>
+      <p>React Fiber架构解析  | 基于React v18+实现原理</p>
     </footer>
   </div>
 </template>

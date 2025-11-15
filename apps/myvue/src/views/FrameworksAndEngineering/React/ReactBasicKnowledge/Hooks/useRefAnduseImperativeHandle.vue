@@ -497,7 +497,7 @@ export default FormContainer;</code></pre>
     </main>
 
     <footer class="footer">
-      <p>© 2023 React useRef和useImperativeHandle指南 | 掌握高级组件交互模式</p>
+      <p> React useRef和useImperativeHandle指南 | 掌握高级组件交互模式</p>
       <div class="links">
         <a href="#"><i class="fab fa-react"></i> React官方文档</a>
         <a href="#"><i class="fab fa-github"></i> 示例代码</a>

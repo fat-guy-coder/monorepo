@@ -59,7 +59,7 @@
               :id="item.id"
               class="code-block"
               :style="{ top: tipsAbsolutePosition.Y, left: tipsAbsolutePosition.X }"
-            ><code >{{item.code}}</code></pre>
+            ><CodeBlock :code="item.code" language="js" hiddenToolbar /></pre>
           </div>
         </div>
       </div>
@@ -74,6 +74,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
+import CodeBlock from '@/components/CodeBlock.vue'
 
 const emit = defineEmits(['goToByRouteName'])
 
@@ -399,13 +400,11 @@ const getCodePositon = async (event: MouseEvent, id: string) => {
     width: 0;
     color: #fff;
     background-color: #000;
-
   }
   &:hover > .code-block {
     position: absolute;
     height: auto;
     width: auto;
-
   }
 
   &:hover {

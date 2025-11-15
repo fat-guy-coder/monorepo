@@ -429,7 +429,7 @@ css: {
 
     <!-- 页脚 -->
     <div class="footer">
-      <p>Vite官方文档：<a href="https://vitejs.dev/" target="_blank">vitejs.dev</a> | 最新版本：v4.x | © 2023</p>
+      <p>Vite官方文档：<a href="https://vitejs.dev/" target="_blank">vitejs.dev</a> | 最新版本：v4.x | </p>
     </div>
   </div>
 </template>

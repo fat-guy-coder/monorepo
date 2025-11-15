@@ -86,7 +86,7 @@
     </div>
 
     <div class="footer">
-      <p>DOM 事件参考手册 © 2023 | 包含 {{ events.length }} 个常用 DOM 事件</p>
+      <p>DOM 事件参考手册  | 包含 {{ events.length }} 个常用 DOM 事件</p>
     </div>
   </div>
 </template>

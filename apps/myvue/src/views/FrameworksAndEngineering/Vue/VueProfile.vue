@@ -209,7 +209,7 @@
         </div>
       </div>
       <div class="copyright">
-        <p>© 2023 Vue.js 技术全景 | 使用 Vue 3 构建</p>
+        <p> Vue.js 技术全景 | 使用 Vue 3 构建</p>
       </div>
     </footer>
   </div>
@@ -372,6 +372,8 @@ onBeforeUnmount(() => {
   min-height: 100vh;
   transition: @transition;
   line-height: 1.6;
+  max-width: 1200px;
+  margin: 0 auto;
 
   &.dark-mode {
     background-color: @dark-bg;

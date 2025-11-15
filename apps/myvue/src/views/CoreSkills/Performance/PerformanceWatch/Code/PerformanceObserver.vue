@@ -431,7 +431,7 @@ po.observe({ type: 'layout-shift', buffered: true });</code></pre>
     </div>
 
     <footer class="po-footer">
-      <p>© 2023 前端性能监控指南 | PerformanceObserver API v2</p>
+      <p> 前端性能监控指南 | PerformanceObserver API v2</p>
       <div class="browser-support">
         支持浏览器: Chrome 52+, Firefox 57+, Edge 79+, Safari 11.1+
       </div>

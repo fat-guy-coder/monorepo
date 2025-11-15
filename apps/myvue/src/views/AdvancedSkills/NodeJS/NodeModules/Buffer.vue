@@ -324,7 +324,7 @@ const digest = hash.digest('hex'); // 哈希结果</pre>
 
     <!-- 页脚 -->
     <div class="footer">
-      <p>Node.js Buffer 模块基础介绍 | 二进制数据处理指南 | © 2023</p>
+      <p>Node.js Buffer 模块基础介绍 | 二进制数据处理指南 | </p>
       <div class="footer-links">
         <a href="https://nodejs.org/api/buffer.html" target="_blank">官方文档</a>
         <a href="https://github.com/nodejs/node" target="_blank">Node.js 源码</a>

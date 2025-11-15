@@ -1,14 +1,36 @@
 import './assets/main.css'
 import 'ant-design-vue/dist/reset.css';
-import { createApp } from 'vue'
+import { createApp, } from 'vue'
 import { createPinia } from 'pinia'
-//import './demo'
+import './test'
+// import './demo'
 
+// const count = reactive({ age: 0 })
+
+// const count2 = ref(0)
+
+// setTimeout(() => {
+//   count.value = 2
+// }, 0)
+// setTimeout(() => {
+//   count.age = 3
+// }, 1000)
+// setTimeout(() => {
+//   count.age = 4
+// }, 2000)
+
+// watch(count, (val, old) => {
+//   console.log(val)
+// }, {
+//   immediate: true
+// })
 
 import App from './App.vue'
 import router from './router'
 
-const app = createApp(App)
+export const app = createApp(App)
+
+
 
 app.use(createPinia())
 
@@ -30,6 +52,9 @@ app.directive('loaded', {
     }
   }
 })
+
+
+
 
 app.mount('#app')
 

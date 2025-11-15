@@ -360,7 +360,7 @@ module.exports = {
 
     <!-- 底部 -->
     <div class="footer">
-      <p>Webpack Asset Modules 基础介绍 | 资源处理最佳实践 | © 2023</p>
+      <p>Webpack Asset Modules 基础介绍 | 资源处理最佳实践 | </p>
     </div>
   </div>
 </template>

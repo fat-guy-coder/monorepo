@@ -341,7 +341,7 @@ server: {
 
     <footer class="footer">
       <p>Vite + 乾坤微前端整合指南 | 构建现代化微前端架构</p>
-      <p>© 2023 前端架构实践手册</p>
+      <p> 前端架构实践手册</p>
     </footer>
   </div>
 </template>

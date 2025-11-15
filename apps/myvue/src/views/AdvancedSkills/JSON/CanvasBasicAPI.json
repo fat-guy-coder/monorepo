@@ -1,0 +1,595 @@
+[
+  {
+    "id": "drawing-rectangles",
+    "name": "矩形绘制",
+    "icon": "⬜",
+    "description": "绘制矩形和方形的相关方法",
+    "apis": [
+      {
+        "name": "fillRect()",
+        "type": "方法",
+        "description": "绘制一个填充的矩形",
+        "syntax": "ctx.fillRect(x, y, width, height);",
+        "parameters": [
+          { "name": "x", "description": "矩形左上角的 x 坐标" },
+          { "name": "y", "description": "矩形左上角的 y 坐标" },
+          { "name": "width", "description": "矩形的宽度" },
+          { "name": "height", "description": "矩形的高度" }
+        ]
+      },
+      {
+        "name": "strokeRect()",
+        "type": "方法",
+        "description": "绘制一个矩形边框",
+        "syntax": "ctx.strokeRect(x, y, width, height);",
+        "parameters": [
+          { "name": "x", "description": "矩形左上角的 x 坐标" },
+          { "name": "y", "description": "矩形左上角的 y 坐标" },
+          { "name": "width", "description": "矩形的宽度" },
+          { "name": "height", "description": "矩形的高度" }
+        ]
+      },
+      {
+        "name": "clearRect()",
+        "type": "方法",
+        "description": "清除指定矩形区域，使其完全透明",
+        "syntax": "ctx.clearRect(x, y, width, height);",
+        "parameters": [
+          { "name": "x", "description": "矩形左上角的 x 坐标" },
+          { "name": "y", "description": "矩形左上角的 y 坐标" },
+          { "name": "width", "description": "矩形的宽度" },
+          { "name": "height", "description": "矩形的高度" }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "paths",
+    "name": "路径绘制",
+    "icon": "🖊️",
+    "description": "创建和绘制路径的方法",
+    "apis": [
+      {
+        "name": "beginPath()",
+        "type": "方法",
+        "description": "开始一条新路径",
+        "syntax": "ctx.beginPath();"
+      },
+      {
+        "name": "closePath()",
+        "type": "方法",
+        "description": "闭合路径，连接起点和终点",
+        "syntax": "ctx.closePath();"
+      },
+      {
+        "name": "moveTo()",
+        "type": "方法",
+        "description": "将笔触移动到指定坐标",
+        "syntax": "ctx.moveTo(x, y);",
+        "parameters": [
+          { "name": "x", "description": "点的 x 坐标" },
+          { "name": "y", "description": "点的 y 坐标" }
+        ]
+      },
+      {
+        "name": "lineTo()",
+        "type": "方法",
+        "description": "从当前点绘制直线到指定点",
+        "syntax": "ctx.lineTo(x, y);",
+        "parameters": [
+          { "name": "x", "description": "点的 x 坐标" },
+          { "name": "y", "description": "点的 y 坐标" }
+        ]
+      },
+      {
+        "name": "arc()",
+        "type": "方法",
+        "description": "绘制圆弧路径",
+        "syntax": "ctx.arc(x, y, radius, startAngle, endAngle, anticlockwise);",
+        "parameters": [
+          { "name": "x", "description": "圆心的 x 坐标" },
+          { "name": "y", "description": "圆心的 y 坐标" },
+          { "name": "radius", "description": "圆的半径" },
+          { "name": "startAngle", "description": "起始角度，以弧度计" },
+          { "name": "endAngle", "description": "结束角度，以弧度计" },
+          { "name": "anticlockwise", "description": "可选，是否逆时针绘制" }
+        ]
+      },
+      {
+        "name": "arcTo()",
+        "type": "方法",
+        "description": "通过控制点和半径绘制圆弧路径",
+        "syntax": "ctx.arcTo(x1, y1, x2, y2, radius);",
+        "parameters": [
+          { "name": "x1", "description": "第一个控制点的 x 坐标" },
+          { "name": "y1", "description": "第一个控制点的 y 坐标" },
+          { "name": "x2", "description": "第二个控制点的 x 坐标" },
+          { "name": "y2", "description": "第二个控制点的 y 坐标" },
+          { "name": "radius", "description": "圆弧的半径" }
+        ]
+      },
+      {
+        "name": "quadraticCurveTo()",
+        "type": "方法",
+        "description": "绘制二次贝塞尔曲线",
+        "syntax": "ctx.quadraticCurveTo(cpx, cpy, x, y);",
+        "parameters": [
+          { "name": "cpx", "description": "控制点的 x 坐标" },
+          { "name": "cpy", "description": "控制点的 y 坐标" },
+          { "name": "x", "description": "终点的 x 坐标" },
+          { "name": "y", "description": "终点的 y 坐标" }
+        ]
+      },
+      {
+        "name": "bezierCurveTo()",
+        "type": "方法",
+        "description": "绘制三次贝塞尔曲线",
+        "syntax": "ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y);",
+        "parameters": [
+          { "name": "cp1x", "description": "第一个控制点的 x 坐标" },
+          { "name": "cp1y", "description": "第一个控制点的 y 坐标" },
+          { "name": "cp2x", "description": "第二个控制点的 x 坐标" },
+          { "name": "cp2y", "description": "第二个控制点的 y 坐标" },
+          { "name": "x", "description": "终点的 x 坐标" },
+          { "name": "y", "description": "终点的 y 坐标" }
+        ]
+      },
+      {
+        "name": "rect()",
+        "type": "方法",
+        "description": "创建矩形路径",
+        "syntax": "ctx.rect(x, y, width, height);",
+        "parameters": [
+          { "name": "x", "description": "矩形左上角的 x 坐标" },
+          { "name": "y", "description": "矩形左上角的 y 坐标" },
+          { "name": "width", "description": "矩形的宽度" },
+          { "name": "height", "description": "矩形的高度" }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "styles-colors",
+    "name": "样式与颜色",
+    "icon": "🎨",
+    "description": "设置绘图样式和颜色的属性和方法",
+    "apis": [
+      {
+        "name": "fillStyle",
+        "type": "属性",
+        "description": "设置或返回用于填充绘画的颜色、渐变或模式",
+        "syntax": "ctx.fillStyle = color|gradient|pattern;"
+      },
+      {
+        "name": "strokeStyle",
+        "type": "属性",
+        "description": "设置或返回用于笔触的颜色、渐变或模式",
+        "syntax": "ctx.strokeStyle = color|gradient|pattern;"
+      },
+      {
+        "name": "globalAlpha",
+        "type": "属性",
+        "description": "设置或返回绘图的当前透明值",
+        "syntax": "ctx.globalAlpha = number;"
+      },
+      {
+        "name": "createLinearGradient()",
+        "type": "方法",
+        "description": "创建线性渐变",
+        "syntax": "ctx.createLinearGradient(x0, y0, x1, y1);",
+        "parameters": [
+          { "name": "x0", "description": "渐变起点的 x 坐标" },
+          { "name": "y0", "description": "渐变起点的 y 坐标" },
+          { "name": "x1", "description": "渐变终点的 x 坐标" },
+          { "name": "y1", "description": "渐变终点的 y 坐标" }
+        ],
+        "returnValue": "CanvasGradient 对象"
+      },
+      {
+        "name": "createRadialGradient()",
+        "type": "方法",
+        "description": "创建放射状/圆形渐变",
+        "syntax": "ctx.createRadialGradient(x0, y0, r0, x1, y1, r1);",
+        "parameters": [
+          { "name": "x0", "description": "开始圆的 x 坐标" },
+          { "name": "y0", "description": "开始圆的 y 坐标" },
+          { "name": "r0", "description": "开始圆的半径" },
+          { "name": "x1", "description": "结束圆的 x 坐标" },
+          { "name": "y1", "description": "结束圆的 y 坐标" },
+          { "name": "r1", "description": "结束圆的半径" }
+        ],
+        "returnValue": "CanvasGradient 对象"
+      },
+      {
+        "name": "createPattern()",
+        "type": "方法",
+        "description": "在指定的方向上重复指定的元素",
+        "syntax": "ctx.createPattern(image, repetition);",
+        "parameters": [
+          { "name": "image", "description": "要使用的图片、画布或视频元素" },
+          { "name": "repetition", "description": "重复方式：repeat, repeat-x, repeat-y, no-repeat" }
+        ],
+        "returnValue": "CanvasPattern 对象"
+      },
+      {
+        "name": "addColorStop()",
+        "type": "方法",
+        "description": "规定渐变对象中的颜色和停止位置",
+        "syntax": "gradient.addColorStop(stop, color);",
+        "parameters": [
+          { "name": "stop", "description": "0.0 到 1.0 之间的值，表示渐变中开始与结束之间的位置" },
+          { "name": "color", "description": "在结束位置显示的 CSS 颜色值" }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "shadows",
+    "name": "阴影效果",
+    "icon": "🌑",
+    "description": "为图形添加阴影效果的相关属性",
+    "apis": [
+      {
+        "name": "shadowColor",
+        "type": "属性",
+        "description": "设置或返回用于阴影的颜色",
+        "syntax": "ctx.shadowColor = color;"
+      },
+      {
+        "name": "shadowBlur",
+        "type": "属性",
+        "description": "设置或返回用于阴影的模糊级别",
+        "syntax": "ctx.shadowBlur = number;"
+      },
+      {
+        "name": "shadowOffsetX",
+        "type": "属性",
+        "description": "设置或返回阴影距形状的水平距离",
+        "syntax": "ctx.shadowOffsetX = number;"
+      },
+      {
+        "name": "shadowOffsetY",
+        "type": "属性",
+        "description": "设置或返回阴影距形状的垂直距离",
+        "syntax": "ctx.shadowOffsetY = number;"
+      }
+    ]
+  },
+  {
+    "id": "line-styles",
+    "name": "线条样式",
+    "icon": "📏",
+    "description": "设置线条样式的相关属性",
+    "apis": [
+      {
+        "name": "lineWidth",
+        "type": "属性",
+        "description": "设置或返回当前的线条宽度",
+        "syntax": "ctx.lineWidth = number;"
+      },
+      {
+        "name": "lineCap",
+        "type": "属性",
+        "description": "设置或返回线条的结束端点样式",
+        "syntax": "ctx.lineCap = \"butt|round|square\";"
+      },
+      {
+        "name": "lineJoin",
+        "type": "属性",
+        "description": "设置或返回两条线相交时，所创建的拐角类型",
+        "syntax": "ctx.lineJoin = \"bevel|round|miter\";"
+      },
+      {
+        "name": "miterLimit",
+        "type": "属性",
+        "description": "设置或返回最大斜接长度",
+        "syntax": "ctx.miterLimit = number;"
+      },
+      {
+        "name": "getLineDash()",
+        "type": "方法",
+        "description": "返回当前线段样式的数组",
+        "syntax": "ctx.getLineDash();",
+        "returnValue": "包含线段和间距长度的数组"
+      },
+      {
+        "name": "setLineDash()",
+        "type": "方法",
+        "description": "设置当前线段样式",
+        "syntax": "ctx.setLineDash(segments);",
+        "parameters": [
+          { "name": "segments", "description": "一组描述交替绘制线段和间距长度的数字" }
+        ]
+      },
+      {
+        "name": "lineDashOffset",
+        "type": "属性",
+        "description": "设置或返回当前线段样式的开始偏移量",
+        "syntax": "ctx.lineDashOffset = value;"
+      }
+    ]
+  },
+  {
+    "id": "text",
+    "name": "文本绘制",
+    "icon": "🔤",
+    "description": "绘制文本的相关属性和方法",
+    "apis": [
+      {
+        "name": "font",
+        "type": "属性",
+        "description": "设置或返回文本内容的当前字体属性",
+        "syntax": "ctx.font = \"italic small-caps bold 12px arial\";"
+      },
+      {
+        "name": "textAlign",
+        "type": "属性",
+        "description": "设置或返回文本内容的当前对齐方式",
+        "syntax": "ctx.textAlign = \"start|end|left|right|center\";"
+      },
+      {
+        "name": "textBaseline",
+        "type": "属性",
+        "description": "设置或返回在绘制文本时使用的当前文本基线",
+        "syntax": "ctx.textBaseline = \"top|hanging|middle|alphabetic|ideographic|bottom\";"
+      },
+      {
+        "name": "fillText()",
+        "type": "方法",
+        "description": "在画布上绘制\"被填充\"的文本",
+        "syntax": "ctx.fillText(text, x, y, maxWidth);",
+        "parameters": [
+          { "name": "text", "description": "规定在画布上输出的文本" },
+          { "name": "x", "description": "开始绘制文本的 x 坐标位置" },
+          { "name": "y", "description": "开始绘制文本的 y 坐标位置" },
+          { "name": "maxWidth", "description": "可选，允许的最大文本宽度" }
+        ]
+      },
+      {
+        "name": "strokeText()",
+        "type": "方法",
+        "description": "在画布上绘制文本（无填充）",
+        "syntax": "ctx.strokeText(text, x, y, maxWidth);",
+        "parameters": [
+          { "name": "text", "description": "规定在画布上输出的文本" },
+          { "name": "x", "description": "开始绘制文本的 x 坐标位置" },
+          { "name": "y", "description": "开始绘制文本的 y 坐标位置" },
+          { "name": "maxWidth", "description": "可选，允许的最大文本宽度" }
+        ]
+      },
+      {
+        "name": "measureText()",
+        "type": "方法",
+        "description": "返回包含指定文本宽度的对象",
+        "syntax": "ctx.measureText(text);",
+        "parameters": [{ "name": "text", "description": "要测量的文本" }],
+        "returnValue": "TextMetrics 对象，包含文本宽度信息"
+      }
+    ]
+  },
+  {
+    "id": "transformations",
+    "name": "变换操作",
+    "icon": "🔄",
+    "description": "对画布进行变换操作的方法",
+    "apis": [
+      {
+        "name": "scale()",
+        "type": "方法",
+        "description": "缩放当前绘图至更大或更小",
+        "syntax": "ctx.scale(scalewidth, scaleheight);",
+        "parameters": [
+          {
+            "name": "scalewidth",
+            "description": "缩放当前绘图的宽度 (1=100%, 0.5=50%, 2=200%, 依此类推)"
+          },
+          {
+            "name": "scaleheight",
+            "description": "缩放当前绘图的高度 (1=100%, 0.5=50%, 2=200%, 依此类推)"
+          }
+        ]
+      },
+      {
+        "name": "rotate()",
+        "type": "方法",
+        "description": "旋转当前绘图",
+        "syntax": "ctx.rotate(angle);",
+        "parameters": [{ "name": "angle", "description": "旋转角度，以弧度计" }]
+      },
+      {
+        "name": "translate()",
+        "type": "方法",
+        "description": "重新映射画布上的 (0,0) 位置",
+        "syntax": "ctx.translate(x, y);",
+        "parameters": [
+          { "name": "x", "description": "添加到水平坐标（x）上的值" },
+          { "name": "y", "description": "添加到垂直坐标（y）上的值" }
+        ]
+      },
+      {
+        "name": "transform()",
+        "type": "方法",
+        "description": "替换绘图的当前转换矩阵",
+        "syntax": "ctx.transform(a, b, c, d, e, f);",
+        "parameters": [
+          { "name": "a", "description": "水平缩放" },
+          { "name": "b", "description": "水平倾斜" },
+          { "name": "c", "description": "垂直倾斜" },
+          { "name": "d", "description": "垂直缩放" },
+          { "name": "e", "description": "水平移动" },
+          { "name": "f", "description": "垂直移动" }
+        ]
+      },
+      {
+        "name": "setTransform()",
+        "type": "方法",
+        "description": "将当前转换重置为单位矩阵，然后运行 transform()",
+        "syntax": "ctx.setTransform(a, b, c, d, e, f);",
+        "parameters": [
+          { "name": "a", "description": "水平缩放" },
+          { "name": "b", "description": "水平倾斜" },
+          { "name": "c", "description": "垂直倾斜" },
+          { "name": "d", "description": "垂直缩放" },
+          { "name": "e", "description": "水平移动" },
+          { "name": "f", "description": "垂直移动" }
+        ]
+      },
+      {
+        "name": "resetTransform()",
+        "type": "方法",
+        "description": "重置当前变换为单位矩阵",
+        "syntax": "ctx.resetTransform();"
+      }
+    ]
+  },
+  {
+    "id": "compositing",
+    "name": "合成与裁剪",
+    "icon": "✂️",
+    "description": "控制图形合成和裁剪的方法",
+    "apis": [
+      {
+        "name": "globalCompositeOperation",
+        "type": "属性",
+        "description": "设置或返回新图像如何绘制到已有的图像上",
+        "syntax": "ctx.globalCompositeOperation = type;"
+      },
+      {
+        "name": "clip()",
+        "type": "方法",
+        "description": "从原始画布中剪切任意形状和尺寸的区域",
+        "syntax": "ctx.clip();"
+      },
+      {
+        "name": "save()",
+        "type": "方法",
+        "description": "保存当前环境的状态",
+        "syntax": "ctx.save();"
+      },
+      {
+        "name": "restore()",
+        "type": "方法",
+        "description": "返回之前保存过的路径状态和属性",
+        "syntax": "ctx.restore();"
+      }
+    ]
+  },
+  {
+    "id": "image-data",
+    "name": "图像数据",
+    "icon": "🖼️",
+    "description": "操作图像像素数据的方法",
+    "apis": [
+      {
+        "name": "drawImage()",
+        "type": "方法",
+        "description": "向画布上绘制图像、画布或视频",
+        "syntax": "ctx.drawImage(img, x, y, width, height);",
+        "parameters": [
+          { "name": "img", "description": "规定要使用的图像、画布或视频" },
+          { "name": "x", "description": "在画布上放置图像的 x 坐标位置" },
+          { "name": "y", "description": "在画布上放置图像的 y 坐标位置" },
+          { "name": "width", "description": "可选，要使用的图像的宽度" },
+          { "name": "height", "description": "可选，要使用的图像的高度" }
+        ]
+      },
+      {
+        "name": "createImageData()",
+        "type": "方法",
+        "description": "创建新的空白 ImageData 对象",
+        "syntax": "ctx.createImageData(width, height);",
+        "parameters": [
+          { "name": "width", "description": "ImageData 对象的宽度" },
+          { "name": "height", "description": "ImageData 对象的高度" }
+        ],
+        "returnValue": "ImageData 对象"
+      },
+      {
+        "name": "getImageData()",
+        "type": "方法",
+        "description": "返回 ImageData 对象，该对象为画布上指定的矩形复制像素数据",
+        "syntax": "ctx.getImageData(x, y, width, height);",
+        "parameters": [
+          { "name": "x", "description": "开始复制的左上角位置的 x 坐标" },
+          { "name": "y", "description": "开始复制的左上角位置的 y 坐标" },
+          { "name": "width", "description": "将要复制的矩形区域的宽度" },
+          { "name": "height", "description": "将要复制的矩形区域的高度" }
+        ],
+        "returnValue": "ImageData 对象，包含图像数据"
+      },
+      {
+        "name": "putImageData()",
+        "type": "方法",
+        "description": "把图像数据（从指定的 ImageData 对象）放回画布上",
+        "syntax": "ctx.putImageData(imgData, x, y);",
+        "parameters": [
+          { "name": "imgData", "description": "规定要放回画布的 ImageData 对象" },
+          { "name": "x", "description": "ImageData 对象左上角的 x 坐标" },
+          { "name": "y", "description": "ImageData 对象左上角的 y 坐标" }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "other",
+    "name": "其他API",
+    "icon": "📋",
+    "description": "其他有用的Canvas API",
+    "apis": [
+      {
+        "name": "isPointInPath()",
+        "type": "方法",
+        "description": "判断指定的点是否在当前路径中",
+        "syntax": "ctx.isPointInPath(x, y);",
+        "parameters": [
+          { "name": "x", "description": "测试点的 x 坐标" },
+          { "name": "y", "description": "测试点的 y 坐标" }
+        ],
+        "returnValue": "布尔值，如果点在路径中则返回 true，否则返回 false"
+      },
+      {
+        "name": "isPointInStroke()",
+        "type": "方法",
+        "description": "判断指定点是否在路径的描边线上",
+        "syntax": "ctx.isPointInStroke(x, y);",
+        "parameters": [
+          { "name": "x", "description": "测试点的 x 坐标" },
+          { "name": "y", "description": "测试点的 y 坐标" }
+        ],
+        "returnValue": "布尔值，如果点在描边线上则返回 true，否则返回 false"
+      },
+      {
+        "name": "createEvent()",
+        "type": "方法",
+        "description": "创建新的Event对象",
+        "syntax": "ctx.createEvent(type);",
+        "parameters": [
+          { "name": "type", "description": "事件类型，如\"MouseEvent\"、\"UIEvent\"等" }
+        ],
+        "returnValue": "Event对象"
+      },
+      {
+        "name": "toDataURL()",
+        "type": "方法",
+        "description": "返回canvas图像的Data URL",
+        "syntax": "canvas.toDataURL(type, encoderOptions);",
+        "parameters": [
+          { "name": "type", "description": "可选，图像格式，默认为image/png" },
+          { "name": "encoderOptions", "description": "可选，图像质量，0到1之间" }
+        ],
+        "returnValue": "包含Data URL的字符串"
+      },
+      {
+        "name": "toBlob()",
+        "type": "方法",
+        "description": "创建canvas图像的Blob对象",
+        "syntax": "canvas.toBlob(callback, type, quality);",
+        "parameters": [
+          { "name": "callback", "description": "回调函数，接收Blob对象作为参数" },
+          { "name": "type", "description": "可选，图像格式，默认为image/png" },
+          { "name": "quality", "description": "可选，图像质量，0到1之间" }
+        ]
+      }
+    ]
+  }
+]

@@ -393,7 +393,7 @@ element.addEventListener('process', (e) => {
           <a href="#" class="footer-link">GitHub仓库</a>
         </div>
         <div class="footer-copyright">
-          © 2023 原生JavaScript事件系统指南 | 使用Vue 3实现
+           原生JavaScript事件系统指南 | 使用Vue 3实现
         </div>
       </div>
     </footer>

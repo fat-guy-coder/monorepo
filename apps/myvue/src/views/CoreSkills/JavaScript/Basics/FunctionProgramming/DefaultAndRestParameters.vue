@@ -418,7 +418,7 @@ Total arguments: 4
 
     <footer class="footer">
       <p>JavaScript 函数参数介绍 | 掌握参数处理的核心技术</p>
-      <p>© 2023 JavaScript 高级编程指南</p>
+      <p> JavaScript 高级编程指南</p>
     </footer>
   </div>
 </template>

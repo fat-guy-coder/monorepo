@@ -444,7 +444,7 @@ Cookies.set('user_id', 'u001', {
     </div>
 
     <footer class="footer">
-      <p>© 2023 前端开发技术文档 | Cookie 使用指南</p>
+      <p> 前端开发技术文档 | Cookie 使用指南</p>
       <p>在实际项目中，请根据具体需求和安全要求合理使用 Cookie</p>
     </footer>
   </div>

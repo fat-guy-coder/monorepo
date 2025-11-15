@@ -3,6 +3,9 @@
     <div class="header">
       <h1><i class="icon"></i> Vue Observable 基本指南</h1>
       <p class="subtitle">掌握响应式状态管理的基础原理与应用</p>
+      <p class="subtitle">
+        Observable在vue3中已经废弃，但是还是需要了解一下，因为vue2中是基于Object.defineProperty来实现响应式，而vue3中是基于Proxy来实现响应式。
+      </p>
     </div>
 
     <div class="quick-summary">

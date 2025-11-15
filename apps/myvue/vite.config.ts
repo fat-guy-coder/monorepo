@@ -51,6 +51,7 @@ export default defineConfig({
   ],
   build: {
     outDir,
+    emptyOutDir: true,
     // sourcemap: true,
     rollupOptions: {
       treeshake: {

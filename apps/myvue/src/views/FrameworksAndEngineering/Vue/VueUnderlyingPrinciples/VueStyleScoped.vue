@@ -332,7 +332,7 @@
       </div>
 
       <div class="footer-copyright">
-        <p>© 2023 Vue技术专家 | Scoped CSS技术指南 v1.3</p>
+        <p> Vue技术专家 | Scoped CSS技术指南 v1.3</p>
       </div>
     </footer>
   </div>

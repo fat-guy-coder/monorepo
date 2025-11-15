@@ -441,7 +441,7 @@ const getWithBaseUrl = curry(fetchData);</code></pre>
     </div>
 
     <footer class="footer">
-      <p>© 2023 JavaScript 柯里化指南 | 函数式编程的强大工具</p>
+      <p> JavaScript 柯里化指南 | 函数式编程的强大工具</p>
       <p>合理使用柯里化，让代码更简洁、更灵活</p>
     </footer>
   </div>

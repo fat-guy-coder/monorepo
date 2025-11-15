@@ -519,7 +519,7 @@ document.getElementById('logo').src = logo;</pre>
           <a href="https://www.snowpack.dev" target="_blank">Snowpack文档</a>
           <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Modules" target="_blank">MDN ESM指南</a>
         </div>
-        <p>© 2023 Bundleless开发指南 | 下一代前端开发范式</p>
+        <p> Bundleless开发指南 | 下一代前端开发范式</p>
       </div>
     </footer>
   </div>

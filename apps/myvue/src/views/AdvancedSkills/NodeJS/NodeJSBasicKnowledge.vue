@@ -177,7 +177,7 @@
     </div>
 
     <footer class="footer">
-      <p>© 2023 Node.js 技术解析 | 使用 Vue 3 + TypeScript 实现</p>
+      <p> Node.js 技术解析 | 使用 Vue 3 + TypeScript 实现</p>
       <p>Node.js® 是 OpenJS Foundation 的注册商标</p>
     </footer>
   </div>

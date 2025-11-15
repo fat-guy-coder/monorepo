@@ -402,7 +402,7 @@ const RemoteButton = defineAsyncComponent(() =>
     </div>
 
     <footer>
-      <p>Webpack 模块联邦指南 © 2023 | 使用 Vue 3 + TypeScript 实现</p>
+      <p>Webpack 模块联邦指南  | 使用 Vue 3 + TypeScript 实现</p>
     </footer>
   </div>
 </template>

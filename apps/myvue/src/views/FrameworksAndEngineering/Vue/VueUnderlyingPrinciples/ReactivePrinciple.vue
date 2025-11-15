@@ -336,7 +336,7 @@ watchEffect(() => {
     </main>
 
     <footer>
-      <p>© 2023 Vue3响应式原理基础介绍 | 使用Vue3和TypeScript实现</p>
+      <p> Vue3响应式原理基础介绍 | 使用Vue3和TypeScript实现</p>
     </footer>
   </div>
 </template>

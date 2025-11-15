@@ -400,7 +400,7 @@ yargs(process.argv.slice(2))
     </div>
 
     <footer class="footer">
-      <p>命令行工具开发文档 © 2023 | 提升 CLI 开发体验</p>
+      <p>命令行工具开发文档  | 提升 CLI 开发体验</p>
       <div class="footer-links">
         <a href="https://github.com/enquirer/enquirer" target="_blank">Enquirer GitHub</a>
         <a href="https://github.com/yargs/yargs" target="_blank">Yargs GitHub</a>

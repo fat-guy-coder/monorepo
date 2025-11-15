@@ -150,7 +150,7 @@ const semanticTags = [
     name: 'footer',
     description: '定义文档或区块的页脚',
     example: `<footer>
-  <p>© 2023 公司名称</p>
+  <p> 公司名称</p>
   <address>联系方式</address>
 </footer>`,
     tips: ['通常包含版权信息', '可包含相关链接', '可在多个区块使用'],

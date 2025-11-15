@@ -503,7 +503,7 @@ module.exports = {
 
     <footer class="footer">
       <p>Webpack HMR 热模块替换指南 | Vue3 + TypeScript 实现</p>
-      <p>© 2023 Webpack 高级开发技术</p>
+      <p> Webpack 高级开发技术</p>
     </footer>
   </div>
 </template>

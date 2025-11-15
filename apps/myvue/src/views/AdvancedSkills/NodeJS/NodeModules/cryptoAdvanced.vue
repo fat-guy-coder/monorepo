@@ -401,7 +401,7 @@ async function decryptWithKMS(ciphertext, keyId) {
     </div>
 
     <footer class="footer">
-      <p>Crypto 模块进阶指南 © 2023 | 安全加密最佳实践</p>
+      <p>Crypto 模块进阶指南  | 安全加密最佳实践</p>
       <div class="footer-links">
         <a href="https://nodejs.org/api/crypto.html" target="_blank">Node.js Crypto 文档</a>
         <a

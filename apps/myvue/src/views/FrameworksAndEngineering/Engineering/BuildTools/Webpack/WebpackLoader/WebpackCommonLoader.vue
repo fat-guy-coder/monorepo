@@ -88,7 +88,7 @@
     </section>
 
     <footer class="footer">
-      <p>© 2023 Webpack Loader 指南 | 持续更新中</p>
+      <p> Webpack Loader 指南 | 持续更新中</p>
       <p>了解更多Webpack知识，请访问官方文档: <a href="https://webpack.js.org/" target="_blank">webpack.js.org</a></p>
     </footer>
   </div>

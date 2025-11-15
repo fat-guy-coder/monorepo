@@ -37,7 +37,7 @@
         <div class="knowledge-grid">
           <div v-for="(item, index) in category.items" :key="index" class="knowledge-card">
             <div class="card-header">
-              <h3>{{ item.name }}</h3>
+              <h3> <a @click="goToRoute(item.route)">{{ item.name }}</a> </h3>
               <div class="stars">
                 <span v-for="n in 5" :key="n" :class="{ filled: n <= item.importance }">★</span>
               </div>
@@ -60,13 +60,14 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-
+const emit = defineEmits(['goToByRouteName'])
 // 知识点类型定义
 interface KnowledgeItem {
   name: string
   description: string
   importance: number
   examples: string[]
+  route: string
 }
 
 interface KnowledgeCategory {
@@ -89,6 +90,10 @@ onMounted(async () => {
   // console.log(res)
   // knowledgeData.value = res.default as unknown as KnowledgeCategory[]
 })
+
+const goToRoute = (route: string) => {
+  emit('goToByRouteName', route)
+};
 
 // 可用分类
 const categories = ref<string[]>([

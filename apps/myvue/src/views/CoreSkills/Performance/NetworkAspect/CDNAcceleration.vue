@@ -232,7 +232,7 @@ output: {
     </div>
 
     <footer class="cdn-footer">
-      <p>© 2023 前端性能优化指南 | CDN加速实践</p>
+      <p> 前端性能优化指南 | CDN加速实践</p>
       <div class="footer-links">
         <a href="#">Cloudflare文档</a>
         <a href="#">AWS CloudFront指南</a>

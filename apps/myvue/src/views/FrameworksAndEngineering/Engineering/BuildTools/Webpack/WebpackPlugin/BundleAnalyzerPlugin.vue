@@ -370,7 +370,7 @@ module.exports = {
     </div>
 
     <div class="footer">
-      <p>© 2023 Webpack Bundle Analyzer 指南 | 提升应用性能从分析开始</p>
+      <p> Webpack Bundle Analyzer 指南 | 提升应用性能从分析开始</p>
     </div>
   </div>
 </template>

@@ -540,7 +540,7 @@ build({
 
     <!-- 页脚 -->
     <div class="footer">
-      <p>ESbuild - 极速前端构建工具 | 性能王者 | © 2023</p>
+      <p>ESbuild - 极速前端构建工具 | 性能王者 | </p>
       <div class="footer-links">
         <a href="https://esbuild.github.io/" target="_blank">官方文档</a>
         <a href="https://github.com/evanw/esbuild" target="_blank">GitHub</a>

@@ -368,7 +368,7 @@ export default function useFetch&lt;T&gt;(url: string) {
     </div>
 
     <footer class="footer">
-      <p>© 2023 Vue 自定义 Hooks 指南 | 使用 Vue3 组合式 API 实现</p>
+      <p> Vue 自定义 Hooks 指南 | 使用 Vue3 组合式 API 实现</p>
       <p>Vue.js 是 Evan You 的注册商标</p>
     </footer>
   </div>

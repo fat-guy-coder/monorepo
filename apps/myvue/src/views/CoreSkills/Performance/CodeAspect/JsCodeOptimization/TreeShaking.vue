@@ -583,7 +583,7 @@ module.exports = {
 
     <footer class="footer">
       <p>Tree Shaking 代码优化指南 | Vue3 + TypeScript 实现</p>
-      <p>© 2023 前端性能优化专家</p>
+      <p> 前端性能优化专家</p>
     </footer>
   </div>
 </template>

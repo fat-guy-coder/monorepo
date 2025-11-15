@@ -675,7 +675,7 @@ export const typography = {
     </main>
 
     <footer class="footer">
-      <p>© 2023 React Atomic Design指南 | 构建可扩展的设计系统</p>
+      <p> React Atomic Design指南 | 构建可扩展的设计系统</p>
       <div class="links">
         <a href="#"><i class="fab fa-react"></i> React文档</a>
         <a href="#"><i class="fas fa-book"></i> Atomic Design书籍</a>

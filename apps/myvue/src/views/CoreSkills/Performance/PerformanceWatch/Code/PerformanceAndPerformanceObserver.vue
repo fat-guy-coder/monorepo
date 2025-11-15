@@ -274,7 +274,7 @@ performance.measure('observer-measure',
     </div>
 
     <footer class="comparison-footer">
-      <p>© 2023 前端性能监控指南 | Performance API vs PerformanceObserver</p>
+      <p> 前端性能监控指南 | Performance API vs PerformanceObserver</p>
       <div class="browser-support">
         支持浏览器: Chrome 52+, Firefox 57+, Edge 79+, Safari 11.1+
       </div>

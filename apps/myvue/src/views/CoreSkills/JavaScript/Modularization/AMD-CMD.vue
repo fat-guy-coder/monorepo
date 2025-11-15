@@ -468,7 +468,7 @@ console.log(math.multiply(5, 3)); // 15</pre>
 
     <!-- 页脚 -->
     <div class="footer">
-      <p>模块化开发演进史 | AMD/CMD规范基础介绍 | 现代ES Modules标准 | © 2023</p>
+      <p>模块化开发演进史 | AMD/CMD规范基础介绍 | 现代ES Modules标准 | </p>
     </div>
   </div>
 </template>

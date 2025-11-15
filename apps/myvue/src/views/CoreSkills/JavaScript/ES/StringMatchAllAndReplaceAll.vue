@@ -286,7 +286,7 @@ const newStr = str.replaceAll(/hello/gi, (match, offset) => {
     </div>
 
     <footer class="footer">
-      <p>© 2023 JavaScript 字符串方法详解 | matchAll & replaceAll</p>
+      <p> JavaScript 字符串方法详解 | matchAll & replaceAll</p>
     </footer>
   </div>
 </template>

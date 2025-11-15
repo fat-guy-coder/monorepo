@@ -347,7 +347,7 @@ watch(count, (newVal, oldVal) => {
     </div>
 
     <div class="footer">
-      <p>© 2023 Vue.js 响应式系统 | 依赖收集是 Vue 高效更新的核心机制</p>
+      <p> Vue.js 响应式系统 | 依赖收集是 Vue 高效更新的核心机制</p>
     </div>
   </div>
 </template>

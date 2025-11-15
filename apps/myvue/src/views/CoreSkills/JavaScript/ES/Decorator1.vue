@@ -539,7 +539,7 @@ export class CatsController {
     </div>
 
     <div class="footer">
-      <p>ECMAScript提案 | 装饰器 | 元编程 © 2023</p>
+      <p>ECMAScript提案 | 装饰器 | 元编程 </p>
     </div>
   </div>
 </template>

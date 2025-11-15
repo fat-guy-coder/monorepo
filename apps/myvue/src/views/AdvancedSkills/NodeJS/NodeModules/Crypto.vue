@@ -588,7 +588,7 @@ const isValid = verifyRequest(signed.data, signed.signature);</code></pre>
     </main>
 
     <footer class="crypto-footer">
-      <p>© 2023 Node.js加密安全指南 | 使用crypto模块构建安全应用</p>
+      <p> Node.js加密安全指南 | 使用crypto模块构建安全应用</p>
       <p>安全提示：定期更新依赖库，使用最新版本的Node.js，遵循最小权限原则</p>
     </footer>
   </div>

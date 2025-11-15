@@ -232,7 +232,7 @@
 
     <!-- 页脚 -->
     <footer class="footer">
-      <p>© 2023 命令行工具指南 | cURL 是开发者的必备工具</p>
+      <p> 命令行工具指南 | cURL 是开发者的必备工具</p>
       <p>cURL 官网: <a href="https://curl.se" target="_blank">https://curl.se</a> | 最新版本: {{ curlVersion }}</p>
     </footer>
   </div>
