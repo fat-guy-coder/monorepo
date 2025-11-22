@@ -1,7 +1,7 @@
 import { fileURLToPath, URL } from 'node:url'
 import { resolve } from 'node:path'
 //rollup-plugin-i18n-auto
-import { defineConfig } from 'vite'
+import { defineConfig, type PluginOption } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import vueDevTools from 'vite-plugin-vue-devtools'
@@ -12,23 +12,42 @@ import zlib from 'zlib'
 
 const outDir = resolve('../../static/myvue')
 
-console.log(outDir)
+// 确保NodeLocalStorage可用
+const ensureNodeLocalStorage = () => {
+  const existing = Reflect.get(globalThis, 'localStorage') as {
+    getItem?: (key: string) => string | null
+  } | undefined
+  if (existing && typeof existing.getItem === 'function') {
+    return
+  }
+
+  const store = new Map<string, string>()
+  const memoryStorage = {
+    getItem: (key: string) => (store.has(key) ? store.get(key)! : null),
+    setItem: (key: string, value: string) => {
+      store.set(key, String(value))
+    },
+    removeItem: (key: string) => {
+      store.delete(key)
+    },
+    clear: () => {
+      store.clear()
+    },
+    key: (index: number) => Array.from(store.keys())[index] ?? null,
+    get length() {
+      return store.size
+    },
+  }
+
+  Reflect.set(globalThis, 'localStorage', memoryStorage)
+}
 
 //https://vite.dev/config/
-export default defineConfig({
-  server: {
-    proxy: {
-      '/api': {
-        target: 'http://localhost:8888', // 目标接口的域名
-        changeOrigin: true, // 是否允许跨域
-        rewrite: (path) => path.replace(/^\/api/, ''), // 路径重写
-      },
-    },
-    // open: true, // 启动时自动打开浏览器
-    port: 3000, // 指定端口号
+export default defineConfig(async ({ command }) => {
 
-  },
-  plugins: [
+  // console.log(process.version,command)
+
+  const plugins: PluginOption[] = [
     vue(),
     vueJsx(),
     vueDevTools(),
@@ -47,29 +66,44 @@ export default defineConfig({
       ],
       // deleteOriginalAssets: true,
       threshold: 500,
-    }),
-  ],
-  build: {
-    outDir,
-    emptyOutDir: true,
-    // sourcemap: true,
-    rollupOptions: {
-      treeshake: {
-        moduleSideEffects: false,
+    })
+  ]
+  return {
+    server: {
+      proxy: {
+        '/api': {
+          target: 'http://localhost:8888', // 目标接口的域名
+          changeOrigin: true, // 是否允许跨域
+          rewrite: (path: string) => path.replace(/^\/api/, ''), // 路径重写
+        },
       },
-      output: {
-        manualChunks: {
-          'vue': ['vue', 'vue-router', 'pinia'],
+      // open: true, // 启动时自动打开浏览器
+      port: 3000, // 指定端口号
+
+    },
+    plugins,
+    build: {
+      outDir,
+      emptyOutDir: true,
+      // sourcemap: true,
+      rollupOptions: {
+        treeshake: {
+          moduleSideEffects: false,
+        },
+        output: {
+          manualChunks: {
+            'vue': ['vue', 'vue-router', 'pinia'],
+          },
         },
       },
     },
-  },
-  resolve: {
-    alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
+    resolve: {
+      alias: {
+        '@': fileURLToPath(new URL('./src', import.meta.url))
+      },
     },
-  },
-  esbuild: {
-    sourcemap: true, // 对Vue单文件组件启用sourcemap
-  },
+    esbuild: {
+      sourcemap: true, // 对Vue单文件组件启用sourcemap
+    },
+  }
 })
