@@ -6624,6 +6624,22 @@ export default [
         "component": () => import('@/views/Shortcuts/CursorShortcutsMac.vue')
       }
     ]
+  },
+  {
+    "name": "Me",
+    "path": "/Me",
+    "children": [
+      {
+        "name": "MyInfomation",
+        "path": "/Me/MyInfomation",
+        "component": () => import('@/views/Me/MyInfomation.vue')
+      },
+      {
+        "name": "SubmitAdvice",
+        "path": "/Me/SubmitAdvice",
+        "component": () => import('@/views/Me/SubmitAdvice.vue')
+      }
+    ]
   }
 ];
   

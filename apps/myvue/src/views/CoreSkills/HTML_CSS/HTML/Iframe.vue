@@ -112,9 +112,8 @@
 
             <div class="demo-container">
               <div class="responsive-iframe">
-                <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="YouTube视频播放器" frameborder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowfullscreen></iframe>
+                <!-- <iframe src="https://www.bilibili.com/video/BV113411p7BT/" title="blibli" frameborder="0"
+                  allow="autoplay;"></iframe> -->
               </div>
               <p class="demo-label">响应式视频嵌入示例</p>
             </div>

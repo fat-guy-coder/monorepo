@@ -1,71 +1,65 @@
 <template>
-  <AConfigProvider :theme="{
-    token: {
-      colorPrimary: '#00b96b',
-    },
-  }">
-    <div ref="container" class="container">
-      <!-- 导航组件示例 -->
-      <Navigation position="bottom-right" :offset="{ bottom: '2rem', right: '0.5rem' }" :isMobile="isMobile"
-        @item-click="handleNavClick">
-        <div class="nav-item">
-          <span class="nav-icon">📊</span>
-          <span class="nav-text">数据</span>
-        </div>
-        <div class="nav-item">
-          <span class="nav-icon">⚙️</span>
-          <span class="nav-text">设置</span>
-        </div>
-        <div class="nav-item">
-          <ThemeChange v-model:show="themeMenuShow" :theme="theme" :themes="themes"
-            :direction="isMobile ? 'vertical' : 'horizontal'" @theme-change="themeChange" />
-          <span class=" nav-icon">👤</span>
-          <span class="nav-text">用户</span>
-        </div>
-        <div class="nav-item">
-          <span class="nav-icon">☀☽</span>
-          <span class="nav-text">主题</span>
-        </div>
-        <div class="nav-item">
-          <span class="nav-icon">🏠</span>
-          <span class="nav-text">首页</span>
-        </div>
-      </Navigation>
-
-
-      <div class="menu-container">
-        <div class="search">
-          <Input v-if="!Menucollapsed" v-model:value="searchValue" placeholder="目前暂支持菜单搜索" allow-clear></Input>
-          <Tooltip>
-            <template #title>菜单数据太大了，展开可能会有点卡顿<br />但换来的是搜索和子项展开的流畅体验</template>
-            <Button @click="toggleCollapsed"> {{ Menucollapsed ? '➡️' : '⬅️' }} </Button>
-          </Tooltip>
-        </div>
-        <div :class="Menucollapsed ? 'menu-collapsed' : 'menu'">
-          <Spin :spinning="loading" class="loading" />
-          <Menu @click="goto" :collapsed="Menucollapsed" v-if="!loading" :selectedKeys="selectedKeys" v-model="openKeys"
-            :menus="menus" @dom-updated="menuDomUpdated">
-          </Menu>
-        </div>
+  <!-- <AConfigProvider :theme="antdThemeConfig""> -->
+    <div ref=" container" class="container">
+    <!-- 导航组件示例 -->
+    <Navigation position="bottom-right" :offset="{ bottom: '2rem', right: '0.5rem' }" :isMobile="isMobile"
+      @item-click="handleNavClick">
+      <div class="nav-item">
+        <span class="nav-icon">📊</span>
+        <span class="nav-text">数据</span>
       </div>
-      <div class="content">
-        <div class="tabBar">
-          <RouteTab @tab-click="tabClick" :activeKey="activeKey" :currentDragIndex="currentDragIndex" :tabList="tabList"
-            :showContextMenu="showContextMenu" @remove="removeTab" @remove-other="removeOther" @remove-side="removeSide"
-            @toggle-show-menu="toggleShowMenu" @set-current-drag-index="setCurrentDragIndex" @sort-tab="sortTab">
-          </RouteTab>
-        </div>
-        <div class="mainView" id="mainView" @scroll="handleScroll">
-          <Spin :spinning="mainViewLoading" class="mainViewLoading" v-if="activeKey !== '/'"> </Spin>
-          <router-view v-slot="{ Component }">
-            <transition name="fade" mode="out-in">
-              <component :is="Component" @goToByRouteName="gotoByName" />
-            </transition>
-          </router-view>
-        </div>
+      <div class="nav-item">
+        <span class="nav-icon">⚙️</span>
+        <span class="nav-text">设置</span>
+      </div>
+      <div class="nav-item">
+        <ThemeChange v-model:show="themeMenuShow" :theme="theme" :themes="themes"
+          :direction="isMobile ? 'vertical' : 'horizontal'" @theme-change="themeChange" />
+        <span class=" nav-icon">👤</span>
+        <span class="nav-text">用户</span>
+      </div>
+      <div class="nav-item">
+        <span class="nav-icon">☀☽</span>
+        <span class="nav-text">主题</span>
+      </div>
+      <div class="nav-item">
+        <span class="nav-icon">🏠</span>
+        <span class="nav-text">首页</span>
+      </div>
+    </Navigation>
+
+
+    <div class="menu-container">
+      <div class="search">
+        <Input v-if="!Menucollapsed" v-model:value="searchValue" placeholder="目前暂支持菜单搜索" allow-clear></Input>
+        <Tooltip>
+          <template #title>菜单数据太大了，展开可能会有点卡顿<br />但换来的是搜索和子项展开的流畅体验</template>
+          <Button @click="toggleCollapsed"> {{ Menucollapsed ? '➡️' : '⬅️' }} </Button>
+        </Tooltip>
+      </div>
+      <div :class="Menucollapsed ? 'menu-collapsed' : 'menu'">
+        <Spin :spinning="loading" class="loading" />
+        <Menu @click="goto" :collapsed="Menucollapsed" v-if="!loading" :selectedKeys="selectedKeys" v-model="openKeys"
+          :menus="menus" @dom-updated="menuDomUpdated">
+        </Menu>
       </div>
     </div>
-  </AConfigProvider>
+    <div class="content">
+      <RouteTab @tab-click="tabClick" :activeKey="activeKey" :currentDragIndex="currentDragIndex" :tabList="tabList"
+        :showContextMenu="showContextMenu" @remove="removeTab" @remove-other="removeOther" @remove-side="removeSide"
+        @toggle-show-menu="toggleShowMenu" @set-current-drag-index="setCurrentDragIndex" @sort-tab="sortTab">
+      </RouteTab>
+      <div class="mainView" id="mainView" @scroll="handleScroll">
+        <Spin :spinning="mainViewLoading" class="mainViewLoading" v-if="activeKey !== '/'"> </Spin>
+        <router-view v-slot="{ Component }">
+          <transition name="fade" mode="out-in">
+            <component :is="Component" @goToByRouteName="gotoByName" />
+          </transition>
+        </router-view>
+      </div>
+    </div>
+    </div>
+  <!-- </AConfigProvider> -->
 </template>
 
 <script lang="ts" setup vapor>
@@ -89,9 +83,48 @@ import { useTabistStore, type Tab } from '@/stores/tab'
 import { type Theme, useUserStore } from '@/stores/user'
 import { useRouter } from 'vue-router'
 import { debounce } from '@/Function/CommonFun'
-import { message, Spin, Input, Button, Tooltip, ConfigProvider as AConfigProvider } from 'ant-design-vue'
+import { message, Spin, Input, Button, Tooltip, ConfigProvider as AConfigProvider, theme as antdTheme } from 'ant-design-vue'
 import { useDetectMobile } from '@/hooks/useDetectMobile'
+import { theme as themeTokens } from '@/assets/css/theme'
 // import { request } from '@/request'
+
+
+
+//获取用户信息
+const userStore = useUserStore()
+
+
+userStore.$subscribe(
+  (_, state) => {
+    localStorage.setItem('user', JSON.stringify(state.user))
+  },
+  { flush: 'sync' },
+)
+
+const theme = computed(() => userStore.user.theme)
+
+const themes = userStore.user.themes
+
+const isMobile = computed(() => userStore.user.device.isMobile)
+
+
+const antdThemeConfig = ref({
+  token: themeTokens[theme.value],
+  algorithm: theme.value === 'dark' ? [antdTheme.darkAlgorithm] : [antdTheme.defaultAlgorithm],
+})
+
+//主题切换
+const themeChange = async (theme1: Theme) => {
+  userStore.setUsrTheme(theme1)
+  // 设置到 html 元素上
+  document.documentElement.setAttribute('data-theme', theme1)
+  antdThemeConfig.value = {
+    token: themeTokens[theme1],
+    algorithm: theme1 === 'dark' ? [antdTheme.darkAlgorithm] : [antdTheme.defaultAlgorithm],
+  }
+  await nextTick()
+}
+
 
 
 
@@ -108,7 +141,9 @@ const container = ref<HTMLElement | null>(null)
 let contextMenu: HTMLElement | null = null
 
 function closeContextMenu(e: MouseEvent) {
+  console.log('closeContextMenu')
   if (contextMenu && !contextMenu.contains(e.target as Node)) {
+    console.log('closeContextMenu')
     store.toggleShowMenu(false)
   }
 
@@ -146,43 +181,27 @@ const loading = ref(false)
 
 const mainViewLoading = ref(false)
 
-const userStore = useUserStore()
-
-
-userStore.$subscribe(
-  (_, state) => {
-    localStorage.setItem('user', JSON.stringify(state.user))
-  },
-  { flush: 'sync' },
-)
-
-const theme = computed(() => userStore.user.theme)
-
-const themes = userStore.user.themes
-
-const isMobile = computed(() => userStore.user.device.isMobile)
-
-watch(isMobile, (val) => {
-  console.log(val)
-})
-
-
-const themeChange = (theme: Theme) => {
-  userStore.setUsrTheme(theme)
-}
 
 useDetectMobile(userStore)
 
 onMounted(() => {
+  //设置主题
+  // themeChange(theme.value)
 
+  //右键菜单
   contextMenu = document.getElementById('context-menu')
+
+  console.log(container.value)
   if (container.value) {
     container.value.addEventListener('click', closeContextMenu)
+
   }
 
+  //跳转激活的tab
   router.push(store.activeKey)
-
+  //获取菜单
   getMenus()
+
 })
 
 onUnmounted(() => {
@@ -496,7 +515,7 @@ const handleNavClick = (index: number) => {
 
 .container {
   display: flex;
-  background: #fff;
+  background: var(--element-background);
 }
 
 .loading {
@@ -505,10 +524,7 @@ const handleNavClick = (index: number) => {
   line-height: calc(100vh - 2.2rem);
 }
 
-li,
-p {
-  color: rgb(0, 0, 0);
-}
+
 
 .menu-container {
   height: 100vh;
@@ -516,7 +532,7 @@ p {
 
 .search {
   height: 2rem;
-  margin: 0.2rem 0 0 0.2rem;
+  margin: 0.1rem 0 0 0.1rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -526,7 +542,7 @@ p {
   width: clamp(350px, 20vw, 400px);
   height: calc(100vh - 2.2rem);
   overflow: auto;
-  border-right: 1px solid rgba(212, 212, 212, 0.5);
+  border-right: 1px solid var(--element-border);
 }
 
 .menu-collapsed {
@@ -543,9 +559,6 @@ p {
   height: 100vh;
 }
 
-.tabBar {
-  background: #fff;
-}
 
 .mainView {
   overflow: auto;

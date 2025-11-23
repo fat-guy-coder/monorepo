@@ -11,12 +11,12 @@
   <Tabs @change="TabClick" :activeKey="activeKey" hide-add size="small" type="editable-card" @edit="onEdit"
     :tabBarStyle="{ margin: '0 5px' }">
     <!-- @click.right.prevent="closeAll" -->
-
     <TabPane v-for="(pane, index) in tabList" :key="pane.path" :closable="pane.path !== '/' && pane.path !== '/home'">
       <template #tab>
-        <div @click.right.prevent.stop="openMenu(pane.path, $event, index)" :data-id="pane.path" class="tab-item"
-          :draggable="pane.path !== '/'" @dragstart="startSorting(index, pane.path)"
-          @dragover="handleSortOver(index, $event, pane.path)" @dragenter.prevent @dragend="endSorting(pane.path)">
+        <div @click.right.prevent.stop="openMenu(pane.path, $event, index)" :data-id="pane.path"
+          :class="[pane.path === activeKey ? 'active' : '', 'tab-item']" :draggable="pane.path !== '/'"
+          @dragstart="startSorting(index, pane.path)" @dragover="handleSortOver(index, $event, pane.path)"
+          @dragenter.prevent @dragend="endSorting(pane.path)">
           {{ pane.label }}
         </div>
       </template>
@@ -28,10 +28,7 @@
 import { defineProps, defineEmits, ref, onMounted } from 'vue'
 import { Tabs, TabPane } from 'ant-design-vue'
 import type { Tab } from '@/stores/tab'
-import { useUserStore } from '@/stores/user'
 
-
-const store = useUserStore()
 
 
 onMounted(() => { })
@@ -114,26 +111,22 @@ const endSorting = (path: string) => {
 </script>
 
 <style lang="less" scoped>
-/* 组件样式 */
-
-// .ant-tabs :where(.css-dev-only-do-not-override-1p3hq3p).ant-tabs-top > .ant-tabs-nav {
-//   margin: 0 !important;
-// }
-
-// :where(.css-dev-only-do-not-override-1p3hq3p).ant-tabs > .ant-tabs-nav .ant-tabs-nav-list {
-//   transition: all 0.3s ease-in !important;
-// }
-
 .tab-item {
   position: relative;
   top: 0px;
   left: 0px;
   transition: all 0.3s ease-in;
+  color: var(--color-text);
+
+  &:hover {
+    color: var(--color-primary);
+  }
+
+  background-color: var(--color-fill-tertiary);
 }
 
 .active {
-  height: 80px;
-  opacity: 1;
+  background-color: var(--element-background);
 }
 
 .left-shift {
@@ -141,9 +134,11 @@ const endSorting = (path: string) => {
   width: 20px;
   cursor: pointer;
   transition: all 0.3s ease-in;
+  color: var(--color-text);
 
   &:hover {
     transform: translate(-1px, -1px);
+    color: var(--color-primary);
   }
 }
 
@@ -151,44 +146,85 @@ const endSorting = (path: string) => {
   position: fixed;
   top: 0;
   right: 0;
-  z-index: 100;
-  background: #fff;
-  opacity: 0.7;
-  color: #1677ff;
-  width: 100px;
+  z-index: 1000;
+  background: var(--element-background);
+  color: var(--color-text);
+  height: 1px;
+  // border: 1px solid var(--element-border);
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  width: 120px;
   height: 0px;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  align-items: center;
+  align-items: stretch;
   overflow: hidden;
-  transition: all 0.3s ease-in;
+  transition: all 0.2s ease-in;
+  font-size: var(--font-size-small);
 
   div {
     cursor: pointer;
     width: 100%;
     text-align: center;
-    transition: translate 0.5s ease-in;
-    color: #1677ff;
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+    color: var(--color-text);
 
     &:hover {
+      background-color: var(--element-background-soft);
+      color: var(--color-primary);
       transform: translate(1px, 1px);
     }
   }
 }
 
-// .tab {
-//   position: relative;
+:deep(.ant-tabs) {
 
-//   .menu {
-//     position: fixed;
-//     width: 100%;
-//     background: #fff;
-//     color: #1677ff;
-//     z-index: 100;
-//   }
+  /* Tabs 容器背景与下边框 */
+  .ant-tabs-nav {
+    background: var(--element-background);
+    border-bottom: 1px solid var(--element-border);
+    margin: 0 !important;
+  }
 
-//   .menu-right {
-//     left: 0;
-//   }
-// }</style>
+  /* 单个 Tab 默认态 */
+  .ant-tabs-tab {
+    color: var(--color-text-soft);
+
+    &:hover {
+      color: var(--color-primary);
+    }
+  }
+
+  /* 激活态 Tab 文本色 */
+  .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+    color: var(--color-primary);
+    text-shadow: none;
+  }
+
+  /* 可编辑卡片型的卡片背景与边框 */
+  &.ant-tabs-card>.ant-tabs-nav .ant-tabs-tab {
+    background: var(--element-background);
+    border: 1px solid var(--element-border);
+  }
+
+  &.ant-tabs-card>.ant-tabs-nav .ant-tabs-tab-active {
+    background: var(--element-background-soft);
+    border: 1px solid var(--color-primary);
+  }
+
+  /* 关闭图标颜色 */
+  .ant-tabs-tab-remove {
+    color: var(--color-text-soft);
+
+    &:hover {
+      color: var(--color-error, var(--color-primary));
+    }
+  }
+
+  /* ink bar 颜色 */
+  .ant-tabs-ink-bar {
+    background: var(--color-primary);
+  }
+}
+</style>

@@ -56,8 +56,6 @@ const toggle = () => {
 
 // 切换主题函数
 const switchTheme = (theme: Theme) => {
-    // 设置到 html 元素上
-    document.documentElement.setAttribute('data-theme', theme)
     // 触发事件
     emit('themeChange', theme)
 }

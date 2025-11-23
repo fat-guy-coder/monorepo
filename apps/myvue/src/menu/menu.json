@@ -5606,5 +5606,23 @@
         "name": "CursorShortcutsMac"
       }
     ]
+  },
+  {
+    "label": "⌨️ 我 ⭐⭐⭐",
+    "name": "Me",
+    "children": [
+      {
+        "label": "⌨️ 我的信息 ⭐⭐⭐",
+        "name": "MyInfomation"
+      },
+      {
+        "label": "⌨️ 提交建议 ⭐⭐⭐",
+        "name": "SubmitAdvice"
+      },
+      {
+        "label": "⌨️ 我的主题 ⭐⭐⭐",
+        "name": "MyTheme"
+      }
+    ]
   }
 ]

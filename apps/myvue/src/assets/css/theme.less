@@ -1,4 +1,3 @@
-@import './reset.less';
 /* ============================================
    主题色系变量系统 - 黑白暖冷主题
    ============================================ */
@@ -39,26 +38,26 @@
 @color-gray-900: #111827;
 
 /* 暖色主题色板 */
-@warm-primary: #d97706;
+@warm-primary: #b66c2f;
 /* 暖橙色 */
-@warm-secondary: #ea580c;
+@warm-secondary: #b4572a;
 /* 暖红橙 */
-@warm-accent: #f59e0b;
+@warm-accent: #d9a65a;
 /* 暖金色 */
-@warm-background: #fff7ed;
+@warm-background: #fff8f0;
 /* 暖米白 */
-@warm-background-soft: #ffedd5;
-@warm-background-mute: #fed7aa;
-@warm-surface: #fef3c7;
+@warm-background-soft: #ffe9d1;
+@warm-background-mute: #f7d9b5;
+@warm-surface: #fff2dc;
 /* 暖黄 */
 @warm-text: #7c2d12;
 /* 暖棕 */
 @warm-text-soft: #9a3412;
-@warm-border: #fdba74;
+@warm-border: #e6c39a;
 /* 暖橙边框 */
 
 /* 冷色主题色板 */
-@cool-primary: #0284c7;
+@cool-primary: #4aa3c0;
 /* 冷蓝色 */
 @cool-secondary: #0369a1;
 /* 深冷蓝 */
@@ -395,6 +394,38 @@ body[data-theme="cool"] {
   --section-gap: 160px;
   --element-padding: 12px;
   --element-margin: 8px;
+
+  /* Ant Design Vue token 风格（kebab-case），用于与 JS 侧 theme.ts 对齐 */
+  /* Brand & Status */
+  --color-info: var(--color-primary);
+  --color-success: #52c41a;
+  --color-warning: #faad14;
+  --color-error: #ff4d4f;
+
+  /* Text */
+  --color-text-base: var(--color-text);
+  --color-text-secondary: var(--color-text-soft);
+  --color-text-tertiary: var(--color-text-soft);
+  --color-text-quaternary: var(--color-text-soft);
+  --color-text-light-solid: var(--color-background);
+
+  /* Link */
+  --color-link: var(--color-primary);
+  --color-link-hover: var(--color-secondary);
+  --color-link-active: var(--color-primary);
+
+  /* Backgrounds */
+  --color-bg-base: var(--color-background);
+  --color-bg-layout: var(--color-background-soft);
+  --color-bg-container: var(--color-background);
+  --color-bg-elevated: var(--color-background-soft);
+
+  /* Fill / Border */
+  --color-fill: var(--color-background-soft);
+  --color-fill-secondary: var(--color-background-mute);
+  --color-fill-tertiary: var(--color-background-mute);
+  --color-fill-quaternary: var(--color-background-mute);
+  --color-border-secondary: var(--color-border-hover);
 }
 
 /* ============================================
