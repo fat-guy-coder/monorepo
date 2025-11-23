@@ -191,8 +191,8 @@ const str = `Hello ${name}, your score is ${score}`</code></pre>
 </template>
 
 <script setup lang="ts">
-import '@/assets/css/unified-styles.css';
-import Nav from '@/components/ScrollNav.vue';
+import '@/assets/css/main.less';
+import Nav from '@/components/Nav/ScrollNav.vue';
 
 const methods = [
   {

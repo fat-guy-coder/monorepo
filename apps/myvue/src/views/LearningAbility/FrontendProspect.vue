@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>B</h1>
+    <h3>🌐 前端前景 ⭐⭐⭐</h3>
   </div>
 </template>
 
@@ -8,4 +8,4 @@
 
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped></style>

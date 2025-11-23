@@ -431,8 +431,8 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import CodeBlock from '@/components/CodeBlock.vue'
-import Nav from '@/components/ScrollNav.vue'
+import CodeBlock from '@/components/Code/index.vue'
+import Nav from '@/components/Nav/ScrollNav.vue'
 import testResults from '../JSON/dataStructurePerformence.json'
 
 const sections = [

@@ -1,66 +1,78 @@
 <template>
-  <div ref="container" class="container">
-    <div class="menu-container">
-      <div class="search">
-        <Input
-          v-if="!Menucollapsed"
-          v-model:value="searchValue"
-          placeholder="目前暂支持菜单搜索"
-          allow-clear
-        ></Input>
-        <Tooltip>
-          <template #title
-            >菜单数据太大了，展开可能会有点卡顿<br />但换来的是搜索和子项展开的流畅体验</template
-          >
-          <Button @click="toggleCollapsed"> {{ Menucollapsed ? '➡️' : '⬅️' }} </Button>
-        </Tooltip>
+  <AConfigProvider :theme="{
+    token: {
+      colorPrimary: '#00b96b',
+    },
+  }">
+    <div ref="container" class="container">
+      <!-- 导航组件示例 -->
+      <Navigation position="bottom-right" :offset="{ bottom: '2rem', right: '0.5rem' }" :isMobile="isMobile"
+        @item-click="handleNavClick">
+        <div class="nav-item">
+          <span class="nav-icon">📊</span>
+          <span class="nav-text">数据</span>
+        </div>
+        <div class="nav-item">
+          <span class="nav-icon">⚙️</span>
+          <span class="nav-text">设置</span>
+        </div>
+        <div class="nav-item">
+          <ThemeChange v-model:show="themeMenuShow" :theme="theme" :themes="themes"
+            :direction="isMobile ? 'vertical' : 'horizontal'" @theme-change="themeChange" />
+          <span class=" nav-icon">👤</span>
+          <span class="nav-text">用户</span>
+        </div>
+        <div class="nav-item">
+          <span class="nav-icon">☀☽</span>
+          <span class="nav-text">主题</span>
+        </div>
+        <div class="nav-item">
+          <span class="nav-icon">🏠</span>
+          <span class="nav-text">首页</span>
+        </div>
+      </Navigation>
+
+
+      <div class="menu-container">
+        <div class="search">
+          <Input v-if="!Menucollapsed" v-model:value="searchValue" placeholder="目前暂支持菜单搜索" allow-clear></Input>
+          <Tooltip>
+            <template #title>菜单数据太大了，展开可能会有点卡顿<br />但换来的是搜索和子项展开的流畅体验</template>
+            <Button @click="toggleCollapsed"> {{ Menucollapsed ? '➡️' : '⬅️' }} </Button>
+          </Tooltip>
+        </div>
+        <div :class="Menucollapsed ? 'menu-collapsed' : 'menu'">
+          <Spin :spinning="loading" class="loading" />
+          <Menu @click="goto" :collapsed="Menucollapsed" v-if="!loading" :selectedKeys="selectedKeys" v-model="openKeys"
+            :menus="menus" @dom-updated="menuDomUpdated">
+          </Menu>
+        </div>
       </div>
-      <div :class="Menucollapsed ? 'menu-collapsed' : 'menu'">
-        <Spin :spinning="loading" class="loading" />
-        <Menu
-          @click="goto"
-          :collapsed="Menucollapsed"
-          v-if="!loading"
-          :selectedKeys="selectedKeys"
-          v-model="openKeys"
-          :menus="menus"
-          @dom-updated="menuDomUpdated"
-        >
-        </Menu>
+      <div class="content">
+        <div class="tabBar">
+          <RouteTab @tab-click="tabClick" :activeKey="activeKey" :currentDragIndex="currentDragIndex" :tabList="tabList"
+            :showContextMenu="showContextMenu" @remove="removeTab" @remove-other="removeOther" @remove-side="removeSide"
+            @toggle-show-menu="toggleShowMenu" @set-current-drag-index="setCurrentDragIndex" @sort-tab="sortTab">
+          </RouteTab>
+        </div>
+        <div class="mainView" id="mainView" @scroll="handleScroll">
+          <Spin :spinning="mainViewLoading" class="mainViewLoading" v-if="activeKey !== '/'"> </Spin>
+          <router-view v-slot="{ Component }">
+            <transition name="fade" mode="out-in">
+              <component :is="Component" @goToByRouteName="gotoByName" />
+            </transition>
+          </router-view>
+        </div>
       </div>
     </div>
-    <div class="content">
-      <div class="tabBar">
-        <RouteTab
-          @tab-click="tabClick"
-          :activeKey="activeKey"
-          :currentDragIndex="currentDragIndex"
-          :tabList="tabList"
-          :showContextMenu="showContextMenu"
-          @remove="removeTab"
-          @remove-other="removeOther"
-          @remove-side="removeSide"
-          @toggle-show-menu="toggleShowMenu"
-          @set-current-drag-index="setCurrentDragIndex"
-          @sort-tab="sortTab"
-        >
-        </RouteTab>
-      </div>
-      <div class="mainView" id="mainView" @scroll="handleScroll">
-        <Spin :spinning="mainViewLoading" class="mainViewLoading" v-if="activeKey !== '/'"> </Spin>
-        <router-view v-slot="{ Component }">
-          <transition name="fade" mode="out-in">
-            <component :is="Component" @goToByRouteName="gotoByName" />
-          </transition>
-        </router-view>
-      </div>
-    </div>
-  </div>
+  </AConfigProvider>
 </template>
 
 <script lang="ts" setup vapor>
-import Menu from '@/components/MainMenu/index.vue'
-import RouteTab from '@/components/RouteTab.vue'
+import Menu from '@/components/Menu/index.vue'
+import RouteTab from '@/components/Tab/RouteTab.vue'
+import ThemeChange from '@/components/Theme/index.vue'
+import Navigation from '@/components/Nav/fixedNavButton.vue'
 import { computed, ref, watch, onMounted, onUnmounted, nextTick } from 'vue'
 import {
   //addKeysToRoutes,
@@ -74,10 +86,16 @@ import {
 } from '@/menu'
 import type { Route } from '@/menu'
 import { useTabistStore, type Tab } from '@/stores/tab'
+import { type Theme, useUserStore } from '@/stores/user'
 import { useRouter } from 'vue-router'
 import { debounce } from '@/Function/CommonFun'
-import { message, Spin, Input, Button, Tooltip } from 'ant-design-vue'
+import { message, Spin, Input, Button, Tooltip, ConfigProvider as AConfigProvider } from 'ant-design-vue'
+import { useDetectMobile } from '@/hooks/useDetectMobile'
 // import { request } from '@/request'
+
+
+
+// const navigationButtonExpanded = ref(false)
 
 const router = useRouter()
 
@@ -93,7 +111,9 @@ function closeContextMenu(e: MouseEvent) {
   if (contextMenu && !contextMenu.contains(e.target as Node)) {
     store.toggleShowMenu(false)
   }
+
 }
+
 
 onUnmounted(() => {
   if (container.value) {
@@ -126,12 +146,42 @@ const loading = ref(false)
 
 const mainViewLoading = ref(false)
 
+const userStore = useUserStore()
+
+
+userStore.$subscribe(
+  (_, state) => {
+    localStorage.setItem('user', JSON.stringify(state.user))
+  },
+  { flush: 'sync' },
+)
+
+const theme = computed(() => userStore.user.theme)
+
+const themes = userStore.user.themes
+
+const isMobile = computed(() => userStore.user.device.isMobile)
+
+watch(isMobile, (val) => {
+  console.log(val)
+})
+
+
+const themeChange = (theme: Theme) => {
+  userStore.setUsrTheme(theme)
+}
+
+useDetectMobile(userStore)
+
 onMounted(() => {
+
   contextMenu = document.getElementById('context-menu')
   if (container.value) {
     container.value.addEventListener('click', closeContextMenu)
   }
+
   router.push(store.activeKey)
+
   getMenus()
 })
 
@@ -246,8 +296,10 @@ function expandMenu(path: string) {
 
 function removeTab(path: string) {
   store.removeTab(path, (p) => {
-    openKeys.value = findFatherKeysListByKey(p)
     router.push({ path: p })
+    //手机端不展开菜单
+    if (userStore.user.device.isMobile) return
+    openKeys.value = findFatherKeysListByKey(p)
     nextTick(() => {
       scrollTo(p)
     })
@@ -256,6 +308,8 @@ function removeTab(path: string) {
 function removeOther(path: string) {
   router.push({ path })
   store.removeOther(path, (path) => {
+    //手机端不展开菜单
+    if (userStore.user.device.isMobile) return
     openKeys.value = findFatherKeysListByKey(path)
     nextTick(() => {
       scrollTo(path)
@@ -266,6 +320,8 @@ function removeOther(path: string) {
 function removeSide(index: number, side: 'left' | 'right', key: string) {
   router.push({ path: key })
   store.removeSide(index, side, key, (path) => {
+    //手机端不展开菜单
+    if (userStore.user.device.isMobile) return
     openKeys.value = findFatherKeysListByKey(path)
     nextTick(() => {
       scrollTo(path)
@@ -291,6 +347,8 @@ function goto({
   if (path === activeKey.value) {
     return
   }
+  //手机端并且折叠状态下点击菜单后折叠菜单 这里重复赋值 主要处理弹出来的菜单后收拢
+  if (userStore.user.device.isMobile && Menucollapsed.value) Menucollapsed.value = true
   if (redirect) {
     gotoByName(redirect.name, true)
     return
@@ -336,6 +394,8 @@ function gotoByName(name: string, isRedirect: boolean = false) {
       label: title,
     },
     (path) => {
+      //手机端不展开菜单
+      if (userStore.user.device.isMobile) return
       if (isRedirect) {
         const keys = findFatherKeysListByKey(path)
         openKeys.value = [...keys, ...openKeys.value]
@@ -387,6 +447,23 @@ const scrollTo = (id: string) => {
 //   }
 //   cacheKeys.value = e
 // }
+
+
+const themeMenuShow = ref(false)
+
+//铆钉导航
+const handleNavClick = (index: number) => {
+  switch (index) {
+    case 4:
+      gotoByName('home')
+      break;
+    case 3:
+      themeMenuShow.value = !themeMenuShow.value
+      break;
+    default:
+      break;
+  }
+}
 </script>
 
 <style lang="less" scoped>
@@ -478,10 +555,48 @@ p {
   scroll-timeline-name: --myTimeline;
   scroll-timeline-axis: block;
 }
+
 .mainViewLoading {
   width: 100%;
   line-height: calc(100vh - 100px);
   // height: calc(100vh - 100px);
   text-align: center;
+}
+
+/* 导航项样式 */
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-width: 30px;
+  min-height: 30px;
+  padding: 10px;
+  background: var(--element-background);
+  color: var(--color-text);
+  border: 1px solid var(--element-border);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: var(--element-background-soft);
+    border-color: var(--element-border-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  }
+}
+
+.nav-icon {
+  font-size: 24px;
+  line-height: 1;
+}
+
+.nav-text {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1;
 }
 </style>

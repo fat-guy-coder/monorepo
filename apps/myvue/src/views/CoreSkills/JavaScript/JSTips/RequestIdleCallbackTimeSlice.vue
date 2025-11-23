@@ -418,7 +418,7 @@ export function useTimeSlicing() {
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import RequestIdleCallback from '@/assets/js/requestIdleCallback.png'
+import RequestIdleCallback from '@/assets/image/js/requestIdleCallback.png'
 
 // 演示数据
 const taskCount = ref(5000)

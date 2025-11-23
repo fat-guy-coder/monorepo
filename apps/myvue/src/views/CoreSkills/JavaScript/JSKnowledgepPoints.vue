@@ -74,7 +74,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import CodeBlock from '@/components/CodeBlock.vue'
+import CodeBlock from '@/components/Code/index.vue'
 
 const emit = defineEmits(['goToByRouteName'])
 

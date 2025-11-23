@@ -49,7 +49,7 @@
 </template>
 
 <script setup lang="ts">
-import domImage from '@/assets/js/nodeInfo.png'
+import domImage from '@/assets/image/js/nodeInfo.png'
 import { onMounted, ref } from 'vue'
 interface DOMAPI {
   name: string

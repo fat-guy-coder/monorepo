@@ -312,7 +312,7 @@
 
 <script setup lang="ts">
 import CodeBlock from '../Components/CodeBlock.vue'
-import Nav from '@/components/ScrollNav.vue'
+import Nav from '@/components/Nav/ScrollNav.vue'
 
 const sections = [
   { id: 'overview', name: '概述' },

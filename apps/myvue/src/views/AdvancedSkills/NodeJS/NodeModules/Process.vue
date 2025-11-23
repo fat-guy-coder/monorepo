@@ -348,16 +348,9 @@
 </script>
 
 <style lang="less" scoped>
-
-
 .process-container {
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  }
-
+  max-width: 1200px;
+  margin: 0 auto;
   background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
   color: #2c3e50;
   min-height: 100vh;

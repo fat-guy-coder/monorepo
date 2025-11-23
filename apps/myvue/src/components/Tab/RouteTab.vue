@@ -1,44 +1,22 @@
 <template>
-  <div
-    class="menu-list"
-    id="context-menu"
-    :style="{
-      top: `${position.Y}px`,
-      left: `${position.X}px`,
-      height: `${showContextMenu ? 80 : 0}px`,
-    }"
-  >
+  <div class="menu-list" id="context-menu" :style="{
+    top: `${position.Y}px`,
+    left: `${position.X}px`,
+    height: `${showContextMenu ? 80 : 0}px`,
+  }">
     <div @click.stop="closeSide(currentIndex, 'left', currentKey)">关闭左侧</div>
     <div @click.stop="closeSide(currentIndex, 'right', currentKey)">关闭右侧</div>
     <div @click.stop="closeAll(currentKey)">关闭其他</div>
   </div>
-  <Tabs
-    @change="TabClick"
-    :activeKey="activeKey"
-    hide-add
-    size="small"
-    type="editable-card"
-    @edit="onEdit"
-    :tabBarStyle="{ margin: '0 5px' }"
-  >
+  <Tabs @change="TabClick" :activeKey="activeKey" hide-add size="small" type="editable-card" @edit="onEdit"
+    :tabBarStyle="{ margin: '0 5px' }">
     <!-- @click.right.prevent="closeAll" -->
 
-    <TabPane
-      v-for="(pane, index) in tabList"
-      :key="pane.path"
-      :closable="pane.path !== '/' && pane.path !== '/home'"
-    >
+    <TabPane v-for="(pane, index) in tabList" :key="pane.path" :closable="pane.path !== '/' && pane.path !== '/home'">
       <template #tab>
-        <div
-          @click.right.prevent.stop="openMenu(pane.path, $event, index)"
-          :data-id="pane.path"
-          class="tab-item"
-          :draggable="pane.path !== '/'"
-          @dragstart="startSorting(index, pane.path)"
-          @dragover="handleSortOver(index, $event, pane.path)"
-          @dragenter.prevent
-          @dragend="endSorting(pane.path)"
-        >
+        <div @click.right.prevent.stop="openMenu(pane.path, $event, index)" :data-id="pane.path" class="tab-item"
+          :draggable="pane.path !== '/'" @dragstart="startSorting(index, pane.path)"
+          @dragover="handleSortOver(index, $event, pane.path)" @dragenter.prevent @dragend="endSorting(pane.path)">
           {{ pane.label }}
         </div>
       </template>
@@ -47,9 +25,16 @@
 </template>
 <script lang="ts" setup>
 // 组合式 API 逻辑
-import { defineProps, defineEmits, ref } from 'vue'
+import { defineProps, defineEmits, ref, onMounted } from 'vue'
 import { Tabs, TabPane } from 'ant-design-vue'
 import type { Tab } from '@/stores/tab'
+import { useUserStore } from '@/stores/user'
+
+
+const store = useUserStore()
+
+
+onMounted(() => { })
 
 const { showContextMenu, tabList, currentDragIndex } = defineProps<{
   tabList: Tab[]
@@ -156,10 +141,12 @@ const endSorting = (path: string) => {
   width: 20px;
   cursor: pointer;
   transition: all 0.3s ease-in;
+
   &:hover {
     transform: translate(-1px, -1px);
   }
 }
+
 .menu-list {
   position: fixed;
   top: 0;
@@ -204,5 +191,4 @@ const endSorting = (path: string) => {
 //   .menu-right {
 //     left: 0;
 //   }
-// }
-</style>
+// }</style>

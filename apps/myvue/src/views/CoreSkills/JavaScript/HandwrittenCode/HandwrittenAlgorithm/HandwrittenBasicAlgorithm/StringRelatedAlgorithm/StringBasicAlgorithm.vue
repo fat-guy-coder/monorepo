@@ -240,7 +240,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import ScrollNav from '@/components/ScrollNav.vue'
+import ScrollNav from '@/components/Nav/ScrollNav.vue'
 // import { EncodeAndDecode } from './demo.ts'
 
 interface Algorithm {

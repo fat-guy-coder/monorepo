@@ -101,7 +101,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import { Input as AInput } from 'ant-design-vue'
-import ScrollNav from '@/components/ScrollNav.vue'
+import ScrollNav from '@/components/Nav/ScrollNav.vue'
 import { debounce } from '@/Function/CommonFun'
 
 // 算法分类

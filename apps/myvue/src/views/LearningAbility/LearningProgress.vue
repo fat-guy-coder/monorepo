@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Hello World</h1>
+    <h3>🗺️ 学习进度 ⭐</h3>
   </div>
 </template>
 

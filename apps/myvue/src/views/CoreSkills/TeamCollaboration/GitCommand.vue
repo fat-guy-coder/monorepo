@@ -5,7 +5,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import GitCommand from '@/assets/git.jpg'
+import GitCommand from '@/assets/image/git/git.jpg'
 </script>
 <style scoped>
 .git-command {

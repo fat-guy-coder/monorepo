@@ -32,7 +32,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref, defineEmits } from 'vue'
-import ScrollNav from '@/components/ScrollNav.vue'
+import ScrollNav from '@/components/Nav/ScrollNav.vue'
 
 const versions = ref<ESVersion[]>([])
 

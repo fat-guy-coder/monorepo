@@ -404,9 +404,9 @@
 </template>
 
 <script setup lang="ts">
-import RedBlackTree from '@/assets/js/rbtree.svg'
-import BTree from '@/assets/js/b-tree.png'
-import TwoThreeTree from '@/assets/js/23-tree.webp'
+import RedBlackTree from '@/assets/image/js/rbtree.svg'
+import BTree from '@/assets/image/js/b-tree.png'
+import TwoThreeTree from '@/assets/image/js/23-tree.webp'
 
 const BinaryTree = `
           A

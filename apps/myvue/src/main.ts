@@ -1,4 +1,4 @@
-import './assets/main.css'
+import './assets/css/main.less'
 import 'ant-design-vue/dist/reset.css';
 import { createApp, } from 'vue'
 import { createPinia } from 'pinia'

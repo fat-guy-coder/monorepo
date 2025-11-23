@@ -233,19 +233,6 @@ column-gap: 30px;//列间距
   grid-column: 1 / -1;
 }
     </code></pre>
-    <h4>HTML结构示例：</h4>
-    <pre class="code-preview"><code>
-<div class="parent-grid">
-  <div>头部</div>
-  <div>头部</div>
-  <div>头部</div>
-  <div class="child-grid">
-    <div>子项1</div>
-    <div>子项2</div>
-    <div>子项3</div>
-  </div>
-</div>
-    </code></pre>
     <h3>适用场景</h3>
     <ul>
       <li>多级卡片、新闻列表等需要子元素与父元素严格对齐的布局。</li>
@@ -445,6 +432,8 @@ button.active {
   display: grid;
   border: 2px dashed #bdc3c7;
   margin-bottom: 2rem;
+  position: sticky;
+  top: 0;
 }
 
 .grid-item {

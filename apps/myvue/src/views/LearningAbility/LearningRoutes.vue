@@ -4,36 +4,8 @@
       <p>
         ⭐⭐⭐代表基础知识务必掌握，⭐⭐代表中阶知识熟练掌握，⭐代表高阶知识要掌握，🌟代表进阶知识可掌握
       </p>
-      <section class="roadmap-section">
-        <h2 class="section-title">学习路线</h2>
-        <div class="timeline-container">
-          <div class="timeline">
-            <div
-              v-for="stage in learningStages"
-              :key="stage.id"
-              class="timeline-stage"
-              :class="{ active: activeStage === stage.id }"
-              @click="setActiveStage(stage.id)"
-            >
-              <div class="stage-marker">
-                <span class="stage-number">{{ stage.order }}</span>
-                <div class="stage-dot"></div>
-              </div>
-              <div class="stage-content">
-                <h3>{{ stage.title }}</h3>
-                <p>{{ stage.description }}</p>
-                <div class="stage-duration">
-                  <span class="duration-icon">⏱️</span>
-                  {{ stage.duration }}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       <section class="stage-details-section">
-        <h2 class="section-title">阶段详细内容</h2>
+        <h2 class="section-title">学习路线</h2>
         <div class="stage-tabs">
           <button
             v-for="stage in learningStages"
@@ -82,7 +54,7 @@
                 <div class="module-header">
                   <div class="module-icon">{{ module.icon }}</div>
                   <div class="module-info">
-                    <h4>{{ module.title }}</h4>
+                    <h4><a @click="gotoTopic(module.route)">{{ module.title }}</a></h4>
                     <p class="module-desc">{{ module.description }}</p>
                   </div>
                   <div class="module-status">
@@ -97,15 +69,15 @@
                   <div class="topics-section">
                     <h5>学习要点</h5>
                     <div class="topics-grid">
-                      <div v-for="topic in module.topics" :key="topic" class="topic-item">
+                      <div v-for="topic in module.topics" :key="topic.route" class="topic-item" @click="gotoTopic(topic.route)">
                         <span class="topic-check">✓</span>
-                        {{ topic }}
+                        {{ topic.title }}
                       </div>
                     </div>
                   </div>
 
                   <div class="resources-section">
-                    <h5>学习资源</h5>
+                    <h5>其他学习资源</h5>
                     <div class="resources-list">
                       <a
                         v-for="resource in module.resources"
@@ -223,33 +195,24 @@
           </div>
         </div>
       </section>
-    </main>
-
-    <footer class="page-footer">
-      <div class="footer-content">
-        <div class="footer-info">
-          <h3>前端学习路线</h3>
-          <p>持续学习，不断进步 · 路虽远，行则将至</p>
-        </div>
-        <div class="footer-links">
-          <a href="https://developer.mozilla.org/zh-CN/" target="_blank">MDN Web Docs</a>
-          <a href="https://github.com/" target="_blank">GitHub</a>
-          <a href="https://stackoverflow.com/" target="_blank">Stack Overflow</a>
-          <a href="https://css-tricks.com/" target="_blank">CSS-Tricks</a>
-        </div>
-      </div>
-    </footer>
-    <div class="author">
-      <div class="author-item"><span>作者</span>:老邓</div>
+      <section class="author-section">
+        <div class="author-item"><span>作者</span>:老邓</div>
       <div class="author-item"><span>邮箱</span>:dldl0830@foxmail.com</div>
       <div class="author-item"><span>QQ</span>:583486505</div>
       <div class="author-item"><span>微信</span>:15680690572</div>
-    </div>
+      </section>
+    </main>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
+
+const emit = defineEmits(['goToByRouteName'])
+
+const gotoTopic = (route: string) => {
+  emit('goToByRouteName', route)
+}
 
 // 响应式数据
 const activeStage = ref('foundation')
@@ -274,13 +237,32 @@ const learningStages = ref([
         difficulty: '简单',
         time: '2周',
         completed: true,
+        route: 'WhatIsHtml',
         topics: [
-          'HTML5 文档结构',
-          '常用标签和属性',
-          '表单和输入控件',
-          '语义化标签',
-          'SEO 基础优化',
-          '可访问性基础',
+          {
+            title: 'HTML5 文档结构',
+            route: 'WhatIsHtml'
+          },
+          {
+            title: '常用标签和属性',
+            route: 'CommonUseTags'
+          },
+          {
+            title: '表单和输入控件',
+            route: 'FormElements'
+          },
+          {
+            title: '语义化标签',
+            route: 'SemanticTags'
+          },
+          {
+            title: 'SEO 基础优化',
+            route: 'SEO'
+          },
+          {
+            title: '可访问性基础',
+            route: 'AccessibilityBasics'
+          },
         ],
         resources: [
           {
@@ -310,14 +292,44 @@ const learningStages = ref([
         difficulty: '简单',
         time: '3周',
         completed: true,
+        route: 'CSSProfile',
         topics: [
-          '选择器和优先级',
-          '盒模型和布局',
-          'Flexbox 布局',
-          'Grid 布局',
-          '响应式设计',
-          'CSS3 新特性',
-          '动画和过渡',
+          {
+            title: '选择器和优先级',
+            route: 'CSSSelectors'
+          },
+          {
+            title: '布局',
+            route: 'BFC_IFC'
+          },
+          {
+            title: '盒模型',
+            route: 'BFC_IFC'
+          },
+          {
+            title: 'Flexbox 布局',
+            route: 'Flexbox'
+          },
+          {
+            title: 'Grid 布局',
+            route: 'Grid'
+          },
+          {
+            title: '响应式设计',
+            route: 'MediaQueries'
+          },
+          {
+            title: 'CSS3 新特性',
+            route: 'CSS3Overview'
+          },
+          {
+            title: '动画',
+            route: 'Animation'
+          },
+          {
+            title: '过渡',
+            route: 'Transition'
+          },
         ],
         resources: [
           {
@@ -352,15 +364,60 @@ const learningStages = ref([
         difficulty: '中等',
         time: '1个月',
         completed: false,
+        route: 'WhatIsJS',
         topics: [
-          '变量和数据类型',
-          '运算符和表达式',
-          '流程控制',
-          '函数和作用域',
-          '数组和对象',
-          'DOM 操作',
-          '事件处理',
-          'ES6+ 新特性',
+          {
+            title: '变量',
+            route: 'Variables'
+          },
+          {
+            title: '数据类型',
+            route: 'PrimitiveTypes'
+          },
+          {
+            title: '运算符',
+            route: 'Operators'
+          },
+          {
+            title: '流程控制',
+            route: 'FlowControl'
+          },
+          {
+            title: '迭代和循环(iteration)',
+            route: 'Iteration'
+          },
+          {
+            title: 'DOM 操作',
+            route: 'DOMAddDeleteModifyQuery'
+          },
+          {
+            title: '函数',
+            route: 'FunctionProgrammingIntroduce'
+          },
+          {
+            title: '作用域',
+            route: 'Scope'
+          },
+          {
+            title: '数组',
+            route: 'Array1'
+          },
+          {
+            title: '对象',
+            route: 'Object1'
+          },
+          {
+            title: 'DOM',
+            route: 'Dom'
+          },
+          {
+            title: '事件处理',
+            route: 'EventsIntroduce'
+          },
+          {
+            title: 'ES6+ 新特性',
+            route: 'ES+Overview'
+          },
         ],
         resources: [
           {
@@ -384,6 +441,7 @@ const learningStages = ref([
         ],
       },
     ],
+    route: 'FrontendIsWhat'
   },
   {
     id: 'advanced',
@@ -403,13 +461,32 @@ const learningStages = ref([
         difficulty: '中等',
         time: '3周',
         completed: false,
+        route: 'CSS3Overview',
         topics: [
-          'CSS 预处理器 (Sass/Less)',
-          'BEM 命名规范',
-          'CSS 架构模式',
-          '现代布局技术',
-          'CSS 性能优化',
-          'CSS-in-JS',
+          {
+            title: 'CSS 预处理器 (Sass/Less)',
+            route: 'CSSPreprocessors'
+          },
+          {
+            title: 'BEM 命名规范',
+            route: 'CSSNaming'
+          },
+          {
+            title: 'CSS 架构模式',
+            route: 'CssArchitectureMode'
+          },
+          {
+            title: '现代布局技术',
+            route: 'TwoColumnAndThreeColumnLayout'
+          },
+          {
+            title: 'CSS 性能优化',
+            route: 'CssSelectorOptimization'
+          },
+          {
+            title: 'CSS-in-JS',
+            route: 'ReactCss'
+          },
         ],
         resources: [
           { name: 'Sass 官方文档', url: 'https://sass-lang.com/', type: '文档', icon: '📚' },
@@ -444,14 +521,40 @@ const learningStages = ref([
         difficulty: '困难',
         time: '1个月',
         completed: false,
+        route: 'ES+Overview',
         topics: [
-          '异步编程 (Promise/async/await)',
-          '闭包和原型链',
-          '模块化开发',
-          '面向对象编程',
-          '函数式编程',
-          '设计模式',
-          '性能优化',
+          {
+            title: '异步编程 (Promise/async/await)',
+            route: 'AsyncProgrammingIntroduce'
+          },
+          {
+            title: '闭包',
+            route: 'Closure'
+          },
+          {
+            title: '原型链',
+            route: 'Prototype1'
+          },
+          {
+            title: '模块化开发',
+            route: 'ModularizationOverview'
+          },
+          {
+            title:  '面向对象编程',
+            route: 'FaceObjectProgramming'
+          },
+          {
+            title: '函数式编程',
+            route: 'FunctionProgrammingIntroduce'
+          },
+          {
+            title: '设计模式',
+            route: 'DesignPatternsOverview'
+          },
+          {
+            title: '性能优化',
+            route: 'PerformanceOverview'
+          },
         ],
         resources: [
           {
@@ -498,13 +601,32 @@ const learningStages = ref([
         difficulty: '中等',
         time: '2个月',
         completed: false,
+        route: 'VueProfile',
         topics: [
-          'Vue 3 核心概念',
-          '组合式 API',
-          '组件化开发',
-          'Vue Router',
-          '状态管理 (Pinia)',
-          'Vue 生态工具',
+          {
+            title: 'Vue 3 核心概念',
+            route: 'Vue3Overview'
+          },
+          {
+            title: '组合式 API',
+            route: 'CompositionApiVsOptionsApi'
+          },
+          {
+            title: '组件化开发',
+            route: 'ComponentCommunication'
+          },
+          {
+            title: 'Vue Router',
+            route: 'VueRouteUse'
+          },
+          {
+            title: '状态管理 (Pinia)',
+            route: 'Pinia'
+          },
+          {
+            title: 'Vue 生态工具',
+            route: 'VueEcosystemTools'
+          },
         ],
         resources: [
           { name: 'Vue 官方文档', url: 'https://cn.vuejs.org/', type: '文档', icon: '📚' },
@@ -529,13 +651,32 @@ const learningStages = ref([
         difficulty: '中等',
         time: '2个月',
         completed: false,
+        route: 'ReactProfile',
         topics: [
-          'React 核心概念',
-          'Hooks 系统',
-          '组件设计模式',
-          'React Router',
-          '状态管理 (Redux)',
-          'Next.js 框架',
+          {
+            title: 'React 核心概念',
+            route: 'ReactProfile'
+          },
+          {
+            title: 'Hooks 系统',
+            route: 'HooksIntroduction'
+          },
+          {
+            title: '组件设计模式',
+            route: 'AtomicDesign'
+          },
+          {
+            title: 'React Router',
+            route: 'ReactComponentCommunication'
+          },
+          {
+            title: '状态管理 (Redux)',
+            route: 'ReactStateManagementOverview'
+          },
+          {
+            title: 'Next.js 框架',
+            route: 'Nextjs'
+          },
         ],
         resources: [
           { name: 'React 官方文档', url: 'https://react.dev/', type: '文档', icon: '📚' },
@@ -572,13 +713,32 @@ const learningStages = ref([
         difficulty: '中等',
         time: '1个月',
         completed: false,
+        route: 'BuildToolsIntroduction',
         topics: [
-          'Webpack 配置优化',
-          'Vite 构建工具',
-          '代码分割和懒加载',
-          'Tree Shaking',
-          '热更新原理',
-          '自定义Loader/Plugin',
+          {
+            title: 'Webpack 配置优化',
+            route: 'WebpackBasicKnowledge'
+          },
+          {
+            title:  'Vite 构建工具',
+            route: 'ViteBasicKnowledge'
+          },
+          {
+            title: '代码分割和懒加载',
+            route: 'CodeSplittingAndLazyLoading'
+          },
+          {
+            title: 'Tree Shaking',
+            route: 'TreeShaking'
+          },
+          {
+            title: '热更新原理',
+            route: 'HotUpdate'
+          },
+          {
+            title: '自定义Loader/Plugin',
+            route: 'HowToImplementALoader'
+          },
         ],
         resources: [
           { name: 'Webpack 官方文档', url: 'https://webpack.js.org/', type: '文档', icon: '📚' },
@@ -608,13 +768,32 @@ const learningStages = ref([
         difficulty: '中等',
         time: '1个月',
         completed: false,
+        route: 'FrontendTestingOverview',
         topics: [
-          '单元测试 (Jest/Vitest)',
-          '组件测试 (Testing Library)',
-          'E2E 测试 (Cypress)',
-          '测试驱动开发',
-          '测试覆盖率',
-          'Mock 和 Stub',
+          {
+            title: '单元测试 (Jest/Vitest)',
+            route: 'UnitTesting'
+          },
+          {
+            title:  '组件测试 (Testing Library)',
+            route: 'ComponentTesting'
+          },
+          {
+            title: 'E2E 测试 (Cypress)',
+            route: 'EndToEndTesting'
+          },
+          {
+            title: '测试驱动开发',
+            route: 'TestDrivenDevelopment'
+          },
+          {
+            title: '测试覆盖率',
+            route: 'TestCoverage'
+          },
+          {
+            title: 'Mock 和 Stub',
+            route: 'MockAndStub'
+          },
         ],
         resources: [
           { name: 'Jest 官方文档', url: 'https://jestjs.io/', type: '文档', icon: '📚' },
@@ -661,13 +840,36 @@ const learningStages = ref([
         difficulty: '困难',
         time: '1个月',
         completed: false,
+        route: 'PerformanceOverview',
         topics: [
-          '浏览器渲染原理',
-          '关键渲染路径优化',
-          '代码分割和懒加载',
-          '图片和资源优化',
-          '缓存策略',
-          '性能监控和分析',
+          {
+            title: '浏览器渲染原理',
+            route: 'BrowserRenderProcess'
+          },
+          {
+            title: '关键渲染路径优化',
+            route: 'CriticalRenderingPathOptimization'
+          },
+          {
+            title: '代码分割',
+            route: 'CodeSplit'
+          },
+          {
+            title: '懒加载',
+            route: 'LazyLoadAndpreLoad'
+          },
+          {
+            title: '图片和资源优化',
+            route: 'ImageLoadOptimization'
+          },
+          {
+            title: '缓存策略',
+            route: 'FrontCache'
+          },
+          {
+            title: '性能监控和分析',
+            route: 'PerformanceApi'
+          },
         ],
         resources: [
           { name: 'Web.dev 性能', url: 'https://web.dev/performance/', type: '教程', icon: '🎓' },
@@ -709,6 +911,24 @@ const toolCategories = ref([
     id: 'editor',
     name: '代码编辑器',
     tools: [
+      {
+        name: 'Cursor',
+        icon: '🔵',
+        type: '编辑器',
+        description: '微软开发的轻量级强大代码编辑器，拥有丰富的插件生态',
+        url: 'https://cursor.com/',
+        docs: 'https://cursor.com/docs',
+        essential: true,
+      },
+      {
+        name: 'claude',
+        icon: '🔵',
+        type: 'AI',
+        description: 'AI',
+        url: 'https://anthropic.com/',
+        docs: 'https://anthropic.com/docs',
+        essential: true,
+      },
       {
         name: 'Visual Studio Code',
         icon: '🔵',
@@ -860,8 +1080,6 @@ const setActiveStage = (stageId: string) => {
 
 <style lang="less" scoped>
 .frontend-learning-path {
-  min-height: 100vh;
-  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
   font-family:
     'Inter',
     'Segoe UI',
@@ -870,8 +1088,6 @@ const setActiveStage = (stageId: string) => {
     sans-serif;
   color: #2d3748;
   line-height: 1.6;
-  max-width: 1200px;
-  margin: 0 auto;
 }
 
 .page-header {
@@ -947,7 +1163,6 @@ const setActiveStage = (stageId: string) => {
 .content {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 2rem;
 }
 
 section {
@@ -1350,11 +1565,17 @@ section {
       .topic-item {
         display: flex;
         align-items: center;
+        cursor: pointer;
         gap: 0.5rem;
         padding: 0.75rem;
         background: white;
         border-radius: 8px;
         border-left: 3px solid #10b981;
+        &:hover {
+          background: #f0fdf4;
+          border-color: #10b981;
+          transform: translateX(5px);
+        }
 
         .topic-check {
           color: #10b981;
@@ -1753,61 +1974,6 @@ section {
 }
 
 // 页脚样式
-.page-footer {
-  background: #2d3748;
-  color: white;
-  padding: 3rem 2rem;
-  margin-top: 4rem;
-
-  .footer-content {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 3rem;
-    align-items: center;
-
-    @media (max-width: 768px) {
-      grid-template-columns: 1fr;
-      text-align: center;
-    }
-  }
-
-  .footer-info {
-    h3 {
-      font-size: 1.5rem;
-      margin-bottom: 1rem;
-      color: #fff;
-    }
-
-    p {
-      color: #cbd5e0;
-      line-height: 1.6;
-      margin: 0;
-    }
-  }
-
-  .footer-links {
-    display: flex;
-    gap: 2rem;
-    justify-content: flex-end;
-
-    @media (max-width: 768px) {
-      justify-content: center;
-    }
-
-    a {
-      color: #cbd5e0;
-      text-decoration: none;
-      transition: color 0.3s ease;
-      font-weight: 500;
-
-      &:hover {
-        color: #fff;
-      }
-    }
-  }
-}
 
 // 动画
 @keyframes fadeIn {
@@ -1872,19 +2038,11 @@ section {
     transform: translateX(-50%);
   }
 }
-.author {
-  color: #999;
-  text-align: center;
-  margin-top: 10px;
+.author-section {
   display: flex;
   justify-content: space-around;
-  position: absolute;
-  width: 100%;
-  bottom: 0;
-  opacity: 0;
-  transition: all 0.5s ease-in-out;
-  &:hover {
-    opacity: 1;
+  .author-item {
+    margin-bottom: 10px;
   }
 }
 </style>

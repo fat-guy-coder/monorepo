@@ -1,0 +1,700 @@
+@import './reset.less';
+/* ============================================
+   主题色系变量系统 - 黑白暖冷主题
+   ============================================ */
+
+/* 主题类型定义 */
+@theme-light: 'light';
+@theme-dark: 'dark';
+@theme-warm: 'warm';
+@theme-cool: 'cool';
+
+/* 当前主题变量（可通过 JavaScript 动态修改） */
+@current-theme: @theme-light;
+
+/* ============================================
+   基础色板定义
+   ============================================ */
+
+/* 黑白主题色板 */
+@color-white: #ffffff;
+@color-white-soft: #f8f8f8;
+@color-white-mute: #f2f2f2;
+@color-white-light: #fafafa;
+
+@color-black: #181818;
+@color-black-soft: #222222;
+@color-black-mute: #282828;
+@color-black-light: #1e1e1e;
+
+@color-gray-50: #f9fafb;
+@color-gray-100: #f3f4f6;
+@color-gray-200: #e5e7eb;
+@color-gray-300: #d1d5db;
+@color-gray-400: #9ca3af;
+@color-gray-500: #6b7280;
+@color-gray-600: #4b5563;
+@color-gray-700: #374151;
+@color-gray-800: #1f2937;
+@color-gray-900: #111827;
+
+/* 暖色主题色板 */
+@warm-primary: #d97706;
+/* 暖橙色 */
+@warm-secondary: #ea580c;
+/* 暖红橙 */
+@warm-accent: #f59e0b;
+/* 暖金色 */
+@warm-background: #fff7ed;
+/* 暖米白 */
+@warm-background-soft: #ffedd5;
+@warm-background-mute: #fed7aa;
+@warm-surface: #fef3c7;
+/* 暖黄 */
+@warm-text: #7c2d12;
+/* 暖棕 */
+@warm-text-soft: #9a3412;
+@warm-border: #fdba74;
+/* 暖橙边框 */
+
+/* 冷色主题色板 */
+@cool-primary: #0284c7;
+/* 冷蓝色 */
+@cool-secondary: #0369a1;
+/* 深冷蓝 */
+@cool-accent: #0ea5e9;
+/* 亮冷蓝 */
+@cool-background: #f0f9ff;
+/* 冷白 */
+@cool-background-soft: #e0f2fe;
+@cool-background-mute: #bae6fd;
+@cool-surface: #dbeafe;
+/* 冷蓝 */
+@cool-text: #0c4a6e;
+/* 冷深蓝 */
+@cool-text-soft: #075985;
+@cool-border: #7dd3fc;
+/* 冷蓝边框 */
+
+/* ============================================
+   Less 函数：主题颜色获取
+   ============================================ */
+
+/* 获取背景色 */
+.get-background(@theme) when (@theme =@theme-light) {
+  @result: @color-white;
+}
+
+.get-background(@theme) when (@theme =@theme-dark) {
+  @result: @color-black;
+}
+
+.get-background(@theme) when (@theme =@theme-warm) {
+  @result: @warm-background;
+}
+
+.get-background(@theme) when (@theme =@theme-cool) {
+  @result: @cool-background;
+}
+
+/* 获取软背景色 */
+.get-background-soft(@theme) when (@theme =@theme-light) {
+  @result: @color-white-soft;
+}
+
+.get-background-soft(@theme) when (@theme =@theme-dark) {
+  @result: @color-black-soft;
+}
+
+.get-background-soft(@theme) when (@theme =@theme-warm) {
+  @result: @warm-background-soft;
+}
+
+.get-background-soft(@theme) when (@theme =@theme-cool) {
+  @result: @cool-background-soft;
+}
+
+/* 获取静音背景色 */
+.get-background-mute(@theme) when (@theme =@theme-light) {
+  @result: @color-white-mute;
+}
+
+.get-background-mute(@theme) when (@theme =@theme-dark) {
+  @result: @color-black-mute;
+}
+
+.get-background-mute(@theme) when (@theme =@theme-warm) {
+  @result: @warm-background-mute;
+}
+
+.get-background-mute(@theme) when (@theme =@theme-cool) {
+  @result: @cool-background-mute;
+}
+
+/* 获取主色 */
+.get-primary(@theme) when (@theme =@theme-light) {
+  @result: @color-gray-700;
+}
+
+.get-primary(@theme) when (@theme =@theme-dark) {
+  @result: @color-gray-300;
+}
+
+.get-primary(@theme) when (@theme =@theme-warm) {
+  @result: @warm-primary;
+}
+
+.get-primary(@theme) when (@theme =@theme-cool) {
+  @result: @cool-primary;
+}
+
+/* 获取次色 */
+.get-secondary(@theme) when (@theme =@theme-light) {
+  @result: @color-gray-600;
+}
+
+.get-secondary(@theme) when (@theme =@theme-dark) {
+  @result: @color-gray-400;
+}
+
+.get-secondary(@theme) when (@theme =@theme-warm) {
+  @result: @warm-secondary;
+}
+
+.get-secondary(@theme) when (@theme =@theme-cool) {
+  @result: @cool-secondary;
+}
+
+/* 获取强调色 */
+.get-accent(@theme) when (@theme =@theme-light) {
+  @result: @color-gray-500;
+}
+
+.get-accent(@theme) when (@theme =@theme-dark) {
+  @result: @color-gray-500;
+}
+
+.get-accent(@theme) when (@theme =@theme-warm) {
+  @result: @warm-accent;
+}
+
+.get-accent(@theme) when (@theme =@theme-cool) {
+  @result: @cool-accent;
+}
+
+/* 获取文本色 */
+.get-text(@theme) when (@theme =@theme-light) {
+  @result: @color-gray-900;
+}
+
+.get-text(@theme) when (@theme =@theme-dark) {
+  @result: @color-gray-100;
+}
+
+.get-text(@theme) when (@theme =@theme-warm) {
+  @result: @warm-text;
+}
+
+.get-text(@theme) when (@theme =@theme-cool) {
+  @result: @cool-text;
+}
+
+/* 获取软文本色 */
+.get-text-soft(@theme) when (@theme =@theme-light) {
+  @result: @color-gray-600;
+}
+
+.get-text-soft(@theme) when (@theme =@theme-dark) {
+  @result: @color-gray-400;
+}
+
+.get-text-soft(@theme) when (@theme =@theme-warm) {
+  @result: @warm-text-soft;
+}
+
+.get-text-soft(@theme) when (@theme =@theme-cool) {
+  @result: @cool-text-soft;
+}
+
+/* 获取边框色 */
+.get-border(@theme) when (@theme =@theme-light) {
+  @result: @color-gray-200;
+}
+
+.get-border(@theme) when (@theme =@theme-dark) {
+  @result: @color-gray-700;
+}
+
+.get-border(@theme) when (@theme =@theme-warm) {
+  @result: @warm-border;
+}
+
+.get-border(@theme) when (@theme =@theme-cool) {
+  @result: @cool-border;
+}
+
+/* 获取悬停边框色 */
+.get-border-hover(@theme) when (@theme =@theme-light) {
+  @result: @color-gray-300;
+}
+
+.get-border-hover(@theme) when (@theme =@theme-dark) {
+  @result: @color-gray-600;
+}
+
+.get-border-hover(@theme) when (@theme =@theme-warm) {
+  @result: @warm-secondary;
+}
+
+.get-border-hover(@theme) when (@theme =@theme-cool) {
+  @result: @cool-secondary;
+}
+
+/* ============================================
+   当前主题变量（基于 @current-theme）
+   ============================================ */
+
+@theme-background: .get-background(@current-theme)[@result];
+@theme-background-soft: .get-background-soft(@current-theme)[@result];
+@theme-background-mute: .get-background-mute(@current-theme)[@result];
+@theme-primary: .get-primary(@current-theme)[@result];
+@theme-secondary: .get-secondary(@current-theme)[@result];
+@theme-accent: .get-accent(@current-theme)[@result];
+@theme-text: .get-text(@current-theme)[@result];
+@theme-text-soft: .get-text-soft(@current-theme)[@result];
+@theme-border: .get-border(@current-theme)[@result];
+@theme-border-hover: .get-border-hover(@current-theme)[@result];
+
+
+
+/* 暗色主题 */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-background: @color-black;
+    --color-background-soft: @color-black-soft;
+    --color-background-mute: @color-black-mute;
+    --color-border: var(--vt-c-divider-dark-2);
+    --color-border-hover: var(--vt-c-divider-dark-1);
+    --color-heading: var(--vt-c-text-dark-1);
+    --color-text: var(--vt-c-text-dark-2);
+  }
+}
+
+/* 主题类切换（通过添加 class 到 html 或 body 来切换主题） */
+html[data-theme="light"],
+body[data-theme="light"] {
+  --color-background: @color-white;
+  --color-background-soft: @color-white-soft;
+  --color-background-mute: @color-white-mute;
+  --color-primary: @color-gray-700;
+  --color-secondary: @color-gray-600;
+  --color-accent: @color-gray-500;
+  --color-border: @color-gray-200;
+  --color-border-hover: @color-gray-300;
+  --color-text: @color-gray-900;
+  --color-text-soft: @color-gray-600;
+  --color-heading: @color-gray-900;
+}
+
+html[data-theme="dark"],
+body[data-theme="dark"] {
+  --color-background: @color-black;
+  --color-background-soft: @color-black-soft;
+  --color-background-mute: @color-black-mute;
+  --color-primary: @color-gray-300;
+  --color-secondary: @color-gray-400;
+  --color-accent: @color-gray-500;
+  --color-border: @color-gray-700;
+  --color-border-hover: @color-gray-600;
+  --color-text: @color-gray-100;
+  --color-text-soft: @color-gray-400;
+  --color-heading: @color-gray-100;
+}
+
+html[data-theme="warm"],
+body[data-theme="warm"] {
+  --color-background: @warm-background;
+  --color-background-soft: @warm-background-soft;
+  --color-background-mute: @warm-background-mute;
+  --color-primary: @warm-primary;
+  --color-secondary: @warm-secondary;
+  --color-accent: @warm-accent;
+  --color-border: @warm-border;
+  --color-border-hover: @warm-secondary;
+  --color-text: @warm-text;
+  --color-text-soft: @warm-text-soft;
+  --color-heading: @warm-text;
+}
+
+html[data-theme="cool"],
+body[data-theme="cool"] {
+  --color-background: @cool-background;
+  --color-background-soft: @cool-background-soft;
+  --color-background-mute: @cool-background-mute;
+  --color-primary: @cool-primary;
+  --color-secondary: @cool-secondary;
+  --color-accent: @cool-accent;
+  --color-border: @cool-border;
+  --color-border-hover: @cool-secondary;
+  --color-text: @cool-text;
+  --color-text-soft: @cool-text-soft;
+  --color-heading: @cool-text;
+}
+
+/* ============================================
+   CSS 变量定义（默认值）
+   ============================================ */
+
+:root {
+  /* 基础色板变量 */
+  --vt-c-white: @color-white;
+  --vt-c-white-soft: @color-white-soft;
+  --vt-c-white-mute: @color-white-mute;
+  --vt-c-black: @color-black;
+  --vt-c-black-soft: @color-black-soft;
+  --vt-c-black-mute: @color-black-mute;
+  --vt-c-indigo: @color-gray-700;
+
+  /* 分隔线颜色 */
+  --vt-c-divider-light-1: rgba(60, 60, 60, 0.29);
+  --vt-c-divider-light-2: rgba(60, 60, 60, 0.12);
+  --vt-c-divider-dark-1: rgba(84, 84, 84, 0.65);
+  --vt-c-divider-dark-2: rgba(84, 84, 84, 0.48);
+
+  /* 文本颜色 */
+  --vt-c-text-light-1: var(--vt-c-indigo);
+  --vt-c-text-light-2: rgba(60, 60, 60, 0.66);
+  --vt-c-text-dark-1: var(--vt-c-white);
+  --vt-c-text-dark-2: rgba(235, 235, 235, 0.64);
+
+  /* 主题变量（默认亮色主题） */
+  --color-background: @theme-background;
+  --color-background-soft: @theme-background-soft;
+  --color-background-mute: @theme-background-mute;
+  --color-primary: @theme-primary;
+  --color-secondary: @theme-secondary;
+  --color-accent: @theme-accent;
+  --color-border: @theme-border;
+  --color-border-hover: @theme-border-hover;
+  --color-heading: @theme-text;
+  --color-text: @theme-text;
+  --color-text-soft: @theme-text-soft;
+
+  /* 元素背景色变量 */
+  --element-background: var(--color-background);
+  --element-background-soft: var(--color-background-soft);
+  --element-background-mute: var(--color-background-mute);
+
+  /* 元素边框变量 */
+  --element-border: var(--color-border);
+  --element-border-hover: var(--color-border-hover);
+  --element-border-radius: 4px;
+
+  /* 间距变量 */
+  --container-padding: 0px;
+  --section-gap: 160px;
+  --element-padding: 12px;
+  --element-margin: 8px;
+}
+
+/* ============================================
+   基础元素重置
+   ============================================ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  font-weight: normal;
+}
+
+/* ============================================
+   标题元素样式 (h1-h6)
+   ============================================ */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--color-heading);
+  background-color: transparent;
+  border: none;
+  font-weight: 600;
+  line-height: 1.4;
+  margin: var(--element-margin) 0;
+  transition: color 0.3s ease;
+}
+
+h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--color-heading);
+  margin-bottom: 1rem;
+}
+
+h2 {
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--color-heading);
+  margin-bottom: 0.875rem;
+}
+
+h3 {
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: var(--color-heading);
+  margin-bottom: 0.75rem;
+}
+
+h4 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--color-heading);
+  margin-bottom: 0.625rem;
+}
+
+h5 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-heading);
+  margin-bottom: 0.5rem;
+}
+
+h6 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-heading);
+  margin-bottom: 0.5rem;
+}
+
+/* ============================================
+   Div 元素样式
+   ============================================ */
+
+div {
+  color: var(--color-text);
+  background-color: var(--element-background);
+  transition:
+    color 0.3s ease,
+    background-color 0.3s ease,
+    border-color 0.3s ease;
+}
+
+/* Div 容器变体 */
+div.container {
+  background-color: var(--element-background-soft);
+  padding: var(--container-padding);
+  border-radius: var(--element-border-radius);
+}
+
+div.card {
+  background-color: var(--element-background);
+  border: 1px solid var(--element-border);
+  border-radius: var(--element-border-radius);
+  padding: var(--element-padding);
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease;
+}
+
+div.card:hover {
+  border-color: var(--element-border-hover);
+  background-color: var(--element-background-soft);
+}
+
+div.section {
+  background-color: var(--element-background);
+  padding: calc(var(--element-padding) * 2);
+  margin: var(--element-margin) 0;
+}
+
+div.surface {
+  background-color: var(--element-background-soft);
+  border: 1px solid var(--element-border);
+  border-radius: var(--element-border-radius);
+  padding: var(--element-padding);
+}
+
+/* ============================================
+   Span 元素样式
+   ============================================ */
+
+span {
+  color: var(--color-text);
+  background-color: transparent;
+  transition: color 0.3s ease;
+}
+
+/* Span 文本变体 */
+span.text-primary {
+  color: var(--color-primary);
+}
+
+span.text-secondary {
+  color: var(--color-secondary);
+}
+
+span.text-accent {
+  color: var(--color-accent);
+}
+
+span.text-soft {
+  color: var(--color-text-soft);
+}
+
+span.badge {
+  display: inline-block;
+  background-color: var(--color-primary);
+  color: var(--color-background);
+  padding: 4px 8px;
+  border-radius: calc(var(--element-border-radius) / 2);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+span.highlight {
+  background-color: var(--color-accent);
+  color: var(--color-background);
+  padding: 2px 4px;
+  border-radius: 2px;
+}
+
+/* ============================================
+   其他常用元素样式
+   ============================================ */
+
+p {
+  color: var(--color-text);
+  margin: var(--element-margin) 0;
+  line-height: 1.6;
+  transition: color 0.3s ease;
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: var(--color-secondary);
+}
+
+ul,
+ol {
+  color: var(--color-text);
+  margin: var(--element-margin) 0;
+  padding-left: 1.5rem;
+}
+
+li {
+  color: var(--color-text);
+  margin: calc(var(--element-margin) / 2) 0;
+}
+
+blockquote {
+  color: var(--color-text-soft);
+  background-color: var(--element-background-soft);
+  border-left: 3px solid var(--color-primary);
+  padding: var(--element-padding);
+  margin: var(--element-margin) 0;
+  border-radius: var(--element-border-radius);
+}
+
+code {
+  background-color: var(--element-background-mute);
+  color: var(--color-primary);
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9em;
+  border: 1px solid var(--element-border);
+}
+
+pre {
+  background-color: var(--element-background-mute);
+  color: var(--color-text);
+  padding: var(--element-padding);
+  border-radius: var(--element-border-radius);
+  border: 1px solid var(--element-border);
+  overflow-x: auto;
+  margin: var(--element-margin) 0;
+}
+
+pre code {
+  background-color: transparent;
+  border: none;
+  padding: 0;
+}
+
+/* ============================================
+   Body 样式
+   ============================================ */
+
+body {
+  min-height: 100vh;
+  color: var(--color-text);
+  background: var(--color-background);
+  transition:
+    color 0.5s,
+    background-color 0.5s;
+  line-height: 1.6;
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    Oxygen,
+    Ubuntu,
+    Cantarell,
+    'Fira Sans',
+    'Droid Sans',
+    'Helvetica Neue',
+    sans-serif;
+  font-size: 15px;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+
+#app {
+  margin: 0 auto;
+  font-weight: normal;
+  width: 100%;
+  height: 100%;
+}
+
+
+a,
+.green {
+  text-decoration: none;
+  color: hsla(160, 100%, 37%, 1);
+  transition: 0.4s;
+  padding: 3px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.code-block {
+  color: #000;
+  background-color: #fff;
+}
+
+@media (hover: hover) {
+  a:hover {
+    background-color: hsla(160, 100%, 37%, 0.2);
+  }
+}
+
+@media (min-width: 1024px) {
+  body {
+    display: flex;
+    place-items: center;
+  }
+
+}

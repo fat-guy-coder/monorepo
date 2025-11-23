@@ -394,8 +394,8 @@ function arrayBufferToDataURL(arrayBuffer, mimeType) {
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import dataStreamFormat from '@/assets/js/数据流.png'
-import dataFormat from '@/assets/js/dataFormat.jfif'
+import dataStreamFormat from '@/assets/image/js/数据流.png'
+import dataFormat from '@/assets/image/js/dataFormat.jfif'
 
 // 示例数据
 const conversionMethods = ref([

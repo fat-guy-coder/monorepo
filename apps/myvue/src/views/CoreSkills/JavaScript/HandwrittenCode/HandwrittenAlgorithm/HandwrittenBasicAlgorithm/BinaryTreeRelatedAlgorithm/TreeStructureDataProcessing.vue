@@ -50,7 +50,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
-import CodeBlock from '@/components/CodeBlock.vue'
+import CodeBlock from '@/components/Code/index.vue'
 
 interface TreeMethod {
   id: number

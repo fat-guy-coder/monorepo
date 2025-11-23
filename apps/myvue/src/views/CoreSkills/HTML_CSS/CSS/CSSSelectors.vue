@@ -222,7 +222,7 @@ a[href*="example"] { color: red; } /* 选择 href 属性值包含 "example" 的 
 </template>
 
 <script setup lang="ts">
-import Navbar from '@/components/ScrollNav.vue';
+import Navbar from '@/components/Nav/ScrollNav.vue';
 // 逻辑代码可根据需要添加
 const list = [
   {

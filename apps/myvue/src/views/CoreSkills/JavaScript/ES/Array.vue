@@ -132,7 +132,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import Nav from '@/components/ScrollNav.vue'
+import Nav from '@/components/Nav/ScrollNav.vue'
 
 const emit = defineEmits(['goToByRouteName'])
 

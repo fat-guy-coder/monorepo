@@ -131,7 +131,7 @@ Object.defineProperty(obj, 'age', {
   </div>
 </template>
 <script lang="ts" setup>
-import Nav from '@/components/ScrollNav.vue'
+import Nav from '@/components/Nav/ScrollNav.vue'
 import { ref, onBeforeMount, computed } from 'vue'
 
 interface Method {

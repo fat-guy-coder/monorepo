@@ -331,8 +331,8 @@ onMounted(() => {
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
-import VirtualScrollList from '@/assets/js/virtual-list.webp'
-import VirtualScrollList1 from '@/assets/js/virtual-list1.webp'
+import VirtualScrollList from '@/assets/image/js/virtual-list.webp'
+import VirtualScrollList1 from '@/assets/image/js/virtual-list1.webp'
 
 // 配置参数
 const dataSize = ref(1000)

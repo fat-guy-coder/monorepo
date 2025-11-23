@@ -121,8 +121,8 @@ clamp(16px, 1vw + 1rem, 32px);
       <h4>摘自<a href="https://www.runoob.com/cssref/func-cubic-bezier.html" target="_blank">菜鸟教程</a></h4>
       <h4>cubic-bezier() 函数定义了一个贝塞尔曲线(Cubic Bezier)。
         贝塞尔曲线曲线由四个点 P0，P1，P2 和 P3 定义。P0 和 P3 是曲线的起点和终点。P0是（0,0）并且表示初始时间和初始状态，P3是（1,1）并且表示最终时间和最终状态</h4>
-      <p><img src="@/assets/css/cubic-bezier-01.png" alt="加载失败" loading="lazy"></p>
-      <p><img src="@/assets/css/cubic-bezier-02.jpg" alt="加载失败" loading="lazy"></p>
+      <p><img src="@/assets/image/css/cubic-bezier-01.png" alt="加载失败" loading="lazy"></p>
+      <p><img src="@/assets/image/css/cubic-bezier-02.jpg" alt="加载失败" loading="lazy"></p>
       <pre><code>
 P0：默认值 (0, 0)
 P1：动态取值 (x1, y1)
@@ -157,7 +157,7 @@ P3：默认值 (1, 1)
 <script setup lang="ts">
 import { ref, onBeforeMount } from 'vue'
 import FunctionCard from '../Components/FunctionCard.vue'
-import NavBar from '@/components//ScrollNav.vue'
+import NavBar from '@/components/Nav/ScrollNav.vue'
 
 interface Category {
   name: string

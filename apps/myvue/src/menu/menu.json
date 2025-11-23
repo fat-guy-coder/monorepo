@@ -1,22 +1,38 @@
 [
   {
+    "label": "📚 学习 ⭐",
+    "name": "LearningAbility",
+    "children": [
+      {
+        "label": "🗺️ 学习路线 ⭐",
+        "name": "LearningRoutes"
+      },
+      {
+        "label": "🗺️ 学习进度 ⭐",
+        "name": "LearningProgress"
+      },
+      {
+        "label": "🔗 学习网站推荐 ⭐",
+        "name": "RecommendedWebsites"
+      },
+      {
+        "label": "💰 前端薪资统计 🌟",
+        "name": "FrontendSalary"
+      },
+      {
+        "label": "🌐 前端是什么 ⭐⭐⭐",
+        "name": "FrontendIsWhat"
+      },
+      {
+        "label": "🌐 前端前景 ⭐⭐⭐",
+        "name": "FrontendProspect"
+      }
+    ]
+  },
+  {
     "label": "🎯 基础核心能力 ⭐⭐⭐",
     "name": "CoreSkills",
     "children": [
-      {
-        "label": "🌐 关于前端 ⭐⭐⭐",
-        "name": "AboutFrontend",
-        "children": [
-          {
-            "label": "🌐 前端是什么 ⭐⭐⭐",
-            "name": "FrontendIsWhat"
-          },
-          {
-            "label": "💰 前端薪资统计 🌟",
-            "name": "FrontendSalary"
-          }
-        ]
-      },
       {
         "label": "🌐 前端基础三要素 ⭐⭐⭐",
         "name": "FrontendBasicThreeElements"
@@ -1105,7 +1121,6 @@
               }
             ]
           },
-
           {
             "label": "🗑️ 垃圾回收 ⭐⭐",
             "name": "GarbageCollection",
@@ -1327,17 +1342,14 @@
                     "label": "🔄 适配器模式实现 ⭐",
                     "name": "AdapterPattern"
                   },
-
                   {
                     "label": "🔄 责任链模式实现 ⭐",
                     "name": "ChainOfResponsibilityPattern"
                   },
-
                   {
                     "label": "🔄 模板方法模式实现 ⭐",
                     "name": "TemplateMethodPattern"
                   },
-
                   {
                     "label": "🔄 组合模式实现 ⭐",
                     "name": "CompositePattern"
@@ -1782,42 +1794,58 @@
               {
                 "label": "🔄 排序算法 ⭐⭐⭐",
                 "name": "SortingAlgorithm1",
-                "redirect": { "name": "SortingAlgorithm" }
+                "redirect": {
+                  "name": "SortingAlgorithm"
+                }
               },
               {
                 "label": "🔄 查找算法 ⭐⭐⭐",
                 "name": "SearchAlgorithm1",
-                "redirect": { "name": "SearchAlgorithm" }
+                "redirect": {
+                  "name": "SearchAlgorithm"
+                }
               },
               {
                 "label": "🔄 递归算法 ⭐⭐⭐",
                 "name": "RecursiveAlgorithm1",
-                "redirect": { "name": "RecursiveAlgorithm" }
+                "redirect": {
+                  "name": "RecursiveAlgorithm"
+                }
               },
               {
                 "label": "🔄 动态规划 ⭐⭐⭐",
                 "name": "DynamicProgrammingBasic",
-                "redirect": { "name": "DynamicProgramming1" }
+                "redirect": {
+                  "name": "DynamicProgramming1"
+                }
               },
               {
                 "label": "🔄 贪心算法 ⭐⭐⭐",
                 "name": "GreedyAlgorithm1",
-                "redirect": { "name": "GreedyAlgorithm" }
+                "redirect": {
+                  "name": "GreedyAlgorithm"
+                }
               },
               {
                 "label": "🔄 分治算法 ⭐⭐⭐",
                 "name": "DivideAndConquer1",
-                "redirect": { "name": "DivideAndConquer" }
+                "redirect": {
+                  "name": "DivideAndConquer"
+                }
               },
               {
                 "label": "🔄 回溯算法 ⭐⭐⭐",
                 "name": "BacktrackingAlgorithm1",
-                "redirect": { "name": "BacktrackingAlgorithm" }
+                "redirect": {
+                  "name": "BacktrackingAlgorithm"
+                }
               },
               {
                 "label": "🔄 分支限界算法 ⭐⭐⭐",
                 "name": "BranchAndBoundAlgorithm1",
-                "redirect": { "name": "BranchAndBoundAlgorithm" }
+                "redirect": {
+                  "name": "BranchAndBoundAlgorithm"
+                }
               }
             ]
           },
@@ -2022,7 +2050,9 @@
               {
                 "label": "🔄 SSE介绍 ⭐⭐",
                 "name": "SSEOverview",
-                "redirect": { "name": "SSE" }
+                "redirect": {
+                  "name": "SSE"
+                }
               },
               {
                 "label": "🔄 HTTP-2(多路复用) ⭐⭐",
@@ -2265,7 +2295,6 @@
             "label": "💡 享元模式 ⭐⭐",
             "name": "Flyweight"
           },
-
           {
             "label": "📝 备忘录模式 ⭐⭐",
             "name": "Memento"
@@ -3008,7 +3037,6 @@
                 "label": "🔄 $nextTick ⭐⭐⭐",
                 "name": "NextTick"
               },
-
               {
                 "label": "🔄 自定义指令 ⭐⭐⭐",
                 "name": "CustomDirective"
@@ -3376,7 +3404,6 @@
                           }
                         ]
                       },
-
                       {
                         "label": "✍️ 怎么实现一个loader ⭐⭐⭐",
                         "name": "HowToImplementALoader"
@@ -3802,7 +3829,6 @@
                     "label": "🔄 Mock工具对比 ⭐⭐⭐",
                     "name": "MockToolsComparison"
                   },
-
                   {
                     "label": "🔄 Mock.js ⭐⭐⭐",
                     "name": "MockJs"
@@ -3861,25 +3887,46 @@
             "label": "📚 栈 ⭐⭐",
             "name": "Stack",
             "children": [
-              { "label": "📚 栈基础介绍 ⭐⭐⭐", "name": "StackBase" },
-              { "label": "📚 栈的相关算法 ⭐⭐⭐", "name": "StackAlgorithm" }
+              {
+                "label": "📚 栈基础介绍 ⭐⭐⭐",
+                "name": "StackBase"
+              },
+              {
+                "label": "📚 栈的相关算法 ⭐⭐⭐",
+                "name": "StackAlgorithm"
+              }
             ]
           },
           {
             "label": "🔢 数组 ⭐⭐⭐",
             "name": "ArrayOperations",
             "children": [
-              { "label": "🔢 数组基础 ⭐⭐⭐", "name": "ArrayBasic" },
-              { "label": "🔢 数组相关算法 ⭐⭐⭐", "name": "ArrayAlgorithm" }
+              {
+                "label": "🔢 数组基础 ⭐⭐⭐",
+                "name": "ArrayBasic"
+              },
+              {
+                "label": "🔢 数组相关算法 ⭐⭐⭐",
+                "name": "ArrayAlgorithm"
+              }
             ]
           },
           {
             "label": "🔗 链表 ⭐⭐⭐",
             "name": "LinkedList",
             "children": [
-              { "label": "🔗 链表介绍 ⭐⭐⭐", "name": "LinkedListBasic" },
-              { "label": "🔗 链表的九个基本操作 ⭐⭐⭐", "name": "LinkedListBasicOperations" },
-              { "label": "🔗 链表的基本算法 ⭐⭐⭐", "name": "LinkedListBasicAlgorithm" },
+              {
+                "label": "🔗 链表介绍 ⭐⭐⭐",
+                "name": "LinkedListBasic"
+              },
+              {
+                "label": "🔗 链表的九个基本操作 ⭐⭐⭐",
+                "name": "LinkedListBasicOperations"
+              },
+              {
+                "label": "🔗 链表的基本算法 ⭐⭐⭐",
+                "name": "LinkedListBasicAlgorithm"
+              },
               {
                 "label": "🔗 链表的算法列表 ⭐⭐⭐",
                 "name": "LinkedListAlgorithmList"
@@ -3904,52 +3951,124 @@
             "label": "🔑 哈希表 ⭐⭐",
             "name": "HashTable",
             "children": [
-              { "label": "🔑 哈希表介绍 ⭐⭐", "name": "HashTableIntroduction" },
-              { "label": "🔑 哈希表实现 ⭐⭐", "name": "HashTableImplementation" },
-              { "label": "🔑 哈希表的相关算法 ⭐⭐", "name": "HashTableAlgorithm" }
+              {
+                "label": "🔑 哈希表介绍 ⭐⭐",
+                "name": "HashTableIntroduction"
+              },
+              {
+                "label": "🔑 哈希表实现 ⭐⭐",
+                "name": "HashTableImplementation"
+              },
+              {
+                "label": "🔑 哈希表的相关算法 ⭐⭐",
+                "name": "HashTableAlgorithm"
+              }
             ]
           },
           {
             "label": "🌳 树⭐⭐⭐",
             "name": "Trees",
             "children": [
-              { "label": "🌳 树基础介绍 ⭐⭐⭐", "name": "TreeBasic" },
-              { "label": "🌳 树的分类 ⭐⭐⭐", "name": "TreeClassification" },
-              { "label": "🌳 Trie树 ⭐⭐⭐", "name": "TrieTree" },
+              {
+                "label": "🌳 树基础介绍 ⭐⭐⭐",
+                "name": "TreeBasic"
+              },
+              {
+                "label": "🌳 树的分类 ⭐⭐⭐",
+                "name": "TreeClassification"
+              },
+              {
+                "label": "🌳 Trie树 ⭐⭐⭐",
+                "name": "TrieTree"
+              },
               {
                 "label": "🌳 二叉树和二叉搜索树 ⭐⭐⭐",
                 "name": "BinaryTreeAndBinarySearchTree"
               },
-              { "label": "🌳 2-3树 ⭐⭐⭐", "name": "2-3Tree" },
-              { "label": "🌳 B树和B+树 ⭐⭐⭐", "name": "BTreeAndBPlusTree" },
-              { "label": "🌳 红黑树 ⭐⭐⭐", "name": "RedBlackTree" },
-              { "label": "🌳 线段树 ⭐⭐⭐", "name": "SegmentTree" },
-              { "label": "🌳 霍夫曼树 ⭐⭐⭐", "name": "HuffmanTree" },
-              { "label": "🌳 树的遍历 ⭐⭐⭐", "name": "TreeTraversal" },
-              { "label": "🌳 树的相关算法 ⭐⭐⭐", "name": "TreeBasicAlgorithm" }
+              {
+                "label": "🌳 2-3树 ⭐⭐⭐",
+                "name": "2-3Tree"
+              },
+              {
+                "label": "🌳 B树和B+树 ⭐⭐⭐",
+                "name": "BTreeAndBPlusTree"
+              },
+              {
+                "label": "🌳 红黑树 ⭐⭐⭐",
+                "name": "RedBlackTree"
+              },
+              {
+                "label": "🌳 线段树 ⭐⭐⭐",
+                "name": "SegmentTree"
+              },
+              {
+                "label": "🌳 霍夫曼树 ⭐⭐⭐",
+                "name": "HuffmanTree"
+              },
+              {
+                "label": "🌳 树的遍历 ⭐⭐⭐",
+                "name": "TreeTraversal"
+              },
+              {
+                "label": "🌳 树的相关算法 ⭐⭐⭐",
+                "name": "TreeBasicAlgorithm"
+              }
             ]
           },
           {
             "label": "🔺 堆 ⭐⭐",
             "name": "Heap",
             "children": [
-              { "label": "🔺 堆介绍 ⭐⭐", "name": "HeapIntroduction" },
-              { "label": "🔺 堆的实现 ⭐⭐", "name": "HeapImplementation" }
+              {
+                "label": "🔺 堆介绍 ⭐⭐",
+                "name": "HeapIntroduction"
+              },
+              {
+                "label": "🔺 堆的实现 ⭐⭐",
+                "name": "HeapImplementation"
+              }
             ]
           },
           {
             "label": "🔍 图 ⭐⭐",
             "name": "Graph",
             "children": [
-              { "label": "🔍 图介绍 ⭐⭐", "name": "GraphBasic" },
-              { "label": "🔍 图的分类 ⭐⭐", "name": "GraphClassification" },
-              { "label": "🔍 图的存储方式 ⭐⭐", "name": "GraphStorageWay" },
-              { "label": "🔍 图相关算法 ⭐⭐", "name": "GraphAlgorithm1" },
-              { "label": "🔍 Dijkstra算法 ⭐⭐", "name": "DijkstraAlgorithm1" },
-              { "label": "🔍 Floyd算法 ⭐⭐", "name": "FloydAlgorithm" },
-              { "label": "🔍 Bellman-Ford算法 ⭐⭐", "name": "BellmanFordAlgorithm" },
-              { "label": "🔍 Prim和Kruskal算法 ⭐⭐", "name": "PrimAndKruskalAlgorithm" },
-              { "label": "🔍 拓扑排序 ⭐⭐", "name": "TopologicalSorting" }
+              {
+                "label": "🔍 图介绍 ⭐⭐",
+                "name": "GraphBasic"
+              },
+              {
+                "label": "🔍 图的分类 ⭐⭐",
+                "name": "GraphClassification"
+              },
+              {
+                "label": "🔍 图的存储方式 ⭐⭐",
+                "name": "GraphStorageWay"
+              },
+              {
+                "label": "🔍 图相关算法 ⭐⭐",
+                "name": "GraphAlgorithm1"
+              },
+              {
+                "label": "🔍 Dijkstra算法 ⭐⭐",
+                "name": "DijkstraAlgorithm1"
+              },
+              {
+                "label": "🔍 Floyd算法 ⭐⭐",
+                "name": "FloydAlgorithm"
+              },
+              {
+                "label": "🔍 Bellman-Ford算法 ⭐⭐",
+                "name": "BellmanFordAlgorithm"
+              },
+              {
+                "label": "🔍 Prim和Kruskal算法 ⭐⭐",
+                "name": "PrimAndKruskalAlgorithm"
+              },
+              {
+                "label": "🔍 拓扑排序 ⭐⭐",
+                "name": "TopologicalSorting"
+              }
             ]
           },
           {
@@ -3960,8 +4079,14 @@
                 "label": "🔑 其他数据结构介绍 ⭐⭐⭐",
                 "name": "OtherDataStructuresIntroduction"
               },
-              { "label": "🔑 跳表 ⭐⭐⭐", "name": "SkipList" },
-              { "label": "🔑 布隆过滤器 ⭐⭐⭐", "name": "BloomFilter" },
+              {
+                "label": "🔑 跳表 ⭐⭐⭐",
+                "name": "SkipList"
+              },
+              {
+                "label": "🔑 布隆过滤器 ⭐⭐⭐",
+                "name": "BloomFilter"
+              },
               {
                 "label": "🔑 并查集 ⭐⭐⭐",
                 "name": "UnionFind"
@@ -5114,7 +5239,6 @@
               }
             ]
           },
-
           {
             "label": "🐧 linux系统 ⭐",
             "name": "LinuxSystem",
@@ -5270,7 +5394,6 @@
           }
         ]
       },
-
       {
         "label": "📈 技术趋势 ⭐",
         "name": "TechTrends",
@@ -5389,20 +5512,6 @@
             ]
           }
         ]
-      }
-    ]
-  },
-  {
-    "label": "📚 学习 ⭐",
-    "name": "LearningAbility",
-    "children": [
-      {
-        "label": "🗺️ 学习路线 ⭐",
-        "name": "LearningRoutes"
-      },
-      {
-        "label": "🔗 学习网站推荐 ⭐",
-        "name": "RecommendedWebsites"
       }
     ]
   },

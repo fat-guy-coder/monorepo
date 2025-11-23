@@ -52,7 +52,7 @@ export const request = (url: string, options: RequestInit & { type?: keyof typeo
     signal: abortController.signal,
     headers: { 'Content-Type': options?.type ? contentTypeMap[options.type as keyof typeof contentTypeMap] : contentTypeMap.json },
     mode: 'cors',
-    body: getRequsetBody(options.type, options.data),
+    body: getRequsetBody(options.type as keyof typeof contentTypeMap, options.data),
     ...options,
   }).then((res) => {
     if (res.ok) {

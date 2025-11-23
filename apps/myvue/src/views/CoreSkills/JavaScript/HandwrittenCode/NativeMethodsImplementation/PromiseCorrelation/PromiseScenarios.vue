@@ -86,8 +86,8 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import CodeBlock from '@/components/CodeBlock.vue'
-import ScrollNav from '@/components/ScrollNav.vue'
+import CodeBlock from '@/components/Code/index.vue'
+import ScrollNav from '@/components/Nav/ScrollNav.vue'
 
 // 知识点类型定义
 interface KnowledgeItem {

@@ -1,24 +1,44 @@
 export default [
   {
+    "name": "LearningAbility",
+    "path": "/LearningAbility",
+    "children": [
+      {
+        "name": "LearningRoutes",
+        "path": "/LearningAbility/LearningRoutes",
+        "component": () => import('@/views/LearningAbility/LearningRoutes.vue')
+      },
+      {
+        "name": "LearningProgress",
+        "path": "/LearningAbility/LearningProgress",
+        "component": () => import('@/views/LearningAbility/LearningProgress.vue')
+      },
+      {
+        "name": "RecommendedWebsites",
+        "path": "/LearningAbility/RecommendedWebsites",
+        "component": () => import('@/views/LearningAbility/RecommendedWebsites.vue')
+      },
+      {
+        "name": "FrontendSalary",
+        "path": "/LearningAbility/FrontendSalary",
+        "component": () => import('@/views/LearningAbility/FrontendSalary.vue')
+      },
+      {
+        "name": "FrontendIsWhat",
+        "path": "/LearningAbility/FrontendIsWhat",
+        "component": () => import('@/views/LearningAbility/FrontendIsWhat.vue')
+      },
+      {
+        "name": "FrontendProspect",
+        "path": "/LearningAbility/FrontendProspect",
+        "component": () => import('@/views/LearningAbility/FrontendProspect.vue')
+      }
+    ]
+  },
+  {
     "name": "CoreSkills",
     "path": "/CoreSkills",
     "children": [
-      {
-        "name": "AboutFrontend",
-        "path": "/CoreSkills/AboutFrontend",
-        "children": [
-          {
-            "name": "FrontendIsWhat",
-            "path": "/CoreSkills/AboutFrontend/FrontendIsWhat",
-            "component": () => import('@/views/CoreSkills/AboutFrontend/FrontendIsWhat.vue')
-          },
-          {
-            "name": "FrontendSalary",
-            "path": "/CoreSkills/AboutFrontend/FrontendSalary",
-            "component": () => import('@/views/CoreSkills/AboutFrontend/FrontendSalary.vue')
-          }
-        ]
-      },
       {
         "name": "FrontendBasicThreeElements",
         "path": "/CoreSkills/FrontendBasicThreeElements",
@@ -6499,22 +6519,6 @@ export default [
             ]
           }
         ]
-      }
-    ]
-  },
-  {
-    "name": "LearningAbility",
-    "path": "/LearningAbility",
-    "children": [
-      {
-        "name": "LearningRoutes",
-        "path": "/LearningAbility/LearningRoutes",
-        "component": () => import('@/views/LearningAbility/LearningRoutes.vue')
-      },
-      {
-        "name": "RecommendedWebsites",
-        "path": "/LearningAbility/RecommendedWebsites",
-        "component": () => import('@/views/LearningAbility/RecommendedWebsites.vue')
       }
     ]
   },

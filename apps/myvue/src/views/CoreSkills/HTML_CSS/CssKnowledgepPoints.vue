@@ -29,7 +29,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import Navbar from '@/components/ScrollNav.vue'
+import Navbar from '@/components/Nav/ScrollNav.vue'
 
 
 // 类型定义

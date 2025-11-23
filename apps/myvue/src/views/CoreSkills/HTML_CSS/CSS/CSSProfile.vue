@@ -338,7 +338,7 @@ div > p              /* 权重值: 1 + 1 = 2 */</code></pre>
 </template>
 
 <script lang="ts" setup>
-import img from '@/assets/css/css-rule.jpg'
+import img from '@/assets/image/css/css-rule.jpg'
 </script>
 
 <style lang="less" scoped>

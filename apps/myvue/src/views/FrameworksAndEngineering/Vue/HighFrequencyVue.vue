@@ -80,7 +80,7 @@
 </template>
 
 <script setup lang="ts">
-import ScrollNav from '@/components/ScrollNav.vue'
+import ScrollNav from '@/components/Nav/ScrollNav.vue'
 import { computed, onMounted, ref } from 'vue'
 
 interface KnowledgePoint {

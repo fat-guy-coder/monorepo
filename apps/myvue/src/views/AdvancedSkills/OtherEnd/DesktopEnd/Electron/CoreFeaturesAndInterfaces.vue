@@ -181,7 +181,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import CodeBlock from '@/components/CodeBlock.vue'
+import CodeBlock from '@/components/Code/index.vue'
 
 // 模拟 Electron 版本
 const electronVersion = '26.0.0'

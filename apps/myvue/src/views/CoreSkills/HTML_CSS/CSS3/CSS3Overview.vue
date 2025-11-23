@@ -22,7 +22,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
-import ScrollNav from '@/components/ScrollNav.vue'
+import ScrollNav from '@/components/Nav/ScrollNav.vue'
 import KnowledgeUnit, { type KnowledgeCategory } from '../../Components/KnowledgeUnit.vue'
 
 // 知识点数据

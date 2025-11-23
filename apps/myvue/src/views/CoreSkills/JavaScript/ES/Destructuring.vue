@@ -224,7 +224,7 @@ const {
 </template>
 
 <script lang="ts" setup>
-import '@/assets/css/unified-styles.css';
+import '@/assets/css/main.less';
 </script>
 
 <style scoped>

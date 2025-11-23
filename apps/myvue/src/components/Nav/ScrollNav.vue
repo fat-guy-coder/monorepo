@@ -6,20 +6,11 @@
     </h2>
     <ul class="list" :style="{ display: fold ? 'block' : 'none' }">
       <li v-if="showBackToTop" @click="scrollToTop" class="nav-item">回到顶部</li>
-      <li
-        v-for="(item, index) in newList"
-        :key="index"
-        @click="scrollTo($event, item.id)"
-        class="nav-item"
-      >
+      <li v-for="(item, index) in newList" :key="index" @click="scrollTo($event, item.id)" class="nav-item">
         {{ item.title }}
         <ul v-if="showChild" class="nav children">
-          <li
-            v-for="(subItem, subIndex) in item.children"
-            :key="subIndex"
-            @click="scrollTo($event, subItem.id)"
-            class="nav-item"
-          >
+          <li v-for="(subItem, subIndex) in item.children" :key="subIndex" @click="scrollTo($event, subItem.id)"
+            class="nav-item">
             {{ subItem.title }}
           </li>
         </ul>
@@ -29,9 +20,20 @@
 </template>
 <script setup lang="ts">
 // 组合式 API 逻辑
-import { defineProps, ref, type PropType, computed } from 'vue'
+import { defineProps, ref, type PropType, computed, onMounted, nextTick } from 'vue'
+import { useUserStore } from '@/stores/user'
 
-const fold = ref(true)
+const store = useUserStore()
+const fold = ref(!store.user.device.isMobile)
+
+
+
+onMounted(async () => {
+  // await  nextTick()
+  fold.value = !store.user.device.isMobile
+  console.log(fold.value, '1', store.user)
+})
+
 
 interface Item {
   title?: string
@@ -56,11 +58,11 @@ const newList = computed(() => {
       id: item[id || 'id'],
       children: props.showChild
         ? item[children || 'children'].map((child: Item) => {
-            return {
-              title: child[title  || 'name'],
-              id: child[id || 'id'],
-            }
-          })
+          return {
+            title: child[title || 'name'],
+            id: child[id || 'id'],
+          }
+        })
         : [],
     }
   })
@@ -142,9 +144,11 @@ nav {
   width: 200px;
   transition: transform 0.5s ease-in-out;
   z-index: 2;
+
   .title-container {
     display: flex;
     flex-direction: row-reverse;
+
     div {
       width: 100%;
     }

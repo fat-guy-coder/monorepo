@@ -1,7 +1,11 @@
 <template>
-  <div>🔗 学习网站推荐 ⭐</div>
+  <div>
+    <h3>🔗 学习网站推荐 ⭐</h3>
+  </div>
 </template>
-<script lang="ts" setup>
+
+<script setup lang="ts">
+
 </script>
-<style scoped>
-</style>
+
+<style scoped></style>

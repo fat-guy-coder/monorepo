@@ -305,7 +305,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue';
-import domImage from '@/assets/js/nodeInfo.png'
+import domImage from '@/assets/image/js/nodeInfo.png'
 
 // 元素属性数据
 const elementProps = ref({

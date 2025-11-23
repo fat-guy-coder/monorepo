@@ -302,7 +302,7 @@
 
 <script setup lang="ts">
 import { ref, } from 'vue';
-import img from '@/assets/browerRenderProcess.jfif';
+import img from '@/assets/image/brower/browerRenderProcess.jfif';
 
 const activeStep = ref(0);
 

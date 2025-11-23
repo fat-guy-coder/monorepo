@@ -289,7 +289,7 @@ ipcRenderer.on('app-update', (event, update) => {
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import CodeBlock from '@/components/CodeBlock.vue';
+import CodeBlock from '@/components/Code/index.vue';
 
 // Electron 版本信息
 const electronVersion = '23.1.1';

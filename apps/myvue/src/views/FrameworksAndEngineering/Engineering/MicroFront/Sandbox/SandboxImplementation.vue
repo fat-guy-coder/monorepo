@@ -303,7 +303,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import CodeBlock from '@/components/CodeBlock.vue';
+import CodeBlock from '@/components/Code/index.vue';
 
 
 const code1 = ref('');

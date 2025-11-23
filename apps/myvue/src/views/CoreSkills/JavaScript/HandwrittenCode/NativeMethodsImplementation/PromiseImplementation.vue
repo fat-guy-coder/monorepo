@@ -212,7 +212,7 @@
 </template>
 
 <script setup lang="ts">
-import codeBlock from '@/components/CodeBlock.vue'
+import codeBlock from '@/components/Code/index.vue'
 import { onMounted, ref, onUnmounted } from 'vue'
 
 const codeText = ref('')

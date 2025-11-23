@@ -142,7 +142,7 @@ src/assets/css/
 在组件的 `<script>` 标签中引入：
 
 ```js
-import '@/assets/css/unified-styles.css'
+import '@/assets/css/main.less'
 ```
 
 #### 2. 使用组件样式

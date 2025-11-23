@@ -81,7 +81,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
-import ScrollNav from '@/components/ScrollNav.vue'
+import ScrollNav from '@/components/Nav/ScrollNav.vue'
 
 // 当前展开的卡片索引
 const expandedCard = ref(0)

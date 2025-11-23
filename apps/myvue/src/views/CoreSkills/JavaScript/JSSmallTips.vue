@@ -35,7 +35,7 @@
 </template>
 
 <script setup lang="ts">
-import Nav from '@/components/ScrollNav.vue'
+import Nav from '@/components/Nav/ScrollNav.vue'
 import { defineEmits, onMounted, ref, onBeforeUnmount } from 'vue'
 // import { useAutoScroll } from '@/hooks/useAutoScroll'
 

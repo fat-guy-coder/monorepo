@@ -373,11 +373,8 @@ const evens = numbers.filter(<span class="code-good">n => n % 2 === 0</span>);</
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import '@/assets/css/unified-styles.css'
+import '@/assets/css/main.less'
 
-// 示例响应式数据
-const activeSection = ref('syntax')
 </script>
 
 <style scoped>

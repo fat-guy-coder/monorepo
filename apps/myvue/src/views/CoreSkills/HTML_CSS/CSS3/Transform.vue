@@ -190,7 +190,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import { Select as ASelect } from 'ant-design-vue'
-import CodeBlock from '@/components/CodeBlock.vue'
+import CodeBlock from '@/components/Code/index.vue'
 
 type TransformType =
   | 'translate'

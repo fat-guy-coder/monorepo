@@ -42,7 +42,7 @@
 </template>
 
 <script setup lang="ts">
-import NavBar from '@/components//ScrollNav.vue'
+import NavBar from '@/components/Nav/ScrollNav.vue'
 interface Type {
   name: string
   id: string

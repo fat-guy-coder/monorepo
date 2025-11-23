@@ -388,7 +388,7 @@ console.log('hahahehea'.replace(regExp, '$3 $2 $1'))</code></pre>
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import '@/assets/css/unified-styles.css'
+import '@/assets/css/main.less'
 
 const syntaxList = ref([
   {

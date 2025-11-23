@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "g": "node  --import=tsx  scripts/generateview.ts",
+    "g": "node  --import=tsx  scripts/generateRouteAndView.ts",
     "rg": "node  --import=tsx  scripts/rg.ts",
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",

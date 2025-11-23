@@ -221,7 +221,7 @@
 import { ref, onMounted, watch } from 'vue';
 
 // 引用示例图像
-import sampleImage from '@/assets/js/imgge-processing.png';
+import sampleImage from '@/assets/image/js/imgge-processing.png';
 
 // 图像处理状态
 const canvas = ref<HTMLCanvasElement | null>(null);

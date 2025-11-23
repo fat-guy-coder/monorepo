@@ -286,7 +286,7 @@ Array.prototype.last = function() {
 </template>
 
 <script setup lang="ts">
-import imgsrc from '@/assets/js/prototype-chain.png'
+import imgsrc from '@/assets/image/js/prototype-chain.png'
 
 const emit = defineEmits(['goToByRouteName']);
 

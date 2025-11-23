@@ -184,7 +184,7 @@ Number.isInteger(1n); // false</code></pre>
 </template>
 
 <script setup lang="ts">
-import '@/assets/css/unified-styles.css';
+import '@/assets/css/main.less';
 </script>
 
 <style scoped>

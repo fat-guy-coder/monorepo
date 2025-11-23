@@ -376,7 +376,7 @@ console.log(x); // 抛出 ReferenceError</code></pre>
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import '@/assets/css/unified-styles.css'
+import '@/assets/css/main.less'
 
 // 严格模式检测
 const isStrictMode = (() => {

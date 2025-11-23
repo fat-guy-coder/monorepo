@@ -55,6 +55,11 @@
       </div>
     </div>
 
+    <div class="code-area">
+      <CodeBlock language="css" :code="code" hidden-toolbar />
+      <CodeBlock language="css" :code="code2" hidden-toolbar />
+    </div>
+
     <div class="controls-container">
       <!-- 容器属性控制 -->
       <div class="control-group">
@@ -101,13 +106,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
-import { useRouter } from 'vue-router'
-
-const router = useRouter()
-const gotoDemonstrate = () => {
-  router.push({ name: 'CSJ1' })
-}
+import CodeBlock from '@/components/Code/index.vue'
+import { ref, reactive, computed } from 'vue'
 
 type FlexDirection = 'row' | 'row-reverse' | 'column' | 'column-reverse'
 type FlexWrap = 'nowrap' | 'wrap' | 'wrap-reverse'
@@ -164,6 +164,27 @@ const container = reactive<ContainerProps>({
   gap: 10,
 })
 
+
+const code = computed(() => `.demo-container{
+  display: flex;
+  flex-direction: ${container.flexDirection};
+  flex-wrap: ${container.flexWrap};
+  justify-content: ${container.justifyContent};
+  align-items: ${container.alignItems};
+  align-content: ${container.alignContent};
+  gap: ${container.gap} px;
+}`)
+
+const selectedItem = ref(0)
+
+const code2 = computed(() => `.demo-item:nth-child(${selectedItem.value + 1}){
+  order: ${items[selectedItem.value].order};
+  flex-grow: ${items[selectedItem.value].flexGrow};
+  flex-shrink: ${items[selectedItem.value].flexShrink};
+  flex-basis: ${(typeof items[selectedItem.value].flexBasis === 'number') ? (items[selectedItem.value].flexBasis + 'px') : items[selectedItem.value].flexBasis};
+  align-self: ${items[selectedItem.value].alignSelf}
+}`)
+
 const items = reactive<ItemProps[]>([
   { order: 0, flexGrow: 0, flexShrink: 1, flexBasis: 'auto', alignSelf: 'auto' },
   { order: 0, flexGrow: 0, flexShrink: 1, flexBasis: 'auto', alignSelf: 'auto' },
@@ -177,7 +198,7 @@ const items = reactive<ItemProps[]>([
   { order: 0, flexGrow: 0, flexShrink: 1, flexBasis: 'auto', alignSelf: 'auto' },
 ])
 
-const selectedItem = ref(0)
+
 const itemColors = [
   '#3498db',
   '#2ecc71',
@@ -462,5 +483,11 @@ button.active {
   border-radius: 4px;
   color: #2c3e50;
   font-size: 0.9em;
+}
+
+.code-area {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+  justify-content: space-between;
 }
 </style>

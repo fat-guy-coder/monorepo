@@ -153,8 +153,8 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount } from 'vue';
-import gitlabCiCd from '@/assets/gitlab.png';
-import githubCiCdWorkflow from '@/assets/gitlab_workflow.png';
+import gitlabCiCd from '@/assets/image/git/gitlab.png';
+import githubCiCdWorkflow from '@/assets//image/git/gitlab_workflow.png';
 
 // 响应式数据
 const darkMode = ref(false);

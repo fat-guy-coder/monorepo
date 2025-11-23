@@ -5,11 +5,11 @@
   "main": "main.js",
   "type": "module",
   "devDependencies": {
+    "@inquirer/prompts": "^8.0.1",
     "@types/node": "^22.13.4",
     "chalk": "^5.4.1",
     "commander": "^14.0.0",
     "husky": "^9.1.7",
-    "inquirer": "^12.9.0",
     "ora": "^8.2.0",
     "turbo": "^2.5.5",
     "vite": "^7.0.6",

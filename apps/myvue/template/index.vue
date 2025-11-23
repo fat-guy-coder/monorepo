@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>A</h1>
+    <h3>Hello World</h3>
   </div>
 </template>
 
@@ -8,4 +8,4 @@
 
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped></style>

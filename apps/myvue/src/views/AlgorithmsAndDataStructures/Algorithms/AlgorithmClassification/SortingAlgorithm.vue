@@ -230,8 +230,8 @@
 <script lang="ts" setup>
 import { ref, onBeforeMount, computed } from 'vue'
 import { Button } from 'ant-design-vue'
-import SortAlgorithBarCharts, { type LogItem } from '@/components/charts/sortAlgorithBarCharts.vue'
-import Pie from '@/components/charts/pie.vue'
+import SortAlgorithBarCharts, { type LogItem } from '@/components/Charts/SortAlgorithBarCharts.vue'
+import Pie from '@/components/Charts/Pie.vue'
 
 const log = ref<LogItem[]>([])
 

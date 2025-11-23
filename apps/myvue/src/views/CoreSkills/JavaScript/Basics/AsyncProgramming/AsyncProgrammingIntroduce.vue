@@ -196,7 +196,7 @@ const baz = bar(7); // 将 42 赋值给 baz
 
 <script setup lang="ts">
 import { reactive } from 'vue'
-import img from '@/assets/js/the_javascript_runtime_environment_example.svg'
+import img from '@/assets/image/js/the_javascript_runtime_environment_example.svg'
 
 // Event Loop阶段定义
 const eventLoopPhases = reactive([

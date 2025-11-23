@@ -66,7 +66,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import ScrollNav from '@/components/ScrollNav.vue'
+import ScrollNav from '@/components/Nav/ScrollNav.vue'
 
 // 定义算法数据类型
 interface Algorithm {

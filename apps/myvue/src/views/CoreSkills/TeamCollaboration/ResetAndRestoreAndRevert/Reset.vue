@@ -309,7 +309,7 @@ git commit -m "提交文件2"</code></pre>
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import gitReset from '@/assets/git-reset.webp'
+import gitReset from '@/assets/image/git/git-reset.webp'
 
 // 提交历史数据
 const commits = ref([
