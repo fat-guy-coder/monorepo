@@ -94,6 +94,56 @@ type ReadonlyUser = Readonly&lt;User&gt;
         </Card>
       </div>
     </section>
+
+    <!-- Section：彩色标签 / 快速导航 -->
+    <section class="section-wrap">
+      <Card class="section-card" :hoverable="true">
+        <template #title>
+          <div class="section-title">专题 · 快速导航</div>
+        </template>
+        <template #body>
+          <div class="chip-list">
+            <a v-for="(t, i) in tags" :key="i" class="chip" :href="t.href" target="_blank">{{ t.label }}</a>
+          </div>
+        </template>
+      </Card>
+    </section>
+
+    <!-- Section：学习进度 / 可视化条 -->
+    <section class="section-wrap">
+      <Card class="section-card" :hoverable="true">
+        <template #title>
+          <div class="section-title">进度 · 可视化</div>
+        </template>
+        <template #body>
+          <div class="progress-list">
+            <div v-for="(p, i) in progresses" :key="i" class="progress-item">
+              <div class="progress-meta">
+                <span class="name">{{ p.label }}</span>
+                <span class="val">{{ p.value }}%</span>
+              </div>
+              <div class="progress">
+                <div class="bar" :style="{ '--val': p.value + '%' }"></div>
+              </div>
+            </div>
+          </div>
+        </template>
+      </Card>
+    </section>
+
+    <!-- Section：Tips / 温馨提示 -->
+    <section class="section-wrap">
+      <Card class="section-card" :hoverable="true">
+        <template #title>
+          <div class="section-title">Tips · 温馨提示</div>
+        </template>
+        <template #body>
+          <ul class="tip-list">
+            <li v-for="(tip, i) in tips" :key="i">{{ tip }}</li>
+          </ul>
+        </template>
+      </Card>
+    </section>
   </div>
 </template>
 
@@ -136,180 +186,32 @@ const links = ref([
   { label: '内置工具类型', href: 'https://www.typescriptlang.org/docs/handbook/utility-types.html' },
   { label: 'JS 是什么', href: 'https://developer.mozilla.org/zh-CN/docs/Learn/JavaScript/First_steps/What_is_JavaScript' }
 ])
+
+// 新增：彩色标签（快速导航）
+const tags = ref([
+  { label: '基础类型', href: '#' },
+  { label: '接口与类型', href: '#' },
+  { label: '工具类型', href: '#' },
+  { label: '泛型', href: '#' },
+  { label: '类型守卫', href: '#' },
+  { label: 'JS 基础', href: '#' }
+])
+
+// 新增：学习进度（可视化）
+const progresses = ref([
+  { label: 'TypeScript 基础', value: 70 },
+  { label: '接口与类型', value: 55 },
+  { label: '内置工具类型', value: 40 },
+  { label: 'JavaScript 基础', value: 80 }
+])
+
+// 新增：温馨提示
+const tips = ref([
+  '分段学习，每段 25-40 分钟高效专注',
+  '在实际项目中寻找类型系统的落点',
+  '注意与 antd token/主题变量保持一致',
+  '记录问题与知识点，形成个人索引'
+])
 </script>
 
-<style lang="less" scoped>
-.view-container {
-  color: var(--color-text);
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-/* 页头区域 */
-.page-header {
-  background: linear-gradient(135deg,
-      color-mix(in oklab, var(--color-primary) 15%, transparent),
-      transparent 60%);
-  border-bottom: 1px solid var(--element-border);
-}
-
-.header-inner {
-  width: 100%;
-  padding: clamp(16px, 4vw, 32px);
-}
-
-.page-title {
-  color: var(--color-heading);
-  font-size: clamp(22px, 3.6vw, 32px);
-  font-weight: 700;
-  line-height: 1.25;
-}
-
-.page-subtitle {
-  margin-top: 6px;
-  color: var(--color-text);
-  font-size: clamp(14px, 2.6vw, 16px);
-}
-
-.page-note {
-  margin-top: 10px;
-  color: var(--color-text-soft);
-  font-size: 13px;
-}
-
-/* 布局栅格 */
-.layout {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: clamp(12px, 3.5vw, 24px);
-  display: grid;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-  gap: clamp(8px, 2.5vw, 16px);
-}
-
-/* 大卡片跨列：移动端 12 列，平板 8~12 列，桌面 8 列 */
-.card-large {
-  grid-column: 1 / -1;
-}
-
-/* 小卡片：移动端 12 列，平板 6 列，桌面 4 列 */
-.card-small {
-  grid-column: span 12;
-}
-
-@media (min-width: 640px) {
-
-  /* sm */
-  .card-large {
-    grid-column: 1 / -1;
-  }
-
-  .card-small {
-    grid-column: span 6;
-  }
-}
-
-@media (min-width: 960px) {
-
-  /* md */
-  .card-large {
-    grid-column: span 8;
-  }
-
-  .card-small {
-    grid-column: span 4;
-  }
-}
-
-/* 内容元素样式 */
-.card-title {
-  color: var(--color-heading);
-  font-weight: 600;
-  font-size: 16px;
-}
-
-.plan-list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.plan-item {
-  display: grid;
-  grid-template-columns: 72px 1fr;
-  align-items: start;
-  gap: 12px;
-  padding: 10px 12px;
-  border: 1px dashed var(--element-border);
-  border-radius: calc(var(--element-border-radius) / 1);
-  background: var(--element-background-soft);
-}
-
-.plan-time {
-  color: var(--color-primary);
-  font-weight: 600;
-}
-
-.plan-name {
-  color: var(--color-heading);
-  font-weight: 600;
-}
-
-.plan-desc {
-  color: var(--color-text);
-  font-size: 13px;
-}
-
-.bullet-list {
-  margin: 0;
-  padding-left: 16px;
-  display: grid;
-  row-gap: 6px;
-  list-style: disc;
-}
-
-.todo-list {
-  display: grid;
-  row-gap: 8px;
-}
-
-.todo-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.todo-item input[type='checkbox'] {
-  width: 14px;
-  height: 14px;
-}
-
-.todo-item .done {
-  text-decoration: line-through;
-  color: var(--color-text-soft);
-}
-
-.link-list {
-  display: grid;
-  row-gap: 8px;
-}
-
-.link-list a {
-  color: var(--color-link, var(--color-primary));
-}
-
-.link-list a:hover {
-  color: var(--color-link-hover, var(--color-secondary));
-}
-
-/* 代码块适配主题 */
-.code-block pre {
-  margin: 0;
-  padding: 12px;
-  border-radius: var(--element-border-radius);
-  border: 1px solid var(--element-border);
-  background: var(--element-background-mute);
-  color: var(--color-text);
-  overflow-x: auto;
-}
-</style>
+<style lang="less"></style>
