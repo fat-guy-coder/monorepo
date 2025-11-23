@@ -1,6 +1,6 @@
 <template>
-  <!-- <AConfigProvider :theme="antdThemeConfig""> -->
-    <div ref=" container" class="container">
+  <AConfigProvider :theme="antdThemeConfig"">
+  <div ref=" container" class="container">
     <!-- 导航组件示例 -->
     <Navigation position="bottom-right" :offset="{ bottom: '2rem', right: '0.5rem' }" :isMobile="isMobile"
       @item-click="handleNavClick">
@@ -58,8 +58,8 @@
         </router-view>
       </div>
     </div>
-    </div>
-  <!-- </AConfigProvider> -->
+  </div>
+  </AConfigProvider>
 </template>
 
 <script lang="ts" setup vapor>
@@ -114,7 +114,7 @@ const antdThemeConfig = ref({
 })
 
 //主题切换
-const themeChange = async (theme1: Theme) => {
+const themeChange = (theme1: Theme) => {
   userStore.setUsrTheme(theme1)
   // 设置到 html 元素上
   document.documentElement.setAttribute('data-theme', theme1)
@@ -122,7 +122,6 @@ const themeChange = async (theme1: Theme) => {
     token: themeTokens[theme1],
     algorithm: theme1 === 'dark' ? [antdTheme.darkAlgorithm] : [antdTheme.defaultAlgorithm],
   }
-  await nextTick()
 }
 
 
@@ -186,7 +185,7 @@ useDetectMobile(userStore)
 
 onMounted(() => {
   //设置主题
-  // themeChange(theme.value)
+  themeChange(theme.value)
 
   //右键菜单
   contextMenu = document.getElementById('context-menu')

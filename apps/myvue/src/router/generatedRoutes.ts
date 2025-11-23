@@ -4,6 +4,11 @@ export default [
     "path": "/LearningAbility",
     "children": [
       {
+        "name": "TemplateView",
+        "path": "/LearningAbility/TemplateView",
+        "component": () => import('@/views/LearningAbility/TemplateView.vue')
+      },
+      {
         "name": "LearningRoutes",
         "path": "/LearningAbility/LearningRoutes",
         "component": () => import('@/views/LearningAbility/LearningRoutes.vue')
@@ -6638,6 +6643,11 @@ export default [
         "name": "SubmitAdvice",
         "path": "/Me/SubmitAdvice",
         "component": () => import('@/views/Me/SubmitAdvice.vue')
+      },
+      {
+        "name": "MyTheme",
+        "path": "/Me/MyTheme",
+        "component": () => import('@/views/Me/MyTheme.vue')
       }
     ]
   }

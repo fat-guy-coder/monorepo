@@ -4,6 +4,10 @@
     "name": "LearningAbility",
     "children": [
       {
+        "label": "📚 模板 ⭐",
+        "name": "TemplateView"
+      },
+      {
         "label": "🗺️ 学习路线 ⭐",
         "name": "LearningRoutes"
       },
