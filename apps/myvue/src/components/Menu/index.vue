@@ -4,7 +4,7 @@
     :selectedKeys="selectedKeys"
     v-model:openKeys="openKeys"
     :items="menus"
-    :inlineIndent="5"
+    :inlineIndent="15"
     :inline-collapsed="collapsed"
     selectable
   >

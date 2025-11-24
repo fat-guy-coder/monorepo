@@ -128,15 +128,16 @@ defineExpose({ scrollToTarget })
 
 <style lang="less" scoped>
 .nav-tag-card {
-  --nav-tag-bg: var(--element-background);
+  --nav-tag-bg: var(--color-bg-container);
   --nav-tag-border: var(--color-border);
   --nav-tag-text: var(--color-text);
-  --nav-tag-radius-md: 10px;
-  --nav-tag-radius-lg: 16px;
+  --nav-tag-radius-md: calc(var(--element-border-radius) * 2.5);
+  --nav-tag-radius-lg: calc(var(--element-border-radius) * 4);
   --nav-tag-radius-pill: 999px;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+  gap: var(--gap-md);
 }
 
 .nav-tag-card--vertical {
@@ -153,46 +154,107 @@ defineExpose({ scrollToTarget })
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.85rem 1.25rem;
+  gap: var(--gap-md);
+  padding: var(--padding-md) var(--padding-xl);
   border: 1px solid var(--nav-tag-border);
   border-radius: var(--nav-tag-radius-md);
   background: var(--nav-tag-bg);
   color: var(--nav-tag-text);
   transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease,
-    border-color 0.2s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+    transform 0.3s ease,
+    box-shadow 0.3s ease,
+    border-color 0.3s ease,
+    background-color 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--color-fill);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 0;
+  }
+
+  > * {
+    position: relative;
+    z-index: 1;
+  }
 
   &:hover {
-    border-color: var(--color-border-hover);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    border-color: var(--color-primary);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+
+    &::before {
+      opacity: 1;
+    }
+  }
+
+  &:active {
+    transform: translateY(0);
   }
 
   &:focus-visible {
     outline: 2px solid var(--color-primary);
-    outline-offset: 2px;
+    outline-offset: var(--spacing-xs);
   }
 
   &.is-active {
     border-color: var(--color-primary);
-    box-shadow: 0 8px 24px rgba(16, 185, 129, 0.2);
+    background: var(--color-primary);
+    color: var(--color-text-light-solid);
+    box-shadow: 0 4px 16px rgba(22, 119, 255, 0.3);
+
+    &::before {
+      opacity: 0;
+    }
+
+    .nav-tag-card__index {
+      background: transparent;
+      color: var(--color-text-light-solid);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
   }
 }
 
 .nav-tag-card--gradient .nav-tag-card__item {
   color: var(--color-text-light-solid);
+
+  &::before {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  &:hover::before {
+    opacity: 1;
+  }
+
+  &.is-active {
+    background: var(--nav-tag-bg);
+    border-color: transparent;
+
+    &::before {
+      opacity: 0;
+    }
+  }
 }
 
 .nav-tag-card--small .nav-tag-card__item {
-  padding: 0.6rem 0.9rem;
-  font-size: 0.85rem;
+  padding: var(--padding-sm) var(--padding-md);
+  font-size: 0.875rem;
+  gap: var(--gap-sm);
 }
 
 .nav-tag-card--large .nav-tag-card__item {
-  padding: 1rem 1.4rem;
+  padding: var(--padding-lg) var(--padding-2xl);
   font-size: 1rem;
+  gap: var(--gap-lg);
 }
 
 .nav-tag-card--rounded-lg .nav-tag-card__item {
@@ -207,25 +269,33 @@ defineExpose({ scrollToTarget })
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 1.75rem;
-  height: 1.75rem;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.2);
-  color: inherit;
-  font-size: 0.85rem;
+  min-width: calc(var(--spacing-xl) + var(--spacing-sm));
+  height: calc(var(--spacing-xl) + var(--spacing-sm));
+  border-radius: 50%;
+  background: transparent;
+  color: var(--color-text);
+  font-size: 0.875rem;
   font-weight: 600;
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  border: 1px solid var(--color-border);
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    color 0.3s ease;
+  flex-shrink: 0;
 }
 
-.nav-tag-card--solid .nav-tag-card__index {
-  background: var(--element-background-mute);
-  color: var(--color-text);
-  border-color: var(--color-border);
+.nav-tag-card--gradient .nav-tag-card__index {
+  background: rgba(255, 255, 255, 0.2);
+  color: var(--color-text-light-solid);
+  border-color: rgba(255, 255, 255, 0.3);
 }
 
 .nav-tag-card__title {
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: 0.01em;
+  line-height: 1.5;
+  color: var(--color-text-light-solid);
+  background: transparent;
 }
 
 .nav-tag-card__suffix {
@@ -233,24 +303,29 @@ defineExpose({ scrollToTarget })
 }
 
 .nav-tag-card--anim-lift .nav-tag-card__item:hover {
-  transform: translateY(-2px);
+  transform: translateY(-3px);
 }
 
 .nav-tag-card--anim-scale .nav-tag-card__item:hover {
-  transform: scale(1.02);
+  transform: scale(1.05) translateY(-2px);
 }
 
 .nav-tag-card--anim-slide .nav-tag-card__item:hover {
-  transform: translateX(3px);
+  transform: translateX(var(--spacing-sm)) translateY(-2px);
 }
 
 @media (max-width: 768px) {
   .nav-tag-card {
-    gap: 0.5rem !important;
+    gap: var(--gap-sm) !important;
   }
 
   .nav-tag-card--horizontal {
     flex-wrap: wrap;
+  }
+
+  .nav-tag-card__item {
+    padding: var(--padding-sm) var(--padding-md);
+    font-size: 0.875rem;
   }
 }
 </style>

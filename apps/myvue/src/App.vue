@@ -1,5 +1,5 @@
 <template>
-  <AConfigProvider :theme="antdThemeConfig"">
+  <AConfigProvider :theme="antdThemeConfig">
   <div ref=" container" class="container">
     <!-- 导航组件示例 -->
     <Navigation position="bottom-right" :offset="{ bottom: '2rem', right: '0.5rem' }" :isMobile="isMobile"

@@ -45,9 +45,10 @@
             class="scroll-nav__item-btn"
             type="button"
             role="menuitem"
+            :title="item.title"
             @click="handleScroll($event, item.id)"
           >
-            <span>{{ item.title }}</span>
+            <span class="scroll-nav__item-text">{{ item.title }}</span>
           </button>
 
           <transition name="fade">
@@ -65,9 +66,10 @@
                   class="scroll-nav__item-btn"
                   type="button"
                   role="menuitem"
+                  :title="child.title"
                   @click="handleScroll($event, child.id)"
                 >
-                  {{ child.title }}
+                  <span class="scroll-nav__item-text">{{ child.title }}</span>
                 </button>
               </li>
             </ul>
@@ -256,6 +258,7 @@ const handleScroll = (event: Event, id: string) => {
   top: 3rem;
   right: 3rem;
   width: 240px;
+  max-width: calc(100vw - 6rem);
   padding: 1rem;
   background: var(--scroll-nav-bg);
   border: 1px solid var(--scroll-nav-border);
@@ -269,6 +272,7 @@ const handleScroll = (event: Event, id: string) => {
     background 0.3s ease,
     border-color 0.3s ease;
   z-index: 5;
+  overflow: hidden;
 
   &:hover {
     transform: translateY(-2px);
@@ -386,6 +390,7 @@ const handleScroll = (event: Event, id: string) => {
   gap: var(--scroll-nav-gap, 2px);
   max-height: calc(100vh - 8rem);
   overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .scroll-nav__item {
@@ -407,13 +412,14 @@ const handleScroll = (event: Event, id: string) => {
 .scroll-nav__item-btn {
   width: 100%;
   text-align: left;
-  padding: 0.65rem 0.8rem;
   background: none;
   border: none;
   color: inherit;
   cursor: pointer;
   font-size: 0.95rem;
   font-weight: 500;
+  padding: 0.5rem 0.75rem;
+  overflow: hidden;
   transition:
     background 0.2s ease,
     color 0.2s ease,
@@ -426,13 +432,21 @@ const handleScroll = (event: Event, id: string) => {
   }
 }
 
+.scroll-nav__item-text {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
 .scroll-nav__children {
   list-style: none;
   padding: 0.4rem 0 0.4rem 1rem;
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
+  //gap: 0.35rem;
 
   .scroll-nav__item-btn {
     font-size: 0.85rem;
