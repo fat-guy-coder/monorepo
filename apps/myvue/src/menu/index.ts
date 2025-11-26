@@ -1,53 +1,20 @@
 import menus from './menu.json'
-import { h } from 'vue'
 import type { VNode } from 'vue'
 
 
 
-export type Route = {
-  label: VNode | string
+export type MenuItem = {
+  id: string
+  label: string
   name: string
-  title?: string
-  key?: string
+  path: string
+  icon: VNode | string
   parentKey?: string
   parentKeyList?: string[]
-  path?: string
-  children?: Route[]
-  icon?: VNode | string
-  component?: () => Promise<string>
+  children?: MenuItem[]
   loading?: boolean
   match?: boolean
-  id?: string
-  redirect?: { name: string }
-}
-
-export function addKeysToRoutes(
-  routes: Route[],
-  parentKey: string = '',
-  parentPath: string = '',
-): Route[] {
-  return routes.map(({ name, label: rawLabel, children ,redirect}) => {
-    const path = parentPath ? parentPath + '/' + name : '/' + name
-    const key = path
-    const title = rawLabel as string
-    const label = h('span', { innerText: rawLabel, id: key })
-    // const expandIcon = () => h(DownOutlined)
-    const newRoute: Route = {
-      name,
-      key,
-      parentKey,
-      path,
-      label,
-      title,
-      id: name,
-      loading: false,
-      redirect,
-    }
-    if (children) {
-      newRoute.children = addKeysToRoutes(children, key, path)
-    }
-    return newRoute
-  })
+  redirect?: { name: string, path: string }
 }
 
 export function findFatherKeysListByKey(key: string): string[] {
@@ -62,9 +29,9 @@ export function findFatherKeysListByKey(key: string): string[] {
   }, [])
 }
 
-export function findMenuItemByName(name: string): Route | undefined {
+export function findMenuItemByName(name: string): MenuItem | undefined {
   // 递归查找routesWithKeys中name等于传入name的项，找到则返回该项，否则返回undefined
-  function findInRoutes(routes: Route[], name: string): Route | undefined {
+  function findInRoutes(routes: MenuItem[], name: string): MenuItem | undefined {
     for (const route of routes) {
       if (route.name === name) {
         return route
@@ -76,17 +43,16 @@ export function findMenuItemByName(name: string): Route | undefined {
     }
     return undefined
   }
-  return findInRoutes(routesWithKeys, name)
+  return findInRoutes(menus as MenuItem[], name)
 }
 
-export function reWashMenus(data: Route[], callback?: (i: Route) => void) {
+export function reWashMenus(data: MenuItem[], callback?: (i: MenuItem) => void) {
   const cb = callback
     ? callback
-    : (i: Route) => {
-      i.label = h('span', { style: { color: 'black' }, innerText: i.title, id: i.key })
+    : (i: MenuItem) => {
       i.match = false
     }
-  const wash = (data: Route[]) => {
+  const wash = (data: MenuItem[]) => {
     for (const i of data) {
       if (i.match) {
         cb(i)
@@ -105,19 +71,18 @@ type Keys = {
 }
 
 //副作用 找到匹配的项并改变菜单项的label 返回openKeys和selectedKeys
-export function findMatchingLabels(routes: Route[], value: string): Keys {
-  const result: {id?:string,path?:string}[] = []
+export function findMatchingLabels(routes: MenuItem[], value: string): Keys {
+  const result: { id?: string, path?: string }[] = []
   const newValue = value.toLocaleLowerCase()
   // 先重置菜单项的label（恢复默认颜色）和match状态
   reWashMenus(routes)
-  function search(routes: Route[]) {
-    for(const route of routes){
-      let text:string|null = (route.title as string).toLocaleLowerCase()
-      let id:string|null = route.id as string
+  function search(routes: MenuItem[]) {
+    for (const route of routes) {
+      let text: string | null = route.label.toLocaleLowerCase()
+      let id: string | null = route.id as string
       if (text?.includes(newValue)) {
-        route.label = h('span', { style: { color: 'red' }, innerText: text, id})
         route.match = true
-        result.push({ id:id, path:route.path})
+        result.push({ id: id, path: route.path })
         text = null
         id = null
       }
@@ -129,7 +94,7 @@ export function findMatchingLabels(routes: Route[], value: string): Keys {
   search(routes)
   const set = new Set<string>()
   const selectedKeys: string[] = []
-   result.forEach((r) => {
+  result.forEach((r) => {
     const list = findFatherKeysListByKey(r.path!)
     selectedKeys.push(r.id!)
     list.forEach(l => set.add(l))
@@ -141,8 +106,8 @@ export function findMatchingLabels(routes: Route[], value: string): Keys {
 }
 
 //副作用
-export const deleteChild = (routes: Route[], name: string) => {
-  const recursion = (routes: Route[]) => {
+export const deleteChild = (routes: MenuItem[], name: string) => {
+  const recursion = (routes: MenuItem[]) => {
     return routes.forEach((route) => {
       if (route.name === name) {
         route.children = []
@@ -157,8 +122,8 @@ export const deleteChild = (routes: Route[], name: string) => {
 }
 
 //加子菜单  //副作用
-export const addChild = (routes: Route[], name: string, child: Route[]) => {
-  const recursion = (routes: Route[]) => {
+export const addChild = (routes: MenuItem[], name: string, child: MenuItem[]) => {
+  const recursion = (routes: MenuItem[]) => {
     routes.forEach((route) => {
       if (route.name === name) {
         route.children = child
@@ -172,16 +137,14 @@ export const addChild = (routes: Route[], name: string, child: Route[]) => {
 }
 
 //改变菜单单项加载状态 副作用
-export const changeLoading = (routes: Route[], name: string, loading: boolean) => {
-  const recursion = (routes: Route[]) => {
+export const changeLoading = (routes: MenuItem[], name: string, loading: boolean) => {
+  const recursion = (routes: MenuItem[]) => {
     routes.forEach((route) => {
       if (route.name === name) {
         if (loading) {
-          route.label = h('span', { innerText: (route.label as VNode).props?.innerText + '加载中' })
+          route.label = route.label + '加载中'
         } else {
-          route.label = h('span', {
-            innerText: (route.label as VNode).props?.innerText.replace('加载中', ''),
-          })
+          route.label = route.label.replace('加载中', '')
         }
 
         return
@@ -194,6 +157,3 @@ export const changeLoading = (routes: Route[], name: string, loading: boolean) =
   recursion(routes)
 }
 
-const routesWithKeys = addKeysToRoutes(menus as Route[])
-
-export default routesWithKeys

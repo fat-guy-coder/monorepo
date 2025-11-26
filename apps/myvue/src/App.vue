@@ -1,5 +1,5 @@
 <template>
-  <AConfigProvider :theme="antdThemeConfig">
+
   <div ref=" container" class="container">
     <!-- 导航组件示例 -->
     <Navigation position="bottom-right" :offset="{ bottom: '2rem', right: '0.5rem' }" :isMobile="isMobile"
@@ -39,9 +39,12 @@
       </div>
       <div :class="Menucollapsed ? 'menu-collapsed' : 'menu'">
         <Spin :spinning="loading" class="loading" />
-        <Menu @click="goto" :collapsed="Menucollapsed" v-if="!loading" :selectedKeys="selectedKeys" v-model="openKeys"
-          :menus="menus" @dom-updated="menuDomUpdated">
+        <Menu @select="goto" :collapsed="Menucollapsed" v-if="!loading" :items="menus as any"
+          v-model:selectedKeys="selectedKeys" v-model:openKeys="openKeys">
         </Menu>
+        <!-- <Menu @click="goto" :collapsed="Menucollapsed" v-if="!loading" :selectedKeys="selectedKeys" v-model="openKeys"
+          :menus="menus" @dom-updated="menuDomUpdated">
+        </Menu> -->
       </div>
     </div>
     <div class="content">
@@ -59,11 +62,12 @@
       </div>
     </div>
   </div>
-  </AConfigProvider>
+
 </template>
 
 <script lang="ts" setup vapor>
 import Menu from '@/components/Menu/index.vue'
+//import Menu from '@/components/Menu/Menu.vue'
 import RouteTab from '@/components/Tab/RouteTab.vue'
 import ThemeChange from '@/components/Theme/index.vue'
 import Navigation from '@/components/Nav/fixedNavButton.vue'
@@ -78,14 +82,14 @@ import {
   // addChild,
   // changeLoading,
 } from '@/menu'
-import type { Route } from '@/menu'
+import type { MenuItem } from '@/menu'
 import { useTabistStore, type Tab } from '@/stores/tab'
 import { type Theme, useUserStore } from '@/stores/user'
 import { useRouter } from 'vue-router'
 import { debounce } from '@/Function/CommonFun'
-import { message, Spin, Input, Button, Tooltip, ConfigProvider as AConfigProvider, theme as antdTheme } from 'ant-design-vue'
+import { message, Spin, Input, Button, Tooltip, } from 'ant-design-vue'
 import { useDetectMobile } from '@/hooks/useDetectMobile'
-import { theme as themeTokens } from '@/assets/css/theme'
+// import { theme as themeTokens } from '@/assets/css/theme'
 // import { request } from '@/request'
 
 
@@ -108,20 +112,13 @@ const themes = userStore.user.themes
 const isMobile = computed(() => userStore.user.device.isMobile)
 
 
-const antdThemeConfig = ref({
-  token: themeTokens[theme.value],
-  algorithm: theme.value === 'dark' ? [antdTheme.darkAlgorithm] : [antdTheme.defaultAlgorithm],
-})
+
 
 //主题切换
 const themeChange = (theme1: Theme) => {
   userStore.setUsrTheme(theme1)
   // 设置到 html 元素上
   document.documentElement.setAttribute('data-theme', theme1)
-  antdThemeConfig.value = {
-    token: themeTokens[theme1],
-    algorithm: theme1 === 'dark' ? [antdTheme.darkAlgorithm] : [antdTheme.defaultAlgorithm],
-  }
 }
 
 
@@ -131,7 +128,7 @@ const themeChange = (theme1: Theme) => {
 
 const router = useRouter()
 
-const menus = ref<Route[]>([])
+const menus = ref<MenuItem[]>([])
 
 // const needLoadKeys = ref<string[]>([])
 
@@ -190,7 +187,6 @@ onMounted(() => {
   //右键菜单
   contextMenu = document.getElementById('context-menu')
 
-  console.log(container.value)
   if (container.value) {
     container.value.addEventListener('click', closeContextMenu)
 
@@ -211,12 +207,12 @@ const getMenus = async () => {
   loading.value = true
   mainViewLoading.value = true
   // const { data, needLoadKeys: n } = await getMainMenu()
-  // menus.value = addKeysToRoutes(data as Route[])
+  // menus.value = addKeysToRoutes(data as MenuItem[])
   // needLoadKeys.value = n
   // const { data } = await request('/menu')
   // menus.value = addKeysToRoutes(data.menu)
-  const { default: rawMenus } = await import('@/menu')
-  menus.value = rawMenus
+  const { default: rawMenus } = await import('@/menu/menu.json')
+  menus.value = rawMenus as MenuItem[]
   loading.value = false
   mainViewLoading.value = false
 }
@@ -348,20 +344,11 @@ function removeSide(index: number, side: 'left' | 'right', key: string) {
 }
 
 function goto({
-  item: {
-    path,
-    name,
-    originItemValue: { label },
-    redirect,
-  },
-}: {
-  item: {
-    path: string
-    name: string
-    originItemValue: { label: { props: { innerText: string } } }
-    redirect: { name: string }
-  }
-}) {
+  path,
+  name,
+  label,
+  redirect,
+}: MenuItem) {
   if (path === activeKey.value) {
     return
   }
@@ -379,10 +366,11 @@ function goto({
     {
       path,
       name,
-      label: label.props.innerText,
+      label
     },
     (path) => {
       openKeys.value = findFatherKeysListByKey(path)
+      console.log('openKeys', openKeys.value)
     },
   )
 }
@@ -391,6 +379,8 @@ function gotoByName(name: string, isRedirect: boolean = false) {
   let item = findMenuItemByName(name)
   if (name === 'home') {
     item = {
+      id: 'home',
+      icon: '🏠',
       label: '首页',
       name: 'home',
       path: '/',
@@ -400,7 +390,7 @@ function gotoByName(name: string, isRedirect: boolean = false) {
     message.error('菜单不存在')
     return
   }
-  const { title, path } = item as { title: string; path: string }
+  const { label, path } = item
   mainViewLoading.value = true
   router.push({ path }).then(() => {
     mainViewLoading.value = false
@@ -409,7 +399,7 @@ function gotoByName(name: string, isRedirect: boolean = false) {
     {
       path,
       name,
-      label: title,
+      label,
     },
     (path) => {
       //手机端不展开菜单
@@ -538,7 +528,7 @@ const handleNavClick = (index: number) => {
 }
 
 .menu {
-  width: clamp(350px, 20vw, 400px);
+  width: 301px;
   height: calc(100vh - 2.2rem);
   overflow: auto;
   border-right: 1px solid var(--element-border);
@@ -546,7 +536,7 @@ const handleNavClick = (index: number) => {
 
 .menu-collapsed {
   width: 50px;
-  overflow: hidden;
+  // overflow: hidden;
   transition: width 0.1s ease-in-out;
 }
 

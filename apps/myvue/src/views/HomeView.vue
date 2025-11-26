@@ -15,6 +15,10 @@
         </template>
         <div class="author">作者</div>
       </a-tooltip>
+      <div class="hover-div">sss-div
+        <div class="hover-div-item">asdasds <div class="hover-div-item2">aasdasds</div>
+        </div>
+      </div>
     </config-provider>
   </div>
 
@@ -44,5 +48,48 @@ import { Tooltip as ATooltip, Button as AButton, ConfigProvider } from 'ant-desi
 
 :where(.css-dev-only-do-not-override-1p3hq3p).ant-tooltip .ant-tooltip-inner {
   background-color: rgba(224, 66, 66, 0.85) !important;
+}
+
+.hover-div {
+  position: relative;
+  width: 100px;
+
+  .hover-div-item {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+
+  .hover-div-item2 {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+
+  &:hover {
+    .hover-div-item {
+      display: block;
+
+      &:hover {
+        .hover-div-item2 {
+          display: block;
+        }
+      }
+
+      &:mouseleave {
+        .hover-div-item2 {
+          display: none;
+        }
+      }
+    }
+  }
+
+  &:mouseleave {
+    .hover-div-item {
+      display: none;
+    }
+  }
 }
 </style>

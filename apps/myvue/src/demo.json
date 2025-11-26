@@ -1,20 +1,30 @@
 [
   {
-    "id": "LearningProgress",
-    "name": "LearningProgress",
-    "label": "学习进度 ⭐",
-    "path": "/LearningAbility/LearningProgress",
+    "id": "LearningAbility",
+    "name": "LearningAbility",
+    "label": "学习⭐",
+    "path": "/LearningAbility",
     "parentPath": "/LearningAbility",
-    "icon": "🗺",
     "children": [
       {
-        "id": "RecommendedWebsites",
-        "name": "RecommendedWebsites",
-        "label": "学习网站推荐 ⭐",
-        "path": "/LearningAbility/RecommendedWebsites",
+        "id": "LearningProgress",
+        "name": "LearningProgress",
+        "label": "学习进度 ⭐",
+        "path": "/LearningAbility/LearningProgress",
         "parentPath": "/LearningAbility",
-        "icon": "🔗"
+        "icon": "🗺",
+        "children": [
+          {
+            "id": "RecommendedWebsites",
+            "name": "RecommendedWebsites",
+            "label": "学习网站推荐 ⭐",
+            "path": "/LearningAbility/RecommendedWebsites",
+            "parentPath": "/LearningAbility",
+            "icon": "🔗"
+          }
+        ]
       }
     ]
   }
+
 ]

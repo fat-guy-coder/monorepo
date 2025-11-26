@@ -225,7 +225,7 @@ type ReadonlyUser = Readonly<User>`"
               <div class="plan-content-wrapper">
                 <h3 class="plan-name-title">{{ item.name }}</h3>
                 <p class="plan-desc-text">{{ item.desc }}</p>
-              </div>
+  </div>
             </div>
           </div>
 
