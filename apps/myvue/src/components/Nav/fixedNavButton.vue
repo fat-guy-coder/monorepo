@@ -18,8 +18,8 @@
       </transition-group>
 
       <!-- 主按钮 -->
-      <button class="navigation-toggle" :class="{ 'is-active': isExpanded }" @click.stop="toggle"
-        :aria-label="isExpanded ? '收起导航' : '展开导航'">
+      <button class="navigation-toggle" :class="{ 'is-active': isExpanded, }"
+        @click.stop="toggle" :aria-label="isExpanded ? '收起导航' : '展开导航'">
         <span class="toggle-icon">
           <span class="icon-line"></span>
           <span class="icon-line"></span>
@@ -200,6 +200,7 @@ defineExpose({
   position: fixed;
   z-index: 1000;
   pointer-events: none;
+  background-color: transparent;
 
   &.is-expanded {
     pointer-events: auto;
@@ -212,6 +213,7 @@ defineExpose({
   display: flex;
   align-items: center;
   z-index: 1001;
+  background-color: transparent;
 }
 
 /* 导航项容器 */
@@ -232,6 +234,10 @@ defineExpose({
   .navigation-items {
     flex-direction: row-reverse;
   }
+
+  .is-active{
+    margin-right: 10px;
+  }
 }
 
 /* 展开方向：从右到左 */
@@ -242,6 +248,10 @@ defineExpose({
 
   .navigation-items {
     flex-direction: row;
+  }
+
+  .is-active{
+    margin-left: 10px;
   }
 }
 
@@ -254,6 +264,10 @@ defineExpose({
   .navigation-items {
     flex-direction: column-reverse;
   }
+
+  .is-active{
+    margin-bottom: 10px;
+  }
 }
 
 /* 展开方向：从下到上 */
@@ -264,6 +278,10 @@ defineExpose({
 
   .navigation-items {
     flex-direction: column;
+  }
+
+  .is-active{
+    margin-top: 10px;
   }
 }
 
@@ -393,7 +411,6 @@ defineExpose({
   height: 56px;
   border: none;
   border-radius: 50%;
-  margin-right: 30px;
   background: var(--color-primary);
   color: var(--color-background);
   cursor: pointer;

@@ -1,5 +1,4 @@
 <template>
-
   <div ref=" container" class="container">
     <!-- 导航组件示例 -->
     <Navigation position="bottom-right" :offset="{ bottom: '2rem', right: '0.5rem' }" :isMobile="isMobile"
@@ -572,8 +571,8 @@ const handleNavClick = (index: number) => {
   align-items: center;
   justify-content: center;
   gap: 4px;
-  min-width: 30px;
-  min-height: 30px;
+  min-width: 20px;
+  min-height: 20px;
   padding: 10px;
   background: var(--element-background);
   color: var(--color-text);
@@ -582,7 +581,6 @@ const handleNavClick = (index: number) => {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   cursor: pointer;
   transition: all 0.3s ease;
-
   &:hover {
     background: var(--element-background-soft);
     border-color: var(--element-border-hover);

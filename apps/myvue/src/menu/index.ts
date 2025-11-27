@@ -96,7 +96,7 @@ export function findMatchingLabels(routes: MenuItem[], value: string): Keys {
   const selectedKeys: string[] = []
   result.forEach((r) => {
     const list = findFatherKeysListByKey(r.path!)
-    selectedKeys.push(r.id!)
+    selectedKeys.push(r.path!)
     list.forEach(l => set.add(l))
   })
   const openKeys = Array.from(set)

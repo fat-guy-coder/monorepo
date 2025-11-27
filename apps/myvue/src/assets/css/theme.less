@@ -293,6 +293,11 @@ body[data-theme="light"] {
   --color-text: @color-gray-900;
   --color-text-soft: @color-gray-600;
   --color-heading: @color-gray-900;
+
+  /* 突出显示颜色 */
+  --color-highlight-text: #005fcc; /* 更深的蓝色 */
+  --color-highlight-bg: #fff3cd;   /* 柔和的黄色背景 */
+  --color-highlight-border: #ffe69c;
 }
 
 html[data-theme="dark"],
@@ -308,6 +313,11 @@ body[data-theme="dark"] {
   --color-text: @color-gray-100;
   --color-text-soft: @color-gray-400;
   --color-heading: @color-gray-100;
+
+  /* 突出显示颜色 */
+  --color-highlight-text: #66fcf1; /* 明亮的青色 */
+  --color-highlight-bg: #2d3748;   /* 深灰色背景 */
+  --color-highlight-border: #4a5568;
 }
 
 html[data-theme="warm"],
@@ -323,6 +333,11 @@ body[data-theme="warm"] {
   --color-text: @warm-text;
   --color-text-soft: @warm-text-soft;
   --color-heading: @warm-text;
+
+  /* 突出显示颜色 */
+  --color-highlight-text: #5a189a; /* 深紫色 */
+  --color-highlight-bg: #f8f7f4;   /* 浅暖灰色背景 */
+  --color-highlight-border: #e0cde8;
 }
 
 html[data-theme="cool"],
@@ -338,6 +353,11 @@ body[data-theme="cool"] {
   --color-text: @cool-text;
   --color-text-soft: @cool-text-soft;
   --color-heading: @cool-text;
+
+  /* 突出显示颜色 */
+  --color-highlight-text: #d63384; /* 鲜艳的粉红色 */
+  --color-highlight-bg: #e7f5f7;   /* 浅青色背景 */
+  --color-highlight-border: #c3e6eb;
 }
 
 /* ============================================
@@ -378,6 +398,11 @@ body[data-theme="cool"] {
   --color-heading: @theme-text;
   --color-text: @theme-text;
   --color-text-soft: @theme-text-soft;
+
+  /* 突出显示颜色 (默认) */
+  --color-highlight-text: #005fcc; /* 更深的蓝色 */
+  --color-highlight-bg: #fff3cd;   /* 柔和的黄色背景 */
+  --color-highlight-border: #ffe69c;
 
   /* 元素背景色变量 */
   --element-background: var(--color-background);
@@ -761,4 +786,21 @@ a,
     place-items: center;
   }
 
+}
+
+/* ============================================
+   Highlight 样式
+   ============================================ */
+//
+.highlight-text {
+  color: var(--color-highlight-text);
+  background-color: var(--color-highlight-bg);
+}
+
+.highlight-bg {
+  background-color: var(--color-highlight-bg);
+}
+
+.highlight-border {
+  border-color: var(--color-highlight-border);
 }

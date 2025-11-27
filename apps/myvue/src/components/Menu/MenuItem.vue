@@ -1,8 +1,10 @@
 <template>
-    <li class="menu-item" :style="{ '--level': level }">
-        <div class="menu-item__title" :class="titleClasses" @click="handleClick">
+    <li class="menu-item" :style="{ '--level': level }" :id="item.path" @click="handleClick"
+        @mouseenter.stop.prevent="handleMouseEnter" @mouseleave="handleMouseLeave">
+        <div class="menu-item__title" :class="titleClasses">
             <span v-if="item.icon" class="menu-item__icon">{{ item.icon }}</span>
-            <span class="menu-item__label" :title="item.label || item.name">
+            <span :class="['menu-item__label', { 'menu-item__label--matched': item.match }]"
+                :title="item.label || item.name">
                 {{ item.label || item.name }}
             </span>
             <span v-if="canToggle" class="menu-item__arrow" :class="{ 'menu-item__arrow--open': isOpen }">
@@ -11,13 +13,25 @@
                 </svg>
             </span>
         </div>
-        <div v-if="shouldRenderChildren" ref="childrenWrapper" class="menu-item__children-wrapper">
-            <ul class="menu-item__children-list">
-                <MenuItem v-for="child in localChildren" :key="child.path" :id="child.path" :item="child" :level="level + 1"
-                    :is-open="openKeys.includes(child.path)" @toggle="$emit('toggle', $event)"
-                    @select="$emit('select', $event)" />
-            </ul>
-        </div>
+        <Teleport to="body" v-if="mode === 'vertical'">
+            <div v-if="shouldRenderChildren" ref="childrenWrapper" class="menu-item__children-wrapper-vertical"
+                :style="{ top: verticalChildrenWrapperPosition.top, left: verticalChildrenWrapperPosition.left }">
+                <ul class="menu-item__children-list">
+                    <MenuItem v-for="child in localChildren" :key="child.path" :id="child.path" :item="child"
+                        :level="level + 1" :is-open="openKeys.includes(child.path)" @toggle="$emit('toggle', $event)"
+                        @select="$emit('select', $event)" />
+                </ul>
+            </div>
+        </Teleport>
+        <template v-else>
+            <div v-if="shouldRenderChildren" ref="childrenWrapper" class="menu-item__children-wrapper">
+                <ul class="menu-item__children-list">
+                    <MenuItem v-for="child in localChildren" :key="child.path" :id="child.path" :item="child"
+                        :level="level + 1" :is-open="openKeys.includes(child.path)" @toggle="$emit('toggle', $event)"
+                        @select="$emit('select', $event)" @close="$emit('close', $event)" />
+                </ul>
+            </div>
+        </template>
     </li>
 </template>
 
@@ -30,6 +44,7 @@ import {
     inject,
     type PropType,
     type Ref,
+    onMounted,
 } from 'vue'
 import { type MenuItem as MenuItemType, animateHeight } from './index'
 
@@ -42,6 +57,10 @@ const props = defineProps({
         type: Object as PropType<MenuItemType>,
         required: true,
     },
+    parent: {
+        type: Object as PropType<MenuItemType>,
+        required: false,
+    },
     level: {
         type: Number,
         required: true,
@@ -49,10 +68,10 @@ const props = defineProps({
     isOpen: {
         type: Boolean,
         default: false,
-    },
+    }
 })
 
-const emit = defineEmits(['toggle', 'select'])
+const emit = defineEmits(['toggle', 'select', 'close'])
 
 const openKeys = inject('openKeys', ref([])) as Ref<string[]>
 const selectedKeys = inject('selectedKeys', ref([])) as Ref<string[]>
@@ -63,6 +82,9 @@ const menuConfig = inject('menuConfig', {
 }) as { labelSize: number; itemGap: number; animationDuration: number }
 
 const menuLoader = inject<((item: MenuItemType) => Promise<MenuItemType[] | void>) | null>('menuOnLoad', null)
+const mode = inject<'inline' | 'vertical'>('mode', 'inline')
+
+const isHovered = ref(false)
 
 const childrenWrapper = ref<HTMLElement | null>(null)
 const localChildren = ref<MenuItemType[]>(props.item.children ?? [])
@@ -75,6 +97,7 @@ const expectRemoteChildren = computed(() => !!props.item.hasChildren && typeof m
 const hasPotentialChildren = computed(() => hasLocalChildren.value || expectRemoteChildren.value)
 const canToggle = computed(() => hasPotentialChildren.value)
 
+//确定是否需要渲染子菜单
 const ensureChildren = async () => {
     if (!canToggle.value) return false
     if (shouldRenderChildren.value && hasLocalChildren.value) return true
@@ -99,26 +122,88 @@ const ensureChildren = async () => {
 }
 
 const handleClick = async () => {
-    if (!props.item.children) {
+    if (mode === 'inline') {
+        if (!props.item.children) {
+            emit('select', props.item)
+        }
+        if (!canToggle.value) return
+
+        if (props.isOpen) {
+            emit('toggle', props.item)
+        } else {
+            const ready = await ensureChildren()
+            if (ready) {
+                emit('toggle', props.item)
+            }
+        }
+    } else {
         emit('select', props.item)
     }
+}
 
-    if (!canToggle.value) return
 
-    if (props.isOpen) {
-        emit('toggle', props.item)
-    } else {
-        const ready = await ensureChildren()
-        if (ready) {
+const verticalSubMenuShow = computed(() => {
+    return isHovered.value && shouldRenderChildren.value
+})
+
+const verticalChildrenWrapperPosition = ref({
+    top: '0px',
+    left: '0px',
+})
+
+const getChildrenWrapperPosition = (e: MouseEvent) => {
+    const rect = (e.target as HTMLElement).getBoundingClientRect()
+    return {
+        top: rect.top + 'px',
+        left: rect.left + rect.width + 'px',
+    }
+}
+
+
+const handleMouseEnter = async (e: MouseEvent) => {
+    isHovered.value = true
+    if (mode === 'vertical' && canToggle.value) {
+        if (props.isOpen) {
             emit('toggle', props.item)
+        } else {
+            if (e) verticalChildrenWrapperPosition.value = getChildrenWrapperPosition(e)
+            const ready = await ensureChildren()
+            if (ready) {
+                emit('toggle', props.item)
+            }
         }
     }
 }
+
+const handleMouseLeave = (e: MouseEvent) => {
+    isHovered.value = false
+    if (mode === 'vertical') {
+        const elements = document.querySelectorAll('.menu-item__children-wrapper-vertical')
+        //先判断是不是移除了菜单项，如果是则关闭子菜单
+        const isMouseInMenuItems = Array.from(elements).some(element => isMouseInElement(element as HTMLElement, e.clientX, e.clientY))
+        if (!isMouseInMenuItems) {
+            emit('close')
+            isHovered.value = false
+            console.log('鼠标离开菜单项')
+            return
+        }
+        //判断此时鼠标是否还在此菜单项或者子菜单项中//移出这两个元素则关闭子菜单
+        const isMouseInChildrenWrapper = isMouseInElement(childrenWrapper.value as HTMLElement, e.clientX, e.clientY)
+        if (isMouseInChildrenWrapper) {
+            return
+        }
+        // // console.log(props.item)
+        emit('toggle', props.item)
+        // isHovered.value = false
+    }
+}
+
 
 const titleClasses = computed(() => ({
     'menu-item__title--selected': isSelected.value,
     'menu-item__title--open': props.isOpen,
     'menu-item__title--matched': props.item.match,
+    'menu-item__title--hovered': isHovered.value,
 }))
 
 watch(
@@ -130,7 +215,7 @@ watch(
         await nextTick()
         if (childrenWrapper.value && shouldRenderChildren.value) {
             const duration = Math.max(menuConfig.animationDuration ?? 0, 0)
-            animateHeight(childrenWrapper.value, newVal, duration)
+            animateHeight(childrenWrapper.value, newVal, duration, mode)
         }
     },
     { immediate: true }
@@ -148,6 +233,20 @@ watch(
         }
     }
 )
+
+
+function isMouseInElement(element: HTMLElement, mouseX: number, mouseY: number) {
+    if (!element) return false
+    const rect = element.getBoundingClientRect();
+    return (
+        mouseX >= rect.left &&
+        mouseX <= rect.right &&
+        mouseY >= rect.top &&
+        mouseY <= rect.bottom
+    );
+}
+
+
 </script>
 
 <style lang="less" scoped>
@@ -185,6 +284,12 @@ watch(
     color: var(--color-text);
 }
 
+.menu-item__label--matched {
+    color: var(--color-highlight-text);
+    //background-color: var(--color-highlight-bg);
+    // border-radius: var(--element-border-radius);
+}
+
 .menu-item__arrow {
     width: 18px;
     height: 18px;
@@ -207,7 +312,15 @@ watch(
 
 .menu-item__children-wrapper {
     overflow: hidden;
-    height: 0; // Initial state for animation
+    //height: 0; // Initial state for animation
+}
+
+.menu-item__children-wrapper-vertical {
+    position: absolute;
+    left: 300px;
+    top: 100px;
+    z-index: 1000;
+    overflow: hidden;
 }
 
 .menu-item__children-list {
@@ -237,8 +350,17 @@ watch(
     background-color: var(--color-fill-secondary);
 }
 
-.menu-item__title--matched .menu-item__label {
-    color: var(--color-primary);
-    font-weight: 600;
+.menu-item__title--hovered {
+    background-color: var(--color-fill-light);
 }
-</style>
+
+// .menu-item__title--matched:not(.menu-item__title--selected) {
+//     color: var(--color-primary);
+//     font-weight: 600;
+
+//     .menu-item__label {
+//         color: var(--color-primary);
+//         font-weight: 600;
+//     }
+// }
+// </style>

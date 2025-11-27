@@ -1,10 +1,10 @@
 <template>
-  <nav class="menu" :style="menuStyle">
+  <nav class="main-menu" :style="menuStyle">
     <ul class="menu__list">
       <MenuItem v-for="item in items" :key="item.path" :item="item" :level="0" :is-open="openKeys.includes(item.path)"
-        @toggle="handleToggle" @select="handleSelect" />
+        :mode="mode" @toggle="handleToggle" @select="handleSelect" @close="closeKeys" />
     </ul>
-
+    <!-- 
     <!-- <button class="menu__settings-btn" type="button" @click="toggleSettings">
       ⚙
     </button> -->
@@ -47,8 +47,7 @@
 
 <script setup lang="ts">
 import { computed, provide, reactive, ref, type PropType } from 'vue'
-import MenuItem from './MenuItem.vue'
-import type { MenuItem as MenuItemType } from './index'
+import type { MenuItem as MenuItemType, MenuMode } from './index'
 
 const props = defineProps({
   items: {
@@ -62,6 +61,10 @@ const props = defineProps({
   width: {
     type: String,
     default: '300px',
+  },
+  mode: {
+    type: String as PropType<MenuMode>,
+    default: 'vertical',
   },
 })
 
@@ -95,35 +98,44 @@ const menuStyle = computed(() => ({
   '--menu-anim-duration': `${Math.max(menuConfig.animationDuration, 0)}ms`,
 }))
 
-const handleToggle = (item: MenuItemType) => {
+const handleToggle = (item: MenuItemType | string) => {
+  const path = typeof item === 'string' ? item : item.path
   const next = [...openKeys.value]
-  if (next.includes(item.path)) {
-    next.splice(next.indexOf(item.path), 1)
+  if (next.includes(path)) {
+    next.splice(next.indexOf(path), 1)
   } else {
-    next.push(item.path)
+    next.push(path)
   }
   openKeys.value = next
 }
 
 const handleSelect = (item: MenuItemType) => {
+  const path = typeof item === 'string' ? item : item.path
   const next = [...selectedKeys.value]
-  if (next.includes(item.path)) {
-    next.splice(next.indexOf(item.path), 1)
+  if (next.includes(path)) {
+    next.splice(next.indexOf(path), 1)
   } else {
-    next.push(item.path)
+    next.push(path)
   }
   selectedKeys.value = next
   emit('select', item)
+}
+
+
+const closeKeys = () => {
+  openKeys.value = []
+  console.log('closeOpenKeys', openKeys.value)
 }
 
 provide('openKeys', openKeys)
 provide('selectedKeys', selectedKeys)
 provide('menuConfig', menuConfig)
 provide('menuOnLoad', props.onLoadData ?? null)
+provide('mode', props.mode)
 </script>
 
 <style lang="less" scoped>
-.menu {
+.main-menu {
   position: relative;
   background: var(--color-bg-container);
   border-radius: var(--element-border-radius);
@@ -141,7 +153,7 @@ provide('menuOnLoad', props.onLoadData ?? null)
 }
 
 @supports (backdrop-filter: blur(8px)) {
-  .menu__settings-card {
+  .main-menu__settings-card {
     backdrop-filter: blur(8px);
   }
 }
