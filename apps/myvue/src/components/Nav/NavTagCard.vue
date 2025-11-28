@@ -272,9 +272,14 @@ defineExpose({ scrollToTarget })
   }
 }
 
-.is-active {
+.nav-tag-card--gradient .nav-tag-card__item.is-active {
+  border-color: var(--color-highlight-border);
+  background: var(--color-highlight-bg);
+  color: var(--color-highlight-text);
+  box-shadow: 0 4px 16px rgba(22, 119, 255, 0.3);
+
   .nav-tag-card__prefix {
-    background-color: transparent;
+    background: transparent;
   }
 }
 

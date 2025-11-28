@@ -1,11 +1,13 @@
 <template>
     <div class="tab-pane" @click="change" :class="{
-        'is-active': activeKey === path,
-        'is-disabled': disabled
+        'is-active-tab-pane': activeKey === path,
+        'is-tab-disabled': disabled
     }">
         <div class="tab" v-if="$slots.tab">
             <slot name="tab"></slot>
-            <div class="close-btn" v-if="type === 'editable-card'" @click="close">x</div>
+            <div class="close-tab--btn" v-if="type === 'editable-card' && closable" @click="close">
+                x
+            </div>
         </div>
         <slot name="content" v-if="activeKey === path && $slots.content"></slot>
     </div>
@@ -60,17 +62,31 @@ const close = () => {
     flex-shrink: 0;
 }
 
-.is-active {
+.is-active-tab-pane {
     div {
         background: var(--color-highlight-bg) !important;
         color: var(--color-highlight-text) !important;
     }
 }
 
-.is-disabled {
+.is-tab-disabled {
     div {
         opacity: 0.5 !important;
         cursor: not-allowed !important;
     }
+}
+
+.close-tab--btn {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--color-text);
+}
+
+.close-tab-btn:hover {
+    color: var(--color-primary);
 }
 </style>

@@ -46,7 +46,8 @@ const ensureNodeLocalStorage = () => {
 export default defineConfig(async ({ command }) => {
   const plugins: PluginOption[] = [
     vue({
-      vapor: true
+      // @ts-ignore - 忽略 TypeScript 检查
+      vapor: true,
     }),
     vueJsx(),
   ]

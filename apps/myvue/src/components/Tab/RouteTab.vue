@@ -113,16 +113,13 @@ const endSorting = (path: string) => {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .tab-item {
   position: relative;
   top: 0px;
   left: 0px;
   transition: all 0.3s ease-in;
-  color: var(--color-text);
-  &:hover {
-    color: var(--color-primary);
-  }
+  background-color: transparent;
 
 }
 

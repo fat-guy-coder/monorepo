@@ -3,7 +3,7 @@ import path from 'path';
 //import { program } from 'commander'
 import { select } from '@inquirer/prompts'
 //引入菜单
-import menu from '../src/menu';
+import menu from '../src/menu/menu.json';
 
 
 //配置json

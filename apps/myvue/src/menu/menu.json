@@ -7,14 +7,6 @@
     "parentPath": "/LearningAbility",
     "children": [
       {
-        "id": "TemplateView",
-        "name": "TemplateView",
-        "label": "模板 ⭐",
-        "path": "/LearningAbility/TemplateView",
-        "parentPath": "/LearningAbility",
-        "icon": "📚"
-      },
-      {
         "id": "LearningRoutes",
         "name": "LearningRoutes",
         "label": "学习路线 ⭐",
