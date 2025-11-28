@@ -9,7 +9,7 @@ export interface Device {
     height: string
 }
 
-export type Theme = 'light' | 'dark' | 'warm' | 'cool'
+export type Theme = 'light' | 'dark' | 'warm' | 'cool' | 'more'
 
 export type ThemeLabel = '亮色' | '暗色' | '暖色' | '冷色'
 

@@ -21,8 +21,6 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
-    "@ant-design/icons-vue": "^7.0.1",
-    "ant-design-vue": "4.x",
     "less": "^4.2.2",
     "pinia": "^3.0.1",
     "prismjs": "^1.29.0",

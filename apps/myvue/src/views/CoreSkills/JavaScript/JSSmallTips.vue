@@ -5,17 +5,10 @@
     <Nav :list="categories" show-child />
 
     <div>
-      <section
-        v-for="category in categories"
-        :key="category.id"
-        :id="category.id"
-        class="category-section"
-      >
+      <section v-for="category in categories" :key="category.id" :id="category.id" class="category-section">
         <h2 class="category-title">
           {{ category.name }}
-          <a v-if="category.route" class="jump-link" @click="goToByRouteName(category.route)"
-            >跳转详细</a
-          >
+          <Link v-if="category.route" class="jump-link" :route="category.route">跳转详细</Link>
         </h2>
         <div class="tips-grid">
           <div v-for="(tip, index) in category.children" :key="index" :id="tip.id" class="tip-card">
@@ -26,7 +19,7 @@
             <p class="tip-desc">{{ tip.description }}</p>
             <pre class="code-example">{{ tip.example }}</pre>
             <p v-if="tip.notice" class="notice">注意:{{ tip.notice }}</p>
-            <a v-if="tip.route" class="jump-link" @click="goToByRouteName(tip.route)">跳转详细</a>
+            <Link v-if="tip.route" class="jump-link" :route="tip.route">跳转详细</Link>
           </div>
         </div>
       </section>
@@ -37,6 +30,7 @@
 <script setup lang="ts">
 import Nav from '@/components/Nav/ScrollNav.vue'
 import { defineEmits, onMounted, ref, onBeforeUnmount } from 'vue'
+import Link from '@/components/Link/index.vue'
 // import { useAutoScroll } from '@/hooks/useAutoScroll'
 
 const emit = defineEmits(['goToByRouteName'])

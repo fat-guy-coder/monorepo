@@ -70,7 +70,7 @@
 </template>
 
 <script setup lang="ts">
-import { Spin } from 'ant-design-vue'
+import { Spin } from '@/components'
 import { ref, computed } from 'vue'
 import { getBrowserSupportIcon } from './Brower'
 

@@ -300,6 +300,11 @@ body[data-theme="light"] {
   --color-highlight-bg: #fff3cd;
   /* 柔和的黄色背景 */
   --color-highlight-border: #ffe69c;
+
+  --color-link-text: #2563eb;
+  --color-link-gradient-1: #3b82f6;
+  --color-link-gradient-2: #60a5fa;
+  --color-link-gradient-3: #93c5fd;
 }
 
 html[data-theme="dark"],
@@ -322,6 +327,11 @@ body[data-theme="dark"] {
   --color-highlight-bg: #2d3748;
   /* 深灰色背景 */
   --color-highlight-border: #4a5568;
+
+  --color-link-text: #38bdf8;
+  --color-link-gradient-1: #93c5fd;
+  --color-link-gradient-2: #bfdbfe;
+  --color-link-gradient-3: #dbeafe;
 }
 
 html[data-theme="warm"],
@@ -344,6 +354,11 @@ body[data-theme="warm"] {
   --color-highlight-bg: #f8f7f4;
   /* 浅暖灰色背景 */
   --color-highlight-border: #e0cde8;
+
+  --color-link-text: #ea580c;
+  --color-link-gradient-1: #d97706;
+  --color-link-gradient-2: #f59e0b;
+  --color-link-gradient-3: #fcd34d;
 }
 
 html[data-theme="cool"],
@@ -366,6 +381,11 @@ body[data-theme="cool"] {
   --color-highlight-bg: #e7f5f7;
   /* 浅青色背景 */
   --color-highlight-border: #c3e6eb;
+
+  --color-link-text: #06b6d4;
+  --color-link-gradient-1: #15aabf;
+  --color-link-gradient-2: #4ccee0;
+  --color-link-gradient-3: #8ce9f1;
 }
 
 /* ============================================
@@ -716,9 +736,12 @@ p {
 }
 
 a {
-  color: var(--color-primary);
+  color: var(--color-link-text);
   text-decoration: none;
   transition: color 0.3s ease;
+  .custom-link__text {
+    color: var(--color-link-text);
+  }
 }
 
 a:hover {

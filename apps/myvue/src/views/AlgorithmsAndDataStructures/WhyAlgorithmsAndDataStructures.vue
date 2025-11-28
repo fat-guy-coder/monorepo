@@ -190,7 +190,7 @@
           "数据结构是程序的骨架，算法是程序的灵魂"
         </div>
         <div class="action-call">
-          <button class="start-learning-btn" @click="gotoByName">开始学习之旅</button>
+          <button class="start-learning-btn" @click="goToByName">开始学习之旅</button>
         </div>
       </div>
       <div class="footer-note">
@@ -215,7 +215,7 @@ const visualNodes = ref([
 
 const emit = defineEmits(['goToByRouteName'])
 
-function gotoByName() {
+function goToByName() {
   emit('goToByRouteName', 'DataStructuresIntroduction')
 }
 

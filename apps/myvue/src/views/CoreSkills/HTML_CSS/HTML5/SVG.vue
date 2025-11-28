@@ -153,7 +153,7 @@
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
-import { Button } from 'ant-design-vue'
+import { Button } from '@/components'
 
 const router = useRouter()
 

@@ -1,4 +1,4 @@
-import { message } from "ant-design-vue"
+import { message } from "@/components"
 import { useTabistStore } from "@/stores/tab"
 
 

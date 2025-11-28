@@ -10,8 +10,8 @@ import Code from './Code/index.vue'
 import Cascader from './Cascader/index.vue'
 import Menu from './Menu/index.vue'
 import Button from './Button/index.vue'
-import Message from './Message/index.ts'
+import message from './Message/index.ts'
 import Spin from './Spin/index.vue'
+import Link from './Link/index.vue'
 
-
-export { Menu, Input, Navigation, ThemeChange, RouteTab, Card, Tabs, ThemeSwitcher, NavButton, Code, Cascader, Button, Message, Spin }
+export { Menu, Input, Navigation, ThemeChange, RouteTab, Card, Tabs, ThemeSwitcher, NavButton, Code, Cascader, Button, message, Spin, Link }

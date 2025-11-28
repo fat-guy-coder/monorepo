@@ -38,6 +38,8 @@ defineOptions({
 
 type TabType = 'line' | 'card' | 'editable-card'
 
+
+
 interface TabItem {
     label: string
     path: string
@@ -57,10 +59,13 @@ const props = withDefaults(
     },
 )
 
+provide('type', props.type)
+
 const emit = defineEmits<{
     (e: 'update:activeKey', key: string): void
     (e: 'edit', key: string): void
     (e: 'change', key: string): void
+    (e: 'close', key: string): void
 }>()
 
 
@@ -99,24 +104,28 @@ const updateInkBar = () => {
 }
 
 
-const onHandleChange = (path:string) => {
+const onHandleChange = (path: string) => {
     emit('change', path)
- }
+}
 
 // 将事件处理函数提供给子组件
 provide('change', onHandleChange)
 
-const paneClosable = (pane: TabItem) => {
-    if (props.type === 'editable-card') {
-        return pane.closable !== false
-    }
-    return pane.closable === true
-}
+// const paneClosable = (pane: TabItem) => {
+//     if (props.type === 'editable-card') {
+//         return pane.closable !== false
+//     }
+//     return pane.closable === true
+// }
 
 
-const handleClose = (pane: TabItem) => {
-    emit('edit', pane.path)
+const onHandleClose = (path: string) => {
+    emit('close', path)
 }
+
+// 将事件处理函数提供给子组件
+provide('close', onHandleClose)
+
 
 const isLeftScrollDisabled = computed(() => transformOffset.value >= 0)
 const isRightScrollDisabled = computed(() => {
@@ -222,14 +231,15 @@ onUnmounted(() => {
     transition: transform 0.3s ease;
     position: relative;
     padding: 4px 0;
-    gap: 4px; /* 添加间距 */
+    gap: 4px;
+    /* 添加间距 */
 }
 
 .tab-pane {
     flex-shrink: 0;
     cursor: pointer;
     transition: all 0.3s ease;
-    
+
     .tab {
         position: relative;
         display: inline-flex;
@@ -244,20 +254,20 @@ onUnmounted(() => {
         border: 1px solid transparent;
         background: var(--element-background-soft);
         min-height: 32px;
-        
+
         &:hover {
             color: var(--color-primary);
             background: var(--color-fill-secondary);
             border-color: var(--color-border);
         }
-        
+
         &.is-active {
             color: var(--color-primary);
             background: var(--color-bg-container);
             border-color: var(--color-primary);
             font-weight: 500;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            
+
             &::before {
                 content: '';
                 position: absolute;
@@ -268,12 +278,12 @@ onUnmounted(() => {
                 background: var(--color-primary);
             }
         }
-        
+
         &.is-disabled {
             color: var(--color-text-quaternary);
             cursor: not-allowed;
             background: var(--color-fill-tertiary);
-            
+
             &:hover {
                 color: var(--color-text-quaternary);
                 background: var(--color-fill-tertiary);
@@ -308,13 +318,13 @@ onUnmounted(() => {
     border-radius: 4px;
     min-width: 36px;
     min-height: 36px;
-    
+
     &:disabled {
         cursor: not-allowed;
         color: var(--color-text-quaternary);
         background: var(--color-fill-tertiary);
     }
-    
+
     &:hover:not(:disabled) {
         color: var(--color-primary);
         background: var(--color-fill-secondary);
@@ -352,7 +362,7 @@ onUnmounted(() => {
     height: 16px;
     border-radius: 2px;
     transition: all 0.2s ease;
-    
+
     &:hover {
         color: var(--color-error);
         background: var(--color-fill-secondary);
@@ -365,28 +375,28 @@ onUnmounted(() => {
         background: transparent;
         border-bottom: none;
     }
-    
+
     .tabs-nav-list {
         gap: 2px;
     }
-    
+
     .tab-pane .tab {
         border-radius: 6px 6px 0 0;
         border: 1px solid var(--color-border);
         border-bottom: none;
         background: var(--element-background);
         margin-bottom: -1px;
-        
+
         &.is-active {
             background: var(--color-bg-container);
             border-color: var(--color-primary);
             color: var(--color-primary);
-            
+
             &::before {
                 display: none;
             }
         }
-        
+
         &:hover:not(.is-active) {
             background: var(--color-fill-secondary);
             border-color: var(--color-border);
@@ -400,27 +410,27 @@ onUnmounted(() => {
         background: transparent;
         border-bottom: none;
     }
-    
+
     .tabs-nav-list {
         gap: 4px;
     }
-    
+
     .tab-pane .tab {
         border-radius: 6px;
         border: 1px solid var(--color-border);
         background: var(--element-background);
         padding: 6px 12px 6px 16px;
-        
+
         &.is-active {
             background: var(--color-bg-container);
             border-color: var(--color-primary);
             color: var(--color-primary);
-            
+
             &::before {
                 display: none;
             }
         }
-        
+
         &:hover:not(.is-active) {
             background: var(--color-fill-secondary);
             border-color: var(--color-border);
@@ -433,13 +443,13 @@ onUnmounted(() => {
     .tabs-nav {
         min-height: 40px;
     }
-    
+
     .tab-pane .tab {
         padding: 6px 12px;
         font-size: 13px;
         min-height: 28px;
     }
-    
+
     .tabs-nav-btn {
         padding: 6px 10px;
         min-width: 32px;

@@ -35,8 +35,8 @@
       </div>
       <div :class="Menucollapsed ? 'menu-collapsed' : 'menu'">
         <Spin :spinning="loading" class="loading" />
-        <Menu @select="goto" :mode="Menucollapsed ? 'vertical' : 'inline'" v-if="!loading" :items="menus as any"
-          v-model:selectedKeys="selectedKeys" v-model:openKeys="openKeys">
+        <Menu @select="goto" :collapsed="Menucollapsed" :mode="Menucollapsed ? 'vertical' : 'inline'" v-if="!loading"
+          :items="menus as any" v-model:selectedKeys="selectedKeys" v-model:openKeys="openKeys">
         </Menu>
       </div>
     </div>
@@ -49,7 +49,7 @@
         <Spin :spinning="mainViewLoading" class="mainViewLoading" v-if="activeKey !== '/'"> </Spin>
         <router-view v-slot="{ Component }">
           <transition name="fade" mode="out-in">
-            <component :is="Component" @goToByRouteName="gotoByName" />
+            <component :is="Component" @goToByRouteName="goToByName" />
           </transition>
         </router-view>
       </div>
@@ -59,8 +59,8 @@
 </template>
 
 <script lang="ts" setup>
-import { Menu, RouteTab, ThemeChange, Navigation, Input, Button, Message, Spin } from '@/components'
-import { computed, ref, watch, onMounted, onUnmounted, nextTick } from 'vue'
+import { Menu, RouteTab, ThemeChange, Navigation, Input, Button, message, Spin } from '@/components'
+import { computed, ref, watch, onMounted, onUnmounted, nextTick, provide } from 'vue'
 import {
   type MenuItem,
   findFatherKeysListByKey,
@@ -99,6 +99,10 @@ const isMobile = computed(() => userStore.user.device.isMobile)
 
 //主题切换
 const themeChange = (theme1: Theme) => {
+  if (theme1 === 'more') { 
+    goToByName('MyTheme')
+    return
+  }
   userStore.setUsrTheme(theme1)
   // 设置到 html 元素上
   document.documentElement.setAttribute('data-theme', theme1)
@@ -338,7 +342,7 @@ function goto({
   //手机端并且折叠状态下点击菜单后折叠菜单 这里重复赋值 主要处理弹出来的菜单后收拢
   if (userStore.user.device.isMobile && Menucollapsed.value) Menucollapsed.value = true
   if (redirect) {
-    gotoByName(redirect.name, true)
+    goToByName(redirect.name, true)
     return
   }
   mainViewLoading.value = true
@@ -357,7 +361,7 @@ function goto({
   )
 }
 
-function gotoByName(name: string, isRedirect: boolean = false) {
+function goToByName(name: string, isRedirect: boolean = false) {
   let item = findMenuItemByName(name)
   if (name === 'home') {
     item = {
@@ -369,7 +373,7 @@ function gotoByName(name: string, isRedirect: boolean = false) {
     }
   }
   if (!item) {
-    Message.error('菜单不存在')
+    message.error('菜单不存在')
     return
   }
   const { label, path } = item
@@ -398,6 +402,8 @@ function gotoByName(name: string, isRedirect: boolean = false) {
     },
   )
 }
+
+provide('goToByName', goToByName)
 
 const handleScroll = debounce((e: Event) => {
   const scrollTop = (e.target as HTMLElement).scrollTop
@@ -445,7 +451,7 @@ const themeMenuShow = ref(false)
 const handleNavClick = (index: number) => {
   switch (index) {
     case 4:
-      gotoByName('home')
+      goToByName('home')
       break;
     case 3:
       themeMenuShow.value = !themeMenuShow.value

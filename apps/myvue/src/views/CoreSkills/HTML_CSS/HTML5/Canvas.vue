@@ -173,7 +173,7 @@ ctx.fillText('Hello Canvas', 100, 100);</code></pre>
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { Button } from 'ant-design-vue'
+import { Button } from '@/components'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()

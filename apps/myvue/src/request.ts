@@ -1,4 +1,4 @@
-import { message } from 'ant-design-vue'
+import { message } from '@/components/index'
 
 export const abortController = new AbortController()
 
@@ -70,5 +70,8 @@ export const request = (url: string, options: RequestInit & { type?: keyof typeo
     return Promise.reject(res.statusText)
   }).catch((error) => {
     message.error(error)
+    return Promise.reject(error)
+  }).finally(() => {
+    abortController.abort()
   })
 }

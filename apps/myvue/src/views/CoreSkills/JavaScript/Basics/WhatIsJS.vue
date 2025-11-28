@@ -276,7 +276,7 @@ document.body.appendChild(script);</code></pre>
 
 <script setup lang="ts">
 import { defineEmits } from 'vue'
-import { Button } from 'ant-design-vue'
+import { Button } from '@/components'
 
 
 

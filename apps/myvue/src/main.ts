@@ -1,29 +1,8 @@
-import './assets/css/main.less'
+import '@/assets/css/main.less'
 import { createApp, } from 'vue'
 import { createPinia } from 'pinia'
 import './test'
 // import './demo'
-
-// const count = reactive({ age: 0 })
-
-// const count2 = ref(0)
-
-// setTimeout(() => {
-//   count.value = 2
-// }, 0)
-// setTimeout(() => {
-//   count.age = 3
-// }, 1000)
-// setTimeout(() => {
-//   count.age = 4
-// }, 2000)
-
-// watch(count, (val, old) => {
-//   console.log(val)
-// }, {
-//   immediate: true
-// })
-
 import App from './App.vue'
 import router from './router'
 

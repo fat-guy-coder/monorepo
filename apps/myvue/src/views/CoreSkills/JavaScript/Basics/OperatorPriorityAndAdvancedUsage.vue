@@ -175,7 +175,7 @@
 </template>
 
 <script setup lang="ts">
-import { Button } from 'ant-design-vue';
+import { Button } from '@/components';
 import { ref } from 'vue';
 
 // 运算符优先级数据

@@ -4,13 +4,13 @@ import MessageComponent from './index.vue';
 
 type MessageType = 'info' | 'success' | 'warning' | 'error';
 
-interface MessageOptions {
+export interface MessageOptions {
   type?: MessageType;
   content?: string;
   duration?: number;
   onClose?: () => void;
   style?: CSSProperties;
-  topOffset?: number;
+  key?: string;
 }
 
 interface MessageInstance {
@@ -43,9 +43,9 @@ const message = (options: MessageOptions | string): MessageInstance => {
   const id = `message_${seed++}`;
   const userOnClose = options.onClose;
 
-  let topOffset = options.topOffset || parseFloat(options.style?.top as string) || 200; // Initial top offset
+  let topOffset = options.style?.top ? parseFloat(options.style.top as string) : 20;
   instances.forEach(instance => {
-    topOffset += instance.vnode.el!.offsetHeight + 16; // 16px gap
+    topOffset += (instance.vnode.el?.offsetHeight || 0) + 16; // 16px gap
   });
 
   const props = {
@@ -56,24 +56,28 @@ const message = (options: MessageOptions | string): MessageInstance => {
       close(id, userOnClose);
     },
     onDestroy: () => {
-      // This will be called by the component when it's fully gone
-      const idx = instances.findIndex(inst => inst.id === id);
-      if (idx !== -1) {
-        render(null, instances[idx].vnode.el!.parentElement!)
-        instances.splice(idx, 1);
-        recalculatePositions();
-      }
+        const idx = instances.findIndex(inst => inst.id === id);
+        if (idx !== -1) {
+            const instance = instances[idx];
+            if (instance.vnode.el) {
+                render(null, instance.vnode.el.parentElement as Element);
+            }
+            instances.splice(idx, 1);
+            recalculatePositions();
+        }
     },
   };
 
   const vnode = createVNode(MessageComponent, props);
   const container = document.createElement('div');
   render(vnode, container);
-  messageContainer!.appendChild(container.firstElementChild!);
+  if (container.firstElementChild) {
+    messageContainer!.appendChild(container.firstElementChild);
+  }
+
 
   const instance = {
     id,
-    type: options.type,
     vnode,
     vm: vnode.component!,
     props: vnode.props,
@@ -89,17 +93,11 @@ const close = (id: string, userOnClose?: () => void) => {
   if (idx === -1) return;
 
   const instance = instances[idx];
-  const removedHeight = instance.vnode.el!.offsetHeight;
-  instances.splice(idx, 1);
-
-  // Recalculate positions for remaining messages
-  recalculatePositions();
 
   if (userOnClose) {
     userOnClose();
   }
 
-  // Let the component handle its own destruction animation
   if (instance.vm.exposed) {
     instance.vm.exposed.close();
   }
@@ -109,21 +107,30 @@ const recalculatePositions = () => {
   let topOffset = 20;
   instances.forEach(instance => {
     instance.top = topOffset;
-    instance.vm.props.top = topOffset;
-    topOffset += instance.vnode.el!.offsetHeight + 16;
+    if (instance.vm.props) {
+        instance.vm.props.top = topOffset;
+    }
+    topOffset += (instance.vnode.el?.offsetHeight || 0) + 16;
   });
 };
 
-// Add helper methods
+
 (['success', 'warning', 'info', 'error'] as MessageType[]).forEach(type => {
-  message[type as MessageType] = (content: string, duration?: number) => {
-    return message({ type, content, duration });
+  (message as any)[type] = (options: string | MessageOptions) => {
+    if (typeof options === 'string') {
+      return message({ type, content: options });
+    }
+    return message({ type, ...options });
   };
 });
 
-export default message as unknown as typeof message & {
-  success: (content: string, duration?: number) => MessageInstance;
-  warning: (content: string, duration?: number) => MessageInstance;
-  info: (content: string, duration?: number) => MessageInstance;
-  error: (content: string, duration?: number) => MessageInstance;
-};
+
+interface MessageApi extends Function {
+    (options: MessageOptions | string): MessageInstance;
+    success: (options: string | MessageOptions) => MessageInstance;
+    warning: (options: string | MessageOptions) => MessageInstance;
+    info: (options: string | MessageOptions) => MessageInstance;
+    error: (options: string | MessageOptions) => MessageInstance;
+}
+
+export default message as MessageApi;

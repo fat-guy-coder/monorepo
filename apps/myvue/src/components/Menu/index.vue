@@ -8,10 +8,14 @@
 </template>
 
 <script setup lang="ts">
-import { computed, provide, ref, type PropType } from 'vue'
+import { computed, provide, type PropType } from 'vue'
 import type { MenuItem as MenuItemType, MenuMode } from './index'
 
 const props = defineProps({
+  collapsed: {
+    type: Boolean,
+    default: false,
+  },
   items: {
     type: Array as PropType<MenuItemType[]>,
     required: true,

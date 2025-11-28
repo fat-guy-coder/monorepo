@@ -337,22 +337,4 @@ function isMouseInElement(element: HTMLElement, mouseX: number, mouseY: number) 
         color: inherit;
     }
 }
-
-// .menu-item__title--open:not(.menu-item__title--selected) {
-//     background-color: var(--color-fill-secondary);
-// }
-
-.menu-item__title--hovered {
-    background-color: var(--color-fill-secondary);
-}
-
-// .menu-item__title--matched:not(.menu-item__title--selected) {
-//     color: var(--color-primary);
-//     font-weight: 600;
-
-//     .menu-item__label {
-//         color: var(--color-primary);
-//         font-weight: 600;
-//     }
-// }
-// </style>
+</style>

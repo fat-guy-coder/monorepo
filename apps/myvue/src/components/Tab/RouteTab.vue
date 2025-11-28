@@ -8,7 +8,7 @@
     <div @click.stop="closeSide(currentIndex, 'right', currentKey)">关闭右侧</div>
     <div @click.stop="closeAll(currentKey)">关闭其他</div>
   </div>
-  <Tabs @change="TabClick" :activeKey="activeKey" type="editable-card" :tabBarStyle="{ margin: '0 5px' }">
+  <Tabs @change="TabClick" :activeKey="activeKey" type="editable-card" :tabBarStyle="{ margin: '0 5px' }" @close="removeTab">
     <TabPane v-for="(pane, index) in tabList" :key="pane.path" :closable="pane.path !== '/' && pane.path !== '/home'"
       :path="pane.path">
       <template #tab>
@@ -80,6 +80,11 @@ const openMenu = (targetKey: string, e: MouseEvent, index: number) => {
   }
   position.value = { X: e.clientX, Y: e.clientY }
   currentIndex.value = index
+}
+
+
+const removeTab = (path: string) => {
+  emit('remove', path)
 }
 const closeAll = (targetKey: string) => {
   emit('removeOther', targetKey)

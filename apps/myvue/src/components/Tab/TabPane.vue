@@ -5,6 +5,7 @@
     }">
         <div class="tab" v-if="$slots.tab">
             <slot name="tab"></slot>
+            <div class="close-btn" v-if="type === 'editable-card'" @click="close">x</div>
         </div>
         <slot name="content" v-if="activeKey === path && $slots.content"></slot>
     </div>
@@ -19,8 +20,12 @@ defineOptions({
 
 const props = defineProps<{
     disabled?: boolean;
+    closable?: boolean;
     path: string;
 }>();
+
+
+const type = inject<ComputedRef<string>>('type');
 
 
 //激活的key
@@ -41,6 +46,13 @@ const onTabChange = inject<(path: string) => void>('change');
 const change = () => {
     onTabChange?.(props.path)
 }
+
+// 注入事件处理函数
+const onClose = inject<(path: string) => void>('close');
+
+const close = () => {
+    onClose?.(props.path)
+}
 </script>
 
 <style lang="less">
@@ -50,8 +62,8 @@ const change = () => {
 
 .is-active {
     div {
-        background: var(--color-highlight-bg)!important;
-        color: var(--color-highlight-text)!important;
+        background: var(--color-highlight-bg) !important;
+        color: var(--color-highlight-text) !important;
     }
 }
 

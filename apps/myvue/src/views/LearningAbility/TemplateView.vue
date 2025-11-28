@@ -1,22 +1,13 @@
 <template>
-  <div
-    class="view-container"
-    :class="{
-      'view-container--list': currentMode === 'list',
-      'view-container--waterfall': currentMode === 'waterfall',
-      'view-container--mixed': currentMode === 'mixed',
-    }"
-    :style="styleVars"
-  >
+  <div class="view-container" :class="{
+    'view-container--list': currentMode === 'list',
+    'view-container--waterfall': currentMode === 'waterfall',
+    'view-container--mixed': currentMode === 'mixed',
+  }" :style="styleVars">
     <!-- 模式切换 Tabs -->
     <div class="mode-tabs">
-      <button
-        v-for="tab in modeTabs"
-        :key="tab.value"
-        class="mode-tab"
-        :class="{ 'is-active': currentMode === tab.value }"
-        @click="currentMode = tab.value"
-      >
+      <button v-for="tab in modeTabs" :key="tab.value" class="mode-tab"
+        :class="{ 'is-active': currentMode === tab.value }" @click="currentMode = tab.value">
         {{ tab.label }}
       </button>
     </div>
@@ -33,16 +24,8 @@
     </header>
 
     <!-- 列表模式和混合模式：导航 -->
-    <Nav
-      v-if="currentMode === 'list'"
-      :list="categoryList"
-      show-child
-    />
-    <Nav
-      v-if="currentMode === 'mixed'"
-      :list="mixedNavList"
-      show-child
-    />
+    <Nav v-if="currentMode === 'list'" :list="categoryList" show-child />
+    <Nav v-if="currentMode === 'mixed'" :list="mixedNavList" show-child />
 
     <!-- 普通模式 -->
     <section v-if="currentMode === 'normal'">
@@ -84,8 +67,7 @@
             <div class="card-title">示例 · 类型系统要点</div>
           </template>
           <template #body>
-            <Code
-              :code="`// TypeScript 基础类型
+            <Code :code="`// TypeScript 基础类型
 let age: number = 18
 let username: string = 'cascade'
 let isOk: boolean = true
@@ -95,10 +77,7 @@ interface User { id: number; name: string }
 type ID = User['id']
 
 // 内置工具类型
-type ReadonlyUser = Readonly<User>`"
-              language="ts"
-              title="类型系统示例"
-            />
+type ReadonlyUser = Readonly<User>`" language="ts" title="类型系统示例" />
           </template>
         </Card>
 
@@ -124,17 +103,8 @@ type ReadonlyUser = Readonly<User>`"
           </template>
           <template #body>
             <nav class="link-list">
-              <Link
-                v-for="link in links"
-                :key="link.id"
-                :id="link.id"
-                :href="link.href"
-                :text="link.label"
-                size="small"
-                variant="solid"
-                animation="lift"
-                target="_blank"
-              />
+              <Link v-for="link in links" :key="link.id" :id="link.id" :href="link.href" :text="link.label" size="small"
+                variant="solid" animation="lift" target="_blank" />
             </nav>
           </template>
         </Card>
@@ -148,16 +118,23 @@ type ReadonlyUser = Readonly<User>`"
           <div class="section-title">专题 · 快速导航</div>
         </template>
         <template #body>
-          <NavTagCard
-            :items="tags.map(t => ({ id: t.id, title: t.label }))"
-            size="medium"
-            variant="gradient"
-            :background-colors="['#1677ff', '#69b1ff']"
-            rounded="md"
-            :animation="(componentsConfig.navTagCard?.animation as any) || 'lift'"
+          <NavTagCard :items="tags.map(t => ({ id: t.id, title: t.label }))" size="medium" variant="gradient"
+            :background-colors="['#1677ff', '#69b1ff']" rounded="md"
             :direction="(componentsConfig.navTagCard?.direction as any) || 'horizontal'"
-            :enable-scroll="componentsConfig.navTagCard?.mode === 'scroll'"
-          />
+            :enable-scroll="componentsConfig.navTagCard?.mode === 'scroll'">
+            <template #[i.id] v-for="i in tags">
+              <Card class="section-card" :hoverable="true">
+                <template #title>
+                  <div class="section-title">{{ i.label }}</div>
+                </template>
+                <template #body>
+                  <ul class="tip-list">
+                    <li v-for="tip in tips" :key="tip.id" :id="tip.id">{{ tip.text }}</li>
+                  </ul>
+                </template>
+              </Card>
+            </template>
+          </NavTagCard>
         </template>
       </Card>
     </section>
@@ -201,153 +178,15 @@ type ReadonlyUser = Readonly<User>`"
     <!-- 瀑布模式：章节内容 -->
     <main v-if="currentMode === 'waterfall'" class="waterfall-content">
       <!-- 两列布局（类似 EnumAndTuple.vue） -->
-      <div
-        v-if="currentConfig.layoutType === 'two-column'"
-        class="waterfall-columns-layout"
-      >
-        <section
-          v-for="chapter in waterfallChapters"
-          :key="chapter.id"
-          :id="chapter.id"
-          class="waterfall-column-section"
-        >
-          <h2 class="waterfall-section-title">{{ chapter.title }}</h2>
-          <div class="waterfall-section-body">
-          <!-- 学习计划章节 -->
-          <div v-if="chapter.type === 'plan' && Array.isArray(chapter.data)" class="waterfall-plan-list">
-            <div
-              v-for="item in chapter.data as Array<{ id: string; time: string; name: string; desc: string }>"
-              :key="item.id"
-              :id="item.id"
-              class="waterfall-plan-item"
-            >
-              <div class="plan-time-badge">{{ item.time }}</div>
-              <div class="plan-content-wrapper">
-                <h3 class="plan-name-title">{{ item.name }}</h3>
-                <p class="plan-desc-text">{{ item.desc }}</p>
-  </div>
-            </div>
-          </div>
-
-          <!-- 要点列表章节 -->
-          <div v-if="chapter.type === 'points' && Array.isArray(chapter.data)" class="waterfall-points-grid">
-            <div
-              v-for="point in chapter.data as Array<{ id: string; title: string; items: string[] }>"
-              :key="point.id"
-              :id="point.id"
-              class="waterfall-point-card"
-            >
-              <div class="point-header">
-                <span class="point-icon">📌</span>
-                <h3 class="point-title">{{ point.title }}</h3>
-              </div>
-              <ul class="point-items">
-                <li v-for="(item, i) in point.items" :key="i">{{ item }}</li>
-              </ul>
-            </div>
-          </div>
-
-          <!-- 代码示例章节 -->
-          <div v-if="chapter.type === 'code' && typeof chapter.data === 'string'">
-            <Code
-              :code="chapter.data"
-              language="ts"
-              :hidden-toolbar="false"
-            />
-          </div>
-
-          <!-- 待办清单章节 -->
-          <div v-if="chapter.type === 'todo' && Array.isArray(chapter.data)" class="waterfall-todo-grid">
-            <label
-              v-for="todo in chapter.data as Array<{ id: string; text: string; done: boolean }>"
-              :key="todo.id"
-              :id="todo.id"
-              class="waterfall-todo-item"
-            >
-              <input type="checkbox" v-model="todo.done" />
-              <span :class="{ done: todo.done }">{{ todo.text }}</span>
-            </label>
-          </div>
-
-          <!-- 相关链接章节 -->
-          <div v-if="chapter.type === 'links' && Array.isArray(chapter.data)" class="waterfall-links-grid">
-            <Link
-              v-for="link in chapter.data as Array<{ id: string; label: string; href: string }>"
-              :key="link.id"
-              :id="link.id"
-              :href="link.href"
-              :text="link.label"
-              icon="🔗"
-              size="medium"
-              variant="solid"
-              animation="lift"
-              target="_blank"
-            />
-          </div>
-
-          <!-- 快速导航章节 -->
-          <div v-if="chapter.type === 'tags' && Array.isArray(chapter.data)" class="waterfall-tags-container">
-            <Link
-              v-for="tag in chapter.data as Array<{ id: string; label: string; href: string }>"
-              :key="tag.id"
-              :id="tag.id"
-              :href="tag.href"
-              :text="tag.label"
-              size="medium"
-              variant="gradient"
-              :gradient-colors="['#1677ff', '#69b1ff']"
-              rounded="pill"
-              animation="glow"
-              target="_blank"
-            />
-          </div>
-
-          <!-- 学习进度章节 -->
-          <div v-if="chapter.type === 'progress' && Array.isArray(chapter.data)" class="waterfall-progress-container">
-            <div
-              v-for="p in chapter.data as Array<{ id: string; label: string; value: number }>"
-              :key="p.id"
-              :id="p.id"
-              class="waterfall-progress-item"
-            >
-              <div class="progress-header">
-                <span class="progress-label">{{ p.label }}</span>
-                <span class="progress-value">{{ p.value }}%</span>
-              </div>
-              <div class="progress-bar-wrapper">
-                <div class="progress-bar-fill" :style="{ width: p.value + '%' }"></div>
-              </div>
-            </div>
-          </div>
-
-          <!-- 温馨提示章节 -->
-          <div v-if="chapter.type === 'tips' && Array.isArray(chapter.data)" class="waterfall-tips-list">
-            <div v-for="tip in chapter.data as Array<{ id: string; text: string }>" :key="tip.id" :id="tip.id" class="waterfall-tip-item">
-              <span class="tip-icon">💡</span>
-              <p>{{ tip.text }}</p>
-            </div>
-          </div>
-          </div>
-        </section>
-      </div>
-      <!-- 传统单列布局 -->
-      <template v-else>
-        <section
-          v-for="chapter in waterfallChapters"
-          :key="chapter.id"
-          :id="chapter.id"
-          class="waterfall-section"
-        >
+      <div v-if="currentConfig.layoutType === 'two-column'" class="waterfall-columns-layout">
+        <section v-for="chapter in waterfallChapters" :key="chapter.id" :id="chapter.id"
+          class="waterfall-column-section">
           <h2 class="waterfall-section-title">{{ chapter.title }}</h2>
           <div class="waterfall-section-body">
             <!-- 学习计划章节 -->
             <div v-if="chapter.type === 'plan' && Array.isArray(chapter.data)" class="waterfall-plan-list">
-              <div
-                v-for="item in chapter.data as Array<{ id: string; time: string; name: string; desc: string }>"
-                :key="item.id"
-                :id="item.id"
-                class="waterfall-plan-item"
-              >
+              <div v-for="item in chapter.data as Array<{ id: string; time: string; name: string; desc: string }>"
+                :key="item.id" :id="item.id" class="waterfall-plan-item">
                 <div class="plan-time-badge">{{ item.time }}</div>
                 <div class="plan-content-wrapper">
                   <h3 class="plan-name-title">{{ item.name }}</h3>
@@ -358,12 +197,8 @@ type ReadonlyUser = Readonly<User>`"
 
             <!-- 要点列表章节 -->
             <div v-if="chapter.type === 'points' && Array.isArray(chapter.data)" class="waterfall-points-grid">
-              <div
-                v-for="point in chapter.data as Array<{ id: string; title: string; items: string[] }>"
-                :key="point.id"
-                :id="point.id"
-                class="waterfall-point-card"
-              >
+              <div v-for="point in chapter.data as Array<{ id: string; title: string; items: string[] }>"
+                :key="point.id" :id="point.id" class="waterfall-point-card">
                 <div class="point-header">
                   <span class="point-icon">📌</span>
                   <h3 class="point-title">{{ point.title }}</h3>
@@ -376,21 +211,13 @@ type ReadonlyUser = Readonly<User>`"
 
             <!-- 代码示例章节 -->
             <div v-if="chapter.type === 'code' && typeof chapter.data === 'string'">
-              <Code
-                :code="chapter.data"
-                language="ts"
-                :hidden-toolbar="false"
-              />
+              <Code :code="chapter.data" language="ts" :hidden-toolbar="false" />
             </div>
 
             <!-- 待办清单章节 -->
             <div v-if="chapter.type === 'todo' && Array.isArray(chapter.data)" class="waterfall-todo-grid">
-              <label
-                v-for="todo in chapter.data as Array<{ id: string; text: string; done: boolean }>"
-                :key="todo.id"
-                :id="todo.id"
-                class="waterfall-todo-item"
-              >
+              <label v-for="todo in chapter.data as Array<{ id: string; text: string; done: boolean }>" :key="todo.id"
+                :id="todo.id" class="waterfall-todo-item">
                 <input type="checkbox" v-model="todo.done" />
                 <span :class="{ done: todo.done }">{{ todo.text }}</span>
               </label>
@@ -398,45 +225,22 @@ type ReadonlyUser = Readonly<User>`"
 
             <!-- 相关链接章节 -->
             <div v-if="chapter.type === 'links' && Array.isArray(chapter.data)" class="waterfall-links-grid">
-              <Link
-                v-for="link in chapter.data as Array<{ id: string; label: string; href: string }>"
-                :key="link.id"
-                :id="link.id"
-                :href="link.href"
-                :text="link.label"
-                icon="🔗"
-                size="medium"
-                variant="solid"
-                animation="lift"
-                target="_blank"
-              />
+              <Link v-for="link in chapter.data as Array<{ id: string; label: string; href: string }>" :key="link.id"
+                :id="link.id" :href="link.href" :text="link.label" icon="🔗" size="medium" variant="solid"
+                animation="lift" target="_blank" />
             </div>
 
             <!-- 快速导航章节 -->
             <div v-if="chapter.type === 'tags' && Array.isArray(chapter.data)" class="waterfall-tags-container">
-              <Link
-                v-for="tag in chapter.data as Array<{ id: string; label: string; href: string }>"
-                :key="tag.id"
-                :id="tag.id"
-                :href="tag.href"
-                :text="tag.label"
-                size="medium"
-                variant="gradient"
-                :gradient-colors="['#1677ff', '#69b1ff']"
-                rounded="pill"
-                animation="glow"
-                target="_blank"
-              />
+              <Link v-for="tag in chapter.data as Array<{ id: string; label: string; href: string }>" :key="tag.id"
+                :id="tag.id" :href="tag.href" :text="tag.label" size="medium" variant="gradient"
+                :gradient-colors="['#1677ff', '#69b1ff']" rounded="pill" animation="glow" target="_blank" />
             </div>
 
             <!-- 学习进度章节 -->
             <div v-if="chapter.type === 'progress' && Array.isArray(chapter.data)" class="waterfall-progress-container">
-              <div
-                v-for="p in chapter.data as Array<{ id: string; label: string; value: number }>"
-                :key="p.id"
-                :id="p.id"
-                class="waterfall-progress-item"
-              >
+              <div v-for="p in chapter.data as Array<{ id: string; label: string; value: number }>" :key="p.id"
+                :id="p.id" class="waterfall-progress-item">
                 <div class="progress-header">
                   <span class="progress-label">{{ p.label }}</span>
                   <span class="progress-value">{{ p.value }}%</span>
@@ -449,7 +253,92 @@ type ReadonlyUser = Readonly<User>`"
 
             <!-- 温馨提示章节 -->
             <div v-if="chapter.type === 'tips' && Array.isArray(chapter.data)" class="waterfall-tips-list">
-              <div v-for="tip in chapter.data as Array<{ id: string; text: string }>" :key="tip.id" :id="tip.id" class="waterfall-tip-item">
+              <div v-for="tip in chapter.data as Array<{ id: string; text: string }>" :key="tip.id" :id="tip.id"
+                class="waterfall-tip-item">
+                <span class="tip-icon">💡</span>
+                <p>{{ tip.text }}</p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+      <!-- 传统单列布局 -->
+      <template v-else>
+        <section v-for="chapter in waterfallChapters" :key="chapter.id" :id="chapter.id" class="waterfall-section">
+          <h2 class="waterfall-section-title">{{ chapter.title }}</h2>
+          <div class="waterfall-section-body">
+            <!-- 学习计划章节 -->
+            <div v-if="chapter.type === 'plan' && Array.isArray(chapter.data)" class="waterfall-plan-list">
+              <div v-for="item in chapter.data as Array<{ id: string; time: string; name: string; desc: string }>"
+                :key="item.id" :id="item.id" class="waterfall-plan-item">
+                <div class="plan-time-badge">{{ item.time }}</div>
+                <div class="plan-content-wrapper">
+                  <h3 class="plan-name-title">{{ item.name }}</h3>
+                  <p class="plan-desc-text">{{ item.desc }}</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- 要点列表章节 -->
+            <div v-if="chapter.type === 'points' && Array.isArray(chapter.data)" class="waterfall-points-grid">
+              <div v-for="point in chapter.data as Array<{ id: string; title: string; items: string[] }>"
+                :key="point.id" :id="point.id" class="waterfall-point-card">
+                <div class="point-header">
+                  <span class="point-icon">📌</span>
+                  <h3 class="point-title">{{ point.title }}</h3>
+                </div>
+                <ul class="point-items">
+                  <li v-for="(item, i) in point.items" :key="i">{{ item }}</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- 代码示例章节 -->
+            <div v-if="chapter.type === 'code' && typeof chapter.data === 'string'">
+              <Code :code="chapter.data" language="ts" :hidden-toolbar="false" />
+            </div>
+
+            <!-- 待办清单章节 -->
+            <div v-if="chapter.type === 'todo' && Array.isArray(chapter.data)" class="waterfall-todo-grid">
+              <label v-for="todo in chapter.data as Array<{ id: string; text: string; done: boolean }>" :key="todo.id"
+                :id="todo.id" class="waterfall-todo-item">
+                <input type="checkbox" v-model="todo.done" />
+                <span :class="{ done: todo.done }">{{ todo.text }}</span>
+              </label>
+            </div>
+
+            <!-- 相关链接章节 -->
+            <div v-if="chapter.type === 'links' && Array.isArray(chapter.data)" class="waterfall-links-grid">
+              <Link v-for="link in chapter.data as Array<{ id: string; label: string; href: string }>" :key="link.id"
+                :id="link.id" :href="link.href" :text="link.label" icon="🔗" size="medium" variant="solid"
+                animation="lift" target="_blank" />
+            </div>
+
+            <!-- 快速导航章节 -->
+            <div v-if="chapter.type === 'tags' && Array.isArray(chapter.data)" class="waterfall-tags-container">
+              <Link v-for="tag in chapter.data as Array<{ id: string; label: string; href: string }>" :key="tag.id"
+                :id="tag.id" :href="tag.href" :text="tag.label" size="medium" variant="gradient"
+                :gradient-colors="['#1677ff', '#69b1ff']" rounded="pill" animation="glow" target="_blank" />
+            </div>
+
+            <!-- 学习进度章节 -->
+            <div v-if="chapter.type === 'progress' && Array.isArray(chapter.data)" class="waterfall-progress-container">
+              <div v-for="p in chapter.data as Array<{ id: string; label: string; value: number }>" :key="p.id"
+                :id="p.id" class="waterfall-progress-item">
+                <div class="progress-header">
+                  <span class="progress-label">{{ p.label }}</span>
+                  <span class="progress-value">{{ p.value }}%</span>
+                </div>
+                <div class="progress-bar-wrapper">
+                  <div class="progress-bar-fill" :style="{ width: p.value + '%' }"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 温馨提示章节 -->
+            <div v-if="chapter.type === 'tips' && Array.isArray(chapter.data)" class="waterfall-tips-list">
+              <div v-for="tip in chapter.data as Array<{ id: string; text: string }>" :key="tip.id" :id="tip.id"
+                class="waterfall-tip-item">
                 <span class="tip-icon">💡</span>
                 <p>{{ tip.text }}</p>
               </div>
@@ -461,31 +350,19 @@ type ReadonlyUser = Readonly<User>`"
 
     <!-- 列表模式：分类内容 -->
     <div v-if="currentMode === 'list'">
-      <section
-        v-for="category in categoryList"
-        :key="category.id"
-        :id="category.id"
-        class="category-section"
-      >
+      <section v-for="category in categoryList" :key="category.id" :id="category.id" class="category-section">
         <h2 class="category-title">{{ category.name }}</h2>
         <!-- 多列网格布局（类似 BasicType.vue） -->
-        <div
-          v-if="currentConfig.layoutType === 'multi-column'"
-          class="type-grid-container"
-        >
-          <div
-            v-for="(item, index) in category.children"
-            :key="item.id"
-            :id="item.id"
-            class="type-grid-item"
-          >
+        <div v-if="currentConfig.layoutType === 'multi-column'" class="type-grid-container">
+          <div v-for="(item, index) in category.children" :key="item.id" :id="item.id" class="type-grid-item">
             <div class="tip-header">
               <span class="tip-index">#{{ index + 1 }}</span>
               <h3>{{ item.name }}</h3>
             </div>
             <p v-if="'description' in item && item.description" class="tip-desc">{{ item.description }}</p>
             <div v-if="item.type === 'plan' && Array.isArray(item.data)" class="plan-list">
-              <div v-for="plan in item.data as Array<{ id: string; time: string; name: string; desc: string }>" :key="plan.id" :id="plan.id" class="plan-item">
+              <div v-for="plan in item.data as Array<{ id: string; time: string; name: string; desc: string }>"
+                :key="plan.id" :id="plan.id" class="plan-item">
                 <span class="plan-time">{{ plan.time }}</span>
                 <div class="plan-content">
                   <div class="plan-name">{{ plan.name }}</div>
@@ -496,48 +373,26 @@ type ReadonlyUser = Readonly<User>`"
             <ul v-if="item.type === 'list' && Array.isArray(item.data)" class="bullet-list">
               <li v-for="(line, i) in item.data as string[]" :key="i">{{ line }}</li>
             </ul>
-            <Code
-              v-if="item.type === 'code' && typeof item.data === 'string'"
-              :code="item.data"
-              language="ts"
-              :hidden-toolbar="false"
-            />
+            <Code v-if="item.type === 'code' && typeof item.data === 'string'" :code="item.data" language="ts"
+              :hidden-toolbar="false" />
             <div v-if="item.type === 'todo' && Array.isArray(item.data)" class="todo-list">
-              <label v-for="todo in item.data as Array<{ id: string; text: string; done: boolean }>" :key="todo.id" :id="todo.id" class="todo-item">
+              <label v-for="todo in item.data as Array<{ id: string; text: string; done: boolean }>" :key="todo.id"
+                :id="todo.id" class="todo-item">
                 <input type="checkbox" v-model="todo.done" />
                 <span :class="{ done: todo.done }">{{ todo.text }}</span>
               </label>
             </div>
             <nav v-if="item.type === 'links' && Array.isArray(item.data)" class="link-list">
-              <Link
-                v-for="link in item.data as Array<{ id: string; label: string; href: string }>"
-                :key="link.id"
-                :id="link.id"
-                :href="link.href"
-                :text="link.label"
-                size="small"
-                variant="solid"
-                animation="lift"
-                target="_blank"
-              />
+              <Link v-for="link in item.data as Array<{ id: string; label: string; href: string }>" :key="link.id"
+                :id="link.id" size="small" />
             </nav>
             <div v-if="item.type === 'tags' && Array.isArray(item.data)" class="chip-list">
-              <Link
-                v-for="tag in item.data as Array<{ id: string; label: string; href: string }>"
-                :key="tag.id"
-                :id="tag.id"
-                :href="tag.href"
-                :text="tag.label"
-                size="small"
-                variant="gradient"
-                :gradient-colors="['#1677ff', '#69b1ff']"
-                rounded="pill"
-                animation="scale"
-                target="_blank"
-              />
+              <Link v-for="tag in item.data as Array<{ id: string; label: string; href: string }>" :key="tag.id"
+                :id="tag.id" :href="tag.href" :text="tag.label" size="small" />
             </div>
             <div v-if="item.type === 'progress' && Array.isArray(item.data)" class="progress-list">
-              <div v-for="p in item.data as Array<{ id: string; label: string; value: number }>" :key="p.id" :id="p.id" class="progress-item">
+              <div v-for="p in item.data as Array<{ id: string; label: string; value: number }>" :key="p.id" :id="p.id"
+                class="progress-item">
                 <div class="progress-meta">
                   <span class="name">{{ p.label }}</span>
                   <span class="val">{{ p.value }}%</span>
@@ -548,28 +403,23 @@ type ReadonlyUser = Readonly<User>`"
               </div>
             </div>
             <ul v-if="item.type === 'tips' && Array.isArray(item.data)" class="tip-list">
-              <li v-for="tip in item.data as Array<{ id: string; text: string }>" :key="tip.id" :id="tip.id">{{ tip.text }}</li>
+              <li v-for="tip in item.data as Array<{ id: string; text: string }>" :key="tip.id" :id="tip.id">{{ tip.text
+                }}
+              </li>
             </ul>
           </div>
         </div>
         <!-- 传统网格布局 -->
-        <div
-          v-else
-          class="tips-grid"
-        >
-          <div
-            v-for="(item, index) in category.children"
-            :key="item.id"
-            :id="item.id"
-            class="tip-card"
-          >
+        <div v-else class="tips-grid">
+          <div v-for="(item, index) in category.children" :key="item.id" :id="item.id" class="tip-card">
             <div class="tip-header">
               <span class="tip-index">#{{ index + 1 }}</span>
               <h3>{{ item.name }}</h3>
             </div>
             <p v-if="'description' in item && item.description" class="tip-desc">{{ item.description }}</p>
             <div v-if="item.type === 'plan' && Array.isArray(item.data)" class="plan-list">
-              <div v-for="plan in item.data as Array<{ id: string; time: string; name: string; desc: string }>" :key="plan.id" :id="plan.id" class="plan-item">
+              <div v-for="plan in item.data as Array<{ id: string; time: string; name: string; desc: string }>"
+                :key="plan.id" :id="plan.id" class="plan-item">
                 <span class="plan-time">{{ plan.time }}</span>
                 <div class="plan-content">
                   <div class="plan-name">{{ plan.name }}</div>
@@ -580,48 +430,26 @@ type ReadonlyUser = Readonly<User>`"
             <ul v-if="item.type === 'list' && Array.isArray(item.data)" class="bullet-list">
               <li v-for="(line, i) in item.data as string[]" :key="i">{{ line }}</li>
             </ul>
-            <Code
-              v-if="item.type === 'code' && typeof item.data === 'string'"
-              :code="item.data"
-              language="ts"
-              :hidden-toolbar="false"
-            />
+            <Code v-if="item.type === 'code' && typeof item.data === 'string'" :code="item.data" language="ts"
+              :hidden-toolbar="false" />
             <div v-if="item.type === 'todo' && Array.isArray(item.data)" class="todo-list">
-              <label v-for="todo in item.data as Array<{ id: string; text: string; done: boolean }>" :key="todo.id" :id="todo.id" class="todo-item">
+              <label v-for="todo in item.data as Array<{ id: string; text: string; done: boolean }>" :key="todo.id"
+                :id="todo.id" class="todo-item">
                 <input type="checkbox" v-model="todo.done" />
                 <span :class="{ done: todo.done }">{{ todo.text }}</span>
               </label>
             </div>
             <nav v-if="item.type === 'links' && Array.isArray(item.data)" class="link-list">
-              <Link
-                v-for="link in item.data as Array<{ id: string; label: string; href: string }>"
-                :key="link.id"
-                :id="link.id"
-                :href="link.href"
-                :text="link.label"
-                size="small"
-                variant="solid"
-                animation="lift"
-                target="_blank"
-              />
+              <Link v-for="link in item.data as Array<{ id: string; label: string; href: string }>" :key="link.id"
+                :id="link.id" :text="link.label" size="small" />
             </nav>
             <div v-if="item.type === 'tags' && Array.isArray(item.data)" class="chip-list">
-              <Link
-                v-for="tag in item.data as Array<{ id: string; label: string; href: string }>"
-                :key="tag.id"
-                :id="tag.id"
-                :href="tag.href"
-                :text="tag.label"
-                size="small"
-                variant="gradient"
-                :gradient-colors="['#1677ff', '#69b1ff']"
-                rounded="pill"
-                animation="scale"
-                target="_blank"
-              />
+              <Link v-for="tag in item.data as Array<{ id: string; label: string; href: string }>" :key="tag.id"
+                :id="tag.id" :text="tag.label" size="small" />
             </div>
             <div v-if="item.type === 'progress' && Array.isArray(item.data)" class="progress-list">
-              <div v-for="p in item.data as Array<{ id: string; label: string; value: number }>" :key="p.id" :id="p.id" class="progress-item">
+              <div v-for="p in item.data as Array<{ id: string; label: string; value: number }>" :key="p.id" :id="p.id"
+                class="progress-item">
                 <div class="progress-meta">
                   <span class="name">{{ p.label }}</span>
                   <span class="val">{{ p.value }}%</span>
@@ -632,7 +460,9 @@ type ReadonlyUser = Readonly<User>`"
               </div>
             </div>
             <ul v-if="item.type === 'tips' && Array.isArray(item.data)" class="tip-list">
-              <li v-for="tip in item.data as Array<{ id: string; text: string }>" :key="tip.id" :id="tip.id">{{ tip.text }}</li>
+              <li v-for="tip in item.data as Array<{ id: string; text: string }>" :key="tip.id" :id="tip.id">{{ tip.text
+                }}
+              </li>
             </ul>
           </div>
         </div>
@@ -679,8 +509,7 @@ type ReadonlyUser = Readonly<User>`"
         <div class="waterfall-section">
           <h2 class="waterfall-section-title">💻 代码示例</h2>
           <div class="waterfall-section-body">
-            <Code
-              :code="`// TypeScript 基础类型
+            <Code :code="`// TypeScript 基础类型
 let age: number = 18
 let username: string = 'cascade'
 let isOk: boolean = true
@@ -690,10 +519,7 @@ interface User { id: number; name: string }
 type ID = User['id']
 
 // 内置工具类型
-type ReadonlyUser = Readonly<User>`"
-              language="ts"
-              :hidden-toolbar="false"
-            />
+type ReadonlyUser = Readonly<User>`" language="ts" :hidden-toolbar="false" />
           </div>
         </div>
       </section>
@@ -728,17 +554,8 @@ type ReadonlyUser = Readonly<User>`"
             </template>
             <template #body>
               <nav class="link-list">
-                <Link
-                  v-for="link in links"
-                  :key="link.id"
-                  :id="link.id"
-                  :href="link.href"
-                  :text="link.label"
-                  size="small"
-                  variant="solid"
-                  animation="lift"
-                  target="_blank"
-                />
+                <Link v-for="link in links" :key="link.id" :id="link.id" :href="link.href" :text="link.label"
+                  size="small" variant="solid" animation="lift" target="_blank" />
               </nav>
             </template>
           </Card>
@@ -748,16 +565,11 @@ type ReadonlyUser = Readonly<User>`"
               <div class="card-title">🚀 快速导航</div>
             </template>
             <template #body>
-              <NavTagCard
-                :items="tags.map(t => ({ id: t.id, title: t.label }))"
-                size="medium"
-                variant="gradient"
-                :background-colors="['#1677ff', '#69b1ff']"
-                rounded="md"
+              <NavTagCard :items="tags.map(t => ({ id: t.id, title: t.label }))" size="medium" variant="gradient"
+                :background-colors="['#1677ff', '#69b1ff']" rounded="md"
                 :animation="(componentsConfig.navTagCard?.animation as any) || 'lift'"
                 :direction="(componentsConfig.navTagCard?.direction as any) || 'horizontal'"
-                :enable-scroll="componentsConfig.navTagCard?.mode === 'scroll'"
-              />
+                :enable-scroll="componentsConfig.navTagCard?.mode === 'scroll'" />
             </template>
           </Card>
         </div>
@@ -769,12 +581,7 @@ type ReadonlyUser = Readonly<User>`"
           <h2 class="waterfall-section-title">📊 学习进度</h2>
           <div class="waterfall-section-body">
             <div class="waterfall-progress-container">
-              <div
-                v-for="p in progresses"
-                :key="p.id"
-                :id="p.id"
-                class="waterfall-progress-item"
-              >
+              <div v-for="p in progresses" :key="p.id" :id="p.id" class="waterfall-progress-item">
                 <div class="progress-header">
                   <span class="progress-label">{{ p.label }}</span>
                   <span class="progress-value">{{ p.value }}%</span>
@@ -805,12 +612,7 @@ type ReadonlyUser = Readonly<User>`"
         <div class="category-section">
           <h2 class="category-title">📚 要点总结</h2>
           <div class="tips-grid">
-            <div
-              v-for="(card, idx) in smallCards"
-              :key="card.id"
-              :id="card.id"
-              class="tip-card"
-            >
+            <div v-for="(card, idx) in smallCards" :key="card.id" :id="card.id" class="tip-card">
               <div class="tip-header">
                 <span class="tip-index">#{{ idx + 1 }}</span>
                 <h3>{{ card.title }}</h3>

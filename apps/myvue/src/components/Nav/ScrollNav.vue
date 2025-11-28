@@ -20,37 +20,38 @@
       </button>
     </header>
 
-      <ul v-show="isOpen" class="scroll-nav__list" role="menu">
-        <li v-if="showBackToTop" class="scroll-nav__item scroll-nav__item--action" role="menuitem" @click="scrollToTop">
-          回到顶部
-        </li>
+    <ul class="scroll-nav__list" ref="scrollNavList" role="menu">
+      <li v-if="showBackToTop" class="scroll-nav__item scroll-nav__item--action" role="menuitem" @click="scrollToTop">
+        回到顶部
+      </li>
 
-        <li v-for="item in mappedList" :key="item.id" class="scroll-nav__item" role="presentation">
-          <button class="scroll-nav__item-btn" :class="[currentItem?.id === item.id ? 'scroll-nav__item--active' : '']"
-            type="button" role="menuitem" :title="item.title" @click="handleScroll($event, item.id)">
-            <span class="scroll-nav__item-text">{{ item.title }}</span>
-          </button>
+      <li v-for="item in mappedList" :key="item.id" class="scroll-nav__item" role="presentation">
+        <button class="scroll-nav__item-btn" :class="[currentItem?.id === item.id ? 'scroll-nav__item--active' : '']"
+          type="button" role="menuitem" :title="item.title" @click="handleScroll($event, item.id)">
+          <span class="scroll-nav__item-text">{{ item.title }}</span>
+        </button>
 
 
-          <ul v-if="showChild && item.children && item.children.length" class="scroll-nav__children">
-            <li v-for="child in item.children" :key="child.id" class="scroll-nav__item scroll-nav__item--child"
-              role="presentation">
-              <button class="scroll-nav__item-btn"
-                :class="[currentItem?.id === child.id ? 'scroll-nav__item--active' : '']" type="button" role="menuitem"
-                :title="child.title" @click="handleScroll($event, child.id)">
-                <span class="scroll-nav__item-text">{{ child.title }}</span>
-              </button>
-            </li>
-          </ul>
+        <ul v-if="showChild && item.children && item.children.length" class="scroll-nav__children">
+          <li v-for="child in item.children" :key="child.id" class="scroll-nav__item scroll-nav__item--child"
+            role="presentation">
+            <button class="scroll-nav__item-btn"
+              :class="[currentItem?.id === child.id ? 'scroll-nav__item--active' : '']" type="button" role="menuitem"
+              :title="child.title" @click="handleScroll($event, child.id)">
+              <span class="scroll-nav__item-text">{{ child.title }}</span>
+            </button>
+          </li>
+        </ul>
 
-        </li>
-      </ul>
+      </li>
+    </ul>
   </nav>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref, type CSSProperties, type PropType } from 'vue'
+import { computed, onMounted, ref, watch, type CSSProperties, type PropType } from 'vue'
 import { useUserStore } from '@/stores/user'
+import { animateHeight, calculateAnimationDuration } from '@/Function/CommonFun'
 
 interface Item {
   title?: string
@@ -143,9 +144,34 @@ const props = defineProps({
 const store = useUserStore()
 const prefersOpen = computed(() => !store?.user?.device?.isMobile)
 const isOpen = ref(prefersOpen.value)
+const scrollNavList = ref<HTMLElement | null>(null)
 
 onMounted(() => {
-  isOpen.value = prefersOpen.value
+  if (scrollNavList.value && !isOpen.value) {
+    scrollNavList.value.style.height = '0px';
+    scrollNavList.value.style.opacity = '0';
+    scrollNavList.value.style.display = 'none';
+  }
+})
+
+const totalItemCount = computed(() => {
+  const countItems = (items: Item[]): number => {
+    let count = items.length;
+    for (const item of items) {
+      if (item.children && item.children.length > 0) {
+        count += countItems(item.children);
+      }
+    }
+    return count;
+  };
+  return countItems(props.list);
+});
+
+watch(isOpen, (newVal) => {
+  if (scrollNavList.value) {
+    const duration = calculateAnimationDuration(totalItemCount.value);
+    animateHeight(scrollNavList.value, newVal, duration);
+  }
 })
 
 const toggleFold = () => {
@@ -420,9 +446,14 @@ const getCurrentItem = (list: Item[], id: string): Item | null => {
 }
 
 .scroll-nav__item--active {
-  color: var(--color-highlight-text);
-  background-color: var(--color-highlight-bg);
+
   transform: translateX(2px);
+  background: var(--color-highlight-bg);
+
+  .scroll-nav__item-text {
+    background: var(--color-highlight-bg);
+    color: var(--color-highlight-text);
+  }
 }
 
 .scroll-nav__item-text {
@@ -453,9 +484,10 @@ const getCurrentItem = (list: Item[], id: string): Item | null => {
 
 @media (max-width: 768px) {
   .scroll-nav {
-    position: static;
+    position: sticky;
     width: 100%;
     margin: 1rem 0;
+    top: 0;
   }
 }
 </style>

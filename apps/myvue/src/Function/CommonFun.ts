@@ -46,6 +46,7 @@ export function animateHeight(element: HTMLElement, isOpening: boolean, duration
   if (duration <= 0) {
     element.style.height = isOpening ? 'auto' : '0px';
     element.style.opacity = isOpening ? '1' : '0';
+    element.style.display = isOpening ? '' : 'none';
     return;
   }
 
@@ -53,6 +54,7 @@ export function animateHeight(element: HTMLElement, isOpening: boolean, duration
 
   if (isOpening) {
     // 展开
+    element.style.display = ''; // Ensure element is visible before animation
     element.style.height = 'auto';
     if (isVertical) {
       element.style.width = 'auto';
@@ -127,9 +129,28 @@ export function animateHeight(element: HTMLElement, isOpening: boolean, duration
 
     animation.onfinish = () => {
       element.style.height = '0px'; // 动画结束后设置为 0
+      element.style.display = 'none'; // Hide element after animation
       if (isVertical) {
         element.style.width = '0px';
       }
     };
   }
+}
+
+/**
+ * 根据列表项数量计算动画时间
+ * @param itemCount 列表项数量
+ * @param baseDuration 基础动画时间 (ms)
+ * @param durationPerItem 每个列表项增加的动画时间 (ms)
+ * @param maxDuration 最大动画时间 (ms)
+ * @returns 计算后的动画时间 (ms)
+ */
+export function calculateAnimationDuration(
+  itemCount: number,
+  baseDuration = 150,
+  durationPerItem = 25,
+  maxDuration = 800
+): number {
+  const duration = baseDuration + itemCount * durationPerItem;
+  return Math.min(duration, maxDuration);
 }

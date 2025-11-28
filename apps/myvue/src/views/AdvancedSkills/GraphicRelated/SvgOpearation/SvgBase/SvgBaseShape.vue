@@ -97,7 +97,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Button } from 'ant-design-vue'
+import { Button } from '@/components'
 import { Modal, Form } from 'ant-design-vue'
 
 type ControlUnit = {

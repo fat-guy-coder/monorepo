@@ -7,25 +7,16 @@
       <section class="stage-details-section">
         <h2 class="section-title">学习路线</h2>
         <div class="stage-tabs">
-          <button
-            v-for="stage in learningStages"
-            :key="stage.id"
-            class="stage-tab"
-            :class="{ active: activeStage === stage.id }"
-            @click="setActiveStage(stage.id)"
-          >
+          <button v-for="stage in learningStages" :key="stage.id" class="stage-tab"
+            :class="{ active: activeStage === stage.id }" @click="setActiveStage(stage.id)">
             <span class="tab-number">{{ stage.order }}</span>
             {{ stage.shortTitle }}
           </button>
         </div>
 
         <div class="stage-content-container">
-          <div
-            v-for="stage in learningStages"
-            :key="stage.id"
-            v-show="activeStage === stage.id"
-            class="stage-detail-content"
-          >
+          <div v-for="stage in learningStages" :key="stage.id" v-show="activeStage === stage.id"
+            class="stage-detail-content">
             <div class="stage-header">
               <h3>{{ stage.title }}</h3>
               <div class="stage-meta">
@@ -45,16 +36,14 @@
             </div>
 
             <div class="learning-modules">
-              <div
-                v-for="module in stage.modules"
-                :key="module.id"
-                class="learning-module"
-                :class="{ completed: module.completed }"
-              >
+              <div v-for="module in stage.modules" :key="module.id" class="learning-module"
+                :class="{ completed: module.completed }">
                 <div class="module-header">
                   <div class="module-icon">{{ module.icon }}</div>
                   <div class="module-info">
-                    <h4><a @click="gotoTopic(module.route)">{{ module.title }}</a></h4>
+                    <h4>
+                      <Link :route="module.route" >{{ module.title }}</Link>
+                    </h4>
                     <p class="module-desc">{{ module.description }}</p>
                   </div>
                   <div class="module-status">
@@ -69,8 +58,8 @@
                   <div class="topics-section">
                     <h5>学习要点</h5>
                     <div class="topics-grid">
-                      <div v-for="topic in module.topics" :key="topic.route" class="topic-item" @click="gotoTopic(topic.route)">
-                        <span class="topic-check">✓</span>
+                      <div v-for="topic in module.topics" :key="topic.route">
+                        <Link :route="topic.route"  class="topic-check">✓</Link>
                         {{ topic.title }}
                       </div>
                     </div>
@@ -79,13 +68,8 @@
                   <div class="resources-section">
                     <h5>其他学习资源</h5>
                     <div class="resources-list">
-                      <a
-                        v-for="resource in module.resources"
-                        :key="resource.name"
-                        :href="resource.url"
-                        target="_blank"
-                        class="resource-link"
-                      >
+                      <a v-for="resource in module.resources" :key="resource.name" :href="resource.url" target="_blank"
+                        class="resource-link">
                         <span class="resource-icon">{{ resource.icon }}</span>
                         <span class="resource-name">{{ resource.name }}</span>
                         <span class="resource-type">{{ resource.type }}</span>
@@ -96,11 +80,7 @@
                   <div class="projects-section" v-if="module.projects">
                     <h5>实践项目</h5>
                     <div class="projects-list">
-                      <div
-                        v-for="project in module.projects"
-                        :key="project.name"
-                        class="project-item"
-                      >
+                      <div v-for="project in module.projects" :key="project.name" class="project-item">
                         <div class="project-icon">{{ project.icon }}</div>
                         <div class="project-info">
                           <strong>{{ project.name }}</strong>
@@ -125,12 +105,8 @@
           <div v-for="category in toolCategories" :key="category.id" class="tool-category">
             <h3>{{ category.name }}</h3>
             <div class="tools-grid">
-              <div
-                v-for="tool in category.tools"
-                :key="tool.name"
-                class="tool-card"
-                :class="{ essential: tool.essential }"
-              >
+              <div v-for="tool in category.tools" :key="tool.name" class="tool-card"
+                :class="{ essential: tool.essential }">
                 <div class="tool-header">
                   <div class="tool-icon">{{ tool.icon }}</div>
                   <div class="tool-info">
@@ -162,7 +138,7 @@
               <div class="skills-list">
                 <span v-for="skill in level.skills" :key="skill" class="skill-tag">{{
                   skill
-                }}</span>
+                  }}</span>
               </div>
             </div>
             <div class="level-responsibilities">
@@ -189,7 +165,7 @@
               <div class="tip-actions">
                 <span v-for="action in tip.actions" :key="action" class="action-tag">{{
                   action
-                }}</span>
+                  }}</span>
               </div>
             </div>
           </div>
@@ -197,9 +173,9 @@
       </section>
       <section class="author-section">
         <div class="author-item"><span>作者</span>:老邓</div>
-      <div class="author-item"><span>邮箱</span>:dldl0830@foxmail.com</div>
-      <div class="author-item"><span>QQ</span>:583486505</div>
-      <div class="author-item"><span>微信</span>:15680690572</div>
+        <div class="author-item"><span>邮箱</span>:dldl0830@foxmail.com</div>
+        <div class="author-item"><span>QQ</span>:583486505</div>
+        <div class="author-item"><span>微信</span>:15680690572</div>
       </section>
     </main>
   </div>
@@ -207,6 +183,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import Link from '@/components/Link/index.vue'
 
 const emit = defineEmits(['goToByRouteName'])
 
@@ -540,7 +517,7 @@ const learningStages = ref([
             route: 'ModularizationOverview'
           },
           {
-            title:  '面向对象编程',
+            title: '面向对象编程',
             route: 'FaceObjectProgramming'
           },
           {
@@ -720,7 +697,7 @@ const learningStages = ref([
             route: 'WebpackBasicKnowledge'
           },
           {
-            title:  'Vite 构建工具',
+            title: 'Vite 构建工具',
             route: 'ViteBasicKnowledge'
           },
           {
@@ -775,7 +752,7 @@ const learningStages = ref([
             route: 'UnitTesting'
           },
           {
-            title:  '组件测试 (Testing Library)',
+            title: '组件测试 (Testing Library)',
             route: 'ComponentTesting'
           },
           {
@@ -1105,8 +1082,7 @@ const setActiveStage = (stageId: string) => {
     left: 0;
     right: 0;
     bottom: 0;
-    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 100" fill="rgba(255,255,255,0.1)"><polygon points="0,0 1000,50 1000,100 0,100"/></svg>')
-      no-repeat;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 100" fill="rgba(255,255,255,0.1)"><polygon points="0,0 1000,50 1000,100 0,100"/></svg>') no-repeat;
     background-size: cover;
   }
 
@@ -1571,6 +1547,7 @@ section {
         background: white;
         border-radius: 8px;
         border-left: 3px solid #10b981;
+
         &:hover {
           background: #f0fdf4;
           border-color: #10b981;
@@ -1981,6 +1958,7 @@ section {
     opacity: 0;
     transform: translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -2038,9 +2016,11 @@ section {
     transform: translateX(-50%);
   }
 }
+
 .author-section {
   display: flex;
   justify-content: space-around;
+
   .author-item {
     margin-bottom: 10px;
   }
