@@ -37,7 +37,7 @@
             </select>
           </div>
           <div class="control-item">
-            <label>圆角半径 {{ borderRadius }} <a-select v-model:value="unit" :options="unitOptions"></a-select> </label>
+            <label>圆角半径 {{ borderRadius }} <select v-model:value="unit" :options="unitOptions"></select> </label>
             <input type="range" v-model="borderRadius" min="0" max="100">
           </div>
         </div>

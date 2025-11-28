@@ -14,8 +14,8 @@
     </div>
 
     <main class="knowledge-grid">
-      <a-spin tip="Loading..." :spinning="loading">
-      </a-spin>
+      <Spin tip="Loading..." :spinning="loading">
+      </Spin>
       <template v-if="!loading">
         <!-- React基础 -->
         <knowledge-section title="React基础核心" icon="📚"
@@ -65,6 +65,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
+import { Spin } from '@/components';
 import KnowledgeSection from './Components/KnowledgeSection.vue';
 
 interface KnowledgeItem {

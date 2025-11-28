@@ -12,25 +12,25 @@
     <div class="filter-controls">
       <div class="filter-group">
         <label>难度筛选:</label>
-        <a-select v-model:value="filterDifficulty" style="width:200px;" @change="filterAlgorithms">
-          <a-select-option :value="'all'">全部</a-select-option>
-          <a-select-option :value="'beginner'">初级</a-select-option>
-          <a-select-option :value="'intermediate'">中级</a-select-option>
-          <a-select-option :value="'advanced'">高级</a-select-option>
-        </a-select>
+        <select v-model:value="filterDifficulty" style="width:200px;" @change="filterAlgorithms">
+          <select-option :value="'all'">全部</select-option>
+          <select-option :value="'beginner'">初级</select-option>
+          <select-option :value="'intermediate'">中级</select-option>
+          <select-option :value="'advanced'">高级</select-option>
+        </select>
       </div>
       <div class="filter-group">
         <label>分类筛选:</label>
-        <a-select v-model:value="filterCategory" style="width:200px;" @change="filterAlgorithms">
+        <select v-model:value="filterCategory" style="width:200px;" @change="filterAlgorithms">
           <option value="all">全部</option>
-          <a-select-option :value="'sorting'">排序算法</a-select-option>
-          <a-select-option :value="'searching'">搜索算法</a-select-option>
-          <a-select-option :value="'graph'">图算法</a-select-option>
-          <a-select-option :value="'dp'">动态规划</a-select-option>
-          <a-select-option :value="'math'">数学算法</a-select-option>
-          <a-select-option :value="'string'">字符串算法</a-select-option>
-          <a-select-option :value="'other'">其他算法</a-select-option>
-        </a-select>
+          <select-option :value="'sorting'">排序算法</select-option>
+          <select-option :value="'searching'">搜索算法</select-option>
+          <select-option :value="'graph'">图算法</select-option>
+          <select-option :value="'dp'">动态规划</select-option>
+          <select-option :value="'math'">数学算法</select-option>
+          <select-option :value="'string'">字符串算法</select-option>
+          <select-option :value="'other'">其他算法</select-option>
+        </select>
       </div>
     </div>
 
