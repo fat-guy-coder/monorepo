@@ -158,6 +158,7 @@ defineExpose({ scrollToTarget })
   flex-wrap: wrap;
   align-items: center;
   gap: var(--gap-md);
+  padding: clamp(12px, 3.5vw, 24px);
 }
 
 .nav-tag-card--vertical {

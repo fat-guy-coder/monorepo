@@ -14,34 +14,6 @@
         </p>
       </div>
     </header>
-    <!-- Section：彩色标签 / 快速导航 -->
-    <section class="section-wrap">
-      <Card class="section-card" :hoverable="true">
-        <template #title>
-          <div class="section-title">专题 · 快速导航</div>
-        </template>
-        <template #body>
-          <NavTagCard :items="tags.map(t => ({ id: t.id, title: t.label }))" size="medium" variant="gradient"
-            :background-colors="['#1677ff', '#69b1ff']" rounded="md"
-            :direction="(componentsConfig.navTagCard?.direction as any) || 'horizontal'"
-            :enable-scroll="componentsConfig.navTagCard?.mode === 'scroll'">
-            <template #[i.id] v-for="i in tags">
-              <Card class="section-card" :hoverable="true">
-                <template #title>
-                  <div class="section-title">{{ i.label }}</div>
-                </template>
-                <template #body>
-                  <ul class="tip-list">
-                    <li v-for="tip in tips" :key="tip.id" :id="tip.id">{{ tip.text }}</li>
-                  </ul>
-                </template>
-              </Card>
-            </template>
-          </NavTagCard>
-        </template>
-      </Card>
-    </section>
-
 
     <!-- 列表模式和混合模式：导航 -->
     <Nav v-if="currentMode === 'list'" :list="categoryList" show-child />
@@ -195,7 +167,7 @@ type ReadonlyUser = Readonly<User>`" language="ts" title="类型系统示例" />
                 <ul v-if="item.type === 'tips' && Array.isArray(item.data)" class="tip-list">
                   <li v-for="tip in item.data as Array<{ id: string; text: string }>" :key="tip.id" :id="tip.id">{{
                     tip.text
-                    }}
+                  }}
                   </li>
                 </ul>
               </div>
@@ -253,7 +225,7 @@ type ReadonlyUser = Readonly<User>`" language="ts" title="类型系统示例" />
                 <ul v-if="item.type === 'tips' && Array.isArray(item.data)" class="tip-list">
                   <li v-for="tip in item.data as Array<{ id: string; text: string }>" :key="tip.id" :id="tip.id">{{
                     tip.text
-                    }}
+                  }}
                   </li>
                 </ul>
               </div>
@@ -597,7 +569,33 @@ type ReadonlyUser = Readonly<User>`" language="ts" title="类型系统示例" />
       </template>
     </NavTagCard>
 
-
+    <!-- Section：彩色标签 / 快速导航 -->
+    <section class="section-wrap">
+      <Card class="section-card" :hoverable="true">
+        <template #title>
+          <div class="section-title">专题 · 快速导航</div>
+        </template>
+        <template #body>
+          <NavTagCard :items="tags.map(t => ({ id: t.id, title: t.label }))" size="medium" variant="gradient"
+            :background-colors="['#1677ff', '#69b1ff']" rounded="md"
+            :direction="(componentsConfig.navTagCard?.direction as any) || 'horizontal'"
+            :enable-scroll="componentsConfig.navTagCard?.mode === 'scroll'">
+            <template #[i.id] v-for="i in tags">
+              <Card class="section-card" :hoverable="true">
+                <template #title>
+                  <div class="section-title">{{ i.label }}</div>
+                </template>
+                <template #body>
+                  <ul class="tip-list">
+                    <li v-for="tip in tips" :key="tip.id" :id="tip.id">{{ tip.text }}</li>
+                  </ul>
+                </template>
+              </Card>
+            </template>
+          </NavTagCard>
+        </template>
+      </Card>
+    </section>
     <!-- Section：学习进度 / 可视化条 -->
     <section class="section-wrap">
       <Card class="section-card" :hoverable="true">
