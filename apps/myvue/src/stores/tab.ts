@@ -4,7 +4,7 @@ import { defineStore } from 'pinia'
 export type Tab = {
   name: string //路由name
   path: string //路由path
-  label?: string //标签名
+  label: string //标签名
   scrollTop?: number //滚动位置
 }
 

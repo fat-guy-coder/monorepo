@@ -8,34 +8,24 @@
     <div @click.stop="closeSide(currentIndex, 'right', currentKey)">关闭右侧</div>
     <div @click.stop="closeAll(currentKey)">关闭其他</div>
   </div>
-  <Tabs @change="TabClick" :modelValue="activeKey" hide-add size="small" type="editable-card"
-    :tabBarStyle="{ margin: '0 5px' }">
-    <TabPane v-for="(pane, index) in tabList" :key="pane.path" :closable="pane.path !== '/' && pane.path !== '/home'">
-      <div @click.right.prevent.stop="openMenu(pane.path, $event, index)" :data-id="pane.path" class="tab-item"
-        :draggable="pane.path !== '/'" @dragstart="startSorting(index, pane.path)"
-        @dragover="handleSortOver(index, $event, pane.path)" @dragenter.prevent @dragend="endSorting(pane.path)"
-        >
-        {{ pane.label }}
-      </div>
+  <Tabs @change="TabClick" :activeKey="activeKey" type="editable-card" :tabBarStyle="{ margin: '0 5px' }">
+    <TabPane v-for="(pane, index) in tabList" :key="pane.path" :closable="pane.path !== '/' && pane.path !== '/home'"
+      :path="pane.path">
+      <template #tab>
+        <div @click.right.prevent.stop="openMenu(pane.path, $event, index)" :data-id="pane.path" class="tab-item"
+          :draggable="pane.path !== '/'" @dragstart="startSorting(index, pane.path)"
+          @dragover="handleSortOver(index, $event, pane.path)" @dragenter.prevent @dragend="endSorting(pane.path)">
+          {{ pane.label }}
+        </div>
+      </template>
     </TabPane>
-    <!-- @click.right.prevent="closeAll" -->
-    <!-- <TabPane v-for="(pane, index) in tabList" :key="pane.path" :closable="pane.path !== '/' && pane.path !== '/home'">
-    </TabPane> -->
-    <!-- <template #tab="{ pane, index }">
-      <div @click.right.prevent.stop="openMenu(pane.path, $event, index)" :data-id="pane.path"
-        :class="[pane.path === activeKey ? 'active' : '', 'tab-item']" :draggable="pane.path !== '/'"
-        @dragstart="startSorting(index, pane.path)" @dragover="handleSortOver(index, $event, pane.path)"
-        @dragenter.prevent @dragend="endSorting(pane.path)">
-        {{ pane.label }}
-      </div>
-    </template> -->
   </Tabs>
 </template>
 <script lang="ts" setup>
 // 组合式 API 逻辑
 import { defineProps, defineEmits, ref, onMounted } from 'vue'
-import Tabs from '../newTab/index.vue'
-import TabPane from '../newTab/tabPane.vue'
+import Tabs from './index.vue'
+import TabPane from './TabPane.vue'
 // import TabPane from './TabPane.vue'
 import type { Tab } from '@/stores/tab'
 
@@ -118,19 +108,17 @@ const endSorting = (path: string) => {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 .tab-item {
   position: relative;
   top: 0px;
   left: 0px;
   transition: all 0.3s ease-in;
   color: var(--color-text);
-
   &:hover {
     color: var(--color-primary);
   }
 
-  background-color: var(--color-fill-tertiary);
 }
 
 .active {

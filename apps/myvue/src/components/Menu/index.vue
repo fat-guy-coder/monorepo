@@ -48,17 +48,11 @@ const selectedKeys = defineModel<string[]>('selectedKeys', {
   type: Array as PropType<string[]>,
 })
 
-const domUpdated = defineModel<boolean>('domUpdated', {
-  default: false,
-  type: Boolean,
-})
 
 const emit = defineEmits(['select'])
 
 
-
 const menuStyle = computed(() => ({
-
   '--menu-label-size': `${props.menuConfig.labelSize}px`,
   '--menu-item-gap': `${props.menuConfig.itemGap}px`,
   '--menu-anim-duration': `${Math.max(props.menuConfig.animationDuration, 0)}ms`,
