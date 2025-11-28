@@ -85,8 +85,6 @@ const getAnimationStage = (stage: AnimationStage): string => {
 }
 
 
-console.log(getAnimationStage('enter-from'))
-
 const emit = defineEmits<{
   (e: 'select', item: NavTagItem, index: number): void
 }>()
