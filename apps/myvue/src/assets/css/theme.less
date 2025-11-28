@@ -295,8 +295,10 @@ body[data-theme="light"] {
   --color-heading: @color-gray-900;
 
   /* 突出显示颜色 */
-  --color-highlight-text: #005fcc; /* 更深的蓝色 */
-  --color-highlight-bg: #fff3cd;   /* 柔和的黄色背景 */
+  --color-highlight-text: #005fcc;
+  /* 更深的蓝色 */
+  --color-highlight-bg: #fff3cd;
+  /* 柔和的黄色背景 */
   --color-highlight-border: #ffe69c;
 }
 
@@ -315,8 +317,10 @@ body[data-theme="dark"] {
   --color-heading: @color-gray-100;
 
   /* 突出显示颜色 */
-  --color-highlight-text: #66fcf1; /* 明亮的青色 */
-  --color-highlight-bg: #2d3748;   /* 深灰色背景 */
+  --color-highlight-text: #66fcf1;
+  /* 明亮的青色 */
+  --color-highlight-bg: #2d3748;
+  /* 深灰色背景 */
   --color-highlight-border: #4a5568;
 }
 
@@ -335,8 +339,10 @@ body[data-theme="warm"] {
   --color-heading: @warm-text;
 
   /* 突出显示颜色 */
-  --color-highlight-text: #5a189a; /* 深紫色 */
-  --color-highlight-bg: #f8f7f4;   /* 浅暖灰色背景 */
+  --color-highlight-text: #5a189a;
+  /* 深紫色 */
+  --color-highlight-bg: #f8f7f4;
+  /* 浅暖灰色背景 */
   --color-highlight-border: #e0cde8;
 }
 
@@ -355,8 +361,10 @@ body[data-theme="cool"] {
   --color-heading: @cool-text;
 
   /* 突出显示颜色 */
-  --color-highlight-text: #d63384; /* 鲜艳的粉红色 */
-  --color-highlight-bg: #e7f5f7;   /* 浅青色背景 */
+  --color-highlight-text: #d63384;
+  /* 鲜艳的粉红色 */
+  --color-highlight-bg: #e7f5f7;
+  /* 浅青色背景 */
   --color-highlight-border: #c3e6eb;
 }
 
@@ -400,8 +408,10 @@ body[data-theme="cool"] {
   --color-text-soft: @theme-text-soft;
 
   /* 突出显示颜色 (默认) */
-  --color-highlight-text: #005fcc; /* 更深的蓝色 */
-  --color-highlight-bg: #fff3cd;   /* 柔和的黄色背景 */
+  --color-highlight-text: #005fcc;
+  /* 更深的蓝色 */
+  --color-highlight-bg: #fff3cd;
+  /* 柔和的黄色背景 */
   --color-highlight-border: #ffe69c;
 
   /* 元素背景色变量 */
@@ -418,33 +428,67 @@ body[data-theme="cool"] {
   --container-padding: 0px;
   --section-gap: 160px;
   --element-padding: 12px;
+  --element-padding-sm: 4px;
+  --element-padding-md: 8px;
+  --element-padding-lg: 12px;
+  --element-padding-xl: 16px;
+  --element-padding-2xl: 20px;
+  --element-padding-3xl: 24px;
+  --element-padding-4xl: 28px;
+
   --element-margin: 8px;
-  
+  --element-margin-sm: 4px;
+  --element-margin-md: 8px;
+  --element-margin-lg: 12px;
+  --element-margin-xl: 16px;
+  --element-margin-2xl: 20px;
+  --element-margin-3xl: 24px;
+  --element-margin-4xl: 28px;
+
   /* 扩展间距变量 */
-  --spacing-xs: 0.25rem;    /* 4px */
-  --spacing-sm: 0.5rem;     /* 8px */
-  --spacing-md: 0.75rem;    /* 12px */
-  --spacing-lg: 1rem;        /* 16px */
-  --spacing-xl: 1.5rem;      /* 24px */
-  --spacing-2xl: 2rem;      /* 32px */
-  --spacing-3xl: 2.5rem;    /* 40px */
-  --spacing-4xl: 3rem;      /* 48px */
-  
+  --spacing-xs: 0.25rem;
+  /* 4px */
+  --spacing-sm: 0.5rem;
+  /* 8px */
+  --spacing-md: 0.75rem;
+  /* 12px */
+  --spacing-lg: 1rem;
+  /* 16px */
+  --spacing-xl: 1.5rem;
+  /* 24px */
+  --spacing-2xl: 2rem;
+  /* 32px */
+  --spacing-3xl: 2.5rem;
+  /* 40px */
+  --spacing-4xl: 3rem;
+  /* 48px */
+
   /* 常用组合间距 */
+  --gap-xs: var(--spacing-xs);
   --gap-sm: var(--spacing-sm);
   --gap-md: var(--spacing-md);
   --gap-lg: var(--spacing-lg);
   --gap-xl: var(--spacing-xl);
   --gap-2xl: var(--spacing-2xl);
   --gap-3xl: var(--spacing-3xl);
-  
+
   --padding-sm: var(--spacing-sm);
   --padding-md: var(--spacing-md);
   --padding-lg: var(--spacing-lg);
   --padding-xl: var(--spacing-xl);
   --padding-2xl: var(--spacing-2xl);
   --padding-3xl: var(--spacing-3xl);
-  
+  --padding-list-item-vertical: var(--spacing-xs);
+  --padding-list-item-horizontal: var(--spacing-xs);
+  --padding-list-item-horizontal-sm: var(--spacing-sm);
+  --padding-list-item-horizontal-md: var(--spacing-md);
+  --padding-list-item-horizontal-lg: var(--spacing-lg);
+  --padding-list-item-horizontal-xl: var(--spacing-xl);
+  --padding-list-item-horizontal-2xl: var(--spacing-2xl);
+  --padding-list-item-horizontal-3xl: var(--spacing-3xl);
+  --padding-list-item-horizontal-4xl: var(--spacing-4xl);
+
+  --margin-xs: var(--spacing-xs);
   --margin-sm: var(--spacing-sm);
   --margin-md: var(--spacing-md);
   --margin-lg: var(--spacing-lg);

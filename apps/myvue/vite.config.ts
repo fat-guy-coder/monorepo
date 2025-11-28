@@ -8,7 +8,6 @@ import Components from 'unplugin-vue-components/vite';
 import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers'
 import { compression, defineAlgorithm } from 'vite-plugin-compression2'
 import zlib from 'zlib'
-
 const outDir = resolve('../../static/myvue')
 
 console.log(outDir)
@@ -46,7 +45,9 @@ const ensureNodeLocalStorage = () => {
 //https://vite.dev/config/
 export default defineConfig(async ({ command }) => {
   const plugins: PluginOption[] = [
-    vue(),
+    vue({
+      vapor: true
+    }),
     vueJsx(),
   ]
 
@@ -81,7 +82,7 @@ export default defineConfig(async ({ command }) => {
         '/api': {
           target: 'http://localhost:8888', // 目标接口的域名
           changeOrigin: true, // 是否允许跨域
-        rewrite: (path: string) => path.replace(/^\/api/, ''), // 路径重写
+          rewrite: (path: string) => path.replace(/^\/api/, ''), // 路径重写
         },
       },
       // open: true, // 启动时自动打开浏览器
@@ -89,6 +90,9 @@ export default defineConfig(async ({ command }) => {
 
     },
     plugins,
+    optimizeDeps: {
+      include: ['vue']
+    },
     build: {
       outDir,
       emptyOutDir: true,

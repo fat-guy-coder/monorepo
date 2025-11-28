@@ -1,59 +1,31 @@
 <template>
-  <label
-    class="search-input"
-    :class="{
-      'is-disabled': disabled,
-      'is-focused': isFocused,
-    }"
-  >
+  <div class="search-input" :class="{
+    'is-disabled': disabled,
+    'is-focused': isFocused,
+  }">
     <span v-if="$slots.prefix || showDefaultPrefix" class="search-input__prefix">
       <slot name="prefix">
         <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path
-            d="M15.5 15.5L20 20M11 17a6 6 0 1 1 0-12 6 6 0 0 1 0 12Z"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          />
+          <path d="M15.5 15.5L20 20M11 17a6 6 0 1 1 0-12 6 6 0 0 1 0 12Z" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round" />
         </svg>
       </slot>
     </span>
 
-    <input
-      ref="inputRef"
-      class="search-input__control"
-      type="text"
-      :value="modelValue"
-      :placeholder="placeholder"
-      :disabled="disabled"
-      :maxlength="maxlength"
-      @focus="setFocus(true)"
-      @blur="setFocus(false)"
-      @input="handleInput"
-      @keyup.enter="triggerSearch"
-    />
+    <input ref="inputRef" class="search-input__control" type="search" :value="value" :placeholder="placeholder"
+      :disabled="disabled" :maxlength="maxlength" @focus="setFocus(true)" @blur="setFocus(false)" @input="handleInput"
+      @keyup.enter="triggerSearch" />
 
-    <button
-      v-if="allowClear && modelValue"
-      type="button"
-      class="search-input__clear"
-      :disabled="disabled"
-      @click="handleClear"
-    >
-      <span aria-hidden="true">×</span>
+    <button v-if="allowClear && value" type="button" class="search-input__clear" :disabled="disabled"
+      @click="handleClear">
+      ×
     </button>
 
-    <button
-      type="button"
-      class="search-input__action"
-      :disabled="disabled || loading"
-      @click="triggerSearch"
-    >
+    <button type="button" class="search-input__action" :disabled="disabled || loading" v-if="showSearchButton" @click="triggerSearch">
       <span v-if="!loading">{{ searchText }}</span>
       <span v-else class="search-input__spinner"></span>
     </button>
-  </label>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -65,7 +37,7 @@ defineOptions({
 
 const props = withDefaults(
   defineProps<{
-    modelValue?: string
+    value?: string
     placeholder?: string
     disabled?: boolean
     allowClear?: boolean
@@ -74,9 +46,10 @@ const props = withDefaults(
     searchText?: string
     maxlength?: number
     showDefaultPrefix?: boolean
+    showSearchButton?: boolean
   }>(),
   {
-    modelValue: '',
+    value: '',
     placeholder: '搜索',
     disabled: false,
     allowClear: true,
@@ -84,12 +57,14 @@ const props = withDefaults(
     autofocus: false,
     searchText: '搜索',
     maxlength: undefined,
-    showDefaultPrefix: true,
+    showDefaultPrefix: false,
+    showSearchButton: false,
   }
 )
 
+
 const emit = defineEmits<{
-  (event: 'update:modelValue', value: string): void
+  (event: 'update:value', value: string): void
   (event: 'search', value: string): void
   (event: 'focus'): void
   (event: 'blur'): void
@@ -109,15 +84,15 @@ const setFocus = (value: boolean) => {
 
 const handleInput = (event: Event) => {
   const target = event.target as HTMLInputElement
-  emit('update:modelValue', target.value)
+  emit('update:value', target.value)
 }
 
 const triggerSearch = () => {
-  emit('search', props.modelValue?.trim() ?? '')
+  emit('search', props.value?.trim() ?? '')
 }
 
 const handleClear = () => {
-  emit('update:modelValue', '')
+  emit('update:value', '')
   nextTick(() => {
     inputRef.value?.focus()
   })
@@ -142,96 +117,113 @@ onMounted(() => {
 
 <style scoped lang="less">
 .search-input {
-  width: 100%;
-  min-height: 40px;
+  --input-height: 32px;
+  --input-padding-horizontal: 11px;
+
+  position: relative;
   display: flex;
-  align-items: stretch;
-  border: 1px solid var(--color-border, rgba(0, 0, 0, 0.08));
-  border-radius: 999px;
-  padding: 0 4px 0 12px;
-  background-color: var(--color-bg-container, var(--element-background, var(--color-background)));
-  color: var(--color-text, #1f1f1f);
-  gap: 4px;
-  transition:
-    border-color 0.2s ease,
-    box-shadow 0.2s ease,
-    background-color 0.2s ease;
-}
+  align-items: center;
+  width: 100%;
+  height: var(--input-height);
+  padding: 0;
+  background-color: var(--color-bg-container);
+  border: 1px solid var(--color-border);
+  border-radius: var(--element-border-radius);
+  transition: border-color 0.2s, box-shadow 0.2s;
 
-.search-input.is-focused {
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 25%, transparent);
-}
+  &:hover {
+    border-color: var(--color-primary);
+  }
 
-.search-input.is-disabled {
-  cursor: not-allowed;
-  opacity: 0.65;
+  &.is-focused {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-primary) 20%, transparent);
+  }
+
+  &.is-disabled {
+    background-color: var(--color-fill-tertiary);
+    border-color: var(--color-border);
+    cursor: not-allowed;
+
+    .search-input__control,
+    .search-input__prefix,
+    .search-input__clear,
+    .search-input__action {
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+  }
 }
 
 .search-input__prefix {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: var(--color-text-soft, rgba(0, 0, 0, 0.45));
+  color: var(--color-text-tertiary);
+  padding-left: var(--input-padding-horizontal);
 }
 
 .search-input__prefix svg {
-  width: 18px;
-  height: 18px;
+  width: 14px;
+  height: 14px;
 }
 
 .search-input__control {
   flex: 1;
+  height: 100%;
+  padding: 0 var(--input-padding-horizontal);
   border: none;
   outline: none;
   background: transparent;
-  color: inherit;
-  font: inherit;
-  padding: 0 8px;
+  color: var(--color-text);
+  font-size: 14px;
 }
 
 .search-input__control::placeholder {
-  color: var(--color-text-soft, rgba(0, 0, 0, 0.45));
+  color: var(--color-text-quaternary);
 }
 
 .search-input__clear {
-  border: none;
-  background: transparent;
-  color: var(--color-text-soft, rgba(0, 0, 0, 0.45));
-  cursor: pointer;
-  width: 28px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  width: 32px;
+  height: 100%;
+  border: none;
+  background: transparent;
+  color: var(--color-text-quaternary);
+  cursor: pointer;
   font-size: 20px;
-  line-height: 1;
-}
+  line-height: 100%;
+  transition: color 0.2s;
 
-.search-input__clear:hover {
-  color: var(--color-text, #1f1f1f);
+  &:hover {
+    color: var(--color-text-secondary);
+  }
 }
 
 .search-input__action {
-  min-width: 80px;
+  height: calc(var(--input-height) - 2px); /* Match inner height */
+  margin-right: -1px; /* Overlap the border */
   border: none;
-  border-radius: 999px;
-  background-color: var(--color-primary, #1677ff);
-  color: var(--color-text-light-solid, #fff);
-  font-weight: 600;
+  border-top-right-radius: var(--element-border-radius);
+  border-bottom-right-radius: var(--element-border-radius);
+  background-color: var(--color-primary);
+  color: var(--color-text-light-solid);
+  font-weight: 500;
   cursor: pointer;
-  padding: 0 18px;
-  transition:
-    opacity 0.2s ease,
-    background-color 0.2s ease;
-}
+  padding: 0 16px;
+  transition: background-color 0.2s;
 
-.search-input__action:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
+  &:not(:disabled):hover {
+    background-color: var(--color-link-hover);
+  }
 
-.search-input__action:not(:disabled):hover {
-  background-color: var(--color-secondary, #4096ff);
+  &:disabled {
+    background-color: var(--color-primary);
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
 }
 
 .search-input__spinner {
@@ -248,9 +240,9 @@ onMounted(() => {
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
 }
 </style>
-

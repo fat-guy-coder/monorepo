@@ -1,7 +1,7 @@
 <template>
-    <li class="menu-item" :style="{ '--level': level }" :id="item.path" @click="handleClick"
+    <li class="menu-item" :style="{ '--level': level }" @click.stop.prevent="handleClick"
         @mouseenter.stop.prevent="handleMouseEnter" @mouseleave="handleMouseLeave">
-        <div class="menu-item__title" :class="titleClasses">
+        <div class="menu-item__title" :class="titleClasses" :id="item.path">
             <span v-if="item.icon" class="menu-item__icon">{{ item.icon }}</span>
             <span :class="['menu-item__label', { 'menu-item__label--matched': item.match }]"
                 :title="item.label || item.name">
@@ -15,20 +15,21 @@
         </div>
         <Teleport to="body" v-if="mode === 'vertical'">
             <div v-if="shouldRenderChildren" ref="childrenWrapper" class="menu-item__children-wrapper-vertical"
+                @mouseleave="handleMouseAllLeave"
                 :style="{ top: verticalChildrenWrapperPosition.top, left: verticalChildrenWrapperPosition.left }">
                 <ul class="menu-item__children-list">
-                    <MenuItem v-for="child in localChildren" :key="child.path" :id="child.path" :item="child"
-                        :level="level + 1" :is-open="openKeys.includes(child.path)" @toggle="$emit('toggle', $event)"
-                        @select="$emit('select', $event)" />
+                    <MenuItem v-for="child in localChildren" :key="child.path" :item="child" :level="level + 1"
+                        :is-open="openKeys.includes(child.path)" @toggle="$emit('toggle', $event)"
+                        @select="$emit('select', $event)" @close="$emit('close', $event)" />
                 </ul>
             </div>
         </Teleport>
         <template v-else>
             <div v-if="shouldRenderChildren" ref="childrenWrapper" class="menu-item__children-wrapper">
                 <ul class="menu-item__children-list">
-                    <MenuItem v-for="child in localChildren" :key="child.path" :id="child.path" :item="child"
-                        :level="level + 1" :is-open="openKeys.includes(child.path)" @toggle="$emit('toggle', $event)"
-                        @select="$emit('select', $event)" @close="$emit('close', $event)" />
+                    <MenuItem v-for="child in localChildren" :key="child.path" :item="child" :level="level + 1"
+                        :is-open="openKeys.includes(child.path)" @toggle="$emit('toggle', $event)"
+                        @select="$emit('select', $event)" />
                 </ul>
             </div>
         </template>
@@ -44,7 +45,6 @@ import {
     inject,
     type PropType,
     type Ref,
-    onMounted,
 } from 'vue'
 import { type MenuItem as MenuItemType, animateHeight } from './index'
 
@@ -142,10 +142,6 @@ const handleClick = async () => {
 }
 
 
-const verticalSubMenuShow = computed(() => {
-    return isHovered.value && shouldRenderChildren.value
-})
-
 const verticalChildrenWrapperPosition = ref({
     top: '0px',
     left: '0px',
@@ -162,10 +158,12 @@ const getChildrenWrapperPosition = (e: MouseEvent) => {
 
 const handleMouseEnter = async (e: MouseEvent) => {
     isHovered.value = true
-    if (mode === 'vertical' && canToggle.value) {
-        if (props.isOpen) {
+    if (mode === 'vertical') {
+        if (!canToggle.value) {
             emit('toggle', props.item)
-        } else {
+            return
+        }
+        if (canToggle.value && !props.isOpen) {
             if (e) verticalChildrenWrapperPosition.value = getChildrenWrapperPosition(e)
             const ready = await ensureChildren()
             if (ready) {
@@ -178,25 +176,26 @@ const handleMouseEnter = async (e: MouseEvent) => {
 const handleMouseLeave = (e: MouseEvent) => {
     isHovered.value = false
     if (mode === 'vertical') {
-        const elements = document.querySelectorAll('.menu-item__children-wrapper-vertical')
-        //先判断是不是移除了菜单项，如果是则关闭子菜单
-        const isMouseInMenuItems = Array.from(elements).some(element => isMouseInElement(element as HTMLElement, e.clientX, e.clientY))
+        //检测是否移出了子菜单区域
+        const isMouseInMenuItems = getMouseInChildWrapperVerticalElement(e)
         if (!isMouseInMenuItems) {
             emit('close')
-            isHovered.value = false
-            console.log('鼠标离开菜单项')
-            return
         }
-        //判断此时鼠标是否还在此菜单项或者子菜单项中//移出这两个元素则关闭子菜单
-        const isMouseInChildrenWrapper = isMouseInElement(childrenWrapper.value as HTMLElement, e.clientX, e.clientY)
-        if (isMouseInChildrenWrapper) {
-            return
-        }
-        // // console.log(props.item)
-        emit('toggle', props.item)
-        // isHovered.value = false
     }
 }
+
+const handleMouseAllLeave = (e: MouseEvent) => {
+    const isMouseInMenuItems = getMouseInChildWrapperVerticalElement(e)
+    if (!isMouseInMenuItems) {
+        emit('close')
+    }
+}
+
+
+const getMouseInChildWrapperVerticalElement = (e: MouseEvent) => {
+    return Array.from(document.querySelectorAll('.menu-item__children-wrapper-vertical')).some(element => isMouseInElement(element as HTMLElement, e.clientX, e.clientY))
+}
+
 
 
 const titleClasses = computed(() => ({
@@ -217,6 +216,7 @@ watch(
             const duration = Math.max(menuConfig.animationDuration ?? 0, 0)
             animateHeight(childrenWrapper.value, newVal, duration, mode)
         }
+
     },
     { immediate: true }
 )
@@ -262,11 +262,6 @@ function isMouseInElement(element: HTMLElement, mouseX: number, mouseY: number) 
     padding-left: calc(8px + var(--level, 0) * 16px);
     cursor: pointer;
     border-radius: var(--element-border-radius);
-    // transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
-
-    &:hover {
-        background-color: var(--color-fill-light);
-    }
 }
 
 .menu-item__icon {
@@ -286,8 +281,6 @@ function isMouseInElement(element: HTMLElement, mouseX: number, mouseY: number) 
 
 .menu-item__label--matched {
     color: var(--color-highlight-text);
-    //background-color: var(--color-highlight-bg);
-    // border-radius: var(--element-border-radius);
 }
 
 .menu-item__arrow {
@@ -346,12 +339,12 @@ function isMouseInElement(element: HTMLElement, mouseX: number, mouseY: number) 
     }
 }
 
-.menu-item__title--open:not(.menu-item__title--selected) {
-    background-color: var(--color-fill-secondary);
-}
+// .menu-item__title--open:not(.menu-item__title--selected) {
+//     background-color: var(--color-fill-secondary);
+// }
 
 .menu-item__title--hovered {
-    background-color: var(--color-fill-light);
+    background-color: var(--color-fill-secondary);
 }
 
 // .menu-item__title--matched:not(.menu-item__title--selected) {

@@ -1,15 +1,11 @@
 <template>
-  <nav
-    class="scroll-nav"
-    :class="[
-      `scroll-nav--${positionClass}`,
-      `scroll-nav--variant-${variant}`,
-      `scroll-nav--rounded-${rounded}`,
-      `scroll-nav--shadow-${shadow}`,
-      { 'scroll-nav--borderless': !bordered },
-    ]"
-    :style="navStyle"
-  >
+  <nav class="scroll-nav" :class="[
+    `scroll-nav--${positionClass}`,
+    `scroll-nav--variant-${variant}`,
+    `scroll-nav--rounded-${rounded}`,
+    `scroll-nav--shadow-${shadow}`,
+    { 'scroll-nav--borderless': !bordered },
+  ]" :style="navStyle">
     <header class="scroll-nav__header">
       <div class="scroll-nav__title">
         <slot name="title">
@@ -24,59 +20,31 @@
       </button>
     </header>
 
-    <transition name="collapse" appear>
       <ul v-show="isOpen" class="scroll-nav__list" role="menu">
-        <li
-          v-if="showBackToTop"
-          class="scroll-nav__item scroll-nav__item--action"
-          role="menuitem"
-          @click="scrollToTop"
-        >
+        <li v-if="showBackToTop" class="scroll-nav__item scroll-nav__item--action" role="menuitem" @click="scrollToTop">
           回到顶部
         </li>
 
-        <li
-          v-for="item in mappedList"
-          :key="item.id"
-          class="scroll-nav__item"
-          role="presentation"
-        >
-          <button
-            class="scroll-nav__item-btn"
-            type="button"
-            role="menuitem"
-            :title="item.title"
-            @click="handleScroll($event, item.id)"
-          >
+        <li v-for="item in mappedList" :key="item.id" class="scroll-nav__item" role="presentation">
+          <button class="scroll-nav__item-btn" :class="[currentItem?.id === item.id ? 'scroll-nav__item--active' : '']"
+            type="button" role="menuitem" :title="item.title" @click="handleScroll($event, item.id)">
             <span class="scroll-nav__item-text">{{ item.title }}</span>
           </button>
 
-          <transition name="fade">
-            <ul
-              v-if="showChild && item.children && item.children.length"
-              class="scroll-nav__children"
-            >
-              <li
-                v-for="child in item.children"
-                :key="child.id"
-                class="scroll-nav__item scroll-nav__item--child"
-                role="presentation"
-              >
-                <button
-                  class="scroll-nav__item-btn"
-                  type="button"
-                  role="menuitem"
-                  :title="child.title"
-                  @click="handleScroll($event, child.id)"
-                >
-                  <span class="scroll-nav__item-text">{{ child.title }}</span>
-                </button>
-              </li>
-            </ul>
-          </transition>
+
+          <ul v-if="showChild && item.children && item.children.length" class="scroll-nav__children">
+            <li v-for="child in item.children" :key="child.id" class="scroll-nav__item scroll-nav__item--child"
+              role="presentation">
+              <button class="scroll-nav__item-btn"
+                :class="[currentItem?.id === child.id ? 'scroll-nav__item--active' : '']" type="button" role="menuitem"
+                :title="child.title" @click="handleScroll($event, child.id)">
+                <span class="scroll-nav__item-text">{{ child.title }}</span>
+              </button>
+            </li>
+          </ul>
+
         </li>
       </ul>
-    </transition>
   </nav>
 </template>
 
@@ -168,7 +136,7 @@ const props = defineProps({
   },
   gap: {
     type: [Number, String] as PropType<number | string>,
-    default: 1,
+    default: 0,
   },
 })
 
@@ -239,8 +207,27 @@ const scrollIntoView = (event: Event | null, id: string) => {
   element?.scrollIntoView({ behavior: 'smooth', block: props.scrollTo })
 }
 
+const currentItem = ref<Item | null>(null)
+
 const handleScroll = (event: Event, id: string) => {
   scrollIntoView(event, id)
+  //一级没有二级继续找
+  currentItem.value = getCurrentItem(mappedList.value, id)
+}
+
+
+const getCurrentItem = (list: Item[], id: string): Item | null => {
+  for (const item of list) {
+    if (item.id === id) {
+      return item
+    } else if (item.children) {
+      const child = getCurrentItem(item.children, id)
+      if (child) {
+        return child
+      }
+    }
+  }
+  return null;
 }
 </script>
 
@@ -418,7 +405,7 @@ const handleScroll = (event: Event, id: string) => {
   cursor: pointer;
   font-size: 0.95rem;
   font-weight: 500;
-  padding: 0.5rem 0.75rem;
+  padding: var(--padding-list-item-vertical) var(--padding-list-item-horizontal);
   overflow: hidden;
   transition:
     background 0.2s ease,
@@ -432,6 +419,12 @@ const handleScroll = (event: Event, id: string) => {
   }
 }
 
+.scroll-nav__item--active {
+  color: var(--color-highlight-text);
+  background-color: var(--color-highlight-bg);
+  transform: translateX(2px);
+}
+
 .scroll-nav__item-text {
   display: block;
   overflow: hidden;
@@ -442,7 +435,7 @@ const handleScroll = (event: Event, id: string) => {
 
 .scroll-nav__children {
   list-style: none;
-  padding: 0.4rem 0 0.4rem 1rem;
+  padding: var(--padding-list-item-vertical) var(--padding-list-item-horizontal);
   margin: 0;
   display: flex;
   flex-direction: column;
@@ -456,28 +449,6 @@ const handleScroll = (event: Event, id: string) => {
       opacity: 1;
     }
   }
-}
-
-.collapse-enter-active,
-.collapse-leave-active {
-  transition: height 0.25s ease, opacity 0.25s ease;
-}
-
-.collapse-enter-from,
-.collapse-leave-to {
-  height: 0;
-  opacity: 0;
-}
-
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.2s ease, transform 0.2s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-  transform: translateY(-4px);
 }
 
 @media (max-width: 768px) {

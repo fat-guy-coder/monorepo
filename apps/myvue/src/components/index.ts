@@ -9,7 +9,9 @@ import NavButton from './Nav/fixedNavButton.vue'
 import Code from './Code/index.vue'
 import Cascader from './Cascader/index.vue'
 import Menu from './Menu/index.vue'
+import Button from './Button/index.vue'
+import Message from './Message/index.ts'
+import Spin from './Spin/index.vue'
 
 
-
-export { Menu, Input, Navigation, ThemeChange, RouteTab, Card, Tabs, ThemeSwitcher, NavButton, Code, Cascader }
+export { Menu, Input, Navigation, ThemeChange, RouteTab, Card, Tabs, ThemeSwitcher, NavButton, Code, Cascader, Button, Message, Spin }

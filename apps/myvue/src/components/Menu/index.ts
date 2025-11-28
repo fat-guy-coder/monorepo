@@ -13,7 +13,7 @@ export interface MenuItem {
 export type MenuMode = 'inline' | 'vertical';
 
 
-export function animateHeight(element: HTMLElement, isOpening: boolean, duration = 250, mode: MenuMode) {
+export function animateHeight(element: HTMLElement, isOpening: boolean, duration = 250, mode?: MenuMode) {
     if (duration <= 0) {
         element.style.height = isOpening ? 'auto' : '0px';
         element.style.opacity = isOpening ? '1' : '0';
@@ -76,7 +76,6 @@ export function animateHeight(element: HTMLElement, isOpening: boolean, duration
             height: `${height}px`,
             opacity: 1,
         }
-
         const endValues: Record<string, string | number> = {
             height: '0px',
             opacity: 0,

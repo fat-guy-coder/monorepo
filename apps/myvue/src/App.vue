@@ -31,25 +31,19 @@
     <div class="menu-container">
       <div class="search">
         <Input v-if="!Menucollapsed" v-model:value="searchValue" placeholder="目前暂支持菜单搜索" allow-clear></Input>
-        <Tooltip>
-          <template #title>菜单数据太大了，展开可能会有点卡顿<br />但换来的是搜索和子项展开的流畅体验</template>
-          <Button @click="toggleCollapsed"> {{ Menucollapsed ? '➡️' : '⬅️' }} </Button>
-        </Tooltip>
+        <Button @click="toggleCollapsed"> {{ Menucollapsed ? '➡️' : '⬅️' }} </Button>
       </div>
       <div :class="Menucollapsed ? 'menu-collapsed' : 'menu'">
         <Spin :spinning="loading" class="loading" />
-        <Menu @select="goto" :collapsed="Menucollapsed" v-if="!loading" :items="menus as any"
+        <Menu @select="goto" :mode="Menucollapsed ? 'vertical' : 'inline'" v-if="!loading" :items="menus as any"
           v-model:selectedKeys="selectedKeys" v-model:openKeys="openKeys">
         </Menu>
-        <!-- <Menu @click="goto" :collapsed="Menucollapsed" v-if="!loading" :selectedKeys="selectedKeys" v-model="openKeys"
-          :menus="menus" @dom-updated="menuDomUpdated">
-        </Menu> -->
       </div>
     </div>
     <div class="content">
       <RouteTab @tab-click="tabClick" :activeKey="activeKey" :currentDragIndex="currentDragIndex" :tabList="tabList"
         :showContextMenu="showContextMenu" @remove="removeTab" @remove-other="removeOther" @remove-side="removeSide"
-        @toggle-show-menu="toggleShowMenu" @set-current-drag-index="setCurrentDragIndex" @sort-tab="sortTab">
+        @set-current-drag-index="setCurrentDragIndex" @sort-tab="sortTab" @toggle-show-menu="toggleShowMenu">
       </RouteTab>
       <div class="mainView" id="mainView" @scroll="handleScroll">
         <Spin :spinning="mainViewLoading" class="mainViewLoading" v-if="activeKey !== '/'"> </Spin>
@@ -64,31 +58,21 @@
 
 </template>
 
-<script lang="ts" setup vapor>
-import Menu from '@/components/Menu/index.vue'
-//import Menu from '@/components/Menu/Menu.vue'
-import RouteTab from '@/components/Tab/RouteTab.vue'
-import ThemeChange from '@/components/Theme/index.vue'
-import Navigation from '@/components/Nav/fixedNavButton.vue'
+<script lang="ts" setup>
+import { Menu, RouteTab, ThemeChange, Navigation, Input, Button, Message, Spin } from '@/components'
 import { computed, ref, watch, onMounted, onUnmounted, nextTick } from 'vue'
 import {
-  //addKeysToRoutes,
+  type MenuItem,
   findFatherKeysListByKey,
   findMatchingLabels,
   reWashMenus,
   findMenuItemByName,
-  // deleteChild,
-  // addChild,
-  // changeLoading,
 } from '@/menu'
-import type { MenuItem } from '@/menu'
 import { useTabistStore, type Tab } from '@/stores/tab'
 import { type Theme, useUserStore } from '@/stores/user'
 import { useRouter } from 'vue-router'
 import { debounce } from '@/Function/CommonFun'
-import { message, Spin, Input, Button, Tooltip, } from 'ant-design-vue'
 import { useDetectMobile } from '@/hooks/useDetectMobile'
-// import { theme as themeTokens } from '@/assets/css/theme'
 // import { request } from '@/request'
 
 
@@ -369,7 +353,6 @@ function goto({
     },
     (path) => {
       openKeys.value = findFatherKeysListByKey(path)
-      console.log('openKeys', openKeys.value)
     },
   )
 }
@@ -386,7 +369,7 @@ function gotoByName(name: string, isRedirect: boolean = false) {
     }
   }
   if (!item) {
-    message.error('菜单不存在')
+    Message.error('菜单不存在')
     return
   }
   const { label, path } = item
@@ -527,7 +510,7 @@ const handleNavClick = (index: number) => {
 }
 
 .menu {
-  width: 301px;
+  width: 315px;
   height: calc(100vh - 2.2rem);
   overflow: auto;
   border-right: 1px solid var(--element-border);
@@ -581,6 +564,7 @@ const handleNavClick = (index: number) => {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   cursor: pointer;
   transition: all 0.3s ease;
+
   &:hover {
     background: var(--element-background-soft);
     border-color: var(--element-border-hover);

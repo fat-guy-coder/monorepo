@@ -1,112 +1,306 @@
 <template>
-  <div
-    class="ui-card"
-    :class="[
-      `size-${size}`,
-      { 'is-hoverable': hoverable, 'is-bordered': bordered }
-    ]"
-    :style="{
-      '--card-border-color': borderColor,
-      '--card-radius': 'var(--element-border-radius)',
-      '--card-bg': 'var(--element-background)',
-      '--card-text': 'var(--color-text)',
-      '--card-heading': 'var(--color-heading)',
-      '--card-padding': padding || 'var(--element-padding)',
-      '--card-shadow': '0 2px 8px rgba(0,0,0,0.08)',
-      '--card-shadow-hover': '0 6px 18px rgba(0,0,0,0.12)'
-    } as any"
-  >
-    <div v-if="hasTitle" class="ui-card__header">
-      <slot name="title">
-        <div class="ui-card__title">{{ title }}</div>
-      </slot>
-    </div>
-
-    <div class="ui-card__body">
-      <slot name="body">
-        <slot />
-      </slot>
-    </div>
-  </div>
+  <button :class="classes" :disabled="disabled || loading">
+    <span v-if="loading" class="btn-loading-icon"></span>
+    <span v-if="$slots.icon" class="btn-icon">
+      <slot name="icon"></slot>
+    </span>
+    <span class="btn-content">
+      <slot></slot>
+    </span>
+  </button>
 </template>
 
 <script setup lang="ts">
-import { computed, useSlots } from 'vue'
+import { computed } from 'vue';
 
-interface Props {
-  title?: string
-  /** 边框颜色（默认主题主色） */
-  borderColor?: string
-  /** 是否显示边框 */
-  bordered?: boolean
-  /** 是否 hover 提升阴影 */
-  hoverable?: boolean
-  /** 卡片内边距（可传如 '16px' 或 'var(--element-padding)'） */
-  padding?: string
-  /** 尺寸 */
-  size?: 'sm' | 'md' | 'lg'
-}
+defineOptions({
+  name: 'AButton',
+});
 
-const props = withDefaults(defineProps<Props>(), {
-  title: '',
-  borderColor: 'var(--color-primary)',
-  bordered: true,
-  hoverable: true,
-  padding: '',
-  size: 'md'
-})
+const props = withDefaults(
+  defineProps<{
+    type?: 'primary' | 'default' | 'dashed' | 'text' | 'link';
+    size?: 'large' | 'middle' | 'small';
+    danger?: boolean;
+    loading?: boolean;
+    disabled?: boolean;
+    shape?: 'default' | 'circle' | 'round';
+  }>(),
+  {
+    type: 'default',
+    size: 'middle',
+    danger: false,
+    loading: false,
+    disabled: false,
+    shape: 'default',
+  }
+);
 
-const slots = useSlots()
-const hasTitle = computed(() => !!(props.title || (slots && (slots as any).title)))
+const classes = computed(() => [
+  'btn',
+  `btn--${props.type}`,
+  `btn--${props.size}`,
+  {
+    'is-danger': props.danger,
+    'is-loading': props.loading,
+    'is-disabled': props.disabled || props.loading,
+    'is-circle': props.shape === 'circle',
+    'is-round': props.shape === 'round',
+  },
+]);
 </script>
 
 <style lang="less" scoped>
-.ui-card {
+.btn {
+  --btn-height-large: 40px;
+  --btn-height-middle: 32px;
+  --btn-height-small: 24px;
+  --btn-font-size-large: 16px;
+  --btn-font-size-middle: 14px;
+  --btn-font-size-small: 14px;
+  --btn-padding-horizontal-large: 15px;
+  --btn-padding-horizontal-middle: 15px;
+  --btn-padding-horizontal-small: 7px;
+
   position: relative;
-  color: var(--card-text);
-  background: var(--card-bg);
-  border-radius: var(--card-radius);
-  padding: var(--card-padding);
-  box-shadow: var(--card-shadow);
-  transition: box-shadow 0.25s ease, transform 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 400;
+  white-space: nowrap;
+  text-align: center;
+  background-image: none;
   border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+  user-select: none;
+  touch-action: manipulation;
+  line-height: 1.5715;
+  border-radius: var(--element-border-radius);
 
-  &.is-bordered {
-    border-color: var(--card-border-color);
-  }
-
-  &.is-hoverable:hover {
-    box-shadow: var(--card-shadow-hover);
-    transform: translateY(-2px);
-  }
-
-  /* 尺寸 */
-  &.size-sm {
-    --card-padding: calc(var(--element-padding) * 0.75);
-    font-size: 0.92rem;
-  }
-  &.size-md {
-    --card-padding: var(--element-padding);
-    font-size: 1rem;
-  }
-  &.size-lg {
-    --card-padding: calc(var(--element-padding) * 1.25);
-    font-size: 1.06rem;
+  // Disabled State
+  &.is-disabled,
+  &[disabled] {
+    cursor: not-allowed;
+    & > * {
+      pointer-events: none;
+    }
   }
 }
 
-.ui-card__header {
-  margin-bottom: 8px;
+/*
+* Type Styles
+*/
+
+// Default
+.btn--default {
+  background-color: var(--color-bg-container);
+  border-color: var(--color-border);
+  color: var(--color-text);
+
+  &:not(.is-disabled):hover {
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+  }
+
+  &.is-danger {
+    color: var(--color-error);
+    border-color: var(--color-error);
+
+    &:not(.is-disabled):hover {
+      color: color-mix(in srgb, var(--color-error) 85%, white);
+      border-color: color-mix(in srgb, var(--color-error) 85%, white);
+    }
+  }
 }
 
-.ui-card__title {
-  color: var(--card-heading);
-  font-weight: 600;
-  font-size: 1.05em;
+// Primary
+.btn--primary {
+  color: var(--color-text-light-solid);
+  background-color: var(--color-primary);
+
+  &:not(.is-disabled):hover {
+    background-color: var(--color-link-hover);
+  }
+
+  &.is-danger {
+    background-color: var(--color-error);
+
+    &:not(.is-disabled):hover {
+      background-color: color-mix(in srgb, var(--color-error) 85%, black);
+    }
+  }
+  }
+
+// Dashed
+.btn--dashed {
+  background-color: var(--color-bg-container);
+  border-color: var(--color-border);
+  border-style: dashed;
+  color: var(--color-text);
+
+  &:not(.is-disabled):hover {
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+  }
+
+  &.is-danger {
+    color: var(--color-error);
+    border-color: var(--color-error);
+
+    &:not(.is-disabled):hover {
+      color: color-mix(in srgb, var(--color-error) 85%, white);
+      border-color: color-mix(in srgb, var(--color-error) 85%, white);
+    }
+  }
 }
 
-.ui-card__body {
-  color: var(--card-text);
+// Text
+.btn--text {
+  background-color: transparent;
+  border-color: transparent;
+  color: var(--color-text);
+
+  &:not(.is-disabled):hover {
+    background-color: var(--color-fill-secondary);
+  }
+
+  &.is-danger {
+    color: var(--color-error);
+
+    &:not(.is-disabled):hover {
+      background-color: color-mix(in srgb, var(--color-error) 15%, transparent);
+    }
+  }
+}
+
+// Link
+.btn--link {
+  background-color: transparent;
+  border-color: transparent;
+  color: var(--color-link);
+
+  &:not(.is-disabled):hover {
+    color: var(--color-link-hover);
+  }
+
+  &.is-danger {
+    color: var(--color-error);
+
+    &:not(.is-disabled):hover {
+      color: color-mix(in srgb, var(--color-error) 85%, white);
+    }
+  }
+}
+
+/*
+* Size Styles
+*/
+.btn--large {
+  height: var(--btn-height-large);
+  padding: 0 var(--btn-padding-horizontal-large);
+  font-size: var(--btn-font-size-large);
+  }
+
+.btn--middle {
+  height: var(--btn-height-middle);
+  padding: 0 var(--btn-padding-horizontal-middle);
+  font-size: var(--btn-font-size-middle);
+}
+
+.btn--small {
+  height: var(--btn-height-small);
+  padding: 0 var(--btn-padding-horizontal-small);
+  font-size: var(--btn-font-size-small);
+  }
+
+/*
+* Shape Styles
+*/
+.btn.is-circle {
+  border-radius: 50%;
+  padding: 0; // Reset padding
+
+  &.btn--large {
+    width: var(--btn-height-large);
+  }
+  &.btn--middle {
+    width: var(--btn-height-middle);
+  }
+  &.btn--small {
+    width: var(--btn-height-small);
+  }
+}
+
+.btn.is-round {
+  &.btn--large {
+    border-radius: var(--btn-height-large);
+  }
+  &.btn--middle {
+    border-radius: var(--btn-height-middle);
+  }
+  &.btn--small {
+    border-radius: var(--btn-height-small);
+  }
+}
+
+/*
+* Loading Styles
+*/
+.btn.is-loading {
+  position: relative;
+  opacity: 0.65;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    right: -1px;
+    bottom: -1px;
+    background: var(--color-bg-container);
+    opacity: 0.35;
+    z-index: 1;
+    border-radius: inherit;
+  }
+
+  .btn-content,
+  .btn-icon {
+    opacity: 0;
+  }
+}
+
+.btn-loading-icon {
+  position: absolute;
+  z-index: 2;
+  display: inline-block;
+  border: 2px solid var(--color-primary);
+  border-top-color: transparent;
+  border-radius: 50%;
+  width: 14px;
+  height: 14px;
+  animation: btn-spin 0.6s linear infinite;
+}
+
+@keyframes btn-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/*
+* Icon Styles
+*/
+.btn-icon {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 8px;
+}
+
+.btn.is-circle .btn-icon {
+  margin-right: 0;
 }
 </style>
-

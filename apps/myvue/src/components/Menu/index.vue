@@ -4,49 +4,11 @@
       <MenuItem v-for="item in items" :key="item.path" :item="item" :level="0" :is-open="openKeys.includes(item.path)"
         :mode="mode" @toggle="handleToggle" @select="handleSelect" @close="closeKeys" />
     </ul>
-    <!-- 
-    <!-- <button class="menu__settings-btn" type="button" @click="toggleSettings">
-      ⚙
-    </button> -->
-
-    <!-- <transition name="menu-config">
-      <div v-if="showSettings" class="menu__settings-card">
-        <header class="menu__settings-header">
-          <h4>菜单配置</h4>
-          <button class="menu__settings-close" type="button" @click="toggleSettings">×</button>
-        </header>
-        <div class="menu__settings-body">
-          <label class="menu__settings-field">
-            <span>标题字号 (px)</span>
-            <div class="menu__settings-control">
-              <input type="range" min="12" max="18" step="1" v-model.number="menuConfig.labelSize" />
-              <span>{{ menuConfig.labelSize }}</span>
-            </div>
-          </label>
-
-          <label class="menu__settings-field">
-            <span>菜单间距 (px)</span>
-            <div class="menu__settings-control">
-              <input type="range" min="0" max="12" step="1" v-model.number="menuConfig.itemGap" />
-              <span>{{ menuConfig.itemGap }}</span>
-            </div>
-          </label>
-
-          <label class="menu__settings-field">
-            <span>动画时长 (ms)</span>
-            <div class="menu__settings-control">
-              <input type="range" min="0" max="600" step="50" v-model.number="menuConfig.animationDuration" />
-              <span>{{ menuConfig.animationDuration }}</span>
-            </div>
-          </label>
-        </div>
-      </div>
-    </transition> -->
   </nav>
 </template>
 
 <script setup lang="ts">
-import { computed, provide, reactive, ref, type PropType } from 'vue'
+import { computed, provide, ref, type PropType } from 'vue'
 import type { MenuItem as MenuItemType, MenuMode } from './index'
 
 const props = defineProps({
@@ -58,14 +20,22 @@ const props = defineProps({
     type: Function as PropType<(item: MenuItemType) => Promise<MenuItemType[] | void>>,
     default: undefined,
   },
-  width: {
-    type: String,
-    default: '300px',
-  },
   mode: {
     type: String as PropType<MenuMode>,
     default: 'vertical',
   },
+  menuConfig: {
+    type: Object as PropType<{
+      labelSize: number,
+      itemGap: number,
+      animationDuration: number,
+    }>,
+    default: () => ({
+      labelSize: 14,
+      itemGap: 4,
+      animationDuration: 250,
+    }),
+  }
 })
 
 const openKeys = defineModel<string[]>('openKeys', {
@@ -78,36 +48,67 @@ const selectedKeys = defineModel<string[]>('selectedKeys', {
   type: Array as PropType<string[]>,
 })
 
-const emit = defineEmits(['select'])
-
-const menuConfig = reactive({
-  labelSize: 14,
-  itemGap: 4,
-  animationDuration: 250,
+const domUpdated = defineModel<boolean>('domUpdated', {
+  default: false,
+  type: Boolean,
 })
 
-const showSettings = ref(false)
-const toggleSettings = () => {
-  showSettings.value = !showSettings.value
-}
+const emit = defineEmits(['select'])
+
+
 
 const menuStyle = computed(() => ({
-  width: props.width,
-  '--menu-label-size': `${menuConfig.labelSize}px`,
-  '--menu-item-gap': `${menuConfig.itemGap}px`,
-  '--menu-anim-duration': `${Math.max(menuConfig.animationDuration, 0)}ms`,
+
+  '--menu-label-size': `${props.menuConfig.labelSize}px`,
+  '--menu-item-gap': `${props.menuConfig.itemGap}px`,
+  '--menu-anim-duration': `${Math.max(props.menuConfig.animationDuration, 0)}ms`,
 }))
 
+//切换菜单
 const handleToggle = (item: MenuItemType | string) => {
-  const path = typeof item === 'string' ? item : item.path
-  const next = [...openKeys.value]
-  if (next.includes(path)) {
-    next.splice(next.indexOf(path), 1)
-  } else {
-    next.push(path)
+  const path = typeof item === 'string' ? item : item.path;
+  const currentOpenKeys = [...openKeys.value];
+  const itemIndex = currentOpenKeys.indexOf(path);
+
+  if (props.mode === 'inline') {
+    if (currentOpenKeys.includes(path)) {
+      currentOpenKeys.splice(currentOpenKeys.indexOf(path), 1)
+    } else {
+      currentOpenKeys.push(path)
+    }
+    openKeys.value = currentOpenKeys
+  } else if (props.mode === 'vertical') {
+    if (itemIndex > -1) {
+      // If the item is already open, close it and all its children
+      openKeys.value = currentOpenKeys.slice(0, itemIndex);
+    } else {
+      // Find the parent of the item to determine the correct level
+      const findPath = (items: MenuItemType[], targetPath: string): string[] | null => {
+        for (const currentItem of items) {
+          if (currentItem.path === targetPath) {
+            return [currentItem.path];
+          }
+          if (currentItem.children) {
+            const childPath = findPath(currentItem.children, targetPath);
+            if (childPath) {
+              return [currentItem.path, ...childPath];
+            }
+          }
+        }
+        return null;
+      };
+
+      const fullPath = findPath(props.items, path);
+      if (!fullPath) {
+        openKeys.value = [path]; // Item not found in hierarchy, open it at root
+        return;
+      }
+      const parentPath = fullPath.slice(0, -1);
+      const keysToKeep = currentOpenKeys.filter(key => parentPath.includes(key));
+      openKeys.value = [...keysToKeep, path];
+    }
   }
-  openKeys.value = next
-}
+};
 
 const handleSelect = (item: MenuItemType) => {
   const path = typeof item === 'string' ? item : item.path
@@ -124,12 +125,13 @@ const handleSelect = (item: MenuItemType) => {
 
 const closeKeys = () => {
   openKeys.value = []
-  console.log('closeOpenKeys', openKeys.value)
 }
+
+
 
 provide('openKeys', openKeys)
 provide('selectedKeys', selectedKeys)
-provide('menuConfig', menuConfig)
+provide('menuConfig', props.menuConfig)
 provide('menuOnLoad', props.onLoadData ?? null)
 provide('mode', props.mode)
 </script>
@@ -142,10 +144,9 @@ provide('mode', props.mode)
   padding: 6px;
   box-sizing: border-box;
   border: 1px solid var(--color-border, rgba(0, 0, 0, 0.1));
-  ;
+  border-bottom: none;
   overflow: visible;
   overflow-x: hidden;
-  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.08);
 
   &:hover .menu__settings-btn {
     opacity: 1;
@@ -164,110 +165,6 @@ provide('mode', props.mode)
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--menu-item-gap, 4px);
+  // gap: var(--menu-item-gap, 4px);
 }
-
-// .menu__settings-btn {
-//   position: absolute;
-//   left: 12px;
-//   bottom: 12px;
-//   width: 30px;
-//   height: 30px;
-//   border-radius: 50%;
-//   border: 1px solid var(--color-border, rgba(0, 0, 0, 0.1));
-//   background: var(--color-fill-secondary);
-//   color: var(--color-text);
-//   cursor: pointer;
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-//   font-size: 16px;
-//   transition: opacity 0.2s ease, transform 0.2s ease;
-//   opacity: 0.2;
-//   z-index: 2;
-
-//   &:hover {
-//     opacity: 1;
-//     transform: scale(1.05);
-//   }
-// }
-
-// .menu__settings-card {
-//   position: absolute;
-//   left: 12px;
-//   bottom: 48px;
-//   width: 220px;
-//   border-radius: 12px;
-//   background: var(--color-bg-elevated);
-//   border: 1px solid var(--color-border);
-//   box-shadow: 0 10px 30px rgba(15, 23, 42, 0.15);
-//   padding: 12px;
-//   z-index: 3;
-// }
-
-// .menu__settings-header {
-//   display: flex;
-//   align-items: center;
-//   justify-content: space-between;
-//   margin-bottom: 8px;
-
-//   h4 {
-//     font-size: 0.85rem;
-//     margin: 0;
-//   }
-// }
-
-// .menu__settings-close {
-//   border: none;
-//   background: transparent;
-//   cursor: pointer;
-//   font-size: 18px;
-//   line-height: 1;
-//   color: var(--color-text-tertiary);
-
-//   &:hover {
-//     color: var(--color-text);
-//   }
-// }
-
-// .menu__settings-body {
-//   display: flex;
-//   flex-direction: column;
-//   gap: 10px;
-// }
-
-// .menu__settings-field {
-//   display: flex;
-//   flex-direction: column;
-//   gap: 4px;
-//   font-size: 12px;
-//   color: var(--color-text-tertiary);
-// }
-
-// .menu__settings-control {
-//   display: flex;
-//   align-items: center;
-//   gap: 8px;
-
-//   input {
-//     flex: 1;
-//   }
-
-//   span:last-child {
-//     min-width: 32px;
-//     text-align: right;
-//     color: var(--color-text);
-//     font-weight: 600;
-//   }
-// }
-
-// .menu-config-enter-active,
-// .menu-config-leave-active {
-//   transition: opacity 0.2s ease, transform 0.2s ease;
-// }
-
-// .menu-config-enter-from,
-// .menu-config-leave-to {
-//   opacity: 0;
-//   transform: translateY(8px);
-// }</style>
+</style>
