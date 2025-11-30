@@ -31,6 +31,7 @@
     "hello": "pnpm -F myvue hello",
     "myvue": "pnpm -F myvue run dev",
     "g": "pnpm -F myvue g",
+    "translate": "pnpm -F myvue translate",
     "svelte": "pnpm -F svelte dev",
     "build:svelte": "pnpm -F svelte build",
     "preview:svelte": "pnpm -F svelte preview",

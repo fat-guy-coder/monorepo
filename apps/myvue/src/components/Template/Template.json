@@ -1,0 +1,70 @@
+{
+  "components": {
+    "card": {
+      "borderRadius": "12px",
+      "shadow": "0 4px 6px -1px rgba(0, 0, 0, 0.05)",
+      "hoverShadow": "0 8px 20px rgba(0, 0, 0, 0.12)",
+      "hoverTransform": "translateY(-3px)"
+    },
+    "navTagCard": {
+      "mode": "scroll",
+      "direction": "horizontal",
+      "animation": "opacity",
+      "transition": "opacity 0.3s ease"
+    },
+    "link": {
+      "size": "small",
+      "variant": "solid",
+      "animation": "lift",
+      "rounded": "md"
+    },
+    "section": {
+      "borderRadius": "16px",
+      "padding": "var(--padding-3xl)",
+      "shadow": "0 4px 20px rgba(0, 0, 0, 0.08)",
+      "hoverShadow": "0 8px 30px rgba(0, 0, 0, 0.12)",
+      "hoverTransform": "translateY(-2px)"
+    }
+  },
+  "spacing": {
+    "list": "var(--gap-lg)",
+    "card": "var(--gap-xl)",
+    "link": "var(--gap-sm)",
+    "section": "var(--margin-4xl)"
+  },
+  "normal": {
+    "grid": {
+      "columns": "repeat(auto-fit, minmax(300px, 1fr))",
+      "gap": "var(--gap-xl)"
+    }
+  },
+  "list": {
+    "layout": "grid",
+    "layoutType": "multi-column",
+    "grid": {
+      "columns": "repeat(auto-fill, minmax(300px, 1fr))",
+      "gap": "var(--gap-xl)",
+      "minColumnWidth": "300px"
+    },
+    "category": {
+      "columns": "repeat(auto-fill, minmax(300px, 1fr))",
+      "gap": "var(--gap-xl)"
+    }
+  },
+  "waterfall": {
+    "layout": "column",
+    "layoutType": "two-column",
+    "grid": {
+      "columns": "1fr 1fr",
+      "gap": "var(--gap-2xl)"
+    }
+  },
+  "mixed": {
+    "layout": "mixed",
+    "grid": {
+      "columns": "repeat(auto-fit, minmax(300px, 1fr))",
+      "gap": "var(--gap-xl)"
+    }
+  }
+}
+

@@ -71,7 +71,10 @@
   // 高亮代码
   const highlightCode = () => {
     if (preElement.value) {
-      highlightElement(preElement.value.querySelector('code')!)
+      const codeElement = preElement.value.querySelector('code');
+      if (codeElement) {
+        highlightElement(codeElement);
+      }
     }
   }
 
