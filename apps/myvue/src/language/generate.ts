@@ -1,5 +1,5 @@
 import fs from 'fs'
-import path from 'path'
+import path ,from 'path'
 import * as compiler from '@vue/compiler-sfc'
 import MagicString from 'magic-string'
 import type { SupportedLanguage } from './index'
@@ -22,7 +22,7 @@ export interface TranslationConfig {
 }
 
 // --- 配置加载 ---
-export function loadConfig(configPath: string = path.join(process.cwd(), 'apps/myvue/src/language/translation.config.json')): TranslationConfig {
+export function loadConfig(configPath: string = path.join(path.dirname, 'translation.config.json')): TranslationConfig {
   if (!fs.existsSync(configPath)) {
     throw new Error(`Translation config file not found at: ${configPath}`);
   }
@@ -77,7 +77,7 @@ function processVueFile(filePath: string): Map<string, string> {
   let keyIndex = 0;
 
   if (descriptor.template) {
-    compiler.walk(descriptor.template.ast, {
+    compiler.traverse(descriptor.template.ast, {
       enter(node) {
         if (node.type === 2 /* TEXT */) {
           const text = node.content.trim();
@@ -127,18 +127,18 @@ async function runAutoTranslate(filesToProcess: string[]) {
     return;
   }
 
-  if (!files || files.length === 0) {
+  if (!filesToProcess || filesToProcess.length === 0) {
     console.warn('No files specified in translation.config.json. Exiting.');
     return;
   }
 
-  for (const filePath of files) {
+  for (const filePath of filesToProcess) {
     const absolutePath = path.join(process.cwd(), filePath);
     if (!fs.existsSync(absolutePath)) {
       console.error(`File not found: ${absolutePath}. Skipping.`);
       continue;
     }
-
+console.log(absolutePath);
     const extractedTexts = processVueFile(absolutePath);
 
     if (extractedTexts.size === 0) {
