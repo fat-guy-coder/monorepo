@@ -353,7 +353,7 @@ function isMouseInElement(element: HTMLElement, mouseX: number, mouseY: number) 
 .menu-item__title--selected {
     background: var(--color-highlight-bg);
     color: var(--color-highlight-text);
-    box-shadow: var(--box-shadow-xs);
+    box-shadow: var(--box-shadow-sm);
 
     .menu-item__label {
         color: inherit;

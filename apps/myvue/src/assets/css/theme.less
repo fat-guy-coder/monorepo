@@ -717,14 +717,14 @@ body[data-theme="cool"] {
   // Box-shadow根据尺寸生成不同的偏移、模糊和阴影强度。
   /* 按尺寸生成阴影: x, y, blur, spread, 以及透明度（高度越大，透明度增加，模糊变广） */
   /* 尺寸/等级 | x   | y   | blur | spread | alpha */
-  --box-shadow-xs: 0.0625rem 0.0625rem 0.125rem 0.0625rem rgba(@theme-box-shadow-color, 0.5);
-  --box-shadow-sm: 0.125rem 0.125rem 0.25rem 0.125rem rgba(@theme-box-shadow-color, 0.16);
-  --box-shadow-md: 0.25rem 0.25rem 0.5rem 0.25rem rgba(@theme-box-shadow-color, 0.24);
-  --box-shadow-lg: 0.5rem 0.5rem 1rem 0.5rem rgba(@theme-box-shadow-color, 0.32);
-  --box-shadow-xl: 0.75rem 0.75rem 1.5rem 0.75rem rgba(@theme-box-shadow-color, 0.20);
-  --box-shadow-2xl: 1rem 1rem 2rem 1rem rgba(@theme-box-shadow-color, 0.48);
-  --box-shadow-3xl: 1.5rem 1.5rem 3rem 1.5rem rgba(@theme-box-shadow-color, 0.64);
-  --box-shadow-4xl: 2rem 2rem 4rem 2rem rgba(@theme-box-shadow-color, 0.80); // ≈32 和 64 基准单位
+  --box-shadow-xs: 0.0625rem 0.0625rem 0.125rem 0.0625rem rgba(@theme-box-shadow-color, 0.2);
+  --box-shadow-sm: 0.125rem 0.125rem 0.25rem 0.125rem rgba(@theme-box-shadow-color, 0.3);
+  --box-shadow-md: 0.25rem 0.25rem 0.5rem 0.25rem rgba(@theme-box-shadow-color, 0.4);
+  --box-shadow-lg: 0.5rem 0.5rem 1rem 0.5rem rgba(@theme-box-shadow-color, 0.5);
+  --box-shadow-xl: 0.75rem 0.75rem 1.5rem 0.75rem rgba(@theme-box-shadow-color, 0.6);
+  --box-shadow-2xl: 1rem 1rem 2rem 1rem rgba(@theme-box-shadow-color, 0.7);
+  --box-shadow-3xl: 1.5rem 1.5rem 3rem 1.5rem rgba(@theme-box-shadow-color, 0.8);
+  --box-shadow-4xl: 2rem 2rem 4rem 2rem rgba(@theme-box-shadow-color, 0.9); // ≈32 和 64 基准单位
   --box-shadow-none: 0 0 0 0 rgba(0, 0, 0, 0);
 
   .box-shadow(x, y, blur, spread, alpha) {
@@ -732,11 +732,11 @@ body[data-theme="cool"] {
   }
 
   /* 内阴影与外阴影（默认暗色调/柔光，可通过使用box-shadow-rgba函数结合不同透明度调用）*/
-  --box-shadow-inner: inset 0 0.0625rem 0.125rem 0.0625rem rgba(@theme-box-shadow-color, 0.12);
-  --box-shadow-outer: 0 0.125rem 0.375rem 0 rgba(@theme-box-shadow-color, 0.14);
-  --box-shadow-inset: inset 0 0.125rem 0.25rem 0.125rem rgba(@theme-box-shadow-color, 0.14);
-  --box-shadow-inset-outer: inset 0 0.25rem 0.5rem 0.25rem rgba(@theme-box-shadow-color, 0.18);
-  --box-shadow-inset-inner: inset 0 0.5rem 1rem 0.5rem rgba(@theme-box-shadow-color, 0.24);
+  --box-shadow-inner: inset 0 0.0625rem 0.125rem 0.0625rem rgba(@theme-box-shadow-color, 0.5);
+  --box-shadow-outer: 0 0.125rem 0.375rem 0 rgba(@theme-box-shadow-color, 0.5);
+  --box-shadow-inset: inset 0 0.125rem 0.25rem 0.125rem rgba(@theme-box-shadow-color, 0.5);
+  --box-shadow-inset-outer: inset 0 0.25rem 0.5rem 0.25rem rgba(@theme-box-shadow-color, 0.5);
+  --box-shadow-inset-inner: inset 0 0.5rem 1rem 0.5rem rgba(@theme-box-shadow-color, 0.5);
 
 
   /* 间距变量 */
