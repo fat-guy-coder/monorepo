@@ -172,13 +172,13 @@ const handleClick = (event: MouseEvent) => {
 
 // Card Background Animation
 .custom-link--type-card.custom-link--gradient-anim-linear:before {
-  background: linear-gradient(90deg, var(--color-link-gradient-1), var(--color-link-gradient-2), var(--color-link-gradient-1));
+  background: linear-gradient(90deg, var(--color-gradient-group-1), var(--color-gradient-group-2), var(--color-gradient-group-1));
   background-size: 200% 100%;
   animation: linear-wipe 2s linear infinite;
 }
 
 .custom-link--type-card.custom-link--gradient-anim-round:before {
-  background: radial-gradient(circle, var(--color-link-gradient-1) 0%, var(--color-link-gradient-2) 70%, var(--color-link-gradient-3) 100%);
+  background: radial-gradient(circle, var(--color-gradient-group-1) 0%, var(--color-gradient-group-2) 70%, var(--color-gradient-group-3) 100%);
   transform: scale(0);
 }
 
@@ -197,13 +197,13 @@ const handleClick = (event: MouseEvent) => {
 }
 
 .custom-link--type-a.custom-link--gradient-anim-linear:hover .custom-link__text {
-  background-image: linear-gradient(90deg, var(--color-link-gradient-1), var(--color-link-gradient-2), var(--color-link-gradient-1));
+  background-image: linear-gradient(90deg, var(--color-gradient-group-1), var(--color-gradient-group-2), var(--color-gradient-group-1));
   background-size: 200% 100%;
   animation: linear-wipe 2s linear infinite;
 }
 
 .custom-link--type-a.custom-link--gradient-anim-round:hover .custom-link__text {
-  background-image: radial-gradient(circle, var(--color-link-gradient-1), var(--color-link-gradient-2));
+  background-image: radial-gradient(circle, var(--color-gradient-group-1), var(--color-gradient-group-2));
 }
 
 @keyframes linear-wipe {

@@ -8,14 +8,11 @@
 </template>
 
 <script setup lang="ts">
-import { computed, provide, type PropType } from 'vue'
+import { computed, provide, watch, type PropType } from 'vue'
 import type { MenuItem as MenuItemType, MenuMode } from './index'
+import { useUserStore } from '@/stores/user'
 
 const props = defineProps({
-  collapsed: {
-    type: Boolean,
-    default: false,
-  },
   items: {
     type: Array as PropType<MenuItemType[]>,
     required: true,
@@ -28,6 +25,14 @@ const props = defineProps({
     type: String as PropType<MenuMode>,
     default: 'vertical',
   },
+  collapsed: {
+    type: Boolean,
+    default: false,
+  },
+  renderAllChildren: {
+    type: Boolean,
+    default: false,
+  },
   menuConfig: {
     type: Object as PropType<{
       labelSize: number,
@@ -39,8 +44,9 @@ const props = defineProps({
       itemGap: 4,
       animationDuration: 250,
     }),
-  }
+  },
 })
+
 
 const openKeys = defineModel<string[]>('openKeys', {
   default: () => [],
@@ -51,6 +57,7 @@ const selectedKeys = defineModel<string[]>('selectedKeys', {
   default: () => [],
   type: Array as PropType<string[]>,
 })
+
 
 
 const emit = defineEmits(['select'])
@@ -127,21 +134,34 @@ const closeKeys = () => {
 
 
 
+watch(() => props.collapsed, (newVal) => {
+  if (newVal) {
+    openKeys.value = []
+  }
+},
+  { immediate: true }
+)
+
+const isMobile = computed(() => useUserStore().user.device.isMobile)
+
+const mode = computed(() => props.mode)
+
 provide('openKeys', openKeys)
 provide('selectedKeys', selectedKeys)
 provide('menuConfig', props.menuConfig)
 provide('menuOnLoad', props.onLoadData ?? null)
-provide('mode', props.mode)
+provide('mode', mode)
+provide('collapsed', props.collapsed)
+provide('isMobile', isMobile)
 </script>
 
 <style lang="less" scoped>
 .main-menu {
   position: relative;
-  background: var(--color-bg-container);
-  border-radius: var(--element-border-radius);
-  padding: 6px;
+  background: var(--color-background);
+  border-radius: var(--border-radius-md);
   box-sizing: border-box;
-  border: 1px solid var(--color-border, rgba(0, 0, 0, 0.1));
+  border: var(--border-width) solid var(--color-border);
   border-bottom: none;
   overflow: visible;
   overflow-x: hidden;
@@ -151,9 +171,9 @@ provide('mode', props.mode)
   }
 }
 
-@supports (backdrop-filter: blur(8px)) {
+@supports (backdrop-filter: blur(0.5rem)) {
   .main-menu__settings-card {
-    backdrop-filter: blur(8px);
+    backdrop-filter: blur(0.5rem);
   }
 }
 
@@ -163,6 +183,5 @@ provide('mode', props.mode)
   padding: 0;
   display: flex;
   flex-direction: column;
-  // gap: var(--menu-item-gap, 4px);
 }
 </style>

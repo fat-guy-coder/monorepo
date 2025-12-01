@@ -197,7 +197,7 @@ defineExpose({ scrollToTarget })
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(90deg, var(--color-link-gradient-1), var(--color-link-gradient-2), var(--color-link-gradient-1));
+    background: linear-gradient(90deg, var(--color-gradient-group-1), var(--color-gradient-group-2), var(--color-gradient-group-1));
     background-size: 200% 100%;
     opacity: 0;
     transition: opacity var(--transition-duration, 0.4s) ease;

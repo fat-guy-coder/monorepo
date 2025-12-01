@@ -1,5 +1,5 @@
 <template>
-  <div ref=" container" class="container">
+  <div ref=" container" class="main-view-container">
     <!-- 导航组件示例 -->
     <Navigation position="bottom-right" :offset="{ bottom: '2rem', right: '0.5rem' }" :isMobile="isMobile"
       @item-click="handleNavClick">
@@ -35,7 +35,7 @@
       </div>
       <div :class="Menucollapsed ? 'menu-collapsed' : 'menu'">
         <Spin :spinning="loading" class="loading" />
-        <Menu @select="goto" :collapsed="Menucollapsed" :mode="Menucollapsed ? 'vertical' : 'inline'" v-if="!loading"
+        <Menu @select="goto" :collapsed="Menucollapsed" v-show="!loading" :mode="Menucollapsed ? 'vertical' : 'inline'"
           :items="menus as any" v-model:selectedKeys="selectedKeys" v-model:openKeys="openKeys">
         </Menu>
       </div>
@@ -490,9 +490,9 @@ const handleNavClick = (index: number) => {
   opacity: 0;
 }
 
-.container {
+.main-view-container {
   display: flex;
-  background: var(--element-background);
+  background: var(--color-background);
 }
 
 .loading {
@@ -516,10 +516,10 @@ const handleNavClick = (index: number) => {
 }
 
 .menu {
-  width: 315px;
+  width: 20rem;
   height: calc(100vh - 2.2rem);
   overflow: auto;
-  border-right: 1px solid var(--element-border);
+  border-right: var(--border-width) solid var(--color-border);
 }
 
 .menu-collapsed {
@@ -563,17 +563,17 @@ const handleNavClick = (index: number) => {
   min-width: 20px;
   min-height: 20px;
   padding: 10px;
-  background: var(--element-background);
+  background: var(--color-background-soft);
   color: var(--color-text);
-  border: 1px solid var(--element-border);
+  border: var(--border-width) solid var(--color-border);
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   cursor: pointer;
   transition: all 0.3s ease;
 
   &:hover {
-    background: var(--element-background-soft);
-    border-color: var(--element-border-hover);
+    background: var(--color-background-soft);
+    border-color: var(--color-border-hover);
     transform: translateY(-2px);
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
   }

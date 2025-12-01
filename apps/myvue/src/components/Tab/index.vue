@@ -214,7 +214,7 @@ onUnmounted(() => {
     align-items: center;
     border-bottom: 1px solid var(--color-border);
     margin-bottom: 12px;
-    background: var(--element-background);
+    background: var(--color-background);
     border-radius: 6px 6px 0 0;
     min-height: 44px;
 }
@@ -251,8 +251,8 @@ onUnmounted(() => {
         transition: all 0.3s ease;
         white-space: nowrap;
         border-radius: 4px;
-        border: 1px solid transparent;
-        background: var(--element-background-soft);
+        border: var(--border-width) solid transparent;
+        background: var(--color-background-soft);
         min-height: 32px;
 
         &:hover {
@@ -308,7 +308,7 @@ onUnmounted(() => {
     align-items: center;
     justify-content: center;
     border: none;
-    background: var(--color-bg-container);
+    background: var(--color-background);
     color: var(--color-text-tertiary);
     cursor: pointer;
     padding: 8px 12px;
@@ -382,9 +382,9 @@ onUnmounted(() => {
 
     .tab-pane .tab {
         border-radius: 6px 6px 0 0;
-        border: 1px solid var(--color-border);
+        border: var(--border-width) solid var(--color-border);
         border-bottom: none;
-        background: var(--element-background);
+        background: var(--color-background);
         margin-bottom: -1px;
 
         &.is-active {
@@ -417,8 +417,8 @@ onUnmounted(() => {
 
     .tab-pane .tab {
         border-radius: 6px;
-        border: 1px solid var(--color-border);
-        background: var(--element-background);
+        border: var(--border-width) solid var(--color-border);
+        background: var(--color-background);
         padding: 6px 12px 6px 16px;
 
         &.is-active {

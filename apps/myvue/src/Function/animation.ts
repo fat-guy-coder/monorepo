@@ -27,7 +27,7 @@ export const getAnimationAllClassNames = (animation: AnimationType | AnimationTy
  * @param mode 动画模式
  * @returns 
  */
-export function animateHeight(element: HTMLElement, isOpening: boolean, duration = 250, mode: 'vertical' | 'inline' = 'inline') {
+export async function animateHeight(element: HTMLElement, isOpening: boolean, duration = 250, mode: 'vertical' | 'inline' = 'inline') {
     if (duration <= 0) {
         element.style.height = isOpening ? 'auto' : '0px';
         element.style.opacity = isOpening ? '1' : '0';
@@ -119,7 +119,18 @@ export function animateHeight(element: HTMLElement, isOpening: boolean, duration
                 element.style.width = '0px';
             }
         };
+        return new Promise((resolve) => {
+            animation.onfinish = () => {
+                element.style.height = '0px'; // 动画结束后设置为 0
+                element.style.display = 'none'; // Hide element after animation
+                if (isVertical) {
+                    element.style.width = '0px';
+                }
+                resolve(true)
+            }
+        })
     }
+    return null
 }
 
 //根据列表数量获取动画时间

@@ -1,0 +1,109 @@
+// Import theme variables to use gradient colors
+@import 'theme.less';
+
+/* ============================================ */
+/* Keyframes for Animations                   */
+/* ============================================ */
+
+@keyframes animated-gradient-background {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes animated-gradient-shadow {
+  0% {
+    box-shadow: 0 0 20px var(--color-gradient-group-1), 0 0 30px var(--color-gradient-group-2);
+  }
+  25% {
+    box-shadow: 0 0 25px var(--color-gradient-group-3), 0 0 35px var(--color-gradient-group-4);
+  }
+  50% {
+    box-shadow: 0 0 20px var(--color-gradient-group-5), 0 0 30px var(--color-gradient-group-6);
+  }
+  75% {
+    box-shadow: 0 0 25px var(--color-gradient-group-7), 0 0 35px var(--color-gradient-group-8);
+  }
+  100% {
+    box-shadow: 0 0 20px var(--color-gradient-group-9), 0 0 30px var(--color-gradient-group-10);
+  }
+}
+
+/* ============================================ */
+/* Mixins for Effects                         */
+/* ============================================ */
+
+.gradient-base(@speed: 15s) {
+  background-size: 400% 400%;
+  animation: animated-gradient-background @speed ease infinite;
+}
+
+/* ============================================ */
+/* Background Gradient Effects                */
+/* ============================================ */
+
+.bg-gradient-animated-3 {
+  .gradient-base();
+  background-image: linear-gradient(
+    -45deg,
+    var(--color-gradient-group-1),
+    var(--color-gradient-group-2),
+    var(--color-gradient-group-3)
+  );
+}
+
+.bg-gradient-animated-5 {
+  .gradient-base();
+  background-image: linear-gradient(
+    -45deg,
+    var(--color-gradient-group-1),
+    var(--color-gradient-group-2),
+    var(--color-gradient-group-3),
+    var(--color-gradient-group-4),
+    var(--color-gradient-group-5)
+  );
+}
+
+.bg-radial-gradient-animated-3 {
+  .gradient-base(20s);
+  background-image: radial-gradient(
+    circle,
+    var(--color-gradient-group-6),
+    var(--color-gradient-group-7),
+    var(--color-gradient-group-8)
+  );
+}
+
+/* ============================================ */
+/* Text Gradient Effects                      */
+/* ============================================ */
+
+.text-gradient-animated {
+  .gradient-base();
+  background-image: linear-gradient(
+    -45deg,
+    var(--color-gradient-group-9),
+    var(--color-gradient-group-10),
+    var(--color-gradient-group-1)
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
+  color: transparent; // Fallback
+}
+
+/* ============================================ */
+/* Box Shadow Effects                         */
+/* ============================================ */
+
+.box-shadow-animated {
+  animation: animated-gradient-shadow 12s ease-in-out infinite alternate;
+}
+

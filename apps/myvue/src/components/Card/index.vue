@@ -1,21 +1,8 @@
 <template>
-  <div
-    class="ui-card"
-    :class="[
-      `size-${size}`,
-      { 'is-hoverable': hoverable, 'is-bordered': bordered }
-    ]"
-    :style="{
-      '--card-border-color': borderColor,
-      '--card-radius': 'var(--element-border-radius)',
-      '--card-bg': 'var(--element-background)',
-      '--card-text': 'var(--color-text)',
-      '--card-heading': 'var(--color-heading)',
-      '--card-padding': padding || 'var(--element-padding)',
-      '--card-shadow': '0 2px 8px rgba(0,0,0,0.08)',
-      '--card-shadow-hover': '0 6px 18px rgba(0,0,0,0.12)'
-    } as any"
-  >
+  <div class="ui-card" :class="[
+    `size-${size}`,
+    { 'is-hoverable': hoverable, }
+  ]">
     <div v-if="hasTitle" class="ui-card__header">
       <slot name="title">
         <div class="ui-card__title">{{ title }}</div>
@@ -31,7 +18,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, useSlots } from 'vue'
+import { computed, useSlots, type CSSProperties } from 'vue'
 
 interface Props {
   title?: string
@@ -49,10 +36,7 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   title: '',
-  borderColor: 'var(--color-primary)',
-  bordered: true,
-  hoverable: true,
-  padding: '',
+  style: {} as CSSProperties | string,
   size: 'md'
 })
 
@@ -63,34 +47,32 @@ const hasTitle = computed(() => !!(props.title || (slots && (slots as any).title
 <style lang="less" scoped>
 .ui-card {
   position: relative;
-  color: var(--card-text);
-  background: var(--card-bg);
-  border-radius: var(--card-radius);
-  padding: var(--card-padding);
-  box-shadow: var(--card-shadow);
+  color: var(--color-text);
+  background: var(--color-background);
+  border-radius: var(--border-radius-md);
+  padding: var(--padding-2xl);
+  box-shadow: var(--box-shadow-md);
   transition: box-shadow 0.25s ease, transform 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
-  border: 1px solid transparent;
-
-  &.is-bordered {
-    border-color: var(--card-border-color);
-  }
+  border: var(--border-width) solid transparent;
 
   &.is-hoverable:hover {
-    box-shadow: var(--card-shadow-hover);
+    box-shadow: var(--box-shadow-hover);
     transform: translateY(-2px);
   }
 
   /* 尺寸 */
   &.size-sm {
-    --card-padding: calc(var(--element-padding) * 0.75);
-    font-size: 0.92rem;
+    padding: var(--padding-2xl);
+    font-size: var(--font-size-sm);
   }
+
   &.size-md {
-    --card-padding: var(--element-padding);
-    font-size: 1rem;
+    padding: calc(var(--padding-2xl) * 0.75);
+    font-size: var(--font-size-normal);
   }
+
   &.size-lg {
-    --card-padding: calc(var(--element-padding) * 1.25);
+    padding: calc(var(--padding-2xl) * 1.25);
     font-size: 1.06rem;
   }
 }
@@ -100,13 +82,12 @@ const hasTitle = computed(() => !!(props.title || (slots && (slots as any).title
 }
 
 .ui-card__title {
-  color: var(--card-heading);
+  color: var(--color-heading);
   font-weight: 600;
   font-size: 1.05em;
 }
 
 .ui-card__body {
-  color: var(--card-text);
+  color: var(--color-text);
 }
 </style>
-

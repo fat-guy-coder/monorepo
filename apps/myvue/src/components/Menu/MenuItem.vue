@@ -45,6 +45,7 @@ import {
     inject,
     type PropType,
     type Ref,
+    toRef,
 } from 'vue'
 import { type MenuItem as MenuItemType, } from './index'
 import { animateHeight } from '@/Function'
@@ -72,18 +73,25 @@ const props = defineProps({
     }
 })
 
+
 const emit = defineEmits(['toggle', 'select', 'close'])
 
 const openKeys = inject('openKeys', ref([])) as Ref<string[]>
 const selectedKeys = inject('selectedKeys', ref([])) as Ref<string[]>
 const menuConfig = inject('menuConfig', {
-    labelSize: 14,
-    itemGap: 4,
+    labelSize: '0.88rem',
+    itemGap: '0.25rem',
     animationDuration: 250,
-}) as { labelSize: number; itemGap: number; animationDuration: number }
+}) as { labelSize: string; itemGap: string; animationDuration: number }
+
 
 const menuLoader = inject<((item: MenuItemType) => Promise<MenuItemType[] | void>) | null>('menuOnLoad', null)
-const mode = inject<'inline' | 'vertical'>('mode', 'inline')
+
+const isMobile = inject('isMobile', ref(false)) as Ref<boolean>
+
+const mode = inject('mode') as Ref<'inline' | 'vertical'>
+
+
 
 const isHovered = ref(false)
 
@@ -97,6 +105,7 @@ const hasLocalChildren = computed(() => localChildren.value.length > 0)
 const expectRemoteChildren = computed(() => !!props.item.hasChildren && typeof menuLoader === 'function')
 const hasPotentialChildren = computed(() => hasLocalChildren.value || expectRemoteChildren.value)
 const canToggle = computed(() => hasPotentialChildren.value)
+
 
 //确定是否需要渲染子菜单
 const ensureChildren = async () => {
@@ -123,23 +132,25 @@ const ensureChildren = async () => {
 }
 
 const handleClick = async () => {
-    if (mode === 'inline') {
-        if (!props.item.children) {
-            emit('select', props.item)
-        }
-        if (!canToggle.value) return
-
+    if (!canToggle.value) {
+        emit('select', props.item)
+        return
+    }
+    if (mode.value === 'inline') {
         if (props.isOpen) {
             emit('toggle', props.item)
+            //删除节点
+            await nextTick()
         } else {
             const ready = await ensureChildren()
             if (ready) {
                 emit('toggle', props.item)
             }
         }
-    } else {
-        emit('select', props.item)
     }
+    //  else {
+    //     console.log(mode)
+    // }
 }
 
 
@@ -159,7 +170,7 @@ const getChildrenWrapperPosition = (e: MouseEvent) => {
 
 const handleMouseEnter = async (e: MouseEvent) => {
     isHovered.value = true
-    if (mode === 'vertical') {
+    if (mode.value === 'vertical') {
         if (!canToggle.value) {
             emit('toggle', props.item)
             return
@@ -176,7 +187,7 @@ const handleMouseEnter = async (e: MouseEvent) => {
 
 const handleMouseLeave = (e: MouseEvent) => {
     isHovered.value = false
-    if (mode === 'vertical') {
+    if (mode.value === 'vertical') {
         //检测是否移出了子菜单区域
         const isMouseInMenuItems = getMouseInChildWrapperVerticalElement(e)
         if (!isMouseInMenuItems) {
@@ -189,6 +200,7 @@ const handleMouseAllLeave = (e: MouseEvent) => {
     const isMouseInMenuItems = getMouseInChildWrapperVerticalElement(e)
     if (!isMouseInMenuItems) {
         emit('close')
+        shouldRenderChildren.value = false
     }
 }
 
@@ -215,9 +227,12 @@ watch(
         await nextTick()
         if (childrenWrapper.value && shouldRenderChildren.value) {
             const duration = Math.max(menuConfig.animationDuration ?? 0, 0)
-            animateHeight(childrenWrapper.value, newVal, duration, mode)
+            await animateHeight(childrenWrapper.value, newVal, duration, mode.value)
+            if (!newVal) {
+                shouldRenderChildren.value = false
+                childrenWrapper.value = null
+            }
         }
-
     },
     { immediate: true }
 )
@@ -234,6 +249,14 @@ watch(
         }
     }
 )
+
+const collapsed = inject('collapsed') as any
+
+watch(() => collapsed, (newVal) => {
+    if (newVal && mode.value === 'vertical' && shouldRenderChildren.value) {
+        shouldRenderChildren.value = false
+    }
+}, { immediate: true })
 
 
 function isMouseInElement(element: HTMLElement, mouseX: number, mouseY: number) {
@@ -253,21 +276,23 @@ function isMouseInElement(element: HTMLElement, mouseX: number, mouseY: number) 
 <style lang="less" scoped>
 .menu-item {
     list-style: none;
+    margin: 0;
+    padding: 0.125rem 0.125rem;
 }
 
 .menu-item__title {
     display: flex;
     align-items: center;
-    gap: 6px;
-    padding: 4px 8px;
-    padding-left: calc(8px + var(--level, 0) * 16px);
+    gap: var(--gap-xs);
+    padding: var(--gap-xs) var(--gap-sm);
+    padding-left: calc(var(--gap-sm) + var(--level, 0) * var(--gap-md));
     cursor: pointer;
-    border-radius: var(--element-border-radius);
+    border-radius: var(--border-radius-md);
 }
 
 .menu-item__icon {
-    margin-right: 8px;
-    font-size: 1rem;
+    margin-right: var(--gap-xs);
+    font-size: var(--font-size-normal);
     flex-shrink: 0;
 }
 
@@ -276,7 +301,7 @@ function isMouseInElement(element: HTMLElement, mouseX: number, mouseY: number) 
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    font-size: var(--menu-label-size, 0.88rem);
+    font-size: var(--font-size-sm);
     color: var(--color-text);
 }
 
@@ -285,12 +310,12 @@ function isMouseInElement(element: HTMLElement, mouseX: number, mouseY: number) 
 }
 
 .menu-item__arrow {
-    width: 18px;
-    height: 18px;
+    width: 1.125rem;
+    height: 1.125rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-left: 6px;
+    margin-left: 0.375rem;
     transition: transform 0.2s ease;
     color: var(--color-text-tertiary);
 
@@ -311,8 +336,7 @@ function isMouseInElement(element: HTMLElement, mouseX: number, mouseY: number) 
 
 .menu-item__children-wrapper-vertical {
     position: absolute;
-    left: 300px;
-    top: 100px;
+
     z-index: 1000;
     overflow: hidden;
 }
@@ -323,13 +347,13 @@ function isMouseInElement(element: HTMLElement, mouseX: number, mouseY: number) 
     padding: 0;
     display: flex;
     flex-direction: column;
-    gap: var(--menu-item-gap, 4px);
+    gap: var(--menu-item-gap, 0.25rem);
 }
 
 .menu-item__title--selected {
     background: var(--color-highlight-bg);
     color: var(--color-highlight-text);
-    box-shadow: inset 0 0 0 1px var(--color-primary);
+    box-shadow: var(--box-shadow-xs);
 
     .menu-item__label {
         color: inherit;

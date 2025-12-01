@@ -124,7 +124,7 @@ const endSorting = (path: string) => {
 }
 
 .active {
-  background-color: var(--element-background);
+  background-color: var(--color-background);
 }
 
 .left-shift {
@@ -145,10 +145,10 @@ const endSorting = (path: string) => {
   top: 0;
   right: 0;
   z-index: 1000;
-  background: var(--element-background);
+  background: var(--color-background);
   color: var(--color-text);
   height: 1px;
-  // border: 1px solid var(--element-border);
+  // border: var(--border-width) solid var(--color-border);
   border-radius: 8px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
   width: 120px;
@@ -169,7 +169,7 @@ const endSorting = (path: string) => {
     color: var(--color-text);
 
     &:hover {
-      background-color: var(--element-background-soft);
+      background-color: var(--color-background-soft);
       color: var(--color-primary);
       transform: translate(1px, 1px);
     }
@@ -180,8 +180,8 @@ const endSorting = (path: string) => {
 
   /* Tabs 容器背景与下边框 */
   .ant-tabs-nav {
-    background: var(--element-background);
-    border-bottom: 1px solid var(--element-border);
+    background: var(--color-background);
+    border-bottom: var(--border-width) solid var(--color-border);
     margin: 0 !important;
   }
 
@@ -202,13 +202,13 @@ const endSorting = (path: string) => {
 
   /* 可编辑卡片型的卡片背景与边框 */
   &.ant-tabs-card>.ant-tabs-nav .ant-tabs-tab {
-    background: var(--element-background);
-    border: 1px solid var(--element-border);
+    background: var(--color-background);
+    border: var(--border-width) solid var(--element-border);
   }
 
   &.ant-tabs-card>.ant-tabs-nav .ant-tabs-tab-active {
-    background: var(--element-background-soft);
-    border: 1px solid var(--color-primary);
+    background: var(--color-background-soft);
+    border: var(--border-width) solid var(--color-primary);
   }
 
   /* 关闭图标颜色 */
