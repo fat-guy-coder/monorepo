@@ -51,7 +51,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch, type CSSProperties, type PropType } from 'vue'
 import { useUserStore } from '@/stores/user'
-import { animateHeight, calculateAnimationDuration } from '@/Function/CommonFun'
+import { animateHeight, calculateAnimationDuration } from '@/Function'
 
 interface Item {
   title?: string

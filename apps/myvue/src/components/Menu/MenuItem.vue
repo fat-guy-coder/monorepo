@@ -46,7 +46,8 @@ import {
     type PropType,
     type Ref,
 } from 'vue'
-import { type MenuItem as MenuItemType, animateHeight } from './index'
+import { type MenuItem as MenuItemType, } from './index'
+import { animateHeight } from '@/Function'
 
 defineOptions({
     name: 'MenuItem',
@@ -329,6 +330,7 @@ function isMouseInElement(element: HTMLElement, mouseX: number, mouseY: number) 
     background: var(--color-highlight-bg);
     color: var(--color-highlight-text);
     box-shadow: inset 0 0 0 1px var(--color-primary);
+
     .menu-item__label {
         color: inherit;
     }
