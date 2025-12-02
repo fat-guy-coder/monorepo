@@ -710,21 +710,16 @@ interface TemplateConfig {
   }
 }
 
-const props = withDefaults(
-  defineProps<{
-    mode?: 'normal' | 'list' | 'waterfall' | 'mixed'
-  }>(),
-  {
-    mode: 'mixed',
-  }
-)
+const props = defineProps<{
+  mode?: 'normal' | 'list' | 'waterfall' | 'mixed'
+}>()
 
 // 生成随机ID
 const generateId = () => `id-${Math.random().toString(36).substr(2, 9)}`
 
 // 模式切换
 type ModeType = 'normal' | 'list' | 'waterfall' | 'mixed'
-const currentMode = ref<ModeType>(props.mode)
+const currentMode = ref<ModeType>(props.mode || 'mixed')
 const modeTabs: Array<{ label: string; value: ModeType }> = [
   { label: '普通模式', value: 'normal' },
   { label: '列表模式', value: 'list' },

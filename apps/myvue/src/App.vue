@@ -1,5 +1,5 @@
 <template>
-  <div ref=" container" class="main-view-container bg-gradient-animated-8">
+  <div ref="container" class="main-view-container bg-gradient-animated-8">
     <!-- 导航组件示例 -->
     <Navigation position="bottom-right" :offset="{ bottom: '2rem', right: '0.5rem' }" :isMobile="isMobile"
       @item-click="handleNavClick">
@@ -124,9 +124,7 @@ const container = ref<HTMLElement | null>(null)
 let contextMenu: HTMLElement | null = null
 
 function closeContextMenu(e: MouseEvent) {
-  console.log('closeContextMenu')
   if (contextMenu && !contextMenu.contains(e.target as Node)) {
-    console.log('closeContextMenu')
     store.toggleShowMenu(false)
   }
 

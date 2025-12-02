@@ -23,7 +23,7 @@
 </template>
 <script lang="ts" setup>
 // 组合式 API 逻辑
-import { defineProps, defineEmits, ref, onMounted, withDefaults } from 'vue'
+import { defineProps, defineEmits, ref, onMounted, } from 'vue'
 import Tabs from './index.vue'
 import TabPane from './TabPane.vue'
 // import TabPane from './TabPane.vue'
@@ -33,16 +33,14 @@ import type { Tab } from '@/stores/tab'
 
 onMounted(() => { })
 
-const { showContextMenu, currentDragIndex, keyMap = 'path', } = withDefaults(defineProps<{
+const { showContextMenu, currentDragIndex } = defineProps<{
   tabList: Tab[]
   activeKey: string
   showContextMenu: boolean
   currentDragIndex: number,
   keyMap?: 'path'
   type?: 'line' | 'card' | 'editable-card'
-}>(), {
-  type: 'editable-card',
-})
+}>()
 
 const emit = defineEmits([
   'tabClick',
