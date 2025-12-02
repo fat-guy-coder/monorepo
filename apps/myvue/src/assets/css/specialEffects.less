@@ -1,37 +1,81 @@
-// Import theme variables to use gradient colors
-@import 'theme.less';
+// Import theme variables to use gradient color
+
+/* ============================================ */
+/* Highlight 样式
+/* ============================================ */
+.highlight-block {
+  color: var(--color-highlight-text);
+  background-color: var(--color-highlight-bg);
+  border-color: var(--color-highlight-border);
+}
+
+.highlight-text {
+  color: var(--color-highlight-text);
+}
+
+.highlight-bg {
+  background-color: var(--color-highlight-bg);
+}
+
+.highlight-border {
+  border-color: var(--color-highlight-border);
+}
 
 /* ============================================ */
 /* Keyframes for Animations                   */
 /* ============================================ */
 
+// Animation for the new pseudo-element gradient wipe effect
+@keyframes linear-wipe {
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+@keyframes text-wipe {
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+// Kept for legacy text gradient effect
 @keyframes animated-gradient-background {
   0% {
     background-position: 0% 50%;
   }
-  50% {
-    background-position: 100% 50%;
-  }
+
   100% {
-    background-position: 0% 50%;
+    background-position: 100% 50%;
   }
 }
 
 @keyframes animated-gradient-shadow {
   0% {
-    box-shadow: 0 0 20px var(--color-gradient-group-1), 0 0 30px var(--color-gradient-group-2);
+    box-shadow: 0 0 1.25rem var(--color-gradient-group-1), 0 0 1.875rem var(--color-gradient-group-2);
   }
+
   25% {
-    box-shadow: 0 0 25px var(--color-gradient-group-3), 0 0 35px var(--color-gradient-group-4);
+    box-shadow: 0 0 1.5625rem var(--color-gradient-group-3), 0 0 2.1875rem var(--color-gradient-group-4);
   }
+
   50% {
-    box-shadow: 0 0 20px var(--color-gradient-group-5), 0 0 30px var(--color-gradient-group-6);
+    box-shadow: 0 0 1.25rem var(--color-gradient-group-5), 0 0 1.875rem var(--color-gradient-group-6);
   }
+
   75% {
-    box-shadow: 0 0 25px var(--color-gradient-group-7), 0 0 35px var(--color-gradient-group-8);
+    box-shadow: 0 0 1.5625rem var(--color-gradient-group-7), 0 0 2.1875rem var(--color-gradient-group-8);
   }
+
   100% {
-    box-shadow: 0 0 20px var(--color-gradient-group-9), 0 0 30px var(--color-gradient-group-10);
+    box-shadow: 0 0 1.25rem var(--color-gradient-group-9), 0 0 1.875rem var(--color-gradient-group-10);
   }
 }
 
@@ -39,64 +83,382 @@
 /* Mixins for Effects                         */
 /* ============================================ */
 
-.gradient-base(@speed: 15s) {
-  background-size: 400% 400%;
-  animation: animated-gradient-background @speed ease infinite;
+// New mixin for the pseudo-element wipe effect
+.gradient-wipe-base(@gradient, @speed: 4s) {
+  position: relative;
+  overflow: hidden; // Ensures the pseudo-element respects the parent's border-radius
+  border-radius: var(--border-radius);
+
+  // Direct children should be stacked above the pseudo-element
+  >* {
+    position: relative;
+    z-index: 1;
+  }
+
+  &::before {
+    opacity: 0;
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: @gradient;
+    background-size: 200% 100%;
+    animation: linear-wipe @speed linear infinite;
+    z-index: 0;
+  }
+
+  &:hover {
+  &::before {
+      opacity: 1;
+    }
+  }
+}
+/* ============================================ */
+/* Background Gradient Effects (Manual Classes) */
+/* ============================================ */
+
+// 2-9 都采用与 1 相同的「首尾相接」渐变方案，实现无缝循环
+.bg-gradient-animated-1 {
+  .gradient-wipe-base(linear-gradient(90deg,
+      var(--color-gradient-group-1),
+      var(--color-gradient-group-2),
+      var(--color-gradient-group-1)),
+    4s);
 }
 
-/* ============================================ */
-/* Background Gradient Effects                */
-/* ============================================ */
+.bg-gradient-animated-2 {
+  .gradient-wipe-base(linear-gradient(90deg,
+      var(--color-gradient-group-1),
+      var(--color-gradient-group-2),
+      var(--color-gradient-group-3),
+      var(--color-gradient-group-1)),
+    5s);
+}
 
 .bg-gradient-animated-3 {
-  .gradient-base();
-  background-image: linear-gradient(
-    -45deg,
-    var(--color-gradient-group-1),
-    var(--color-gradient-group-2),
-    var(--color-gradient-group-3)
-  );
+  .gradient-wipe-base(linear-gradient(90deg,
+      var(--color-gradient-group-1),
+      var(--color-gradient-group-2),
+      var(--color-gradient-group-3),
+      var(--color-gradient-group-4),
+      var(--color-gradient-group-1)),
+    6s);
+}
+
+.bg-gradient-animated-4 {
+  .gradient-wipe-base(linear-gradient(90deg,
+      var(--color-gradient-group-1),
+      var(--color-gradient-group-2),
+      var(--color-gradient-group-3),
+      var(--color-gradient-group-4),
+      var(--color-gradient-group-5),
+      var(--color-gradient-group-1)),
+    7s);
 }
 
 .bg-gradient-animated-5 {
-  .gradient-base();
-  background-image: linear-gradient(
-    -45deg,
-    var(--color-gradient-group-1),
-    var(--color-gradient-group-2),
-    var(--color-gradient-group-3),
-    var(--color-gradient-group-4),
-    var(--color-gradient-group-5)
-  );
+  .gradient-wipe-base(linear-gradient(90deg,
+      var(--color-gradient-group-1),
+      var(--color-gradient-group-2),
+      var(--color-gradient-group-3),
+      var(--color-gradient-group-4),
+      var(--color-gradient-group-5),
+      var(--color-gradient-group-6),
+      var(--color-gradient-group-1)),
+    8s);
+}
+
+.bg-gradient-animated-6 {
+  .gradient-wipe-base(linear-gradient(90deg,
+      var(--color-gradient-group-1),
+      var(--color-gradient-group-2),
+      var(--color-gradient-group-3),
+      var(--color-gradient-group-4),
+      var(--color-gradient-group-5),
+      var(--color-gradient-group-6),
+      var(--color-gradient-group-7),
+      var(--color-gradient-group-1)),
+    9s);
+}
+
+.bg-gradient-animated-7 {
+  .gradient-wipe-base(linear-gradient(90deg,
+      var(--color-gradient-group-1),
+      var(--color-gradient-group-2),
+      var(--color-gradient-group-3),
+      var(--color-gradient-group-4),
+      var(--color-gradient-group-5),
+      var(--color-gradient-group-6),
+      var(--color-gradient-group-7),
+      var(--color-gradient-group-8),
+      var(--color-gradient-group-1)),
+    10s);
+}
+
+.bg-gradient-animated-8 {
+  .gradient-wipe-base(linear-gradient(90deg,
+      var(--color-gradient-group-1),
+      var(--color-gradient-group-2),
+      var(--color-gradient-group-3),
+      var(--color-gradient-group-4),
+      var(--color-gradient-group-5),
+      var(--color-gradient-group-6),
+      var(--color-gradient-group-7),
+      var(--color-gradient-group-8),
+      var(--color-gradient-group-9),
+      var(--color-gradient-group-1)),
+    11s);
+}
+
+.bg-gradient-animated-9 {
+  .gradient-wipe-base(linear-gradient(90deg,
+      var(--color-gradient-group-1),
+      var(--color-gradient-group-2),
+      var(--color-gradient-group-3),
+      var(--color-gradient-group-4),
+      var(--color-gradient-group-5),
+      var(--color-gradient-group-6),
+      var(--color-gradient-group-7),
+      var(--color-gradient-group-8),
+      var(--color-gradient-group-9),
+      var(--color-gradient-group-10),
+      var(--color-gradient-group-1)),
+   12s);
+}
+
+// --- Radial Gradients (will render as a linear wipe) ---
+
+.bg-radial-gradient-animated-1 {
+  .gradient-wipe-base(radial-gradient(circle,
+      var(--color-gradient-group-1),
+      var(--color-gradient-group-2),
+      var(--color-gradient-group-1)),
+    4s);
+}
+
+.bg-radial-gradient-animated-2 {
+  .gradient-wipe-base(radial-gradient(circle,
+      var(--color-gradient-group-1),
+      var(--color-gradient-group-2),
+      var(--color-gradient-group-3),
+      var(--color-gradient-group-1)),
+    5s);
 }
 
 .bg-radial-gradient-animated-3 {
-  .gradient-base(20s);
-  background-image: radial-gradient(
-    circle,
-    var(--color-gradient-group-6),
-    var(--color-gradient-group-7),
-    var(--color-gradient-group-8)
-  );
+  .gradient-wipe-base(radial-gradient(circle,
+      var(--color-gradient-group-1),
+      var(--color-gradient-group-2),
+      var(--color-gradient-group-3),
+      var(--color-gradient-group-4),
+      var(--color-gradient-group-1)),
+    6s);
 }
 
-/* ============================================ */
-/* Text Gradient Effects                      */
-/* ============================================ */
+.bg-radial-gradient-animated-4 {
+  .gradient-wipe-base(radial-gradient(circle,
+      var(--color-gradient-group-1),
+      var(--color-gradient-group-2),
+      var(--color-gradient-group-3),
+      var(--color-gradient-group-4),
+      var(--color-gradient-group-5),
+      var(--color-gradient-group-1)),
+    7s);
+}
 
-.text-gradient-animated {
-  .gradient-base();
-  background-image: linear-gradient(
-    -45deg,
-    var(--color-gradient-group-9),
-    var(--color-gradient-group-10),
-    var(--color-gradient-group-1)
-  );
+.bg-radial-gradient-animated-5 {
+  .gradient-wipe-base(radial-gradient(circle,
+      var(--color-gradient-group-1),
+      var(--color-gradient-group-2),
+      var(--color-gradient-group-3),
+      var(--color-gradient-group-4),
+      var(--color-gradient-group-5),
+      var(--color-gradient-group-6),
+      var(--color-gradient-group-1)),
+    8s);
+}
+
+.bg-radial-gradient-animated-6 {
+  .gradient-wipe-base(radial-gradient(circle,
+      var(--color-gradient-group-1),
+      var(--color-gradient-group-2),
+      var(--color-gradient-group-3),
+      var(--color-gradient-group-4),
+      var(--color-gradient-group-5),
+      var(--color-gradient-group-6),
+      var(--color-gradient-group-7),
+      var(--color-gradient-group-1)),
+    9s);
+}
+
+.bg-radial-gradient-animated-7 {
+  .gradient-wipe-base(radial-gradient(circle,
+      var(--color-gradient-group-1),
+      var(--color-gradient-group-2),
+      var(--color-gradient-group-3),
+      var(--color-gradient-group-4),
+      var(--color-gradient-group-5),
+      var(--color-gradient-group-6),
+      var(--color-gradient-group-7),
+      var(--color-gradient-group-8),
+      var(--color-gradient-group-1)),
+    10s);
+}
+
+.bg-radial-gradient-animated-8 {
+  .gradient-wipe-base(radial-gradient(circle,
+      var(--color-gradient-group-1),
+      var(--color-gradient-group-2),
+      var(--color-gradient-group-3),
+      var(--color-gradient-group-4),
+      var(--color-gradient-group-5),
+      var(--color-gradient-group-6),
+      var(--color-gradient-group-7),
+      var(--color-gradient-group-8),
+      var(--color-gradient-group-9),
+      var(--color-gradient-group-1)),
+    11s);
+}
+
+.bg-radial-gradient-animated-9 {
+  .gradient-wipe-base(radial-gradient(circle,
+      var(--color-gradient-group-1),
+      var(--color-gradient-group-2),
+      var(--color-gradient-group-3),
+      var(--color-gradient-group-4),
+      var(--color-gradient-group-5),
+      var(--color-gradient-group-6),
+      var(--color-gradient-group-7),
+      var(--color-gradient-group-8),
+      var(--color-gradient-group-9),
+      var(--color-gradient-group-10),
+      var(--color-gradient-group-1)),
+    12s);
+}
+
+
+/* ============================================ */
+/* Text Gradient Effects (Legacy Animation)   */
+/* ============================================ */
+.text-gradient-animated-base(@gradient, @speed) {
+  background-size: 400% 400%;
+  animation: text-wipe @speed linear infinite;
+  background-image: @gradient;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  text-fill-color: transparent;
-  color: transparent; // Fallback
+  color: transparent;
+}
+
+.text-gradient-animated-1 {
+  .text-gradient-animated-base(linear-gradient(90deg,
+      var(--color-gradient-group-1),
+      var(--color-gradient-group-2),
+      var(--color-gradient-group-1)),
+    4s);
+}
+
+.text-gradient-animated-2 {
+  .text-gradient-animated-base(linear-gradient(90deg,
+      var(--color-gradient-group-1),
+      var(--color-gradient-group-2),
+      var(--color-gradient-group-3),
+      var(--color-gradient-group-1)),
+    5s);
+}
+
+.text-gradient-animated-3 {
+  .text-gradient-animated-base(linear-gradient(90deg,
+      var(--color-gradient-group-1),
+      var(--color-gradient-group-2),
+      var(--color-gradient-group-3),
+      var(--color-gradient-group-4),
+      var(--color-gradient-group-1)),
+    6s);
+}
+
+.text-gradient-animated-4 {
+  .text-gradient-animated-base(linear-gradient(90deg,
+      var(--color-gradient-group-1),
+      var(--color-gradient-group-2),
+      var(--color-gradient-group-3),
+      var(--color-gradient-group-4),
+      var(--color-gradient-group-5),
+      var(--color-gradient-group-1)),
+    7s);
+}
+
+.text-gradient-animated-5 {
+  background-size: 400% 400%;
+  .text-gradient-animated-base(linear-gradient(90deg,
+      var(--color-gradient-group-1),
+      var(--color-gradient-group-2),
+      var(--color-gradient-group-3),
+      var(--color-gradient-group-4),
+      var(--color-gradient-group-5),
+      var(--color-gradient-group-6),
+      var(--color-gradient-group-1)),
+    8s);
+}
+
+.text-gradient-animated-6 {
+  .text-gradient-animated-base(linear-gradient(90deg,
+      var(--color-gradient-group-1),
+      var(--color-gradient-group-2),
+      var(--color-gradient-group-3),
+      var(--color-gradient-group-4),
+      var(--color-gradient-group-5),
+      var(--color-gradient-group-6),
+      var(--color-gradient-group-7),
+      var(--color-gradient-group-1)),
+    9s);
+}
+
+.text-gradient-animated-7 {
+  .text-gradient-animated-base(linear-gradient(90deg,
+      var(--color-gradient-group-1),
+      var(--color-gradient-group-2),
+      var(--color-gradient-group-3),
+      var(--color-gradient-group-4),
+      var(--color-gradient-group-5),
+      var(--color-gradient-group-6),
+      var(--color-gradient-group-7),
+      var(--color-gradient-group-8),
+      var(--color-gradient-group-1)),
+      10s);
+}
+
+.text-gradient-animated-8 {
+  .text-gradient-animated-base(linear-gradient(90deg,
+      var(--color-gradient-group-1),
+      var(--color-gradient-group-2),
+      var(--color-gradient-group-3),
+      var(--color-gradient-group-4),
+      var(--color-gradient-group-5),
+      var(--color-gradient-group-6),
+      var(--color-gradient-group-7),
+      var(--color-gradient-group-8),
+      var(--color-gradient-group-9),
+      var(--color-gradient-group-1)),
+    11s);
+}
+
+.text-gradient-animated-9 {
+  .text-gradient-animated-base(linear-gradient(90deg,
+      var(--color-gradient-group-1),
+      var(--color-gradient-group-2),
+      var(--color-gradient-group-3),
+      var(--color-gradient-group-4),
+      var(--color-gradient-group-5),
+      var(--color-gradient-group-6),
+      var(--color-gradient-group-7),
+      var(--color-gradient-group-8),
+      var(--color-gradient-group-9),
+      var(--color-gradient-group-10),
+      var(--color-gradient-group-1)),
+    12s);
 }
 
 /* ============================================ */
@@ -107,3 +469,12 @@
   animation: animated-gradient-shadow 12s ease-in-out infinite alternate;
 }
 
+
+
+/* ============================================ */
+/* Box Shadow Effects                         */
+/* ============================================ */
+
+.box-shadow-animated {
+  animation: animated-gradient-shadow 12s ease-in-out infinite alternate;
+}

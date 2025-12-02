@@ -1,5 +1,5 @@
 <template>
-  <div ref=" container" class="main-view-container">
+  <div ref=" container" class="main-view-container bg-gradient-animated-8">
     <!-- 导航组件示例 -->
     <Navigation position="bottom-right" :offset="{ bottom: '2rem', right: '0.5rem' }" :isMobile="isMobile"
       @item-click="handleNavClick">
@@ -99,7 +99,7 @@ const isMobile = computed(() => userStore.user.device.isMobile)
 
 //主题切换
 const themeChange = (theme1: Theme) => {
-  if (theme1 === 'more') { 
+  if (theme1 === 'more') {
     goToByName('MyTheme')
     return
   }

@@ -7,4 +7,5 @@ import Template from '@/components/Template/index.vue';
 
 </script>
 
-<style scoped></style>
+<style scoped>
+</style>

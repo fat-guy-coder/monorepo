@@ -30,6 +30,7 @@ import {
     ref,
     watch,
     type CSSProperties,
+    withDefaults,
 } from 'vue'
 
 defineOptions({
@@ -60,6 +61,8 @@ const props = withDefaults(
 )
 
 provide('type', props.type)
+
+console.log(props.type)
 
 const emit = defineEmits<{
     (e: 'update:activeKey', key: string): void
@@ -110,13 +113,6 @@ const onHandleChange = (path: string) => {
 
 // 将事件处理函数提供给子组件
 provide('change', onHandleChange)
-
-// const paneClosable = (pane: TabItem) => {
-//     if (props.type === 'editable-card') {
-//         return pane.closable !== false
-//     }
-//     return pane.closable === true
-// }
 
 
 const onHandleClose = (path: string) => {
@@ -213,10 +209,8 @@ onUnmounted(() => {
     display: flex;
     align-items: center;
     border-bottom: 1px solid var(--color-border);
-    margin-bottom: 12px;
-    background: var(--color-background);
-    border-radius: 6px 6px 0 0;
-    min-height: 44px;
+    border-radius: var(--border-radius-md) var(--border-radius-md) 0 0;
+    min-height: 2.75rem;
 }
 
 .tabs-nav-wrap {
@@ -230,67 +224,9 @@ onUnmounted(() => {
     flex-grow: 1;
     transition: transform 0.3s ease;
     position: relative;
-    padding: 4px 0;
-    gap: 4px;
+    padding: var(--padding-xs) 0;
+    gap: var(--gap-xs);
     /* 添加间距 */
-}
-
-.tab-pane {
-    flex-shrink: 0;
-    cursor: pointer;
-    transition: all 0.3s ease;
-
-    .tab {
-        position: relative;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        padding: 8px 16px;
-        font-size: 14px;
-        color: var(--color-text);
-        transition: all 0.3s ease;
-        white-space: nowrap;
-        border-radius: 4px;
-        border: var(--border-width) solid transparent;
-        background: var(--color-background-soft);
-        min-height: 32px;
-
-        &:hover {
-            color: var(--color-primary);
-            background: var(--color-fill-secondary);
-            border-color: var(--color-border);
-        }
-
-        &.is-active {
-            color: var(--color-primary);
-            background: var(--color-bg-container);
-            border-color: var(--color-primary);
-            font-weight: 500;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-
-            &::before {
-                content: '';
-                position: absolute;
-                bottom: -1px;
-                left: 0;
-                right: 0;
-                height: 2px;
-                background: var(--color-primary);
-            }
-        }
-
-        &.is-disabled {
-            color: var(--color-text-quaternary);
-            cursor: not-allowed;
-            background: var(--color-fill-tertiary);
-
-            &:hover {
-                color: var(--color-text-quaternary);
-                background: var(--color-fill-tertiary);
-                border-color: transparent;
-            }
-        }
-    }
 }
 
 .tabs-ink-bar {
@@ -311,12 +247,12 @@ onUnmounted(() => {
     background: var(--color-background);
     color: var(--color-text-tertiary);
     cursor: pointer;
-    padding: 8px 12px;
-    font-size: 16px;
+    padding: var(--padding-sm) var(--padding-md);
+    font-size: 1rem;
     font-weight: bold;
     transition: all 0.2s ease;
-    border-radius: 4px;
-    min-width: 36px;
+    border-radius: var(--border-radius-xs);
+    min-width: 2.25rem;
     min-height: 36px;
 
     &:disabled {
@@ -338,36 +274,59 @@ onUnmounted(() => {
 
 .tabs-nav-next {
     border-left: 1px solid var(--color-border);
-    margin-left: 4px;
+    margin-left: 0.1rem;
 }
 
 .tabs-content {
     flex: 1;
     padding: 16px;
     background: var(--color-bg-container);
-    border-radius: 0 0 6px 6px;
+    border-radius: 0 0 0.3rem 0.3rem;
 }
 
-.tab-close {
-    margin-left: 8px;
-    border: none;
-    background: transparent;
-    cursor: pointer;
-    color: var(--color-text-tertiary);
-    font-size: 12px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 16px;
-    height: 16px;
-    border-radius: 2px;
-    transition: all 0.2s ease;
+/* Line 样式 */
+.tabs--line {
+    .tabs-nav {
+        background: transparent;
+        border-bottom: none;
+    }
 
-    &:hover {
-        color: var(--color-error);
-        background: var(--color-fill-secondary);
+    .tab-pane {
+        flex-shrink: 0;
+        cursor: pointer;
+
+        &.is-active {
+            div {
+                background: var(--color-highlight-bg) !important;
+                color: var(--color-highlight-text) !important;
+            }
+        }
+
+        .is-disabled {
+            div {
+                opacity: 0.5;
+                cursor: not-allowed;
+            }
+        }
+
+        .tab {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--padding-sm) var(--padding-md);
+            font-size: var(--font-size-sm);
+            color: var(--color-text);
+            white-space: nowrap;
+            border-radius: var(--border-radius-xs);
+            border: var(--border-width) solid transparent;
+            background: var(--color-background-soft);
+            min-height: 2rem;
+        }
     }
 }
+
+
 
 /* Card 样式 */
 .tabs--card {
@@ -380,29 +339,33 @@ onUnmounted(() => {
         gap: 2px;
     }
 
-    .tab-pane .tab {
-        border-radius: 6px 6px 0 0;
-        border: var(--border-width) solid var(--color-border);
-        border-bottom: none;
-        background: var(--color-background);
-        margin-bottom: -1px;
+    .tab-pane {
+        .tab {
+            border-radius: 0.3rem 0.3rem 0 0;
+            border: var(--border-width) solid var(--color-border);
+            border-bottom: none;
+            background: var(--color-background);
+            margin-bottom: -1px;
 
-        &.is-active {
-            background: var(--color-bg-container);
-            border-color: var(--color-primary);
-            color: var(--color-primary);
+            &.is-active {
+                background: var(--color-bg-container);
+                border-color: var(--color-primary);
+                color: var(--color-primary);
 
-            &::before {
-                display: none;
+                &::before {
+                    display: none;
+                }
             }
-        }
 
-        &:hover:not(.is-active) {
-            background: var(--color-fill-secondary);
-            border-color: var(--color-border);
+            &:hover:not(.is-active) {
+                background: var(--color-fill-secondary);
+                border-color: var(--color-border);
+            }
         }
     }
 }
+
+
 
 /* Editable Card 样式 */
 .tabs--editable-card {
@@ -415,25 +378,38 @@ onUnmounted(() => {
         gap: 4px;
     }
 
-    .tab-pane .tab {
-        border-radius: 6px;
+    .tab-pane {
+        flex-shrink: 0;
+        cursor: pointer;
         border: var(--border-width) solid var(--color-border);
-        background: var(--color-background);
-        padding: 6px 12px 6px 16px;
 
         &.is-active {
-            background: var(--color-bg-container);
-            border-color: var(--color-primary);
-            color: var(--color-primary);
-
-            &::before {
-                display: none;
+            div {
+                background: var(--color-highlight-bg) !important;
+                color: var(--color-highlight-text) !important;
             }
         }
 
-        &:hover:not(.is-active) {
-            background: var(--color-fill-secondary);
-            border-color: var(--color-border);
+        .is-disabled {
+            div {
+                opacity: 0.5;
+                cursor: not-allowed;
+            }
+        }
+
+        .tab {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--padding-xs) var(--padding-sm);
+            font-size: var(--font-size-sm);
+            color: var(--color-text);
+            white-space: nowrap;
+            border-radius: var(--border-radius);
+            border: var(--border-width) solid transparent;
+            background: transparent;
+            min-height: 2rem;
         }
     }
 }

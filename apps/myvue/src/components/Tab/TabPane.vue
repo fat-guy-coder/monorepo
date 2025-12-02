@@ -1,15 +1,17 @@
 <template>
-    <div class="tab-pane" @click="change" :class="{
-        'is-active-tab-pane': activeKey === path,
-        'is-tab-disabled': disabled
+    <div class="tab-pane bg-gradient-animated-2" @click="change" :class="{
+        'is-active': activeKey === path,
+        'is-disabled': disabled
     }">
         <div class="tab" v-if="$slots.tab">
             <slot name="tab"></slot>
-            <div class="close-tab--btn" v-if="type === 'editable-card' && closable" @click="close">
+            <div class="close-tab--btn" v-if="type === 'editable-card' && closable" @click.stop="close">
                 x
             </div>
         </div>
-        <slot name="content" v-if="activeKey === path && $slots.content"></slot>
+        <div v-if="$slots.content" class="tab-content">
+            <slot name="content"></slot>
+        </div>
     </div>
 </template>
 
@@ -58,32 +60,30 @@ const close = () => {
 </script>
 
 <style lang="less">
-.tab-pane {
-    flex-shrink: 0;
-}
-
-.is-active-tab-pane {
-    div {
-        background: var(--color-highlight-bg) !important;
-        color: var(--color-highlight-text) !important;
-    }
-}
-
-.is-tab-disabled {
-    div {
-        opacity: 0.5 !important;
-        cursor: not-allowed !important;
+/* 响应式设计 */
+@media (max-width: 48rem) {
+    .tab-pane .tab {
+        padding: 0.375rem 0.75rem;
+        font-size: 0.8125rem;
+        min-height: 1.75rem;
     }
 }
 
 .close-tab--btn {
-    width: 24px;
-    height: 24px;
+    width: 1.25rem;
+    height: 1.25rem;
+    line-height: 1.25rem;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    color: var(--color-text);
+    color: var(--color-text-quaternary);
+    background: transparent !important;
+
+    &:hover {
+        border: var(--border-width) solid var(--color-border);
+        border-radius: var(--border-radius-full);
+    }
 }
 
 .close-tab-btn:hover {

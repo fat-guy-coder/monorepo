@@ -1,7 +1,7 @@
 <template>
     <li class="menu-item" :style="{ '--level': level }" @click.stop.prevent="handleClick"
         @mouseenter.stop.prevent="handleMouseEnter" @mouseleave="handleMouseLeave">
-        <div class="menu-item__title" :class="titleClasses" :id="item.path">
+        <div class="menu-item__title bg-gradient-animated-2" :class="titleClasses" :id="item.path">
             <span v-if="item.icon" class="menu-item__icon">{{ item.icon }}</span>
             <span :class="['menu-item__label', { 'menu-item__label--matched': item.match }]"
                 :title="item.label || item.name">
@@ -353,12 +353,10 @@ function isMouseInElement(element: HTMLElement, mouseX: number, mouseY: number) 
 .menu-item__title--selected {
     background: var(--color-highlight-bg);
     color: var(--color-highlight-text);
-    box-shadow: var(--box-shadow-sm);
-
+    box-shadow: var(--box-shadow);
     .menu-item__label {
         color: inherit;
     }
-
     .menu-item__arrow {
         color: inherit;
     }

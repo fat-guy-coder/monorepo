@@ -148,11 +148,11 @@ defineExpose({ scrollToTarget })
 
 <style lang="less" scoped>
 .nav-tag-card {
-  --nav-tag-bg: var(--color-bg-container);
+  --nav-tag-bg: var(--color-background);
   --nav-tag-border: var(--color-border);
   --nav-tag-text: var(--color-text);
-  --nav-tag-radius-md: calc(var(--element-border-radius) * 2.5);
-  --nav-tag-radius-lg: calc(var(--element-border-radius) * 4);
+  --nav-tag-radius-md: calc(var(--border-radius) * 2.5);
+  --nav-tag-radius-lg: calc(var(--border-radius) * 4);
   --nav-tag-radius-pill: 999px;
   display: flex;
   flex-wrap: wrap;
@@ -212,7 +212,7 @@ defineExpose({ scrollToTarget })
 
   &:hover {
     border-color: var(--color-primary);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--box-shadow-md);
 
     &::before {
       opacity: 1;
@@ -232,7 +232,7 @@ defineExpose({ scrollToTarget })
     border-color: var(--color-highlight-border);
     background: var(--color-highlight-bg);
     color: var(--color-highlight-text);
-    box-shadow: 0 4px 16px rgba(22, 119, 255, 0.3);
+    box-shadow: var(--box-shadow-md);
 
     &::before {
       opacity: 0;
@@ -275,7 +275,7 @@ defineExpose({ scrollToTarget })
   border-color: var(--color-highlight-border);
   background: var(--color-highlight-bg);
   color: var(--color-highlight-text);
-  box-shadow: 0 4px 16px rgba(22, 119, 255, 0.3);
+  box-shadow: var(--box-shadow-md);
 
   .nav-tag-card__prefix {
     background: transparent;

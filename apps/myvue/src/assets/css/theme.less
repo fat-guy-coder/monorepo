@@ -9,7 +9,7 @@
 @theme-cool: 'cool';
 
 /* 字体大小变量 */
-@font-size-normal: 1rem;
+@font-size-normal: 16px;
 @font-size-xs: 0.75rem;
 @font-size-sm: 0.875rem;
 @font-size-md: 1rem;
@@ -19,24 +19,88 @@
 @font-size-3xl: 2rem;
 @font-size-4xl: 2.5rem;
 
+
 /* 当前主题变量（可通过 JavaScript 动态修改） */
 @current-theme: @theme-light;
+
+
 
 /* ============================================
    基础色板定义
    ============================================ */
 
-/* 黑白主题色板 */
-@color-white: #ffffff;
-@color-white-soft: #f8f8f8;
-@color-white-mute: #f2f2f2;
-@color-white-light: #fafafa;
+/* 白主题色板 默认亮色主题*/
+@color-light: #ffffff; // 白色背景
+@color-primary: #003d99; // 主色
+@color-light-soft: #f8f8f8; // 柔和白
+@color-light-mute: #f2f2f2; // 淡化白
+@color-light-light: #fafafa; // 浅白
+@color-highlight-text: #003d99;
+@color-highlight-bg: #ffd700;
+@color-highlight-border: #ffb300;
+@color-link-text: #2563eb;
+@color-link-hover: #38bdf8;
 
-@color-black: #181818;
-@color-black-soft: #222222;
-@color-black-mute: #282828;
-@color-black-light: #1e1e1e;
+/* 白色主题渐变
+    - 起始色为主题底色（柔和，不生硬）
+    - 渐变分布从纯白到柔蓝、浅灰、淡金、浅蓝至微灰
+    - 只挑选具备和主题底色有对比但整体温和柔顺的色阶
+*/
+@color-gradient-light-1: #ffffff;   // 主题底色起点（纯白）
+@color-gradient-light-2: #f6f8fa;   // 柔和浅灰白
+@color-gradient-light-3: #e8f0ff;   // 柔和浅蓝白
+@color-gradient-light-4: #c6dbf7;   // 柔蓝
+@color-gradient-light-5: #f9f5e3;   // 柔和淡金
+@color-gradient-light-6: #e0e7ef;   // 淡蓝灰
+@color-gradient-light-7: #d2eaff;   // 晴天浅蓝
+@color-gradient-light-8: #f4e2cf;   // 柔米白
+@color-gradient-light-9: #e3eee5;   // 浅青草绿灰
+@color-gradient-light-10: #cfcfcf;  // 柔和收尾淡灰
 
+// box-shadow 颜色
+@color-box-shadow: 60, 90, 120;
+@color-box-shadow-hover: 80, 120, 180;
+// info,success,warning,error颜色
+@color-info: #007bff;
+@color-success: #28a745;
+@color-warning: #ffc107;
+@color-error: #dc3545;
+
+
+/* 黑主题色板 */
+@color-dark: #181818; // 黑色背景
+@color-dark-soft: #222222;
+@color-dark-mute: #282828;
+@color-dark-light: #1e1e1e;
+@color-highlight-dark-text: #00ffff;
+@color-highlight-dark-bg: #1a4d4d;
+@color-highlight-dark-border: #00cccc;
+@color-link-dark-text: #38bdf8;
+@color-link-dark-hover: #2563eb;
+
+/* 黑色主题渐变
+    - 起始色为主题底色
+    - 渐变色分布为深灰-蓝灰-深蓝-柔青-柔紫-柔金-收尾为 softened 高对比色但不刺眼
+*/
+@color-gradient-dark-1: #181818;   // 主题底色（深黑灰）
+@color-gradient-dark-2: #20232a;   // 更深柔和灰
+@color-gradient-dark-3: #233144;   // 蓝调灰
+@color-gradient-dark-4: #2b3d52;   // 带青的灰蓝
+@color-gradient-dark-5: #394963;   // 柔和蓝灰
+@color-gradient-dark-6: #364156;   // 柔青灰
+@color-gradient-dark-7: #475e7b;   // 柔和蓝紫
+@color-gradient-dark-8: #9aa4ba;   // 柔灰蓝
+@color-gradient-dark-9: #b9b079;   // 柔金
+@color-gradient-dark-10: #eeeeee;  // 柔和收尾高灰白
+
+@color-box-shadow-dark: 0, 0, 0;
+@color-box-shadow-hover-dark: 40, 80, 160;
+@color-info-dark: #58a6ff;
+@color-success-dark: #4ade80;
+@color-warning-dark: #facc15;
+@color-error-dark: #f87171;
+
+// 灰度色板
 @color-gray-50: #f9fafb;
 @color-gray-100: #f3f4f6;
 @color-gray-200: #e5e7eb;
@@ -48,546 +112,249 @@
 @color-gray-800: #1f2937;
 @color-gray-900: #111827;
 
+
 /* 暖色主题色板 */
 @warm-primary: #b66c2f;
-/* 暖橙色 */
 @warm-secondary: #b4572a;
-/* 暖红橙 */
 @warm-accent: #d9a65a;
-/* 暖金色 */
 @warm-background: #fff8f0;
-/* 暖米白 */
 @warm-background-soft: #ffe9d1;
 @warm-background-mute: #f7d9b5;
 @warm-surface: #fff2dc;
-/* 暖黄 */
 @warm-text: #7c2d12;
-/* 暖棕 */
 @warm-text-soft: #9a3412;
 @warm-border: #e6c39a;
-/* 暖橙边框 */
-@warm-box-shadow: rgba(182, 108, 47);
+@warm-box-shadow: 182, 108, 47;
+@warm-box-shadow-hover: 200, 120, 50;
+@highlight-warm-text: #8b0000;
+@highlight-warm-bg: #ffe4b5;
+@highlight-warm-border: #ff8c00;
+@link-warm-text: #ea580c;
+@link-warm-hover: #c2410c;
+
+/* 暖色主题渐变
+    - 起始色为主题底色
+    - 选取高阶的米白、淡橙、柔和粉、柔金、焦糖、带点橘黄和茶色，但整体协调柔和
+*/
+@color-gradient-warm-1: #fff8f0; // 主题底色
+@color-gradient-warm-2: #ffe7cc; // 柔和米白
+@color-gradient-warm-3: #ffd7a8; // 柔金浅橙
+@color-gradient-warm-4: #ffc48b; // 明橙
+@color-gradient-warm-5: #fbd5b5; // 柔和粉橙
+@color-gradient-warm-6: #fcb98a; // 柔橘
+@color-gradient-warm-7: #fbeece; // 柔黄米
+@color-gradient-warm-8: #edc7a8; // 焦糖粉
+@color-gradient-warm-9: #e2baa6; // 茶棕
+@color-gradient-warm-10: #dbc9b5; // 柔和深米白（收尾温柔）
+
+@color-info-warm: #254478;
+@color-success-warm: #256427;
+@color-warning-warm: #b45309;
+@color-error-warm: #b91c1c;
+
+
 /* 冷色主题色板 */
 @cool-primary: #4aa3c0;
-/* 冷蓝色 */
 @cool-secondary: #0369a1;
-/* 深冷蓝 */
 @cool-accent: #0ea5e9;
-/* 亮冷蓝 */
 @cool-background: #f0f9ff;
-/* 冷白 */
 @cool-background-soft: #e0f2fe;
 @cool-background-mute: #bae6fd;
 @cool-surface: #dbeafe;
-/* 冷蓝 */
 @cool-text: #0c4a6e;
-/* 冷深蓝 */
 @cool-text-soft: #075985;
-/* 冷蓝边框 */
 @cool-border: #7dd3fc;
-/* 冷蓝色阴影 */
-@cool-box-shadow: rgb(54, 54, 54); // 与冷色主题色有对比度的中性深灰色
-/* ============================================
-   Less 函数：主题颜色获取
-   ============================================ */
+@cool-box-shadow: 54, 54, 54;
+@cool-box-shadow-hover: 70, 70, 70;
+@highlight-cool-text: #c2185b;
+@highlight-cool-bg: #b3e5fc;
+@highlight-cool-border: #4fc3f7;
+@link-cool-text: #06b6d4;
+@link-cool-hover: #0369a1;
 
-/* 获取背景色 */
-.get-background(@theme) when (@theme =@theme-light) {
-  @result: @color-white;
-}
+/* 冷色主题渐变
+    - 起始色为主题底色
+    - 选取从淡青-浅蓝-霜灰-淡紫-柔银-柔蓝绿依次渐变，整体温和高级
+*/
+@color-gradient-cool-1: #f0f9ff; // 主题底色（冷色底）
+@color-gradient-cool-2: #d8f2fb; // 柔和淡青
+@color-gradient-cool-3: #bae6fd; // 浅蓝冷灰
+@color-gradient-cool-4: #dbeafe; // 冷霜灰
+@color-gradient-cool-5: #b6d3ee; // 柔和淡蓝
+@color-gradient-cool-6: #a5bbdc; // 柔和银蓝
+@color-gradient-cool-7: #c0e2e4; // 柔藍綠
+@color-gradient-cool-8: #e3e3f7; // 柔淡紫
+@color-gradient-cool-9: #e5fcfa; // 柔和青灰
+@color-gradient-cool-10: #d1e2e7; // 柔冷银灰(收尾)
 
-.get-background(@theme) when (@theme =@theme-dark) {
-  @result: @color-black;
-}
-
-.get-background(@theme) when (@theme =@theme-warm) {
-  @result: @warm-background;
-}
-
-.get-background(@theme) when (@theme =@theme-cool) {
-  @result: @cool-background;
-}
-
-/* 获取软背景色 */
-.get-background-soft(@theme) when (@theme =@theme-light) {
-  @result: @color-white-soft;
-}
-
-.get-background-soft(@theme) when (@theme =@theme-dark) {
-  @result: @color-black-soft;
-}
-
-.get-background-soft(@theme) when (@theme =@theme-warm) {
-  @result: @warm-background-soft;
-}
-
-.get-background-soft(@theme) when (@theme =@theme-cool) {
-  @result: @cool-background-soft;
-}
-
-/* 获取静音背景色 */
-.get-background-mute(@theme) when (@theme =@theme-light) {
-  @result: @color-white-mute;
-}
-
-.get-background-mute(@theme) when (@theme =@theme-dark) {
-  @result: @color-black-mute;
-}
-
-.get-background-mute(@theme) when (@theme =@theme-warm) {
-  @result: @warm-background-mute;
-}
-
-.get-background-mute(@theme) when (@theme =@theme-cool) {
-  @result: @cool-background-mute;
-}
-
-/* 获取主色 */
-.get-primary(@theme) when (@theme =@theme-light) {
-  @result: @color-gray-700;
-}
-
-.get-primary(@theme) when (@theme =@theme-dark) {
-  @result: @color-gray-300;
-}
-
-.get-primary(@theme) when (@theme =@theme-warm) {
-  @result: @warm-primary;
-}
-
-.get-primary(@theme) when (@theme =@theme-cool) {
-  @result: @cool-primary;
-}
-
-/* 获取次色 */
-.get-secondary(@theme) when (@theme =@theme-light) {
-  @result: @color-gray-600;
-}
-
-.get-secondary(@theme) when (@theme =@theme-dark) {
-  @result: @color-gray-400;
-}
-
-.get-secondary(@theme) when (@theme =@theme-warm) {
-  @result: @warm-secondary;
-}
-
-.get-secondary(@theme) when (@theme =@theme-cool) {
-  @result: @cool-secondary;
-}
-
-/* 获取强调色 */
-.get-accent(@theme) when (@theme =@theme-light) {
-  @result: @color-gray-500;
-}
-
-.get-accent(@theme) when (@theme =@theme-dark) {
-  @result: @color-gray-500;
-}
-
-.get-accent(@theme) when (@theme =@theme-warm) {
-  @result: @warm-accent;
-}
-
-.get-accent(@theme) when (@theme =@theme-cool) {
-  @result: @cool-accent;
-}
-
-/* 获取文本色 */
-.get-text(@theme) when (@theme =@theme-light) {
-  @result: @color-gray-900;
-}
-
-.get-text(@theme) when (@theme =@theme-dark) {
-  @result: @color-gray-100;
-}
-
-.get-text(@theme) when (@theme =@theme-warm) {
-  @result: @warm-text;
-}
-
-.get-text(@theme) when (@theme =@theme-cool) {
-  @result: @cool-text;
-}
-
-/* 获取软文本色 */
-.get-text-soft(@theme) when (@theme =@theme-light) {
-  @result: @color-gray-600;
-}
-
-.get-text-soft(@theme) when (@theme =@theme-dark) {
-  @result: @color-gray-400;
-}
-
-.get-text-soft(@theme) when (@theme =@theme-warm) {
-  @result: @warm-text-soft;
-}
-
-.get-text-soft(@theme) when (@theme =@theme-cool) {
-  @result: @cool-text-soft;
-}
-
-/* 获取边框色 */
-.get-border(@theme) when (@theme =@theme-light) {
-  @result: @color-gray-200;
-}
-
-.get-border(@theme) when (@theme =@theme-dark) {
-  @result: @color-gray-700;
-}
-
-.get-border(@theme) when (@theme =@theme-warm) {
-  @result: @warm-border;
-}
-
-.get-border(@theme) when (@theme =@theme-cool) {
-  @result: @cool-border;
-}
-
-/* 获取悬停边框色 */
-.get-border-hover(@theme) when (@theme =@theme-light) {
-  @result: @color-gray-300;
-}
-
-.get-border-hover(@theme) when (@theme =@theme-dark) {
-  @result: @color-gray-600;
-}
-
-.get-border-hover(@theme) when (@theme =@theme-warm) {
-  @result: @warm-secondary;
-}
-
-.get-border-hover(@theme) when (@theme =@theme-cool) {
-  @result: @cool-secondary;
-}
-
-//获取阴影色
-.get-box-shadow-color(@theme) when (@theme =@theme-light) {
-  // 深蓝色深度阴影，对浅色背景有高对比度
-  @result: 20, 30, 64;
-}
-
-.get-box-shadow-color(@theme) when (@theme =@theme-dark) {
-  // 浅灰色透明阴影，对深色背景有高对比度
-  @result: 220, 225, 235;
-}
-
-.get-box-shadow-color(@theme) when (@theme =@theme-warm) {
-  // 暖主题用深棕色阴影，对亮暖背景有对比度
-  @result: 105, 58, 15;
-}
-
-.get-box-shadow-color(@theme) when (@theme =@theme-cool) {
-  // 冷主题用深蓝灰色阴影，对冷色背景有对比度
-  @result: 36, 72, 115;
-}
-
-.get-box-shadow-color-hover(@theme) when (@theme =@theme-light) {
-  // hover状态再深一点
-  @result: 13, 17, 46;
-}
-
-.get-box-shadow-color-hover(@theme) when (@theme =@theme-dark) {
-  // hover用稍微亮一点的浅灰
-  @result: 245, 248, 255;
-}
-
-.get-box-shadow-color-hover(@theme) when (@theme =@theme-warm) {
-  // 暖色hover用更深棕
-  @result: 78, 43, 11;
-}
-
-.get-box-shadow-color-hover(@theme) when (@theme =@theme-cool) {
-  // 冷色hover用更深冷蓝
-  @result: 20, 62, 105;
-}
-
-/* ============================================
-   当前主题变量（基于 @current-theme）
-   ============================================ */
-
-@theme-background: .get-background(@current-theme)[@result];
-@theme-background-soft: .get-background-soft(@current-theme)[@result];
-@theme-background-mute: .get-background-mute(@current-theme)[@result];
-@theme-primary: .get-primary(@current-theme)[@result];
-@theme-secondary: .get-secondary(@current-theme)[@result];
-@theme-accent: .get-accent(@current-theme)[@result];
-@theme-text: .get-text(@current-theme)[@result];
-@theme-text-soft: .get-text-soft(@current-theme)[@result];
-@theme-border: .get-border(@current-theme)[@result];
-@theme-border-hover: .get-border-hover(@current-theme)[@result];
-@theme-box-shadow-color: .get-box-shadow-color(@current-theme)[@result];
-@theme-box-shadow-color-hover: .get-box-shadow-color-hover(@current-theme)[@result];
-
-
-
-/* 暗色主题 */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-background: @color-black;
-    --color-background-soft: @color-black-soft;
-    --color-background-mute: @color-black-mute;
-    --color-border: var(--vt-c-divider-dark-2);
-    --color-border-hover: var(--vt-c-divider-dark-1);
-    --color-heading: var(--vt-c-text-dark-1);
-    --color-text: var(--vt-c-text-dark-2);
-  }
-}
+@color-info-cool: #2563eb;
+@color-success-cool: #059669;
+@color-warning-cool: #0ea5e9;
+@color-error-cool: #be185d;
 
 /* 主题类切换（通过添加 class 到 html 或 body 来切换主题） */
 html[data-theme="light"],
 body[data-theme="light"] {
-  --color-background: @color-white;
-  --color-background-soft: @color-white-soft;
-  --color-background-mute: @color-white-mute;
-  --color-primary: @color-gray-700;
-  --color-secondary: @color-gray-600;
-  --color-accent: @color-gray-500;
-  --color-border: @color-gray-200;
-  --color-border-hover: @color-gray-300;
-  --color-text: @color-gray-900;
-  --color-text-soft: @color-gray-600;
-  --color-heading: @color-gray-900;
-
+  --color-background: @color-light; //白色背景
+  --color-background-soft: @color-light-soft; //白色背景柔和
+  --color-background-mute: @color-light-mute; //白色背景淡化
+  --color-primary: @color-gray-700; //白色主色
+  --color-secondary: @color-gray-600; //白色次色
+  --color-accent: @color-gray-500; //白色强调
+  --color-border: @color-gray-200; //白色边框
+  --color-border-hover: @color-gray-300; //白色边框悬停
+  --color-text: @color-gray-900; //白色文本
+  --color-text-soft: @color-gray-600; //白色文本淡化
+  --color-heading: @color-gray-900; //白色标题
+  --color-box-shadow: @color-box-shadow; //白色阴影
+  --color-box-shadow-hover: @color-box-shadow-hover; //白色阴影悬停
   /* 突出显示颜色 */
-  --color-highlight-text: #003d99;
-  /* 深蓝色 */
-  --color-highlight-bg: #ffd700;
-  /* 鲜艳的金黄色 */
-  --color-highlight-border: #ffb300;
-
+  --color-highlight-text: @color-highlight-text; //白色突出显示文本
+  --color-highlight-bg: @color-highlight-bg; //白色突出显示背景
+  --color-highlight-border: @color-highlight-border; //白色突出显示边框
+  /* 类型颜色 */
+  --color-info: @color-info; //白色信息
+  --color-success: @color-success; //白色成功
+  --color-warning: @color-warning; //白色警告
+  --color-error: @color-error; //白色错误
   //链接颜色
-  --color-link-text: #2563eb;
+  --color-link-text: @color-link-text; //白色链接
+  --color-link-hover: @color-link-hover; //白色链接悬停
 
   // 渐变颜色组：优先保证高对比度，其次色调柔和并与主题协调
-  --color-gradient-group-1: #1e40af;
-  /* 强对比蓝色，柔和 */
-  --color-gradient-group-2: #3b82f6;
-  /* 明亮蓝色，主色对比 */
-  --color-gradient-group-3: #10b981;
-  /* 亮绿色，冷暖对比 */
-  --color-gradient-group-4: #f59e42;
-  /* 柔和橙色，中性色彩 */
-  --color-gradient-group-5: #e11d48;
-  /* 鲜艳桃红，红蓝对比 */
-  --color-gradient-group-6: #9333ea;
-  /* 紫色，冷暖与高明度 */
-  --color-gradient-group-7: #7dd3fc;
-  /* 柔和青蓝，渐变衔接 */
-  --color-gradient-group-8: #6366f1;
-  /* 蓝紫色，柔润淡雅 */
-  --color-gradient-group-9: #f472b6;
-  /* 柔粉色，舒缓点缀 */
-  --color-gradient-group-10: #fed7aa;
-  /* 柔和杏色，白色背景很柔 */
-
-  // 渐变颜色2（保持柔和过渡，基于主色可见性）
-  --color-gradient-group2-1: #2563eb;
-  --color-gradient-group2-2: #60a5fa;
-  --color-gradient-group2-3: #93c5fd;
-  --color-gradient-group2-4: #f59e0b;
-  --color-gradient-group2-5: #fcd34d;
-  --color-gradient-group2-6: #fff3d6;
-  --color-gradient-group2-7: #d97706;
-  --color-gradient-group2-8: #f59e0b;
-  --color-gradient-group2-9: #fcd34d;
-  --color-gradient-group2-10: #fff3d6;
+  --color-gradient-group-1: @color-gradient-light-1; //白色渐变1
+  --color-gradient-group-2: @color-gradient-light-2; //白色渐变2
+  --color-gradient-group-3: @color-gradient-light-3; //白色渐变3
+  --color-gradient-group-4: @color-gradient-light-4; //白色渐变4
+  --color-gradient-group-5: @color-gradient-light-5; //白色渐变5
+  --color-gradient-group-6: @color-gradient-light-6; //白色渐变6
+  --color-gradient-group-7: @color-gradient-light-7; //白色渐变7
+  --color-gradient-group-8: @color-gradient-light-8; //白色渐变8
+  --color-gradient-group-9: @color-gradient-light-9; //白色渐变9
+  --color-gradient-group-10: @color-gradient-light-10; //白色渐变10
 }
 
 html[data-theme="dark"],
 body[data-theme="dark"] {
-  --color-background: @color-black;
-  --color-background-soft: @color-black-soft;
-  --color-background-mute: @color-black-mute;
-  --color-primary: @color-gray-300;
-  --color-secondary: @color-gray-400;
-  --color-accent: @color-gray-500;
-  --color-border: @color-gray-700;
-  --color-border-hover: @color-gray-600;
-  --color-text: @color-gray-100;
-  --color-text-soft: @color-gray-400;
-  --color-heading: @color-gray-100;
-
+  --color-background: @color-dark; //黑色背景
+  --color-background-soft: @color-dark-soft; //黑色背景柔和
+  --color-background-mute: @color-dark-mute; //黑色背景淡化
+  --color-primary: @color-gray-300; //黑色主色
+  --color-secondary: @color-gray-400; //黑色次色
+  --color-accent: @color-gray-500; //黑色强调
+  --color-border: @color-gray-700; //黑色边框
+  --color-border-hover: @color-gray-600; //黑色边框悬停
+  --color-text: @color-gray-100; //黑色文本
+  --color-text-soft: @color-gray-400; //黑色文本淡化
+  --color-heading: @color-gray-100; //黑色标题
+  --color-box-shadow: @color-box-shadow-dark; //黑色阴影
+  --color-box-shadow-hover: @color-box-shadow-hover-dark; //黑色阴影悬停
   /* 突出显示颜色 */
-  --color-highlight-text: #00ffff;
-  /* 鲜艳的青色 */
-  --color-highlight-bg: #1a4d4d;
-  /* 深青色背景 */
-  --color-highlight-border: #00cccc;
-
-  --color-link-text: #38bdf8;
+  --color-highlight-text: @color-highlight-dark-text; //黑色突出显示文本
+  --color-highlight-bg: @color-highlight-dark-bg; //黑色突出显示背景
+  --color-highlight-border: @color-highlight-dark-border; //黑色突出显示边框
+  /* 类型颜色 */
+  --color-info: @color-info-dark; //黑色信息
+  --color-success: @color-success-dark; //黑色成功
+  --color-warning: @color-warning-dark; //黑色警告
+  --color-error: @color-error-dark; //黑色错误
+  //链接颜色
+  --color-link-text: @color-link-dark-text; //黑色链接
+  --color-link-hover: @color-link-dark-hover; //黑色链接悬停
 
   // 渐变颜色组：高对比/偏亮/柔和，便于在黑底显示清晰
-  --color-gradient-group-1: #60a5fa;
-  /* 亮蓝，强对比 */
-  --color-gradient-group-2: #38bdf8;
-  /* 青蓝，明亮对比 */
-  --color-gradient-group-3: #34d399;
-  /* 亮绿，柔和对比 */
-  --color-gradient-group-4: #fde68a;
-  /* 柔黄，明亮衬托 */
-  --color-gradient-group-5: #f472b6;
-  /* 粉色，高对比 */
-  --color-gradient-group-6: #a78bfa;
-  /* 紫色，柔和 */
-  --color-gradient-group-7: #fbbf24;
-  /* 明亮橙黄，醒目 */
-  --color-gradient-group-8: #f87171;
-  /* 红色，高对比点缀 */
-  --color-gradient-group-9: #93c5fd;
-  /* 柔和蓝，过渡色 */
-  --color-gradient-group-10: #bbf7d0;
-  /* 浅绿色，温和柔顺 */
-
-
-  // 渐变颜色2（保持柔和过渡，基于主色可见性）
-  --color-gradient-group2-1: #60a5fa;
-  --color-gradient-group2-2: #93c5fd;
-  --color-gradient-group2-3: #cfe2ff;
-  --color-gradient-group2-4: #f59e0b;
-  --color-gradient-group2-5: #fcd34d;
-  --color-gradient-group2-6: #fff3d6;
-  --color-gradient-group2-7: #d97706;
-  --color-gradient-group2-8: #f59e0b;
-  --color-gradient-group2-9: #fcd34d;
-  --color-gradient-group2-10: #fff3d6;
+  --color-gradient-group-1: @color-gradient-dark-1; //黑色渐变1
+  --color-gradient-group-2: @color-gradient-dark-2; //黑色渐变2
+  --color-gradient-group-3: @color-gradient-dark-3; //黑色渐变3
+  --color-gradient-group-4: @color-gradient-dark-4; //黑色渐变4
+  --color-gradient-group-5: @color-gradient-dark-5; //黑色渐变5
+  --color-gradient-group-6: @color-gradient-dark-6; //黑色渐变6
+  --color-gradient-group-7: @color-gradient-dark-7; //黑色渐变7
+  --color-gradient-group-8: @color-gradient-dark-8; //黑色渐变8
+  --color-gradient-group-9: @color-gradient-dark-9; //黑色渐变9
+  --color-gradient-group-10: @color-gradient-dark-10; //黑色渐变10
 }
 
 html[data-theme="warm"],
 body[data-theme="warm"] {
-  --color-background: @warm-background;
-  --color-background-soft: @warm-background-soft;
-  --color-background-mute: @warm-background-mute;
-  --color-primary: @warm-primary;
-  --color-secondary: @warm-secondary;
-  --color-accent: @warm-accent;
-  --color-border: @warm-border;
-  --color-border-hover: @warm-secondary;
-  --color-text: @warm-text;
-  --color-text-soft: @warm-text-soft;
-  --color-heading: @warm-text;
-
+  --color-background: @warm-background; //暖色背景
+  --color-background-soft: @warm-background-soft; //暖色背景柔和
+  --color-background-mute: @warm-background-mute; //暖色背景淡化
+  --color-primary: @warm-primary; //暖色主色
+  --color-secondary: @warm-secondary; //暖色次色
+  --color-accent: @warm-accent; //暖色强调
+  --color-border: @warm-border; //暖色边框
+  --color-border-hover: @warm-secondary; //暖色边框悬停
+  --color-text: @warm-text; //暖色文本
+  --color-text-soft: @warm-text-soft; //暖色文本淡化
+  --color-heading: @warm-text; //暖色标题
+  --color-box-shadow: @warm-box-shadow; //暖色阴影
+  --color-box-shadow-hover: @warm-box-shadow-hover; //暖色阴影悬停
   /* 突出显示颜色 */
-  --color-highlight-text: #8b0000;
-  /* 深红色 */
-  --color-highlight-bg: #ffe4b5;
-  /* 鲜艳的暖橙色 */
-  --color-highlight-border: #ff8c00;
-
-  --color-link-text: #ea580c;
+  --color-highlight-text: @highlight-warm-text; //暖色突出显示文本
+  --color-highlight-bg: @highlight-warm-bg; //暖色突出显示背景
+  --color-highlight-border: @highlight-warm-border; //暖色突出显示边框
+  /* 类型颜色 */
+  --color-info: @color-info-warm; //暖色信息
+  --color-success: @color-success-warm; //暖色成功
+  --color-warning: @color-warning-warm; //暖色警告
+  --color-error: @color-error-warm; //暖色错误
+  // 链接颜色
+  --color-link-text: @link-warm-text; //暖色链接
+  --color-link-hover: @link-warm-hover; //暖色链接悬停
 
   // 渐变颜色组：基于暖色背景高对比度且柔和
-  --color-gradient-group-1: #2b6cb0;
-  /* 蓝色-与暖色对比强烈 */
-  --color-gradient-group-2: #38b2ac;
-  /* 青绿-冷暖对比适中 */
-  --color-gradient-group-3: #c084fc;
-  /* 柔紫-冷暖映衬 */
-  --color-gradient-group-4: #fa8181;
-  /* 柔粉-明快点缀 */
-  --color-gradient-group-5: #ed8936;
-  /* 橙色-主色调衬托 */
-  --color-gradient-group-6: #f6ad55;
-  /* 杏色-温和渐变 */
-  --color-gradient-group-7: #ffd6a5;
-  /* 明亮柔和 */
-  --color-gradient-group-8: #dd6b20;
-  /* 深橙-高阶对比 */
-  --color-gradient-group-9: #fecaca;
-  /* 柔红过渡 */
-  --color-gradient-group-10: #fcd34d;
-  /* 亮黄，衬托提升 */
-
-  // 渐变颜色2（保持柔和过渡，基于主色可见性, 且不与 group1 重复）
-  --color-gradient-group2-1: #b38b6d;
-  /* 柔和棕色，与主色调呼应 */
-  --color-gradient-group2-2: #ffadad;
-  /* 粉橙，比4/9更淡 */
-  --color-gradient-group2-3: #f1c27d;
-  /* 柔黄棕，渐变感 */
-  --color-gradient-group2-4: #ffe29a;
-  /* 柔亮玉米黄 */
-  --color-gradient-group2-5: #9ae6b4;
-  /* 柔薄荷绿，冷暖区分 */
-  --color-gradient-group2-6: #8ecae6;
-  /* 柔和天蓝 */
-  --color-gradient-group2-7: #c3aed6;
-  /* 淡紫灰，点缀 */
-  --color-gradient-group2-8: #d8e2dc;
-  /* 柔雾白灰 */
-  --color-gradient-group2-9: #f8bbd0;
-  /* 柔粉玫瑰 */
-  --color-gradient-group2-10: #ffe5ec;
-  /* 超淡樱粉，渐隐 */
-
+  --color-gradient-group-1: @color-gradient-warm-1; //暖色渐变1
+  --color-gradient-group-2: @color-gradient-warm-2; //暖色渐变2
+  --color-gradient-group-3: @color-gradient-warm-3; //暖色渐变3
+  --color-gradient-group-4: @color-gradient-warm-4; //暖色渐变4
+  --color-gradient-group-5: @color-gradient-warm-5; //暖色渐变5
+  --color-gradient-group-6: @color-gradient-warm-6; //暖色渐变6
+  --color-gradient-group-7: @color-gradient-warm-7; //暖色渐变7
+  --color-gradient-group-8: @color-gradient-warm-8; //暖色渐变8
+  --color-gradient-group-9: @color-gradient-warm-9; //暖色渐变9
+  --color-gradient-group-10: @color-gradient-warm-10; //暖色渐变10
 }
 
 html[data-theme="cool"],
 body[data-theme="cool"] {
-  --color-background: @cool-background;
-  --color-background-soft: @cool-background-soft;
-  --color-background-mute: @cool-background-mute;
-  --color-primary: @cool-primary;
-  --color-secondary: @cool-secondary;
-  --color-accent: @cool-accent;
-  --color-border: @cool-border;
-  --color-border-hover: @cool-secondary;
-  --color-text: @cool-text;
-  --color-text-soft: @cool-text-soft;
-  --color-heading: @cool-text;
-
+  --color-background: @cool-background; //冷色背景
+  --color-background-soft: @cool-background-soft; //冷色背景柔和
+  --color-background-mute: @cool-background-mute; //冷色背景淡化
+  --color-primary: @cool-primary; //冷色主色
+  --color-secondary: @cool-secondary; //冷色次色
+  --color-accent: @cool-accent; //冷色强调
+  --color-border: @cool-border; //冷色边框
+  --color-border-hover: @cool-secondary; //冷色边框悬停
+  --color-text: @cool-text; //冷色文本
+  --color-text-soft: @cool-text-soft; //冷色文本淡化
+  --color-heading: @cool-text; //冷色标题
+  --color-box-shadow: @cool-box-shadow; //冷色阴影
+  --color-box-shadow-hover: @cool-box-shadow-hover; //冷色阴影悬停
   /* 突出显示颜色 */
-  --color-highlight-text: #c2185b;
-  /* 深粉红色 */
-  --color-highlight-bg: #b3e5fc;
-  /* 鲜艳的浅蓝色 */
-  --color-highlight-border: #4fc3f7;
-
-  --color-link-text: #06b6d4;
-
+  --color-highlight-text: @highlight-cool-text; //冷色突出显示文本
+  --color-highlight-bg: @highlight-cool-bg; //冷色突出显示背景
+  --color-highlight-border: @highlight-cool-border; //冷色突出显示边框
+  /* 类型颜色 */
+  --color-info: @color-info-cool; //冷色信息
+  --color-success: @color-success-cool; //冷色成功
+  --color-warning: @color-warning-cool; //冷色警告
+  --color-error: @color-error-cool; //冷色错误
+  //链接颜色
+  --color-link-text: @link-cool-text; //冷色链接
+  --color-link-hover: @link-cool-hover; //冷色链接悬停
   // 渐变颜色组：冷色为主，强调对比与柔和
-  --color-gradient-group-1: #eab308;
-  /* 温暖明黄，对比冷感背景 */
-  --color-gradient-group-2: #2563eb;
-  /* 深蓝，对比高 */
-  --color-gradient-group-3: #f472b6;
-  /* 柔粉，打破冷色单调 */
-  --color-gradient-group-4: #22d3ee;
-  /* 高对比青色 */
-  --color-gradient-group-5: #60a5fa;
-  /* 柔蓝，温和过渡 */
-  --color-gradient-group-6: #818cf8;
-  /* 紫蓝，平衡暖冷 */
-  --color-gradient-group-7: #2dd4bf;
-  /* 青绿，对比提亮 */
-  --color-gradient-group-8: #7c3aed;
-  /* 紫色，补充柔和 */
-  --color-gradient-group-9: #facc15;
-  /* 明黄，冷暖对比 */
-  --color-gradient-group-10: #a5f3fc;
+  --color-gradient-group-1: @color-gradient-cool-1; //冷色渐变1
+  --color-gradient-group-2: @color-gradient-cool-2; //冷色渐变2
+  --color-gradient-group-3: @color-gradient-cool-3; //冷色渐变3
+  --color-gradient-group-4: @color-gradient-cool-4; //冷色渐变4
+  --color-gradient-group-5: @color-gradient-cool-5; //冷色渐变5
+  --color-gradient-group-6: @color-gradient-cool-6; //冷色渐变6
+  --color-gradient-group-7: @color-gradient-cool-7; //冷色渐变7
+  --color-gradient-group-8: @color-gradient-cool-8; //冷色渐变8
+  --color-gradient-group-9: @color-gradient-cool-9; //冷色渐变9
+  --color-gradient-group-10: @color-gradient-cool-10; //冷色渐变10
   /* 浅青，氛围提升 */
-
-  // 渐变颜色2（保持柔和过渡，基于主色可见性, 不与 group1 重复）
-  --color-gradient-group2-1: #bcdefa;
-  /* 极淡天蓝 */
-  --color-gradient-group2-2: #b8c3e0;
-  /* 柔雾蓝紫 */
-  --color-gradient-group2-3: #dabfff;
-  /* 柔和薰衣草紫 */
-  --color-gradient-group2-4: #a8edea;
-  /* 淡青蓝渐变 */
-  --color-gradient-group2-5: #98f5e1;
-  /* 柔淡青绿 */
-  --color-gradient-group2-6: #b5ead7;
-  /* 冷绿过渡 */
-  --color-gradient-group2-7: #dfecf6;
-  /* 雾白冷色 */
-  --color-gradient-group2-8: #e0c3fc;
-  /* 淡柔紫亮 */
-  --color-gradient-group2-9: #fde2e4;
-  /* 柔粉白过渡 */
-  --color-gradient-group2-10: #fff5ba;
-  /* 超浅柠檬黄 */
 }
 
 /* ============================================
@@ -605,52 +372,11 @@ body[data-theme="cool"] {
   --font-size-2xl: @font-size-2xl;
   --font-size-3xl: @font-size-3xl;
   --font-size-4xl: @font-size-4xl;
-
+  /* 字体大小变量 */
   font-size: var(--font-size-normal);
 
-  /* 基础色板变量 */
-  --vt-c-white: @color-white;
-  --vt-c-white-soft: @color-white-soft;
-  --vt-c-white-mute: @color-white-mute;
-  --vt-c-black: @color-black;
-  --vt-c-black-soft: @color-black-soft;
-  --vt-c-black-mute: @color-black-mute;
-  --vt-c-indigo: @color-gray-700;
-
-  /* 分隔线颜色 */
-  --vt-c-divider-light-1: rgba(60, 60, 60, 0.29);
-  --vt-c-divider-light-2: rgba(60, 60, 60, 0.12);
-  --vt-c-divider-dark-1: rgba(84, 84, 84, 0.65);
-  --vt-c-divider-dark-2: rgba(84, 84, 84, 0.48);
-
-  /* 文本颜色 */
-  --vt-c-text-light-1: var(--vt-c-indigo);
-  --vt-c-text-light-2: rgba(60, 60, 60, 0.66);
-  --vt-c-text-dark-1: var(--vt-c-white);
-  --vt-c-text-dark-2: rgba(235, 235, 235, 0.64);
-
-  /* 主题变量（默认亮色主题） */
-  --color-background: @theme-background;
-  --color-background-soft: @theme-background-soft;
-  --color-background-mute: @theme-background-mute;
-  --color-primary: @theme-primary;
-  --color-secondary: @theme-secondary;
-  --color-accent: @theme-accent;
-  --color-border: @theme-border;
-  --color-border-hover: @theme-border-hover;
-  --color-heading: @theme-text;
-  --color-text: @theme-text;
-  --color-text-soft: @theme-text-soft;
-
-  /* 突出显示颜色 (默认) */
-  --color-highlight-text: #003d99;
-  /* 深蓝色 */
-  --color-highlight-bg: #ffd700;
-  /* 鲜艳的金黄色 */
-  --color-highlight-border: #ffb300;
-
-
   /* 扩展间距变量 */
+  --spacing: 0.5rem;
   --spacing-xs: 0.25rem;
   --spacing-sm: 0.5rem;
   --spacing-md: 0.75rem;
@@ -661,6 +387,7 @@ body[data-theme="cool"] {
   --spacing-4xl: 3rem;
 
   /* 常用组合间距 */
+  --gap: var(--spacing);
   --gap-xs: var(--spacing-xs);
   --gap-sm: var(--spacing-sm);
   --gap-md: var(--spacing-md);
@@ -668,8 +395,11 @@ body[data-theme="cool"] {
   --gap-xl: var(--spacing-xl);
   --gap-2xl: var(--spacing-2xl);
   --gap-3xl: var(--spacing-3xl);
+  --gap-4xl: var(--spacing-4xl);
+
 
   /* 内边距变量 */
+  --padding: var(--spacing);
   --padding-xs: var(--spacing-xs);
   --padding-sm: var(--spacing-sm);
   --padding-md: var(--spacing-md);
@@ -680,6 +410,7 @@ body[data-theme="cool"] {
   --padding-4xl: var(--spacing-4xl);
 
   /* 外边距变量 */
+  --margin: var(--spacing);
   --margin-xs: var(--spacing-xs);
   --margin-sm: var(--spacing-sm);
   --margin-md: var(--spacing-md);
@@ -690,6 +421,7 @@ body[data-theme="cool"] {
   --margin-4xl: var(--spacing-4xl);
 
   /* 边框圆角变量 */
+  --border-radius: 0.3rem;
   --border-radius-xs: var(--spacing-xs);
   --border-radius-sm: var(--spacing-sm);
   --border-radius-md: var(--spacing-md);
@@ -712,69 +444,43 @@ body[data-theme="cool"] {
   --border-width-3xl: var(--spacing-3xl);
   --border-width-4xl: var(--spacing-4xl);
 
+  //box-shadow透明度
+  --box-shadow-alpha: 0.5;
 
   // 阴影色根据主题主色和背景自动生成具有对比度的阴影色，并可通过自定义透明度的函数生成rgba值。
   // Box-shadow根据尺寸生成不同的偏移、模糊和阴影强度。
   /* 按尺寸生成阴影: x, y, blur, spread, 以及透明度（高度越大，透明度增加，模糊变广） */
   /* 尺寸/等级 | x   | y   | blur | spread | alpha */
-  --box-shadow-xs: 0.0625rem 0.0625rem 0.125rem 0.0625rem rgba(@theme-box-shadow-color, 0.2);
-  --box-shadow-sm: 0.125rem 0.125rem 0.25rem 0.125rem rgba(@theme-box-shadow-color, 0.3);
-  --box-shadow-md: 0.25rem 0.25rem 0.5rem 0.25rem rgba(@theme-box-shadow-color, 0.4);
-  --box-shadow-lg: 0.5rem 0.5rem 1rem 0.5rem rgba(@theme-box-shadow-color, 0.5);
-  --box-shadow-xl: 0.75rem 0.75rem 1.5rem 0.75rem rgba(@theme-box-shadow-color, 0.6);
-  --box-shadow-2xl: 1rem 1rem 2rem 1rem rgba(@theme-box-shadow-color, 0.7);
-  --box-shadow-3xl: 1.5rem 1.5rem 3rem 1.5rem rgba(@theme-box-shadow-color, 0.8);
-  --box-shadow-4xl: 2rem 2rem 4rem 2rem rgba(@theme-box-shadow-color, 0.9); // ≈32 和 64 基准单位
-  --box-shadow-none: 0 0 0 0 rgba(0, 0, 0, 0);
-
-  .box-shadow(x, y, blur, spread, alpha) {
-    box-shadow: x, y, blur, spread, rgba(@theme-box-shadow-color, alpha);
+  --box-shadow-xs: 0 0rem 0.125rem 0.0625rem rgba(var(--color-box-shadow), 0.2);//小尺寸阴影
+  --box-shadow-sm: 0 0 0.25rem 0.125rem rgba(var(--color-box-shadow), 0.3);//中尺寸阴影
+  --box-shadow-md: 0 0 0.5rem 0.25rem rgba(var(--color-box-shadow), 0.4);
+  --box-shadow-lg: 0 0 1rem 0.5rem rgba(var(--color-box-shadow), 0.5);//大尺寸阴影
+  --box-shadow-xl: 0 0rem 1.5rem 0.75rem rgba(var(--color-box-shadow), 0.6);
+  --box-shadow-2xl: 0 0 2rem 1rem rgba(var(--color-box-shadow), 0.7);//超大尺寸阴影
+  --box-shadow-3xl: 0 0 3rem 1.5rem rgba(var(--color-box-shadow), 0.8);//超大尺寸阴影
+  --box-shadow-4xl: 0 0 4rem 2rem rgba(var(--color-box-shadow), 0.9); // ≈32 和 64 基准单位//超大尺寸阴影 
+  --box-shadow-none: 0 0 0 0 rgba(0, 0, 0, 0);//无阴影
+  --box-shadow: var(--box-shadow-sm);//普通
+  --box-shadow-hover: var(--box-shadow-hover-sm);//普通悬停
+  //box-shadow函数
+  .box-shadow(@x, @y, @blur, @spread, @alpha) {
+    box-shadow: @x, @y, @blur, @spread, rgba(var(--color-box-shadow), @alpha);
+  }
+  //box-shadow-hover函数
+  .box-shadow-hover(@x, @y, @blur, @spread, @alpha) {
+    box-shadow: @x, @y, @blur, @spread, rgba(var(--color-box-shadow-hover), @alpha);
   }
 
   /* 内阴影与外阴影（默认暗色调/柔光，可通过使用box-shadow-rgba函数结合不同透明度调用）*/
-  --box-shadow-inner: inset 0 0.0625rem 0.125rem 0.0625rem rgba(@theme-box-shadow-color, 0.5);
-  --box-shadow-outer: 0 0.125rem 0.375rem 0 rgba(@theme-box-shadow-color, 0.5);
-  --box-shadow-inset: inset 0 0.125rem 0.25rem 0.125rem rgba(@theme-box-shadow-color, 0.5);
-  --box-shadow-inset-outer: inset 0 0.25rem 0.5rem 0.25rem rgba(@theme-box-shadow-color, 0.5);
-  --box-shadow-inset-inner: inset 0 0.5rem 1rem 0.5rem rgba(@theme-box-shadow-color, 0.5);
-
+  --box-shadow-inner: inset 0 0.0625rem 0.125rem 0.0625rem rgba(--color-box-shadow, 0.5);
+  --box-shadow-outer: 0 0.125rem 0.375rem 0 rgba(--color-box-shadow, 0.5);
+  --box-shadow-inset: inset 0 0.125rem 0.25rem 0.125rem rgba(--color-box-shadow, 0.5);
+  --box-shadow-inset-outer: inset 0 0.25rem 0.5rem 0.25rem rgba(--color-box-shadow, 0.5);
+  --box-shadow-inset-inner: inset 0 0.5rem 1rem 0.5rem rgba(--color-box-shadow, 0.5);
 
   /* 间距变量 */
   --container-padding: var(--padding-2xl);
-  --section-gap: var(--margin-4xl);
-
-
-  /* Ant Design Vue token 风格（kebab-case），用于与 JS 侧 theme.ts 对齐 */
-  /* Brand & Status */
-  --color-info: var(--color-primary);
-  --color-success: #52c41a;
-  --color-warning: #faad14;
-  --color-error: #ff4d4f;
-
-  /* Text */
-  --color-text-base: var(--color-text);
-  --color-text-secondary: var(--color-text-soft);
-  --color-text-tertiary: var(--color-text-soft);
-  --color-text-quaternary: var(--color-text-soft);
-  --color-text-light-solid: var(--color-background);
-
-  /* Link */
-  --color-link: var(--color-primary);
-  --color-link-hover: var(--color-secondary);
-  --color-link-active: var(--color-primary);
-
-  /* Backgrounds */
-  --color-bg-base: var(--color-background);
-  --color-bg-layout: var(--color-background-soft);
-  --color-bg-container: var(--color-background);
-  --color-bg-elevated: var(--color-background-soft);
-
-  /* Fill / Border */
-  --color-fill: var(--color-background-soft);
-  --color-fill-secondary: var(--color-background-mute);
-  --color-fill-tertiary: var(--color-background-mute);
-  --color-fill-quaternary: var(--color-background-mute);
-  --color-border-secondary: var(--color-border-hover);
+  --section-gap: var(--gap-2xl);  
 }
 
 /* ============================================
@@ -1064,10 +770,6 @@ a,
   cursor: cursor-pointer;
 }
 
-.code-block {
-  color: #000;
-  background-color: #fff;
-}
 
 @media (hover: hover) {
   a:hover {
@@ -1081,21 +783,4 @@ a,
     place-items: center;
   }
 
-}
-
-/* ============================================
-   Highlight 样式
-   ============================================ */
-//
-.highlight-text {
-  color: var(--color-highlight-text);
-  background-color: var(--color-highlight-bg);
-}
-
-.highlight-bg {
-  background-color: var(--color-highlight-bg);
-}
-
-.highlight-border {
-  border-color: var(--color-highlight-border);
 }

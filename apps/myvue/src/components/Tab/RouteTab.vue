@@ -8,7 +8,7 @@
     <div @click.stop="closeSide(currentIndex, 'right', currentKey)">关闭右侧</div>
     <div @click.stop="closeAll(currentKey)">关闭其他</div>
   </div>
-  <Tabs @change="TabClick" :activeKey="activeKey" type="editable-card" :tabBarStyle="{ margin: '0 5px' }" @close="removeTab">
+  <Tabs @change="TabClick" :activeKey="activeKey" :type="type" :tabBarStyle="{ margin: '0 5px' }" @close="removeTab">
     <TabPane v-for="(pane, index) in tabList" :key="pane.path" :closable="pane.path !== '/' && pane.path !== '/home'"
       :path="pane.path">
       <template #tab>
@@ -23,7 +23,7 @@
 </template>
 <script lang="ts" setup>
 // 组合式 API 逻辑
-import { defineProps, defineEmits, ref, onMounted } from 'vue'
+import { defineProps, defineEmits, ref, onMounted, withDefaults } from 'vue'
 import Tabs from './index.vue'
 import TabPane from './TabPane.vue'
 // import TabPane from './TabPane.vue'
@@ -33,13 +33,16 @@ import type { Tab } from '@/stores/tab'
 
 onMounted(() => { })
 
-const { showContextMenu, tabList, currentDragIndex, keyMap = 'path' } = defineProps<{
+const { showContextMenu, currentDragIndex, keyMap = 'path', } = withDefaults(defineProps<{
   tabList: Tab[]
   activeKey: string
   showContextMenu: boolean
   currentDragIndex: number,
   keyMap?: 'path'
-}>()
+  type?: 'line' | 'card' | 'editable-card'
+}>(), {
+  type: 'editable-card',
+})
 
 const emit = defineEmits([
   'tabClick',
@@ -118,26 +121,7 @@ const endSorting = (path: string) => {
   position: relative;
   top: 0px;
   left: 0px;
-  transition: all 0.3s ease-in;
   background-color: transparent;
-
-}
-
-.active {
-  background-color: var(--color-background);
-}
-
-.left-shift {
-  font-size: 16px;
-  width: 20px;
-  cursor: pointer;
-  transition: all 0.3s ease-in;
-  color: var(--color-text);
-
-  &:hover {
-    transform: translate(-1px, -1px);
-    color: var(--color-primary);
-  }
 }
 
 .menu-list {
@@ -149,9 +133,9 @@ const endSorting = (path: string) => {
   color: var(--color-text);
   height: 1px;
   // border: var(--border-width) solid var(--color-border);
-  border-radius: 8px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-  width: 120px;
+  border-radius: 0.5rem;
+  box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.08);
+  width: 7.5rem;
   height: 0px;
   display: flex;
   flex-direction: column;
@@ -173,56 +157,6 @@ const endSorting = (path: string) => {
       color: var(--color-primary);
       transform: translate(1px, 1px);
     }
-  }
-}
-
-:deep(.ant-tabs) {
-
-  /* Tabs 容器背景与下边框 */
-  .ant-tabs-nav {
-    background: var(--color-background);
-    border-bottom: var(--border-width) solid var(--color-border);
-    margin: 0 !important;
-  }
-
-  /* 单个 Tab 默认态 */
-  .ant-tabs-tab {
-    color: var(--color-text-soft);
-
-    &:hover {
-      color: var(--color-primary);
-    }
-  }
-
-  /* 激活态 Tab 文本色 */
-  .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
-    color: var(--color-primary);
-    text-shadow: none;
-  }
-
-  /* 可编辑卡片型的卡片背景与边框 */
-  &.ant-tabs-card>.ant-tabs-nav .ant-tabs-tab {
-    background: var(--color-background);
-    border: var(--border-width) solid var(--element-border);
-  }
-
-  &.ant-tabs-card>.ant-tabs-nav .ant-tabs-tab-active {
-    background: var(--color-background-soft);
-    border: var(--border-width) solid var(--color-primary);
-  }
-
-  /* 关闭图标颜色 */
-  .ant-tabs-tab-remove {
-    color: var(--color-text-soft);
-
-    &:hover {
-      color: var(--color-error, var(--color-primary));
-    }
-  }
-
-  /* ink bar 颜色 */
-  .ant-tabs-ink-bar {
-    background: var(--color-primary);
   }
 }
 </style>
