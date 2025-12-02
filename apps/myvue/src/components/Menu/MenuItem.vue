@@ -1,7 +1,7 @@
 <template>
     <li class="menu-item" :style="{ '--level': level }" @click.stop.prevent="handleClick"
         @mouseenter.stop.prevent="handleMouseEnter" @mouseleave="handleMouseLeave">
-        <div class="menu-item__title bg-gradient-animated-2" :class="titleClasses" :id="item.path">
+        <div class="menu-item__title" :class="titleClasses" :id="item.path">
             <span v-if="item.icon" class="menu-item__icon">{{ item.icon }}</span>
             <span :class="['menu-item__label', { 'menu-item__label--matched': item.match }]"
                 :title="item.label || item.name">
@@ -213,6 +213,7 @@ const getMouseInChildWrapperVerticalElement = (e: MouseEvent) => {
 
 const titleClasses = computed(() => ({
     'menu-item__title--selected': isSelected.value,
+    'bg-gradient-animated-2': !isSelected.value,
     'menu-item__title--open': props.isOpen,
     'menu-item__title--matched': props.item.match,
     'menu-item__title--hovered': isHovered.value,

@@ -62,7 +62,6 @@ const props = withDefaults(
 
 provide('type', props.type)
 
-console.log(props.type)
 
 const emit = defineEmits<{
     (e: 'update:activeKey', key: string): void

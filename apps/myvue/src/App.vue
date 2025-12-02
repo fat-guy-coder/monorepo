@@ -36,7 +36,7 @@
       <div :class="Menucollapsed ? 'menu-collapsed' : 'menu'">
         <Spin :spinning="loading" class="loading" />
         <Menu @select="goto" :collapsed="Menucollapsed" v-show="!loading" :mode="Menucollapsed ? 'vertical' : 'inline'"
-          :items="menus as any" v-model:selectedKeys="selectedKeys" v-model:openKeys="openKeys">
+          :items="menus as any" :selectedKeys="selectedKeys" v-model:openKeys="openKeys">
         </Menu>
       </div>
     </div>
