@@ -58,9 +58,8 @@ interface Props {
   target?: '_blank' | '_self' | '_parent' | '_top'
 }
 
-const props = defineProps<Props>()
 
-const { href = 'javascript:void(0);', type = 'a', text = '', icon = '', showArrow = false, size = 'medium', bordered = false, rounded = 'md', animation = 'lift', gradientAnimation = 'linear', block = false, target = '_self' } = defineProps<Props>()
+const {id,route, href = 'javascript:void(0);', type = 'a', text = '', icon = '', showArrow = false, size = 'medium', bordered = false, rounded = 'md', animation = 'lift', gradientAnimation = 'linear', block = false, target = '_self' } = defineProps<Props>()
 
 const goToByName = inject<((name: string) => void)>('goToByName');
 if (!goToByName) {
@@ -68,18 +67,18 @@ if (!goToByName) {
 }
 
 const handleClick = (event: MouseEvent) => {
-  if (props.id) {
+  if (id) {
     event.preventDefault()
-    const element = document.getElementById(props.id)
+    const element = document.getElementById(id)
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' })
     }
     return
   }
 
-  if (props.route) {
+  if (route) {
     event.preventDefault()
-    goToByName(typeof props.route === 'string' ? props.route : props.route.name as string)
+    goToByName(typeof route === 'string' ? route : route.name as string)
     return
   }
 }
