@@ -37,20 +37,17 @@
 
   type Language = 'js' | 'ts' | 'html' | 'json' | 'css'
 
-  const props = withDefaults(
-    defineProps<{
-      title?: string
-      code: string
-      language?: Language
-      lineNumbers?: boolean
-      hiddenToolbar?: boolean
-    }>(),
-    {
-      language: 'js',
-      lineNumbers: true,
-      hiddenToolbar: false,
-    },
-  )
+  const props = defineProps<{
+    title?: string
+    code: string
+    language?: Language
+    lineNumbers?: boolean
+    hiddenToolbar?: boolean
+  }>()
+
+  const language = computed(() => props.language || 'js');
+  const lineNumbers = computed(() => props.lineNumbers !== false);
+  const hiddenToolbar = computed(() => props.hiddenToolbar === true);
 
   const preElement = ref<HTMLElement | null>(null)
   const isCopying = ref(false)
@@ -65,7 +62,7 @@
       json: 'JSON',
       css: 'Css'
     }
-    return langMap[props.language] || props.language.toUpperCase()
+    return langMap[language.value] || language.value.toUpperCase()
   })
 
   // 高亮代码
@@ -103,7 +100,7 @@
   })
 
   watch(
-    () => [props.code, props.language],
+    () => [props.code, language.value],
     () => nextTick(highlightCode),
   )
   </script>

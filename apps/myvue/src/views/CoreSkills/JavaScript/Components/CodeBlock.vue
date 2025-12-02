@@ -40,21 +40,14 @@ import 'prismjs/plugins/line-numbers/prism-line-numbers.js'
 
 type Language = 'js' | 'ts' | 'html' | 'json'
 
-const props = withDefaults(
+const { code, language = 'js', lineNumbers = true, hiddenLanguageTag = false, hiddenCopyButton = false } =
   defineProps<{
     code: string
     language?: Language
     lineNumbers?: boolean
     hiddenLanguageTag?: boolean
     hiddenCopyButton?: boolean
-  }>(),
-  {
-    language: 'js',
-    lineNumbers: true,
-    hiddenLanguageTag: false,
-    hiddenCopyButton: false,
-  },
-)
+  }>()
 
 const preElement = ref<HTMLElement | null>(null)
 const isCopying = ref(false)
@@ -68,7 +61,7 @@ const formattedLanguage = computed(() => {
     html: 'HTML',
     json: 'JSON',
   }
-  return langMap[props.language] || props.language.toUpperCase()
+  return langMap[language] || language.toUpperCase()
 })
 
 // 高亮代码
@@ -82,7 +75,7 @@ const highlightCode = () => {
 const handleCopy = async () => {
   try {
     isCopying.value = true
-    await navigator.clipboard.writeText(props.code)
+    await navigator.clipboard.writeText(code)
     copyStatusText.value = '已复制!'
     setTimeout(() => {
       copyStatusText.value = '复制'
@@ -103,7 +96,7 @@ onMounted(() => {
 })
 
 watch(
-  () => [props.code, props.language],
+  () => [code, language],
   () => nextTick(highlightCode),
 )
 </script>

@@ -34,14 +34,10 @@ interface Props {
   size?: 'sm' | 'md' | 'lg'
 }
 
-const props = withDefaults(defineProps<Props>(), {
-  title: '',
-  style: {} as CSSProperties | string,
-  size: 'md'
-})
+const { title = '', size = 'md' } = defineProps<Props>()
 
 const slots = useSlots()
-const hasTitle = computed(() => !!(props.title || (slots && (slots as any).title)))
+const hasTitle = computed(() => !!(title || (slots && (slots as any).title)))
 </script>
 
 <style lang="less" scoped>

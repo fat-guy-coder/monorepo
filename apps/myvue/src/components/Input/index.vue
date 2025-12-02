@@ -12,17 +12,17 @@
       </slot>
     </span>
 
-    <input ref="inputRef" class="search-input__control" type="search" :value="value" :placeholder="placeholder"
+    <input ref="inputRef" class="search-input__control" type="search" :value="value || ''" :placeholder="placeholder || '搜索'"
       :disabled="disabled" :maxlength="maxlength" @focus="setFocus(true)" @blur="setFocus(false)" @input="handleInput"
       @keyup.enter="triggerSearch" />
 
-    <button v-if="allowClear && value" type="button" class="search-input__clear" :disabled="disabled"
+    <button v-if="(allowClear ?? true) && value" type="button" class="search-input__clear" :disabled="disabled"
       @click="handleClear">
       ×
     </button>
 
     <button type="button" class="search-input__action" :disabled="disabled || loading" v-if="showSearchButton" @click="triggerSearch">
-      <span v-if="!loading">{{ searchText }}</span>
+      <span v-if="!loading">{{ searchText || '搜索' }}</span>
       <span v-else class="search-input__spinner"></span>
     </button>
   </div>
@@ -35,33 +35,18 @@ defineOptions({
   name: 'SearchInput',
 })
 
-const props = withDefaults(
-  defineProps<{
-    value?: string
-    placeholder?: string
-    disabled?: boolean
-    allowClear?: boolean
-    loading?: boolean
-    autofocus?: boolean
-    searchText?: string
-    maxlength?: number
-    showDefaultPrefix?: boolean
-    showSearchButton?: boolean
-  }>(),
-  {
-    value: '',
-    placeholder: '搜索',
-    disabled: false,
-    allowClear: true,
-    loading: false,
-    autofocus: false,
-    searchText: '搜索',
-    maxlength: undefined,
-    showDefaultPrefix: false,
-    showSearchButton: false,
-  }
-)
-
+const props = defineProps<{
+  value?: string
+  placeholder?: string
+  disabled?: boolean
+  allowClear?: boolean
+  loading?: boolean
+  autofocus?: boolean
+  searchText?: string
+  maxlength?: number
+  showDefaultPrefix?: boolean
+  showSearchButton?: boolean
+}>()
 
 const emit = defineEmits<{
   (event: 'update:value', value: string): void

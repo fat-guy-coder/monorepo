@@ -4,7 +4,7 @@
     `expand-${computedExpandDirection}`,
     {
       'is-expanded': isExpanded,
-      'mobile-adaptive': props.mobileAdaptive && isMobile
+      'mobile-adaptive': mobileAdaptive && isMobile
     }
   ]" :style="containerStyle">
     <!-- 导航内容区域 -->
@@ -60,16 +60,7 @@ interface Props {
   isMobile: boolean
 }
 
-const props = withDefaults(defineProps<Props>(), {
-  position: 'bottom-right',
-  expandDirection: undefined,
-  offset: () => ({
-    bottom: '20px',
-    right: '20px'
-  }),
-  mobileAdaptive: true,
-  isMobile: false
-})
+const { position = 'bottom-right', expandDirection, offset = { bottom: '20px', right: '20px' }, mobileAdaptive = true, isMobile = false } = defineProps<Props>()
 
 // Emits
 const emit = defineEmits<{
@@ -105,12 +96,12 @@ const hasItems = computed(() => navigationItems.value.length > 0)
 // 计算展开方向
 const computedExpandDirection = computed<ExpandDirection>(() => {
   // 如果明确指定了展开方向，优先使用
-  if (props.expandDirection) {
-    return props.expandDirection
+  if (expandDirection) {
+    return expandDirection
   }
 
   // 如果启用移动端自适应，在移动端时根据位置调整
-  if (props.mobileAdaptive && props.isMobile) {
+  if (mobileAdaptive && isMobile) {
     return getMobileExpandDirection()
   }
 
@@ -121,7 +112,6 @@ const computedExpandDirection = computed<ExpandDirection>(() => {
 
 // 根据位置自动计算展开方向
 const getAutoExpandDirection = (): ExpandDirection => {
-  const { position } = props
   switch (position) {
     case 'top-left':
       return 'bottom'
@@ -138,7 +128,6 @@ const getAutoExpandDirection = (): ExpandDirection => {
 
 // 移动端展开方向
 const getMobileExpandDirection = (): ExpandDirection => {
-  const { position } = props
   switch (position) {
     case 'top-left':
     case 'top-right':
@@ -154,7 +143,6 @@ const getMobileExpandDirection = (): ExpandDirection => {
 // 容器样式
 const containerStyle = computed(() => {
   const style: Record<string, string> = {}
-  const { offset } = props
 
   if (offset.top !== undefined) {
     style.top = typeof offset.top === 'number' ? `${offset.top}px` : offset.top

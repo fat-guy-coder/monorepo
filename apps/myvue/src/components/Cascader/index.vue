@@ -88,20 +88,17 @@ defineOptions({
   name: 'AppCascader',
 })
 
-const props = withDefaults(
-  defineProps<{
-    options?: CascaderOption[]
-    value?: string | string[]
-    placeholder?: string
-    disabled?: boolean
-    loadData?: (option: CascaderOption) => Promise<CascaderOption[]>
-  }>(),
-  {
-    options: () => [],
-    placeholder: '请选择',
-    disabled: false,
-  }
-)
+const props = defineProps<{
+  options?: CascaderOption[]
+  value?: string | string[]
+  placeholder?: string
+  disabled?: boolean
+  loadData?: (option: CascaderOption) => Promise<CascaderOption[]>
+}>()
+
+const options = computed(() => props.options || [])
+const placeholder = computed(() => props.placeholder || '请选择')
+const disabled = computed(() => props.disabled === true)
 
 const emit = defineEmits<{
   (event: 'update:value', value: string | string[]): void
@@ -142,19 +139,19 @@ const displayValue = computed(() => {
 })
 
 const handleInputClick = () => {
-  if (props.disabled) return
+  if (disabled.value) return
   toggleDropdown()
 }
 
 const handleInputMouseEnter = () => {
-  if (props.disabled || !supportsHover.value) return
+  if (disabled.value || !supportsHover.value) return
   if (hoverTimer) {
     clearTimeout(hoverTimer)
   }
 }
 
 const handleInputMouseLeave = () => {
-  if (props.disabled || !supportsHover.value) return
+  if (disabled.value || !supportsHover.value) return
   if (hoverTimer) {
     clearTimeout(hoverTimer)
   }
@@ -203,9 +200,9 @@ const toggleDropdown = () => {
 }
 
 const openDropdown = () => {
-  if (props.disabled) return
+  if (disabled.value) return
   isOpen.value = true
-  panes.value = [{ options: props.options }]
+  panes.value = [{ options: options.value }]
   nextTick(() => {
     updateDropdownPosition()
   })
@@ -435,7 +432,7 @@ watch(
       return false
     }
 
-    findPath(props.options, values, [])
+    findPath(options.value, values, [])
     selectedPath.value = path
   },
   { immediate: true }

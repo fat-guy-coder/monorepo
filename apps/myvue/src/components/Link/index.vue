@@ -58,20 +58,9 @@ interface Props {
   target?: '_blank' | '_self' | '_parent' | '_top'
 }
 
-const props = withDefaults(defineProps<Props>(), {
-  href: 'javascript:void(0);', // 默认无操作
-  type: 'a',
-  text: '',
-  icon: '',
-  showArrow: false,
-  size: 'medium',
-  bordered: false,
-  rounded: 'md',
-  animation: 'lift',
-  gradientAnimation: 'linear',
-  block: false,
-  target: '_self',
-})
+const props = defineProps<Props>()
+
+const { href = 'javascript:void(0);', type = 'a', text = '', icon = '', showArrow = false, size = 'medium', bordered = false, rounded = 'md', animation = 'lift', gradientAnimation = 'linear', block = false, target = '_self' } = defineProps<Props>()
 
 const goToByName = inject<((name: string) => void)>('goToByName');
 if (!goToByName) {

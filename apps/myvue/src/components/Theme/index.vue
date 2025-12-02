@@ -36,11 +36,7 @@ interface Props {
     themes: Themes
 }
 
-const props = withDefaults(defineProps<Props>(), {
-    direction: 'horizontal',
-    show: false,
-    theme: 'light'
-})
+const { direction = 'horizontal', show = false, theme = 'light' } = defineProps<Props>()
 
 // Emits
 const emit = defineEmits<{
@@ -51,7 +47,7 @@ const emit = defineEmits<{
 
 // 切换展开/收起
 const toggle = () => {
-    emit('toggle', !props.show)
+    emit('toggle', !show)
 }
 
 // 切换主题函数
@@ -62,8 +58,8 @@ const switchTheme = (theme: Theme) => {
 
 // 初始化主题
 onMounted(() => {
-    if (props.theme && ['light', 'dark', 'warm', 'cool'].includes(props.theme)) {
-        switchTheme(props.theme)
+    if (theme && ['light', 'dark', 'warm', 'cool'].includes(theme)) {
+        switchTheme(theme)
     } else {
         // 如果没有保存的主题，使用系统偏好
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches

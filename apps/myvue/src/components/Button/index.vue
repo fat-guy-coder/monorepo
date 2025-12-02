@@ -17,7 +17,7 @@ defineOptions({
   name: 'AButton',
 });
 
-const props = withDefaults(
+const props =
   defineProps<{
     type?: 'primary' | 'default' | 'dashed' | 'text' | 'link';
     size?: 'large' | 'middle' | 'small';
@@ -25,16 +25,7 @@ const props = withDefaults(
     loading?: boolean;
     disabled?: boolean;
     shape?: 'default' | 'circle' | 'round';
-  }>(),
-  {
-    type: 'default',
-    size: 'middle',
-    danger: false,
-    loading: false,
-    disabled: false,
-    shape: 'default',
-  }
-);
+  }>()
 
 const classes = computed(() => [
   'btn',

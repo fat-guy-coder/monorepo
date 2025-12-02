@@ -47,7 +47,7 @@ interface NavTagItem {
 }
 
 
-const props = withDefaults(
+const { items = [], size = 'medium', variant = 'solid', backgroundColors = [], backgroundColor, borderColor, bordered = true, rounded = 'md', showIndex = true, enableScroll = true, direction = 'horizontal', animation = 'fade', gap = '0.5rem', transitionDuration = 300 } =
   defineProps<{
     items: NavTagItem[]
     size?: 'small' | 'medium' | 'large'
@@ -63,25 +63,10 @@ const props = withDefaults(
     animation?: AnimationType | AnimationType[]
     gap?: number | string
     transitionDuration?: number
-  }>(),
-  {
-    items: () => [],
-    size: 'medium',
-    variant: 'solid',
-    backgroundColors: () => [],
-    bordered: true,
-    rounded: 'md',
-    showIndex: true,
-    enableScroll: true,
-    direction: 'horizontal',
-    animation: 'fade',
-    gap: '0.5rem',
-    transitionDuration: 300,
-  }
-)
+  }>()
 
 const getAnimationStage = (stage: AnimationStage): string => {
-  return getAnimationClassName(props.animation, stage)
+  return getAnimationClassName(animation, stage)
 }
 
 
@@ -90,37 +75,37 @@ const emit = defineEmits<{
 }>()
 
 const animationClasses = computed(() => {
-  if (Array.isArray(props.animation)) {
-    return props.animation.map(anim => `nav-tag-card--anim-${anim}`)
+  if (Array.isArray(animation)) {
+        return animation.map(anim => `nav-tag-card--anim-${anim}`)
   }
-  if (typeof props.animation === 'string') {
-    return [`nav-tag-card--anim-${props.animation}`]
+  if (typeof animation === 'string') {
+    return [`nav-tag-card--anim-${animation}`]
   }
   return []
 })
 
 const containerStyle = computed<CSSProperties>(() => ({
-  '--transition-duration': `${props.transitionDuration}ms`,
-  gap: typeof props.gap === 'number' ? `${props.gap}px` : props.gap,
+  '--transition-duration': `${transitionDuration}ms`,
+  gap: typeof gap === 'number' ? `${gap}px` : gap,
 }))
 
 const resolvedGradient = computed(() => {
-  if (props.backgroundColors.length >= 2) {
-    return props.backgroundColors.join(', ')
+  if (backgroundColors.length >= 2) {
+    return backgroundColors.join(', ')
   }
   return 'var(--color-primary), var(--color-secondary)'
 })
 
 const itemStyleVars = computed<CSSProperties>(() => {
   const style: CSSProperties = {}
-  if (props.variant === 'gradient') {
-    style['--nav-tag-bg'] = `linear-gradient(135deg, ${resolvedGradient.value})`
-  } else if (props.backgroundColor) {
-    style['--nav-tag-bg'] = props.backgroundColor
+  if (variant === 'gradient') {
+    style['--nav-tag-bg'] = `linear-gradient(135deg, ${resolvedGradient})`
+  } else if (backgroundColor) {
+    style['--nav-tag-bg'] = backgroundColor
   }
 
-  if (props.borderColor) {
-    style['--nav-tag-border'] = props.borderColor
+  if (borderColor) {
+    style['--nav-tag-border'] = borderColor
   }
 
   return style
@@ -138,7 +123,7 @@ const activeId = defineModel<string | null>('activeId')
 const handleItemClick = (item: NavTagItem, index: number) => {
   activeId.value = item.id
   emit('select', item, index)
-  if (props.enableScroll && item.id) {
+    if (enableScroll && item.id) {
     scrollToTarget(item.id)
   }
 }

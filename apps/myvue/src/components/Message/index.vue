@@ -22,28 +22,21 @@ defineOptions({
   name: 'Message',
 });
 
-const props = withDefaults(
-  defineProps<{
-    id: string;
-    type?: 'info' | 'success' | 'warning' | 'error';
-    content?: string;
-    duration?: number; // Duration in seconds
-    top: number;
-    onClose?: () => void;
-    onDestroy: () => void;
-  }>(),
-  {
-    type: 'info',
-    content: '',
-    duration: 3,
-  }
-);
+const { id, type = 'info', content = '', duration = 3, top, onClose, onDestroy } = defineProps<{
+  id: string;
+  type?: 'info' | 'success' | 'warning' | 'error';
+  content?: string;
+  duration?: number; // Duration in seconds
+  top: number;
+  onClose?: () => void;
+  onDestroy: () => void;
+}>();
 
 const visible = ref(false);
 let timer: number | undefined;
 
 const customStyle = computed(() => ({
-  top: `${props.top}px`,
+      top: `${top}px`,
 }));
 
 const close = () => {
@@ -51,10 +44,10 @@ const close = () => {
 };
 
 const startTimer = () => {
-  if (props.duration > 0) {
+  if (duration > 0) {
     timer = window.setTimeout(() => {
       close();
-    }, props.duration * 1000);
+    }, duration * 1000);
   }
 };
 

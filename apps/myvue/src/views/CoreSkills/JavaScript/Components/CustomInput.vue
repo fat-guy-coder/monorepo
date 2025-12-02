@@ -22,7 +22,7 @@ import { ref } from 'vue'
 
 // 组件Props类型定义
 interface Props {
-  modelValue: string
+  modelValue?: string
   placeholder?: string
 }
 
@@ -32,10 +32,10 @@ interface Emits {
 }
 
 // 定义Props和Emits
-const props = withDefaults(defineProps<Props>(), {
-  placeholder: '请输入...'
-})
-const emit = defineEmits<Emits>()
+const { modelValue, placeholder = '请输入...' } = defineProps<Props>()
+const emit = defineEmits<{
+  (e: 'update:modelValue', value: string): void
+}>()
 
 // 输入框聚焦状态
 const isFocused = ref(false)

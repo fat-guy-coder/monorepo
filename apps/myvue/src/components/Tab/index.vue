@@ -29,8 +29,7 @@ import {
     provide,
     ref,
     watch,
-    type CSSProperties,
-    withDefaults,
+    type CSSProperties
 } from 'vue'
 
 defineOptions({
@@ -48,19 +47,15 @@ interface TabItem {
     disabled?: boolean
 }
 
-const props = withDefaults(
-    defineProps<{
-        activeKey: string
-        type?: TabType,
-        items?: TabItem[]
-        tabBarStyle: CSSProperties
-    }>(),
-    {
-        type: 'line',
-    },
-)
+const { activeKey, type= 'editable-card' } = defineProps<{
+    activeKey: string
+    type?: TabType,
+    items?: TabItem[]
+    tabBarStyle: CSSProperties
+}>()
 
-provide('type', props.type)
+
+provide('type', type)
 
 
 const emit = defineEmits<{
@@ -74,7 +69,7 @@ const emit = defineEmits<{
 
 provide(
     'activeKey',
-    computed(() => props.activeKey),
+    computed(() => activeKey),
 )
 
 const navListRef = ref<HTMLElement | null>(null)
@@ -95,7 +90,7 @@ const setTabRef = (key: string, el: HTMLElement) => {
 
 const updateInkBar = () => {
     nextTick(() => {
-        const activeTab = tabRefs.value[props.activeKey]
+        const activeTab = tabRefs.value[activeKey]
         if (activeTab) {
             inkBarStyle.value = {
                 width: `${activeTab.offsetWidth}px`,
@@ -157,7 +152,7 @@ const handleScroll = (direction: 'left' | 'right') => {
 
 const scrollToActive = () => {
     if (!isOverflowing.value || !navListRef.value) return
-    const activeTab = tabRefs.value[props.activeKey]
+    const activeTab = tabRefs.value[activeKey]
     if (!activeTab || !navListRef.value.parentElement) return
     const containerWidth = navListRef.value.parentElement.offsetWidth
     const activeLeft = activeTab.offsetLeft
@@ -172,7 +167,7 @@ const scrollToActive = () => {
 }
 
 watch(
-    () => props.activeKey,
+    () => activeKey,
     () => {
         updateInkBar()
         scrollToActive()

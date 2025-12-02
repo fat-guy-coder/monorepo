@@ -22,22 +22,15 @@ defineOptions({
   name: 'ASpin',
 });
 
-const props = withDefaults(
-  defineProps<{
-    spinning?: boolean;
-    size?: 'small' | 'default' | 'large';
-    tip?: string;
-  }>(),
-  {
-    spinning: true,
-    size: 'default',
-    tip: '',
-  }
-);
+const { spinning = true, size = 'default', tip = '' } = defineProps<{
+  spinning?: boolean;
+  size?: 'small' | 'default' | 'large';
+  tip?: string;
+}>()
 
 const spinClasses = computed(() => [
   'spin-wrapper',
-  `spin--${props.size}`,
+    `spin--${size}`,
 ]);
 </script>
 

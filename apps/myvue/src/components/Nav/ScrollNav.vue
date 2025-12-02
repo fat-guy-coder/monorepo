@@ -183,7 +183,7 @@ const navStyle = computed<CSSProperties>(() => {
   style['--scroll-nav-gap'] = typeof props.gap === 'number' ? `${props.gap}px` : props.gap
   if (props.variant === 'gradient') {
     const colors =
-      props.gradientColors.length >= 2
+        props.gradientColors.length >= 2
         ? props.gradientColors.join(', ')
         : 'var(--color-primary), var(--color-secondary)'
     style.background = `linear-gradient(135deg, ${colors})`
