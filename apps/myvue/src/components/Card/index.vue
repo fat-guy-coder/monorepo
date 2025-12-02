@@ -51,15 +51,15 @@ const hasTitle = computed(() => !!(props.title || (slots && (slots as any).title
   background: var(--color-background);
   border-radius: var(--border-radius-md);
   padding: var(--padding-2xl);
-  box-shadow: var(--box-shadow-xs);
+  //box-shadow: var(--box-shadow-md);
   transition: box-shadow 0.25s ease, transform 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
-  border: var(--border-width) solid transparent;
+  border: var(--border-width) solid var(--color-border);
 
   &.is-hoverable:hover {
-    box-shadow: var(--box-shadow-hover);
-    transform: translate(-2px, -2px);
-    border: var(--border-width) solid var(--color-border);
-    background-color: var(--color-background-soft);
+    box-shadow: var(--box-shadow-hover-md);
+    transform: translate(-1spx, -1px);
+    border: var(--border-width) solid var(--color-border-hover);
+    //background-color: var(--color-background-soft);
   }
 
   /* 尺寸 */
