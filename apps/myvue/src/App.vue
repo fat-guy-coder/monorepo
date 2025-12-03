@@ -1,32 +1,15 @@
 <template>
-  <div ref="container" class="main-view-container bg-gradient-animated-8">
+  <div ref="container" class="main-view-container">
     <!-- 导航组件示例 -->
     <Navigation position="bottom-right" :offset="{ bottom: '2rem', right: '0.5rem' }" :isMobile="isMobile"
-      @item-click="handleNavClick">
-      <div class="nav-item">
-        <span class="nav-icon">📊</span>
-        <span class="nav-text">数据</span>
-      </div>
-      <div class="nav-item">
-        <span class="nav-icon">⚙️</span>
-        <span class="nav-text">设置</span>
-      </div>
-      <div class="nav-item">
+      @item-click="handleNavClick" :items="navItems">
+      <template #theme="{ item }">
         <ThemeChange v-model:show="themeMenuShow" :theme="theme" :themes="themes"
           :direction="isMobile ? 'vertical' : 'horizontal'" @theme-change="themeChange" />
-        <span class=" nav-icon">👤</span>
-        <span class="nav-text">用户</span>
-      </div>
-      <div class="nav-item">
-        <span class="nav-icon">☀☽</span>
-        <span class="nav-text">主题</span>
-      </div>
-      <div class="nav-item">
-        <span class="nav-icon">🏠</span>
-        <span class="nav-text">首页</span>
-      </div>
+        <span class="nav-icon">{{ currentThemeIcon }}</span>
+        <span class="nav-text">{{ item.label }}</span>
+      </template>
     </Navigation>
-
 
     <div class="menu-container">
       <div class="search">
@@ -62,25 +45,24 @@
 import { Menu, RouteTab, ThemeChange, Navigation, Input, Button, message, Spin } from '@/components'
 import { computed, ref, watch, onMounted, onUnmounted, nextTick, provide } from 'vue'
 import {
-  type MenuItem,
-  findFatherKeysListByKey,
-  findMatchingLabels,
-  reWashMenus,
-  findMenuItemByName,
+  type MenuItem,//菜单项类型
+  findFatherKeysListByKey,//查找父级菜单key列表
+  findMatchingLabels,//查找匹配的项并改变菜单项的label 返回openKeys和selectedKeys 具有副作用
+  reWashMenus,//重置菜单项匹配状态 具有副作用
+  findMenuItemByName,//查找菜单项 通过name
 } from '@/menu'
-import { useTabistStore, type Tab } from '@/stores/tab'
-import { type Theme, useUserStore } from '@/stores/user'
+import { useTabistStore, type Tab } from '@/stores/tab'//标签列表store
+import { type Theme, useUserStore } from '@/stores/user'//用户信息store
 import { useRouter } from 'vue-router'
-import { debounce } from '@/Function/CommonFun'
+import { debounce } from '@/Function/CommonFun'//常用函数
 import { useDetectMobile } from '@/hooks/useDetectMobile'
+import type { NavItem } from './components/Nav'//导航项类型
 // import { request } from '@/request'
 
-
-
-//获取用户信息
+//获取用户信息store
 const userStore = useUserStore()
 
-
+//用户信息store订阅
 userStore.$subscribe(
   (_, state) => {
     localStorage.setItem('user', JSON.stringify(state.user))
@@ -88,13 +70,60 @@ userStore.$subscribe(
   { flush: 'sync' },
 )
 
+//主题
 const theme = computed(() => userStore.user.theme)
 
+//主题列表
 const themes = userStore.user.themes
 
+//是否是手机端
 const isMobile = computed(() => userStore.user.device.isMobile)
 
+//固定导航项列表数据
+const navItems = ref<NavItem[]>([
+  {
+    icon: '⚙️',
+    label: '设置',
+    value: 'setting',
+  },
+  {
+    icon: '👤',
+    label: '用户',
+    value: 'user',
+  },
+  {
+    icon: '☀☽',
+    label: '主题',
+    value: 'theme',
+  },
+  {
+    icon: '🏠',
+    label: '首页',
+    value: 'home',
+  },
+])
 
+//当前主题图标
+const currentThemeIcon = computed(() => {
+  return themes.find((i) => i.value === theme.value)?.icon || '☀️'
+})
+
+//主题菜单显示状态
+const themeMenuShow = ref(false)
+
+//铆钉导航
+const handleNavClick = (item: NavItem): void => {
+  switch (item.value) {
+    case 'home':
+      goToByName('home')
+      break;
+    case 'theme':
+      themeMenuShow.value = !themeMenuShow.value
+      break;
+    default:
+      break;
+  }
+}
 
 
 //主题切换
@@ -103,55 +132,56 @@ const themeChange = (theme1: Theme) => {
     goToByName('MyTheme')
     return
   }
+  //设置用户主题
   userStore.setUsrTheme(theme1)
   // 设置到 html 元素上
   document.documentElement.setAttribute('data-theme', theme1)
 }
 
 
-
-
-// const navigationButtonExpanded = ref(false)
-
+//路由
 const router = useRouter()
 
+//菜单列表
 const menus = ref<MenuItem[]>([])
 
-// const needLoadKeys = ref<string[]>([])
-
+//容器
 const container = ref<HTMLElement | null>(null)
 
+//右键菜单node
 let contextMenu: HTMLElement | null = null
 
 function closeContextMenu(e: MouseEvent) {
   if (contextMenu && !contextMenu.contains(e.target as Node)) {
     store.toggleShowMenu(false)
   }
-
 }
 
 
-onUnmounted(() => {
-  if (container.value) {
-    if (contextMenu) {
-      container.value.removeEventListener('click', (e) => {
-        if (contextMenu && !contextMenu.contains(e.target as Node)) {
-          store.toggleShowMenu(false)
-        }
-      })
-    }
+function cancelContextMenu() {
+  if (contextMenu) {
+    container.value?.removeEventListener('click', (e) => {
+      if (contextMenu && !contextMenu.contains(e.target as Node)) {
+        store.toggleShowMenu(false)
+      }
+    })
     contextMenu = null
   }
+}
+
+onUnmounted(() => {
+  cancelContextMenu()
 })
 
 //是初始加载菜单吗？
 // const initMenu = ref(true)
 
+//菜单折叠状态
 const Menucollapsed = ref(false)
 
+//切换菜单折叠状态
 const toggleCollapsed = async () => {
   //切换菜单后，初始加载菜单为false
-  // initMenu.value = false
   loading.value = true
   Menucollapsed.value = !Menucollapsed.value
   await nextTick()
@@ -168,15 +198,11 @@ useDetectMobile(userStore)
 onMounted(() => {
   //设置主题
   themeChange(theme.value)
-
   //右键菜单
   contextMenu = document.getElementById('context-menu')
-
   if (container.value) {
     container.value.addEventListener('click', closeContextMenu)
-
   }
-
   //跳转激活的tab
   router.push(store.activeKey)
   //获取菜单
@@ -202,10 +228,6 @@ const getMenus = async () => {
   mainViewLoading.value = false
 }
 
-function menuDomUpdated() {
-  // 菜单dom更新后，打开父级菜单
-  expandMenu(store.activeKey)
-}
 
 const store = useTabistStore()
 
@@ -442,22 +464,6 @@ const scrollTo = (id: string) => {
 //   cacheKeys.value = e
 // }
 
-
-const themeMenuShow = ref(false)
-
-//铆钉导航
-const handleNavClick = (index: number) => {
-  switch (index) {
-    case 4:
-      goToByName('home')
-      break;
-    case 3:
-      themeMenuShow.value = !themeMenuShow.value
-      break;
-    default:
-      break;
-  }
-}
 </script>
 
 <style lang="less" scoped>
@@ -551,39 +557,13 @@ const handleNavClick = (index: number) => {
   text-align: center;
 }
 
-/* 导航项样式 */
-.nav-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  min-width: 20px;
-  min-height: 20px;
-  padding: 10px;
-  background: var(--color-background-soft);
-  color: var(--color-text);
-  border: var(--border-width) solid var(--color-border);
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  cursor: pointer;
-  transition: all 0.3s ease;
-
-  &:hover {
-    background: var(--color-background-soft);
-    border-color: var(--color-border-hover);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
-  }
-}
-
 .nav-icon {
-  font-size: 24px;
+  font-size: var(--font-size-xs);
   line-height: 1;
 }
 
 .nav-text {
-  font-size: 12px;
+  font-size: var(--font-size-xs);
   font-weight: 500;
   line-height: 1;
 }

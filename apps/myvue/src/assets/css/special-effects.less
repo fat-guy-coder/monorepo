@@ -46,17 +46,6 @@
   }
 }
 
-// Kept for legacy text gradient effect
-@keyframes animated-gradient-background {
-  0% {
-    background-position: 0% 50%;
-  }
-
-  100% {
-    background-position: 100% 50%;
-  }
-}
-
 @keyframes animated-gradient-shadow {
   0% {
     box-shadow: 0 0 1.25rem var(--color-gradient-group-1), 0 0 1.875rem var(--color-gradient-group-2);
@@ -78,6 +67,7 @@
     box-shadow: 0 0 1.25rem var(--color-gradient-group-9), 0 0 1.875rem var(--color-gradient-group-10);
   }
 }
+
 
 /* ============================================ */
 /* Mixins for Effects                         */
@@ -110,11 +100,13 @@
   }
 
   &:hover {
-  &::before {
+    &::before {
       opacity: 1;
     }
   }
 }
+
+
 /* ============================================ */
 /* Background Gradient Effects (Manual Classes) */
 /* ============================================ */
@@ -225,7 +217,7 @@
       var(--color-gradient-group-9),
       var(--color-gradient-group-10),
       var(--color-gradient-group-1)),
-   12s);
+    12s);
 }
 
 // --- Radial Gradients (will render as a linear wipe) ---
@@ -427,7 +419,7 @@
       var(--color-gradient-group-7),
       var(--color-gradient-group-8),
       var(--color-gradient-group-1)),
-      10s);
+    10s);
 }
 
 .text-gradient-animated-8 {

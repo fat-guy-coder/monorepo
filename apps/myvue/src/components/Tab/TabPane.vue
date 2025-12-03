@@ -68,7 +68,6 @@ const close = () => {
         min-height: 1.75rem;
     }
 }
-
 .close-tab--btn {
     width: 1.25rem;
     height: 1.25rem;

@@ -10,16 +10,22 @@
     <!-- 导航内容区域 -->
     <div class="navigation-content">
       <!-- 展开的导航项 -->
-      <transition-group v-if="isExpanded && hasItems" name="nav-item" tag="div" class="navigation-items">
-        <div v-for="(item, index) in navigationItems" :key="item.key || `nav-item-${index}`" class="navigation-item"
-          :style="{ '--delay': `${index * 0.05}s` }" @click="handleItemClick(index, item)">
-          <component :is="item" />
+      <transition-group v-if="isExpanded && items && items.length > 0" name="nav-item" tag="div"
+        class="navigation-items">
+        <div v-for="(item, index) in items" :key="item.value || `nav-item-${index}`" class="navigation-item"
+          :style="{ '--delay': `${index * 0.05}s` }" @click="handleItemClick(item)">
+          <div class="nav-item" :class="['gradient-animation']">
+            <slot :name="item.value" v-if="$slots[item.value]" :item="item"></slot>
+            <template v-else>
+              <span class="nav-icon">{{ item.icon }}</span>
+              <span class="nav-text">{{ item.label }}</span>
+            </template>
+          </div>
         </div>
       </transition-group>
-
       <!-- 主按钮 -->
-      <button class="navigation-toggle" :class="{ 'is-active': isExpanded, }"
-        @click.stop="toggle" :aria-label="isExpanded ? '收起导航' : '展开导航'">
+      <button class="navigation-toggle" :class="{ 'is-active': isExpanded, }" @click.stop="toggle"
+        :aria-label="isExpanded ? '收起导航' : '展开导航'">
         <span class="toggle-icon">
           <span class="icon-line"></span>
           <span class="icon-line"></span>
@@ -31,8 +37,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted, useSlots } from 'vue'
-
+import { computed, useSlots } from 'vue'
+import type { NavItem } from './index'
 
 
 // 定义位置类型
@@ -43,6 +49,7 @@ type ExpandDirection = 'left' | 'right' | 'top' | 'bottom'
 
 // Props
 interface Props {
+  items?: NavItem[]
   // 位置：默认右下角
   position?: Position
   // 展开方向：默认从左到右（如果传了位置会根据位置自动调整，但此参数优先级更高）
@@ -58,38 +65,47 @@ interface Props {
   mobileAdaptive?: boolean
   //是否是手机端
   isMobile: boolean
+  //是否使用
+  userBgGradient?: {
+    colorsCount?: number,
+    type?: 'linear' | 'radial' | 'text' | 'box-shadow'
+  }
 }
 
-const { position = 'bottom-right', expandDirection, offset = { bottom: '20px', right: '20px' }, mobileAdaptive = true, isMobile = false } = defineProps<Props>()
+
+
+const { position = 'bottom-right', expandDirection, offset = { bottom: '1.5rem', right: '1.5rem' }, mobileAdaptive = true, isMobile = false, userBgGradient } = defineProps<Props>()
+
 
 // Emits
 const emit = defineEmits<{
-  toggle: [isExpanded: boolean]
-  itemClick: [index: number, item?: any]
+  (e: 'toggle', isExpanded: boolean): void
+  (e: 'itemClick', item: NavItem): void
 }>()
 
 // 获取插槽
-const slots = useSlots()
+// const slots = useSlots()
 
 // 状态
 const isExpanded = defineModel({ default: false })
 
-// 获取导航项
-const navigationItems = computed(() => {
-  if (slots.default) {
-    const defaultSlot = slots.default()
-    // 过滤掉注释和文本节点
-    return defaultSlot.filter(item => {
-      if (!item) return false
-      // 检查是否是有效的 VNode
-      return item.type && typeof item.type !== 'string' || (typeof item.type === 'string' && item.type !== '')
-    })
-  }
-  return []
-})
+// // 获取导航项
+// const navigationItems = computed(() => {
+//   if (slots.default) {
+//     const defaultSlot = slots.default()
+//     // 过滤掉注释和文本节点
+//     console.log(defaultSlot)
+//     return defaultSlot.filter(item => {
+//       if (!item) return false
+//       // 检查是否是有效的 VNode
+//       return item.type && typeof item.type !== 'string' || (typeof item.type === 'string' && item.type !== '')
+//     })
+//   }
+//   return []
+// })
 
-// 是否有导航项
-const hasItems = computed(() => navigationItems.value.length > 0)
+// // 是否有导航项
+// const hasItems = computed(() => navigationItems.value.length > 0)
 
 
 
@@ -167,8 +183,8 @@ const toggle = () => {
 }
 
 // 处理导航项点击
-const handleItemClick = (index: number, item?: any) => {
-  emit('itemClick', index, item)
+const handleItemClick = (item: NavItem): void => {
+  emit('itemClick', item)
   // 点击后可以自动收起（可选）
   // toggle()
 }
@@ -193,6 +209,78 @@ defineExpose({
   &.is-expanded {
     pointer-events: auto;
   }
+
+  --nav-item-color: var(--color-text);
+  --nav-item-hover-color: var(--color-primary);
+  --nav-item-background: var(--color-background-soft);
+  --nav-item-padding: var(--padding-sm) var(--padding-md);
+  --nav-item-gap: var(--gap-md);
+  --nav-item-font-size: var(--font-size-xs);
+  --nav-item-font-weight: var(--font-weight-medium);
+  --nav-item-border-color: var(--color-border);
+  --nav-item-border-width: var(--border-width);
+  --nav-item-border-radius: var(--border-radius-sm);
+  --nav-item-box-shadow: var(--box-shadow-xs);
+  --nav-item-box-shadow-hover: var(--box-shadow-sm);
+
+  --nav-item-transform-x: 0.125rem;
+  --nav-item-transform-y: 0.125rem;
+  --nav-item-transform-scale: 1.05;
+  --nav-item-transform-duration: 0.3s;
+  --nav-item-transform-easing: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  --nav-item-transform-slide-y: 1.25rem;
+  --nav-item-transform-slide-x: 1.25rem;
+  --nav-item-transform-slide-scale: 0.8;
+
+  --navigation-toggle-width: calc(var(--nav-item-font-size) * 4);
+  --navigation-toggle-height: calc(var(--nav-item-font-size) * 4);
+  --navigation-toggle-icon-size:1rem;
+
+  --navigation-toggle-border-radius: var(--border-radius-full);
+  --navigation-toggle-background: var(--color-secondary);
+  --navigation-toggle-color: var(--color-text);
+  --navigation-toggle-box-shadow: var(--box-shadow-xs);
+  --navigation-toggle-box-shadow-hover: var(--box-shadow-sm);
+  
+  --navigation-toggle-icon-line-width: 1.25rem;
+}
+
+
+/* 导航项样式 */
+.nav-item {
+  overflow: visible;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--nav-item-gap);
+  padding: var(--nav-item-padding);
+  background: var(--nav-item-background);
+  color: var(--nav-item-color);
+  border: var(--nav-item-border-width) solid var(--nav-item-border-color);
+  border-radius: var(--nav-item-border-radius);
+  box-shadow: var(--nav-item-box-shadow);
+  cursor: pointer;
+  transition: border-color var(--nav-item-transform-duration) var(--nav-item-transform-easing), transform var(--nav-item-transform-duration) var(--nav-item-transform-easing), box-shadow var(--nav-item-transform-duration) var(--nav-item-transform-easing);
+
+  /* 悬停样式 */
+  &:hover {
+    border-color: var(--color-border-hover);
+    transform: translateY(var(--nav-item-transform-y)) scale(var(--nav-item-transform-scale));
+    box-shadow: var(--nav-item-box-shadow-hover);
+  }
+}
+
+.nav-icon {
+  font-size: var(--nav-item-font-size);
+  line-height: 1;
+}
+
+.nav-text {
+  font-size: var(--nav-item-font-size);
+  font-weight: var(--font-weight-medium);
+  line-height: 1;
 }
 
 /* 导航内容 */
@@ -202,12 +290,13 @@ defineExpose({
   align-items: center;
   z-index: 1001;
   background-color: transparent;
+  align-content: center;
 }
 
 /* 导航项容器 */
 .navigation-items {
   display: flex;
-  gap: 12px;
+  gap: var(--nav-item-gap);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -223,7 +312,7 @@ defineExpose({
     flex-direction: row-reverse;
   }
 
-  .is-active{
+  .is-active {
     margin-right: 10px;
   }
 }
@@ -238,7 +327,7 @@ defineExpose({
     flex-direction: row;
   }
 
-  .is-active{
+  .is-active {
     margin-left: 10px;
   }
 }
@@ -253,7 +342,7 @@ defineExpose({
     flex-direction: column-reverse;
   }
 
-  .is-active{
+  .is-active {
     margin-bottom: 10px;
   }
 }
@@ -268,7 +357,7 @@ defineExpose({
     flex-direction: column;
   }
 
-  .is-active{
+  .is-active {
     margin-top: 10px;
   }
 }
@@ -297,11 +386,12 @@ defineExpose({
 /* 导航项 */
 .navigation-item {
   opacity: 0;
-  transform: scale(0.8) translateY(20px);
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transform: scale(0.8) translateY(var(--nav-item-transform-slide-y));
+  transition: scale 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), translateY 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   transition-delay: var(--delay, 0s);
   pointer-events: auto;
   cursor: pointer;
+  background: transparent;
 }
 
 /* 展开状态下的导航项 */
@@ -323,7 +413,7 @@ defineExpose({
 @keyframes slideInLeft {
   from {
     opacity: 0;
-    transform: translateX(20px) scale(0.8);
+    transform: translateX(var(--nav-item-transform-slide-x)) scale(var(--nav-item-transform-slide-scale));
   }
 
   to {
@@ -343,7 +433,7 @@ defineExpose({
 @keyframes slideInRight {
   from {
     opacity: 0;
-    transform: translateX(-20px) scale(0.8);
+    transform: translateX(-var(--nav-item-transform-slide-x)) scale(var(--nav-item-transform-slide-scale));
   }
 
   to {
@@ -363,7 +453,7 @@ defineExpose({
 @keyframes slideInTop {
   from {
     opacity: 0;
-    transform: translateY(20px) scale(0.8);
+    transform: translateY(var(--nav-item-transform-slide-y)) scale(var(--nav-item-transform-slide-scale));
   }
 
   to {
@@ -383,7 +473,7 @@ defineExpose({
 @keyframes slideInBottom {
   from {
     opacity: 0;
-    transform: translateY(-20px) scale(0.8);
+    transform: translateY(-var(--nav-item-transform-slide-y)) scale(var(--nav-item-transform-slide-scale));
   }
 
   to {
@@ -395,14 +485,14 @@ defineExpose({
 /* 主按钮 */
 .navigation-toggle {
   position: relative;
-  width: 56px;
-  height: 56px;
+  width: var(--navigation-toggle-width);
+  height: var(--navigation-toggle-height);
   border: none;
   border-radius: 50%;
-  background: var(--color-primary);
-  color: var(--color-background);
+  background: var(--navigation-toggle-background);
+  color: var(--navigation-toggle-color);
   cursor: pointer;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--navigation-toggle-box-shadow);
   transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   pointer-events: auto;
   display: flex;
@@ -412,7 +502,7 @@ defineExpose({
 
   &:hover {
     transform: scale(1.1);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    box-shadow: var(--navigation-toggle-box-shadow-hover);
   }
 
   &:active {
@@ -426,7 +516,7 @@ defineExpose({
     .toggle-icon {
       .icon-line {
         &:nth-child(1) {
-          transform: translateY(8px) rotate(45deg);
+          transform: translateY(0.5rem) rotate(45deg);
         }
 
         &:nth-child(2) {
@@ -434,7 +524,7 @@ defineExpose({
         }
 
         &:nth-child(3) {
-          transform: translateY(-8px) rotate(-45deg);
+          transform: translateY(-0.5rem) rotate(-45deg);
         }
       }
     }
@@ -444,20 +534,20 @@ defineExpose({
 /* 图标 */
 .toggle-icon {
   position: relative;
-  width: 24px;
-  height: 24px;
+  width: var(--navigation-toggle-icon-size);
+  height: var(--navigation-toggle-icon-size);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 5px;
+  gap: 0.3rem;
 }
 
 .icon-line {
-  width: 20px;
+  width: var(--navigation-toggle-icon-line-width);
   height: 2px;
   background: currentColor;
-  border-radius: 2px;
+  border-radius: var(--border-radius-xs);
   transition: all 0.3s ease;
   transform-origin: center;
 }
@@ -492,7 +582,7 @@ defineExpose({
 /* 导航项进入/离开动画 */
 .nav-item-enter-active,
 .nav-item-leave-active {
-  transition: all 0.3s ease;
+  transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
 .nav-item-enter-from {

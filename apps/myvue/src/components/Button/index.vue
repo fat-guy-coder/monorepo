@@ -17,63 +17,65 @@ defineOptions({
   name: 'AButton',
 });
 
-const props =
-  defineProps<{
-    type?: 'primary' | 'default' | 'dashed' | 'text' | 'link';
-    size?: 'large' | 'middle' | 'small';
-    danger?: boolean;
-    loading?: boolean;
-    disabled?: boolean;
-    shape?: 'default' | 'circle' | 'round';
-  }>()
+interface Props {
+  type?: 'primary' | 'default' | 'dashed' | 'text' | 'link';
+  size?: 'large' | 'middle' | 'small';
+  danger?: boolean;
+  loading?: boolean;
+  disabled?: boolean;
+  shape?: 'default' | 'circle' | 'round';
+}
+const { type = 'default', size = 'middle', danger = false, loading = false, disabled = false, shape = 'default' } =
+  defineProps<Props>()
 
 const classes = computed(() => [
   'btn',
-  `btn--${props.type}`,
-  `btn--${props.size}`,
+  `btn--${type}`,
+  `btn--${size}`,
   {
-    'is-danger': props.danger,
-    'is-loading': props.loading,
-    'is-disabled': props.disabled || props.loading,
-    'is-circle': props.shape === 'circle',
-    'is-round': props.shape === 'round',
+    'is-danger': danger,
+    'is-loading': loading,
+    'is-disabled': disabled || loading,
+    'is-circle': shape === 'circle',
+    'is-round': shape === 'round',
   },
 ]);
 </script>
 
 <style lang="less" scoped>
 .btn {
-  --btn-height-large: 40px;
-  --btn-height-middle: 32px;
-  --btn-height-small: 24px;
-  --btn-font-size-large: 16px;
-  --btn-font-size-middle: 14px;
-  --btn-font-size-small: 14px;
-  --btn-padding-horizontal-large: 15px;
-  --btn-padding-horizontal-middle: 15px;
-  --btn-padding-horizontal-small: 7px;
+  --btn-height-large: 2.5rem;
+  --btn-height-middle: 2rem;
+  --btn-height-small: 1.5rem;
+  --btn-font-size-large: var(--font-size-md);
+  --btn-font-size-middle: var(--font-size-sm);
+  --btn-font-size-small: var(--font-size-sm);
+  --btn-padding-horizontal-large: 0.9375rem;
+  --btn-padding-horizontal-middle: 0.9375rem;
+  --btn-padding-horizontal-small: 0.4375rem;
 
   position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-weight: 400;
+  font-weight: var(--font-weight);
   white-space: nowrap;
   text-align: center;
   background-image: none;
-  border: 1px solid transparent;
+  border: var(--border-width) solid transparent;
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
   user-select: none;
   touch-action: manipulation;
   line-height: 1.5715;
-  border-radius: var(--element-border-radius);
+  border-radius: var(--border-radius);
 
   // Disabled State
   &.is-disabled,
   &[disabled] {
     cursor: not-allowed;
-    & > * {
+
+    &>* {
       pointer-events: none;
     }
   }
@@ -121,7 +123,7 @@ const classes = computed(() => [
       background-color: color-mix(in srgb, var(--color-error) 85%, black);
     }
   }
-  }
+}
 
 // Dashed
 .btn--dashed {
@@ -191,7 +193,7 @@ const classes = computed(() => [
   height: var(--btn-height-large);
   padding: 0 var(--btn-padding-horizontal-large);
   font-size: var(--btn-font-size-large);
-  }
+}
 
 .btn--middle {
   height: var(--btn-height-middle);
@@ -203,7 +205,7 @@ const classes = computed(() => [
   height: var(--btn-height-small);
   padding: 0 var(--btn-padding-horizontal-small);
   font-size: var(--btn-font-size-small);
-  }
+}
 
 /*
 * Shape Styles
@@ -215,9 +217,11 @@ const classes = computed(() => [
   &.btn--large {
     width: var(--btn-height-large);
   }
+
   &.btn--middle {
     width: var(--btn-height-middle);
   }
+
   &.btn--small {
     width: var(--btn-height-small);
   }
@@ -227,9 +231,11 @@ const classes = computed(() => [
   &.btn--large {
     border-radius: var(--btn-height-large);
   }
+
   &.btn--middle {
     border-radius: var(--btn-height-middle);
   }
+
   &.btn--small {
     border-radius: var(--btn-height-small);
   }
@@ -245,10 +251,10 @@ const classes = computed(() => [
   &::before {
     content: '';
     position: absolute;
-    top: -1px;
-    left: -1px;
-    right: -1px;
-    bottom: -1px;
+    top: -0.0625rem;
+    left: -0.0625rem;
+    right: -0.0625rem;
+    bottom: -0.0625rem;
     background: var(--color-bg-container);
     opacity: 0.35;
     z-index: 1;
@@ -265,11 +271,11 @@ const classes = computed(() => [
   position: absolute;
   z-index: 2;
   display: inline-block;
-  border: 2px solid var(--color-primary);
+  border: 0.125rem solid var(--color-primary);
   border-top-color: transparent;
   border-radius: 50%;
-  width: 14px;
-  height: 14px;
+  width: 0.875rem;
+  height: 0.875rem;
   animation: btn-spin 0.6s linear infinite;
 }
 
@@ -277,6 +283,7 @@ const classes = computed(() => [
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
@@ -288,7 +295,7 @@ const classes = computed(() => [
 .btn-icon {
   display: inline-flex;
   align-items: center;
-  margin-right: 8px;
+  margin-right: var(--spacing-sm);
 }
 
 .btn.is-circle .btn-icon {

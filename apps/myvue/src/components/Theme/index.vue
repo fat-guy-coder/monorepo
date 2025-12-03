@@ -8,12 +8,11 @@
         <transition-group v-if="show" name="theme-item" tag="div" class="theme-buttons">
             <button v-for="(item, index) in themes" :key="item.value" class="theme-btn"
                 :class="[`theme-${item.value}`, { active: theme === item.value }]"
-                :style="{ '--delay': `${index * 0.05}s` }" @click="switchTheme(item.value)" :title="item.label">
+                :style="{ '--delay': `${index * 0.05}s` }" @click.stop="switchTheme(item.value)" :title="item.label">
                 <span class="theme-icon">{{ item.icon }}</span>
                 <span class="theme-label">{{ item.label }}</span>
             </button>
         </transition-group>
-
     </div>
 </template>
 
@@ -72,13 +71,42 @@ onMounted(() => {
 <style lang="less" scoped>
 /* 主题切换按钮组 */
 .theme-switcher {
+    --theme-switcher-top: -4rem;
+    --theme-switcher-top-vertical: -9.375rem;
+    --theme-switcher-right: -3.125rem;
+    --theme-switcher-right-vertical: -4.375rem;
+    --theme-switcher-left: -4.375rem;
+    --theme-switcher-left-vertical: -4.375rem;
+    --theme-switcher-width: 3.75rem;
+    --theme-switcher-height: 2.5rem;
+
+    --theme-toggle-buttons-gap: 0.5rem;
+   
+    // 主题按钮样式
+    --theme-buttons-min-width: 3.25rem;
+    --theme-buttons-gap: 0.25rem;
+    --theme-buttons-padding: var(--padding-sm) var(--padding-md);
+    --theme-buttons-border-color: var(--border-color);
+    --theme-buttons-border: 1px solid var(--theme-buttons-border-color);
+    --theme-buttons-border-radius: var(--border-radius-sm);
+    --theme-buttons-background: var(--color-background-soft);
+    --theme-buttons-background-hover: var(--color-background-mute);
+    --theme-buttons-color: var(--color-text);
+    --theme-buttons-font-size: var(--font-size-sm);
+    --theme-buttons-font-weight: var(--font-weight-medium);
+    --theme-buttons-box-shadow: var(--box-shadow);
+    --theme-buttons-box-shadow-hover: var(--box-shadow-hover);
+    // --theme-buttons-border: var(--border-color-none);
+
+    
     position: absolute;
-    top: -70px;
-    right: -50px;
+    top: var(--theme-switcher-top);
+    right: var(--theme-switcher-right);
     display: flex;
     z-index: 1000;
     align-items: center;
     transition: all 0.3s ease;
+    background: transparent;
 }
 
 /* 方向样式 */
@@ -91,15 +119,14 @@ onMounted(() => {
 }
 
 .theme-switcher.direction-vertical {
-    top: -150px;
-    left: -70px;
+    top: var(--theme-switcher-top-vertical);
+    left: var(--theme-switcher-left-vertical);
     position: absolute;
     display: flex;
     z-index: 1000;
-    width: 60px;
+    width: var(--theme-switcher-width);
     align-items: center;
     transition: all 0.3s ease;
-
     .theme-buttons {
         flex-direction: column;
     }
@@ -108,7 +135,8 @@ onMounted(() => {
 /* 主题按钮容器 */
 .theme-buttons {
     display: flex;
-    gap: 8px;
+    gap: var(--theme-toggle-buttons-gap);
+    background: transparent;
 }
 
 .theme-btn {
@@ -116,26 +144,26 @@ onMounted(() => {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 4px;
-    padding: 8px 12px;
-    border: 1px solid var(--element-border);
-    border-radius: 8px;
-    background: var(--element-background);
-    color: var(--color-text);
+    gap: var(--theme-buttons-gap);
+    padding: var(--theme-buttons-padding);
+    border: var(--theme-buttons-border);
+    border-radius: var(--theme-buttons-border-radius);
+    background: var(--theme-buttons-background);
+    color: var(--theme-buttons-color);
     cursor: pointer;
     transition: all 0.3s ease;
-    min-width: 60px;
-    font-size: 12px;
-    font-weight: 500;
+    min-width: var(--theme-buttons-min-width);
+    font-size: var(--theme-buttons-font-size);
+    font-weight: var(--theme-buttons-font-weight);
     opacity: 0;
     transform: scale(0.8);
     transition-delay: var(--delay, 0s);
 
     &:hover {
-        background: var(--element-background-soft);
-        border-color: var(--element-border-hover);
+        background: var(--theme-buttons-background-hover);
+        border-color: var(--theme-buttons-border-color-hover);
         transform: translateY(-2px) scale(1);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        box-shadow: var(--theme-buttons-box-shadow-hover);
     }
 
     &.active {

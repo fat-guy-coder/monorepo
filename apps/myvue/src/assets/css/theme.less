@@ -9,7 +9,7 @@
 @theme-cool: 'cool';
 
 /* 字体大小变量 */
-@font-size-normal: 16px;
+@font-size: 16px;
 @font-size-xs: 0.75rem;
 @font-size-sm: 0.875rem;
 @font-size-md: 1rem;
@@ -19,6 +19,14 @@
 @font-size-3xl: 2rem;
 @font-size-4xl: 2.5rem;
 
+
+//字体粗细
+@font-weight-light: 300;
+@font-weight: 400;
+@font-weight-medium: 500;
+@font-weight-bold: 700;
+@font-weight-bolder: 800;
+@font-weight-lighter: 200;
 
 /* 当前主题变量（可通过 JavaScript 动态修改） */
 @current-theme: @theme-light;
@@ -46,16 +54,16 @@
     - 渐变分布从纯白到柔蓝、浅灰、淡金、浅蓝至微灰
     - 只挑选具备和主题底色有对比但整体温和柔顺的色阶
 */
-@color-gradient-light-1: #ffffff;   // 主题底色起点（纯白）
-@color-gradient-light-2: #f6f8fa;   // 柔和浅灰白
-@color-gradient-light-3: #e8f0ff;   // 柔和浅蓝白
-@color-gradient-light-4: #c6dbf7;   // 柔蓝
-@color-gradient-light-5: #f9f5e3;   // 柔和淡金
-@color-gradient-light-6: #e0e7ef;   // 淡蓝灰
-@color-gradient-light-7: #d2eaff;   // 晴天浅蓝
-@color-gradient-light-8: #f4e2cf;   // 柔米白
-@color-gradient-light-9: #e3eee5;   // 浅青草绿灰
-@color-gradient-light-10: #cfcfcf;  // 柔和收尾淡灰
+@color-gradient-light-1: #ffffff; // 主题底色起点（纯白）
+@color-gradient-light-2: #f6f8fa; // 柔和浅灰白
+@color-gradient-light-3: #e8f0ff; // 柔和浅蓝白
+@color-gradient-light-4: #c6dbf7; // 柔蓝
+@color-gradient-light-5: #f9f5e3; // 柔和淡金
+@color-gradient-light-6: #e0e7ef; // 淡蓝灰
+@color-gradient-light-7: #d2eaff; // 晴天浅蓝
+@color-gradient-light-8: #f4e2cf; // 柔米白
+@color-gradient-light-9: #e3eee5; // 浅青草绿灰
+@color-gradient-light-10: #cfcfcf; // 柔和收尾淡灰
 
 // box-shadow 颜色
 @color-box-shadow: 60, 90, 120;
@@ -82,16 +90,16 @@
     - 起始色为主题底色
     - 渐变色分布为深灰-蓝灰-深蓝-柔青-柔紫-柔金-收尾为 softened 高对比色但不刺眼
 */
-@color-gradient-dark-1: #181818;   // 主题底色（深黑灰）
-@color-gradient-dark-2: #20232a;   // 更深柔和灰
-@color-gradient-dark-3: #233144;   // 蓝调灰
-@color-gradient-dark-4: #2b3d52;   // 带青的灰蓝
-@color-gradient-dark-5: #394963;   // 柔和蓝灰
-@color-gradient-dark-6: #364156;   // 柔青灰
-@color-gradient-dark-7: #475e7b;   // 柔和蓝紫
-@color-gradient-dark-8: #9aa4ba;   // 柔灰蓝
-@color-gradient-dark-9: #b9b079;   // 柔金
-@color-gradient-dark-10: #eeeeee;  // 柔和收尾高灰白
+@color-gradient-dark-1: #181818; // 主题底色（深黑灰）
+@color-gradient-dark-2: #20232a; // 更深柔和灰
+@color-gradient-dark-3: #233144; // 蓝调灰
+@color-gradient-dark-4: #2b3d52; // 带青的灰蓝
+@color-gradient-dark-5: #394963; // 柔和蓝灰
+@color-gradient-dark-6: #364156; // 柔青灰
+@color-gradient-dark-7: #475e7b; // 柔和蓝紫
+@color-gradient-dark-8: #9aa4ba; // 柔灰蓝
+@color-gradient-dark-9: #b9b079; // 柔金
+@color-gradient-dark-10: #eeeeee; // 柔和收尾高灰白
 
 @color-box-shadow-dark: 0, 0, 0;
 @color-box-shadow-hover-dark: 40, 80, 160;
@@ -363,7 +371,7 @@ body[data-theme="cool"] {
 
 :root {
   /* 字体大小变量 */
-  --font-size-normal: @font-size-normal;
+  --font-size-normal: @font-size;
   --font-size-xs: @font-size-xs;
   --font-size-sm: @font-size-sm;
   --font-size-md: @font-size-md;
@@ -374,6 +382,17 @@ body[data-theme="cool"] {
   --font-size-4xl: @font-size-4xl;
   /* 字体大小变量 */
   font-size: var(--font-size-normal);
+
+
+  /* 字体粗细变量 */
+  --font-weight: @font-weight;
+  --font-weight-light: @font-weight-light;
+  --font-weight-medium: @font-weight-medium;
+  --font-weight-bold: @font-weight-bold;
+  --font-weight-bolder: @font-weight-bolder;
+  --font-weight-lighter: @font-weight-lighter;
+  /* 字体粗细变量 */
+  font-weight: var(--font-weight);
 
   /* 扩展间距变量 */
   --spacing: 0.5rem;
@@ -451,29 +470,31 @@ body[data-theme="cool"] {
   // Box-shadow根据尺寸生成不同的偏移、模糊和阴影强度。
   /* 按尺寸生成阴影: x, y, blur, spread, 以及透明度（高度越大，透明度增加，模糊变广） */
   /* 尺寸/等级 | x   | y   | blur | spread | alpha */
-  --box-shadow-xs: 0 0rem 0.125rem 0.0625rem rgba(var(--color-box-shadow), 0.2);//小尺寸阴影
-  --box-shadow-sm: 0 0 0.25rem 0.125rem rgba(var(--color-box-shadow), 0.3);//中尺寸阴影
+  --box-shadow-xs: 0 0rem 0.125rem 0.0625rem rgba(var(--color-box-shadow), 0.2); //小尺寸阴影
+  --box-shadow-sm: 0 0 0.25rem 0.125rem rgba(var(--color-box-shadow), 0.3); //中尺寸阴影
   --box-shadow-md: 0 0 0.5rem 0.25rem rgba(var(--color-box-shadow), 0.4);
-  --box-shadow-lg: 0 0 1rem 0.5rem rgba(var(--color-box-shadow), 0.5);//大尺寸阴影
+  --box-shadow-lg: 0 0 1rem 0.5rem rgba(var(--color-box-shadow), 0.5); //大尺寸阴影
   --box-shadow-xl: 0 0rem 1.5rem 0.75rem rgba(var(--color-box-shadow), 0.6);
-  --box-shadow-2xl: 0 0 2rem 1rem rgba(var(--color-box-shadow), 0.7);//超大尺寸阴影
-  --box-shadow-3xl: 0 0 3rem 1.5rem rgba(var(--color-box-shadow), 0.8);//超大尺寸阴影
+  --box-shadow-2xl: 0 0 2rem 1rem rgba(var(--color-box-shadow), 0.7); //超大尺寸阴影
+  --box-shadow-3xl: 0 0 3rem 1.5rem rgba(var(--color-box-shadow), 0.8); //超大尺寸阴影
   --box-shadow-4xl: 0 0 4rem 2rem rgba(var(--color-box-shadow), 0.9); // ≈32 和 64 基准单位//超大尺寸阴影 
-  --box-shadow-none: 0 0 0 0 rgba(0, 0, 0, 0);//无阴影
-  --box-shadow: var(--box-shadow-sm);//普通
-  --box-shadow-hover: var(--box-shadow-hover-sm);//普通悬停
-  --box-shadow-hover-xs: 0 0rem 0.125rem 0.0625rem rgba(var(--color-box-shadow-hover), 0.2);//小尺寸阴影悬停
-  --box-shadow-hover-sm: 0 0 0.25rem 0.125rem rgba(var(--color-box-shadow-hover), 0.3);//中尺寸阴影悬停
-  --box-shadow-hover-md: 0 0 0.5rem 0.25rem rgba(var(--color-box-shadow-hover), 0.4);//大尺寸阴影悬停
-  --box-shadow-hover-lg: 0 0 1rem 0.5rem rgba(var(--color-box-shadow-hover), 0.5);//大尺寸阴影悬停
-  --box-shadow-hover-xl: 0 0rem 1.5rem 0.75rem rgba(var(--color-box-shadow-hover), 0.6);//超大尺寸阴影悬停
-  --box-shadow-hover-2xl: 0 0 2rem 1rem rgba(var(--color-box-shadow-hover), 0.7);//超大尺寸阴影悬停
-  --box-shadow-hover-3xl: 0 0 3rem 1.5rem rgba(var(--color-box-shadow-hover), 0.8);//超大尺寸阴影悬停
+  --box-shadow-none: 0 0 0 0 rgba(0, 0, 0, 0); //无阴影
+  --box-shadow: var(--box-shadow-sm); //普通
+  --box-shadow-hover: var(--box-shadow-hover-sm); //普通悬停
+  --box-shadow-hover-xs: 0 0rem 0.125rem 0.0625rem rgba(var(--color-box-shadow-hover), 0.2); //小尺寸阴影悬停
+  --box-shadow-hover-sm: 0 0 0.25rem 0.125rem rgba(var(--color-box-shadow-hover), 0.3); //中尺寸阴影悬停
+  --box-shadow-hover-md: 0 0 0.5rem 0.25rem rgba(var(--color-box-shadow-hover), 0.4); //大尺寸阴影悬停
+  --box-shadow-hover-lg: 0 0 1rem 0.5rem rgba(var(--color-box-shadow-hover), 0.5); //大尺寸阴影悬停
+  --box-shadow-hover-xl: 0 0rem 1.5rem 0.75rem rgba(var(--color-box-shadow-hover), 0.6); //超大尺寸阴影悬停
+  --box-shadow-hover-2xl: 0 0 2rem 1rem rgba(var(--color-box-shadow-hover), 0.7); //超大尺寸阴影悬停
+  --box-shadow-hover-3xl: 0 0 3rem 1.5rem rgba(var(--color-box-shadow-hover), 0.8); //超大尺寸阴影悬停
   --box-shadow-hover-4xl: 0 0 4rem 2rem rgba(var(--color-box-shadow-hover), 0.9); // ≈32 和 64 基准单位//超大尺寸阴影悬停
+
   //box-shadow函数
   .box-shadow(@x, @y, @blur, @spread, @alpha) {
     box-shadow: @x, @y, @blur, @spread, rgba(var(--color-box-shadow), @alpha);
   }
+
   //box-shadow-hover函数
   .box-shadow-hover(@x, @y, @blur, @spread, @alpha) {
     box-shadow: @x, @y, @blur, @spread, rgba(var(--color-box-shadow-hover), @alpha);
@@ -488,7 +509,7 @@ body[data-theme="cool"] {
 
   /* 间距变量 */
   --container-padding: var(--padding-2xl);
-  --section-gap: var(--gap-2xl);  
+  --section-gap: var(--gap-2xl);
 }
 
 /* ============================================
