@@ -43,7 +43,7 @@
           <h3>transform-style 属性定义了元素的子元素是否保留其3D变换。</h3>
           <div class="origin-controls">
             <div class="origin-control">
-              <select
+              <Select
                 style="width: 120px"
                 v-model:value="currentTransform.transformStyle"
                 :options="transformStyle"
@@ -83,7 +83,7 @@
           <h3>backface-visibility 属性定义了元素的背面是否可见。</h3>
           <div class="origin-controls">
             <div class="origin-control">
-              <select
+              <Select
                 style="width: 120px"
                 v-model:value="backfaceVisibility"
                 :options="backfaceVisibilityOptions"
@@ -189,7 +189,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import { Select as ASelect } from 'ant-design-vue'
+import Select from '@/components/Select/index.vue'
 import CodeBlock from '@/components/Code/index.vue'
 
 type TransformType =

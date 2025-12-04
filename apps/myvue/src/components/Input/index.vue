@@ -12,16 +12,17 @@
       </slot>
     </span>
 
-    <input ref="inputRef" class="search-input__control" type="search" :value="value || ''" :placeholder="placeholder || '搜索'"
-      :disabled="disabled" :maxlength="maxlength" @focus="setFocus(true)" @blur="setFocus(false)" @input="handleInput"
-      @keyup.enter="triggerSearch" />
+    <input ref="inputRef" class="search-input__control" type="search" :value="value || ''"
+      :placeholder="placeholder || '搜索'" :disabled="disabled" :maxlength="maxlength" @focus="setFocus(true)"
+      @blur="setFocus(false)" @input="handleInput" @keyup.enter="triggerSearch" />
 
     <button v-if="(allowClear ?? true) && value" type="button" class="search-input__clear" :disabled="disabled"
       @click="handleClear">
       ×
     </button>
 
-    <button type="button" class="search-input__action" :disabled="disabled || loading" v-if="showSearchButton" @click="triggerSearch">
+    <button type="button" class="search-input__action" :disabled="disabled || loading" v-if="showSearchButton"
+      @click="triggerSearch">
       <span v-if="!loading">{{ searchText || '搜索' }}</span>
       <span v-else class="search-input__spinner"></span>
     </button>
@@ -36,7 +37,7 @@ defineOptions({
 })
 
 const props = defineProps<{
-  value?: string
+  value?: string | number
   placeholder?: string
   disabled?: boolean
   allowClear?: boolean
@@ -49,7 +50,7 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  (event: 'update:value', value: string): void
+  (event: 'update:value', value: string | number): void
   (event: 'search', value: string): void
   (event: 'focus'): void
   (event: 'blur'): void
@@ -73,7 +74,7 @@ const handleInput = (event: Event) => {
 }
 
 const triggerSearch = () => {
-  emit('search', props.value?.trim() ?? '')
+  emit('search', props.value?.toString().trim() ?? '')
 }
 
 const handleClear = () => {
@@ -188,8 +189,10 @@ onMounted(() => {
 }
 
 .search-input__action {
-  height: calc(var(--input-height) - 2px); /* Match inner height */
-  margin-right: -1px; /* Overlap the border */
+  height: calc(var(--input-height) - 2px);
+  /* Match inner height */
+  margin-right: -1px;
+  /* Overlap the border */
   border: none;
   border-top-right-radius: var(--element-border-radius);
   border-bottom-right-radius: var(--element-border-radius);

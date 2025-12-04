@@ -1,9 +1,14 @@
 <template>
   <div class="custom-select" ref="selectRef">
-    <div class="select-input" @click="toggleDropdown">
+    <div class="select-input" :class="{ 'is-open': isOpen }" @click="toggleDropdown">
       <span v-if="selectedValue" class="selected-value">{{ selectedLabel }}</span>
       <span v-else class="placeholder">{{ placeholder }}</span>
-      <svg class="arrow-icon" :class="{ 'is-open': isOpen }" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+      <svg
+        class="arrow-icon"
+        :class="{ 'is-open': isOpen }"
+        viewBox="0 0 1024 1024"
+        xmlns="http://www.w3.org/2000/svg"
+      >
         <path d="M831.872 340.864l-319.872 319.872-319.872-319.872z"></path>
       </svg>
     </div>
@@ -11,8 +16,8 @@
       <div v-if="isOpen" class="select-dropdown">
         <ul>
           <li
-            v-for="option in options"
-            :key="option.value"
+            v-for="option in options as Option[] | any"
+            :key="option.value as string"
             class="option-item"
             :class="{ 'is-selected': option.value === selectedValue }"
             @click="selectOption(option)"
@@ -25,22 +30,27 @@
   </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue';
+
+interface Option {
+  value: string;
+  label: string;
+}
 
 const props = defineProps({
   modelValue: {
     type: [String, Number],
-    default: null
+    default: null,
   },
   options: {
     type: Array,
-    default: () => [] // e.g., [{ label: 'Option 1', value: '1' }]
+    default: () => [], // e.g., [{ label: 'Option 1', value: '1' }]
   },
   placeholder: {
     type: String,
-    default: 'Please select'
-  }
+    default: 'Please select',
+  },
 });
 
 const emit = defineEmits(['update:modelValue']);
@@ -51,7 +61,9 @@ const selectRef = ref(null);
 const selectedValue = computed(() => props.modelValue);
 
 const selectedLabel = computed(() => {
-  const selectedOption = props.options.find(option => option.value === selectedValue.value);
+  const selectedOption = props.options.find(
+    (option: Option | any) => option.value === selectedValue.value,
+  ) as Option | undefined;
   return selectedOption ? selectedOption.label : '';
 });
 
@@ -63,13 +75,13 @@ const closeDropdown = () => {
   isOpen.value = false;
 };
 
-const selectOption = (option) => {
+const selectOption = (option: { value: string }) => {
   emit('update:modelValue', option.value);
   closeDropdown();
 };
 
-const handleClickOutside = (event) => {
-  if (selectRef.value && !selectRef.value.contains(event.target)) {
+const handleClickOutside = (event: MouseEvent) => {
+  if (selectRef.value && !(selectRef.value as HTMLElement).contains(event.target as Node)) {
     closeDropdown();
   }
 };
@@ -84,47 +96,78 @@ onUnmounted(() => {
 </script>
 
 <style lang="less" scoped>
-@import '../assets/css/theme.less';
 
 .custom-select {
   position: relative;
-  width: 220px;
-  font-size: 14px;
+  width: var(--select-width);
+  font-size: var(--select-font-size);
+
+  // 组件内部可调变量（统一从全局 theme.less 派生）
+  --select-width: 13.75rem; // 220px / 16
+  --select-font-size: var(--font-size-sm);
+
+  --select-bg: var(--color-background-soft);
+  --select-border-color: var(--color-border);
+  --select-border-color-hover: var(--color-border-hover);
+  --select-border-radius: var(--border-radius-sm);
+
+  --select-text-color: var(--color-text);
+  --select-placeholder-color: var(--color-text-soft);
+  --select-arrow-color: var(--color-text-soft);
+
+  --select-padding-y: var(--padding-sm);
+  --select-padding-x: var(--padding-md);
+
+  --select-dropdown-bg: var(--color-background);
+  --select-dropdown-border-color: var(--color-border);
+  --select-dropdown-radius: var(--border-radius-sm);
+  --select-dropdown-shadow: var(--box-shadow-sm);
+  --select-dropdown-max-height: 12.5rem; // 200px
+
+  --select-option-padding-y: var(--padding-sm);
+  --select-option-padding-x: var(--padding-md);
+  --select-option-hover-bg: var(--color-background-soft);
+  --select-option-selected-bg: color-mix(in srgb, var(--color-primary) 10%, transparent);
+  --select-option-selected-color: var(--color-primary);
+
+  --select-transition-duration: 0.2s;
 }
 
 .select-input {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--element-padding-md) var(--element-padding-lg);
-  background-color: var(--color-bg-container);
-  border: 1px solid var(--color-border);
-  border-radius: var(--element-border-radius);
+  padding: var(--select-padding-y) var(--select-padding-x);
+  background-color: var(--select-bg);
+  border: var(--border-width) solid var(--select-border-color);
+  border-radius: var(--select-border-radius);
   cursor: pointer;
-  transition: border-color 0.3s, box-shadow 0.3s;
+  transition:
+    border-color var(--select-transition-duration) ease,
+    box-shadow var(--select-transition-duration) ease;
 
   &:hover {
-    border-color: var(--color-border-hover);
+    border-color: var(--select-border-color-hover);
   }
 
   &.is-open {
     border-color: var(--color-primary);
-    box-shadow: 0 0 0 2px fade(var(--color-primary), 20%);
+    box-shadow: 0 0 0 0.125rem color-mix(in srgb, var(--color-primary) 20%, transparent); // 2px
   }
 }
 
 .selected-value {
-  color: var(--color-text);
+  color: var(--select-text-color);
 }
 
 .placeholder {
-  color: var(--color-text-soft);
+  color: var(--select-placeholder-color);
 }
 
 .arrow-icon {
-  width: 12px;
-  height: 12px;
-  fill: var(--color-text-soft);
+  width: 0.75rem; // 12px
+  height: 0.75rem;
+  fill: var(--select-arrow-color);
   transition: transform 0.3s ease;
 
   &.is-open {
@@ -138,11 +181,11 @@ onUnmounted(() => {
   left: 0;
   right: 0;
   z-index: 1000;
-  background-color: var(--color-bg-elevated);
-  border: 1px solid var(--color-border);
-  border-radius: var(--element-border-radius);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  max-height: 200px;
+  background-color: var(--select-dropdown-bg);
+  border: var(--border-width) solid var(--select-dropdown-border-color);
+  border-radius: var(--select-dropdown-radius);
+  box-shadow: var(--select-dropdown-shadow);
+  max-height: var(--select-dropdown-max-height);
   overflow-y: auto;
 
   ul {
@@ -153,19 +196,19 @@ onUnmounted(() => {
 }
 
 .option-item {
-  padding: var(--element-padding-md) var(--element-padding-lg);
-  color: var(--color-text);
+  padding: var(--select-option-padding-y) var(--select-option-padding-x);
+  color: var(--select-text-color);
   cursor: pointer;
-  border-radius: var(--element-border-radius);
-  transition: background-color 0.2s;
+  border-radius: var(--select-border-radius);
+  transition: background-color var(--select-transition-duration) ease;
 
   &:hover {
-    background-color: var(--color-bg-layout);
+    background-color: var(--select-option-hover-bg);
   }
 
   &.is-selected {
-    background-color: fade(var(--color-primary), 10%);
-    color: var(--color-primary);
+    background-color: var(--select-option-selected-bg);
+    color: var(--select-option-selected-color);
     font-weight: 600;
   }
 }
@@ -173,7 +216,7 @@ onUnmounted(() => {
 /* Transition for dropdown */
 .slide-fade-enter-active,
 .slide-fade-leave-active {
-  transition: all 0.2s ease-out;
+  transition: all var(--select-transition-duration) ease-out;
 }
 
 .slide-fade-enter-from,

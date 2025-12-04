@@ -376,7 +376,7 @@ onUnmounted(() => {
         flex-shrink: 0;
         cursor: pointer;
         border: var(--border-width) solid var(--color-border);
-
+        border-radius: var(--border-radius);
         &.is-active {
             div {
                 background: var(--color-highlight-bg) !important;

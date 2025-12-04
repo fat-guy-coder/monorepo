@@ -13,5 +13,5 @@ import Button from './Button/index.vue'
 import message from './Message/index.ts'
 import Spin from './Spin/index.vue'
 import Link from './Link/index.vue'
-
-export { Menu, Input, Navigation, ThemeChange, RouteTab, Card, Tabs, ThemeSwitcher, NavButton, Code, Cascader, Button, message, Spin, Link }
+import Select from './Select/index.vue'
+export { Menu, Input,Select, Navigation, ThemeChange, RouteTab, Card, Tabs, ThemeSwitcher, NavButton, Code, Cascader, Button, message, Spin, Link }

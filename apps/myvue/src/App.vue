@@ -10,7 +10,6 @@
         <span class="nav-text">{{ item.label }}</span>
       </template>
     </Navigation>
-
     <div class="menu-container">
       <div class="search">
         <Input v-if="!Menucollapsed" v-model:value="searchValue" placeholder="目前暂支持菜单搜索" allow-clear></Input>
@@ -57,6 +56,7 @@ import { useRouter } from 'vue-router'
 import { debounce } from '@/Function/CommonFun'//常用函数
 import { useDetectMobile } from '@/hooks/useDetectMobile'
 import type { NavItem } from './components/Nav'//导航项类型
+import { useGradientAnimation } from '@/hooks/useGradientAnimation'
 // import { request } from '@/request'
 
 //获取用户信息store
@@ -102,6 +102,13 @@ const navItems = ref<NavItem[]>([
     value: 'home',
   },
 ])
+
+//全局渐变色动画
+// useGradientAnimation({
+//   colorsCount: {random: 2},
+//   speed: 30,
+//   gradientType: 'linear',
+// })
 
 //当前主题图标
 const currentThemeIcon = computed(() => {
@@ -250,7 +257,7 @@ const tabList = computed<Tab[]>(() => store.tabList)
 const activeKey = computed<string>(() => store.activeKey)
 
 const selectedKeys = computed<string[]>(() => {
-  if (!Menucollapsed.value) {
+  if (!Menucollapsed.value&&store.activeKey!=='/') {
     return [store.activeKey]
   }
   return []
@@ -290,6 +297,7 @@ function tabClick(path: string) {
   router.push({ path }).then(() => {
     mainViewLoading.value = false
   })
+  
   store.activateTabOnlyKey(path, () => {
     if (path !== '/') {
       if (!Menucollapsed.value) {

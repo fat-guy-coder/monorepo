@@ -96,7 +96,7 @@
 </template>
 
 <script setup lang="ts">
-import { Input, Select, Button } from 'ant-design-vue'
+import { Input, Select, Button } from '@/components'
 import { ref, onMounted, watch, onUnmounted } from 'vue'
 // import { debounce } from '@/Function/CommonFun'
 

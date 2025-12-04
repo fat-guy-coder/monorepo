@@ -5,12 +5,10 @@ import { defineConfig, type PluginOption } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import Components from 'unplugin-vue-components/vite';
-import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers'
 import { compression, defineAlgorithm } from 'vite-plugin-compression2'
 import zlib from 'zlib'
 const outDir = resolve('../../static/myvue')
 
-console.log(outDir)
 
 // 确保NodeLocalStorage可用
 const ensureNodeLocalStorage = () => {
@@ -20,7 +18,6 @@ const ensureNodeLocalStorage = () => {
   if (existing && typeof existing.getItem === 'function') {
     return
   }
-
   const store = new Map<string, string>()
   const memoryStorage = {
     getItem: (key: string) => (store.has(key) ? store.get(key)! : null),
@@ -55,17 +52,11 @@ export default defineConfig(async ({ command }) => {
   if (command === 'serve') {
     ensureNodeLocalStorage()
     const { default: vueDevTools } = await import('vite-plugin-vue-devtools')
-    plugins.push(vueDevTools())
+    plugins.push(vueDevTools({ launchEditor: 'cursor' }))
   }
 
   plugins.push(
-    Components({
-      resolvers: [
-        AntDesignVueResolver({
-          importStyle: false, // css in js
-        }),
-      ],
-    }),
+    Components(),
     compression({
       algorithms: [
         'gzip', defineAlgorithm('brotliCompress', {
