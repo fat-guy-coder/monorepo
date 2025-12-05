@@ -4,41 +4,24 @@
 
 <script lang="ts" setup>
 // import Template from '@/components/Template/index.vue'
-import { useGradientAnimation } from '@/hooks/useGradientAnimation'
+import { useGradientAnimation } from '@/hooks/useDemo'
+import { useGradientAnimation as useGradientAnimation2 } from '@/hooks/useGradientAnimation'
 
-// useGradientAnimation({
+useGradientAnimation({
+  className: 'home-id'
+})
+// useGradientAnimation2({
 //   className: 'home-id',
 //   triggerTimes: ['mounted']
 // })
 </script>
 
-<style scoped>
+<style scoped lang="css">
 .home-id {
   width: 100%;
   height: 100%;
 }
 
-@keyframes gradient-anim-pbe4dx {
-  0% {
-    background-position: 200% 0
-  }
-
-  100% {
-    background-position: -200% 0
-  }
-}
-
-;
-
-.home-id {
-  position: relative;
-  overflow: hidden;
-  background-image: linear-gradient(90deg, var(--color-gradient-group-1) 0%, var(--color-gradient-group-10) 25%, var(--color-gradient-group-11) 50%, var(--color-gradient-group-12) 75%, var(--color-gradient-group-1) 100%);
-  background-size: 200% 100%;
-  animation: gradient-anim-pbe4dx 2s linear 0s infinite normal running
-}
-
-;
 
 .home-view {
   position: relative;
