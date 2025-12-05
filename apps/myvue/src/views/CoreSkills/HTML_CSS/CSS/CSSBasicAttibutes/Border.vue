@@ -32,12 +32,12 @@
           </div>
           <div class="control-item">
             <label>边框样式</label>
-            <select v-model="borderStyle">
+            <Select v-model="borderStyle">
               <option v-for="style in borderStyles" :key="style">{{ style }}</option>
-            </select>
+            </Select>
           </div>
           <div class="control-item">
-            <label>圆角半径 {{ borderRadius }} <select v-model:value="unit" :options="unitOptions"></select> </label>
+            <label>圆角半径 {{ borderRadius }} <Select v-model:value="unit" :options="unitOptions"></select> </label>
             <input type="range" v-model="borderRadius" min="0" max="100">
           </div>
         </div>
@@ -105,6 +105,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { Select } from '@/components'
 
 const borderColor = ref('#42b983')
 const borderWidth = ref(4)
