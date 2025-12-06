@@ -1,57 +1,59 @@
 <template>
-  <nav class="scroll-nav" :class="[
-    `scroll-nav--${positionClass}`,
-    `scroll-nav--variant-${variant}`,
-    `scroll-nav--rounded-${rounded}`,
-    `scroll-nav--shadow-${shadow}`,
-    { 'scroll-nav--borderless': !bordered },
-  ]" :style="navStyle">
-    <header class="scroll-nav__header">
-      <div class="scroll-nav__title">
-        <slot name="title">
-          <h2>{{ title ?? '目录' }}</h2>
-        </slot>
-      </div>
-      <button class="scroll-nav__toggle" type="button" @click="toggleFold">
-        {{ isOpen ? '收起' : '展开' }}
-        <svg viewBox="0 0 24 24" aria-hidden="true" :class="{ 'is-open': isOpen }">
-          <path d="M6 10l6 6 6-6" />
-        </svg>
-      </button>
-    </header>
-
-    <ul class="scroll-nav__list" ref="scrollNavList" role="menu">
-      <li v-if="showBackToTop" class="scroll-nav__item scroll-nav__item--action" role="menuitem" @click="scrollToTop">
-        回到顶部
-      </li>
-
-      <li v-for="item in mappedList" :key="item.id" class="scroll-nav__item" role="presentation">
-        <button class="scroll-nav__item-btn" :class="[currentItem?.id === item.id ? 'scroll-nav__item--active' : '']"
-          type="button" role="menuitem" :title="item.title" @click="handleScroll($event, item.id)">
-          <span class="scroll-nav__item-text">{{ item.title }}</span>
+  <transition :name="animation.name" :style="{ '--nav-animation-duration': animation.duration }">
+    <nav v-if="show" class="scroll-nav" :class="[
+      `scroll-nav--${positionClass}`,
+      `scroll-nav--variant-${variant}`,
+      `scroll-nav--rounded-${rounded}`,
+      `scroll-nav--shadow-${shadow}`,
+      { 'scroll-nav--borderless': !bordered },
+    ]" :style="navStyle">
+      <header class="scroll-nav__header">
+        <div class="scroll-nav__title">
+          <slot name="title">
+            <h2>{{ title ?? '目录' }}</h2>
+          </slot>
+        </div>
+        <button class="scroll-nav__toggle" type="button" @click="toggleFold">
+          {{ isOpen ? '收起' : '展开' }}
+          <svg viewBox="0 0 24 24" aria-hidden="true" :class="{ 'is-open': isOpen }">
+            <path d="M6 10l6 6 6-6" />
+          </svg>
         </button>
+      </header>
+
+      <ul class="scroll-nav__list" ref="scrollNavList" role="menu">
+        <li v-if="showBackToTop" class="scroll-nav__item scroll-nav__item--action" role="menuitem" @click="scrollToTop">
+          回到顶部
+        </li>
+
+        <li v-for="item in mappedList" :key="item.id" class="scroll-nav__item" role="presentation">
+          <button class="scroll-nav__item-btn" :class="[currentItem?.id === item.id ? 'scroll-nav__item--active' : '']"
+            type="button" role="menuitem" :title="item.title" @click="handleScroll($event, item.id)">
+            <span class="scroll-nav__item-text">{{ item.title }}</span>
+          </button>
 
 
-        <ul v-if="showChild && item.children && item.children.length" class="scroll-nav__children">
-          <li v-for="child in item.children" :key="child.id" class="scroll-nav__item scroll-nav__item--child"
-            role="presentation">
-            <button class="scroll-nav__item-btn"
-              :class="[currentItem?.id === child.id ? 'scroll-nav__item--active' : '']" type="button" role="menuitem"
-              :title="child.title" @click="handleScroll($event, child.id)">
-              <span class="scroll-nav__item-text">{{ child.title }}</span>
-            </button>
-          </li>
-        </ul>
+          <ul v-if="showChild && item.children && item.children.length" class="scroll-nav__children">
+            <li v-for="child in item.children" :key="child.id" class="scroll-nav__item scroll-nav__item--child"
+              role="presentation">
+              <button class="scroll-nav__item-btn"
+                :class="[currentItem?.id === child.id ? 'scroll-nav__item--active' : '']" type="button" role="menuitem"
+                :title="child.title" @click="handleScroll($event, child.id)">
+                <span class="scroll-nav__item-text">{{ child.title }}</span>
+              </button>
+            </li>
+          </ul>
 
-      </li>
-    </ul>
-  </nav>
+        </li>
+      </ul>
+    </nav>
+  </transition>
 </template>
 
 <script setup lang="ts">
 import { computed, onMounted, ref, watch, type CSSProperties, type PropType } from 'vue'
 import { useUserStore } from '@/stores/user'
-import { animateHeight, calculateAnimationDuration } from '@/Function'
+import { animateHeight, calculateAnimationDuration,type AnimationProperties, type AnimationDurationOptions } from '@/Function/animation'
 
 interface Item {
   title?: string
@@ -66,7 +68,21 @@ interface KeyMap {
   children?: string
 }
 
+type AnimationConfig = {
+  name: 'fade' | 'slide-in-right' | 'slide-in-left' | 'slide-in-top' | 'slide-in-bottom';
+  duration: string;
+  type: AnimationProperties;
+}&AnimationDurationOptions
+
 const props = defineProps({
+  show: {
+    type: Boolean,
+    default: true,
+  },
+  animation: {
+    type: Object as PropType<AnimationConfig>,
+    default: () => ({ name: 'fade', duration: '0.3s', type: ['height'],baseDuration: 50, durationPerItem: 35, maxDuration: 800})
+  },
   title: {
     type: String,
     required: false,
@@ -139,6 +155,10 @@ const props = defineProps({
     type: [Number, String] as PropType<number | string>,
     default: 0,
   },
+  styleConfig: {
+    type: Object as PropType<Record<string, string>>,
+    default: () => ({}),
+  }
 })
 
 const store = useUserStore()
@@ -169,8 +189,8 @@ const totalItemCount = computed(() => {
 
 watch(isOpen, (newVal) => {
   if (scrollNavList.value) {
-    const duration = calculateAnimationDuration(totalItemCount.value);
-    animateHeight(scrollNavList.value, newVal, duration);
+    const duration = calculateAnimationDuration({ ...props.animation, itemCount: totalItemCount.value });
+    animateHeight(scrollNavList.value, newVal, duration, props.animation.type);
   }
 })
 
@@ -179,7 +199,7 @@ const toggleFold = () => {
 }
 
 const navStyle = computed<CSSProperties>(() => {
-  const style: CSSProperties = {}
+  const style: CSSProperties = { ...props.styleConfig } // Apply styleConfig first
   style['--scroll-nav-gap'] = typeof props.gap === 'number' ? `${props.gap}px` : props.gap
   if (props.variant === 'gradient') {
     const colors =
@@ -258,94 +278,94 @@ const getCurrentItem = (list: Item[], id: string): Item | null => {
 </script>
 
 <style scoped lang="less">
-.scroll-nav {
-  --scroll-nav-bg: var(--color-background);
-  --scroll-nav-border: var(--color-border);
-  --scroll-nav-text: var(--color-text);
-  --scroll-nav-accent: var(--color-primary);
-  --scroll-nav-radius-sm: 12px;
-  --scroll-nav-radius-md: 16px;
-  --scroll-nav-radius-lg: 20px;
+@import '@/assets/css/special-effects.less';
 
+.scroll-nav {
+  // --- Internal CSS Variables ---
+  --nav-animation-duration: 0.3s; // Default animation duration
+  --nav-padding: 0.75rem;
+  --nav-bg: var(--color-background-soft);
+  --nav-border-color: var(--color-border);
+  --nav-text-color: var(--color-text);
+  --nav-accent-color: var(--color-primary);
+  --nav-shadow: var(--box-shadow-lg);
+  --nav-shadow-hover: var(--box-shadow-xl);
+  --nav-radius-sm: var(--border-radius-sm);
+  --nav-radius-md: var(--border-radius-md);
+  --nav-radius-lg: var(--border-radius-lg);
+
+  --nav-header-padding: 0.25rem 0.5rem;
+  --nav-title-font-size: 1rem;
+  --nav-title-color: var(--color-heading);
+
+  --nav-toggle-padding: 0.25rem 0.6rem;
+  --nav-toggle-bg: var(--color-background-mute);
+  --nav-toggle-bg-hover: var(--color-background);
+  --nav-toggle-radius: var(--border-radius-full);
+  --nav-toggle-font-size: 0.8rem;
+
+  --nav-list-margin-top: 0.5rem;
+  --nav-list-gap: 1px; // Reduced gap
+
+  --nav-item-padding: 0.5rem 0.75rem;
+  --nav-item-radius: var(--border-radius-sm);
+  --nav-item-bg: transparent;
+  --nav-item-bg-hover: var(--color-background-mute);
+  --nav-item-font-size: 0.9rem;
+  --nav-item-text-color: var(--color-text-soft);
+  --nav-item-text-color-hover: var(--nav-accent-color);
+
+  --nav-item-active-bg: var(--color-highlight-bg);
+  --nav-item-active-color: var(--color-highlight-text);
+
+  --nav-child-list-padding: 0 0 0 0.75rem; // Reduced vertical padding
+  --nav-child-item-padding: 0.3rem 0.75rem;
+  --nav-child-item-font-size: 0.85rem;
+
+  // --- Component Styles ---
   position: fixed;
   top: 3rem;
   right: 3rem;
-  width: 240px;
-  max-width: calc(100vw - 6rem);
-  padding: 1rem;
-  background: var(--scroll-nav-bg);
-  border: 1px solid var(--scroll-nav-border);
-  border-radius: var(--scroll-nav-radius-md);
-  color: var(--scroll-nav-text);
-  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.15);
-  backdrop-filter: blur(8px);
-  transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease,
-    background 0.3s ease,
-    border-color 0.3s ease;
+  width: 220px;
+  max-width: calc(100vw - 4rem);
+  padding: var(--nav-padding);
+  background: var(--nav-bg);
+  border: 1px solid var(--nav-border-color);
+  border-radius: var(--nav-radius-md);
+  color: var(--nav-text-color);
+  box-shadow: var(--nav-shadow);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
   z-index: 5;
   overflow: hidden;
 
   &:hover {
     transform: translateY(-2px);
-    box-shadow: 0 25px 45px rgba(15, 23, 42, 0.2);
+    box-shadow: var(--nav-shadow-hover);
   }
 
-  &--top_left {
-    top: 3rem;
-    left: 3rem;
-    right: auto;
-  }
+  &--top_left { top: 3rem; left: 3rem; right: auto; }
+  &--bottom_right { top: auto; bottom: 3rem; }
+  &--bottom_left { top: auto; bottom: 3rem; left: 3rem; right: auto; }
+  &--borderless { border-color: transparent; }
+  &--rounded-sm { border-radius: var(--nav-radius-sm); }
+  &--rounded-lg { border-radius: var(--nav-radius-lg); }
+  &--shadow-none { box-shadow: none; }
+  &--shadow-sm { box-shadow: var(--box-shadow-sm); }
+  &--shadow-md { box-shadow: var(--box-shadow-md); }
+  &--shadow-lg { box-shadow: var(--box-shadow-lg); }
 
-  &--bottom_right {
-    top: auto;
-    bottom: 3rem;
-  }
-
-  &--bottom_left {
-    top: auto;
-    bottom: 3rem;
-    left: 3rem;
-    right: auto;
-  }
-
-  &--borderless {
-    border-color: transparent;
-  }
-
-  &--rounded-sm {
-    border-radius: var(--scroll-nav-radius-sm);
-  }
-
-  &--rounded-lg {
-    border-radius: var(--scroll-nav-radius-lg);
-  }
-
-  &--shadow-none {
-    box-shadow: none;
-  }
-
-  &--shadow-sm {
-    box-shadow: 0 6px 20px rgba(15, 23, 42, 0.12);
-  }
-
-  &--shadow-md {
-    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.15);
-  }
-
-  &--shadow-lg {
-    box-shadow: 0 25px 45px rgba(15, 23, 42, 0.2);
-  }
-
-  &--variant-gradient {
-    color: var(--color-text-light-solid);
-    border-color: transparent;
-  }
-
-  &--variant-image {
-    color: var(--color-text-light-solid);
-    border-color: rgba(255, 255, 255, 0.4);
+  &--variant-gradient, &--variant-image {
+    color: #fff; // High-contrast text for dark backgrounds
+    --nav-text-color: #fff;
+    --nav-title-color: #fff;
+    --nav-item-text-color: rgba(255, 255, 255, 0.85);
+    --nav-item-active-color: #fff;
+    --nav-item-bg-hover: rgba(255, 255, 255, 0.15);
+    --nav-item-active-bg: rgba(255, 255, 255, 0.25);
+    --nav-toggle-bg: rgba(255, 255, 255, 0.1);
+    --nav-toggle-bg-hover: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.2);
   }
 }
 
@@ -353,12 +373,13 @@ const getCurrentItem = (list: Item[], id: string): Item | null => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-
+  padding: var(--nav-header-padding);
 
   h2 {
     margin: 0;
-    font-size: 1.1rem;
-    color: inherit;
+    font-size: var(--nav-title-font-size);
+    color: var(--nav-title-color);
+    font-weight: 600;
   }
 }
 
@@ -367,59 +388,48 @@ const getCurrentItem = (list: Item[], id: string): Item | null => {
   align-items: center;
   gap: 0.25rem;
   border: none;
-  background: rgba(255, 255, 255, 0.15);
+  background: var(--nav-toggle-bg);
   color: inherit;
-  padding: 0.35rem 0.75rem;
-  border-radius: 999px;
+  padding: var(--nav-toggle-padding);
+  border-radius: var(--nav-toggle-radius);
   cursor: pointer;
-  font-size: 0.85rem;
+  font-size: var(--nav-toggle-font-size);
   transition: background 0.2s ease;
 
   svg {
-    width: 16px;
-    height: 16px;
+    width: 14px;
+    height: 14px;
     fill: none;
     stroke: currentColor;
     stroke-width: 2;
-    transform: rotate(0deg);
     transition: transform 0.2s ease;
-
-    &.is-open {
-      transform: rotate(180deg);
-    }
+    transform: rotate(0deg);
+    &.is-open { transform: rotate(180deg); }
   }
 
-  &:hover {
-    background: rgba(255, 255, 255, 0.25);
-  }
+  &:hover { background: var(--nav-toggle-bg-hover); }
 }
 
 .scroll-nav__list {
   list-style: none;
-  margin: 0;
+  margin: var(--nav-list-margin-top) 0 0;
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--scroll-nav-gap, 2px);
+  gap: var(--scroll-nav-gap, var(--nav-list-gap));
   max-height: calc(100vh - 8rem);
   overflow-y: auto;
   overflow-x: hidden;
 }
 
 .scroll-nav__item {
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  margin-bottom: var(--scroll-nav-gap, 2px);
+  border-radius: var(--nav-item-radius);
+  background: var(--nav-item-bg);
+  margin: 0;
+  border: none;
 
-  &--action {
-    background: rgba(255, 255, 255, 0.15);
-  }
-
-  &--child {
-    background: transparent;
-    border: none;
-  }
+  &--action { background: var(--nav-item-bg-hover); }
+  &--child { background: transparent; }
 }
 
 .scroll-nav__item-btn {
@@ -427,33 +437,26 @@ const getCurrentItem = (list: Item[], id: string): Item | null => {
   text-align: left;
   background: none;
   border: none;
-  color: inherit;
+  color: var(--nav-item-text-color);
   cursor: pointer;
-  font-size: 0.95rem;
+  font-size: var(--nav-item-font-size);
   font-weight: 500;
-  padding: var(--padding-list-item-vertical) var(--padding-list-item-horizontal);
-  overflow: hidden;
-  transition:
-    background 0.2s ease,
-    color 0.2s ease,
-    transform 0.2s ease;
+  padding: var(--nav-item-padding);
+  border-radius: var(--nav-item-radius);
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
 
   &:hover {
-    background: rgba(255, 255, 255, 0.2);
-    color: var(--scroll-nav-accent);
+    background: var(--nav-item-bg-hover);
+    color: var(--nav-item-text-color-hover);
     transform: translateX(2px);
   }
 }
 
 .scroll-nav__item--active {
-
+  background: var(--nav-item-active-bg);
+  color: var(--nav-item-active-color);
+  font-weight: 600;
   transform: translateX(2px);
-  background: var(--color-highlight-bg);
-
-  .scroll-nav__item-text {
-    background: var(--color-highlight-bg);
-    color: var(--color-highlight-text);
-  }
 }
 
 .scroll-nav__item-text {
@@ -466,28 +469,80 @@ const getCurrentItem = (list: Item[], id: string): Item | null => {
 
 .scroll-nav__children {
   list-style: none;
-  padding: var(--padding-list-item-vertical) var(--padding-list-item-horizontal);
+  padding: var(--nav-child-list-padding);
   margin: 0;
   display: flex;
   flex-direction: column;
-  //gap: 0.35rem;
+  gap: var(--nav-list-gap);
 
   .scroll-nav__item-btn {
-    font-size: 0.85rem;
+    padding: var(--nav-child-item-padding);
+    font-size: var(--nav-child-item-font-size);
     opacity: 0.9;
-
-    &:hover {
-      opacity: 1;
-    }
+    &:hover { opacity: 1; }
   }
 }
+
+/* --- Transition Animations --- */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity var(--nav-animation-duration) ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.slide-in-right-enter-active,
+.slide-in-right-leave-active {
+  transition: transform var(--nav-animation-duration) ease, opacity var(--nav-animation-duration) ease;
+}
+.slide-in-right-enter-from,
+.slide-in-right-leave-to {
+  opacity: 0;
+  transform: translateX(20px);
+}
+
+.slide-in-left-enter-active,
+.slide-in-left-leave-active {
+  transition: transform var(--nav-animation-duration) ease, opacity var(--nav-animation-duration) ease;
+}
+.slide-in-left-enter-from,
+.slide-in-left-leave-to {
+  opacity: 0;
+  transform: translateX(-20px);
+}
+
+.slide-in-top-enter-active,
+.slide-in-top-leave-active {
+  transition: transform var(--nav-animation-duration) ease, opacity var(--nav-animation-duration) ease;
+}
+.slide-in-top-enter-from,
+.slide-in-top-leave-to {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+.slide-in-bottom-enter-active,
+.slide-in-bottom-leave-active {
+  transition: transform var(--nav-animation-duration) ease, opacity var(--nav-animation-duration) ease;
+}
+.slide-in-bottom-enter-from,
+.slide-in-bottom-leave-to {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
 
 @media (max-width: 768px) {
   .scroll-nav {
     position: sticky;
     width: 100%;
+    max-width: 100%;
     margin: 1rem 0;
-    top: 0;
+    top: 1rem;
+    right: 0;
+    left: 0;
   }
 }
 </style>

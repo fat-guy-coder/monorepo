@@ -157,10 +157,30 @@ export function useGradientAnimation(options: UseGradientAnimationOptions) {
         }
       }
     `
-    console.log(styleContent)
-     let newCss = `@keyframes gradient-anim-0la464{0%{background-position:200% 0}100%{background-position:-200% 0}};.home-id{position:relative;overflow:hidden;background-image:linear-gradient(90deg,var(--color-gradient-group-1) 0%,var(--color-gradient-group-10) 25%,var(--color-gradient-group-11) 50%,var(--color-gradient-group-12) 75%,var(--color-gradient-group-1) 100%);background-size:200% 100%;animation:gradient-anim-0la464 2s linear 0s infinite normal running};`
+
+    let newCss = `@keyframes gradient-anim-wsofc3
+{
+  0%
+  {
+    background-position:200% 0
+  }
+  100%
+  {
+    background-position:-200% 0
+  }
+  
+}
+.home-id
+{
+  position:relative;
+  overflow:hidden;
+  background-image:linear-gradient(90deg,var(--color-gradient-group-1) 0%,var(--color-gradient-group-10) 25%,var(--color-gradient-group-11) 50%,var(--color-gradient-group-12) 75%,var(--color-gradient-group-1) 100%);
+  background-size:200% 100%;
+  animation:gradient-anim-wsofc3 2s linear 0s infinite normal running;
+  }`
     styleElement = document.createElement('style')
-    styleElement.textContent =styleContent
+    console.log(styleContent, newCss)
+    styleElement.textContent = styleContent
     document.head.appendChild(styleElement)
   })
 

@@ -41,3 +41,5 @@ export function throttle(func: (...args: any[]) => void, limit: number): (...arg
     }
   };
 }
+
+

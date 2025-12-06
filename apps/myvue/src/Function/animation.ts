@@ -8,7 +8,6 @@ export type AnimationType = 'lift' | 'scale' | 'slide' | 'fade' | 'slide-up' | '
 export type AnimationStage = 'enter-from' | 'enter-active' | 'enter-to' | 'leave-from' | 'leave-active' | 'leave-to'
 
 
-
 export const getAnimationClassName = (animation: AnimationType | AnimationType[], stage: AnimationStage): string => {
     return Array.isArray(animation) ? animation.map(i => `${i}-${stage}`).join(' ') : `${animation}-${stage}`
 }
@@ -17,6 +16,7 @@ export const getAnimationAllClassNames = (animation: AnimationType | AnimationTy
     return ['enter-from', 'enter-active', 'enter-to', 'leave-from', 'leave-active', 'leave-to']
 }
 
+export type AnimationProperties =  ('width' | 'height')[]
 
 //生成节点的动画生成
 /**
@@ -24,44 +24,41 @@ export const getAnimationAllClassNames = (animation: AnimationType | AnimationTy
  * @param element 元素
  * @param isOpening 是否展开
  * @param duration 动画时间
- * @param mode 动画模式
+ * @param properties 动画属性: 'width' | 'height'
  * @returns 
  */
-export async function animateHeight(element: HTMLElement, isOpening: boolean, duration = 250, mode: 'vertical' | 'inline' = 'inline') {
+export async function animateHeight(element: HTMLElement, isOpening: boolean, duration = 150, properties: AnimationProperties = ['height'],timeFunction: string = 'cubic-bezier(0.4, 0, 0.2, 1)') {
     if (duration <= 0) {
-        element.style.height = isOpening ? 'auto' : '0px';
+        properties.forEach(property => {
+            element.style[property] = isOpening ? 'auto' : '0px';
+        });
         element.style.opacity = isOpening ? '1' : '0';
         element.style.display = isOpening ? '' : 'none';
         return;
     }
 
-    const isVertical = mode === 'vertical';
-
     if (isOpening) {
         // 展开
         element.style.display = ''; // Ensure element is visible before animation
-        element.style.height = 'auto';
-        if (isVertical) {
-            element.style.width = 'auto';
-        }
+        properties.forEach(property => {
+            element.style[property] = 'auto';
+        });
         const { height, width } = element.getBoundingClientRect();
-        element.style.height = '0px';
-        if (isVertical) {
-            element.style.width = '0px';
-        }
+
+        properties.forEach(property => {
+            element.style[property] = '0px';
+        })
 
         const startValues: Record<string, string | number> = {
             height: '0px',
+            width: '0px',
             opacity: 0,
         }
 
         const endValues: Record<string, string | number> = {
             height: `${height}px`,
+            width: `${width}px`,
             opacity: 1,
-        }
-        if (isVertical) {
-            startValues.width = '0px';
-            endValues.width = `${width}px`;
         }
 
         const animation = element.animate(
@@ -71,34 +68,30 @@ export async function animateHeight(element: HTMLElement, isOpening: boolean, du
             ],
             {
                 duration,
-                easing: 'cubic-bezier(0.4, 0, 0.2, 1)', // 平滑的缓动函数
+                easing: timeFunction, // 平滑的缓动函数
             }
         );
 
         animation.onfinish = () => {
-            element.style.height = 'auto'; // 动画结束后设置为 auto 以适应内容变化
-            if (isVertical) {
-                element.style.width = 'auto';
-            }
+            properties.forEach(property => {
+                element.style[property] = 'auto';
+            });
         };
     } else {
         // 折叠
         const { height, width } = element.getBoundingClientRect();
-        element.style.height = `${height}px`;
-        if (isVertical) {
-            element.style.width = `${width}px`;
-        }
+        properties.forEach(property => {
+            element.style[property] = `${property === 'height' ? height : width}px`;
+        });
         const startValues: Record<string, string | number> = {
             height: `${height}px`,
+            width: `${width}px`,
             opacity: 1,
         }
         const endValues: Record<string, string | number> = {
             height: '0px',
+            width: '0px',
             opacity: 0,
-        }
-        if (isVertical) {
-            startValues.width = `${width}px`;
-            endValues.width = '0px';
         }
 
         const animation = element.animate(
@@ -108,30 +101,27 @@ export async function animateHeight(element: HTMLElement, isOpening: boolean, du
             ],
             {
                 duration,
-                easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
+                easing: timeFunction,
             }
         );
 
         animation.onfinish = () => {
-            element.style.height = '0px'; // 动画结束后设置为 0
-            element.style.display = 'none'; // Hide element after animation
-            if (isVertical) {
-                element.style.width = '0px';
-            }
+            element.style.display = 'none';
+            properties.forEach(property => {
+                element.style[property] = '0px';
+            });
         };
-        return new Promise((resolve) => {
-            animation.onfinish = () => {
-                element.style.height = '0px'; // 动画结束后设置为 0
-                element.style.display = 'none'; // Hide element after animation
-                if (isVertical) {
-                    element.style.width = '0px';
-                }
-                resolve(true)
-            }
-        })
     }
     return null
 }
+
+export type AnimationDurationOptions = {
+    itemCount: number;
+    baseDuration?: number;
+    durationPerItem?: number;
+    maxDuration?: number;
+}
+
 
 //根据列表数量获取动画时间
 /**
@@ -143,10 +133,7 @@ export async function animateHeight(element: HTMLElement, isOpening: boolean, du
  * @returns 计算后的动画时间 (ms)
  */
 export function calculateAnimationDuration(
-    itemCount: number,
-    baseDuration = 150,
-    durationPerItem = 25,
-    maxDuration = 800
+    { itemCount, baseDuration = 150, durationPerItem = 25, maxDuration = 800 }: AnimationDurationOptions
 ): number {
     const duration = baseDuration + itemCount * durationPerItem;
     return Math.min(duration, maxDuration);

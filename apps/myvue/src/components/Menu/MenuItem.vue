@@ -213,7 +213,7 @@ const getMouseInChildWrapperVerticalElement = (e: MouseEvent) => {
 
 const titleClasses = computed(() => ({
     'menu-item__title--selected': isSelected.value,
-    'gradient-animation-hover': !isSelected.value,
+    'gradient-animation': !isSelected.value,
     'menu-item__title--open': props.isOpen,
     'menu-item__title--matched': props.item.match,
     'menu-item__title--hovered': isHovered.value,

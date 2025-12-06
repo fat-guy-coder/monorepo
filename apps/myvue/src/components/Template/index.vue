@@ -20,8 +20,7 @@
     <!-- 模式切换 Tabs -->
     <NavTagCard :items="modeTabs.map(t => ({ id: t.value, title: t.label }))" size="medium" variant="gradient"
       :background-colors="['#1677ff', '#69b1ff']" rounded="md"
-      :direction="(componentsConfig.navTagCard?.direction as any) || 'horizontal'"
-      :animation="'fade'"
+      :direction="(componentsConfig.navTagCard?.direction as any) || 'horizontal'" :animation="['slide-left']"
       :enable-scroll="componentsConfig.navTagCard?.mode === 'scroll'" v-model:active-id="currentMode">
       <!-- 普通模式 -->
       <template #normal>
@@ -167,7 +166,7 @@ type ReadonlyUser = Readonly<User>`" language="ts" title="类型系统示例" />
                 <ul v-if="item.type === 'tips' && Array.isArray(item.data)" class="tip-list">
                   <li v-for="tip in item.data as Array<{ id: string; text: string }>" :key="tip.id" :id="tip.id">{{
                     tip.text
-                  }}
+                    }}
                   </li>
                 </ul>
               </div>
@@ -225,7 +224,7 @@ type ReadonlyUser = Readonly<User>`" language="ts" title="类型系统示例" />
                 <ul v-if="item.type === 'tips' && Array.isArray(item.data)" class="tip-list">
                   <li v-for="tip in item.data as Array<{ id: string; text: string }>" :key="tip.id" :id="tip.id">{{
                     tip.text
-                  }}
+                    }}
                   </li>
                 </ul>
               </div>

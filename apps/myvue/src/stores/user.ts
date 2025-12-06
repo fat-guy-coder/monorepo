@@ -9,11 +9,11 @@ export interface Device {
     height: string
 }
 
-export type Theme = 'light' | 'dark' | 'warm' | 'cool' | 'more'
+export type Theme = 'light' | 'dark' | 'warm' | 'cool' | 'eye-friendly' | 'more'
 
-export type ThemeLabel = '亮色' | '暗色' | '暖色' | '冷色' | '更多'
+export type ThemeLabel = '亮色' | '暗色' | '暖色' | '冷色'  | '护眼'|'更多'
 
-export type ThemeIcon = '☀️' | '🌙' | '🔥' | '❄️' | '🎨'
+export type ThemeIcon = '☀️' | '🌙' | '🔥' | '❄️'  | '👀'|'🎨'
 
 export type Themes = Array<{
     value: Theme
@@ -39,6 +39,7 @@ export const useUserStore = defineStore('user', () => {
             { value: 'dark', label: '暗色', icon: '🌙' },
             { value: 'warm', label: '暖色', icon: '🔥' },
             { value: 'cool', label: '冷色', icon: '❄️' },
+            { value: 'eye-friendly', label: '护眼', icon: '👀' },
             { value: 'more', label: '更多', icon: '🎨' }
         ],
         device: {

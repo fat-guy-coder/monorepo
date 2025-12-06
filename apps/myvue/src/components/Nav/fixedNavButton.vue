@@ -14,7 +14,7 @@
         class="navigation-items">
         <div v-for="(item, index) in items" :key="item.value || `nav-item-${index}`" class="navigation-item"
           :style="{ '--delay': `${index * 0.05}s` }" @click="handleItemClick(item)">
-          <div class="nav-item" :class="['gradient-animation']">
+          <div class="nav-item">
             <slot :name="item.value" v-if="$slots[item.value]" :item="item"></slot>
             <template v-else>
               <span class="nav-icon">{{ item.icon }}</span>

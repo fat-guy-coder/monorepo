@@ -1,6 +1,7 @@
 <template>
   <div class="ui-card" :class="[
     `size-${size}`,
+    'gradient-animation',
     { 'is-hoverable': hoverable, }
   ]">
     <div v-if="hasTitle" class="ui-card__header">
@@ -42,50 +43,65 @@ const hasTitle = computed(() => !!(title || (slots && (slots as any).title)))
 
 <style lang="less" scoped>
 .ui-card {
+  // --- Internal CSS Variables for Card ---
+  --card-padding: var(--padding-2xl);
+  --card-padding-sm: var(--padding-2xl);
+  --card-padding-md: calc(var(--padding-2xl) * 0.75);
+  --card-padding-lg: calc(var(--padding-2xl) * 1.25);
+  --card-bg-color: var(--color-background);
+  --card-bg-color-hover: var(--color-background-soft);
+  --card-text-color: var(--color-text);
+  --card-title-color: var(--color-heading);
+  --card-border-radius: var(--border-radius-md);
+  --card-border-width: var(--border-width);
+  --card-border-color: var(--color-border);
+  --card-border-color-hover: var(--color-border-hover);
+  --card-box-shadow: var(--box-shadow-md);
+  --card-box-shadow-hover: var(--box-shadow-hover-md);
+
   position: relative;
-  color: var(--color-text);
-  background: var(--color-background);
-  border-radius: var(--border-radius-md);
-  padding: var(--padding-2xl);
-  //box-shadow: var(--box-shadow-md);
+  color: var(--card-text-color);
+  background: var(--card-bg-color);
+  border-radius: var(--card-border-radius);
+  padding: var(--card-padding);
+  border: var(--card-border-width) solid var(--card-border-color);
   transition: box-shadow 0.25s ease, transform 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
-  border: var(--border-width) solid var(--color-border);
 
   &.is-hoverable:hover {
-    box-shadow: var(--box-shadow-hover-md);
-    transform: translate(-1spx, -1px);
-    border: var(--border-width) solid var(--color-border-hover);
-    //background-color: var(--color-background-soft);
+    box-shadow: var(--card-box-shadow-hover);
+    transform: translate(-1px, -1px);
+    border-color: var(--card-border-color-hover);
+    background-color: var(--card-bg-color-hover);
   }
 
   /* 尺寸 */
   &.size-sm {
-    padding: var(--padding-2xl);
+    padding: var(--card-padding-sm);
     font-size: var(--font-size-sm);
   }
 
   &.size-md {
-    padding: calc(var(--padding-2xl) * 0.75);
+    padding: var(--card-padding-md);
     font-size: var(--font-size-normal);
   }
 
   &.size-lg {
-    padding: calc(var(--padding-2xl) * 1.25);
-    font-size: 1.06rem;
+    padding: var(--card-padding-lg);
+    font-size: 1rem;
   }
 }
 
 .ui-card__header {
-  margin-bottom: 8px;
+  margin-bottom: var(--margin-2xl);
 }
 
 .ui-card__title {
-  color: var(--color-heading);
+  color: var(--card-title-color);
   font-weight: 600;
   font-size: 1.05em;
 }
 
 .ui-card__body {
-  color: var(--color-text);
+  color: var(--card-text-color);
 }
 </style>

@@ -156,7 +156,7 @@ function throttle&lt;T extends (...args: any[]) => any&gt;(
 
 <script setup lang="ts">
 import { ref, } from 'vue'
-import { debounce, throttle } from '@/Function/CommonFun'
+import { debounce, throttle } from '@/Function/commonFun'
 
 // 防抖演示
 const debounceCount = ref(0)

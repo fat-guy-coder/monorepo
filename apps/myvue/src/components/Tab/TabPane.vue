@@ -1,5 +1,5 @@
 <template>
-    <div class="tab-pane gradient-animation-hover" @click="change" :class="{
+    <div class="tab-pane gradient-animation" @click="change" :class="{
         'is-active': activeKey === path,
         'is-disabled': disabled
     }">

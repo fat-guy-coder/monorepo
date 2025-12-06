@@ -1,25 +1,24 @@
 <template>
-  <div class="home-id"></div>
+  <Template />
 </template>
 
 <script lang="ts" setup>
-// import Template from '@/components/Template/index.vue'
-import { useGradientAnimation } from '@/hooks/useDemo'
-import { useGradientAnimation as useGradientAnimation2 } from '@/hooks/useGradientAnimation'
+import Template from '@/components/Template/index.vue'
 
-useGradientAnimation({
-  className: 'home-id'
-})
-// useGradientAnimation2({
-//   className: 'home-id',
-//   triggerTimes: ['mounted']
-// })
 </script>
 
 <style scoped lang="css">
-.home-id {
-  width: 100%;
-  height: 100%;
+.home{
+  width: 300px;
+  height: 300px;
+  border: 1px solid #000;
+  position: absolute;
+  margin: 300px;
+  text-align: center;
+  line-height: 300px;
+  font-size: 20px;
+  font-weight: bold;
+  /* 顶层背景透明，让下面的伪元素可见 */
 }
 
 

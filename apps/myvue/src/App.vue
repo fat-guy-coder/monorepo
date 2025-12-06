@@ -53,7 +53,7 @@ import {
 import { useTabistStore, type Tab } from '@/stores/tab'//标签列表store
 import { type Theme, useUserStore } from '@/stores/user'//用户信息store
 import { useRouter } from 'vue-router'
-import { debounce } from '@/Function/CommonFun'//常用函数
+import { debounce } from '@/Function/commonFun'//常用函数
 import { useDetectMobile } from '@/hooks/useDetectMobile'
 import type { NavItem } from './components/Nav'//导航项类型
 import { useGradientAnimation } from '@/hooks/useGradientAnimation'
@@ -104,11 +104,10 @@ const navItems = ref<NavItem[]>([
 ])
 
 //全局渐变色动画
-// useGradientAnimation({
-//   colorsCount: {random: 2},
-//   speed: 30,
-//   gradientType: 'linear',
-// })
+  useGradientAnimation({
+  triggerTimes: ['hover'],
+  gradientTypes: ['linear'],
+  })
 
 //当前主题图标
 const currentThemeIcon = computed(() => {

@@ -35,7 +35,7 @@
 </template>
 
 <script setup lang="ts">
-import { debounce } from '@/Function/CommonFun'
+import { debounce } from '@/Function/commonFun'
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 
 // 定义类型

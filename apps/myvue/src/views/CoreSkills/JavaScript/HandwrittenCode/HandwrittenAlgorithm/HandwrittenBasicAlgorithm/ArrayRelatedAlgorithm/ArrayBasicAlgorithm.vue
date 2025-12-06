@@ -102,7 +102,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { Input as AInput } from 'ant-design-vue'
 import ScrollNav from '@/components/Nav/ScrollNav.vue'
-import { debounce } from '@/Function/CommonFun'
+import { debounce } from '@/Function/commonFun'
 
 // 算法分类
 const categories = ref([

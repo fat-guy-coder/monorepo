@@ -8,6 +8,7 @@
 @theme-warm: 'warm';
 @theme-cool: 'cool';
 @thme-custom: 'custom';
+@theme-eye-friendly: 'eye-friendly';
 
 /* 字体大小变量 */
 @font-size: 16px;
@@ -216,6 +217,48 @@
 @color-warning-cool: #0ea5e9;
 @color-error-cool: #be185d;
 
+/* 护眼主题色板 (Eye-Friendly) */
+@eye-primary: #3a8a5d;
+@eye-secondary: #5a9c78;
+@eye-accent: #87c7a3;
+@eye-background: #f0f7f2; // very light green-ish white
+@eye-background-soft: #e6f0e9;
+@eye-background-mute: #d9e8de;
+@eye-surface: #e8f2eb;
+@eye-text: #2a3d33;
+@eye-text-soft: #4a6357;
+@eye-border: #c4d9cb;
+@eye-box-shadow: 80, 120, 90;
+@eye-box-shadow-hover: 100, 140, 110;
+@highlight-eye-text: #1a4d32;
+@highlight-eye-bg: #d4ebd9;
+@highlight-eye-border: #a7c9b1;
+@link-eye-text: #3a8a5d;
+@link-eye-hover: #5a9c78;
+
+/* 护眼主题渐变 */
+@color-gradient-eye-1: #f0f7f2; // 主题底色
+@color-gradient-eye-2: #e0f0e5; // 柔和薄荷绿
+@color-gradient-eye-3: #cce8d6; // 浅青瓷绿
+@color-gradient-eye-4: #b8dcc7; // 柔和玉绿
+@color-gradient-eye-5: #a3d0b8; // 清新绿
+@color-gradient-eye-6: #90c4a9; // 豆沙绿
+@color-gradient-eye-7: #cde2d5; // 灰绿
+@color-gradient-eye-8: #e1ece5; // 浅灰绿
+@color-gradient-eye-9: #d1e0d7; // 柔灰绿
+@color-gradient-eye-10: #c1d4c8; // 收尾灰绿
+
+/* 护眼主题高对比度渐变 */
+@color-gradient-eye-11: #2b6b47; // 深森林绿
+@color-gradient-eye-12: #1e4b32; // 墨绿
+@color-gradient-eye-13: #50916e; // 灰调松绿
+@color-gradient-eye-14: #70a989; // 柔和苔绿
+
+@color-info-eye: #3a8a5d;
+@color-success-eye: #4caf50;
+@color-warning-eye: #ff9800;
+@color-error-eye: #f44336;
+
 /* 主题类切换（通过添加 class 到 html 或 body 来切换主题） */
 html[data-theme='light'],
 body[data-theme='light'] {
@@ -399,6 +442,52 @@ body[data-theme='cool'] {
   --color-gradient-group-12: @color-gradient-cool-12; //冷色渐变12
   --color-gradient-group-13: @color-gradient-cool-13; //冷色渐变13
   --color-gradient-group-14: @color-gradient-cool-14; //冷色渐变14
+}
+
+html[data-theme='eye-friendly'],
+body[data-theme='eye-friendly'] {
+  --color-background: @eye-background;
+  --color-background-soft: @eye-background-soft;
+  --color-background-mute: @eye-background-mute;
+  --color-primary: @eye-primary;
+  --color-secondary: @eye-secondary;
+  --color-accent: @eye-accent;
+  --color-border: @eye-border;
+  --color-border-hover: @eye-secondary;
+  --color-text: @eye-text;
+  --color-text-soft: @eye-text-soft;
+  --color-heading: @eye-text;
+  --color-box-shadow: @eye-box-shadow;
+  --color-box-shadow-hover: @eye-box-shadow-hover;
+  /* 突出显示颜色 */
+  --color-highlight-text: @highlight-eye-text;
+  --color-highlight-bg: @highlight-eye-bg;
+  --color-highlight-border: @highlight-eye-border;
+  /* 类型颜色 */
+  --color-info: @color-info-eye;
+  --color-success: @color-success-eye;
+  --color-warning: @color-warning-eye;
+  --color-error: @color-error-eye;
+  // 链接颜色
+  --color-link-text: @link-eye-text;
+  --color-link-hover: @link-eye-hover;
+
+  // 渐变颜色组
+  --color-gradient-group-1: @color-gradient-eye-1;
+  --color-gradient-group-2: @color-gradient-eye-2;
+  --color-gradient-group-3: @color-gradient-eye-3;
+  --color-gradient-group-4: @color-gradient-eye-4;
+  --color-gradient-group-5: @color-gradient-eye-5;
+  --color-gradient-group-6: @color-gradient-eye-6;
+  --color-gradient-group-7: @color-gradient-eye-7;
+  --color-gradient-group-8: @color-gradient-eye-8;
+  --color-gradient-group-9: @color-gradient-eye-9;
+  --color-gradient-group-10: @color-gradient-eye-10;
+  // 高对比度渐变
+  --color-gradient-group-11: @color-gradient-eye-11;
+  --color-gradient-group-12: @color-gradient-eye-12;
+  --color-gradient-group-13: @color-gradient-eye-13;
+  --color-gradient-group-14: @color-gradient-eye-14;
 }
 
 /* ============================================
