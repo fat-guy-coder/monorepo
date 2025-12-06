@@ -14,6 +14,9 @@
             <div class="shortcut-keys">
               <kbd v-for="(key, index) in shortcut.keys" :key="index">{{ key }}</kbd>
             </div>
+            <div class="shortcut-heat" :style="{ backgroundColor: getHeatColor(shortcut.heat) }">
+              {{ shortcut.heat }}
+            </div>
           </div>
         </div>
       </div>
@@ -26,9 +29,13 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue';
+
 interface Shortcut {
   name: string;
   keys: string[];
+  heat: number; // 热度值，1-10
+  extra?: string;
 }
 
 interface Category {
@@ -36,84 +43,96 @@ interface Category {
   shortcuts: Shortcut[];
 }
 
-const categories: Category[] = [
+const getHeatColor = (heat: number): string => {
+  const hue = 240 - heat * 24; // 从蓝色 (240) 到红色 (0)
+  return `hsl(${hue}, 80%, 60%)`;
+};
+
+const categoriesData: Category[] = [
   {
     name: "⌨️ 基础编辑",
     shortcuts: [
-      { name: "复制", keys: ["⌘", "C"] },
-      { name: "剪切", keys: ["⌘", "X"] },
-      { name: "粘贴", keys: ["⌘", "V"] },
-      { name: "粘贴无格式", keys: ["⌘", "⌥", "V"] },
-      { name: "撤销", keys: ["⌘", "Z"] },
-      { name: "重做", keys: ["⌘", "⇧", "Z"] },
-      { name: "全选", keys: ["⌘", "A"] },
+      { name: "复制", keys: ["⌘", "C"], heat: 10 },
+      { name: "粘贴", keys: ["⌘", "V"], heat: 10 },
+      { name: "撤销", keys: ["⌘", "Z"], heat: 9 },
+      { name: "剪切", keys: ["⌘", "X"], heat: 8 },
+      { name: "全选", keys: ["⌘", "A"], heat: 8 },
+      { name: "重做", keys: ["⌘", "⇧", "Z"], heat: 7 },
+      { name: "粘贴无格式", keys: ["⌘", "⌥", "V"], heat: 6 },
     ]
   },
   {
     name: "🚀 光标导航",
     shortcuts: [
-      { name: "行首", keys: ["⌘", "←"] },
-      { name: "行尾", keys: ["⌘", "→"] },
-      { name: "文档开头", keys: ["⌘", "↑"] },
-      { name: "文档结尾", keys: ["⌘", "↓"] },
-      { name: "按词移动", keys: ["⌥", "←/→"] },
-      { name: "按段移动", keys: ["⌥", "↑/↓"] },
-      { name: "跳转到行", keys: ["⌘", "L"] },
+      { name: "按词移动", keys: ["⌥", "←/→"], heat: 9 },
+      { name: "行首", keys: ["⌘", "←"], heat: 8 },
+      { name: "行尾", keys: ["⌘", "→"], heat: 8 },
+      { name: "文档开头", keys: ["⌘", "↑"], heat: 7 },
+      { name: "文档结尾", keys: ["⌘", "↓"], heat: 7 },
+      { name: "按段移动", keys: ["⌥", "↑/↓"], heat: 6 },
+      { name: "跳转到行", keys: ["⌘", "L"], heat: 5 },
     ]
   },
   {
     name: "✂️ 文本操作",
     shortcuts: [
-      { name: "删除前词", keys: ["⌥", "⌫"] },
-      { name: "删除后词", keys: ["⌥", "⌦"] },
-      { name: "删除到行首", keys: ["⌘", "⌫"] },
-      { name: "删除到行尾", keys: ["⌘", "⌦"] },
-      { name: "选中当前词", keys: ["⌥", "双击"] },
-      { name: "选中当前行", keys: ["⌘", "双击"] },
-      { name: "大小写转换", keys: ["⌥", "⌘", "C"] },
+      { name: "删除前词", keys: ["⌥", "⌫"], heat: 8 },
+      { name: "删除到行首", keys: ["⌘", "⌫"], heat: 7 },
+      { name: "选中当前词", keys: ["⌥", "双击"], heat: 7 },
+      { name: "删除后词", keys: ["⌥", "⌦"], heat: 6 },
+      { name: "删除到行尾", keys: ["⌘", "⌦"], heat: 6 },
+      { name: "选中当前行", keys: ["⌘", "双击"], heat: 5 },
+      { name: "大小写转换", keys: ["⌥", "⌘", "C"], heat: 4 },
     ]
   },
   {
     name: "🖥️ 窗口管理",
     shortcuts: [
-      { name: "切换应用", keys: ["⌘", "Tab"] },
-      { name: "反向切换", keys: ["⌘", "⇧", "Tab"] },
-      { name: "隐藏当前", keys: ["⌘", "H"] },
-      { name: "最小化", keys: ["⌘", "M"] },
-      { name: "全屏", keys: ["⌘", "⌃", "F"] },
-      { name: "新建窗口", keys: ["⌘", "N"] },
-      { name: "关闭窗口", keys: ["⌘", "W"] },
+      { name: "切换应用", keys: ["⌘", "Tab"], heat: 10 },
+      { name: "关闭窗口", keys: ["⌘", "W"], heat: 9 },
+      { name: "新建窗口", keys: ["⌘", "N"], heat: 7 },
+      { name: "隐藏当前", keys: ["⌘", "H"], heat: 7 },
+      { name: "全屏", keys: ["⌘", "⌃", "F"], heat: 6 },
+      { name: "最小化", keys: ["⌘", "M"], heat: 6 },
+      { name: "反向切换", keys: ["⌘", "⇧", "Tab"], heat: 5 },
     ]
   },
   {
     name: "🔍 搜索与系统",
     shortcuts: [
-      { name: "聚焦搜索", keys: ["⌘", "Space"] },
-      { name: "快速查看", keys: ["Space"] },
-      { name: "表情符号", keys: ["⌘", "⌃", "Space"] },
-      { name: "访达", keys: ["⌘", "⌥", "Space"] },
-      { name: "强制退出", keys: ["⌘", "⌥", "Esc"] },
-      { name: "屏幕截图", keys: ["⌘", "⇧", "4"] },
-      { name: "录屏", keys: ["⌘", "⇧", "5"] },
+      { name: "聚焦搜索", keys: ["⌘", "Space"], heat: 10 },
+      { name: "屏幕截图", keys: ["⌘", "⇧", "4"], heat: 9 },
+      { name: "表情符号", keys: ["⌘", "⌃", "Space"], heat: 8 },
+      { name: "强制退出", keys: ["⌘", "⌥", "Esc"], heat: 7 },
+      { name: "快速查看", keys: ["Space"], heat: 7 },
+      { name: "访达", keys: ["⌘", "⌥", "Space"], heat: 6 },
+      { name: "录屏", keys: ["⌘", "⇧", "5"], heat: 5 },
     ]
   },
   {
     name: "⚙️ 高级功能",
     shortcuts: [
-      { name: "终端", keys: ["⌘", "Space"], extra: "输入 Terminal" },
-      { name: "活动监视器", keys: ["⌘", "Space"], extra: "输入 Activity" },
-      { name: "系统偏好", keys: ["⌘", ","] },
-      { name: "Dock 隐藏/显示", keys: ["⌘", "⌥", "D"] },
-      { name: "Mission Control", keys: ["⌃", "↑"] },
-      { name: "应用切换器", keys: ["⌃", "↓"] },
-      { name: "锁定屏幕", keys: ["⌘", "⌃", "Q"] },
+      { name: "终端", keys: ["⌘", "Space"], extra: "输入 Terminal", heat: 8 },
+      { name: "Mission Control", keys: ["⌃", "↑"], heat: 7 },
+      { name: "锁定屏幕", keys: ["⌘", "⌃", "Q"], heat: 6 },
+      { name: "系统偏好", keys: ["⌘", ","], heat: 5 },
+      { name: "Dock 隐藏/显示", keys: ["⌘", "⌥", "D"], heat: 5 },
+      { name: "活动监视器", keys: ["⌘", "Space"], extra: "输入 Activity", heat: 4 },
+      { name: "应用切换器", keys: ["⌃", "↓"], heat: 4 },
     ]
   }
 ];
+
+const categories = computed(() => {
+  return categoriesData.map(category => ({
+    ...category,
+    shortcuts: [...category.shortcuts].sort((a, b) => b.heat - a.heat)
+  }));
+});
+
 </script>
 
 <style lang="less" scoped>
-
 
 .shortcuts-container {
   max-width: 900px;
@@ -191,11 +210,13 @@ const categories: Category[] = [
     font-size: 0.9rem;
     font-weight: 500;
     color: #1d1d1f;
+    flex-grow: 1;
   }
 
   .shortcut-keys {
     display: flex;
     gap: 0.4rem;
+    margin-left: 1rem;
 
     kbd {
       background-color: #fff;
@@ -216,6 +237,17 @@ const categories: Category[] = [
         background-color: #f5f5f7;
       }
     }
+  }
+
+  .shortcut-heat {
+    margin-left: 1rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 6px;
+    color: white;
+    font-size: 0.8rem;
+    font-weight: 600;
+    min-width: 1.5rem;
+    text-align: center;
   }
 }
 

@@ -63,8 +63,9 @@
 @color-gradient-light-8: #f4e2cf; // 柔米白
 @color-gradient-light-9: #e3eee5; // 浅青草绿灰
 @color-gradient-light-10: #cfcfcf; // 柔和收尾淡灰
-/* 额外高对比度渐变（用于强调/高对比度场景） */
+@color-gradient-light-11-soft: #bcdffb; // 柔和蓝调灰(新增11柔和渐变色)
 @color-gradient-light-11: #0b3d91; // 深海蓝（高对比）
+/* 额外高对比度渐变（用于强调/高对比度场景） */
 @color-gradient-light-12: #ff6f00; // 明亮橙（高对比）
 @color-gradient-light-13: #00796b; // 深青绿色（高对比）
 @color-gradient-light-14: #6a1b9a; // 深紫（高对比）
@@ -103,6 +104,7 @@
 @color-gradient-dark-8: #9aa4ba; // 柔灰蓝
 @color-gradient-dark-9: #b9b079; // 柔金
 @color-gradient-dark-10: #eeeeee; // 柔和收尾高灰白
+@color-gradient-dark-11-soft: #6c798d; // 柔和银蓝(新增11柔和渐变色)
 /* 额外高对比度渐变（用于黑暗主题的强调色） */
 @color-gradient-dark-11: #00ffea; // 霓虹青（高对比）
 @color-gradient-dark-12: #ff6b00; // 亮橙（高对比）
@@ -161,6 +163,7 @@
 @color-gradient-warm-8: #edc7a8; // 焦糖粉
 @color-gradient-warm-9: #e2baa6; // 茶棕
 @color-gradient-warm-10: #dbc9b5; // 柔和深米白（收尾温柔）
+@color-gradient-warm-11-soft: #ffe3c3; // 柔和淡橘(新增11柔和渐变色)
 
 @color-info-warm: #254478;
 @color-success-warm: #256427;
@@ -206,6 +209,7 @@
 @color-gradient-cool-8: #e3e3f7; // 柔淡紫
 @color-gradient-cool-9: #e5fcfa; // 柔和青灰
 @color-gradient-cool-10: #d1e2e7; // 柔冷银灰(收尾)
+@color-gradient-cool-11-soft: #b8d8e4; // 柔和水蓝(新增11柔和渐变色)
 /* 额外高对比度渐变（用于冷色主题的强调色） */
 @color-gradient-cool-11: #003f5c; // 深海军蓝（高对比）
 @color-gradient-cool-12: #005f73; // 深青（高对比）
@@ -247,6 +251,7 @@
 @color-gradient-eye-8: #e1ece5; // 浅灰绿
 @color-gradient-eye-9: #d1e0d7; // 柔灰绿
 @color-gradient-eye-10: #c1d4c8; // 收尾灰绿
+@color-gradient-eye-11-soft: #cbe3d6; // 柔和淡青绿(新增11柔和渐变色)
 
 /* 护眼主题高对比度渐变 */
 @color-gradient-eye-11: #2b6b47; // 深森林绿
@@ -390,6 +395,7 @@ body[data-theme='warm'] {
   --color-gradient-group-8: @color-gradient-warm-8; //暖色渐变8
   --color-gradient-group-9: @color-gradient-warm-9; //暖色渐变9
   --color-gradient-group-10: @color-gradient-warm-10; //暖色渐变10
+  --color-gradient-group-11: @color-gradient-warm-11-soft; //暖色渐变11柔和  
   /* 温暖的橙色，舒适提升 */
   // 额外高对比度渐变（用于暖色主题的强调色）
   --color-gradient-group-11: @color-gradient-warm-11; //白色渐变11
@@ -436,6 +442,7 @@ body[data-theme='cool'] {
   --color-gradient-group-8: @color-gradient-cool-8; //冷色渐变8
   --color-gradient-group-9: @color-gradient-cool-9; //冷色渐变9
   --color-gradient-group-10: @color-gradient-cool-10; //冷色渐变10
+  --color-gradient-group-11: @color-gradient-cool-11-soft; //冷色渐变11柔和  
   /* 浅青，氛围提升 */
   // 额外高对比度渐变（用于冷色主题的强调色）
   --color-gradient-group-11: @color-gradient-cool-11; //冷色渐变11
@@ -483,6 +490,7 @@ body[data-theme='eye-friendly'] {
   --color-gradient-group-8: @color-gradient-eye-8;
   --color-gradient-group-9: @color-gradient-eye-9;
   --color-gradient-group-10: @color-gradient-eye-10;
+  --color-gradient-group-11: @color-gradient-eye-11-soft; //护眼渐变11柔和  
   // 高对比度渐变
   --color-gradient-group-11: @color-gradient-eye-11;
   --color-gradient-group-12: @color-gradient-eye-12;

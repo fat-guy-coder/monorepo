@@ -1,8 +1,7 @@
 <template>
   <div class="shortcuts-container">
     <header class="header">
-      <h1 class="title">Windows 光标操作快捷键</h1>
-      <p class="subtitle">提高工作效率的必备快捷键指南</p>
+      <h1 class="title">Windows Cursor操作快捷键</h1>
     </header>
 
     <div class="content-section">
@@ -14,106 +13,93 @@
             <div class="shortcut-keys">
               <kbd v-for="(key, index) in shortcut.keys" :key="index">{{ key }}</kbd>
             </div>
+            <div class="shortcut-heat" :style="{ backgroundColor: getHeatColor(shortcut.heat) }">
+              {{ shortcut.heat }}
+            </div>
           </div>
         </div>
       </div>
     </div>
-
-    <footer class="footer">
-      <p>掌握这些快捷键可以显著提高您在Windows系统中的操作效率</p>
-    </footer>
   </div>
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue';
+
 interface Shortcut {
   name: string;
   keys: string[];
+  heat: number; // 热度值，1-10
 }
 
 interface Category {
-  shortcuts: Shortcut[];
   name: string;
+  shortcuts: Shortcut[];
 }
 
-const categories: Category[] = [
+const getHeatColor = (heat: number): string => {
+  const hue = 240 - heat * 24; // 从蓝色 (240) 到红色 (0)
+  return `hsl(${hue}, 80%, 60%)`;
+};
+
+const categoriesData: Category[] = [
+  {
+    name: "💻 我的一些快捷键",
+    shortcuts: [
+      { name: "删除整行", keys: ["Ctrl", "1"], heat: 9 },
+      { name: "分支比较", keys: ["Ctrl", "2"], heat: 8 },
+      { name: "代码照片", keys: ["Ctrl", "3"], heat: 6 },
+      { name: "快捷方式编辑", keys: ["Ctrl", "4"], heat: 5 },
+    ]
+  },
   {
     name: "💻 基础操作",
     shortcuts: [
-      { name: "选择文本", keys: ["Shift", "+", "方向键"] },
-      { name: "全选", keys: ["Ctrl", "A"] },
-      { name: "复制", keys: ["Ctrl", "C"] },
-      { name: "剪切", keys: ["Ctrl", "X"] },
-      { name: "粘贴", keys: ["Ctrl", "V"] },
-      { name: "撤销", keys: ["Ctrl", "Z"] },
-      { name: "恢复", keys: ["Ctrl", "Y"] },
+      { name: "复制", keys: ["Ctrl", "C"], heat: 10 },
+      { name: "粘贴", keys: ["Ctrl", "V"], heat: 10 },
+      { name: "撤销", keys: ["Ctrl", "Z"], heat: 9 },
+      { name: "选择文本", keys: ["Shift", "+", "方向键"], heat: 9 },
+      { name: "全选", keys: ["Ctrl", "A"], heat: 8 },
+      { name: "剪切", keys: ["Ctrl", "X"], heat: 8 },
+      { name: "恢复", keys: ["Ctrl", "Y"], heat: 7 },
     ]
   },
   {
     name: "🚀 高效导航",
     shortcuts: [
-      { name: "光标移动到行首", keys: ["Home"] },
-      { name: "光标移动到行尾", keys: ["End"] },
-      { name: "光标移动到文档开头", keys: ["Ctrl", "Home"] },
-      { name: "光标移动到文档结尾", keys: ["Ctrl", "End"] },
-      { name: "按单词移动光标", keys: ["Ctrl", "+", "←/→"] },
-      { name: "按段落移动光标", keys: ["Ctrl", "+", "↑/↓"] },
-      { name: "快速滚动", keys: ["Ctrl", "+", "鼠标滚轮"] },
+      { name: "按单词移动光标", keys: ["Ctrl", "+", "←/→"], heat: 9 },
+      { name: "光标移动到行首", keys: ["Home"], heat: 8 },
+      { name: "光标移动到行尾", keys: ["End"], heat: 8 },
+      { name: "光标移动到文档开头", keys: ["Ctrl", "Home"], heat: 7 },
+      { name: "光标移动到文档结尾", keys: ["Ctrl", "End"], heat: 7 },
+      { name: "按段落移动光标", keys: ["Ctrl", "+", "↑/↓"], heat: 6 },
+      { name: "快速滚动", keys: ["Ctrl", "+", "鼠标滚轮"], heat: 5 },
     ]
   },
   {
     name: "📋 文本编辑",
     shortcuts: [
-      { name: "删除光标前字符", keys: ["Backspace"] },
-      { name: "删除光标后字符", keys: ["Delete"] },
-      { name: "删除前一个单词", keys: ["Ctrl", "Backspace"] },
-      { name: "删除后一个单词", keys: ["Ctrl", "Delete"] },
-      { name: "插入换行符", keys: ["Shift", "Enter"] },
-      { name: "插入制表符", keys: ["Ctrl", "Tab"] },
-      { name: "大小写转换", keys: ["Shift", "F3"] },
-    ]
-  },
-  {
-    name: "🖥️ 窗口管理",
-    shortcuts: [
-      { name: "切换窗口", keys: ["Alt", "Tab"] },
-      { name: "反向切换窗口", keys: ["Alt", "Shift", "Tab"] },
-      { name: "最小化所有窗口", keys: ["Win", "D"] },
-      { name: "锁定计算机", keys: ["Win", "L"] },
-      { name: "打开任务管理器", keys: ["Ctrl", "Shift", "Esc"] },
-      { name: "切换虚拟桌面", keys: ["Ctrl", "Win", "←/→"] },
-      { name: "新建虚拟桌面", keys: ["Ctrl", "Win", "D"] },
-    ]
-  },
-  {
-    name: "🔍 搜索与运行",
-    shortcuts: [
-      { name: "打开搜索", keys: ["Win", "S"] },
-      { name: "打开运行对话框", keys: ["Win", "R"] },
-      { name: "打开文件资源管理器", keys: ["Win", "E"] },
-      { name: "打开设置", keys: ["Win", "I"] },
-      { name: "打开操作中心", keys: ["Win", "A"] },
-      { name: "打开通知中心", keys: ["Win", "N"] },
-      { name: "打开放大镜", keys: ["Win", "+"] },
-    ]
-  },
-  {
-    name: "🛠️ 高级功能",
-    shortcuts: [
-      { name: "截图工具", keys: ["Win", "Shift", "S"] },
-      { name: "游戏栏", keys: ["Win", "G"] },
-      { name: "投影屏幕", keys: ["Win", "P"] },
-      { name: "打开表情面板", keys: ["Win", "."] },
-      { name: "重命名文件", keys: ["F2"] },
-      { name: "刷新", keys: ["F5"] },
-      { name: "全屏截图", keys: ["PrtScn"] },
+      { name: "删除光标前字符", keys: ["Backspace"], heat: 10 },
+      { name: "删除光标后字符", keys: ["Delete"], heat: 10 },
+      { name: "删除前一个单词", keys: ["Ctrl", "Backspace"], heat: 9 },
+      { name: "删除后一个单词", keys: ["Ctrl", "Delete"], heat: 8 },
+      { name: "大小写转换", keys: ["Shift", "F3"], heat: 6 },
+      { name: "插入换行符", keys: ["Shift", "Enter"], heat: 5 },
+      { name: "插入制表符", keys: ["Ctrl", "Tab"], heat: 4 },
     ]
   }
 ];
+
+const categories = computed(() => {
+  return categoriesData.map(category => ({
+    ...category,
+    shortcuts: [...category.shortcuts].sort((a, b) => b.heat - a.heat)
+  }));
+});
+
 </script>
 
 <style lang="less" scoped>
-
 .shortcuts-container {
   max-width: 900px;
   margin: 0 auto;
@@ -187,11 +173,13 @@ const categories: Category[] = [
     font-size: 0.9rem;
     font-weight: 500;
     color: #2c3e50;
+    flex-grow: 1;
   }
 
   .shortcut-keys {
     display: flex;
     gap: 0.3rem;
+    margin-left: 1rem;
 
     kbd {
       background-color: #fff;
@@ -207,6 +195,17 @@ const categories: Category[] = [
       min-width: 1.5rem;
       justify-content: center;
     }
+  }
+
+  .shortcut-heat {
+    margin-left: 1rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 6px;
+    color: white;
+    font-size: 0.8rem;
+    font-weight: 600;
+    min-width: 1.5rem;
+    text-align: center;
   }
 }
 

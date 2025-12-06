@@ -228,7 +228,7 @@ watch(
         await nextTick()
         if (childrenWrapper.value && shouldRenderChildren.value) {
             const duration = Math.max(menuConfig.animationDuration ?? 0, 0)
-            await animateHeight(childrenWrapper.value, newVal, duration, mode.value)
+            await animateHeight(childrenWrapper.value, newVal, duration, mode.value === 'vertical' ? ['height','width'] : ['height'])
             if (!newVal) {
                 shouldRenderChildren.value = false
                 childrenWrapper.value = null

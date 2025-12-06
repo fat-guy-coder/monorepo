@@ -53,10 +53,10 @@ import {
 import { useTabistStore, type Tab } from '@/stores/tab'//标签列表store
 import { type Theme, useUserStore } from '@/stores/user'//用户信息store
 import { useRouter } from 'vue-router'
-import { debounce } from '@/Function/commonFun'//常用函数
+import { debounce } from '@/Function/CommonFun'//常用函数
 import { useDetectMobile } from '@/hooks/useDetectMobile'
 import type { NavItem } from './components/Nav'//导航项类型
-import { useGradientAnimation } from '@/hooks/useGradientAnimation'
+import { useGradientAnimation } from '@/hooks/useGradientAnimation'//渐变色动画
 // import { request } from '@/request'
 
 //获取用户信息store
@@ -104,10 +104,11 @@ const navItems = ref<NavItem[]>([
 ])
 
 //全局渐变色动画
-  useGradientAnimation({
-  triggerTimes: ['hover'],
-  gradientTypes: ['linear'],
-  })
+// useGradientAnimation({
+//   triggerTimes: ['hover'],
+//   gradientTypes: ['linear'],
+
+// })
 
 //当前主题图标
 const currentThemeIcon = computed(() => {
@@ -256,7 +257,7 @@ const tabList = computed<Tab[]>(() => store.tabList)
 const activeKey = computed<string>(() => store.activeKey)
 
 const selectedKeys = computed<string[]>(() => {
-  if (!Menucollapsed.value&&store.activeKey!=='/') {
+  if (!Menucollapsed.value && store.activeKey !== '/') {
     return [store.activeKey]
   }
   return []
@@ -296,7 +297,7 @@ function tabClick(path: string) {
   router.push({ path }).then(() => {
     mainViewLoading.value = false
   })
-  
+
   store.activateTabOnlyKey(path, () => {
     if (path !== '/') {
       if (!Menucollapsed.value) {

@@ -1,10 +1,19 @@
 <template>
-  <Template />
+  <div class="home"></div>
 </template>
-
+  <!-- <Template /> -->
 <script lang="ts" setup>
 import Template from '@/components/Template/index.vue'
+import { useGradientAnimation } from '@/hooks/useGradientAnimation'//渐变色动画
 
+
+useGradientAnimation({
+  className: 'home',
+  colors:['red','green','blue','yellow','purple','red'],
+  triggerTimes:['mounted','hover','active'],
+  direction:'random',
+
+})
 </script>
 
 <style scoped lang="css">
@@ -13,12 +22,14 @@ import Template from '@/components/Template/index.vue'
   height: 300px;
   border: 1px solid #000;
   position: absolute;
-  margin: 300px;
+  /* margin: 300px; */
   text-align: center;
   line-height: 300px;
   font-size: 20px;
   font-weight: bold;
   /* 顶层背景透明，让下面的伪元素可见 */
+  background-color: red!important;
+  z-index: 3;
 }
 
 
@@ -28,7 +39,7 @@ import Template from '@/components/Template/index.vue'
   height: 500px;
   border: 1px solid #000;
   /* 顶层背景透明，让下面的伪元素可见 */
-  background-color: transparent;
+  background-color: red;
   overflow: hidden;
 }
 
@@ -46,7 +57,7 @@ import Template from '@/components/Template/index.vue'
   animation: gradient-animation 1s linear infinite;
   transform: rotate(-45deg);
   transform-origin: center;
-  z-index: 0;
+  z-index: 2;
 }
 
 @keyframes gradient-animation {

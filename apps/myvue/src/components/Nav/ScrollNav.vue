@@ -22,16 +22,19 @@
       </header>
 
       <ul class="scroll-nav__list" ref="scrollNavList" role="menu">
-        <li v-if="showBackToTop" class="scroll-nav__item scroll-nav__item--action" role="menuitem" @click="scrollToTop">
-          回到顶部
+        <li v-if="showBackToTop" class="scroll-nav__item" role="menuitem" @click="scrollToTop">
+          <button class="scroll-nav__item-btn"
+            :class="[currentItem?.id === 'back-to-top' ? 'scroll-nav__item--active' : '', 'gradient-animation']">
+            回到顶部
+          </button>
         </li>
 
         <li v-for="item in mappedList" :key="item.id" class="scroll-nav__item" role="presentation">
-          <button class="scroll-nav__item-btn" :class="[currentItem?.id === item.id ? 'scroll-nav__item--active' : '']"
-            type="button" role="menuitem" :title="item.title" @click="handleScroll($event, item.id)">
+          <button class="scroll-nav__item-btn"
+            :class="[currentItem?.id === item.id ? 'scroll-nav__item--active' : '', 'gradient-animation']" type="button"
+            role="menuitem" :title="item.title" @click="handleScroll($event, item.id)">
             <span class="scroll-nav__item-text">{{ item.title }}</span>
           </button>
-
 
           <ul v-if="showChild && item.children && item.children.length" class="scroll-nav__children">
             <li v-for="child in item.children" :key="child.id" class="scroll-nav__item scroll-nav__item--child"
@@ -53,7 +56,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch, type CSSProperties, type PropType } from 'vue'
 import { useUserStore } from '@/stores/user'
-import { animateHeight, calculateAnimationDuration,type AnimationProperties, type AnimationDurationOptions } from '@/Function/animation'
+import { animateHeight, calculateAnimationDuration, type AnimationProperties, type AnimationDurationOptions } from '@/Function/animation'
 
 interface Item {
   title?: string
@@ -72,36 +75,43 @@ type AnimationConfig = {
   name: 'fade' | 'slide-in-right' | 'slide-in-left' | 'slide-in-top' | 'slide-in-bottom';
   duration: string;
   type: AnimationProperties;
-}&AnimationDurationOptions
+} & AnimationDurationOptions
 
 const props = defineProps({
+  /** 是否显示 */
   show: {
     type: Boolean,
     default: true,
   },
+  /** 动画配置 */
   animation: {
     type: Object as PropType<AnimationConfig>,
-    default: () => ({ name: 'fade', duration: '0.3s', type: ['height'],baseDuration: 50, durationPerItem: 35, maxDuration: 800})
+    default: () => ({ name: 'fade', duration: '0.3s', type: ['height'], baseDuration: 0, durationPerItem: 20, maxDuration: 400 })
   },
+  /** 标题 */
   title: {
     type: String,
     required: false,
   },
+  /** 列表 */
   list: {
     type: Array as PropType<Item[]>,
     required: true,
     default: () => [],
   },
+  /** 是否显示子级 */
   showChild: {
     type: Boolean,
     required: false,
     default: true,
   },
+  /** 是否阻止事件冒泡 */
   stopPropagation: {
     type: Boolean,
     required: false,
     default: true,
   },
+  /** 键映射 */
   keyMap: {
     type: Object as PropType<KeyMap>,
     required: false,
@@ -111,50 +121,62 @@ const props = defineProps({
       children: 'children',
     }),
   },
+  /** 位置 */
   position: {
     type: String as PropType<'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'>,
     default: 'top-right',
   },
+  /** 滚动到 */
   scrollTo: {
     type: String as PropType<'center' | 'end' | 'start' | 'nearest'>,
     default: 'center',
   },
+  /** 是否显示回到顶部 */
   showBackToTop: {
     type: Boolean,
-    default: false,
+    default: true,
   },
+  /** 是否显示边框 */
   bordered: {
     type: Boolean,
     default: true,
   },
+  /** 圆角 */
   rounded: {
     type: String as PropType<'sm' | 'md' | 'lg'>,
     default: 'md',
   },
+  /** 阴影 */
   shadow: {
     type: String as PropType<'none' | 'sm' | 'md' | 'lg'>,
     default: 'md',
   },
+  /** 背景样式配置 */
   variant: {
     type: String as PropType<'solid' | 'gradient' | 'image'>,
     default: 'solid',
   },
+  /** 背景颜色 */
   backgroundColor: {
     type: String,
     default: '',
   },
+  /** 渐变颜色 */
   gradientColors: {
     type: Array as PropType<string[]>,
     default: () => [],
   },
+  /** 背景图片 */
   backgroundImage: {
     type: String,
     default: '',
   },
+  /** 间距 */
   gap: {
     type: [Number, String] as PropType<number | string>,
     default: 0,
   },
+  /** 样式配置 */
   styleConfig: {
     type: Object as PropType<Record<string, string>>,
     default: () => ({}),
@@ -167,11 +189,11 @@ const isOpen = ref(prefersOpen.value)
 const scrollNavList = ref<HTMLElement | null>(null)
 
 onMounted(() => {
-  if (scrollNavList.value && !isOpen.value) {
-    scrollNavList.value.style.height = '0px';
-    scrollNavList.value.style.opacity = '0';
-    scrollNavList.value.style.display = 'none';
-  }
+  // if (scrollNavList.value && !isOpen.value) {
+  //   scrollNavList.value.style.height = '0px';
+  //   scrollNavList.value.style.opacity = '0';
+  //   scrollNavList.value.style.display = 'none';
+  // }
 })
 
 const totalItemCount = computed(() => {
@@ -203,7 +225,7 @@ const navStyle = computed<CSSProperties>(() => {
   style['--scroll-nav-gap'] = typeof props.gap === 'number' ? `${props.gap}px` : props.gap
   if (props.variant === 'gradient') {
     const colors =
-        props.gradientColors.length >= 2
+      props.gradientColors.length >= 2
         ? props.gradientColors.join(', ')
         : 'var(--color-primary), var(--color-secondary)'
     style.background = `linear-gradient(135deg, ${colors})`
@@ -243,6 +265,7 @@ const mappedList = computed(() => {
 const scrollToTop = () => {
   const element = document.getElementById('mainView')
   element?.scrollTo({ top: 0, behavior: 'smooth' })
+  currentItem.value = { id: 'back-to-top' }
 }
 
 const scrollIntoView = (event: Event | null, id: string) => {
@@ -288,8 +311,8 @@ const getCurrentItem = (list: Item[], id: string): Item | null => {
   --nav-border-color: var(--color-border);
   --nav-text-color: var(--color-text);
   --nav-accent-color: var(--color-primary);
-  --nav-shadow: var(--box-shadow-lg);
-  --nav-shadow-hover: var(--box-shadow-xl);
+  --nav-shadow: var(--box-shadow-xs);
+  --nav-shadow-hover: var(--box-shadow-hover-xs);
   --nav-radius-sm: var(--border-radius-sm);
   --nav-radius-md: var(--border-radius-md);
   --nav-radius-lg: var(--border-radius-lg);
@@ -340,22 +363,58 @@ const getCurrentItem = (list: Item[], id: string): Item | null => {
   overflow: hidden;
 
   &:hover {
-    transform: translateY(-2px);
+    transform: translateY(-px);
     box-shadow: var(--nav-shadow-hover);
   }
 
-  &--top_left { top: 3rem; left: 3rem; right: auto; }
-  &--bottom_right { top: auto; bottom: 3rem; }
-  &--bottom_left { top: auto; bottom: 3rem; left: 3rem; right: auto; }
-  &--borderless { border-color: transparent; }
-  &--rounded-sm { border-radius: var(--nav-radius-sm); }
-  &--rounded-lg { border-radius: var(--nav-radius-lg); }
-  &--shadow-none { box-shadow: none; }
-  &--shadow-sm { box-shadow: var(--box-shadow-sm); }
-  &--shadow-md { box-shadow: var(--box-shadow-md); }
-  &--shadow-lg { box-shadow: var(--box-shadow-lg); }
+  &--top_left {
+    top: 3rem;
+    left: 3rem;
+    right: auto;
+  }
 
-  &--variant-gradient, &--variant-image {
+  &--bottom_right {
+    top: auto;
+    bottom: 3rem;
+  }
+
+  &--bottom_left {
+    top: auto;
+    bottom: 3rem;
+    left: 3rem;
+    right: auto;
+  }
+
+  &--borderless {
+    border-color: transparent;
+  }
+
+  &--rounded-sm {
+    border-radius: var(--nav-radius-sm);
+  }
+
+  &--rounded-lg {
+    border-radius: var(--nav-radius-lg);
+  }
+
+  &--shadow-none {
+    box-shadow: none;
+  }
+
+  &--shadow-sm {
+    box-shadow: var(--box-shadow-sm);
+  }
+
+  &--shadow-md {
+    box-shadow: var(--box-shadow-md);
+  }
+
+  &--shadow-lg {
+    box-shadow: var(--box-shadow-lg);
+  }
+
+  &--variant-gradient,
+  &--variant-image {
     color: #fff; // High-contrast text for dark backgrounds
     --nav-text-color: #fff;
     --nav-title-color: #fff;
@@ -404,10 +463,15 @@ const getCurrentItem = (list: Item[], id: string): Item | null => {
     stroke-width: 2;
     transition: transform 0.2s ease;
     transform: rotate(0deg);
-    &.is-open { transform: rotate(180deg); }
+
+    &.is-open {
+      transform: rotate(180deg);
+    }
   }
 
-  &:hover { background: var(--nav-toggle-bg-hover); }
+  &:hover {
+    background: var(--nav-toggle-bg-hover);
+  }
 }
 
 .scroll-nav__list {
@@ -428,8 +492,13 @@ const getCurrentItem = (list: Item[], id: string): Item | null => {
   margin: 0;
   border: none;
 
-  &--action { background: var(--nav-item-bg-hover); }
-  &--child { background: transparent; }
+  &--action {
+    background: var(--nav-item-bg-hover);
+  }
+
+  &--child {
+    background: transparent;
+  }
 }
 
 .scroll-nav__item-btn {
@@ -446,7 +515,7 @@ const getCurrentItem = (list: Item[], id: string): Item | null => {
   transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
 
   &:hover {
-    background: var(--nav-item-bg-hover);
+    // background: var(--nav-item-bg-hover);
     color: var(--nav-item-text-color-hover);
     transform: translateX(2px);
   }
@@ -479,7 +548,10 @@ const getCurrentItem = (list: Item[], id: string): Item | null => {
     padding: var(--nav-child-item-padding);
     font-size: var(--nav-child-item-font-size);
     opacity: 0.9;
-    &:hover { opacity: 1; }
+
+    &:hover {
+      opacity: 1;
+    }
   }
 }
 
@@ -488,6 +560,7 @@ const getCurrentItem = (list: Item[], id: string): Item | null => {
 .fade-leave-active {
   transition: opacity var(--nav-animation-duration) ease;
 }
+
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
@@ -497,6 +570,7 @@ const getCurrentItem = (list: Item[], id: string): Item | null => {
 .slide-in-right-leave-active {
   transition: transform var(--nav-animation-duration) ease, opacity var(--nav-animation-duration) ease;
 }
+
 .slide-in-right-enter-from,
 .slide-in-right-leave-to {
   opacity: 0;
@@ -507,6 +581,7 @@ const getCurrentItem = (list: Item[], id: string): Item | null => {
 .slide-in-left-leave-active {
   transition: transform var(--nav-animation-duration) ease, opacity var(--nav-animation-duration) ease;
 }
+
 .slide-in-left-enter-from,
 .slide-in-left-leave-to {
   opacity: 0;
@@ -517,6 +592,7 @@ const getCurrentItem = (list: Item[], id: string): Item | null => {
 .slide-in-top-leave-active {
   transition: transform var(--nav-animation-duration) ease, opacity var(--nav-animation-duration) ease;
 }
+
 .slide-in-top-enter-from,
 .slide-in-top-leave-to {
   opacity: 0;
@@ -527,6 +603,7 @@ const getCurrentItem = (list: Item[], id: string): Item | null => {
 .slide-in-bottom-leave-active {
   transition: transform var(--nav-animation-duration) ease, opacity var(--nav-animation-duration) ease;
 }
+
 .slide-in-bottom-enter-from,
 .slide-in-bottom-leave-to {
   opacity: 0;
