@@ -54,6 +54,33 @@ const categoriesData: Category[] = [
     ]
   },
   {
+    name: "📋 文本编辑",
+    shortcuts: [
+      { name: "删除光标前字符", keys: ["Backspace"], heat: 10 },
+      { name: "删除光标后字符", keys: ["Delete"], heat: 10 },
+      { name: "删除前一个单词", keys: ["Ctrl", "Backspace"], heat: 9 },
+      { name: "删除后一个单词", keys: ["Ctrl", "Delete"], heat: 8 },
+      { name: "大小写转换", keys: ["Shift", "F3"], heat: 6 },
+      { name: "插入换行符", keys: ["Shift", "Enter"], heat: 5 },
+      { name: "插入制表符", keys: ["Ctrl", "Tab"], heat: 4 },
+    ]
+  },
+  {
+    name: "🚀 高效导航",
+    shortcuts: [
+      { name: "移动到具体行", keys: ["Ctrl", "G"], heat: 10 }, 
+      { name: "移动到具体页面(全局)", keys: ["Ctrl", "P"], heat: 10 }, 
+      { name: "移动到具体页面(打开的页签)", keys: ["Ctrl", "Tab"], heat: 10 }, 
+      { name: "按单词移动光标", keys: ["Ctrl", "+", "←/→"], heat: 9 },
+      { name: "光标移动到行首", keys: ["Home"], heat: 8 },
+      { name: "光标移动到行尾", keys: ["End"], heat: 8 },
+      { name: "光标移动到文档开头", keys: ["Ctrl", "Home"], heat: 7 },
+      { name: "光标移动到文档结尾", keys: ["Ctrl", "End"], heat: 7 },
+      { name: "按段落移动光标", keys: ["Ctrl", "+", "↑/↓"], heat: 6 },
+      { name: "快速滚动", keys: ["Ctrl", "+", "鼠标滚轮"], heat: 5 },
+    ]
+  },
+  {
     name: "💻 基础操作",
     shortcuts: [
       { name: "复制", keys: ["Ctrl", "C"], heat: 10 },
@@ -65,30 +92,6 @@ const categoriesData: Category[] = [
       { name: "恢复", keys: ["Ctrl", "Y"], heat: 7 },
     ]
   },
-  {
-    name: "🚀 高效导航",
-    shortcuts: [
-      { name: "按单词移动光标", keys: ["Ctrl", "+", "←/→"], heat: 9 },
-      { name: "光标移动到行首", keys: ["Home"], heat: 8 },
-      { name: "光标移动到行尾", keys: ["End"], heat: 8 },
-      { name: "光标移动到文档开头", keys: ["Ctrl", "Home"], heat: 7 },
-      { name: "光标移动到文档结尾", keys: ["Ctrl", "End"], heat: 7 },
-      { name: "按段落移动光标", keys: ["Ctrl", "+", "↑/↓"], heat: 6 },
-      { name: "快速滚动", keys: ["Ctrl", "+", "鼠标滚轮"], heat: 5 },
-    ]
-  },
-  {
-    name: "📋 文本编辑",
-    shortcuts: [
-      { name: "删除光标前字符", keys: ["Backspace"], heat: 10 },
-      { name: "删除光标后字符", keys: ["Delete"], heat: 10 },
-      { name: "删除前一个单词", keys: ["Ctrl", "Backspace"], heat: 9 },
-      { name: "删除后一个单词", keys: ["Ctrl", "Delete"], heat: 8 },
-      { name: "大小写转换", keys: ["Shift", "F3"], heat: 6 },
-      { name: "插入换行符", keys: ["Shift", "Enter"], heat: 5 },
-      { name: "插入制表符", keys: ["Ctrl", "Tab"], heat: 4 },
-    ]
-  }
 ];
 
 const categories = computed(() => {

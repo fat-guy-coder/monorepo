@@ -4,7 +4,7 @@ import {
   THEME_HIGH_CONTRAST_NEON_COLORS,
   THEME_SECONDARY_GRADIENT_COLORS,
 } from '@/assets/css/theme/index'
-import { lightMinifyCode, lihlghtDecompressCode } from '@/Function'
+import { lightMinifyCode, decompressCodeAdvanced } from '@/Function/code'
 import { random, randPick } from '@/Function/math'
 
 /** 渐变类型 */
@@ -91,9 +91,6 @@ interface UseGradientAnimationOptions {
   prefixName?: string //前缀名称,防止动画名称冲突
   coverBackground?: boolean //是否需要覆盖元素底层背景
 }
-
-// --- CSS 代码常量 ---
-const CSS_STATIC = `position:relative;overflow:hidden;z-index:1;&::before{transition:opacity 0.2s ease;content:'';position:absolute;z-index:-1;transform-origin:center;`
 
 /** 动画详情 */
 interface AnimationDetails {
@@ -311,8 +308,10 @@ function handleBoxShadowAnimation({
   }
 }
 
-/**
+/** 应用渐变动画
  * @description 一个 Vue composable，用于给元素应用动态背景渐变动画。
+ * @param options 应用渐变动画的配置选项
+ * @returns 应用渐变动画的配置选项
  */
 export function useGradientAnimation(options: UseGradientAnimationOptions = {}) {
   //style元素
@@ -323,10 +322,10 @@ export function useGradientAnimation(options: UseGradientAnimationOptions = {}) 
       items = [], //子项配置
       className = 'gradient-animation', //全局默认的 CSS 类名
       colors = THEME_SECONDARY_GRADIENT_COLORS, //渐变颜色组
-      opacity = 1, //透明度
+      opacity = 1, //全局透明度
       colorsCount = 3, //渐变颜色段数
       speed = 15, //背景渐变动画速度
-      direction = '90deg', //全局默认的渐变方向
+      direction = '0deg', //全局默认的渐变方向
       gradientTypes = ['linear'], //渐变类型
       triggerTimes = ['mounted'], //背景渐变动画触发时机
       // coverBackground = false, //是否需要覆盖元素底层背景
@@ -350,26 +349,28 @@ export function useGradientAnimation(options: UseGradientAnimationOptions = {}) 
       })
       return
     }
-
     //方向集合，用于随机选择方向
     const dirSet = new Set<string>()
 
     //获取需要公共伪元素的css代码(三种触发时机下公用的伪元素css代码)
-    const getCommonPseudoElementCSS = () => {
-      return `&::before{${CSS_STATIC}}`
-    }
-
+    const getCommonPseudoElementCSS = () =>
+      `&::before{transition:opacity 0.2s ease;content:'';position:absolute;z-index:-1;transform-origin:center;}`
     //时间单位
     const timeUnit = 's'
 
-    let newCss = `.${className}{${getCommonPseudoElementCSS()}}`
+    //初始化css代码
+    let newCss = ''
+    //往大括号里加css代码 大括号是class的{}
+    const getAllDynamicCssCode = (code: string) =>
+      `.${className}{position:relative;overflow:hidden;z-index:1;${getCommonPseudoElementCSS()}` +
+      code +
+      '}'
 
-    console.log(newCss)
+    //动画代码 动画代码在大括号外面
+    let keyframesCode: string = ''
 
-    //动画代码列表
-    const keyframesList: string[] = []
-    //css代码
-    let css = ``
+    //大括号里面的动画代码
+    let KeyCode: string = ''
 
     //每个触发时机下伪元素的css代码包裹，用于包裹伪元素的css代码
     const getPseudoElementCSS = (code: string) => {
@@ -380,7 +381,7 @@ export function useGradientAnimation(options: UseGradientAnimationOptions = {}) 
     const getEveryDynamicCssCodeByTrigger = (
       trigger: TriggerTime,
       code: string,
-      needPseudoElementCSS: boolean = false, //需要伪元素的css代码包裹 box-shadow 不需要
+      needPseudoElementCSS: boolean = true, //需要伪元素的css代码包裹 box-shadow 不需要
     ) => {
       let prefixCode, suffixCode: string
       switch (trigger) {
@@ -401,8 +402,7 @@ export function useGradientAnimation(options: UseGradientAnimationOptions = {}) 
           suffixCode = ''
           break
       }
-      return `${prefixCode + getPseudoElementCSS(code) + suffixCode}`
-      // return `${prefixCode}${needPseudoElementCSS ? getPseudoElementCSS(code) : code}${suffixCode}`
+      return `${prefixCode}${needPseudoElementCSS ? getPseudoElementCSS(code) : code}${suffixCode}`
     }
 
     //每个状态下渐变动画的配置信息
@@ -445,11 +445,14 @@ export function useGradientAnimation(options: UseGradientAnimationOptions = {}) 
         }
         return colors.length
       })()
+      //范围内随机取值
       end = Math.max(1, Math.min(end, colors.length))
       baseColors = colors.slice(start, end)
-      if (shouldRandomize) {
-        baseColors = colors.toSorted(randomColorsOrder ? () => Math.random() - 0.5 : undefined)
+      //随机排序
+      if (randomColorsOrder) {
+        baseColors = baseColors.toSorted(() => Math.random() - 0.5)
       }
+      //颜色填充主题背景色
       baseColors = baseColors.map((c, i) =>
         typeof c === 'string'
           ? `${c} ${((i + 1) / (baseColors.length + 1)) * 100}%`
@@ -503,21 +506,20 @@ export function useGradientAnimation(options: UseGradientAnimationOptions = {}) 
               colors: newColors,
             })
         }
-
         item.keyframesName = `${prefixName + Math.random().toString(36).slice(2, 8)}`
-        keyframesList.push(`@keyframes ${item.keyframesName}{${item.keyframes}}`)
-        getEveryDynamicCssCodeByTrigger(
+        keyframesCode += `@keyframes ${item.keyframesName}{${item.keyframes}}`
+        KeyCode += getEveryDynamicCssCodeByTrigger(
           trigger,
           `${item.prefixCode ?? '' + item.insertPseudoCode}background-image:${item.type}-gradient(${item.direction || direction},${gradientColorsString});background-size:${item.backgroundSize};animation:${animDecl(item.keyframesName)};`,
         )
-        css += `.${className}{${CSS_STATIC + item.insertPseudoCode}background-image:${item.type}-gradient(${item.direction || direction},${gradientColorsString});background-size:${item.backgroundSize};animation:${animDecl(item.keyframesName)};}}`
         return item
       })
     })
-    css += keyframesList.join('\n')
-    console.log(lihlghtDecompressCode(css, 'css'))
+    newCss = getAllDynamicCssCode(KeyCode)
+    newCss += keyframesCode
+    console.log(decompressCodeAdvanced(newCss, 'css'))
     styleElement = document.createElement('style')
-    styleElement.textContent = lightMinifyCode(css, 'css')
+    styleElement.textContent = lightMinifyCode(newCss, 'css')
     document.head.appendChild(styleElement)
   })
 
