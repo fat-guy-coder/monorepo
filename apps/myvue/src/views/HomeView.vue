@@ -113,23 +113,21 @@ useGradientAnimation({
     transform-origin: center;
   }
 
-  -webkit-background-clip:text;
-  background-clip:text;
-  -webkit-text-fill-color:transparent;
-  color:transparent;
-  display:inline-block;
-  background-image:linear-gradient(0deg, var(--color-gradient-group-1) 0%, red 25%, green 50%, blue 75%, var(--color-gradient-group-1) 100%);
-  background-size:100% 200%;
-  animation:gradient-anim-qfr2u8 3s linear 0s infinite normal running;
+  &::before {
+    inset: 0;
+    background-image: linear-gradient(-90deg, var(--color-gradient-group-1) 0%, red 25%, green 50%, blue 75%, var(--color-gradient-group-1) 100%);
+    background-size: 200% 100%;
+    animation: gradient-anim-kt54u8 1s linear 0s infinite normal running;
+  }
 }
 
-@keyframes gradient-anim-qfr2u8 {
+@keyframes gradient-anim-kt54u8 {
   0% {
-    background-position: 0 -200%
+    background-position: 200% 0
   }
 
   100% {
-    background-position: 0 200%
+    background-position: -200% 0
   }
 }
 </style>

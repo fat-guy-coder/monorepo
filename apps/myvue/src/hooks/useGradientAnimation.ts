@@ -548,6 +548,7 @@ export function useGradientAnimation(options: UseGradientAnimationOptions = {}) 
             })
             break
         }
+        console.log(item)
         item.keyframesName = `${prefixName + Math.random().toString(36).slice(2, 8)}`
         keyframesCode += `@keyframes ${item.keyframesName}{${item.keyframes}}`
         KeyCode += getEveryDynamicCssCodeByTrigger(
