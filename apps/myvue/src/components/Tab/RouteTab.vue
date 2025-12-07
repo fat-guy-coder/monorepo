@@ -23,7 +23,7 @@
 </template>
 <script lang="ts" setup>
 // 组合式 API 逻辑
-import { defineProps, defineEmits, ref, onMounted, } from 'vue'
+import { ref, onMounted, } from 'vue'
 import Tabs from './index.vue'
 import TabPane from './TabPane.vue'
 // import TabPane from './TabPane.vue'
@@ -110,7 +110,7 @@ const handleSortOver = (index: number, e: DragEvent, path: string) => {
 
 const endSorting = (path: string) => {
   emit('setCurrentDragIndex', currentDragIndex - 1)
-  emit('tabClick', path)
+  // emit('tabClick', path)
 }
 </script>
 

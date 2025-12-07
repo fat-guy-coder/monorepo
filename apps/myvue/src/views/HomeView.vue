@@ -1,17 +1,19 @@
 <template>
-  <div class="home">asdasdasdsa</div>
+  <div class="home">asdasdasdsasadasda</div>
 </template>
 <!-- <Template /> -->
 <script lang="ts" setup>
 import Template from '@/components/Template/index.vue'
 import { useGradientAnimation } from '@/hooks/useGradientAnimation'//渐变色动画
+// import { useGradientAnimation } from '@/hooks/useDemo'//渐变色动画
 
 
 useGradientAnimation({
   className: 'home',
   colors: ['red', 'green', 'blue', 'yellow', 'purple', 'red'],
-  triggerTimes: ['hover', 'active', 'mounted'],
-  direction: 'random'
+  triggerTimes: ['mounted'],
+  gradientTypes: ['linear'],
+  speed: 60
 })
 </script>
 
@@ -24,7 +26,8 @@ useGradientAnimation({
   line-height: 300px;
   font-size: 20px;
   font-weight: bold;
-  background-color: red;
+  margin: 100px auto;
+  position: absolute;
 }
 
 @keyframes gradient1 {
@@ -95,10 +98,12 @@ useGradientAnimation({
     }
   }
 } */
-/* .home {
+
+.home {
   position: relative;
   overflow: hidden;
   z-index: 1;
+  opacity: 1;
 
   &::before {
     transition: opacity 0.2s ease;
@@ -108,23 +113,23 @@ useGradientAnimation({
     transform-origin: center;
   }
 
-  &:hover {
-    &::before {
-      inset: 0;
-      background-image: linear-gradient(90deg, var(--color-gradient-group-1) 0%, blue 14.285714285714285%, green 28.57142857142857%, red 42.857142857142854%, purple 57.14285714285714%, red 71.42857142857143%, yellow 85.71428571428571%, var(--color-gradient-group-1) 100%);
-      background-size: 200% 100%;
-      animation: gradient-anim-kabcmk 4s linear 0s infinite normal running;
-    }
-  }
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+  color:transparent;
+  display:inline-block;
+  background-image:linear-gradient(0deg, var(--color-gradient-group-1) 0%, red 25%, green 50%, blue 75%, var(--color-gradient-group-1) 100%);
+  background-size:100% 200%;
+  animation:gradient-anim-qfr2u8 3s linear 0s infinite normal running;
 }
 
-@keyframes gradient-anim-kabcmk {
+@keyframes gradient-anim-qfr2u8 {
   0% {
-    background-position: -200% 0
+    background-position: 0 -200%
   }
 
   100% {
-    background-position: 200% 0
+    background-position: 0 200%
   }
-} */
+}
 </style>

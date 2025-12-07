@@ -7,6 +7,8 @@ import {
 import { lightMinifyCode, decompressCodeAdvanced } from '@/Function/code'
 import { random, randPick } from '@/Function/math'
 
+// --- 类型定义 ---
+
 /** 渐变类型 */
 type GradientType = 'linear' | 'radial' | 'text' | 'box-shadow'
 
@@ -30,7 +32,7 @@ type TriggerTime = 'mounted' | 'hover' | 'active'
 //是否随机动画色段,动画方向
 type ColorsSequenceRandom = {
   allRandom?: boolean //是否全随机
-  randomColorsCount?: boolean | number //是否随机色段数
+  randomColorsCount?: boolean | number //是否随机色段数 数字为确定色段数
   randomColorsOrder?: boolean //是否随机色段次序
   randomDirection?: boolean //是否随机方向
 }
@@ -71,8 +73,19 @@ const getDirCandidates = (type: GradientType, trigger: TriggerTime) => {
   }
 }
 
+//荧光阴影渐变配置
+interface BoxShadowConfig {
+  colors: string[]
+  x: string
+  y: string
+  spread: number
+  blur: number
+  brightness: number
+}
+
 /** useGradientAnimation composable 的全局配置选项 */
 interface UseGradientAnimationOptions {
+  boxShadowConfig?: BoxShadowConfig
   /** 全局默认的 CSS 类名 */
   className?: string
   /** 渐变动画项数组 */
@@ -119,6 +132,41 @@ interface HandleAnimationOptions {
   index?: number //当前序号
 }
 
+//根据方向获得背景位置的开始和结束位置和背景大小
+const getBackgroundPositionAndSize = (
+  xOrY: 'x' | 'y' | 'diagonal',
+  degree: '90' | '270' | '0' | '180' | '45' | '135' | '225' | '315',
+) => {
+  const posMap = {
+    x: {
+      90: { start: '-200% 0', end: '200% 0' },
+      270: { start: '200% 0', end: '-200% 0' },
+      backgroundSize: '200% 100%',
+    },
+    y: {
+      0: { start: '0 -200%', end: '0 200%' },
+      180: { start: '0 200%', end: '0 -200%' },
+      backgroundSize: '100% 200%',
+    },
+    diagonal: {
+      45: { start: '200% 200%', end: '-200% -200%' },
+      135: { start: '-200% 200%', end: '200% -200%' },
+      225: { start: '-200% -200%', end: '200% 200%' },
+      315: { start: '200% -200%', end: '-200% 200%' },
+      backgroundSize: '200% 200%',
+    },
+  }
+  const backgroundSize = (posMap[xOrY] as any).backgroundSize
+  //起始位置
+  const start = (posMap[xOrY] as any)[degree].start
+  //结束位置
+  const end = (posMap[xOrY] as any)[degree].end
+  return {
+    backgroundSize,
+    keyframes: `0%{background-position:${start}}100%{background-position:${end}}`,
+  }
+}
+
 /** 处理线性/对角线渐变动画 */
 function handleLinearAnimation({ direction, type }: HandleAnimationOptions): AnimationDetails {
   const numberAngle = parseInt(direction.match(/(-?\d+)/)?.[0] || '180', 10)
@@ -139,57 +187,26 @@ function handleLinearAnimation({ direction, type }: HandleAnimationOptions): Ani
 
   gradientDirection = (angle + 'deg') as Direction
 
-  //根据方向获得背景位置的开始和结束位置和背景大小
-  const getBackgroundPositionAndSize = (
-    xOrY: 'x' | 'y' | 'diagonal',
-    degree: '90' | '270' | '0' | '180' | '45' | '135' | '225' | '315',
-  ) => {
-    const posMap = {
-      x: {
-        90: { start: '-200% 0', end: '200% 0' },
-        270: { start: '200% 0', end: '-200% 0' },
-        backgroundSize: '200% 100%',
-      },
-      y: {
-        0: { start: '0 -200%', end: '0 200%' },
-        180: { start: '0 200%', end: '0 -200%' },
-        backgroundSize: '100% 200%',
-      },
-      diagonal: {
-        45: { start: '200% 200%', end: '-200% -200%' },
-        135: { start: '-200% 200%', end: '200% -200%' },
-        225: { start: '-200% -200%', end: '200% 200%' },
-        315: { start: '200% -200%', end: '-200% 200%' },
-        backgroundSize: '200% 200%',
-      },
-    }
-    const backgroundSize = (posMap[xOrY] as any)[degree].backgroundSize
-    //起始位置
-    const start = (posMap[xOrY] as any)[degree].start
-    //结束位置
-    const end = (posMap[xOrY] as any)[degree].end
-    return {
-      backgroundSize,
-      keyframes: `0%{background-position:${start}}100%{background-position:${end}}`,
-    }
-  }
   if (angle % 180 === 0) {
     //这个是Y轴方向的动画
     angle = angle % 360 === 0 ? 0 : 180
-    backgroundSize = '100% 200%'
-    //angle == 0 根据角度获取背景位置的负号符
-    keyframes = `0%{background-position:${angle == 0 ? '0 -200%' : '0 200%'}}100%{background-position:${angle == 0 ? '0 200%' : '0 -200%'}}`
+
+    backgroundSize = getBackgroundPositionAndSize(
+      'y',
+      angle.toString() as '0' | '180',
+    ).backgroundSize
+    keyframes = getBackgroundPositionAndSize('y', angle.toString() as '0' | '180').keyframes
   } else if (angle % 90 === 0) {
     //这个是X轴方向的动画
     angle = angle === 90 || angle === -270 ? 90 : 270
-    backgroundSize = '200% 100%'
-    //angle == 90 根据角度获取背景位置的负号符
-    keyframes = `0%{background-position:${angle == 90 ? '-200% 0' : '200% 0'}}100%{background-position:${angle == 90 ? '200% 0' : '-200% 0'}}`
+    backgroundSize = getBackgroundPositionAndSize(
+      'x',
+      angle.toString() as '90' | '270',
+    ).backgroundSize
+    keyframes = getBackgroundPositionAndSize('x', angle.toString() as '90' | '270').keyframes
   } else {
     //其他方向就为斜线动画，旋转45度
     isDiagonal = true
-    backgroundSize = '200% 200%'
-    keyframes = '0%{background-position:200% 200%}100%{background-position:-200% -200%}'
     const rotationMap: Record<number, { rotate: string; dir: string }> = {
       45: { rotate: '-45deg', dir: '90deg' },
       135: { rotate: '135deg', dir: '180deg' },
@@ -198,15 +215,17 @@ function handleLinearAnimation({ direction, type }: HandleAnimationOptions): Ani
     }
     const diagonal = rotationMap[angle] || { rotate: '-45deg', dir: '90deg' }
     transform = `rotate(${diagonal.rotate})`
-    finalDirection = parseInt(diagonal.dir) + parseInt(diagonal.rotate)
-    if (finalDirection > 360) {
-      finalDirection = finalDirection % 360
-    }
+    backgroundSize = getBackgroundPositionAndSize(
+      'diagonal',
+      angle.toString() as '45' | '135' | '225' | '315',
+    ).backgroundSize
+    keyframes = getBackgroundPositionAndSize(
+      'diagonal',
+      angle.toString() as '45' | '135' | '225' | '315',
+    ).keyframes
     gradientDirection = diagonal.dir as Direction
   }
-
   return {
-    finalDirection, //最终方向
     backgroundSize, //渐变背景大小
     keyframes, //动画关键帧
     direction: gradientDirection, //动画方向
@@ -232,9 +251,39 @@ function handleRadialAnimation({ direction, type }: HandleAnimationOptions): Ani
 
 /** 处理文本渐变动画 */
 function handleTextAnimation({ direction, type }: HandleAnimationOptions): AnimationDetails {
+  let backgroundSize: string
+  let keyframes: string
+
+  switch (direction) {
+    case 'to right':
+    case '90deg':
+      backgroundSize = '200% 100%'
+      keyframes = '0%{background-position:-200% 0%}100%{background-position:200% 0%}'
+      break
+    case 'to left':
+    case '270deg':
+      backgroundSize = '200% 100%'
+      keyframes = '0%{background-position:200% 0%}100%{background-position:-200% 0%}'
+      break
+    case 'to bottom':
+    case '180deg':
+      backgroundSize = '100% 200%'
+      keyframes = '0%{background-position:0 -200%}100%{background-position:0 200%}'
+      break
+    case 'to top':
+    case '0deg':
+    case '360deg':
+      backgroundSize = '100% 200%'
+      keyframes = '0%{background-position:0 200%}100%{background-position:0 -200%}'
+      break
+    default:
+      backgroundSize = '200% 100%'
+      keyframes = '0%{background-position:-200% 0%}100%{background-position:200% 0%}'
+      break
+  }
   return {
-    backgroundSize: '400% 400%',
-    keyframes: '0%{background-position:0% 0%}100%{background-position:100% 100%}',
+    backgroundSize,
+    keyframes,
     direction: direction as Direction,
     type,
     prefixCode:
@@ -242,69 +291,54 @@ function handleTextAnimation({ direction, type }: HandleAnimationOptions): Anima
   }
 }
 
-/** 处理荧光阴影渐变动画 */
-/** 这里我们自定义一组亮眼的荧光色彩，且让动画效果更明显 */
 /**
- * 处理荧光阴影渐变动画
+ * 处理荧光阴影渐变动画（两种模式：普通渐变，或旋转闪烁模式）
  * @param direction 动画方向
  * @param type 渐变类型
- * @param colors 渐变色数组
- * @param options 可选: 控制光晕宽度、模糊度等 { spread?: number, blur?: number, brightness?: number }
+ * @param boxShadowConfig 盒阴影参数，包含 colors, x, y, spread, blur, brightness, mode
  */
 function handleBoxShadowAnimation({
   direction,
   type,
-  colors = THEME_HIGH_CONTRAST_NEON_COLORS,
-  spread = 0.2, // 光晕扩散
-  blur = 0.3, // 模糊(光晕)大小
-  brightness = 1.6, // 光晕亮度
-}: HandleAnimationOptions): AnimationDetails {
-  // 用参数控制各色的 box-shadow spread&blur
-  const sequence = [0, 1, 2, 3]
-  const n = sequence.length
+  boxShadowConfig,
+}: {
+  direction: Direction
+  type: GradientType
+  boxShadowConfig: BoxShadowConfig
+}): AnimationDetails {
+  const { colors, x, y, spread, blur, brightness } = boxShadowConfig
+  // 强制把 x, y, spread, blur 转成 number
+  const numX = typeof x === 'number' ? x : parseFloat(x)
+  const numY = typeof y === 'number' ? y : parseFloat(y)
+  const numSpread = typeof spread === 'number' ? spread : parseFloat(spread)
+  const numBlur = typeof blur === 'number' ? blur : parseFloat(blur)
+
+  // 只做色彩切换动画 (不同颜色切换，不是多层渐变叠加)
   let keyframes = ''
+  const n = colors.length
   for (let i = 0; i < n; i++) {
     const percent = Math.round((i * 100) / n)
-    // 支持 css 变量，如果 neonColors 里是 css 变量语法则直接拼接
-    const c1 = colors[i % colors.length]
-    const c2 = colors[(i + 1) % colors.length]
-    const c3 = colors[(i + 2) % colors.length]
-
-    // alpha 通道用 aa，如果是变量不拼aa
-    const c1Alpha = c1.startsWith('var(') ? c1 : `${c1}`
-    const c2Alpha = c2.startsWith('var(') ? c2 : `${c2}`
-    const c3Alpha = c3.startsWith('var(') ? c3 : `${c3}aa`
-
+    const color = colors[i]
+    const colorValue = color.startsWith('var(') ? color : `${color}`
     keyframes += `
       ${percent}% {
-        box-shadow: 
-          0 0 ${0.9 + blur * 0.5}rem ${spread}rem ${c1Alpha}, 
-          0 0 ${1.4 + blur}rem ${spread * 2.3}rem ${c2Alpha}, 
-          0 0 ${2.2 + blur * 2.2}rem ${spread * 3.6}rem ${c3Alpha};
+        box-shadow: ${numX}rem ${numY}rem ${(0.9 + numBlur * 0.5).toFixed(2)}rem ${numSpread.toFixed(2)}rem ${colorValue};
       }`
   }
-  // 闭合循环
-  const c1end = colors[0 % colors.length]
-  const c2end = colors[1 % colors.length]
-  const c3end = colors[2 % colors.length]
-  const c1endAlpha = c1end.startsWith('var(') ? c1end : `${c1end}`
-  const c2endAlpha = c2end.startsWith('var(') ? c2end : `${c2end}`
-  const c3endAlpha = c3end.startsWith('var(') ? c3end : `${c3end}aa`
+  // 闭合为第一个颜色
+  const color0 = colors[0]
+  const color0Value = color0.startsWith('var(') ? color0 : `${color0}`
   keyframes += `
     100% {
-      box-shadow:
-        0 0 ${0.9 + blur * 0.5}rem ${spread}rem ${c1endAlpha},
-        0 0 ${1.4 + blur}rem ${spread * 2.3}rem ${c2endAlpha},
-        0 0 ${2.2 + blur * 2.2}rem ${spread * 3.6}rem ${c3endAlpha};
+      box-shadow: ${numX}rem ${numY}rem ${(0.9 + numBlur * 0.5).toFixed(2)}rem ${numSpread.toFixed(2)}rem ${color0Value};
     }`
   keyframes = keyframes.trim()
-  // 前缀用inset:0，且不再往外撑破父元素，filter可调
   return {
     backgroundSize: '100% 100%',
     keyframes,
     direction: direction as Direction,
     type,
-    prefixCode: `inset:0;border-radius:inherit;filter:blur(${blur}rem) brightness(${brightness});pointer-events:none;`, // 防止撑大父容器
+    prefixCode: `inset:0;border-radius:inherit;filter:brightness(${brightness});pointer-events:none;`,
   }
 }
 
@@ -319,9 +353,17 @@ export function useGradientAnimation(options: UseGradientAnimationOptions = {}) 
 
   onMounted(() => {
     const {
-      items = [], //子项配置
+      items = [], //子项配置 子项配置会递归调用 useGradientAnimation
       className = 'gradient-animation', //全局默认的 CSS 类名
       colors = THEME_SECONDARY_GRADIENT_COLORS, //渐变颜色组
+      boxShadowConfig = {
+        colors: THEME_HIGH_CONTRAST_NEON_COLORS, //荧光阴影渐变颜色组
+        x: '0',
+        y: '0',
+        blur: 0,
+        spread: 1,
+        brightness: 1,
+      },
       opacity = 1, //全局透明度
       colorsCount = 3, //渐变颜色段数
       speed = 15, //背景渐变动画速度
@@ -359,10 +401,10 @@ export function useGradientAnimation(options: UseGradientAnimationOptions = {}) 
     const timeUnit = 's'
 
     //初始化css代码
-    let newCss = ''
+    let css = ''
     //往大括号里加css代码 大括号是class的{}
     const getAllDynamicCssCode = (code: string) =>
-      `.${className}{position:relative;overflow:hidden;z-index:1;${getCommonPseudoElementCSS()}` +
+      `.${className}{position:relative;overflow:hidden;z-index:1;opacity:${opacity};${getCommonPseudoElementCSS()}` +
       code +
       '}'
 
@@ -381,7 +423,7 @@ export function useGradientAnimation(options: UseGradientAnimationOptions = {}) 
     const getEveryDynamicCssCodeByTrigger = (
       trigger: TriggerTime,
       code: string,
-      needPseudoElementCSS: boolean = true, //需要伪元素的css代码包裹 box-shadow 不需要
+      needPseudoElementCSS: boolean = true, //需要伪元素的css代码包裹 box-shadow和text 不需要
     ) => {
       let prefixCode, suffixCode: string
       switch (trigger) {
@@ -499,27 +541,28 @@ export function useGradientAnimation(options: UseGradientAnimationOptions = {}) 
             item = handleTextAnimation({ direction: randowDirection, type: i })
             break
           case 'box-shadow':
-            const newColors = baseColors.map((i) => (typeof i === 'string' ? i : i.color))
             item = handleBoxShadowAnimation({
               direction: randowDirection,
               type: i,
-              colors: newColors,
+              boxShadowConfig,
             })
+            break
         }
         item.keyframesName = `${prefixName + Math.random().toString(36).slice(2, 8)}`
         keyframesCode += `@keyframes ${item.keyframesName}{${item.keyframes}}`
         KeyCode += getEveryDynamicCssCodeByTrigger(
           trigger,
-          `${item.prefixCode ?? '' + item.insertPseudoCode}background-image:${item.type}-gradient(${item.direction || direction},${gradientColorsString});background-size:${item.backgroundSize};animation:${animDecl(item.keyframesName)};`,
+          `${item.prefixCode ?? '' + item.insertPseudoCode}background-image:${item.type === 'text' ? 'text' : 'linear'}-gradient(${item.direction || direction},${gradientColorsString});background-size:${item.backgroundSize};animation:${animDecl(item.keyframesName)};`,
+          !(i === 'box-shadow' || i === 'text'),
         )
         return item
       })
     })
-    newCss = getAllDynamicCssCode(KeyCode)
-    newCss += keyframesCode
-    console.log(decompressCodeAdvanced(newCss, 'css'))
+    css = getAllDynamicCssCode(KeyCode)
+    css += keyframesCode
+    console.log(decompressCodeAdvanced(css, 'css'))
     styleElement = document.createElement('style')
-    styleElement.textContent = lightMinifyCode(newCss, 'css')
+    styleElement.textContent = lightMinifyCode(css, 'css')
     document.head.appendChild(styleElement)
   })
 
@@ -527,6 +570,7 @@ export function useGradientAnimation(options: UseGradientAnimationOptions = {}) 
     if (styleElement && document.head.contains(styleElement)) {
       document.head.removeChild(styleElement)
       styleElement = null
+      console.log('aaa')
     }
   })
 }

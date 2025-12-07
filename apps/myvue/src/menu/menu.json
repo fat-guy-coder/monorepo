@@ -7,18 +7,26 @@
     "parentPath": "/LearningAbility",
     "children": [
       {
+        "id": "FrontendIsWhat",
+        "name": "FrontendIsWhat",
+        "label": "前端是什么 ⭐⭐⭐",
+        "path": "/LearningAbility/FrontendIsWhat",
+        "parentPath": "/LearningAbility",
+        "icon": "🌐"
+      },
+      {
+        "id": "FrontendProspect",
+        "name": "FrontendProspect",
+        "label": "前端前景 ⭐⭐⭐",
+        "path": "/LearningAbility/FrontendProspect",
+        "parentPath": "/LearningAbility",
+        "icon": "🌐"
+      },
+      {
         "id": "LearningRoutes",
         "name": "LearningRoutes",
         "label": "学习路线 ⭐",
         "path": "/LearningAbility/LearningRoutes",
-        "parentPath": "/LearningAbility",
-        "icon": "🗺"
-      },
-      {
-        "id": "LearningProgress",
-        "name": "LearningProgress",
-        "label": "学习进度 ⭐",
-        "path": "/LearningAbility/LearningProgress",
         "parentPath": "/LearningAbility",
         "icon": "🗺"
       },
@@ -37,22 +45,6 @@
         "path": "/LearningAbility/FrontendSalary",
         "parentPath": "/LearningAbility",
         "icon": "💰"
-      },
-      {
-        "id": "FrontendIsWhat",
-        "name": "FrontendIsWhat",
-        "label": "前端是什么 ⭐⭐⭐",
-        "path": "/LearningAbility/FrontendIsWhat",
-        "parentPath": "/LearningAbility",
-        "icon": "🌐"
-      },
-      {
-        "id": "FrontendProspect",
-        "name": "FrontendProspect",
-        "label": "前端前景 ⭐⭐⭐",
-        "path": "/LearningAbility/FrontendProspect",
-        "parentPath": "/LearningAbility",
-        "icon": "🌐"
       }
     ],
     "icon": "📚"
@@ -10576,6 +10568,14 @@
         "path": "/Me/MyInfomation",
         "parentPath": "/Me",
         "icon": "⌨"
+      },
+      {
+        "id": "LearningProgress",
+        "name": "LearningProgress",
+        "label": "学习进度 ⭐",
+        "path": "/Me/LearningProgress",
+        "parentPath": "/Me",
+        "icon": "🗺"
       },
       {
         "id": "SubmitAdvice",

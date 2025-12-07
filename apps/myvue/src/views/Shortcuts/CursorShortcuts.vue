@@ -51,6 +51,7 @@ const categoriesData: Category[] = [
       { name: "块注释", keys: ["Alt", "Shift", "A"], heat: 7 },
       { name: "代码照片", keys: ["Ctrl", "3"], heat: 6 },
       { name: "快捷方式编辑", keys: ["Ctrl", "4"], heat: 5 },
+      { name: "快捷方式编辑", keys: ["Ctrl", "5"], heat: 5 },
     ]
   },
   {
