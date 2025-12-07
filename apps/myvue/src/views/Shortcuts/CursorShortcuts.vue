@@ -48,6 +48,7 @@ const categoriesData: Category[] = [
     shortcuts: [
       { name: "删除整行", keys: ["Ctrl", "1"], heat: 9 },
       { name: "分支比较", keys: ["Ctrl", "2"], heat: 8 },
+      { name: "块注释", keys: ["Alt", "Shift", "A"], heat: 7 },
       { name: "代码照片", keys: ["Ctrl", "3"], heat: 6 },
       { name: "快捷方式编辑", keys: ["Ctrl", "4"], heat: 5 },
     ]
