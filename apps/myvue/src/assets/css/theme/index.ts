@@ -15,10 +15,23 @@ export const THEME_SECONDARY_GRADIENT_COLORS = [
 ]
 //高对比度 neon 颜色变量数组
 export const THEME_HIGH_CONTRAST_NEON_COLORS = [
-'var(--color-gradient-group-11)',
-'var(--color-gradient-group-12)',
-'var(--color-gradient-group-13)',
-'var(--color-gradient-group-14)',
+  'var(--color-gradient-group-11)',
+  'var(--color-gradient-group-12)',
+  'var(--color-gradient-group-13)',
+  'var(--color-gradient-group-14)',
+]
+
+export const THEME__MAIN_TEXT_COLOR = 'var(--color-text)'
+
+//
+
+//字体渐变颜色变量数组
+export const THEME_FONT_GRADIENT_COLORS = [
+  'var(--font-gradient-1)',
+  'var(--font-gradient-2)',
+  'var(--font-gradient-3)',
+  'var(--font-gradient-4)',
+  'var(--font-gradient-5)',
 ]
 
 export const THEME_ALL_GRADIENT_COLORS = [

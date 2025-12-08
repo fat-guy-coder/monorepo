@@ -70,6 +70,14 @@
 @color-gradient-light-13: #00796b; // 深青绿色（高对比）
 @color-gradient-light-14: #6a1b9a; // 深紫（高对比）
 
+// ---- 新增：白色主题字体渐变色（仅颜色，不是渐变函数） ----
+@font-gradient-light-1: #003d99;
+@font-gradient-light-2: #2563eb;
+@font-gradient-light-3: #0b3d91;
+@font-gradient-light-4: #ffd700;
+@font-gradient-light-5: #ffb300;
+// ------------------------------
+
 // box-shadow 颜色
 @color-box-shadow: 60, 90, 120;
 @color-box-shadow-hover: 80, 120, 180;
@@ -110,6 +118,15 @@
 @color-gradient-dark-12: #ff6b00; // 亮橙（高对比）
 @color-gradient-dark-13: #ff2d95; // 鲜粉（高对比）
 @color-gradient-dark-14: #a3ff00; // 电光绿（高对比）
+
+// ---- 新增：黑色主题字体渐变色（仅颜色，不是渐变函数） ----
+@font-gradient-dark-1: #00ffff;
+@font-gradient-dark-2: #ff2d95;
+@font-gradient-dark-3: #00ffea;
+@font-gradient-dark-4: #6c798d;
+@font-gradient-dark-5: #a3ff00;
+// ------------------------------
+
 
 @color-box-shadow-dark: 0, 0, 0;
 @color-box-shadow-hover-dark: 40, 80, 160;
@@ -176,6 +193,15 @@
 @color-gradient-warm-13: #3d1f00; // 深巧克力（高对比）
 @color-gradient-warm-14: #b87333; // 琥珀（高对比）
 
+// ---- 新增：暖色主题字体渐变色（仅颜色，不是渐变函数） ----
+@font-gradient-warm-1: #b66c2f;
+@font-gradient-warm-2: #ffc48b;
+@font-gradient-warm-3: #8b2f00;
+@font-gradient-warm-4: #b87333;
+@font-gradient-warm-5: #fbd5b5;
+// ------------------------------
+
+
 /* 冷色主题色板 */
 @cool-primary: #4aa3c0;
 @cool-secondary: #0369a1;
@@ -215,6 +241,15 @@
 @color-gradient-cool-12: #005f73; // 深青（高对比）
 @color-gradient-cool-13: #00b4d8; // 电光青（高对比）
 @color-gradient-cool-14: #6a4c93; // 深紫（高对比）
+
+// ---- 新增：冷色主题字体渐变色（仅颜色，不是渐变函数） ----
+@font-gradient-cool-1: #0369a1;
+@font-gradient-cool-2: #0ea5e9;
+@font-gradient-cool-3: #003f5c;
+@font-gradient-cool-4: #00b4d8;
+@font-gradient-cool-5: #a5bbdc;
+// ------------------------------
+
 
 @color-info-cool: #2563eb;
 @color-success-cool: #059669;
@@ -258,6 +293,14 @@
 @color-gradient-eye-12: #1e4b32; // 墨绿
 @color-gradient-eye-13: #50916e; // 灰调松绿
 @color-gradient-eye-14: #70a989; // 柔和苔绿
+
+// ---- 新增：护眼主题字体渐变色（仅颜色，不是渐变函数） ----
+@font-gradient-eye-1: #3a8a5d;
+@font-gradient-eye-2: #87c7a3;
+@font-gradient-eye-3: #2b6b47;
+@font-gradient-eye-4: #1e4b32;
+@font-gradient-eye-5: #70a989;
+// ------------------------------
 
 @color-info-eye: #3a8a5d;
 @color-success-eye: #4caf50;
@@ -308,6 +351,13 @@ body[data-theme='light'] {
   --color-gradient-group-12: @color-gradient-light-12; //白色渐变11
   --color-gradient-group-13: @color-gradient-light-13; //白色渐变11
   --color-gradient-group-14: @color-gradient-light-14; //白色渐变11
+
+  // 字体渐变色组
+  --font-gradient-1: @font-gradient-light-1;
+  --font-gradient-2: @font-gradient-light-2;
+  --font-gradient-3: @font-gradient-light-3;
+  --font-gradient-4: @font-gradient-light-4;
+  --font-gradient-5: @font-gradient-light-5;
 }
 
 html[data-theme='dark'],
@@ -354,6 +404,13 @@ body[data-theme='dark'] {
   --color-gradient-group-12: @color-gradient-dark-12; //黑色渐变12
   --color-gradient-group-13: @color-gradient-dark-13; //黑色渐变13
   --color-gradient-group-14: @color-gradient-dark-14; //黑色渐变14
+
+  // 字体渐变色组
+  --font-gradient-1: @font-gradient-dark-1;
+  --font-gradient-2: @font-gradient-dark-2;
+  --font-gradient-3: @font-gradient-dark-3;
+  --font-gradient-4: @font-gradient-dark-4;
+  --font-gradient-5: @font-gradient-dark-5;
 }
 
 html[data-theme='warm'],
@@ -402,6 +459,13 @@ body[data-theme='warm'] {
   --color-gradient-group-12: @color-gradient-warm-12; //白色渐变11
   --color-gradient-group-13: @color-gradient-warm-13; //白色渐变11
   --color-gradient-group-14: @color-gradient-warm-14; //白色渐变11
+
+  // 字体渐变色组
+  --font-gradient-1: @font-gradient-warm-1;
+  --font-gradient-2: @font-gradient-warm-2;
+  --font-gradient-3: @font-gradient-warm-3;
+  --font-gradient-4: @font-gradient-warm-4;
+  --font-gradient-5: @font-gradient-warm-5;
 }
 
 html[data-theme='cool'],
@@ -449,6 +513,13 @@ body[data-theme='cool'] {
   --color-gradient-group-12: @color-gradient-cool-12; //冷色渐变12
   --color-gradient-group-13: @color-gradient-cool-13; //冷色渐变13
   --color-gradient-group-14: @color-gradient-cool-14; //冷色渐变14
+
+  // 字体渐变色组
+  --font-gradient-1: @font-gradient-cool-1;
+  --font-gradient-2: @font-gradient-cool-2;
+  --font-gradient-3: @font-gradient-cool-3;
+  --font-gradient-4: @font-gradient-cool-4;
+  --font-gradient-5: @font-gradient-cool-5;
 }
 
 html[data-theme='eye-friendly'],
@@ -496,6 +567,13 @@ body[data-theme='eye-friendly'] {
   --color-gradient-group-12: @color-gradient-eye-12;
   --color-gradient-group-13: @color-gradient-eye-13;
   --color-gradient-group-14: @color-gradient-eye-14;
+
+  // 字体渐变色组
+  --font-gradient-1: @font-gradient-eye-1;
+  --font-gradient-2: @font-gradient-eye-2;
+  --font-gradient-3: @font-gradient-eye-3;
+  --font-gradient-4: @font-gradient-eye-4;
+  --font-gradient-5: @font-gradient-eye-5;
 }
 
 /* ============================================

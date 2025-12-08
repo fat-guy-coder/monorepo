@@ -3,6 +3,8 @@ import {
   THEME_MAIN_GRADIENT_COLOR,
   THEME_HIGH_CONTRAST_NEON_COLORS,
   THEME_SECONDARY_GRADIENT_COLORS,
+  THEME_FONT_GRADIENT_COLORS,
+  THEME__MAIN_TEXT_COLOR,
 } from '@/assets/css/theme/index'
 import { lightMinifyCode, decompressCodeAdvanced } from '@/Function/code'
 import { random, randPick } from '@/Function/math'
@@ -39,9 +41,7 @@ type ColorsSequenceRandom = {
 
 type ColorsSequenceCount = number | [number, number] | ColorsSequenceRandom
 
-/** 方向集合 */
-const DIRECTION_CANDIDATES = [
-  //文本 和 背景 线性渐变
+const LINEAR_DIRECTION_CANDIDATES = [
   '0deg',
   '90deg',
   '180deg',
@@ -50,37 +50,43 @@ const DIRECTION_CANDIDATES = [
   '135deg',
   '225deg',
   '315deg',
-  'to top',
-  'to right',
-  'to bottom',
-  'to left',
-  //径向  背景 渐变
+  '360deg',
+] as const
+
+const RADIAL_DIRECTION_CANDIDATES = [
   'at center',
   'at left',
   'at right',
   'at top',
   'at bottom',
-]
+] as const
+
+/** 方向集合 */
+const DIRECTION_CANDIDATES = [
+  ...LINEAR_DIRECTION_CANDIDATES,
+  ...RADIAL_DIRECTION_CANDIDATES,
+  'random',
+] as const
 
 type Direction = (typeof DIRECTION_CANDIDATES)[number]
 
 //随机方向池，用于随机选择方向
-const getDirCandidates = (type: GradientType, trigger: TriggerTime) => {
-  if (type === 'linear') {
-    return ['0deg', '45deg', '90deg', '135deg', '180deg', '225deg', '270deg', '315deg']
-  } else {
-    return ['at center', 'at left', 'at right', 'at top', 'at bottom']
-  }
+const getDirCandidates = (type: GradientType): Direction[] => {
+  return type === 'linear'
+    ? (LINEAR_DIRECTION_CANDIDATES as unknown as Direction[])
+    : (RADIAL_DIRECTION_CANDIDATES as unknown as Direction[])
 }
+
+const STATIC_CSS_CODE = `position:relative;overflow:hidden;z-index:1;&::before{transition:opacity 0.2s ease;content:'';position:absolute;z-index:-1;transform-origin:center;}`
 
 //荧光阴影渐变配置
 interface BoxShadowConfig {
-  colors: string[]
   x: string
   y: string
   spread: number
   blur: number
   brightness: number
+  boxShadowColors?: string[]
 }
 
 /** useGradientAnimation composable 的全局配置选项 */
@@ -95,14 +101,17 @@ interface UseGradientAnimationOptions {
   /* 需要的触发时机*/
   triggerTimes?: TriggerTime[]
   colors?: BaseColor[] //颜色数组
+  textGradientColors?: string[] //字体渐变颜色组
+  boxShadowColors?: string[] //盒阴影渐变颜色组
   opacity?: number //透明度
   // 颜色段数
   colorsCount?: ColorsSequenceCount
   speed?: number //速度
+  timeUnit?: 's' | 'ms' //时间单位
   direction?: Direction //方向
   animation?: string | AnimationType //动画
   prefixName?: string //前缀名称,防止动画名称冲突
-  coverBackground?: boolean //是否需要覆盖元素底层背景
+  keyframe?: string //动画关键帧定义
 }
 
 /** 动画详情 */
@@ -110,14 +119,12 @@ interface AnimationDetails {
   backgroundSize: string
   keyframes: string
   keyframesName?: string
-  direction: Direction
-  isDiagonal?: boolean
+  direction?: Direction
   transform?: string
   type: GradientType
   animation?: string
-  insertPseudoCode?: string //插入伪元素的css代码
+  insertPseudoElementsCode?: string //插入伪元素内的css代码
   prefixCode?: string //伪元素之外的前缀代码
-  finalDirection?: number //最终渐变呈现方向
 }
 
 /** 渐变动画函数参数 */
@@ -129,13 +136,223 @@ interface HandleAnimationOptions {
   brightness?: number // 亮度
   colors?: string[] // 颜色数组
   dirSet?: Set<string> // 方向集合 并且随机方向
-  index?: number //当前序号
+  isText?: boolean //是否是文本渐变
+}
+
+// 将解构参数抽离为一个专门的函数
+function getGradientAnimationParams(options: UseGradientAnimationOptions = {}) {
+  const {
+    items = [], //子项配置 子项配置会递归调用 useGradientAnimation
+    className = 'gradient-animation', //全局默认的 CSS 类名
+    colors = THEME_SECONDARY_GRADIENT_COLORS, //渐变颜色组
+    textGradientColors = THEME_FONT_GRADIENT_COLORS, //字体渐变颜色组
+    boxShadowColors = THEME_HIGH_CONTRAST_NEON_COLORS, //荧光阴影渐变颜色组
+    boxShadowConfig = {
+      x: '0',
+      y: '0',
+      blur: 0,
+      spread: 0.2,
+      brightness: 1,
+    },
+    opacity = 1, //全局透明度
+    colorsCount = 3, //渐变颜色段数
+    speed = 15, //背景渐变动画速度
+    timeUnit = 's', //时间单位
+    direction = '0deg', //方向
+    gradientTypes = ['linear'], //渐变类型
+    triggerTimes = ['mounted'], //背景渐变动画触发时机
+    // coverBackground = false, //是否需要覆盖元素底层背景
+    prefixName = 'gradient-anim-', //前缀名称,防止
+    animation = {
+      name: '', //动画名称
+      iterationCount: 'infinite', //动画迭代次数
+      direction: 'normal', //背景渐变动画方向
+      duration: null, //背景渐变动画持续时间
+      timingFunction: 'linear', //背景渐变动画缓动函数
+      delay: '0s', //背景渐变动画延迟
+      playState: 'running', //背景渐变动画状态
+    },
+    keyframe,
+  } = options
+  return {
+    items,
+    className,
+    colors,
+    textGradientColors,
+    boxShadowColors,
+    boxShadowConfig,
+    opacity,
+    colorsCount,
+    speed,
+    timeUnit,
+    keyframe,
+    gradientTypes,
+    triggerTimes,
+    prefixName,
+    animation,
+    direction,
+  }
+}
+
+/** 应用渐变动画
+ * @description 一个 Vue composable，用于给元素应用动态背景渐变动画。
+ * @param options 应用渐变动画的配置选项
+ * @returns 应用渐变动画的配置选项
+ */
+export function useGradientAnimation(options: UseGradientAnimationOptions = {}) {
+  //style元素
+  let styleElement: HTMLStyleElement | null = null
+
+  onMounted(() => {
+    // 使用抽离的函数获得所有参数
+    const {
+      items,
+      className,
+      colors,
+      textGradientColors,
+      boxShadowColors,
+      boxShadowConfig,
+      opacity,
+      colorsCount,
+      speed,
+      timeUnit,
+      gradientTypes,
+      triggerTimes,
+      prefixName,
+      animation,
+      direction,
+    } = getGradientAnimationParams(options)
+    if (typeof document === 'undefined') return
+
+    //自定义渐变色数组配置子项
+    if (items.length > 0) {
+      items.forEach((item) => {
+        useGradientAnimation(item)
+      })
+      return
+    }
+
+    //方向集合，用于随机选择方向
+    const dirSet = new Set<string>()
+
+    //时间单位
+
+    //往大括号里加css代码 大括号是class的{}
+    const getAllDynamicCssCode = (code: string) =>
+      `.${className}{${STATIC_CSS_CODE}opacity:${opacity};` + code + '}'
+
+    //动画代码 动画代码在大括号外面
+    let keyframesCode: string = ''
+
+    //大括号里面的动画代码
+    let KeyCode: string = ''
+
+    //每个状态下渐变动画的配置信息
+    triggerTimes.forEach((trigger) => {
+      //渐变色段
+      let baseColors: BaseColor[] = []
+      //生成动画声明 kfn动画名
+      const animDecl = (kfn: string) =>
+        typeof animation === 'string'
+          ? `${kfn} ${animation}`
+          : `${kfn} ${animation.duration || 60 / speed + timeUnit} ${animation.timingFunction} ${animation.delay} ${animation.iterationCount}  ${animation.direction} ${animation.playState}`
+
+      //核心背景样式css code
+      let itemKeyCode: string = ''
+
+      //临时方向
+      let temDirection = direction
+
+      const isRandomDirection =
+        direction === 'random' ||
+        (colorsCount as ColorsSequenceRandom).randomDirection ||
+        (colorsCount as ColorsSequenceRandom).allRandom
+
+      //所有触发时机下生成对应的不同渐变类型动画样式配置
+      gradientTypes.map((i) => {
+        //获得每个渐变类型动画的配置信息
+        let item: AnimationDetails = {
+          backgroundSize: '',
+          keyframes: '',
+          direction: '0deg',
+          type: i,
+          animation: '',
+          insertPseudoElementsCode: '',
+        }
+        if (isRandomDirection) {
+          temDirection = randPick(getDirCandidates(i), dirSet, (v) => v)
+        }
+        console.log(temDirection)
+        switch (i) {
+          case 'linear':
+            item = handleLinearAnimation({ direction: temDirection, type: i })
+            //渐变色组颜色并填充主题背景色
+            baseColors = [
+              `${THEME_MAIN_GRADIENT_COLOR} 0%`,
+              ...handleRandomColors(colors, colorsCount),
+              `${THEME_MAIN_GRADIENT_COLOR} 100%`,
+            ]
+            itemKeyCode = `${item.insertPseudoElementsCode ?? ''}background-image:${item.type}-gradient(${item.direction || direction},${baseColors.join(',')});background-size:${item.backgroundSize};`
+            break
+          case 'radial':
+            item = handleRadialAnimation({ direction: temDirection, type: i })
+            itemKeyCode = `background-image:${item.type}-gradient(${item.direction || direction},${baseColors.join(',')});background-size:${item.backgroundSize};`
+            break
+          case 'text':
+            item = handleTextAnimation({ direction: temDirection, type: i })
+            baseColors = [
+              `${THEME__MAIN_TEXT_COLOR} 0%`,
+              ...handleRandomColors(textGradientColors, colorsCount),
+              `${THEME__MAIN_TEXT_COLOR} 100%`,
+            ]
+            itemKeyCode = `${item.insertPseudoElementsCode ?? ''}background-image:${item.type}-gradient(${item.direction || direction},${baseColors.join(',')});background-size:${item.backgroundSize};`
+            console.log(itemKeyCode)
+            break
+          case 'box-shadow':
+            item = handleBoxShadowAnimation({
+              type: i,
+              boxShadowConfig,
+              boxShadowColors,
+            })
+            item.type = item.type
+            break
+        }
+        //随机动画帧名
+        item.keyframesName = `${prefixName + Math.random().toString(36).slice(2, 8)}`
+        //动态添加动画关键帧代码
+        keyframesCode += `@keyframes ${item.keyframesName}{${item.keyframes}}`
+        //动态添加动画样式代码
+        KeyCode +=
+          (item.prefixCode ?? '') +
+          getPseudoClassAndPseudoElementWrapByTrigger(
+            trigger,
+            `${itemKeyCode}animation:${animDecl(item.keyframesName)};`,
+            !!item.insertPseudoElementsCode,
+          )
+        return item
+      })
+    })
+    //初始化css代码
+    let css = getAllDynamicCssCode(KeyCode)
+    css += keyframesCode
+    console.log(decompressCodeAdvanced(css, 'css'))
+    styleElement = document.createElement('style')
+    styleElement.textContent = lightMinifyCode(css, 'css')
+    document.head.appendChild(styleElement)
+  })
+
+  onUnmounted(() => {
+    if (styleElement && document.head.contains(styleElement)) {
+      document.head.removeChild(styleElement)
+      styleElement = null
+    }
+  })
 }
 
 //根据方向获得背景位置的开始和结束位置和背景大小
 const getBackgroundPositionAndSize = (
   xOrY: 'x' | 'y' | 'diagonal',
-  degree: '90' | '270' | '0' | '180' | '45' | '135' | '225' | '315',
+  degree?: '90' | '270' | '0' | '180',
 ) => {
   const posMap = {
     x: {
@@ -149,33 +366,36 @@ const getBackgroundPositionAndSize = (
       backgroundSize: '100% 200%',
     },
     diagonal: {
-      45: { start: '200% 200%', end: '-200% -200%' },
-      135: { start: '-200% 200%', end: '200% -200%' },
-      225: { start: '-200% -200%', end: '200% 200%' },
-      315: { start: '200% -200%', end: '-200% 200%' },
-      backgroundSize: '200% 200%',
+      start: '0 -200%',
+      end: '0 200%',
+      backgroundSize: '100% 200%',
     },
   }
   const backgroundSize = (posMap[xOrY] as any).backgroundSize
   //起始位置
-  const start = (posMap[xOrY] as any)[degree].start
+  const start =
+    xOrY === 'diagonal' ? (posMap[xOrY] as any).start : (posMap[xOrY] as any)[degree ?? '0'].start
   //结束位置
-  const end = (posMap[xOrY] as any)[degree].end
+  const end =
+    xOrY === 'diagonal' ? (posMap[xOrY] as any).end : (posMap[xOrY] as any)[degree ?? '0'].end
   return {
     backgroundSize,
-    keyframes: `0%{background-position:${start}}100%{background-position:${end}}`,
+    keyframes: `0%{background-position:${start}}  100%{background-position:${end}}`,
   }
 }
 
 /** 处理线性/对角线渐变动画 */
-function handleLinearAnimation({ direction, type }: HandleAnimationOptions): AnimationDetails {
+function handleLinearAnimation({
+  direction,
+  type,
+  isText,//文本渐变不需要处理对角线
+}: HandleAnimationOptions): AnimationDetails {
   const numberAngle = parseInt(direction.match(/(-?\d+)/)?.[0] || '180', 10)
   let backgroundSize = '200% 100%',
     keyframes = '0%{background-position:200% 0}100%{background-position:-200% 0}',
     isDiagonal = false,
     transform = '',
-    gradientDirection = direction, //渐变方向(对角线会旋转)
-    finalDirection = numberAngle //最终方向
+    gradientDirection //渐变方向(对角线会旋转)
 
   const angleMap: Record<string, number> = {
     'to top': 0,
@@ -183,14 +403,15 @@ function handleLinearAnimation({ direction, type }: HandleAnimationOptions): Ani
     'to bottom': 180,
     'to left': 270,
   }
-  let angle = (angleMap[direction] ?? numberAngle) - (numberAngle % 90 === 0 ? 90 : 0)
+  let angle = angleMap[direction] ?? numberAngle - 90
+  if (angle < 0) angle += 360
+  if (angle > 360) angle -= 360
 
   gradientDirection = (angle + 'deg') as Direction
-
+  transform = 'rotate(0deg)'
   if (angle % 180 === 0) {
     //这个是Y轴方向的动画
     angle = angle % 360 === 0 ? 0 : 180
-
     backgroundSize = getBackgroundPositionAndSize(
       'y',
       angle.toString() as '0' | '180',
@@ -198,41 +419,32 @@ function handleLinearAnimation({ direction, type }: HandleAnimationOptions): Ani
     keyframes = getBackgroundPositionAndSize('y', angle.toString() as '0' | '180').keyframes
   } else if (angle % 90 === 0) {
     //这个是X轴方向的动画
-    angle = angle === 90 || angle === -270 ? 90 : 270
+    angle = angle === 90 ? 90 : 270
     backgroundSize = getBackgroundPositionAndSize(
       'x',
       angle.toString() as '90' | '270',
     ).backgroundSize
     keyframes = getBackgroundPositionAndSize('x', angle.toString() as '90' | '270').keyframes
   } else {
-    //其他方向就为斜线动画，旋转45度
-    isDiagonal = true
-    const rotationMap: Record<number, { rotate: string; dir: string }> = {
-      45: { rotate: '-45deg', dir: '90deg' },
-      135: { rotate: '135deg', dir: '180deg' },
-      225: { rotate: '-225deg', dir: '270deg' },
-      315: { rotate: '315deg', dir: '360deg' },
+    //如果是文本不处理对角线，因为对角线需要伪元素旋转，而文字是写在元素里的，伪元素的背景不起作用
+    if (!isText) {
+      //其他方向就为斜线动画，渐变方向不动,旋转相应角度就可以了
+      isDiagonal = true
+      transform = `rotate(${numberAngle}deg)`
+      backgroundSize = getBackgroundPositionAndSize('diagonal').backgroundSize
+      keyframes = getBackgroundPositionAndSize('diagonal').keyframes
+      gradientDirection = '0deg' as Direction
     }
-    const diagonal = rotationMap[angle] || { rotate: '-45deg', dir: '90deg' }
-    transform = `rotate(${diagonal.rotate})`
-    backgroundSize = getBackgroundPositionAndSize(
-      'diagonal',
-      angle.toString() as '45' | '135' | '225' | '315',
-    ).backgroundSize
-    keyframes = getBackgroundPositionAndSize(
-      'diagonal',
-      angle.toString() as '45' | '135' | '225' | '315',
-    ).keyframes
-    gradientDirection = diagonal.dir as Direction
   }
   return {
     backgroundSize, //渐变背景大小
     keyframes, //动画关键帧
     direction: gradientDirection, //动画方向
-    isDiagonal, //是否是斜线动画
     transform, //伪元素变换 旋转用于线性渐变斜线动画
     type, //渐变类型
-    insertPseudoCode: isDiagonal ? `inset:-25%;transform:${transform};` : 'inset:0;', //插入代码
+    insertPseudoElementsCode: isDiagonal
+      ? `inset:-25%;transform:${transform};`
+      : `inset:0;transform:${transform};`, //插入代码 如果是对角线动画，则需要旋转伪元素和扩大伪元素的尺寸
   }
 }
 
@@ -249,46 +461,78 @@ function handleRadialAnimation({ direction, type }: HandleAnimationOptions): Ani
   }
 }
 
-/** 处理文本渐变动画 */
+/** 处理文本渐变动画
+ *  0deg, to right: 渐变动画向右走（动画由左到右）
+ *  90deg, to top: 渐变动画向上走（动画由下到上）
+ *  180deg, to left: 渐变动画向左走（动画由右到左）
+ *  270deg, to bottom: 渐变动画向下走（动画由上到下）
+ */
 function handleTextAnimation({ direction, type }: HandleAnimationOptions): AnimationDetails {
-  let backgroundSize: string
-  let keyframes: string
-
-  switch (direction) {
-    case 'to right':
-    case '90deg':
-      backgroundSize = '200% 100%'
-      keyframes = '0%{background-position:-200% 0%}100%{background-position:200% 0%}'
-      break
-    case 'to left':
-    case '270deg':
-      backgroundSize = '200% 100%'
-      keyframes = '0%{background-position:200% 0%}100%{background-position:-200% 0%}'
-      break
-    case 'to bottom':
-    case '180deg':
-      backgroundSize = '100% 200%'
-      keyframes = '0%{background-position:0 -200%}100%{background-position:0 200%}'
-      break
-    case 'to top':
-    case '0deg':
-    case '360deg':
-      backgroundSize = '100% 200%'
-      keyframes = '0%{background-position:0 200%}100%{background-position:0 -200%}'
-      break
-    default:
-      backgroundSize = '200% 100%'
-      keyframes = '0%{background-position:-200% 0%}100%{background-position:200% 0%}'
-      break
-  }
+  //文本用的其实是线性渐变
+  // 270deg => to bottom（动画向下，渐变方向 to top）
+  const {
+    backgroundSize,
+    keyframes,
+    direction: gradientDirection,
+  } = handleLinearAnimation({ direction, type, isText: true })
   return {
     backgroundSize,
     keyframes,
-    direction: direction as Direction,
-    type,
+    direction: gradientDirection, // 渐变方向应与动画方向相反
+    type: 'linear',
     prefixCode:
       '-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;display:inline-block;',
   }
+}
+
+//随机色段处理
+function handleRandomColors(colors: BaseColor[], colorsCount: ColorsSequenceCount): BaseColor[] {
+  let baseColors: BaseColor[] = []
+  //随机处理
+  let {
+    allRandom = false, //是否全随机
+    randomColorsCount = false, //是否随机色段数
+    randomColorsOrder = false, //是否随机色段次序
+    randomDirection = false, //是否随机方向
+  } = (colorsCount as ColorsSequenceRandom) || {}
+  //全随机
+  if (allRandom) {
+    randomColorsCount = true
+    randomDirection = true
+    randomColorsOrder = true
+  }
+  //渐变色组起始位置
+  let start = 0
+  //渐变色组结束位置
+  let end = (() => {
+    if (randomColorsCount) {
+      if (typeof randomColorsCount === 'number') return randomColorsCount
+      // 如果是 true，则在 1 ~ colors.length 之间随机
+      return 1 + random(colors.length, 'floor')
+    } else if (typeof colorsCount === 'number') {
+      return colorsCount
+    } else if (Array.isArray(colorsCount)) {
+      // 范围取整随机
+      const [min, max] = colorsCount as [number, number]
+      start = min
+      return max
+    }
+    return colors.length
+  })()
+  //范围内随机取值
+  end = Math.max(1, Math.min(end, colors.length))
+  baseColors = colors.slice(start, end)
+  //随机排序
+  if (randomColorsOrder) {
+    baseColors.sort(() => Math.random() - 0.5)
+  }
+  //颜色填充主题背景色
+  baseColors = baseColors.map((c, i) =>
+    typeof c === 'string'
+      ? `${c} ${((i + 1) / (baseColors.length + 1)) * 100}%`
+      : `${c.color} ${c.position}`,
+  )
+  return baseColors
 }
 
 /**
@@ -298,15 +542,16 @@ function handleTextAnimation({ direction, type }: HandleAnimationOptions): Anima
  * @param boxShadowConfig 盒阴影参数，包含 colors, x, y, spread, blur, brightness, mode
  */
 function handleBoxShadowAnimation({
-  direction,
   type,
   boxShadowConfig,
+  boxShadowColors,
 }: {
-  direction: Direction
   type: GradientType
   boxShadowConfig: BoxShadowConfig
+  boxShadowColors: string[]
 }): AnimationDetails {
-  const { colors, x, y, spread, blur, brightness } = boxShadowConfig
+  const { x, y, spread, blur, brightness } = boxShadowConfig
+  boxShadowColors = boxShadowConfig.boxShadowColors || boxShadowColors
   // 强制把 x, y, spread, blur 转成 number
   const numX = typeof x === 'number' ? x : parseFloat(x)
   const numY = typeof y === 'number' ? y : parseFloat(y)
@@ -315,10 +560,10 @@ function handleBoxShadowAnimation({
 
   // 只做色彩切换动画 (不同颜色切换，不是多层渐变叠加)
   let keyframes = ''
-  const n = colors.length
+  const n = boxShadowColors.length
   for (let i = 0; i < n; i++) {
     const percent = Math.round((i * 100) / n)
-    const color = colors[i]
+    const color = boxShadowColors[i]
     const colorValue = color.startsWith('var(') ? color : `${color}`
     keyframes += `
       ${percent}% {
@@ -326,7 +571,7 @@ function handleBoxShadowAnimation({
       }`
   }
   // 闭合为第一个颜色
-  const color0 = colors[0]
+  const color0 = boxShadowColors[0]
   const color0Value = color0.startsWith('var(') ? color0 : `${color0}`
   keyframes += `
     100% {
@@ -336,242 +581,36 @@ function handleBoxShadowAnimation({
   return {
     backgroundSize: '100% 100%',
     keyframes,
-    direction: direction as Direction,
     type,
-    prefixCode: `inset:0;border-radius:inherit;filter:brightness(${brightness});pointer-events:none;`,
+    prefixCode: `border-radius:inherit;filter:brightness(${brightness});pointer-events:none;`,
   }
 }
 
-/** 应用渐变动画
- * @description 一个 Vue composable，用于给元素应用动态背景渐变动画。
- * @param options 应用渐变动画的配置选项
- * @returns 应用渐变动画的配置选项
- */
-export function useGradientAnimation(options: UseGradientAnimationOptions = {}) {
-  //style元素
-  let styleElement: HTMLStyleElement | null = null
+//每个触发时机下伪元素的css代码包裹，用于包裹伪元素的css代码
+const getPseudoElementCSS = (code: string) => {
+  return `&::before{${code}}`
+}
 
-  onMounted(() => {
-    const {
-      items = [], //子项配置 子项配置会递归调用 useGradientAnimation
-      className = 'gradient-animation', //全局默认的 CSS 类名
-      colors = THEME_SECONDARY_GRADIENT_COLORS, //渐变颜色组
-      boxShadowConfig = {
-        colors: THEME_HIGH_CONTRAST_NEON_COLORS, //荧光阴影渐变颜色组
-        x: '0',
-        y: '0',
-        blur: 0,
-        spread: 1,
-        brightness: 1,
-      },
-      opacity = 1, //全局透明度
-      colorsCount = 3, //渐变颜色段数
-      speed = 15, //背景渐变动画速度
-      direction = '0deg', //全局默认的渐变方向
-      gradientTypes = ['linear'], //渐变类型
-      triggerTimes = ['mounted'], //背景渐变动画触发时机
-      // coverBackground = false, //是否需要覆盖元素底层背景
-      prefixName = 'gradient-anim-', //前缀名称,防止
-      animation = {
-        name: '', //动画名称
-        iterationCount: 'infinite', //动画迭代次数
-        direction: 'normal', //背景渐变动画方向
-        duration: null, //背景渐变动画持续时间
-        timingFunction: 'linear', //背景渐变动画缓动函数
-        delay: '0s', //背景渐变动画延迟
-        playState: 'running', //背景渐变动画状态
-      },
-    } = options
-    if (typeof document === 'undefined') return
-
-    //自定义渐变色数组配置子项
-    if (items.length > 0) {
-      items.forEach((item) => {
-        useGradientAnimation(item)
-      })
-      return
-    }
-    //方向集合，用于随机选择方向
-    const dirSet = new Set<string>()
-
-    //获取需要公共伪元素的css代码(三种触发时机下公用的伪元素css代码)
-    const getCommonPseudoElementCSS = () =>
-      `&::before{transition:opacity 0.2s ease;content:'';position:absolute;z-index:-1;transform-origin:center;}`
-    //时间单位
-    const timeUnit = 's'
-
-    //初始化css代码
-    let css = ''
-    //往大括号里加css代码 大括号是class的{}
-    const getAllDynamicCssCode = (code: string) =>
-      `.${className}{position:relative;overflow:hidden;z-index:1;opacity:${opacity};${getCommonPseudoElementCSS()}` +
-      code +
-      '}'
-
-    //动画代码 动画代码在大括号外面
-    let keyframesCode: string = ''
-
-    //大括号里面的动画代码
-    let KeyCode: string = ''
-
-    //每个触发时机下伪元素的css代码包裹，用于包裹伪元素的css代码
-    const getPseudoElementCSS = (code: string) => {
-      return `&::before{${code}}`
-    }
-
-    //获取每个关键渐变类型的动态css动画代码
-    const getEveryDynamicCssCodeByTrigger = (
-      trigger: TriggerTime,
-      code: string,
-      needPseudoElementCSS: boolean = true, //需要伪元素的css代码包裹 box-shadow和text 不需要
-    ) => {
-      let prefixCode, suffixCode: string
-      switch (trigger) {
-        case 'mounted':
-          prefixCode = ''
-          suffixCode = ''
-          break
-        case 'hover':
-          prefixCode = '&:hover{'
-          suffixCode = '}'
-          break
-        case 'active':
-          prefixCode = '&:active{'
-          suffixCode = '}'
-          break
-        default:
-          prefixCode = ''
-          suffixCode = ''
-          break
-      }
-      return `${prefixCode}${needPseudoElementCSS ? getPseudoElementCSS(code) : code}${suffixCode}`
-    }
-
-    //每个状态下渐变动画的配置信息
-    triggerTimes.forEach((trigger) => {
-      //随机处理
-      let {
-        allRandom = false, //是否全随机
-        randomColorsCount = false, //是否随机色段数
-        randomColorsOrder = false, //是否随机色段次序
-        randomDirection = false, //是否随机方向
-      } = (colorsCount as ColorsSequenceRandom) || {}
-
-      const randomList = [allRandom, randomColorsCount, randomColorsOrder, randomDirection]
-
-      //是否随机生成
-      const shouldRandomize = randomList.some(Boolean)
-      if (shouldRandomize) {
-        if (allRandom) {
-          randomColorsCount = true
-          randomDirection = true
-          randomColorsOrder = true
-        }
-      }
-      let baseColors: BaseColor[] = []
-      //渐变色组起始位置
-      let start = 0
-      //渐变色组结束位置
-      let end = (() => {
-        if (randomColorsCount) {
-          if (typeof randomColorsCount === 'number') return randomColorsCount
-          // 如果是 true，则在 1 ~ colors.length 之间随机
-          return 1 + random(colors.length, 'floor')
-        } else if (typeof colorsCount === 'number') {
-          return colorsCount
-        } else if (Array.isArray(colorsCount)) {
-          // 范围取整随机
-          const [min, max] = colorsCount as [number, number]
-          start = min
-          return max
-        }
-        return colors.length
-      })()
-      //范围内随机取值
-      end = Math.max(1, Math.min(end, colors.length))
-      baseColors = colors.slice(start, end)
-      //随机排序
-      if (randomColorsOrder) {
-        baseColors = baseColors.toSorted(() => Math.random() - 0.5)
-      }
-      //颜色填充主题背景色
-      baseColors = baseColors.map((c, i) =>
-        typeof c === 'string'
-          ? `${c} ${((i + 1) / (baseColors.length + 1)) * 100}%`
-          : `${c.color} ${c.position}`,
-      )
-      //渐变色组颜色并填充主题背景色
-      baseColors = [
-        `${THEME_MAIN_GRADIENT_COLOR} 0%`,
-        ...baseColors,
-        `${THEME_MAIN_GRADIENT_COLOR} 100%`,
-      ]
-      //生成线性渐变颜色css字符串
-      const gradientColorsString = baseColors.join(',')
-
-      //生成动画声明 kfn动画名
-      const animDecl = (kfn: string) =>
-        typeof animation === 'string'
-          ? `${kfn} ${animation}`
-          : `${kfn} ${animation.duration || 60 / speed + timeUnit} ${animation.timingFunction} ${animation.delay} ${animation.iterationCount}  ${animation.direction} ${animation.playState}`
-
-      let randowDirection = direction
-      //所有触发时机下生成对应的不同渐变类型动画样式配置
-      gradientTypes.map((i) => {
-        if (direction === 'random' || randomDirection) {
-          randowDirection = randPick(getDirCandidates(i, trigger), dirSet, (v) => v) as Direction
-        }
-        //获得每个渐变类型动画的配置信息
-        let item: AnimationDetails = {
-          backgroundSize: '',
-          keyframes: '',
-          direction: '90deg',
-          type: 'linear',
-          animation: '',
-          insertPseudoCode: '',
-        }
-        switch (i) {
-          case 'linear':
-            item = handleLinearAnimation({ direction: randowDirection, type: i })
-            break
-          case 'radial':
-            item = handleRadialAnimation({ direction: randowDirection, type: i })
-            break
-          case 'text':
-            item = handleTextAnimation({ direction: randowDirection, type: i })
-            break
-          case 'box-shadow':
-            item = handleBoxShadowAnimation({
-              direction: randowDirection,
-              type: i,
-              boxShadowConfig,
-            })
-            break
-        }
-        console.log(item)
-        item.keyframesName = `${prefixName + Math.random().toString(36).slice(2, 8)}`
-        keyframesCode += `@keyframes ${item.keyframesName}{${item.keyframes}}`
-        KeyCode += getEveryDynamicCssCodeByTrigger(
-          trigger,
-          `${item.prefixCode ?? '' + item.insertPseudoCode}background-image:${item.type === 'text' ? 'text' : 'linear'}-gradient(${item.direction || direction},${gradientColorsString});background-size:${item.backgroundSize};animation:${animDecl(item.keyframesName)};`,
-          !(i === 'box-shadow' || i === 'text'),
-        )
-        return item
-      })
-    })
-    css = getAllDynamicCssCode(KeyCode)
-    css += keyframesCode
-    console.log(decompressCodeAdvanced(css, 'css'))
-    styleElement = document.createElement('style')
-    styleElement.textContent = lightMinifyCode(css, 'css')
-    document.head.appendChild(styleElement)
-  })
-
-  onUnmounted(() => {
-    if (styleElement && document.head.contains(styleElement)) {
-      document.head.removeChild(styleElement)
-      styleElement = null
-      console.log('aaa')
-    }
-  })
+//伪类和伪元素css包裹
+const getPseudoClassAndPseudoElementWrapByTrigger = (
+  trigger: TriggerTime,
+  code: string,
+  needPseudoElementCSS: boolean = true, //需要伪元素的css代码包裹 box-shadow和text 不需要
+) => {
+  let prefixCode: string = '',
+    suffixCode: string = ''
+  switch (trigger) {
+    case 'mounted':
+      break
+    case 'hover':
+      prefixCode = '&:hover{'
+      suffixCode = '}'
+      break
+    case 'active':
+      prefixCode = '&:active{'
+      suffixCode = '}'
+      break
+    default:
+  }
+  return `${prefixCode}${needPseudoElementCSS ? getPseudoElementCSS(code) : code}${suffixCode}`
 }

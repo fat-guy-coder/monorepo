@@ -1,31 +1,63 @@
 <template>
   <div ref="container" class="main-view-container">
     <!-- 导航组件示例 -->
-    <Navigation position="bottom-right" :offset="{ bottom: '2rem', right: '0.5rem' }" :isMobile="isMobile"
-      @item-click="handleNavClick" :items="navItems">
+    <Navigation
+      position="bottom-right"
+      :offset="{ bottom: '2rem', right: '0.5rem' }"
+      :isMobile="isMobile"
+      @item-click="handleNavClick"
+      :items="navItems"
+    >
       <template #theme="{ item }">
-        <ThemeChange v-model:show="themeMenuShow" :theme="theme" :themes="themes"
-          :direction="isMobile ? 'vertical' : 'horizontal'" @theme-change="themeChange" />
+        <ThemeChange
+          v-model:show="themeMenuShow"
+          :theme="theme"
+          :themes="themes"
+          :direction="isMobile ? 'vertical' : 'horizontal'"
+          @theme-change="themeChange"
+        />
         <span class="nav-icon">{{ currentThemeIcon }}</span>
         <span class="nav-text">{{ item.label }}</span>
       </template>
     </Navigation>
     <div class="menu-container">
       <div class="search">
-        <Input v-if="!Menucollapsed" v-model:value="searchValue" placeholder="目前暂支持菜单搜索" allow-clear></Input>
+        <Input
+          v-if="!Menucollapsed"
+          v-model:value="searchValue"
+          placeholder="目前暂支持菜单搜索"
+          allow-clear
+        ></Input>
         <Button @click="toggleCollapsed"> {{ Menucollapsed ? '➡️' : '⬅️' }} </Button>
       </div>
       <div :class="Menucollapsed ? 'menu-collapsed' : 'menu'">
         <Spin :spinning="loading" class="loading" />
-        <Menu @select="goto" :collapsed="Menucollapsed" v-show="!loading" :mode="Menucollapsed ? 'vertical' : 'inline'"
-          :items="menus as any" :selectedKeys="selectedKeys" v-model:openKeys="openKeys">
+        <Menu
+          @select="goto"
+          :collapsed="Menucollapsed"
+          v-show="!loading"
+          :mode="Menucollapsed ? 'vertical' : 'inline'"
+          :items="menus as any"
+          :selectedKeys="selectedKeys"
+          v-model:openKeys="openKeys"
+        >
         </Menu>
       </div>
     </div>
     <div class="content">
-      <RouteTab @tab-click="tabClick" :activeKey="activeKey" :currentDragIndex="currentDragIndex" :tabList="tabList"
-        :showContextMenu="showContextMenu" @remove="removeTab" @remove-other="removeOther" @remove-side="removeSide"
-        @set-current-drag-index="setCurrentDragIndex" @sort-tab="sortTab" @toggle-show-menu="toggleShowMenu">
+      <RouteTab
+        @tab-click="tabClick"
+        :activeKey="activeKey"
+        :currentDragIndex="currentDragIndex"
+        :tabList="tabList"
+        :showContextMenu="showContextMenu"
+        @remove="removeTab"
+        @remove-other="removeOther"
+        @remove-side="removeSide"
+        @set-current-drag-index="setCurrentDragIndex"
+        @sort-tab="sortTab"
+        @toggle-show-menu="toggleShowMenu"
+      >
       </RouteTab>
       <div class="mainView" id="mainView" @scroll="handleScroll">
         <Spin :spinning="mainViewLoading" class="mainViewLoading" v-if="activeKey !== '/'"> </Spin>
@@ -38,26 +70,25 @@
       </div>
     </div>
   </div>
-
 </template>
 
 <script lang="ts" setup>
 import { Menu, RouteTab, ThemeChange, Navigation, Input, Button, message, Spin } from '@/components'
 import { computed, ref, watch, onMounted, onUnmounted, nextTick, provide } from 'vue'
 import {
-  type MenuItem,//菜单项类型
-  findFatherKeysListByKey,//查找父级菜单key列表
-  findMatchingLabels,//查找匹配的项并改变菜单项的label 返回openKeys和selectedKeys 具有副作用
-  reWashMenus,//重置菜单项匹配状态 具有副作用
-  findMenuItemByName,//查找菜单项 通过name
+  type MenuItem, //菜单项类型
+  findFatherKeysListByKey, //查找父级菜单key列表
+  findMatchingLabels, //查找匹配的项并改变菜单项的label 返回openKeys和selectedKeys 具有副作用
+  reWashMenus, //重置菜单项匹配状态 具有副作用
+  findMenuItemByName, //查找菜单项 通过name
 } from '@/menu'
-import { useTabistStore, type Tab } from '@/stores/tab'//标签列表store
-import { type Theme, useUserStore } from '@/stores/user'//用户信息store
+import { useTabistStore, type Tab } from '@/stores/tab' //标签列表store
+import { type Theme, useUserStore } from '@/stores/user' //用户信息store
 import { useRouter } from 'vue-router'
-import { debounce } from '@/Function/CommonFun'//常用函数
+import { debounce } from '@/Function/CommonFun' //常用函数
 import { useDetectMobile } from '@/hooks/useDetectMobile'
-import type { NavItem } from './components/Nav'//导航项类型
-import { useGradientAnimation } from '@/hooks/useGradientAnimation'//渐变色动画
+import type { NavItem } from './components/Nav' //导航项类型
+import { useGradientAnimation } from '@/hooks/useGradientAnimation' //渐变色动画
 // import { request } from '@/request'
 
 //获取用户信息store
@@ -105,11 +136,10 @@ const navItems = ref<NavItem[]>([
 ])
 
 //全局渐变色动画
-// useGradientAnimation({
-//   triggerTimes: ['hover'],
-//   gradientTypes: ['linear'],
-
-// })
+useGradientAnimation({
+  triggerTimes: ['hover'],
+  gradientTypes: ['linear'],
+})
 
 //当前主题图标
 const currentThemeIcon = computed(() => {
@@ -124,15 +154,14 @@ const handleNavClick = (item: NavItem): void => {
   switch (item.value) {
     case 'home':
       goToByName('home')
-      break;
+      break
     case 'theme':
       themeMenuShow.value = !themeMenuShow.value
-      break;
+      break
     default:
-      break;
+      break
   }
 }
-
 
 //主题切换
 const themeChange = (theme1: Theme) => {
@@ -145,7 +174,6 @@ const themeChange = (theme1: Theme) => {
   // 设置到 html 元素上
   document.documentElement.setAttribute('data-theme', theme1)
 }
-
 
 //路由
 const router = useRouter()
@@ -164,7 +192,6 @@ function closeContextMenu(e: MouseEvent) {
     store.toggleShowMenu(false)
   }
 }
-
 
 function cancelContextMenu() {
   if (contextMenu) {
@@ -200,7 +227,6 @@ const loading = ref(false)
 
 const mainViewLoading = ref(false)
 
-
 useDetectMobile(userStore)
 
 onMounted(() => {
@@ -215,7 +241,6 @@ onMounted(() => {
   router.push(store.activeKey)
   //获取菜单
   getMenus()
-
 })
 
 onUnmounted(() => {
@@ -235,7 +260,6 @@ const getMenus = async () => {
   loading.value = false
   mainViewLoading.value = false
 }
-
 
 const store = useTabistStore()
 
@@ -359,12 +383,7 @@ function removeSide(index: number, side: 'left' | 'right', key: string) {
   })
 }
 
-function goto({
-  path,
-  name,
-  label,
-  redirect,
-}: MenuItem) {
+function goto({ path, name, label, redirect }: MenuItem) {
   if (path === activeKey.value) {
     return
   }
@@ -382,7 +401,7 @@ function goto({
     {
       path,
       name,
-      label
+      label,
     },
     (path) => {
       openKeys.value = findFatherKeysListByKey(path)
@@ -472,7 +491,6 @@ const scrollTo = (id: string) => {
 //   }
 //   cacheKeys.value = e
 // }
-
 </script>
 
 <style lang="less" scoped>
@@ -514,8 +532,6 @@ const scrollTo = (id: string) => {
   line-height: calc(100vh - 2.2rem);
 }
 
-
-
 .menu-container {
   height: 100vh;
 }
@@ -548,7 +564,6 @@ const scrollTo = (id: string) => {
   overflow: auto;
   height: 100vh;
 }
-
 
 .mainView {
   overflow: auto;
