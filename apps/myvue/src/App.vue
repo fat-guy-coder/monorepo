@@ -45,20 +45,22 @@
       </div>
     </div>
     <div class="content">
-      <RouteTab
-        @tab-click="tabClick"
-        :activeKey="activeKey"
-        :currentDragIndex="currentDragIndex"
-        :tabList="tabList"
-        :showContextMenu="showContextMenu"
-        @remove="removeTab"
-        @remove-other="removeOther"
-        @remove-side="removeSide"
-        @set-current-drag-index="setCurrentDragIndex"
-        @sort-tab="sortTab"
-        @toggle-show-menu="toggleShowMenu"
-      >
-      </RouteTab>
+      <div class="tabs">
+        <RouteTab
+          @tab-click="tabClick"
+          :activeKey="activeKey"
+          :currentDragIndex="currentDragIndex"
+          :tabList="tabList"
+          :showContextMenu="showContextMenu"
+          @remove="removeTab"
+          @remove-other="removeOther"
+          @remove-side="removeSide"
+          @set-current-drag-index="setCurrentDragIndex"
+          @sort-tab="sortTab"
+          @toggle-show-menu="toggleShowMenu"
+        >
+        </RouteTab>
+      </div>
       <div class="mainView" id="mainView" @scroll="handleScroll">
         <Spin :spinning="mainViewLoading" class="mainViewLoading" v-if="activeKey !== '/'"> </Spin>
         <router-view v-slot="{ Component }">
@@ -135,12 +137,6 @@ const navItems = ref<NavItem[]>([
   },
 ])
 
-//全局渐变色动画
-useGradientAnimation({
-  triggerTimes: ['hover'],
-  gradientTypes: ['linear'],
-})
-
 //当前主题图标
 const currentThemeIcon = computed(() => {
   return themes.find((i) => i.value === theme.value)?.icon || '☀️'
@@ -174,6 +170,12 @@ const themeChange = (theme1: Theme) => {
   // 设置到 html 元素上
   document.documentElement.setAttribute('data-theme', theme1)
 }
+
+//全局渐变色动画
+useGradientAnimation({
+  gradientTypes: ['linear'],
+  triggerTimes: ['hover'],
+})
 
 //路由
 const router = useRouter()
@@ -212,7 +214,7 @@ onUnmounted(() => {
 // const initMenu = ref(true)
 
 //菜单折叠状态
-const Menucollapsed = ref(false)
+const Menucollapsed = ref(isMobile.value)
 
 //切换菜单折叠状态
 const toggleCollapsed = async () => {
@@ -282,7 +284,7 @@ const tabList = computed<Tab[]>(() => store.tabList)
 const activeKey = computed<string>(() => store.activeKey)
 
 const selectedKeys = computed<string[]>(() => {
-  if (!Menucollapsed.value && store.activeKey !== '/') {
+  if (store.activeKey !== '/') {
     return [store.activeKey]
   }
   return []
@@ -393,6 +395,7 @@ function goto({ path, name, label, redirect }: MenuItem) {
     goToByName(redirect.name, true)
     return
   }
+  console.log()
   mainViewLoading.value = true
   router.push({ path }).then(() => {
     mainViewLoading.value = false
@@ -468,29 +471,6 @@ const scrollTo = (id: string) => {
     }, 300)
   }
 }
-
-// const cacheKeys = ref<string[]>([])
-
-// const leafKeys = ref<string[]>([])
-
-// async function openChange(e: any) {
-//   if (cacheKeys.value.length < e.length) {
-//     const name = e[e.length - 1].slice(1)
-//     if (needLoadKeys.value.includes(name)) {
-//       changeLoading(menus.value, name, true)
-//       const submenus = await getSubMenuByName(name)
-//       addChild(menus.value, name, addKeysToRoutes(submenus))
-//       changeLoading(menus.value, name, false)
-//     }
-//   } else {
-//     // 计算cacheKeys.value和e的差集（即被关闭的key）
-//     const closedKey = cacheKeys.value.filter((key) => !e.includes(key))[0].slice(1)
-//     if (needLoadKeys.value.includes(closedKey)) {
-//       deleteChild(menus.value, closedKey)
-//     }
-//   }
-//   cacheKeys.value = e
-// }
 </script>
 
 <style lang="less" scoped>
@@ -537,8 +517,8 @@ const scrollTo = (id: string) => {
 }
 
 .search {
-  height: 2rem;
-  margin: 0.1rem 0 0 0.1rem;
+  height: 2.2rem;
+  // margin: 0.1rem 0 0 0.1rem;
   display: flex;
   justify-content: space-between;
   align-items: center;

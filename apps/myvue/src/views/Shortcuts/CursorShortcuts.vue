@@ -69,12 +69,15 @@ const categoriesData: Category[] = [
   {
     name: "🚀 高效导航",
     shortcuts: [
-      { name: "移动到具体行", keys: ["Ctrl", "G"], heat: 10 }, 
-      { name: "移动到具体页面(全局)", keys: ["Ctrl", "P"], heat: 10 }, 
-      { name: "移动到具体页面(打开的页签)", keys: ["Ctrl", "Tab"], heat: 10 }, 
+      { name: "移动到具体行", keys: ["Ctrl", "G"], heat: 10 },
+      { name: "移动到具体页面(全局)", keys: ["Ctrl", "P"], heat: 10 },
+      { name: "移动到具体页面(打开的页签)", keys: ["Ctrl", "Tab"], heat: 10 },
       { name: "按单词移动光标", keys: ["Ctrl", "+", "←/→"], heat: 9 },
       { name: "光标移动到行首", keys: ["Home"], heat: 8 },
       { name: "光标移动到行尾", keys: ["End"], heat: 8 },
+      { name: "查找上一项", keys: ["Shift", "Enter"], heat: 8 },
+      { name: "查找下一项", keys: ["Enter"], heat: 8 },
+      { name: "驼峰切换", keys: ["Ctrl", "5"], heat: 5 },
       { name: "光标移动到文档开头", keys: ["Ctrl", "Home"], heat: 7 },
       { name: "光标移动到文档结尾", keys: ["Ctrl", "End"], heat: 7 },
       { name: "按段落移动光标", keys: ["Ctrl", "+", "↑/↓"], heat: 6 },

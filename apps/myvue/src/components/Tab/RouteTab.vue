@@ -142,14 +142,12 @@ const endSorting = (path: string) => {
   overflow: hidden;
   transition: all 0.2s ease-in;
   font-size: var(--font-size-small);
-
   div {
     cursor: pointer;
     width: 100%;
     text-align: center;
     transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
     color: var(--color-text);
-
     &:hover {
       background-color: var(--color-background-soft);
       color: var(--color-primary);

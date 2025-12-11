@@ -1,5 +1,5 @@
 <template>
-    <div class="tab-pane gradient-animation" @click="change" :class="{
+    <div ref="tabPaneRef" class="tab-pane gradient-animation-linear-hover" @click="change" :class="{
         'is-active': activeKey === path,
         'is-disabled': disabled
     }">
@@ -16,7 +16,7 @@
 </template>
 
 <script setup lang="ts">
-import { inject, type ComputedRef } from 'vue';
+import { inject, onMounted, onUnmounted, ref, type ComputedRef } from 'vue';
 
 defineOptions({
     name: 'TabPane',
@@ -28,6 +28,7 @@ const props = defineProps<{
     path: string;
 }>();
 
+const tabPaneRef = ref<HTMLElement | null>(null);
 
 const type = inject<ComputedRef<string>>('type');
 
@@ -57,6 +58,20 @@ const onClose = inject<(path: string) => void>('close');
 const close = () => {
     onClose?.(props.path)
 }
+
+const setTabRef = inject<(key: string, el: HTMLElement) => void>('setTabRef');
+const removeTabRef = inject<(key: string) => void>('removeTabRef');
+
+onMounted(() => {
+    if (tabPaneRef.value) {
+        setTabRef?.(props.path, tabPaneRef.value);
+    }
+});
+
+onUnmounted(() => {
+    removeTabRef?.(props.path);
+});
+
 </script>
 
 <style lang="less">
@@ -77,10 +92,9 @@ const close = () => {
     justify-content: center;
     cursor: pointer;
     color: var(--color-text-quaternary);
-    background: transparent !important;
-
+    background: transparent;
     &:hover {
-        border: var(--border-width) solid var(--color-border);
+        border: var(--border-width) solid;
         border-radius: var(--border-radius-full);
     }
 }

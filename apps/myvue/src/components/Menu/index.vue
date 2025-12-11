@@ -1,14 +1,23 @@
 <template>
   <nav class="main-menu" :style="menuStyle">
     <ul class="menu__list">
-      <MenuItem v-for="item in items" :key="item.path" :item="item" :level="0" :is-open="openKeys.includes(item.path)"
-        :mode="mode" @toggle="handleToggle" @select="handleSelect" @close="closeKeys" />
+      <MenuItem
+        v-for="item in items"
+        :key="item.path"
+        :item="item"
+        :level="0"
+        :is-open="openKeys.includes(item.path)"
+        :mode="mode"
+        @toggle="handleToggle"
+        @select="handleSelect"
+        @close="closeKeys"
+      />
     </ul>
   </nav>
 </template>
 
 <script setup lang="ts">
-import { computed, provide, watch, type PropType } from 'vue'
+import { computed, provide, onMounted, type PropType, ref } from 'vue'
 import type { MenuItem as MenuItemType, MenuMode } from './index'
 import { useUserStore } from '@/stores/user'
 
@@ -35,9 +44,9 @@ const props = defineProps({
   },
   menuConfig: {
     type: Object as PropType<{
-      labelSize: number,
-      itemGap: number,
-      animationDuration: number,
+      labelSize: number
+      itemGap: number
+      animationDuration: number
     }>,
     default: () => ({
       labelSize: 14,
@@ -46,7 +55,6 @@ const props = defineProps({
     }),
   },
 })
-
 
 const openKeys = defineModel<string[]>('openKeys', {
   default: () => [],
@@ -58,10 +66,7 @@ const selectedKeys = defineModel<string[]>('selectedKeys', {
   type: Array as PropType<string[]>,
 })
 
-
-
 const emit = defineEmits(['select'])
-
 
 const menuStyle = computed(() => ({
   '--menu-label-size': `${props.menuConfig.labelSize}px`,
@@ -71,9 +76,9 @@ const menuStyle = computed(() => ({
 
 //切换菜单
 const handleToggle = (item: MenuItemType | string) => {
-  const path = typeof item === 'string' ? item : item.path;
-  const currentOpenKeys = [...openKeys.value];
-  const itemIndex = currentOpenKeys.indexOf(path);
+  const path = typeof item === 'string' ? item : item.path
+  const currentOpenKeys = [...openKeys.value]
+  const itemIndex = currentOpenKeys.indexOf(path)
 
   if (props.mode === 'inline') {
     if (currentOpenKeys.includes(path)) {
@@ -84,36 +89,34 @@ const handleToggle = (item: MenuItemType | string) => {
     openKeys.value = currentOpenKeys
   } else if (props.mode === 'vertical') {
     if (itemIndex > -1) {
-      // If the item is already open, close it and all its children
-      openKeys.value = currentOpenKeys.slice(0, itemIndex);
+      openKeys.value = currentOpenKeys.slice(0, itemIndex)
     } else {
       // Find the parent of the item to determine the correct level
       const findPath = (items: MenuItemType[], targetPath: string): string[] | null => {
         for (const currentItem of items) {
           if (currentItem.path === targetPath) {
-            return [currentItem.path];
+            return [currentItem.path]
           }
           if (currentItem.children) {
-            const childPath = findPath(currentItem.children, targetPath);
+            const childPath = findPath(currentItem.children, targetPath)
             if (childPath) {
-              return [currentItem.path, ...childPath];
+              return [currentItem.path, ...childPath]
             }
           }
         }
-        return null;
-      };
-
-      const fullPath = findPath(props.items, path);
-      if (!fullPath) {
-        openKeys.value = [path]; // Item not found in hierarchy, open it at root
-        return;
+        return null
       }
-      const parentPath = fullPath.slice(0, -1);
-      const keysToKeep = currentOpenKeys.filter(key => parentPath.includes(key));
-      openKeys.value = [...keysToKeep, path];
+      const fullPath = findPath(props.items, path)
+      if (!fullPath) {
+        openKeys.value = [path] // Item not found in hierarchy, open it at root
+        return
+      }
+      const parentPath = fullPath.slice(0, -1)
+      const keysToKeep = currentOpenKeys.filter((key) => parentPath.includes(key))
+      openKeys.value = [...keysToKeep, path]
     }
   }
-};
+}
 
 const handleSelect = (item: MenuItemType) => {
   const path = typeof item === 'string' ? item : item.path
@@ -127,31 +130,29 @@ const handleSelect = (item: MenuItemType) => {
   emit('select', item)
 }
 
-
 const closeKeys = () => {
   openKeys.value = []
 }
 
-
-
-watch(() => props.collapsed, (newVal) => {
-  if (newVal) {
-    openKeys.value = []
-  }
-},
-  { immediate: true }
-)
-
 const isMobile = computed(() => useUserStore().user.device.isMobile)
 
 const mode = computed(() => props.mode)
+
+const collapsed = computed(() => props.collapsed)
+
+const viewportWidth = ref<number>(window.innerWidth)
+
+onMounted(() => {
+  viewportWidth.value = window.innerWidth
+})
 
 provide('openKeys', openKeys)
 provide('selectedKeys', selectedKeys)
 provide('menuConfig', props.menuConfig)
 provide('menuOnLoad', props.onLoadData ?? null)
 provide('mode', mode)
-provide('collapsed', props.collapsed)
+provide('collapsed', collapsed)
+provide('viewportWidth', viewportWidth)
 provide('isMobile', isMobile)
 </script>
 

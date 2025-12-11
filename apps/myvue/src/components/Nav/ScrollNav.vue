@@ -1,12 +1,17 @@
 <template>
   <transition :name="animation.name" :style="{ '--nav-animation-duration': animation.duration }">
-    <nav v-if="show" class="scroll-nav" :class="[
-      `scroll-nav--${positionClass}`,
-      `scroll-nav--variant-${variant}`,
-      `scroll-nav--rounded-${rounded}`,
-      `scroll-nav--shadow-${shadow}`,
-      { 'scroll-nav--borderless': !bordered },
-    ]" :style="navStyle">
+    <nav
+      v-if="show"
+      class="scroll-nav"
+      :class="[
+        `scroll-nav--${positionClass}`,
+        `scroll-nav--variant-${variant}`,
+        `scroll-nav--rounded-${rounded}`,
+        `scroll-nav--shadow-${shadow}`,
+        { 'scroll-nav--borderless': !bordered },
+      ]"
+      :style="navStyle"
+    >
       <header class="scroll-nav__header">
         <div class="scroll-nav__title">
           <slot name="title">
@@ -23,30 +28,54 @@
 
       <ul class="scroll-nav__list" ref="scrollNavList" role="menu">
         <li v-if="showBackToTop" class="scroll-nav__item" role="menuitem" @click="scrollToTop">
-          <button class="scroll-nav__item-btn"
-            :class="[currentItem?.id === 'back-to-top' ? 'scroll-nav__item--active' : '', 'gradient-animation']">
+          <button
+            class="scroll-nav__item-btn"
+            :class="[
+              currentItem?.id === 'back-to-top' ? 'scroll-nav__item--active' : '',
+              'gradient-animation-hover',
+            ]"
+          >
             回到顶部
           </button>
         </li>
 
         <li v-for="item in mappedList" :key="item.id" class="scroll-nav__item" role="presentation">
-          <button class="scroll-nav__item-btn"
-            :class="[currentItem?.id === item.id ? 'scroll-nav__item--active' : '', 'gradient-animation']" type="button"
-            role="menuitem" :title="item.title" @click="handleScroll($event, item.id)">
+          <button
+            class="scroll-nav__item-btn"
+            :class="[
+              currentItem?.id === item.id ? 'scroll-nav__item--active' : '',
+              'gradient-animation-linear-hover',
+            ]"
+            type="button"
+            role="menuitem"
+            :title="item.title"
+            @click="handleScroll($event, item.id)"
+          >
             <span class="scroll-nav__item-text">{{ item.title }}</span>
           </button>
 
-          <ul v-if="showChild && item.children && item.children.length" class="scroll-nav__children">
-            <li v-for="child in item.children" :key="child.id" class="scroll-nav__item scroll-nav__item--child"
-              role="presentation">
-              <button class="scroll-nav__item-btn"
-                :class="[currentItem?.id === child.id ? 'scroll-nav__item--active' : '']" type="button" role="menuitem"
-                :title="child.title" @click="handleScroll($event, child.id)">
+          <ul
+            v-if="showChild && item.children && item.children.length"
+            class="scroll-nav__children"
+          >
+            <li
+              v-for="child in item.children"
+              :key="child.id"
+              class="scroll-nav__item scroll-nav__item--child"
+              role="presentation"
+            >
+              <button
+                class="scroll-nav__item-btn gradient-animation-linear-hover"
+                :class="[currentItem?.id === child.id ? 'scroll-nav__item--active' : '']"
+                type="button"
+                role="menuitem"
+                :title="child.title"
+                @click="handleScroll($event, child.id)"
+              >
                 <span class="scroll-nav__item-text">{{ child.title }}</span>
               </button>
             </li>
           </ul>
-
         </li>
       </ul>
     </nav>
@@ -56,7 +85,12 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch, type CSSProperties, type PropType } from 'vue'
 import { useUserStore } from '@/stores/user'
-import { animateHeight, calculateAnimationDuration, type AnimationProperties, type AnimationDurationOptions } from '@/Function/animation'
+import {
+  animateHeight,
+  calculateAnimationDuration,
+  type AnimationProperties,
+  type AnimationDurationOptions,
+} from '@/Function/animation'
 
 interface Item {
   title?: string
@@ -72,9 +106,9 @@ interface KeyMap {
 }
 
 type AnimationConfig = {
-  name: 'fade' | 'slide-in-right' | 'slide-in-left' | 'slide-in-top' | 'slide-in-bottom';
-  duration: string;
-  type: AnimationProperties;
+  name: 'fade' | 'slide-in-right' | 'slide-in-left' | 'slide-in-top' | 'slide-in-bottom'
+  duration: string
+  type: AnimationProperties
 } & AnimationDurationOptions
 
 const props = defineProps({
@@ -86,7 +120,14 @@ const props = defineProps({
   /** 动画配置 */
   animation: {
     type: Object as PropType<AnimationConfig>,
-    default: () => ({ name: 'fade', duration: '0.3s', type: ['height'], baseDuration: 0, durationPerItem: 20, maxDuration: 400 })
+    default: () => ({
+      name: 'fade',
+      duration: '0.3s',
+      type: ['height'],
+      baseDuration: 0,
+      durationPerItem: 20,
+      maxDuration: 400,
+    }),
   },
   /** 标题 */
   title: {
@@ -149,7 +190,7 @@ const props = defineProps({
   /** 阴影 */
   shadow: {
     type: String as PropType<'none' | 'sm' | 'md' | 'lg'>,
-    default: 'md',
+    default: 'none',
   },
   /** 背景样式配置 */
   variant: {
@@ -180,7 +221,7 @@ const props = defineProps({
   styleConfig: {
     type: Object as PropType<Record<string, string>>,
     default: () => ({}),
-  }
+  },
 })
 
 const store = useUserStore()
@@ -198,21 +239,24 @@ onMounted(() => {
 
 const totalItemCount = computed(() => {
   const countItems = (items: Item[]): number => {
-    let count = items.length;
+    let count = items.length
     for (const item of items) {
       if (item.children && item.children.length > 0) {
-        count += countItems(item.children);
+        count += countItems(item.children)
       }
     }
-    return count;
-  };
-  return countItems(props.list);
-});
+    return count
+  }
+  return countItems(props.list)
+})
 
 watch(isOpen, (newVal) => {
   if (scrollNavList.value) {
-    const duration = calculateAnimationDuration({ ...props.animation, itemCount: totalItemCount.value });
-    animateHeight(scrollNavList.value, newVal, duration, props.animation.type);
+    const duration = calculateAnimationDuration({
+      ...props.animation,
+      itemCount: totalItemCount.value,
+    })
+    animateHeight(scrollNavList.value, newVal, duration, props.animation.type)
   }
 })
 
@@ -247,9 +291,7 @@ const mappedList = computed(() => {
   const childrenKey = props.keyMap.children || 'children'
 
   return (props.list || []).map((item) => {
-    const children = Array.isArray(item[childrenKey])
-      ? (item[childrenKey] as Item[])
-      : []
+    const children = Array.isArray(item[childrenKey]) ? (item[childrenKey] as Item[]) : []
 
     return {
       title: (item[titleKey] as string) ?? '',
@@ -284,7 +326,6 @@ const handleScroll = (event: Event, id: string) => {
   currentItem.value = getCurrentItem(mappedList.value, id)
 }
 
-
 const getCurrentItem = (list: Item[], id: string): Item | null => {
   for (const item of list) {
     if (item.id === id) {
@@ -296,13 +337,11 @@ const getCurrentItem = (list: Item[], id: string): Item | null => {
       }
     }
   }
-  return null;
+  return null
 }
 </script>
 
 <style scoped lang="less">
-@import '@/assets/css/special-effects.less';
-
 .scroll-nav {
   // --- Internal CSS Variables ---
   --nav-animation-duration: 0.3s; // Default animation duration
@@ -311,8 +350,8 @@ const getCurrentItem = (list: Item[], id: string): Item | null => {
   --nav-border-color: var(--color-border);
   --nav-text-color: var(--color-text);
   --nav-accent-color: var(--color-primary);
-  --nav-shadow: var(--box-shadow-xs);
-  --nav-shadow-hover: var(--box-shadow-hover-xs);
+  --nav-shadow: var(--box-shadow-md);
+  --nav-shadow-hover: var(--box-shadow-hover-md);
   --nav-radius-sm: var(--border-radius-sm);
   --nav-radius-md: var(--border-radius-md);
   --nav-radius-lg: var(--border-radius-lg);
@@ -356,7 +395,7 @@ const getCurrentItem = (list: Item[], id: string): Item | null => {
   border: 1px solid var(--nav-border-color);
   border-radius: var(--nav-radius-md);
   color: var(--nav-text-color);
-  box-shadow: var(--nav-shadow);
+  // box-shadow: var(--nav-shadow);
   backdrop-filter: blur(10px);
   transition: all 0.3s ease;
   z-index: 5;
@@ -433,7 +472,6 @@ const getCurrentItem = (list: Item[], id: string): Item | null => {
   justify-content: space-between;
   align-items: center;
   padding: var(--nav-header-padding);
-
   h2 {
     margin: 0;
     font-size: var(--nav-title-font-size);
@@ -492,6 +530,8 @@ const getCurrentItem = (list: Item[], id: string): Item | null => {
   margin: 0;
   border: none;
 
+
+
   &--action {
     background: var(--nav-item-bg-hover);
   }
@@ -512,7 +552,10 @@ const getCurrentItem = (list: Item[], id: string): Item | null => {
   font-weight: 500;
   padding: var(--nav-item-padding);
   border-radius: var(--nav-item-radius);
-  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
 
   &:hover {
     // background: var(--nav-item-bg-hover);
@@ -568,7 +611,9 @@ const getCurrentItem = (list: Item[], id: string): Item | null => {
 
 .slide-in-right-enter-active,
 .slide-in-right-leave-active {
-  transition: transform var(--nav-animation-duration) ease, opacity var(--nav-animation-duration) ease;
+  transition:
+    transform var(--nav-animation-duration) ease,
+    opacity var(--nav-animation-duration) ease;
 }
 
 .slide-in-right-enter-from,
@@ -579,7 +624,9 @@ const getCurrentItem = (list: Item[], id: string): Item | null => {
 
 .slide-in-left-enter-active,
 .slide-in-left-leave-active {
-  transition: transform var(--nav-animation-duration) ease, opacity var(--nav-animation-duration) ease;
+  transition:
+    transform var(--nav-animation-duration) ease,
+    opacity var(--nav-animation-duration) ease;
 }
 
 .slide-in-left-enter-from,
@@ -590,7 +637,9 @@ const getCurrentItem = (list: Item[], id: string): Item | null => {
 
 .slide-in-top-enter-active,
 .slide-in-top-leave-active {
-  transition: transform var(--nav-animation-duration) ease, opacity var(--nav-animation-duration) ease;
+  transition:
+    transform var(--nav-animation-duration) ease,
+    opacity var(--nav-animation-duration) ease;
 }
 
 .slide-in-top-enter-from,
@@ -601,7 +650,9 @@ const getCurrentItem = (list: Item[], id: string): Item | null => {
 
 .slide-in-bottom-enter-active,
 .slide-in-bottom-leave-active {
-  transition: transform var(--nav-animation-duration) ease, opacity var(--nav-animation-duration) ease;
+  transition:
+    transform var(--nav-animation-duration) ease,
+    opacity var(--nav-animation-duration) ease;
 }
 
 .slide-in-bottom-enter-from,
@@ -609,7 +660,6 @@ const getCurrentItem = (list: Item[], id: string): Item | null => {
   opacity: 0;
   transform: translateY(20px);
 }
-
 
 @media (max-width: 768px) {
   .scroll-nav {

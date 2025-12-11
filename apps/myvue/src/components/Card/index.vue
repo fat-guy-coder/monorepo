@@ -1,49 +1,79 @@
 <template>
-  <div class="ui-card" :class="[
+  <component :is="as" class="ui-card" :class="[
     `size-${size}`,
-    'gradient-animation',
+    `variant--${variant}`,
+    // 'gradient-animation-hover',
     { 'is-hoverable': hoverable, }
   ]">
     <div v-if="hasTitle" class="ui-card__header">
       <slot name="title">
-        <div class="ui-card__title">{{ title }}</div>
+        <component :is="titleInfo.tag" class="ui-card__title">
+          {{ titleInfo.content }}
+        </component>
       </slot>
     </div>
-
     <div class="ui-card__body">
       <slot name="body">
         <slot />
       </slot>
     </div>
-  </div>
+  </component>
 </template>
 
 <script setup lang="ts">
-import { computed, useSlots, type CSSProperties } from 'vue'
+import { computed, useSlots } from 'vue'
 
 interface Props {
+  as?: string
   title?: string
-  /** 边框颜色（默认主题主色） */
+  h1?: string
+  h2?: string
+  h3?: string
+  h4?: string
+  h5?: string
+  h6?: string
+  variant?: 'default' | 'section-card'
   borderColor?: string
-  /** 是否显示边框 */
   bordered?: boolean
-  /** 是否 hover 提升阴影 */
   hoverable?: boolean
-  /** 卡片内边距（可传如 '16px' 或 'var(--element-padding)'） */
   padding?: string
-  /** 尺寸 */
   size?: 'sm' | 'md' | 'lg'
 }
 
-const { title = '', size = 'md' } = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), {
+  as: 'div',
+  title: '',
+  variant: 'default',
+  size: 'md',
+})
 
 const slots = useSlots()
-const hasTitle = computed(() => !!(title || (slots && (slots as any).title)))
+
+const titleInfo = computed(() => {
+  const headings: Record<string, string | undefined> = {
+    h1: props.h1,
+    h2: props.h2,
+    h3: props.h3,
+    h4: props.h4,
+    h5: props.h5,
+    h6: props.h6,
+  }
+  for (const tag in headings) {
+    if (headings[tag]) {
+      return { tag, content: headings[tag] }
+    }
+  }
+  return { tag: 'h3', content: props.title }
+})
+
+const hasTitle = computed(() => 
+  !!(props.title || props.h1 || props.h2 || props.h3 || props.h4 || props.h5 || props.h6 || slots.title)
+)
 </script>
 
 <style lang="less" scoped>
 .ui-card {
-  // --- Internal CSS Variables for Card ---
+  // --- 自有 CSS 变量定义 ---
   --card-padding: var(--padding-2xl);
   --card-padding-sm: var(--padding-2xl);
   --card-padding-md: calc(var(--padding-2xl) * 0.75);
@@ -58,6 +88,14 @@ const hasTitle = computed(() => !!(title || (slots && (slots as any).title)))
   --card-border-color-hover: var(--color-border-hover);
   --card-box-shadow: var(--box-shadow-md);
   --card-box-shadow-hover: var(--box-shadow-hover-md);
+  --card--title-margin: 0 ;
+
+  // Section Variant Styles
+  --section-card-padding: var(--padding-3xl);
+  --section-card-border-radius: var(--border-radius-lg);
+  --section-card-shadow: 0 0.25rem 1.25rem rgba(0, 0, 0, 0.08);
+  --section-card-shadow-hover: 0 0.5rem 1.875rem rgba(0, 0, 0, 0.12);
+  --section-card-transform-hover: translateY(-0.125rem);
 
   position: relative;
   color: var(--card-text-color);
@@ -89,16 +127,33 @@ const hasTitle = computed(() => !!(title || (slots && (slots as any).title)))
     padding: var(--card-padding-lg);
     font-size: 1rem;
   }
+
+  // Section 变体
+  &.variant--section-card {
+    padding: var(--section-card-padding);
+    border-radius: var(--section-card-border-radius);
+    box-shadow: var(--section-card-shadow);
+
+    &.is-hoverable:hover {
+      box-shadow: var(--section-card-shadow-hover);
+      transform: var(--section-card-transform-hover);
+    }
+  }
 }
 
 .ui-card__header {
-  margin-bottom: var(--margin-2xl);
+  margin-bottom: var(--margin-xl);
+  background-color: transparent;
 }
 
 .ui-card__title {
   color: var(--card-title-color);
-  font-weight: 600;
-  font-size: 1.05em;
+  background-color: transparent;
+  margin: var(--card--title-margin);
+}
+
+.variant--section-card .ui-card__title {
+    font-size: 1.2em;
 }
 
 .ui-card__body {

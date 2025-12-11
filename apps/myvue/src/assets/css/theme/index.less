@@ -42,9 +42,13 @@
 @color-light-soft: #f8f8f8; // 柔和白
 @color-light-mute: #f2f2f2; // 淡化白
 @color-light-light: #fafafa; // 浅白
-@color-highlight-text: #003d99;
-@color-highlight-bg: #ffd700;
-@color-highlight-border: #ffb300;
+
+// 高亮色加强对比度，更明显地区分于主题主色
+@color-highlight-text: #0051c8; // 明亮蓝色，较@color-primary明显更亮且偏蓝, 用于强调文本
+@color-highlight-text-high-contrast: #d32f2f; // 高对比度强调用色，鲜明红色，适用于极强视觉强调和警示场景
+@color-highlight-bg: #dbeafe; // 鲜明的高亮蓝色背景，远比@color-primary或主色更亮，与白区别明显
+@color-highlight-border: #3283ea; // 亮蓝高对比边框，比@color-primary更明亮醒目
+
 @color-link-text: #2563eb;
 @color-link-hover: #38bdf8;
 
@@ -69,15 +73,12 @@
 @color-gradient-light-12: #ff6f00; // 明亮橙（高对比）
 @color-gradient-light-13: #00796b; // 深青绿色（高对比）
 @color-gradient-light-14: #6a1b9a; // 深紫（高对比）
-
 // ---- 新增：白色主题字体渐变色（仅颜色，不是渐变函数） ----
 @font-gradient-light-1: #003d99;
 @font-gradient-light-2: #2563eb;
 @font-gradient-light-3: #0b3d91;
 @font-gradient-light-4: #ffd700;
 @font-gradient-light-5: #ffb300;
-// ------------------------------
-
 // box-shadow 颜色
 @color-box-shadow: 60, 90, 120;
 @color-box-shadow-hover: 80, 120, 180;
@@ -1017,4 +1018,37 @@ a,
     display: flex;
     place-items: center;
   }
+}
+
+/* Scrollbar styling based on theme color */
+
+// 定义主题色变量（如果还没有定义的话）
+// 可以放在文件顶部 :root 或 body，也可放在此处，下面是直接在这里添加
+:root {
+  --theme-color: var(--color-primary);
+  --theme-color-scrollbar-thumb: var(--color-primary-soft);
+  --theme-scrollbar-track: #f4f6fa;
+}
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+
+}
+::-webkit-scrollbar-thumb {
+  border-radius: 8px;
+  border: 2px solid #fff;
+}
+::-webkit-scrollbar-track {
+  background: var(--theme-scrollbar-track);
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Firefox scrollbar styling */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--theme-color-scrollbar-thumb) var(--theme-scrollbar-track);
 }

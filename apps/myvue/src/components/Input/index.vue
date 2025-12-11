@@ -103,8 +103,26 @@ onMounted(() => {
 
 <style scoped lang="less">
 .search-input {
-  --input-height: 32px;
-  --input-padding-horizontal: 11px;
+  // --- 自有 CSS 变量定义 ---
+  --input-height: 2rem; // 32px
+  --input-padding-horizontal: 0.6875rem; // 11px
+  --input-bg: var(--color-bg-container);
+  --input-border-color: var(--color-border);
+  --input-border-radius: var(--element-border-radius);
+  --input-border-color-hover: var(--color-primary);
+  --input-border-color-focus: var(--color-primary);
+  --input-focus-shadow: var(--box-shadow-hover); // 2px
+  --input-bg-disabled: var(--color-fill-tertiary);
+  --input-prefix-color: var(--color-text-tertiary);
+  --input-text-color: var(--color-text);
+  --input-placeholder-color: var(--color-text-quaternary);
+  --input-clear-color: var(--color-text-quaternary);
+  --input-clear-color-hover: var(--color-text-secondary);
+  --input-button-bg: var(--color-primary);
+  --input-button-text-color: var(--color-text-light-solid);
+  --input-button-bg-hover: var(--color-link-hover);
+  --input-spinner-track-color: rgba(255, 255, 255, 0.5);
+  --input-spinner-color: var(--color-text-light-solid, #fff);
 
   position: relative;
   display: flex;
@@ -112,23 +130,23 @@ onMounted(() => {
   width: 100%;
   height: var(--input-height);
   padding: 0;
-  background-color: var(--color-bg-container);
-  border: 1px solid var(--color-border);
-  border-radius: var(--element-border-radius);
+  background-color: var(--input-bg);
+  border: 0.0625rem solid var(--input-border-color); // 1px
+  border-radius: var(--input-border-radius);
   transition: border-color 0.2s, box-shadow 0.2s;
 
   &:hover {
-    border-color: var(--color-primary);
+    border-color: var(--input-border-color-hover);
   }
 
   &.is-focused {
-    border-color: var(--color-primary);
-    box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-primary) 20%, transparent);
+    border-color: var(--input-border-color-focus);
+    box-shadow: var(--input-focus-shadow);
   }
 
   &.is-disabled {
-    background-color: var(--color-fill-tertiary);
-    border-color: var(--color-border);
+    background-color: var(--input-bg-disabled);
+    border-color: var(--input-border-color);
     cursor: not-allowed;
 
     .search-input__control,
@@ -145,13 +163,13 @@ onMounted(() => {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: var(--color-text-tertiary);
+  color: var(--input-prefix-color);
   padding-left: var(--input-padding-horizontal);
 }
 
 .search-input__prefix svg {
-  width: 14px;
-  height: 14px;
+  width: 0.875rem; // 14px
+  height: 0.875rem; // 14px
 }
 
 .search-input__control {
@@ -161,65 +179,63 @@ onMounted(() => {
   border: none;
   outline: none;
   background: transparent;
-  color: var(--color-text);
-  font-size: 14px;
+  color: var(--input-text-color);
+  font-size: 0.875rem; // 14px
 }
 
 .search-input__control::placeholder {
-  color: var(--color-text-quaternary);
+  color: var(--input-placeholder-color);
 }
 
 .search-input__clear {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
+  width: 2rem; // 32px
   height: 100%;
   border: none;
   background: transparent;
-  color: var(--color-text-quaternary);
+  color: var(--input-clear-color);
   cursor: pointer;
-  font-size: 20px;
+  font-size: 1.25rem; // 20px
   line-height: 100%;
   transition: color 0.2s;
 
   &:hover {
-    color: var(--color-text-secondary);
+    color: var(--input-clear-color-hover);
   }
 }
 
 .search-input__action {
-  height: calc(var(--input-height) - 2px);
-  /* Match inner height */
-  margin-right: -1px;
-  /* Overlap the border */
+  height: calc(var(--input-height) - 0.125rem); // 2px
+  margin-right: -0.0625rem; // -1px
   border: none;
-  border-top-right-radius: var(--element-border-radius);
-  border-bottom-right-radius: var(--element-border-radius);
-  background-color: var(--color-primary);
-  color: var(--color-text-light-solid);
+  border-top-right-radius: var(--input-border-radius);
+  border-bottom-right-radius: var(--input-border-radius);
+  background-color: var(--input-button-bg);
+  color: var(--input-button-text-color);
   font-weight: 500;
   cursor: pointer;
-  padding: 0 16px;
+  padding: 0 1rem; // 16px
   transition: background-color 0.2s;
 
   &:not(:disabled):hover {
-    background-color: var(--color-link-hover);
+    background-color: var(--input-button-bg-hover);
   }
 
   &:disabled {
-    background-color: var(--color-primary);
+    background-color: var(--input-button-bg);
     opacity: 0.6;
     cursor: not-allowed;
   }
 }
 
 .search-input__spinner {
-  border: 2px solid rgba(255, 255, 255, 0.5);
-  border-top-color: var(--color-text-light-solid, #fff);
+  border: 0.125rem solid var(--input-spinner-track-color); // 2px
+  border-top-color: var(--input-spinner-color);
   border-radius: 50%;
-  width: 16px;
-  height: 16px;
+  width: 1rem; // 16px
+  height: 1rem; // 16px
   display: inline-block;
   animation: search-spin 0.8s linear infinite;
 }
