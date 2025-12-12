@@ -1,13 +1,7 @@
 <template>
   <div
     :class="['pagination-container', `pagination--${mode}`, { disabled }]"
-    :style="{
-      '--_pagination-active-bg': activeBgColor,
-      '--_pagination-active-text': activeTextColor,
-      '--_pagination-hover-bg': hoverBgColor,
-      '--_pagination-text-color': textColor,
-      '--_pagination-border-color': borderColor,
-    }"
+    :style="componentStyle"
   >
     <!-- 总条数 -->
     <span v-if="showTotal && mode !== 'small'" class="pagination-total">
@@ -66,18 +60,27 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue';
+import { ref, computed, watch, type CSSProperties } from 'vue';
 
-type Mode = 'small' | 'medium' | 'large';
-
-interface Props {
+const { 
+  total,
+  currentPage = 1,
+  pageSize = 10,
+  mode = 'medium',
+  disabled = false,
+  showTotal = true,
+  showJumper = true,
+  showPageSizeChanger = true,
+  pageSizeOptions = [10, 20, 50, 100],
+  css = {},
+} = defineProps<{
   // 数据
   total: number;
   currentPage?: number;
   pageSize?: number;
 
   // 模式
-  mode?: Mode;
+  mode?: 'small' | 'medium' | 'large';
 
   // 功能开关
   disabled?: boolean;
@@ -87,28 +90,8 @@ interface Props {
   pageSizeOptions?: number[];
 
   // 样式覆盖
-  activeBgColor?: string | null;
-  activeTextColor?: string | null;
-  hoverBgColor?: string | null;
-  textColor?: string | null;
-  borderColor?: string | null;
-}
-
-const props = withDefaults(defineProps<Props>(), {
-  currentPage: 1,
-  pageSize: 10,
-  mode: 'medium',
-  disabled: false,
-  showTotal: true,
-  showJumper: true,
-  showPageSizeChanger: true,
-  pageSizeOptions: () => [10, 20, 50, 100],
-  activeBgColor: null,
-  activeTextColor: null,
-  hoverBgColor: null,
-  textColor: null,
-  borderColor: null,
-});
+  css?: Record<string, string>;
+}>();
 
 const emit = defineEmits<{ 
   (e: 'update:currentPage', page: number): void;
@@ -117,18 +100,24 @@ const emit = defineEmits<{
 }>();
 
 // 内部状态，用于 v-model
-const internalCurrentPage = ref<number>(props.currentPage);
-const internalPageSize = ref<number>(props.pageSize);
-const jumperPage = ref<number | string>(props.currentPage);
+const internalCurrentPage = ref<number>(currentPage);
+const internalPageSize = ref<number>(pageSize);
+const jumperPage = ref<number | string>(currentPage);
 
 // 计算总页数
-const totalPages = computed<number>(() => Math.ceil(props.total / internalPageSize.value));
+const totalPages = computed<number>(() => Math.ceil(total / internalPageSize.value));
+
+// 动态计算 style，用于覆盖 CSS 变量
+const componentStyle = computed(() => {
+  // 将 props.css 转换为 CSSProperties 类型，以解决 TypeScript 类型问题
+  return { ...css } as CSSProperties;
+});
 
 // 监听外部 props 变化，同步内部状态
-watch(() => props.currentPage, (newPage) => {
+watch(() => currentPage, (newPage) => {
   internalCurrentPage.value = newPage;
 });
-watch(() => props.pageSize, (newSize) => {
+watch(() => pageSize, (newSize) => {
   internalPageSize.value = newSize;
 });
 
@@ -137,8 +126,8 @@ const paginatedPages = computed<(number | string)[]>(() => {
   const pages: (number | string)[] = [];
   const total = totalPages.value;
   const current = internalCurrentPage.value;
-  const pageBufferSize = props.mode === 'large' ? 2 : 1; // 当前页码前后显示的页码数
-  const edgeBufferSize = props.mode === 'large' ? 2 : 1; // 边缘页码数
+  const pageBufferSize = mode === 'large' ? 2 : 1; // 当前页码前后显示的页码数
+  const edgeBufferSize = mode === 'large' ? 2 : 1; // 边缘页码数
 
   if (total <= (pageBufferSize * 2) + (edgeBufferSize * 2) + 1) {
     // 如果总页数不多，全部显示
@@ -148,7 +137,7 @@ const paginatedPages = computed<(number | string)[]>(() => {
   } else {
     // 显示第一页
     pages.push(1);
-    if (edgeBufferSize > 1 && props.mode === 'large') pages.push(2);
+    if (edgeBufferSize > 1 && mode === 'large') pages.push(2);
 
     // 前置省略号
     if (current > pageBufferSize + edgeBufferSize + 1) {
@@ -171,7 +160,7 @@ const paginatedPages = computed<(number | string)[]>(() => {
     }
 
     // 显示最后几页
-    if (edgeBufferSize > 1 && props.mode === 'large') {
+    if (edgeBufferSize > 1 && mode === 'large') {
         if (!pages.includes(total - 1)) pages.push(total - 1);
     }
     if (!pages.includes(total)) pages.push(total);
@@ -182,7 +171,7 @@ const paginatedPages = computed<(number | string)[]>(() => {
 
 // --- 事件处理 ---
 function changePage(page: number) {
-  if (props.disabled || page < 1 || page > totalPages.value || page === internalCurrentPage.value) {
+  if (disabled || page < 1 || page > totalPages.value || page === internalCurrentPage.value) {
     return;
   }
   internalCurrentPage.value = page;

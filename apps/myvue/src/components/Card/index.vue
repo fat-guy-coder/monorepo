@@ -2,9 +2,8 @@
   <component :is="as" class="ui-card" :class="[
     `size-${size}`,
     `variant--${variant}`,
-    // 'gradient-animation-hover',
     { 'is-hoverable': hoverable, }
-  ]">
+  ]" :style="componentStyle">
     <div v-if="hasTitle" class="ui-card__header">
       <slot name="title">
         <component :is="titleInfo.tag" class="ui-card__title">
@@ -21,9 +20,22 @@
 </template>
 
 <script setup lang="ts">
-import { computed, useSlots } from 'vue'
+import { computed, useSlots, type CSSProperties } from 'vue'
 
-interface Props {
+const {
+  as = 'div',
+  title = '',
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  variant = 'default',
+  hoverable = false,
+  size = 'md',
+  css = {},
+} = defineProps<{
   as?: string
   title?: string
   h1?: string
@@ -33,61 +45,56 @@ interface Props {
   h5?: string
   h6?: string
   variant?: 'default' | 'section-card'
-  borderColor?: string
-  bordered?: boolean
   hoverable?: boolean
-  padding?: string
   size?: 'sm' | 'md' | 'lg'
-}
-
-const props = withDefaults(defineProps<Props>(), {
-  as: 'div',
-  title: '',
-  variant: 'default',
-  size: 'md',
-})
+  css?: Record<string, string>
+}>()
 
 const slots = useSlots()
 
+const componentStyle = computed(() => {
+  return { ...css } as CSSProperties;
+});
+
 const titleInfo = computed(() => {
   const headings: Record<string, string | undefined> = {
-    h1: props.h1,
-    h2: props.h2,
-    h3: props.h3,
-    h4: props.h4,
-    h5: props.h5,
-    h6: props.h6,
+    h1: h1,
+    h2: h2,
+    h3: h3,
+    h4: h4,
+    h5: h5,
+    h6: h6,
   }
   for (const tag in headings) {
     if (headings[tag]) {
       return { tag, content: headings[tag] }
     }
   }
-  return { tag: 'h3', content: props.title }
+  return { tag: 'h3', content: title }
 })
 
 const hasTitle = computed(() => 
-  !!(props.title || props.h1 || props.h2 || props.h3 || props.h4 || props.h5 || props.h6 || slots.title)
+  !!(title || h1 || h2 || h3 || h4 || h5 || h6 || slots.title)
 )
 </script>
 
 <style lang="less" scoped>
 .ui-card {
   // --- 自有 CSS 变量定义 ---
-  --card-padding: var(--padding-2xl);
-  --card-padding-sm: var(--padding-2xl);
-  --card-padding-md: calc(var(--padding-2xl) * 0.75);
-  --card-padding-lg: calc(var(--padding-2xl) * 1.25);
-  --card-bg-color: var(--color-background);
-  --card-bg-color-hover: var(--color-background-soft);
-  --card-text-color: var(--color-text);
-  --card-title-color: var(--color-heading);
-  --card-border-radius: var(--border-radius-md);
-  --card-border-width: var(--border-width);
-  --card-border-color: var(--color-border);
-  --card-border-color-hover: var(--color-border-hover);
-  --card-box-shadow: var(--box-shadow-md);
-  --card-box-shadow-hover: var(--box-shadow-hover-md);
+  --card-padding: var(--_card-padding, var(--padding-2xl));
+  --card-padding-sm: var(--_card-padding-sm, var(--padding-2xl));
+  --card-padding-md: var(--_card-padding-md, calc(var(--padding-2xl) * 0.75));
+  --card-padding-lg: var(--_card-padding-lg, calc(var(--padding-2xl) * 1.25));
+  --card-bg-color: var(--_card-bg-color, var(--color-background));
+  --card-bg-color-hover: var(--_card-bg-color-hover, var(--color-background-soft));
+  --card-text-color: var(--_card-text-color, var(--color-text));
+  --card-title-color: var(--_card-title-color, var(--color-heading));
+  --card-border-radius: var(--_card-border-radius, var(--border-radius-md));
+  --card-border-width: var(--_card-border-width, var(--border-width));
+  --card-border-color: var(--_card-border-color, var(--color-border));
+  --card-border-color-hover: var(--_card-border-color-hover, var(--color-border-hover));
+  --card-box-shadow: var(--_card-box-shadow, var(--box-shadow-md));
+  --card-box-shadow-hover: var(--_card-box-shadow-hover, var(--box-shadow-hover-md));
   --card--title-margin: 0 ;
 
   // Section Variant Styles

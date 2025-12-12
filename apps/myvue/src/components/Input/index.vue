@@ -2,7 +2,7 @@
   <div class="search-input" :class="{
     'is-disabled': disabled,
     'is-focused': isFocused,
-  }">
+  }" :style="componentStyle">
     <span v-if="$slots.prefix || showDefaultPrefix" class="search-input__prefix">
       <slot name="prefix">
         <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -16,7 +16,7 @@
       :placeholder="placeholder || '搜索'" :disabled="disabled" :maxlength="maxlength" @focus="setFocus(true)"
       @blur="setFocus(false)" @input="handleInput" @keyup.enter="triggerSearch" />
 
-    <button v-if="(allowClear ?? true) && value" type="button" class="search-input__clear" :disabled="disabled"
+    <button v-if="allowClear && value" type="button" class="search-input__clear" :disabled="disabled"
       @click="handleClear">
       ×
     </button>
@@ -30,13 +30,25 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted, nextTick } from 'vue'
+import { ref, watch, onMounted, nextTick, computed, type CSSProperties } from 'vue'
 
 defineOptions({
   name: 'SearchInput',
 })
 
-const props = defineProps<{
+const {
+  value,
+  placeholder,
+  disabled = false,
+  allowClear = true,
+  loading = false,
+  autofocus = false,
+  searchText,
+  maxlength,
+  showDefaultPrefix = false,
+  showSearchButton = false,
+  css = {},
+} = defineProps<{
   value?: string | number
   placeholder?: string
   disabled?: boolean
@@ -47,9 +59,10 @@ const props = defineProps<{
   maxlength?: number
   showDefaultPrefix?: boolean
   showSearchButton?: boolean
-}>()
+  css?: Record<string, string>
+}>() 
 
-const emit = defineEmits<{
+const emit = defineEmits<{ 
   (event: 'update:value', value: string | number): void
   (event: 'search', value: string): void
   (event: 'focus'): void
@@ -58,6 +71,10 @@ const emit = defineEmits<{
 
 const inputRef = ref<HTMLInputElement>()
 const isFocused = ref(false)
+
+const componentStyle = computed(() => {
+  return { ...css } as CSSProperties;
+});
 
 const setFocus = (value: boolean) => {
   isFocused.value = value
@@ -74,7 +91,7 @@ const handleInput = (event: Event) => {
 }
 
 const triggerSearch = () => {
-  emit('search', props.value?.toString().trim() ?? '')
+  emit('search', value?.toString().trim() ?? '')
 }
 
 const handleClear = () => {
@@ -85,7 +102,7 @@ const handleClear = () => {
 }
 
 watch(
-  () => props.autofocus,
+  () => autofocus,
   (value) => {
     if (value) {
       nextTick(() => inputRef.value?.focus())
@@ -95,7 +112,7 @@ watch(
 )
 
 onMounted(() => {
-  if (props.autofocus) {
+  if (autofocus) {
     inputRef.value?.focus()
   }
 })
@@ -104,25 +121,25 @@ onMounted(() => {
 <style scoped lang="less">
 .search-input {
   // --- 自有 CSS 变量定义 ---
-  --input-height: 2rem; // 32px
-  --input-padding-horizontal: 0.6875rem; // 11px
-  --input-bg: var(--color-bg-container);
-  --input-border-color: var(--color-border);
-  --input-border-radius: var(--element-border-radius);
-  --input-border-color-hover: var(--color-primary);
-  --input-border-color-focus: var(--color-primary);
-  --input-focus-shadow: var(--box-shadow-hover); // 2px
-  --input-bg-disabled: var(--color-fill-tertiary);
-  --input-prefix-color: var(--color-text-tertiary);
-  --input-text-color: var(--color-text);
-  --input-placeholder-color: var(--color-text-quaternary);
-  --input-clear-color: var(--color-text-quaternary);
-  --input-clear-color-hover: var(--color-text-secondary);
-  --input-button-bg: var(--color-primary);
-  --input-button-text-color: var(--color-text-light-solid);
-  --input-button-bg-hover: var(--color-link-hover);
-  --input-spinner-track-color: rgba(255, 255, 255, 0.5);
-  --input-spinner-color: var(--color-text-light-solid, #fff);
+  --input-height: var(--_input-height, 2rem);
+  --input-padding-horizontal: var(--_input-padding-horizontal, 0.6875rem);
+  --input-bg: var(--_input-bg, var(--color-bg-container));
+  --input-border-color: var(--_input-border-color, var(--color-border));
+  --input-border-radius: var(--_input-border-radius, var(--element-border-radius));
+  --input-border-color-hover: var(--_input-border-color-hover, var(--color-primary));
+  --input-border-color-focus: var(--_input-border-color-focus, var(--color-primary));
+  --input-focus-shadow: var(--_input-focus-shadow, var(--box-shadow-hover));
+  --input-bg-disabled: var(--_input-bg-disabled, var(--color-fill-tertiary));
+  --input-prefix-color: var(--_input-prefix-color, var(--color-text-tertiary));
+  --input-text-color: var(--_input-text-color, var(--color-text));
+  --input-placeholder-color: var(--_input-placeholder-color, var(--color-text-quaternary));
+  --input-clear-color: var(--_input-clear-color, var(--color-text-quaternary));
+  --input-clear-color-hover: var(--_input-clear-color-hover, var(--color-text-secondary));
+  --input-button-bg: var(--_input-button-bg, var(--color-primary));
+  --input-button-text-color: var(--_input-button-text-color, var(--color-text-light-solid));
+  --input-button-bg-hover: var(--_input-button-bg-hover, var(--color-link-hover));
+  --input-spinner-track-color: var(--_input-spinner-track-color, rgba(255, 255, 255, 0.5));
+  --input-spinner-color: var(--_input-spinner-color, var(--color-text-light-solid, #fff));
 
   position: relative;
   display: flex;
@@ -131,7 +148,7 @@ onMounted(() => {
   height: var(--input-height);
   padding: 0;
   background-color: var(--input-bg);
-  border: 0.0625rem solid var(--input-border-color); // 1px
+  border: 0.0625rem solid var(--input-border-color);
   border-radius: var(--input-border-radius);
   transition: border-color 0.2s, box-shadow 0.2s;
 
@@ -168,8 +185,8 @@ onMounted(() => {
 }
 
 .search-input__prefix svg {
-  width: 0.875rem; // 14px
-  height: 0.875rem; // 14px
+  width: 0.875rem;
+  height: 0.875rem;
 }
 
 .search-input__control {
@@ -180,7 +197,7 @@ onMounted(() => {
   outline: none;
   background: transparent;
   color: var(--input-text-color);
-  font-size: 0.875rem; // 14px
+  font-size: 0.875rem;
 }
 
 .search-input__control::placeholder {
@@ -191,13 +208,13 @@ onMounted(() => {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 2rem; // 32px
+  width: 2rem;
   height: 100%;
   border: none;
   background: transparent;
   color: var(--input-clear-color);
   cursor: pointer;
-  font-size: 1.25rem; // 20px
+  font-size: 1.25rem;
   line-height: 100%;
   transition: color 0.2s;
 
@@ -207,8 +224,8 @@ onMounted(() => {
 }
 
 .search-input__action {
-  height: calc(var(--input-height) - 0.125rem); // 2px
-  margin-right: -0.0625rem; // -1px
+  height: calc(var(--input-height) - 0.125rem);
+  margin-right: -0.0625rem;
   border: none;
   border-top-right-radius: var(--input-border-radius);
   border-bottom-right-radius: var(--input-border-radius);
@@ -216,7 +233,7 @@ onMounted(() => {
   color: var(--input-button-text-color);
   font-weight: 500;
   cursor: pointer;
-  padding: 0 1rem; // 16px
+  padding: 0 1rem;
   transition: background-color 0.2s;
 
   &:not(:disabled):hover {
@@ -231,11 +248,11 @@ onMounted(() => {
 }
 
 .search-input__spinner {
-  border: 0.125rem solid var(--input-spinner-track-color); // 2px
+  border: 0.125rem solid var(--input-spinner-track-color);
   border-top-color: var(--input-spinner-color);
   border-radius: 50%;
-  width: 1rem; // 16px
-  height: 1rem; // 16px
+  width: 1rem;
+  height: 1rem;
   display: inline-block;
   animation: search-spin 0.8s linear infinite;
 }

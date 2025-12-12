@@ -8,7 +8,7 @@
       ...animationClasses,
       { 'nav-carx--borderless': !bordered, 'nav-carx--gradient': variant === 'gradient' },
     ]"
-    :style="containerStyle"
+    :style="componentStyle"
     role="navigation"
     aria-label="内容导航卡片列表"
   >
@@ -18,7 +18,6 @@
       type="button"
       class="nav-carx__item gradient-animation-linear-hover"
       :class="{ 'is-active': item.id && item.id === activeId }"
-      :style="itemStyleVars"
       @click="handleItemClick(item, index)"
     >
       <div class="nav-carx__prefix">
@@ -55,7 +54,7 @@
 
 <script setup lang="ts">
 import { computed, type CSSProperties } from 'vue'
-import { type AnimationType, type AnimationStage, getAnimationClassName } from '@/Function'
+import { type AnimationType, type AnimationStage, getAnimationClassName } from '@/function'
 
 interface NavTagItem {
   id: string
@@ -67,8 +66,6 @@ const {
   items = [],
   size = 'medium',
   variant = 'solid',
-  backgroundColors = [],
-  borderColor,
   bordered = true,
   rounded = 'md',
   showIndex = true,
@@ -76,15 +73,12 @@ const {
   justifyContent = 'center',
   direction = 'horizontal',
   animation = 'fade',
-  gap = '0.5rem',
   transitionDuration = 300,
+  css = {},
 } = defineProps<{
   items: NavTagItem[]
   size?: 'small' | 'medium' | 'large'
   variant?: 'solid' | 'gradient'
-  backgroundColors?: string[]
-  backgroundColor?: string
-  borderColor?: string
   bordered?: boolean
   rounded?: 'md' | 'lg' | 'pill'
   justifyContent?: 'start' | 'center' | 'end'
@@ -92,15 +86,15 @@ const {
   enableScroll?: boolean
   direction?: 'horizontal' | 'vertical'
   animation?: AnimationType | AnimationType[]
-  gap?: number | string
   transitionDuration?: number
+  css?: Record<string, string>
 }>()
 
 const getAnimationStage = (stage: AnimationStage): string => {
   return getAnimationClassName(animation, stage)
 }
 
-const emit = defineEmits<{
+const emit = defineEmits<{ 
   (e: 'select', item: NavTagItem, index: number): void
 }>()
 
@@ -114,19 +108,11 @@ const animationClasses = computed(() => {
   return []
 })
 
-const containerStyle = computed<CSSProperties>(() => ({
+const componentStyle = computed<CSSProperties>(() => ({
   '--transition-duration': `${transitionDuration}ms`,
-  gap: typeof gap === 'number' ? `${gap}px` : gap,
   justifyContent: justifyContent,
+  ...css,
 }))
-
-const itemStyleVars = computed<CSSProperties>(() => {
-  const style: CSSProperties = {}
-  if (borderColor) {
-    style['--nav-tag-border'] = borderColor
-  }
-  return style
-})
 
 const scrollToTarget = (targetId?: string) => {
   if (!targetId) return
@@ -149,16 +135,18 @@ defineExpose({ scrollToTarget })
 
 <style lang="less" scoped>
 .nav-carx {
-  --nav-tag-bg: var(--color-background);
-  --nav-tag-border: var(--color-border);
-  --nav-tag-text: var(--color-text);
-  --nav-tag-radius-md: calc(var(--border-radius) * 2.5);
-  --nav-tag-radius-lg: calc(var(--border-radius) * 4);
-  --nav-tag-radius-pill: 999px;
+  --nav-tag-bg: var(--_nav-tag-bg, var(--color-background));
+  --nav-tag-border: var(--_nav-tag-border, var(--color-border));
+  --nav-tag-text: var(--_nav-tag-text, var(--color-text));
+  --nav-tag-radius-md: var(--_nav-tag-radius-md, calc(var(--border-radius) * 2.5));
+  --nav-tag-radius-lg: var(--_nav-tag-radius-lg, calc(var(--border-radius) * 4));
+  --nav-tag-radius-pill: var(--_nav-tag-radius-pill, 999px);
+  --nav-carx-gap: var(--_nav-carx-gap, var(--gap-md));
+
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--gap-md);
+  gap: var(--nav-carx-gap);
   padding: clamp(12px, 3.5vw, 24px);
 }
 
@@ -172,7 +160,6 @@ defineExpose({ scrollToTarget })
 }
 
 .nav-carx__item {
-  // all: unset;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -192,7 +179,6 @@ defineExpose({ scrollToTarget })
   &:hover {
     border-color: var(--color-primary);
     box-shadow: var(--box-shadow-hover-md);
-    // background-color: red;
   }
 
   &:active {

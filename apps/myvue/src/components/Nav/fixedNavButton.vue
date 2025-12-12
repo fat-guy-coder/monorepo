@@ -37,7 +37,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, useSlots } from 'vue'
+import { computed, type CSSProperties } from 'vue'
 import type { NavItem } from './index'
 
 
@@ -47,34 +47,28 @@ type Position = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'
 // 定义展开方向类型
 type ExpandDirection = 'left' | 'right' | 'top' | 'bottom'
 
-// Props
-interface Props {
+const {
+  items,
+  position = 'bottom-right',
+  expandDirection,
+  offset = { bottom: '1.5rem', right: '1.5rem' },
+  mobileAdaptive = true,
+  isMobile = false,
+  css = {},
+} = defineProps<{
   items?: NavItem[]
-  // 位置：默认右下角
   position?: Position
-  // 展开方向：默认从左到右（如果传了位置会根据位置自动调整，但此参数优先级更高）
   expandDirection?: ExpandDirection
-  // 距离边缘的距离
   offset?: {
     top?: number | string
     right?: number | string
     bottom?: number | string
     left?: number | string
   }
-  // 移动端是否自动调整位置和展开方向
   mobileAdaptive?: boolean
-  //是否是手机端
   isMobile: boolean
-  //是否使用
-  userBgGradient?: {
-    colorsCount?: number,
-    type?: 'linear' | 'radial' | 'text' | 'box-shadow'
-  }
-}
-
-
-
-const { position = 'bottom-right', expandDirection, offset = { bottom: '1.5rem', right: '1.5rem' }, mobileAdaptive = true, isMobile = false, userBgGradient } = defineProps<Props>()
+  css?: Record<string, string>
+}>()
 
 
 // Emits
@@ -83,45 +77,17 @@ const emit = defineEmits<{
   (e: 'itemClick', item: NavItem): void
 }>()
 
-// 获取插槽
-// const slots = useSlots()
-
 // 状态
 const isExpanded = defineModel({ default: false })
 
-// // 获取导航项
-// const navigationItems = computed(() => {
-//   if (slots.default) {
-//     const defaultSlot = slots.default()
-//     // 过滤掉注释和文本节点
-//     console.log(defaultSlot)
-//     return defaultSlot.filter(item => {
-//       if (!item) return false
-//       // 检查是否是有效的 VNode
-//       return item.type && typeof item.type !== 'string' || (typeof item.type === 'string' && item.type !== '')
-//     })
-//   }
-//   return []
-// })
-
-// // 是否有导航项
-// const hasItems = computed(() => navigationItems.value.length > 0)
-
-
-
 // 计算展开方向
 const computedExpandDirection = computed<ExpandDirection>(() => {
-  // 如果明确指定了展开方向，优先使用
   if (expandDirection) {
     return expandDirection
   }
-
-  // 如果启用移动端自适应，在移动端时根据位置调整
   if (mobileAdaptive && isMobile) {
     return getMobileExpandDirection()
   }
-
-  // 根据位置自动计算展开方向
   return getAutoExpandDirection()
 })
 
@@ -173,7 +139,7 @@ const containerStyle = computed(() => {
     style.left = typeof offset.left === 'number' ? `${offset.left}px` : offset.left
   }
 
-  return style
+  return { ...style, ...css } as CSSProperties;
 })
 
 // 切换展开/收起
@@ -185,8 +151,6 @@ const toggle = () => {
 // 处理导航项点击
 const handleItemClick = (item: NavItem): void => {
   emit('itemClick', item)
-  // 点击后可以自动收起（可选）
-  // toggle()
 }
 
 
@@ -210,40 +174,40 @@ defineExpose({
     pointer-events: auto;
   }
 
-  --nav-item-color: var(--color-text);
-  --nav-item-hover-color: var(--color-primary);
-  --nav-item-background: var(--color-background-soft);
-  --nav-item-padding: var(--padding-sm) var(--padding-md);
-  --nav-item-gap: var(--gap-md);
-  --nav-item-font-size: var(--font-size-xs);
-  --nav-item-font-weight: var(--font-weight-medium);
-  --nav-item-border-color: var(--color-border);
-  --nav-item-border-width: var(--border-width);
-  --nav-item-border-radius: var(--border-radius-sm);
-  --nav-item-box-shadow: var(--box-shadow-xs);
-  --nav-item-box-shadow-hover: var(--box-shadow-sm);
+  --nav-item-color: var(--_nav-item-color, var(--color-text));
+  --nav-item-hover-color: var(--_nav-item-hover-color, var(--color-primary));
+  --nav-item-background: var(--_nav-item-background, var(--color-background-soft));
+  --nav-item-padding: var(--_nav-item-padding, var(--padding-sm) var(--padding-md));
+  --nav-item-gap: var(--_nav-item-gap, var(--gap-md));
+  --nav-item-font-size: var(--_nav-item-font-size, var(--font-size-xs));
+  --nav-item-font-weight: var(--_nav-item-font-weight, var(--font-weight-medium));
+  --nav-item-border-color: var(--_nav-item-border-color, var(--color-border));
+  --nav-item-border-width: var(--_nav-item-border-width, var(--border-width));
+  --nav-item-border-radius: var(--_nav-item-border-radius, var(--border-radius-sm));
+  --nav-item-box-shadow: var(--_nav-item-box-shadow, var(--box-shadow-xs));
+  --nav-item-box-shadow-hover: var(--_nav-item-box-shadow-hover, var(--box-shadow-sm));
 
-  --nav-item-transform-x: 0.125rem;
-  --nav-item-transform-y: 0.125rem;
-  --nav-item-transform-scale: 1.05;
-  --nav-item-transform-duration: 0.3s;
-  --nav-item-transform-easing: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --nav-item-transform-x: var(--_nav-item-transform-x, 0.125rem);
+  --nav-item-transform-y: var(--_nav-item-transform-y, 0.125rem);
+  --nav-item-transform-scale: var(--_nav-item-transform-scale, 1.05);
+  --nav-item-transform-duration: var(--_nav-item-transform-duration, 0.3s);
+  --nav-item-transform-easing: var(--_nav-item-transform-easing, cubic-bezier(0.34, 1.56, 0.64, 1));
 
-  --nav-item-transform-slide-y: 1.25rem;
-  --nav-item-transform-slide-x: 1.25rem;
-  --nav-item-transform-slide-scale: 0.8;
+  --nav-item-transform-slide-y: var(--_nav-item-transform-slide-y, 1.25rem);
+  --nav-item-transform-slide-x: var(--_nav-item-transform-slide-x, 1.25rem);
+  --nav-item-transform-slide-scale: var(--_nav-item-transform-slide-scale, 0.8);
 
-  --navigation-toggle-width: calc(var(--nav-item-font-size) * 4);
-  --navigation-toggle-height: calc(var(--nav-item-font-size) * 4);
-  --navigation-toggle-icon-size:1rem;
+  --navigation-toggle-width: var(--_navigation-toggle-width, calc(var(--nav-item-font-size) * 4));
+  --navigation-toggle-height: var(--_navigation-toggle-height, calc(var(--nav-item-font-size) * 4));
+  --navigation-toggle-icon-size: var(--_navigation-toggle-icon-size, 1rem);
 
-  --navigation-toggle-border-radius: var(--border-radius-full);
-  --navigation-toggle-background: var(--color-secondary);
-  --navigation-toggle-color: var(--color-text);
-  --navigation-toggle-box-shadow: var(--box-shadow-xs);
-  --navigation-toggle-box-shadow-hover: var(--box-shadow-sm);
+  --navigation-toggle-border-radius: var(--_navigation-toggle-border-radius, var(--border-radius-full));
+  --navigation-toggle-background: var(--_navigation-toggle-background, var(--color-secondary));
+  --navigation-toggle-color: var(--_navigation-toggle-color, var(--color-text));
+  --navigation-toggle-box-shadow: var(--_navigation-toggle-box-shadow, var(--box-shadow-xs));
+  --navigation-toggle-box-shadow-hover: var(--_navigation-toggle-box-shadow-hover, var(--box-shadow-sm));
   
-  --navigation-toggle-icon-line-width: 1.25rem;
+  --navigation-toggle-icon-line-width: var(--_navigation-toggle-icon-line-width, 1.25rem);
 }
 
 

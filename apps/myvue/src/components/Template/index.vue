@@ -17,8 +17,7 @@
     <Row :gutter="currentConfig.grid?.gutter || 0">
       <Col span="24">
         <NavCard :items="modeTabs.map((t) => ({ id: t.value, title: t.label }))" size="medium" variant="gradient"
-          :background-colors="['#1677ff', '#69b1ff']" rounded="md"
-          :direction="(templateConfig.components.navTagCard?.direction as any) || 'horizontal'"
+          rounded="md" :direction="(templateConfig.components.navTagCard?.direction as any) || 'horizontal'"
           :animation="['slide-left']" :enable-scroll="templateConfig.components.navTagCard?.mode === 'scroll'"
           v-model:active-id="currentMode">
           <!-- 普通模式 -->
@@ -190,8 +189,7 @@
         <Card as="section" class="page-section" variant="section-card" :hoverable="true" title="专题 · 快速导航"
           id="quickNav">
           <NavCard :items="tags.map((t) => ({ id: t.id, title: t.label }))" size="medium" variant="gradient"
-            :background-colors="['#1677ff', '#69b1ff']" rounded="md"
-            :direction="(templateConfig.components.navTagCard?.direction as any) || 'horizontal'"
+            rounded="md" :direction="(templateConfig.components.navTagCard?.direction as any) || 'horizontal'"
             :enable-scroll="templateConfig.components.navTagCard?.mode === 'scroll'">
             <template #[i.id] v-for="i in tags">
               <Card :hoverable="true" :h3="i.label">

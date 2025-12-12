@@ -72,7 +72,7 @@ import {
   type CSSProperties,
 } from 'vue'
 import { type MenuItem as MenuItemType } from './index'
-import { animateHeight } from '@/Function'
+import { animateHeight } from '@/function'
 
 defineOptions({
   name: 'MenuItem',

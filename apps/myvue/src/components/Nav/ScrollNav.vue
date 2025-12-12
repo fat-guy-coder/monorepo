@@ -4,13 +4,13 @@
       v-if="show"
       class="scroll-nav"
       :class="[
-        `scroll-nav--${positionClass}`,
+        `scroll-nav--${position.replace('-', '_')}`,
         `scroll-nav--variant-${variant}`,
         `scroll-nav--rounded-${rounded}`,
         `scroll-nav--shadow-${shadow}`,
         { 'scroll-nav--borderless': !bordered },
       ]"
-      :style="navStyle"
+      :style="componentStyle"
     >
       <header class="scroll-nav__header">
         <div class="scroll-nav__title">
@@ -83,7 +83,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref, watch, type CSSProperties, type PropType } from 'vue'
+import { computed, onMounted, ref, watch, type CSSProperties } from 'vue'
 import { useUserStore } from '@/stores/user'
 import {
   animateHeight,
@@ -111,131 +111,59 @@ type AnimationConfig = {
   type: AnimationProperties
 } & AnimationDurationOptions
 
-const props = defineProps({
-  /** 是否显示 */
-  show: {
-    type: Boolean,
-    default: true,
+const {
+  show = true,
+  animation = {
+    name: 'fade',
+    duration: '0.3s',
+    type: ['height'],
+    baseDuration: 0,
+    durationPerItem: 20,
+    maxDuration: 400,
   },
-  /** 动画配置 */
-  animation: {
-    type: Object as PropType<AnimationConfig>,
-    default: () => ({
-      name: 'fade',
-      duration: '0.3s',
-      type: ['height'],
-      baseDuration: 0,
-      durationPerItem: 20,
-      maxDuration: 400,
-    }),
+  title,
+  list,
+  showChild = true,
+  stopPropagation = true,
+  keyMap = {
+    title: 'name',
+    id: 'id',
+    children: 'children',
   },
-  /** 标题 */
-  title: {
-    type: String,
-    required: false,
-  },
-  /** 列表 */
-  list: {
-    type: Array as PropType<Item[]>,
-    required: true,
-    default: () => [],
-  },
-  /** 是否显示子级 */
-  showChild: {
-    type: Boolean,
-    required: false,
-    default: true,
-  },
-  /** 是否阻止事件冒泡 */
-  stopPropagation: {
-    type: Boolean,
-    required: false,
-    default: true,
-  },
-  /** 键映射 */
-  keyMap: {
-    type: Object as PropType<KeyMap>,
-    required: false,
-    default: () => ({
-      title: 'name',
-      id: 'id',
-      children: 'children',
-    }),
-  },
-  /** 位置 */
-  position: {
-    type: String as PropType<'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'>,
-    default: 'top-right',
-  },
-  /** 滚动到 */
-  scrollTo: {
-    type: String as PropType<'center' | 'end' | 'start' | 'nearest'>,
-    default: 'center',
-  },
-  /** 是否显示回到顶部 */
-  showBackToTop: {
-    type: Boolean,
-    default: true,
-  },
-  /** 是否显示边框 */
-  bordered: {
-    type: Boolean,
-    default: true,
-  },
-  /** 圆角 */
-  rounded: {
-    type: String as PropType<'sm' | 'md' | 'lg'>,
-    default: 'md',
-  },
-  /** 阴影 */
-  shadow: {
-    type: String as PropType<'none' | 'sm' | 'md' | 'lg'>,
-    default: 'none',
-  },
-  /** 背景样式配置 */
-  variant: {
-    type: String as PropType<'solid' | 'gradient' | 'image'>,
-    default: 'solid',
-  },
-  /** 背景颜色 */
-  backgroundColor: {
-    type: String,
-    default: '',
-  },
-  /** 渐变颜色 */
-  gradientColors: {
-    type: Array as PropType<string[]>,
-    default: () => [],
-  },
-  /** 背景图片 */
-  backgroundImage: {
-    type: String,
-    default: '',
-  },
-  /** 间距 */
-  gap: {
-    type: [Number, String] as PropType<number | string>,
-    default: 0,
-  },
-  /** 样式配置 */
-  styleConfig: {
-    type: Object as PropType<Record<string, string>>,
-    default: () => ({}),
-  },
-})
+  position = 'top-right',
+  scrollTo = 'center',
+  showBackToTop = true,
+  bordered = true,
+  rounded = 'md',
+  shadow = 'none',
+  variant = 'solid',
+  css = {},
+} = defineProps<{
+  show?: boolean
+  animation?: AnimationConfig
+  title?: string
+  list: Item[]
+  showChild?: boolean
+  stopPropagation?: boolean
+  keyMap?: KeyMap
+  position?: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'
+  scrollTo?: 'center' | 'end' | 'start' | 'nearest'
+  showBackToTop?: boolean
+  bordered?: boolean
+  rounded?: 'sm' | 'md' | 'lg'
+  shadow?: 'none' | 'sm' | 'md' | 'lg'
+  variant?: 'solid' | 'gradient' | 'image'
+  css?: Record<string, string>
+}>()
 
 const store = useUserStore()
 const prefersOpen = computed(() => !store?.user?.device?.isMobile)
 const isOpen = ref(prefersOpen.value)
 const scrollNavList = ref<HTMLElement | null>(null)
 
-onMounted(() => {
-  // if (scrollNavList.value && !isOpen.value) {
-  //   scrollNavList.value.style.height = '0px';
-  //   scrollNavList.value.style.opacity = '0';
-  //   scrollNavList.value.style.display = 'none';
-  // }
-})
+const componentStyle = computed(() => {
+  return { ...css } as CSSProperties;
+});
 
 const totalItemCount = computed(() => {
   const countItems = (items: Item[]): number => {
@@ -247,16 +175,16 @@ const totalItemCount = computed(() => {
     }
     return count
   }
-  return countItems(props.list)
+  return countItems(list)
 })
 
 watch(isOpen, (newVal) => {
   if (scrollNavList.value) {
     const duration = calculateAnimationDuration({
-      ...props.animation,
+      ...animation,
       itemCount: totalItemCount.value,
     })
-    animateHeight(scrollNavList.value, newVal, duration, props.animation.type)
+    animateHeight(scrollNavList.value, newVal, duration, animation.type)
   }
 })
 
@@ -264,33 +192,12 @@ const toggleFold = () => {
   isOpen.value = !isOpen.value
 }
 
-const navStyle = computed<CSSProperties>(() => {
-  const style: CSSProperties = { ...props.styleConfig } // Apply styleConfig first
-  style['--scroll-nav-gap'] = typeof props.gap === 'number' ? `${props.gap}px` : props.gap
-  if (props.variant === 'gradient') {
-    const colors =
-      props.gradientColors.length >= 2
-        ? props.gradientColors.join(', ')
-        : 'var(--color-primary), var(--color-secondary)'
-    style.background = `linear-gradient(135deg, ${colors})`
-  } else if (props.variant === 'solid' && props.backgroundColor) {
-    style.background = props.backgroundColor
-  } else if (props.variant === 'image' && props.backgroundImage) {
-    style.backgroundImage = `url(${props.backgroundImage})`
-    style.backgroundSize = 'cover'
-    style.backgroundPosition = 'center'
-  }
-  return style
-})
-
-const positionClass = computed(() => props.position.replace('-', '_'))
-
 const mappedList = computed(() => {
-  const titleKey = props.keyMap.title || 'name'
-  const idKey = props.keyMap.id || 'id'
-  const childrenKey = props.keyMap.children || 'children'
+  const titleKey = keyMap.title || 'name'
+  const idKey = keyMap.id || 'id'
+  const childrenKey = keyMap.children || 'children'
 
-  return (props.list || []).map((item) => {
+  return (list || []).map((item) => {
     const children = Array.isArray(item[childrenKey]) ? (item[childrenKey] as Item[]) : []
 
     return {
@@ -311,11 +218,11 @@ const scrollToTop = () => {
 }
 
 const scrollIntoView = (event: Event | null, id: string) => {
-  if (event && props.stopPropagation) {
+  if (event && stopPropagation) {
     event.stopPropagation()
   }
   const element = document.getElementById(id)
-  element?.scrollIntoView({ behavior: 'smooth', block: props.scrollTo })
+  element?.scrollIntoView({ behavior: 'smooth', block: scrollTo })
 }
 
 const currentItem = ref<Item | null>(null)
@@ -343,46 +250,45 @@ const getCurrentItem = (list: Item[], id: string): Item | null => {
 
 <style scoped lang="less">
 .scroll-nav {
-  // --- Internal CSS Variables ---
-  --nav-animation-duration: 0.3s; // Default animation duration
-  --nav-padding: 0.75rem;
-  --nav-bg: var(--color-background-soft);
-  --nav-border-color: var(--color-border);
-  --nav-text-color: var(--color-text);
-  --nav-accent-color: var(--color-primary);
-  --nav-shadow: var(--box-shadow-md);
-  --nav-shadow-hover: var(--box-shadow-hover-md);
-  --nav-radius-sm: var(--border-radius-sm);
-  --nav-radius-md: var(--border-radius-md);
-  --nav-radius-lg: var(--border-radius-lg);
+  --nav-animation-duration: var(--_nav-animation-duration, 0.3s);
+  --nav-padding: var(--_nav-padding, 0.75rem);
+  --nav-bg: var(--_nav-bg, var(--color-background-soft));
+  --nav-border-color: var(--_nav-border-color, var(--color-border));
+  --nav-text-color: var(--_nav-text-color, var(--color-text));
+  --nav-accent-color: var(--_nav-accent-color, var(--color-primary));
+  --nav-shadow: var(--_nav-shadow, var(--box-shadow-md));
+  --nav-shadow-hover: var(--_nav-shadow-hover, var(--box-shadow-hover-md));
+  --nav-radius-sm: var(--_nav-radius-sm, var(--border-radius-sm));
+  --nav-radius-md: var(--_nav-radius-md, var(--border-radius-md));
+  --nav-radius-lg: var(--_nav-radius-lg, var(--border-radius-lg));
 
-  --nav-header-padding: 0.25rem 0.5rem;
-  --nav-title-font-size: 1rem;
-  --nav-title-color: var(--color-heading);
+  --nav-header-padding: var(--_nav-header-padding, 0.25rem 0.5rem);
+  --nav-title-font-size: var(--_nav-title-font-size, 1rem);
+  --nav-title-color: var(--_nav-title-color, var(--color-heading));
 
-  --nav-toggle-padding: 0.25rem 0.6rem;
-  --nav-toggle-bg: var(--color-background-mute);
-  --nav-toggle-bg-hover: var(--color-background);
-  --nav-toggle-radius: var(--border-radius-full);
-  --nav-toggle-font-size: 0.8rem;
+  --nav-toggle-padding: var(--_nav-toggle-padding, 0.25rem 0.6rem);
+  --nav-toggle-bg: var(--_nav-toggle-bg, var(--color-background-mute));
+  --nav-toggle-bg-hover: var(--_nav-toggle-bg-hover, var(--color-background));
+  --nav-toggle-radius: var(--_nav-toggle-radius, var(--border-radius-full));
+  --nav-toggle-font-size: var(--_nav-toggle-font-size, 0.8rem);
 
-  --nav-list-margin-top: 0.5rem;
-  --nav-list-gap: 1px; // Reduced gap
+  --nav-list-margin-top: var(--_nav-list-margin-top, 0.5rem);
+  --nav-list-gap: var(--_nav-list-gap, 1px);
 
-  --nav-item-padding: 0.5rem 0.75rem;
-  --nav-item-radius: var(--border-radius-sm);
-  --nav-item-bg: transparent;
-  --nav-item-bg-hover: var(--color-background-mute);
-  --nav-item-font-size: 0.9rem;
-  --nav-item-text-color: var(--color-text-soft);
-  --nav-item-text-color-hover: var(--nav-accent-color);
+  --nav-item-padding: var(--_nav-item-padding, 0.5rem 0.75rem);
+  --nav-item-radius: var(--_nav-item-radius, var(--border-radius-sm));
+  --nav-item-bg: var(--_nav-item-bg, transparent);
+  --nav-item-bg-hover: var(--_nav-item-bg-hover, var(--color-background-mute));
+  --nav-item-font-size: var(--_nav-item-font-size, 0.9rem);
+  --nav-item-text-color: var(--_nav-item-text-color, var(--color-text-soft));
+  --nav-item-text-color-hover: var(--_nav-item-text-color-hover, var(--nav-accent-color));
 
-  --nav-item-active-bg: var(--color-highlight-bg);
-  --nav-item-active-color: var(--color-highlight-text);
+  --nav-item-active-bg: var(--_nav-item-active-bg, var(--color-highlight-bg));
+  --nav-item-active-color: var(--_nav-item-active-color, var(--color-highlight-text));
 
-  --nav-child-list-padding: 0 0 0 0.75rem; // Reduced vertical padding
-  --nav-child-item-padding: 0.3rem 0.75rem;
-  --nav-child-item-font-size: 0.85rem;
+  --nav-child-list-padding: var(--_nav-child-list-padding, 0 0 0 0.75rem);
+  --nav-child-item-padding: var(--_nav-child-item-padding, 0.3rem 0.75rem);
+  --nav-child-item-font-size: var(--_nav-child-item-font-size, 0.85rem);
 
   // --- Component Styles ---
   position: fixed;
@@ -395,14 +301,13 @@ const getCurrentItem = (list: Item[], id: string): Item | null => {
   border: 1px solid var(--nav-border-color);
   border-radius: var(--nav-radius-md);
   color: var(--nav-text-color);
-  // box-shadow: var(--nav-shadow);
   backdrop-filter: blur(10px);
   transition: all 0.3s ease;
   z-index: 5;
   overflow: hidden;
 
   &:hover {
-    transform: translateY(-px);
+    transform: translateY(-1px);
     box-shadow: var(--nav-shadow-hover);
   }
 
@@ -518,7 +423,7 @@ const getCurrentItem = (list: Item[], id: string): Item | null => {
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--scroll-nav-gap, var(--nav-list-gap));
+  gap: var(--nav-list-gap);
   max-height: calc(100vh - 8rem);
   overflow-y: auto;
   overflow-x: hidden;
@@ -529,8 +434,6 @@ const getCurrentItem = (list: Item[], id: string): Item | null => {
   background: var(--nav-item-bg);
   margin: 0;
   border: none;
-
-
 
   &--action {
     background: var(--nav-item-bg-hover);
@@ -558,7 +461,6 @@ const getCurrentItem = (list: Item[], id: string): Item | null => {
     transform 0.2s ease;
 
   &:hover {
-    // background: var(--nav-item-bg-hover);
     color: var(--nav-item-text-color-hover);
     transform: translateX(2px);
   }
