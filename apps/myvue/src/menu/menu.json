@@ -10595,5 +10595,55 @@
       }
     ],
     "icon": "⌨"
+  },
+  {
+    "id": "ServerConfig",
+    "name": "ServerConfig",
+    "label": "服务器配置",
+    "path": "/ServerConfig",
+    "parentPath": "/ServerConfig",
+    "icon": "🔧",
+    "children": [
+      {
+        "id": "APIManagement",
+        "name": "APIManagement",
+        "label": "API接口管理",
+        "path": "/ServerConfig/APIManagement",
+        "parentPath": "/ServerConfig",
+        "icon": "🔌"
+      },
+      {
+        "id": "DataManagement",
+        "name": "DataManagement",
+        "label": "数据管理",
+        "path": "/ServerConfig/DataManagement",
+        "parentPath": "/ServerConfig",
+        "icon": "🔌"
+      },
+      {
+        "id": "EnvVariables",
+        "name": "EnvVariables",
+        "label": "环境变量设置",
+        "path": "/ServerConfig/EnvVariables",
+        "parentPath": "/ServerConfig",
+        "icon": "🌎"
+      },
+      {
+        "id": "ServiceControl",
+        "name": "ServiceControl",
+        "label": "服务控制",
+        "path": "/ServerConfig/ServiceControl",
+        "parentPath": "/ServerConfig",
+        "icon": "🛠"
+      },
+      {
+        "id": "LogViewer",
+        "name": "LogViewer",
+        "label": "日志查看",
+        "path": "/ServerConfig/LogViewer",
+        "parentPath": "/ServerConfig",
+        "icon": "📋"
+      }
+    ]
   }
 ]

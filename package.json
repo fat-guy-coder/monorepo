@@ -37,7 +37,8 @@
     "preview:svelte": "pnpm -F svelte preview",
     "build:express": "pnpm -F express run build-only",
     "turbo:express": "turbo -F express run build-only",
-    "express": "pnpm -F express run dev"
+    "express": "pnpm -F express run dev",
+    "adminjs": "npm -F express run adminjs"
   },
   "keywords": [
     "前端学习网站",
@@ -48,6 +49,10 @@
   "pnpm": {
     "onlyBuiltDependencies": [
       "esbuild"
-    ]
+    ],
+    "overrides": {
+      "@tiptap/core": "2.27.1",
+      "@tiptap/pm": "2.27.1"
+    }
   }
 }

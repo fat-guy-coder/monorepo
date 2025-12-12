@@ -16,6 +16,7 @@ import Spin from './Spin/index.vue'
 import Link from './Link/index.vue'
 import Select from './Select/index.vue'
 import List from './List/index.vue'
-import Progress from './progress/index.vue'
+import Progress from './Progress/index.vue'
 import { Row, Col } from './Grid'
-export { Menu, Input,Select, Navigation, ThemeChange, RouteTab, Card, Tabs, ThemeSwitcher,  Code, Cascader, Button, message, Spin, Link, List, Nav, NavCard, Progress, Row, Col }
+import Pagination from './Pagination/index.vue'
+export { Menu, Input,Select, Navigation, ThemeChange, RouteTab, Card, Tabs, ThemeSwitcher,  Code, Cascader, Button, message, Spin, Link, List, Nav, NavCard, Progress, Row, Col, Pagination }

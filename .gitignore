@@ -9,9 +9,6 @@ lerna-debug.log*
 
 node_modules/
 apps/myvue/node_modules/
-apps/myvue/cypress/
-apps/myvue/src/menu/subMenu/
-apps/svelte/node_modules/
 apps/express/node_modules/
 apps/express/dist/
 apps/express/myvue/
@@ -32,5 +29,6 @@ coverage/
 *.sw?
 *.zip
 *.7z
+.env
 
 *.tsbuildinfo

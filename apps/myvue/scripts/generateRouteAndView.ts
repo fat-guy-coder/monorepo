@@ -87,8 +87,8 @@ Object.assign(config, options)
 
 //菜单类型
 interface MenuItem {
+  id: string;
   label: string;
-  title: string;
   name: string;
   path: string;
   children?: MenuItem[];
@@ -126,7 +126,7 @@ function addRouteToRouter(routes: MenuItem[]) {
 
 //读取模板vue文件
 function getTemplateVue(title: string) {
-  const template = readFileSync(config.TemplateVueFile, 'utf8', 'ss')
+  const template = readFileSync(config.TemplateVueFile, 'utf8')
   return template.replace('<h3>Hello World</h3>', `<h3>${title}</h3>`)
 }
 
@@ -147,8 +147,8 @@ function generateView(menu: MenuItem[], basePath: string) {
       const vueFilePath = `${itemPath}.vue`;
       // Create single vue file
       if (!existsSync(vueFilePath) && !item.redirect) {
-        //根据title和提示器调取外部模型生成Template
-        writeFileSync(vueFilePath, getTemplateVue(item.title));
+        //根据label和提示器调取外部模型生成Template
+        writeFileSync(vueFilePath, getTemplateVue(item.label));
       }
     }
   });

@@ -4,14 +4,19 @@ export default [
     "path": "/LearningAbility",
     "children": [
       {
+        "name": "FrontendIsWhat",
+        "path": "/LearningAbility/FrontendIsWhat",
+        "component": () => import('@/views/LearningAbility/FrontendIsWhat.vue')
+      },
+      {
+        "name": "FrontendProspect",
+        "path": "/LearningAbility/FrontendProspect",
+        "component": () => import('@/views/LearningAbility/FrontendProspect.vue')
+      },
+      {
         "name": "LearningRoutes",
         "path": "/LearningAbility/LearningRoutes",
         "component": () => import('@/views/LearningAbility/LearningRoutes.vue')
-      },
-      {
-        "name": "LearningProgress",
-        "path": "/LearningAbility/LearningProgress",
-        "component": () => import('@/views/LearningAbility/LearningProgress.vue')
       },
       {
         "name": "RecommendedWebsites",
@@ -22,16 +27,6 @@ export default [
         "name": "FrontendSalary",
         "path": "/LearningAbility/FrontendSalary",
         "component": () => import('@/views/LearningAbility/FrontendSalary.vue')
-      },
-      {
-        "name": "FrontendIsWhat",
-        "path": "/LearningAbility/FrontendIsWhat",
-        "component": () => import('@/views/LearningAbility/FrontendIsWhat.vue')
-      },
-      {
-        "name": "FrontendProspect",
-        "path": "/LearningAbility/FrontendProspect",
-        "component": () => import('@/views/LearningAbility/FrontendProspect.vue')
       }
     ]
   },
@@ -6557,6 +6552,11 @@ export default [
         "component": () => import('@/views/Me/MyInfomation.vue')
       },
       {
+        "name": "LearningProgress",
+        "path": "/Me/LearningProgress",
+        "component": () => import('@/views/Me/LearningProgress.vue')
+      },
+      {
         "name": "SubmitAdvice",
         "path": "/Me/SubmitAdvice",
         "component": () => import('@/views/Me/SubmitAdvice.vue')
@@ -6565,6 +6565,37 @@ export default [
         "name": "MyTheme",
         "path": "/Me/MyTheme",
         "component": () => import('@/views/Me/MyTheme.vue')
+      }
+    ]
+  },
+  {
+    "name": "ServerConfig",
+    "path": "/ServerConfig",
+    "children": [
+      {
+        "name": "APIManagement",
+        "path": "/ServerConfig/APIManagement",
+        "component": () => import('@/views/ServerConfig/APIManagement.vue')
+      },
+      {
+        "name": "DataManagement",
+        "path": "/ServerConfig/DataManagement",
+        "component": () => import('@/views/ServerConfig/DataManagement.vue')
+      },
+      {
+        "name": "EnvVariables",
+        "path": "/ServerConfig/EnvVariables",
+        "component": () => import('@/views/ServerConfig/EnvVariables.vue')
+      },
+      {
+        "name": "ServiceControl",
+        "path": "/ServerConfig/ServiceControl",
+        "component": () => import('@/views/ServerConfig/ServiceControl.vue')
+      },
+      {
+        "name": "LogViewer",
+        "path": "/ServerConfig/LogViewer",
+        "component": () => import('@/views/ServerConfig/LogViewer.vue')
       }
     ]
   }
