@@ -1,20 +1,10 @@
 <template>
-  <ul class="ui-list" :class="[`list-type--${type}`, { 'no-underline': !showUnderline }]">
-    <li
-      v-for="(item, index) in localItems"
-      :key="(item as any).id || index"
-      class="ui-list-item"
-      :class="{ 'is-completed': (item as any).completed }"
-      @click="type === 'todo' && toggleComplete(item as any)"
-    >
+  <ul class="ui-list" :class="[`list-type--${type}`, { 'no-underline': !showUnderline }]" :style="componentStyle">
+    <li v-for="(item, index) in localItems" :key="(item as any).id || index" class="ui-list-item"
+      :class="{ 'is-completed': (item as any).completed }" @click="type === 'todo' && toggleComplete(item as any)">
       <slot name="item" :item="item" :index="index" :toggle="() => toggleComplete(item as any)">
         <!-- Link Type Rendering -->
-        <Link
-          v-if="type === 'link'"
-          class="link-item"
-          v-bind="item as ILink as any"
-          :text="(item as ILink).label"
-        />
+        <Link v-if="type === 'link'" class="link-item" v-bind="item as ILink as any" :text="(item as ILink).label" />
 
         <!-- Plan Type Rendering -->
         <div v-else-if="type === 'plan'" class="plan-item">
@@ -30,9 +20,7 @@
             <span class="name">{{ (item as IProgress).label }}</span>
             <span class="val">{{ (item as IProgress).value }}%</span>
           </div>
-          <div class="progress">
-            <div class="bar" :style="{ '--val': (item as IProgress).value + '%' }"></div>
-          </div>
+          <Progress :value="(item as IProgress).value" />
         </div>
 
         <!-- Tips Type Rendering -->
@@ -42,21 +30,13 @@
 
         <!-- Default, Todo, Bullet Type Rendering -->
         <div v-else class="default-item">
-          <input
-            v-if="type === 'todo'"
-            type="checkbox"
-            class="todo-checkbox"
-            :checked="(item as any).completed"
-            @change.stop="toggleComplete(item as any)"
-            @click.stop
-          />
+          <input v-if="type === 'todo'" type="checkbox" class="todo-checkbox" :checked="(item as any).completed"
+            @change.stop="toggleComplete(item as any)" @click.stop />
           <span class="default-item__label">
             {{ typeof item === 'string' ? item : (item as any).label }}
           </span>
-          <span
-            v-if="type === 'default' && typeof item === 'object' && (item as any).value"
-            class="default-item__value"
-          >
+          <span v-if="type === 'default' && typeof item === 'object' && (item as any).value"
+            class="default-item__value">
             {{ (item as any).value }}
           </span>
         </div>
@@ -66,31 +46,35 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, watch, computed, type CSSProperties } from 'vue'
 import Link from '@/components/Link/index.vue'
+import Progress from '@/components/Progress/index.vue'
 import type { ListItem, IPlan, ITodo, ILink, IProgress, ITip } from './index.d'
 
 defineOptions({
   name: 'ListComponent',
 })
 
-const props = withDefaults(
-  defineProps<{
-    items?: ListItem[]
-    type?: 'default' | 'todo' | 'link' | 'plan' | 'bullet' | 'progress' | 'tips'
-    showUnderline?: boolean
-  }>(),
-  {
-    type: 'default',
-    items: () => [],
-    showUnderline: true,
-  },
-)
+const {
+  items = [],
+  type = 'default',
+  showUnderline = true,
+  css = {},
+} = defineProps<{
+  items?: ListItem[]
+  type?: 'default' | 'todo' | 'link' | 'plan' | 'bullet' | 'progress' | 'tips'
+  showUnderline?: boolean
+  css?: Record<string, string>
+}>()
+
+const componentStyle = computed(() => {
+  return { ...css } as CSSProperties;
+});
 
 const localItems = ref<ListItem[]>([])
 
 watch(
-  () => props.items,
+  () => items,
   (newItems) => {
     localItems.value = JSON.parse(JSON.stringify(newItems))
   },
@@ -103,23 +87,31 @@ const toggleComplete = (item: ITodo) => {
 </script>
 
 <style lang="less" scoped>
+
+
 .ui-list {
   // --- 自有 CSS 变量定义 ---
-  --list-bg: transparent;
-  --list-padding: 0;
-  --list-item-padding: var(--padding-md) var(--padding-lg);
-  --list-item-color: var(--color-text);
-  --list-item-value-color: var(--color-text-secondary);
-  --list-item-border-color: var(--color-border-secondary);
-  --list-item-hover-bg: var(--color-fill-secondary);
-  --list-border-radius: var(--border-radius-md);
-  --todo-strikethrough-color: var(--color-text-tertiary);
-  --todo-completed-color: var(--color-text-tertiary);
+  --list-bg-transparent: var(--list-bg-transparent, transparent);
+  --list-bg-normal: var(--_list-normal-bg, var(--color-background));
+  --list-padding: var(--_list-padding, 0);
+  --list-item-padding: var(--_list-item-padding, var(--padding-md) var(--padding-lg));
+  --list-item-color: var(--_list-item-color, var(--color-text));
+  --list-item-value-color: var(--_list-item-value-color, var(--color-text-secondary));
+  --list-item-border-color: var(--_list-item-border-color, var(--color-border-secondary));
+  --list-item-hover-bg: var(--_list-item-hover-bg, var(--color-fill-secondary));
+  --list-border-radius: var(--_list-border-radius, var(--border-radius-md));
+  --_list-style: var(--_list-style, var(--list-style));
+  
 
-  list-style: none;
+
+
+  --todo-strikethrough-color: var(--_todo-strikethrough-color, var(--color-text-tertiary));
+  --todo-completed-color: var(--_todo-completed-color, var(--color-text-tertiary));
+
+  list-style: var(--_list-style);
   padding: var(--list-padding);
   margin: 0;
-  background-color: var(--list-bg);
+  background: var( --list-bg-normal);
   border-radius: var(--list-border-radius);
   overflow: hidden; // 确保子元素的圆角生效
 
@@ -132,16 +124,11 @@ const toggleComplete = (item: ITodo) => {
   padding: var(--list-item-padding);
   color: var(--list-item-color);
   border-bottom: 1px solid var(--list-item-border-color);
-  transition: background-color 0.2s ease;
-
+  border-radius: var(--list-border-radius);
   &:last-child {
     border-bottom: none;
   }
 
-  .list-type--default &:hover,
-  .list-type--todo &:hover {
-    background-color: var(--list-item-hover-bg);
-  }
 }
 
 .default-item {
@@ -169,7 +156,7 @@ const toggleComplete = (item: ITodo) => {
     height: 1px;
     background-color: var(--todo-strikethrough-color);
     transform: scaleX(0);
-    transform-origin: left;
+    transform-origin: center; // 修改动画原点为中心
     transition: transform 0.3s cubic-bezier(0.65, 0, 0.35, 1);
   }
 }
@@ -184,6 +171,7 @@ const toggleComplete = (item: ITodo) => {
   .ui-list-item {
     cursor: pointer;
   }
+
   .default-item {
     justify-content: flex-start;
     gap: var(--gap-md);
@@ -191,6 +179,7 @@ const toggleComplete = (item: ITodo) => {
 
   .is-completed .default-item__label {
     color: var(--todo-completed-color);
+
     &::after {
       transform: scaleX(1);
     }
@@ -209,20 +198,28 @@ const toggleComplete = (item: ITodo) => {
 .list-type--link {
   .ui-list-item {
     padding: 0;
+
     &:hover {
       background-color: transparent;
     }
   }
+
   .link-item {
     width: 100%;
     justify-content: flex-start;
     padding: var(--list-item-padding);
-    border-radius: 0;
     border: none;
+
     &:hover {
       background-color: var(--list-item-hover-bg);
       transform: none;
     }
+  }
+}
+
+.ui-card{
+  .list-type--plan{
+    background-color: var(--list-bg-transparent);
   }
 }
 
@@ -231,10 +228,8 @@ const toggleComplete = (item: ITodo) => {
   .ui-list-item {
     padding: 0;
     border-bottom: none;
-    &:hover {
-      background-color: transparent;
-    }
   }
+
   .plan-item {
     display: flex;
     align-items: flex-start;
@@ -242,7 +237,7 @@ const toggleComplete = (item: ITodo) => {
     padding: var(--padding-sm) var(--padding-md);
     border: var(--border-width) dashed var(--color-border);
     border-radius: var(--border-radius-md);
-    background: var(--color-background-soft);
+
     margin-bottom: var(--gap-lg);
   }
 
@@ -266,6 +261,11 @@ const toggleComplete = (item: ITodo) => {
   .plan-item__content {
     flex: 1;
     min-width: 0; // 允许 flex 项收缩
+    background-color: var(--list-bg-transparent);
+
+    &>div {
+      background-color: var(--list-bg-transparent);
+    }
   }
 
   .plan-item__name,
@@ -289,7 +289,7 @@ const toggleComplete = (item: ITodo) => {
 // --- "要点" 类型样式 ---
 .list-type--bullet {
   padding-left: var(--padding-xl);
-  list-style: disc;
+  list-style: var(--_list-style);
 
   .ui-list-item {
     border-bottom: none;
@@ -302,20 +302,14 @@ const toggleComplete = (item: ITodo) => {
 // --- "进度" 类型样式 ---
 .list-type--progress {
   .ui-list-item {
-    padding: 0;
+    padding: var(--padding-md) 0;
     border-bottom: none;
+
     &:hover {
       background-color: transparent;
     }
   }
-  position: relative;
-  height: 0.625rem;
-  background: var(--color-fill-tertiary);
-  border-radius: var(--border-radius-full);
-  overflow: hidden;
-  border: 1px solid var(--color-border);
 
-  /* 模板页面的特定布局和样式 */
   .progress-item {
     display: flex;
     flex-direction: column;
@@ -330,19 +324,6 @@ const toggleComplete = (item: ITodo) => {
       margin-bottom: var(--margin-xs);
     }
   }
-  .bar {
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: var(--val, 0%);
-    background: linear-gradient(
-      90deg,
-      var(--color-primary),
-      color-mix(in oklab, var(--color-primary) 60%, var(--color-secondary))
-    );
-    transition: width 0.35s ease;
-  }
 }
 
 // --- "温馨提示" 类型样式 ---
@@ -350,19 +331,23 @@ const toggleComplete = (item: ITodo) => {
   .ui-list-item {
     padding: 0;
     border-bottom: none;
+
     &:hover {
       background-color: transparent;
     }
   }
+
   .tips-item {
     padding: var(--list-item-padding);
-    border-radius: var(--border-radius-md);
-    background: var(--color-background-soft);
+    border-radius: var(--list-border-radius);
+ 
     margin-bottom: var(--gap-lg);
   }
+
   .tips-item__text {
     color: var(--color-text);
   }
+
   .tips-item__icon {
     color: var(--color-primary);
     font-size: 1.5rem;

@@ -1,47 +1,123 @@
-// 引入 dotenv 用于加载环境变量 (如果无法创建 .env 文件，则会优雅地跳过)
-require('dotenv').config();
-
 const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
+const fs = require('fs');
+const path = require('path');
+const util = require('util');
 
-// 引入路由文件
-const authRoutes = require('./routes/auth');
-const commentRoutes = require('./routes/comments');
-
-// 初始化 Express 应用
 const app = express();
 
-// --- 中间件 ---
-// 启用 CORS (跨域资源共享)
-app.use(cors());
-// 解析 JSON 格式的请求体
+// --- 动态配置加载 ---
+const configPath = path.join(__dirname, 'config', 'server-config.json');
+let config;
+try {
+  config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+} catch (error) {
+  console.error('致命错误: 无法读取或解析 server-config.json。', error);
+  process.exit(1);
+}
+
+// 从配置中获取端口号
+const port = process.env.PORT || (config.server && config.server.port) || 3000;
+
+// 无条件应用 JSON 解析中间件，确保元 API 可以正常工作
 app.use(express.json());
 
-// --- 数据库连接 ---
-const connectDB = async () => {
-  try {
-    // 警告: 在生产环境中，请务必将此连接字符串存储在 .env 文件中！
-    const mongoURI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/personal-website';
-    await mongoose.connect(mongoURI);
-    console.log('MongoDB 连接成功...');
-  } catch (err) {
-    console.error('MongoDB 连接失败:', err.message);
-    // 如果连接失败，则退出进程
-    process.exit(1);
+app.use(express.static(config.server.staticAssetsPath))
+
+// --- SSE 日志拦截器 ---
+const logService = require('./services/log.service');
+if (config.logging && config.logging.sse.enabled) {
+  console.log('[LogInterceptor] SSE 日志服务已启用，正在拦截 console 输出...');
+  const originalConsole = {};
+  ['log', 'warn', 'error', 'info', 'debug'].forEach(level => {
+    originalConsole[level] = console[level];
+    console[level] = (...args) => {
+      originalConsole[level](...args);
+      const message = args.map(arg => typeof arg === 'object' ? util.inspect(arg, { depth: null }) : arg).join(' ');
+      logService.broadcast({ type: level, message, timestamp: new Date().toISOString() });
+    };
+  });
+} else {
+  console.log('[LogInterceptor] SSE 日志服务已禁用。');
+}
+// ------------------------
+
+console.log('正在加载服务器配置...');
+// --- 动态中间件加载 ---
+for (const key in config.middleware) {
+  if (config.middleware[key].enabled) {
+    const options = config.middleware[key].options;
+    console.log(`  -> 启用中间件: ${key}`);
+    try {
+      if (key === 'express.json') {
+        app.use(express.json(options));
+      } else if (key === 'express.urlencoded') {
+        app.use(express.urlencoded(options));
+      } else {
+        const middlewarePackage = require(key);
+        app.use(middlewarePackage(options));
+      }
+    } catch (e) {
+      console.error(`错误: 无法加载中间件 '${key}'。请确保您已经通过 'npm install ${key}' 安装了它。`, e);
+    }
   }
+}
+// ------------------------ //
+
+// --- 动态加载 SSE 日志流路由 ---
+if (config.logging && config.logging.sse.enabled) {
+  const logStreamPath = (config.server && config.server.logStreamPath) || '/meta/logs/stream';
+  app.get(logStreamPath, (req, res) => {
+    res.setHeader('Content-Type', 'text/event-stream');
+    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Connection', 'keep-alive');
+    res.flushHeaders();
+
+    logService.addClient(res);
+
+    const initialMessage = { type: 'info', message: '成功连接到实时日志流。' };
+    res.write(`data: ${JSON.stringify(initialMessage)}\n\n`);
+
+    req.on('close', () => {
+      logService.removeClient(res);
+      res.end();
+    });
+  });
+  console.log(`成功加载 SSE 日志流路由: ${logStreamPath}`);
+}
+// -------------------------- //
+
+// --- 加载元 API 路由 --- //
+const metaRouter = require('./meta');
+app.use('/meta', metaRouter);
+console.log('成功加载元 API 路由: /meta');
+// ----------------------- //
+
+// --- 递归动态路由加载 --- //
+const routesDir = path.join(__dirname, 'routes');
+const loadRoutes = (directory, prefix = '/') => {
+  if (!fs.existsSync(directory)) return;
+  fs.readdirSync(directory).forEach(file => {
+    const fullPath = path.join(directory, file);
+    if (fs.statSync(fullPath).isDirectory()) {
+      loadRoutes(fullPath, path.join(prefix, file));
+    } else if (file.endsWith('.js')) {
+      const route = require(fullPath);
+      const routePath = path.join(prefix, path.basename(file, '.js'));
+      const finalRoutePath = routePath.replace(/\\/g, '/').startsWith('/') ? routePath.replace(/\\/g, '/') : '/' + routePath.replace(/\\/g, '/');
+      app.use(finalRoutePath, route);
+      console.log(`成功加载动态路由: ${finalRoutePath} (来自 ${file})`);
+    }
+  });
 };
+console.log('正在加载动态 API 路由...');
+loadRoutes(routesDir);
+// -------------------------- //
 
-connectDB();
+app.get('/', (req, res) => {
+  res.send('动态 API 生成器正在运行。');
+});
 
-// --- API 路由 ---
-// 挂载认证路由
-app.use('/api/auth', authRoutes);
-// 挂载评论路由
-app.use('/api/comments', commentRoutes);
-
-// --- 启动服务器 ---
-const PORT = process.env.PORT || 5000;
-
-app.listen(PORT, () => console.log(`服务器已在端口 ${PORT} 上启动`));
-
+app.listen(port, () => {
+  console.log(`服务器正在 http://localhost:${port} 上运行`);
+  console.log('使用 `npm start` 启动，由 nodemon 监视。');
+});

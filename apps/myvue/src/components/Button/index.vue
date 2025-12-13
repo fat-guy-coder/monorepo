@@ -1,9 +1,15 @@
 <template>
-  <button :class="classes" :disabled="disabled || loading">
-    <span v-if="loading" class="btn-loading-icon"></span>
-    <span v-if="$slots.icon" class="btn-icon">
-      <slot name="icon"></slot>
-    </span>
+  <button
+    class="ui-button"
+    :class="[
+      `btn-type--${type}`,
+      `btn-size--${size}`,
+      { 'is-loading': loading, 'is-disabled': isDisabled }
+    ]"
+    :disabled="isDisabled"
+    :style="componentStyle"
+  >
+    <span v-if="loading" class="spinner"></span>
     <span class="btn-content">
       <slot></slot>
     </span>
@@ -11,294 +17,125 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, type CSSProperties, inject } from 'vue';
+
 
 defineOptions({
-  name: 'AButton',
+  name: 'ButtonComponent',
 });
 
-interface Props {
-  type?: 'primary' | 'default' | 'dashed' | 'text' | 'link';
-  size?: 'large' | 'middle' | 'small';
-  danger?: boolean;
+const props = defineProps<{
+  type?: 'default' | 'primary';
+  size?: 'small' | 'medium' | 'large';
   loading?: boolean;
   disabled?: boolean;
-  shape?: 'default' | 'circle' | 'round';
-}
-const { type = 'default', size = 'middle', danger = false, loading = false, disabled = false, shape = 'default' } =
-  defineProps<Props>()
+  css?: Record<string, string>;
+}>();
 
-const classes = computed(() => [
-  'btn',
-  `btn--${type}`,
-  `btn--${size}`,
-  {
-    'is-danger': danger,
-    'is-loading': loading,
-    'is-disabled': disabled || loading,
-    'is-circle': shape === 'circle',
-    'is-round': shape === 'round',
-  },
-]);
+
+
+const isDisabled = computed(() => {
+  return props.disabled ||  props.loading;
+});
+
+const componentStyle = computed(() => {
+  return { ...props.css } as CSSProperties;
+});
+
 </script>
 
 <style lang="less" scoped>
-.btn {
-  --btn-height-large: 2.5rem;
-  --btn-height-middle: 2rem;
-  --btn-height-small: 1.5rem;
-  --btn-font-size-large: var(--font-size-md);
-  --btn-font-size-middle: var(--font-size-sm);
-  --btn-font-size-small: var(--font-size-sm);
-  --btn-padding-horizontal-large: 0.9375rem;
-  --btn-padding-horizontal-middle: 0.9375rem;
-  --btn-padding-horizontal-small: 0.4375rem;
+.ui-button {
+  --btn-default-bg: var(--_btn-default-bg, var(--color-background));
+  --btn-default-color: var(--_btn-default-color, var(--color-text));
+  --btn-default-border: var(--_btn-default-border, var(--color-border));
+  --btn-default-hover-bg: var(--_btn-default-hover-bg, var(--color-background-soft));
+  --btn-default-hover-border: var(--_btn-default-hover-border, var(--color-primary));
+  --btn-default-hover-color: var(--_btn-default-hover-color, var(--color-primary));
 
-  position: relative;
+  --btn-primary-bg: var(--_btn-primary-bg, var(--color-primary));
+  --btn-primary-color: var(--_btn-primary-color, #fff);
+  --btn-primary-border: var(--_btn-primary-border, var(--color-primary));
+  --btn-primary-hover-bg: var(--_btn-primary-hover-bg, color-mix(in srgb, var(--color-primary) 85%, black));
+  --btn-primary-hover-border: var(--_btn-primary-hover-border, color-mix(in srgb, var(--color-primary) 85%, black));
+
   display: inline-flex;
-  align-items: center;
   justify-content: center;
-  font-weight: var(--font-weight);
-  white-space: nowrap;
-  text-align: center;
-  background-image: none;
-  border: var(--border-width) solid transparent;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: var(--border-radius-md);
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+  transition: all 0.2s ease;
+  font-weight: 500;
+  text-align: center;
+  white-space: nowrap;
   user-select: none;
-  touch-action: manipulation;
-  line-height: 1.5715;
-  border-radius: var(--border-radius);
+
+  // Default Type
+  &.btn-type--default {
+    background-color: var(--btn-default-bg);
+    color: var(--btn-default-color);
+    border: 1px solid var(--btn-default-border);
+
+    &:not(:disabled):hover {
+      background-color: var(--btn-default-hover-bg);
+      border-color: var(--btn-default-hover-border);
+      color: var(--btn-default-hover-color);
+    }
+  }
+
+  // Primary Type
+  &.btn-type--primary {
+    background-color: var(--btn-primary-bg);
+    color: var(--btn-primary-color);
+    border: 1px solid var(--btn-primary-border);
+
+    &:not(:disabled):hover {
+      background-color: var(--btn-primary-hover-bg);
+      border-color: var(--btn-primary-hover-border);
+    }
+  }
+
+  // Sizes
+  &.btn-size--small {
+    padding: 0.25rem 0.75rem;
+    font-size: 0.875rem;
+  }
+  &.btn-size--medium {
+    padding: 0.5rem 1rem;
+    font-size: 0.95rem;
+  }
+  &.btn-size--large {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+  }
 
   // Disabled State
-  &.is-disabled,
-  &[disabled] {
+  &.is-disabled {
+    opacity: 0.6;
     cursor: not-allowed;
+  }
 
-    &>* {
-      pointer-events: none;
-    }
+  .btn-content {
+    display: inline-flex;
+    align-items: center;
+    visibility: v-bind("props.loading ? 'hidden' : 'visible'");
   }
 }
 
-/*
-* Type Styles
-*/
-
-// Default
-.btn--default {
-  background-color: var(--color-bg-container);
-  border-color: var(--color-border);
-  color: var(--color-text);
-
-  &:not(.is-disabled):hover {
-    color: var(--color-primary);
-    border-color: var(--color-primary);
-  }
-
-  &.is-danger {
-    color: var(--color-error);
-    border-color: var(--color-error);
-
-    &:not(.is-disabled):hover {
-      color: color-mix(in srgb, var(--color-error) 85%, white);
-      border-color: color-mix(in srgb, var(--color-error) 85%, white);
-    }
-  }
-}
-
-// Primary
-.btn--primary {
-  color: var(--color-text-light-solid);
-  background-color: var(--color-primary);
-
-  &:not(.is-disabled):hover {
-    background-color: var(--color-link-hover);
-  }
-
-  &.is-danger {
-    background-color: var(--color-error);
-
-    &:not(.is-disabled):hover {
-      background-color: color-mix(in srgb, var(--color-error) 85%, black);
-    }
-  }
-}
-
-// Dashed
-.btn--dashed {
-  background-color: var(--color-bg-container);
-  border-color: var(--color-border);
-  border-style: dashed;
-  color: var(--color-text);
-
-  &:not(.is-disabled):hover {
-    color: var(--color-primary);
-    border-color: var(--color-primary);
-  }
-
-  &.is-danger {
-    color: var(--color-error);
-    border-color: var(--color-error);
-
-    &:not(.is-disabled):hover {
-      color: color-mix(in srgb, var(--color-error) 85%, white);
-      border-color: color-mix(in srgb, var(--color-error) 85%, white);
-    }
-  }
-}
-
-// Text
-.btn--text {
-  background-color: transparent;
-  border-color: transparent;
-  color: var(--color-text);
-
-  &:not(.is-disabled):hover {
-    background-color: var(--color-fill-secondary);
-  }
-
-  &.is-danger {
-    color: var(--color-error);
-
-    &:not(.is-disabled):hover {
-      background-color: color-mix(in srgb, var(--color-error) 15%, transparent);
-    }
-  }
-}
-
-// Link
-.btn--link {
-  background-color: transparent;
-  border-color: transparent;
-  color: var(--color-link);
-
-  &:not(.is-disabled):hover {
-    color: var(--color-link-hover);
-  }
-
-  &.is-danger {
-    color: var(--color-error);
-
-    &:not(.is-disabled):hover {
-      color: color-mix(in srgb, var(--color-error) 85%, white);
-    }
-  }
-}
-
-/*
-* Size Styles
-*/
-.btn--large {
-  height: var(--btn-height-large);
-  padding: 0 var(--btn-padding-horizontal-large);
-  font-size: var(--btn-font-size-large);
-}
-
-.btn--middle {
-  height: var(--btn-height-middle);
-  padding: 0 var(--btn-padding-horizontal-middle);
-  font-size: var(--btn-font-size-middle);
-}
-
-.btn--small {
-  height: var(--btn-height-small);
-  padding: 0 var(--btn-padding-horizontal-small);
-  font-size: var(--btn-font-size-small);
-}
-
-/*
-* Shape Styles
-*/
-.btn.is-circle {
-  border-radius: 50%;
-  padding: 0; // Reset padding
-
-  &.btn--large {
-    width: var(--btn-height-large);
-  }
-
-  &.btn--middle {
-    width: var(--btn-height-middle);
-  }
-
-  &.btn--small {
-    width: var(--btn-height-small);
-  }
-}
-
-.btn.is-round {
-  &.btn--large {
-    border-radius: var(--btn-height-large);
-  }
-
-  &.btn--middle {
-    border-radius: var(--btn-height-middle);
-  }
-
-  &.btn--small {
-    border-radius: var(--btn-height-small);
-  }
-}
-
-/*
-* Loading Styles
-*/
-.btn.is-loading {
-  position: relative;
-  opacity: 0.65;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: -0.0625rem;
-    left: -0.0625rem;
-    right: -0.0625rem;
-    bottom: -0.0625rem;
-    background: var(--color-bg-container);
-    opacity: 0.35;
-    z-index: 1;
-    border-radius: inherit;
-  }
-
-  .btn-content,
-  .btn-icon {
-    opacity: 0;
-  }
-}
-
-.btn-loading-icon {
+.spinner {
   position: absolute;
-  z-index: 2;
   display: inline-block;
-  border: 0.125rem solid var(--color-primary);
-  border-top-color: transparent;
+  width: 1em;
+  height: 1em;
+  border: 2px solid currentColor;
   border-radius: 50%;
-  width: 0.875rem;
-  height: 0.875rem;
-  animation: btn-spin 0.6s linear infinite;
+  border-top-color: transparent;
+  opacity: 0.8;
+  animation: spin 1s ease-in-out infinite;
 }
 
-@keyframes btn-spin {
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/*
-* Icon Styles
-*/
-.btn-icon {
-  display: inline-flex;
-  align-items: center;
-  margin-right: var(--spacing-sm);
-}
-
-.btn.is-circle .btn-icon {
-  margin-right: 0;
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 </style>

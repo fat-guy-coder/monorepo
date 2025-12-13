@@ -1,11 +1,6 @@
 <template>
-  <li
-    class="menu-item"
-    :style="{ '--level': level }"
-    @click.stop.prevent="handleClick"
-    @mouseenter.stop.prevent="handleMouseEnter"
-    @mouseleave="handleMouseLeave"
-  >
+  <li class="menu-item" :style="{ '--level': level }" @click.stop.prevent="handleClick"
+    @mouseenter.stop.prevent="handleMouseEnter" @mouseleave="handleMouseLeave">
     <div class="menu-item__title" :class="titleClasses" :id="item.path">
       <span v-if="item.icon" class="menu-item__icon">{{ item.icon }}</span>
       <span :class="['menu-item__label']" :title="item.label || item.name">
@@ -18,42 +13,24 @@
       </span>
     </div>
     <Teleport to="body" v-if="mode === 'vertical'">
-      <div
-        v-if="shouldRenderChildren"
-        ref="childrenWrapper"
-        class="menu-item__children-wrapper-vertical"
-        @mouseleave="handleMouseAllLeave"
-        :style="{
+      <div v-if="shouldRenderChildren" ref="childrenWrapper" class="menu-item__children-wrapper-vertical"
+        @mouseleave="handleMouseAllLeave" :style="{
           top: verticalChildrenWrapperStyle.top,
           left: verticalChildrenWrapperStyle.left,
-        }"
-      >
+        }">
         <ul class="menu-item__children-list">
-          <MenuItem
-            v-for="child in localChildren"
-            :key="child.path"
-            :item="child"
-            :level="level + 1"
-            :is-open="openKeys.includes(child.path)"
-            @toggle="$emit('toggle', $event)"
-            @select="$emit('select', $event)"
-            @close="$emit('close', $event)"
-          />
+          <MenuItem v-for="child in localChildren" :key="child.path" :item="child" :level="level + 1"
+            :is-open="openKeys.includes(child.path)" @toggle="$emit('toggle', $event)" @select="$emit('select', $event)"
+            @close="$emit('close', $event)" />
         </ul>
       </div>
     </Teleport>
     <template v-else>
       <div v-if="shouldRenderChildren" ref="childrenWrapper" class="menu-item__children-wrapper">
         <ul class="menu-item__children-list">
-          <MenuItem
-            v-for="child in localChildren"
-            :key="child.path"
-            :item="child"
-            :level="level + 1"
-            :is-open="openKeys.includes(child.path)"
-            @toggle="$emit('toggle', $event)"
-            @select="$emit('select', $event)"
-          />
+          <MenuItem v-for="child in localChildren" :key="child.path" :item="child" :level="level + 1"
+            :is-open="openKeys.includes(child.path)" @toggle="$emit('toggle', $event)"
+            @select="$emit('select', $event)" />
         </ul>
       </div>
     </template>
@@ -209,7 +186,7 @@ const getChildrenWrapperPosition = (e: MouseEvent) => {
   } else {
     style.left = left + 'px'
   }
-  if (isMobile.value&&props.level!==0) {
+  if (isMobile.value && props.level !== 0) {
     style.top = rect.top + rect.height + 'px'
   }
   return style
@@ -332,96 +309,96 @@ function isMouseInElement(element: HTMLElement, mouseX: number, mouseY: number) 
 </script>
 
 <style lang="less" scoped>
-.menu-item {
-  list-style: none;
-  margin: 0;
-  padding: 0.125rem 0.125rem;
-}
-
-.menu-item__title {
-  display: flex;
-  align-items: center;
-  gap: var(--gap-xs);
-  padding: var(--gap-xs) var(--gap-sm);
-  padding-left: calc(var(--gap-sm) + var(--level, 0) * var(--gap-md));
-  cursor: pointer;
-  border-radius: var(--border-radius-md);
-}
-
-.menu-item__icon {
-  margin-right: var(--gap-xs);
-  font-size: var(--font-size-normal);
-  flex-shrink: 0;
-}
-
-.menu-item__label {
-  flex-grow: 1;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-size: var(--font-size-sm);
-  color: var(--color-text);
-}
-
-.menu-item__label--matched {
-  color: var(--color-highlight-text);
-}
-
-.menu-item__arrow {
-  width: 1.125rem;
-  height: 1.125rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-left: 0.375rem;
-  transition: transform 0.2s ease;
-  color: var(--color-text-tertiary);
-
-  &--open {
-    transform: rotate(90deg);
+  .menu-item {
+    list-style: none;
+    margin: 0;
+    padding: 0.125rem 0.125rem;
   }
-
-  svg {
-    width: 100%;
-    height: 100%;
+  
+  .menu-item__title {
+    display: flex;
+    align-items: center;
+    gap: var(--gap-xs);
+    padding: var(--gap-xs) var(--gap-sm);
+    padding-left: calc(var(--gap-sm) + var(--level, 0) * var(--gap-md));
+    cursor: pointer;
+    border-radius: var(--border-radius-md);
   }
-}
-
-.menu-item__children-wrapper {
-  overflow: hidden;
-  //height: 0; // Initial state for animation
-}
-
-.menu-item__children-wrapper-vertical {
-  position: absolute;
-  z-index: 1000;
-  overflow: hidden;
-}
-
-.menu-item__children-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: var(--menu-item-gap, 0.25rem);
-}
-
-.menu-item__title--selected {
-  background: var(--color-highlight-bg);
-  color: var(--color-highlight-text);
-  box-shadow: var(--box-shadow);
+  
+  .menu-item__icon {
+    margin-right: var(--gap-xs);
+    font-size: var(--font-size-normal);
+    flex-shrink: 0;
+  }
+  
   .menu-item__label {
-    color: inherit;
+    flex-grow: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: var(--font-size-sm);
+    color: var(--color-text);
   }
-  .menu-item__arrow {
-    color: inherit;
-  }
-}
-.menu-item__title--matched {
-  box-shadow: var(--box-shadow);
-  .menu-item__label {
+  
+  .menu-item__label--matched {
     color: var(--color-highlight-text);
   }
-}
+  
+  .menu-item__arrow {
+    width: 1.125rem;
+    height: 1.125rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 0.375rem;
+    transition: transform 0.2s ease;
+    color: var(--color-text-tertiary);
+  
+    &--open {
+      transform: rotate(90deg);
+    }
+  
+    svg {
+      width: 100%;
+      height: 100%;
+    }
+  }
+  
+  .menu-item__children-wrapper {
+    overflow: hidden;
+    //height: 0; // Initial state for animation
+  }
+  
+  .menu-item__children-wrapper-vertical {
+    position: absolute;
+    z-index: 1000;
+    overflow: hidden;
+  }
+  
+  .menu-item__children-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--menu-item-gap, 0.25rem);
+  }
+  
+  .menu-item__title--selected {
+    background: var(--color-highlight-bg);
+    color: var(--color-highlight-text);
+    box-shadow: var(--box-shadow);
+    .menu-item__label {
+      color: inherit;
+    }
+    .menu-item__arrow {
+      color: inherit;
+    }
+  }
+  .menu-item__title--matched {
+    box-shadow: var(--box-shadow);
+    .menu-item__label {
+      color: var(--color-highlight-text);
+    }
+  }
 </style>

@@ -146,5 +146,6 @@ const rowStyle = computed(() => {
 .row {
   display: flex;
   flex-wrap: wrap;
+  background-color: transparent;
 }
 </style>

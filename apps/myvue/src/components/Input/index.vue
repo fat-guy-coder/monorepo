@@ -1,6 +1,6 @@
 <template>
   <div class="search-input" :class="{
-    'is-disabled': disabled,
+    'is-disabled': isDisabled,
     'is-focused': isFocused,
   }" :style="componentStyle">
     <span v-if="$slots.prefix || showDefaultPrefix" class="search-input__prefix">
@@ -13,15 +13,15 @@
     </span>
 
     <input ref="inputRef" class="search-input__control" type="search" :value="value || ''"
-      :placeholder="placeholder || '搜索'" :disabled="disabled" :maxlength="maxlength" @focus="setFocus(true)"
-      @blur="setFocus(false)" @input="handleInput" @keyup.enter="triggerSearch" />
+      :placeholder="placeholder || '搜索'" :disabled="isDisabled" :maxlength="maxlength" @focus="setFocus(true)"
+      @blur="handleBlur" @input="handleInput" @keyup.enter="triggerSearch" :data-field="name" />
 
-    <button v-if="allowClear && value" type="button" class="search-input__clear" :disabled="disabled"
+    <button v-if="allowClear && value" type="button" class="search-input__clear" :disabled="isDisabled"
       @click="handleClear">
       ×
     </button>
 
-    <button type="button" class="search-input__action" :disabled="disabled || loading" v-if="showSearchButton"
+    <button type="button" class="search-input__action" :disabled="isDisabled || loading" v-if="showSearchButton"
       @click="triggerSearch">
       <span v-if="!loading">{{ searchText || '搜索' }}</span>
       <span v-else class="search-input__spinner"></span>
@@ -30,95 +30,99 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted, nextTick, computed, type CSSProperties } from 'vue'
+import { ref, watch, onMounted, nextTick, computed, type CSSProperties, inject } from 'vue';
 
 defineOptions({
   name: 'SearchInput',
-})
+});
 
-const {
-  value,
-  placeholder,
-  disabled = false,
-  allowClear = true,
-  loading = false,
-  autofocus = false,
-  searchText,
-  maxlength,
-  showDefaultPrefix = false,
-  showSearchButton = false,
-  css = {},
-} = defineProps<{
-  value?: string | number
-  placeholder?: string
-  disabled?: boolean
-  allowClear?: boolean
-  loading?: boolean
-  autofocus?: boolean
-  searchText?: string
-  maxlength?: number
-  showDefaultPrefix?: boolean
-  showSearchButton?: boolean
-  css?: Record<string, string>
-}>() 
+const props = defineProps<{
+  value?: string | number;
+  placeholder?: string;
+  disabled?: boolean;
+  allowClear?: boolean;
+  loading?: boolean;
+  autofocus?: boolean;
+  searchText?: string;
+  maxlength?: number;
+  showDefaultPrefix?: boolean;
+  showSearchButton?: boolean;
+  css?: Record<string, string>;
+  // 添加 name 属性
+  name?: string;
+}>();
 
-const emit = defineEmits<{ 
-  (event: 'update:value', value: string | number): void
-  (event: 'search', value: string): void
-  (event: 'focus'): void
-  (event: 'blur'): void
-}>()
+const { allowClear = true, showDefaultPrefix = false, showSearchButton = false, autofocus = false } = props;
 
-const inputRef = ref<HTMLInputElement>()
-const isFocused = ref(false)
+const emit = defineEmits<{
+  (event: 'update:value', value: string | number): void;
+  (event: 'search', value: string): void;
+  (event: 'focus'): void;
+  (event: 'blur'): void;
+}>();
+
+const inputRef = ref<HTMLInputElement>();
+const isFocused = ref(false);
+
+
+
+const isDisabled = computed(() => {
+  return props.disabled
+});
 
 const componentStyle = computed(() => {
-  return { ...css } as CSSProperties;
+  return { ...props.css } as CSSProperties;
 });
 
 const setFocus = (value: boolean) => {
-  isFocused.value = value
+  isFocused.value = value;
   if (value) {
-    emit('focus')
-  } else {
-    emit('blur')
+    emit('focus');
   }
-}
+};
+
+const handleBlur = () => {
+  setFocus(false);
+  emit('blur');
+
+};
 
 const handleInput = (event: Event) => {
-  const target = event.target as HTMLInputElement
-  emit('update:value', target.value)
-}
+  const target = event.target as HTMLInputElement;
+  emit('update:value', target.value);
+
+};
 
 const triggerSearch = () => {
-  emit('search', value?.toString().trim() ?? '')
-}
+  emit('search', props.value?.toString().trim() ?? '');
+};
 
 const handleClear = () => {
-  emit('update:value', '')
+  emit('update:value', '');
   nextTick(() => {
-    inputRef.value?.focus()
-  })
-}
+    inputRef.value?.focus();
+  });
+};
 
 watch(
   () => autofocus,
   (value) => {
     if (value) {
-      nextTick(() => inputRef.value?.focus())
+      nextTick(() => inputRef.value?.focus());
     }
   },
   { immediate: true }
-)
+);
 
 onMounted(() => {
   if (autofocus) {
-    inputRef.value?.focus()
+    inputRef.value?.focus();
   }
-})
+});
 </script>
 
 <style scoped lang="less">
+/* Styles remain the same */
 .search-input {
   // --- 自有 CSS 变量定义 ---
   --input-height: var(--_input-height, 2rem);

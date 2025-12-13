@@ -1,5 +1,5 @@
 <template>
-    <div class="code-block-container">
+    <div class="code-block-container" :style="componentStyle">
       <!-- 代码工具栏 -->
       <div class="code-toolbar" v-if="!hiddenToolbar">
         <span class="language-tag">{{ formattedLanguage }}</span>
@@ -17,7 +17,7 @@
   </template>
 
   <script setup lang="ts">
-  import { ref, computed, onMounted, watch, nextTick } from 'vue'
+  import { ref, computed, onMounted, watch, nextTick, type CSSProperties } from 'vue'
   import { highlightElement } from 'prismjs'
   import 'prismjs/themes/prism-solarizedlight.min.css'
   import 'prismjs/plugins/toolbar/prism-toolbar.css'
@@ -32,26 +32,31 @@
   import 'prismjs/components/prism-css'
   import 'prismjs/components/prism-json'
 
-  // import 'prismjs/components/prism-markup-templating'
-  // import 'prismjs/plugins/line-numbers/prism-line-numbers.js'
-
   type Language = 'js' | 'ts' | 'html' | 'json' | 'css'
 
-  const props = defineProps<{
+  const {
+    title,
+    code,
+    language = 'js',
+    lineNumbers = true, // lineNumbers 暂未实现，保留 prop
+    hiddenToolbar = false,
+    css = {},
+  } = defineProps<{
     title?: string
     code: string
     language?: Language
     lineNumbers?: boolean
     hiddenToolbar?: boolean
-  }>()
-
-  const language = computed(() => props.language || 'js');
-  const lineNumbers = computed(() => props.lineNumbers !== false);
-  const hiddenToolbar = computed(() => props.hiddenToolbar === true);
+    css?: Record<string, string>
+  }>() 
 
   const preElement = ref<HTMLElement | null>(null)
   const isCopying = ref(false)
   const copyStatusText = ref('复制')
+
+  const componentStyle = computed(() => {
+    return { ...css } as CSSProperties;
+  });
 
   // 格式化显示的语言名称
   const formattedLanguage = computed(() => {
@@ -62,7 +67,7 @@
       json: 'JSON',
       css: 'Css'
     }
-    return langMap[language.value] || language.value.toUpperCase()
+    return langMap[language] || language.toUpperCase()
   })
 
   // 高亮代码
@@ -79,7 +84,7 @@
   const handleCopy = async () => {
     try {
       isCopying.value = true
-      await navigator.clipboard.writeText(props.code)
+      await navigator.clipboard.writeText(code)
       copyStatusText.value = '已复制!'
       setTimeout(() => {
         copyStatusText.value = '复制'
@@ -100,27 +105,50 @@
   })
 
   watch(
-    () => [props.code, language.value],
+    () => [code, language],
     () => nextTick(highlightCode),
   )
   </script>
 
   <style lang="less" scoped>
   .title {
-    color: var(--color-text-light-solid);
+    color: var(--code-toolbar-title-color, var(--color-text));
   }
 
   .code-block-container {
+    --code-container-bg: var(--_code-container-bg, var(--color-background));
+    --code-container-border-color: var(--_code-container-border-color, var(--color-border));
+    --code-container-shadow: var(--_code-container-shadow, var(--box-shadow-sm));
+    --code-container-radius: var(--_code-container-radius, var(--border-radius-md));
+
+    --code-toolbar-bg: var(--_code-toolbar-bg, var(--color-background-soft));
+    --code-toolbar-border-color: var(--_code-toolbar-border-color, var(--color-border));
+    --code-toolbar-title-color: var(--_code-toolbar-title-color, var(--color-text));
+    
+    --code-lang-tag-color: var(--_code-lang-tag-color, var(--color-text-secondary));
+    
+    --code-copy-btn-bg: var(--_code-copy-btn-bg, var(--color-background-soft));
+    --code-copy-btn-border-color: var(--_code-copy-btn-border-color, var(--color-border));
+    --code-copy-btn-color: var(--_code-copy-btn-color, var(--color-text));
+    --code-copy-btn-hover-bg: var(--_code-copy-btn-hover-bg, var(--color-background-mute));
+    --code-copy-btn-hover-border-color: var(--_code-copy-btn-hover-border-color, var(--color-border-hover));
+    --code-copy-status-color: var(--_code-copy-status-color, var(--color-text-secondary));
+    
+    --code-block-bg: var(--_code-block-bg, var(--color-background-mute));
+    --code-block-color: var(--_code-block-color, var(--color-text));
+    --code-content-color: var(--_code-content-color, var(--color-text));
+
     position: relative;
     margin: 0;
-    border-radius: var(--element-border-radius);
-    background: var(--color-bg-container);
-    border: 1px solid var(--color-border);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-radius: var(--code-container-radius);
+    background: var(--code-container-bg);
+    border: 1px solid var(--code-container-border-color);
+    box-shadow: var(--code-container-shadow);
     transition:
       background-color 0.3s ease,
       border-color 0.3s ease,
       box-shadow 0.3s ease;
+    overflow: hidden; // 确保圆角生效
   }
 
   .code-toolbar {
@@ -128,8 +156,8 @@
     justify-content: space-between;
     align-items: center;
     padding: var(--padding-md) var(--padding-lg);
-    background: var(--color-fill);
-    border-bottom: 1px solid var(--color-border);
+    background: var(--code-toolbar-bg);
+    border-bottom: 1px solid var(--code-toolbar-border-color);
     backdrop-filter: blur(4px);
     transition:
       background-color 0.3s ease,
@@ -141,7 +169,7 @@
   }
 
   .language-tag {
-    color: var(--color-text-secondary);
+    color: var(--code-lang-tag-color);
     font-size: 0.85rem;
     font-weight: 500;
     text-transform: uppercase;
@@ -153,16 +181,16 @@
     align-items: center;
     gap: var(--gap-sm);
     padding: var(--padding-xs) var(--padding-md);
-    background: var(--color-fill-secondary);
-    border: 1px solid var(--color-border);
-    border-radius: calc(var(--element-border-radius) / 2);
-    color: var(--color-text);
+    background: var(--code-copy-btn-bg);
+    border: 1px solid var(--code-copy-btn-border-color);
+    border-radius: var(--border-radius-sm);
+    color: var(--code-copy-btn-color);
     cursor: pointer;
     transition: all 0.2s ease;
 
     &:hover:not(:disabled) {
-      background: var(--color-fill-tertiary);
-      border-color: var(--color-border-hover);
+      background: var(--code-copy-btn-hover-bg);
+      border-color: var(--code-copy-btn-hover-border-color);
     }
 
     &:disabled {
@@ -181,15 +209,15 @@
 
   .copy-status {
     font-size: 0.85rem;
-    color: var(--color-text-secondary);
+    color: var(--code-copy-status-color);
   }
 
   .code-block {
     margin: 0;
     padding: var(--padding-xl) !important;
-    overflow: inherit;
-    background: var(--color-bg-container);
-    color: var(--color-text);
+    overflow: auto;
+    background: var(--code-block-bg);
+    color: var(--code-block-color);
     transition:
       background-color 0.3s ease,
       color 0.3s ease;
@@ -199,7 +227,7 @@
     font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
     font-size: 0.95rem;
     line-height: 1.6;
-    color: var(--color-text);
+    color: var(--code-content-color);
     transition: color 0.3s ease;
   }
 
@@ -267,7 +295,7 @@
   }
 
   .code-block::-webkit-scrollbar-track {
-    background: var(--color-fill);
+    background: var(--color-background-soft);
     border-radius: 3px;
   }
 
@@ -304,42 +332,6 @@
 
     100% {
       transform: scale(1);
-    }
-  }
-
-  /* 暗色主题优化 */
-  html[data-theme="dark"] &,
-  body[data-theme="dark"] & {
-    .code-block-container {
-      background: var(--color-black-mute);
-      border-color: var(--color-gray-700);
-    }
-
-    .code-toolbar {
-      background: var(--color-black-soft);
-      border-bottom-color: var(--color-gray-700);
-    }
-
-    .code-block {
-      background: var(--color-black-mute);
-    }
-  }
-
-  /* 亮色主题优化 */
-  html[data-theme="light"] &,
-  body[data-theme="light"] & {
-    .code-block-container {
-      background: var(--color-white);
-      border-color: var(--color-gray-200);
-    }
-
-    .code-toolbar {
-      background: var(--color-white-soft);
-      border-bottom-color: var(--color-gray-200);
-    }
-
-    .code-block {
-      background: var(--color-white);
     }
   }
   </style>

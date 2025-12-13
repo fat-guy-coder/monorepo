@@ -1,17 +1,12 @@
 <template>
   <transition :name="animation.name" :style="{ '--nav-animation-duration': animation.duration }">
-    <nav
-      v-if="show"
-      class="scroll-nav"
-      :class="[
-        `scroll-nav--${position.replace('-', '_')}`,
-        `scroll-nav--variant-${variant}`,
-        `scroll-nav--rounded-${rounded}`,
-        `scroll-nav--shadow-${shadow}`,
-        { 'scroll-nav--borderless': !bordered },
-      ]"
-      :style="componentStyle"
-    >
+    <nav v-if="show" class="scroll-nav" :class="[
+      `scroll-nav--${position.replace('-', '_')}`,
+      `scroll-nav--variant-${variant}`,
+      `scroll-nav--rounded-${rounded}`,
+      `scroll-nav--shadow-${shadow}`,
+      { 'scroll-nav--borderless': !bordered },
+    ]" :style="componentStyle">
       <header class="scroll-nav__header">
         <div class="scroll-nav__title">
           <slot name="title">
@@ -26,52 +21,30 @@
         </button>
       </header>
 
-      <ul class="scroll-nav__list" ref="scrollNavList" role="menu">
+      <ul :class="['scroll-nav__list']" ref="scrollNavList" role="menu">
         <li v-if="showBackToTop" class="scroll-nav__item" role="menuitem" @click="scrollToTop">
-          <button
-            class="scroll-nav__item-btn"
-            :class="[
-              currentItem?.id === 'back-to-top' ? 'scroll-nav__item--active' : '',
-              'gradient-animation-hover',
-            ]"
-          >
+          <button class="scroll-nav__item-btn" :class="[
+            currentItem?.id === 'back-to-top' ? 'scroll-nav__item--active' : '',
+            'gradient-animation-hover',
+          ]">
             回到顶部
           </button>
         </li>
 
         <li v-for="item in mappedList" :key="item.id" class="scroll-nav__item" role="presentation">
-          <button
-            class="scroll-nav__item-btn"
-            :class="[
-              currentItem?.id === item.id ? 'scroll-nav__item--active' : '',
-              'gradient-animation-linear-hover',
-            ]"
-            type="button"
-            role="menuitem"
-            :title="item.title"
-            @click="handleScroll($event, item.id)"
-          >
+          <button class="scroll-nav__item-btn" :class="[
+            currentItem?.id === item.id ? 'scroll-nav__item--active' : '',
+            'gradient-animation-linear-hover',
+          ]" type="button" role="menuitem" :title="item.title" @click="handleScroll($event, item.id)">
             <span class="scroll-nav__item-text">{{ item.title }}</span>
           </button>
 
-          <ul
-            v-if="showChild && item.children && item.children.length"
-            class="scroll-nav__children"
-          >
-            <li
-              v-for="child in item.children"
-              :key="child.id"
-              class="scroll-nav__item scroll-nav__item--child"
-              role="presentation"
-            >
-              <button
-                class="scroll-nav__item-btn gradient-animation-linear-hover"
-                :class="[currentItem?.id === child.id ? 'scroll-nav__item--active' : '']"
-                type="button"
-                role="menuitem"
-                :title="child.title"
-                @click="handleScroll($event, child.id)"
-              >
+          <ul v-if="showChild && item.children && item.children.length" class="scroll-nav__children">
+            <li v-for="child in item.children" :key="child.id" class="scroll-nav__item scroll-nav__item--child"
+              role="presentation">
+              <button class="scroll-nav__item-btn gradient-animation-linear-hover"
+                :class="[currentItem?.id === child.id ? 'scroll-nav__item--active' : '']" type="button" role="menuitem"
+                :title="child.title" @click="handleScroll($event, child.id)">
                 <span class="scroll-nav__item-text">{{ child.title }}</span>
               </button>
             </li>
@@ -83,7 +56,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref, watch, type CSSProperties } from 'vue'
+import { computed,  onMounted,  ref, watch, type CSSProperties } from 'vue'
 import { useUserStore } from '@/stores/user'
 import {
   animateHeight,
@@ -118,7 +91,7 @@ const {
     duration: '0.3s',
     type: ['height'],
     baseDuration: 0,
-    durationPerItem: 20,
+    durationPerItem: 10,
     maxDuration: 400,
   },
   title,
@@ -132,7 +105,7 @@ const {
   },
   position = 'top-right',
   scrollTo = 'center',
-  showBackToTop = true,
+  showBackToTop = false,
   bordered = true,
   rounded = 'md',
   shadow = 'none',
@@ -157,8 +130,10 @@ const {
 }>()
 
 const store = useUserStore()
-const prefersOpen = computed(() => !store?.user?.device?.isMobile)
-const isOpen = ref(prefersOpen.value)
+
+
+const isOpen = ref(true)
+
 const scrollNavList = ref<HTMLElement | null>(null)
 
 const componentStyle = computed(() => {
@@ -186,11 +161,15 @@ watch(isOpen, (newVal) => {
     })
     animateHeight(scrollNavList.value, newVal, duration, animation.type)
   }
-})
+},)
 
 const toggleFold = () => {
   isOpen.value = !isOpen.value
 }
+
+onMounted(() => {
+  isOpen.value = !store?.user?.device?.isMobile
+})
 
 const mappedList = computed(() => {
   const titleKey = keyMap.title || 'name'
@@ -269,7 +248,7 @@ const getCurrentItem = (list: Item[], id: string): Item | null => {
   --nav-toggle-padding: var(--_nav-toggle-padding, 0.25rem 0.6rem);
   --nav-toggle-bg: var(--_nav-toggle-bg, var(--color-background-mute));
   --nav-toggle-bg-hover: var(--_nav-toggle-bg-hover, var(--color-background));
-  --nav-toggle-radius: var(--_nav-toggle-radius, var(--border-radius-full));
+  --nav-toggle-radius: var(--_nav-toggle-radius, var(--border-radius));
   --nav-toggle-font-size: var(--_nav-toggle-font-size, 0.8rem);
 
   --nav-list-margin-top: var(--_nav-list-margin-top, 0.5rem);
@@ -281,7 +260,8 @@ const getCurrentItem = (list: Item[], id: string): Item | null => {
   --nav-item-bg-hover: var(--_nav-item-bg-hover, var(--color-background-mute));
   --nav-item-font-size: var(--_nav-item-font-size, 0.9rem);
   --nav-item-text-color: var(--_nav-item-text-color, var(--color-text-soft));
-  --nav-item-text-color-hover: var(--_nav-item-text-color-hover, var(--nav-accent-color));
+  --nav-item-color-border-hover: var(--_nav-item-color-border-hover, var(--color-border-hover));
+  --nav-item-box-shadow-hover: var(--_nav-item-box-shadow-hover, var(--box-shadow-hover-sm));
 
   --nav-item-active-bg: var(--_nav-item-active-bg, var(--color-highlight-bg));
   --nav-item-active-color: var(--_nav-item-active-color, var(--color-highlight-text));
@@ -289,6 +269,8 @@ const getCurrentItem = (list: Item[], id: string): Item | null => {
   --nav-child-list-padding: var(--_nav-child-list-padding, 0 0 0 0.75rem);
   --nav-child-item-padding: var(--_nav-child-item-padding, 0.3rem 0.75rem);
   --nav-child-item-font-size: var(--_nav-child-item-font-size, 0.85rem);
+
+  --nav-transition-duration: var(--_nav-transition-duration, var(--transition-duration));
 
   // --- Component Styles ---
   position: fixed;
@@ -311,22 +293,16 @@ const getCurrentItem = (list: Item[], id: string): Item | null => {
     box-shadow: var(--nav-shadow-hover);
   }
 
-  &--top_left {
-    top: 3rem;
+  &--top_left,
+  &--bottom_left {
     left: 3rem;
     right: auto;
   }
 
-  &--bottom_right {
-    top: auto;
-    bottom: 3rem;
-  }
-
+  &--bottom_right,
   &--bottom_left {
     top: auto;
     bottom: 3rem;
-    left: 3rem;
-    right: auto;
   }
 
   &--borderless {
@@ -377,6 +353,7 @@ const getCurrentItem = (list: Item[], id: string): Item | null => {
   justify-content: space-between;
   align-items: center;
   padding: var(--nav-header-padding);
+
   h2 {
     margin: 0;
     font-size: var(--nav-title-font-size);
@@ -390,14 +367,12 @@ const getCurrentItem = (list: Item[], id: string): Item | null => {
   align-items: center;
   gap: 0.25rem;
   border: none;
-  background: var(--nav-toggle-bg);
   color: inherit;
   padding: var(--nav-toggle-padding);
   border-radius: var(--nav-toggle-radius);
   cursor: pointer;
   font-size: var(--nav-toggle-font-size);
   transition: background 0.2s ease;
-
   svg {
     width: 14px;
     height: 14px;
@@ -456,13 +431,9 @@ const getCurrentItem = (list: Item[], id: string): Item | null => {
   padding: var(--nav-item-padding);
   border-radius: var(--nav-item-radius);
   transition:
-    background 0.2s ease,
-    color 0.2s ease,
-    transform 0.2s ease;
-
+    box-shadow var(--nav-transition-duration) ease;
   &:hover {
-    color: var(--nav-item-text-color-hover);
-    transform: translateX(2px);
+    box-shadow: var(--nav-item-box-shadow-hover);
   }
 }
 
@@ -512,7 +483,13 @@ const getCurrentItem = (list: Item[], id: string): Item | null => {
 }
 
 .slide-in-right-enter-active,
-.slide-in-right-leave-active {
+.slide-in-right-leave-active,
+.slide-in-left-enter-active,
+.slide-in-left-leave-active,
+.slide-in-top-enter-active,
+.slide-in-top-leave-active,
+.slide-in-bottom-enter-active,
+.slide-in-bottom-leave-active {
   transition:
     transform var(--nav-animation-duration) ease,
     opacity var(--nav-animation-duration) ease;
@@ -524,37 +501,16 @@ const getCurrentItem = (list: Item[], id: string): Item | null => {
   transform: translateX(20px);
 }
 
-.slide-in-left-enter-active,
-.slide-in-left-leave-active {
-  transition:
-    transform var(--nav-animation-duration) ease,
-    opacity var(--nav-animation-duration) ease;
-}
-
 .slide-in-left-enter-from,
 .slide-in-left-leave-to {
   opacity: 0;
   transform: translateX(-20px);
 }
 
-.slide-in-top-enter-active,
-.slide-in-top-leave-active {
-  transition:
-    transform var(--nav-animation-duration) ease,
-    opacity var(--nav-animation-duration) ease;
-}
-
 .slide-in-top-enter-from,
 .slide-in-top-leave-to {
   opacity: 0;
   transform: translateY(-20px);
-}
-
-.slide-in-bottom-enter-active,
-.slide-in-bottom-leave-active {
-  transition:
-    transform var(--nav-animation-duration) ease,
-    opacity var(--nav-animation-duration) ease;
 }
 
 .slide-in-bottom-enter-from,

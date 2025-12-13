@@ -168,6 +168,7 @@ const colClasses = computed(() => {
 <style scoped lang="less">
 .col {
   box-sizing: border-box;
+  background-color: transparent;
 }
 
 /* 支持order排序，样式辅助，可以和 style 结合 */

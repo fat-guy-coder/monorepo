@@ -76,12 +76,12 @@
 
             <Row :gutter="currentConfig.grid?.gutter || 0" v-for="category in categoryList" :key="category.id">
               <Col v-bind="currentConfig.grid?.layout?.item">
-                <Card as="section" :bordered="false" :key="category.id" :id="category.id" class="category-section"
+                <Card as="section"  :hoverable="true" :key="category.id" :id="category.id" class="category-section"
                   :title="category.name">
                   <Row :gutter="currentConfig.grid?.gutter || 0" v-for="(item, index) in category.children"
                     :key="item.id">
                     <Col v-if="category.id !== 'key-points'" v-bind="currentConfig.grid?.layout?.item">
-                      <Card :id="item.id" class="tip-card" :title="item.name">
+                      <Card :id="item.id"  :bordered="false" :title="item.name">
                         <List v-if="item.type === 'plan'" type="plan" :items="item.data as IPlan[]"
                           :show-underline="false" />
                         <List v-else-if="item.type === 'list'" type="bullet" :items="item.data as string[]" />
@@ -104,7 +104,7 @@
                     <Col v-else span="24">
                       <Row :gutter="currentConfig.grid?.gutter || 0" :key="item.id">
                         <Col v-bind="currentConfig.list?.grid?.layout?.keyPoints">
-                          <Card :id="item.id" class="tip-card" :title="item.name">
+                          <Card :id="item.id"  :title="item.name">
                             <List v-if="item.type === 'plan'" type="plan" :items="item.data as IPlan[]"
                               :show-underline="false" />
                             <List v-else-if="item.type === 'list'" type="bullet" :items="item.data as string[]" />

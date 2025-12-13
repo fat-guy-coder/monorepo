@@ -142,7 +142,12 @@ defineExpose({ scrollToTarget })
   --nav-tag-radius-lg: var(--_nav-tag-radius-lg, calc(var(--border-radius) * 4));
   --nav-tag-radius-pill: var(--_nav-tag-radius-pill, 999px);
   --nav-carx-gap: var(--_nav-carx-gap, var(--gap-md));
-
+  --nav-color-border-hover: var(--_nav-color-border-hover, var(--color-border-hover));
+  --nav-box-shadow: var(--_nav-box-shadow, var(--box-shadow-md));
+  --nav-box-shadow-hover: var(--_nav-box-shadow-hover, var(--box-shadow-hover-md));
+  --nav-transition-duration: var(--_nav-transition-duration, var(--transition-duration));
+  --nav-bg-transparent: var(--_nav-bg-transparent, transparent);
+  background-color: var(--nav-bg-transparent);
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -170,15 +175,15 @@ defineExpose({ scrollToTarget })
   background: var(--nav-tag-bg);
   color: var(--nav-tag-text);
   transition:
-    transform var(--transition-duration, 0.3s) ease,
-    box-shadow var(--transition-duration, 0.3s) ease,
-    border-color var(--transition-duration, 0.3s) ease;
+    transform var(--nav-transition-duration) ease,
+    box-shadow var(--nav-transition-duration) ease,
+    border-color var(--nav-transition-duration) ease;
   box-shadow: var(--box-shadow-xs);
   position: relative;
   overflow: hidden;
   &:hover {
-    border-color: var(--color-primary);
-    box-shadow: var(--box-shadow-hover-md);
+    border-color: var(--nav-color-border-hover);
+    box-shadow: var(--nav-box-shadow-hover);
   }
 
   &:active {

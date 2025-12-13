@@ -2,7 +2,8 @@
   <component :is="as" class="ui-card" :class="[
     `size-${size}`,
     `variant--${variant}`,
-    { 'is-hoverable': hoverable, }
+    { 'is-hoverable': hoverable, },
+    { 'is-bordered': bordered } //是否显示边框
   ]" :style="componentStyle">
     <div v-if="hasTitle" class="ui-card__header">
       <slot name="title">
@@ -34,6 +35,7 @@ const {
   variant = 'default',
   hoverable = false,
   size = 'md',
+  bordered = true,
   css = {},
 } = defineProps<{
   as?: string
@@ -46,7 +48,8 @@ const {
   h6?: string
   variant?: 'default' | 'section-card'
   hoverable?: boolean
-  size?: 'sm' | 'md' | 'lg'
+  size?: 'sm' | 'md' | 'lg',
+  bordered?: boolean
   css?: Record<string, string>
 }>()
 
@@ -109,8 +112,8 @@ const hasTitle = computed(() =>
   background: var(--card-bg-color);
   border-radius: var(--card-border-radius);
   padding: var(--card-padding);
-  border: var(--card-border-width) solid var(--card-border-color);
-  transition: box-shadow 0.25s ease, transform 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+  transition: box-shadow 0.25s ease, transform 0.2s ease, background-color 0.2s ease;
+  background-color: transparent;
 
   &.is-hoverable:hover {
     box-shadow: var(--card-box-shadow-hover);
@@ -148,6 +151,10 @@ const hasTitle = computed(() =>
   }
 }
 
+.ui-card.is-bordered {
+  border: var(--card-border-width) solid var(--card-border-color);
+}
+
 .ui-card__header {
   margin-bottom: var(--margin-xl);
   background-color: transparent;
@@ -165,5 +172,6 @@ const hasTitle = computed(() =>
 
 .ui-card__body {
   color: var(--card-text-color);
+  background-color: transparent;
 }
 </style>
