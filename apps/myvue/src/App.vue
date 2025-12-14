@@ -87,7 +87,7 @@ import {
 import { useTabistStore, type Tab } from '@/stores/tab' //标签列表store
 import { type Theme, useUserStore } from '@/stores/user' //用户信息store
 import { useRouter } from 'vue-router'
-import { debounce } from '@/function/CommonFun' //常用函数
+import { debounce } from '@/function/common' //常用函数
 import { useDetectMobile } from '@/hooks/useDetectMobile'
 import type { NavItem } from './components/Nav' //导航项类型
 import { useGradientAnimation } from '@/hooks/useGradientAnimation' //渐变色动画

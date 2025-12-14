@@ -4,8 +4,8 @@ import {
   THEME_HIGH_CONTRAST_NEON_COLORS,
   THEME_SECONDARY_GRADIENT_COLORS,
 } from '@/assets/css/theme/index'
-import { lightMinifyCode, lihlghtDecompressCode } from '@/Function/code'
-import { random, randPick } from '@/Function/math'
+import { lightMinifyCode, lihlghtDecompressCode } from '@/function/code'
+import { random, randPick } from '@/function/math'
 
 // --- 类型定义 ---
 

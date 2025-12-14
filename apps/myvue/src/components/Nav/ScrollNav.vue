@@ -63,7 +63,7 @@ import {
   calculateAnimationDuration,
   type AnimationProperties,
   type AnimationDurationOptions,
-} from '@/Function/animation'
+} from '@/function/animation'
 
 interface Item {
   title?: string

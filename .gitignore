@@ -9,10 +9,8 @@ lerna-debug.log*
 
 node_modules/
 apps/myvue/node_modules/
-apps/express/node_modules/
-apps/express/dist/
-apps/express/myvue/
-apps/express/config/
+apps/fastify/node_modules/
+apps/fastify/dist/
 static/
 .DS_Store
 coverage/

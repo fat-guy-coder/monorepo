@@ -28,17 +28,9 @@
     "dev": "pnpm -r run dev",
     "turbo:myvue": "turbo -F myvue run build ",
     "vite:myvue": "pnpm -F myvue build --config  vite.config.ts",
-    "hello": "pnpm -F myvue hello",
     "myvue": "pnpm -F myvue run dev",
     "g": "pnpm -F myvue g",
-    "translate": "pnpm -F myvue translate",
-    "svelte": "pnpm -F svelte dev",
-    "build:svelte": "pnpm -F svelte build",
-    "preview:svelte": "pnpm -F svelte preview",
-    "build:express": "pnpm -F express run build-only",
-    "turbo:express": "turbo -F express run build-only",
-    "express": "pnpm -F express run dev",
-    "adminjs": "npm -F express run adminjs"
+    "translate": "pnpm -F myvue translate"
   },
   "keywords": [
     "前端学习网站",

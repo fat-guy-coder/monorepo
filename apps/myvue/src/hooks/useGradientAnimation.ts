@@ -6,8 +6,8 @@ import {
   THEME_FONT_GRADIENT_COLORS,
   THEME__MAIN_TEXT_COLOR,
 } from '@/assets/css/theme/index'
-import { lightMinifyCode, decompressCodeAdvanced } from '@/Function/code'
-import { random, randPick } from '@/Function/math'
+import { lightMinifyCode, decompressCodeAdvanced } from '@/function/code'
+import { random, randPick } from '@/function/math'
 
 // --- 类型定义 ---
 
