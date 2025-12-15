@@ -1151,14 +1151,14 @@ const mixedNavList = computed(() => {
 .tips-grid {
   display: grid;
   grid-template-columns: var(--category-columns, repeat(auto-fit, minmax(400px, 1fr)));
-  gap: var(--category-gap, var(--gap-xl));
+  gap: var\((--[a-zA-Z0-9_-]+)\);
 }
 
 // 多列网格布局（类似 BasicType.vue）
 .type-grid-container {
   display: grid;
   grid-template-columns: var(--grid-columns, repeat(auto-fill, minmax(300px, 1fr)));
-  gap: var(--grid-gap, var(--gap-xl));
+  gap: var\((--[a-zA-Z0-9_-]+)\);
 }
 
 .type-grid-item {
@@ -1399,8 +1399,8 @@ const mixedNavList = computed(() => {
 .waterfall-columns-layout {
   display: grid;
   grid-template-columns: var(--grid-columns, 1fr 1fr);
-  gap: var(--grid-gap, var(--gap-2xl));
-  margin-bottom: var(--spacing-section, var(--margin-4xl));
+  gap: var\((--[a-zA-Z0-9_-]+)\);
+  margin-bottom: var\((--[a-zA-Z0-9_-]+)\);
 
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
@@ -1410,7 +1410,7 @@ const mixedNavList = computed(() => {
 .waterfall-column-section {
   background: var(--color-bg-container);
   border-radius: var(--section-border-radius, 16px);
-  padding: var(--section-padding, var(--padding-3xl));
+  padding: var\((--[a-zA-Z0-9_-]+)\);
   box-shadow: var(--section-shadow, 0 4px 20px rgba(0, 0, 0, 0.08));
   border: 1px solid var(--color-border);
   transition: all 0.3s ease;

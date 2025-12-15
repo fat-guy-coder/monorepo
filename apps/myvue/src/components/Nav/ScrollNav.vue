@@ -231,46 +231,46 @@ const getCurrentItem = (list: Item[], id: string): Item | null => {
 .scroll-nav {
   --nav-animation-duration: var(--_nav-animation-duration, 0.3s);
   --nav-padding: var(--_nav-padding, 0.75rem);
-  --nav-bg: var(--_nav-bg, var(--color-background-soft));
-  --nav-border-color: var(--_nav-border-color, var(--color-border));
-  --nav-text-color: var(--_nav-text-color, var(--color-text));
-  --nav-accent-color: var(--_nav-accent-color, var(--color-primary));
-  --nav-shadow: var(--_nav-shadow, var(--box-shadow-md));
-  --nav-shadow-hover: var(--_nav-shadow-hover, var(--box-shadow-hover-md));
-  --nav-radius-sm: var(--_nav-radius-sm, var(--border-radius-sm));
-  --nav-radius-md: var(--_nav-radius-md, var(--border-radius-md));
-  --nav-radius-lg: var(--_nav-radius-lg, var(--border-radius-lg));
+  --nav-bg: var(--color-background-soft);
+  --nav-border-color: var(--color-border);
+  --nav-text-color: var(--color-text);
+  --nav-accent-color: var(--color-primary);
+  --nav-shadow: var(--box-shadow-md);
+  --nav-shadow-hover: var(--box-shadow-hover-md);
+  --nav-radius-sm: var(--border-radius-sm);
+  --nav-radius-md: var(--border-radius-md);
+  --nav-radius-lg: var(--border-radius-lg);
 
   --nav-header-padding: var(--_nav-header-padding, 0.25rem 0.5rem);
   --nav-title-font-size: var(--_nav-title-font-size, 1rem);
-  --nav-title-color: var(--_nav-title-color, var(--color-heading));
+  --nav-title-color: var(--color-heading);
 
   --nav-toggle-padding: var(--_nav-toggle-padding, 0.25rem 0.6rem);
-  --nav-toggle-bg: var(--_nav-toggle-bg, var(--color-background-mute));
-  --nav-toggle-bg-hover: var(--_nav-toggle-bg-hover, var(--color-background));
-  --nav-toggle-radius: var(--_nav-toggle-radius, var(--border-radius));
+  --nav-toggle-bg: var(--color-background-mute);
+  --nav-toggle-bg-hover: var(--color-background);
+  --nav-toggle-radius: var(--border-radius);
   --nav-toggle-font-size: var(--_nav-toggle-font-size, 0.8rem);
 
   --nav-list-margin-top: var(--_nav-list-margin-top, 0.5rem);
   --nav-list-gap: var(--_nav-list-gap, 1px);
 
   --nav-item-padding: var(--_nav-item-padding, 0.5rem 0.75rem);
-  --nav-item-radius: var(--_nav-item-radius, var(--border-radius-sm));
+  --nav-item-radius: var(--border-radius-sm);
   --nav-item-bg: var(--_nav-item-bg, transparent);
-  --nav-item-bg-hover: var(--_nav-item-bg-hover, var(--color-background-mute));
+  --nav-item-bg-hover: var(--color-background-mute);
   --nav-item-font-size: var(--_nav-item-font-size, 0.9rem);
-  --nav-item-text-color: var(--_nav-item-text-color, var(--color-text-soft));
-  --nav-item-color-border-hover: var(--_nav-item-color-border-hover, var(--color-border-hover));
-  --nav-item-box-shadow-hover: var(--_nav-item-box-shadow-hover, var(--box-shadow-hover-sm));
+  --nav-item-text-color: var(--color-text-soft);
+  --nav-item-color-border-hover: var(--color-border-hover);
+  --nav-item-box-shadow-hover: var(--box-shadow-hover-sm);
 
-  --nav-item-active-bg: var(--_nav-item-active-bg, var(--color-highlight-bg));
-  --nav-item-active-color: var(--_nav-item-active-color, var(--color-highlight-text));
+  --nav-item-active-bg: var(--color-highlight-bg);
+  --nav-item-active-color: var(--color-highlight-text);
 
   --nav-child-list-padding: var(--_nav-child-list-padding, 0 0 0 0.75rem);
   --nav-child-item-padding: var(--_nav-child-item-padding, 0.3rem 0.75rem);
   --nav-child-item-font-size: var(--_nav-child-item-font-size, 0.85rem);
 
-  --nav-transition-duration: var(--_nav-transition-duration, var(--transition-duration));
+  --nav-transition-duration: var(--transition-duration);
 
   // --- Component Styles ---
   position: fixed;

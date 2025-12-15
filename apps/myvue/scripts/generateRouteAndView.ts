@@ -84,6 +84,9 @@ const options = await getArg()
 Object.assign(config, options)
 
 
+console.log('options', options)
+
+
 
 //菜单类型
 interface MenuItem {

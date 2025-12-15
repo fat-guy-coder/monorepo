@@ -135,17 +135,17 @@ defineExpose({ scrollToTarget })
 
 <style lang="less" scoped>
 .nav-carx {
-  --nav-tag-bg: var(--_nav-tag-bg, var(--color-background));
-  --nav-tag-border: var(--_nav-tag-border, var(--color-border));
-  --nav-tag-text: var(--_nav-tag-text, var(--color-text));
-  --nav-tag-radius-md: var(--_nav-tag-radius-md, calc(var(--border-radius) * 2.5));
-  --nav-tag-radius-lg: var(--_nav-tag-radius-lg, calc(var(--border-radius) * 4));
-  --nav-tag-radius-pill: var(--_nav-tag-radius-pill, 999px);
-  --nav-carx-gap: var(--_nav-carx-gap, var(--gap-md));
-  --nav-color-border-hover: var(--_nav-color-border-hover, var(--color-border-hover));
-  --nav-box-shadow: var(--_nav-box-shadow, var(--box-shadow-md));
-  --nav-box-shadow-hover: var(--_nav-box-shadow-hover, var(--box-shadow-hover-md));
-  --nav-transition-duration: var(--_nav-transition-duration, var(--transition-duration));
+  --nav-tag-bg: var(--color-background);
+  --nav-tag-border: var(--color-border);
+  --nav-tag-text: var(--color-text);
+  --nav-tag-radius-md: var(--border-radius-md);
+  --nav-tag-radius-lg: var(--border-radius-lg);
+  --nav-tag-radius-pill: 999px;
+  --nav-carx-gap: var(--gap-md);
+  --nav-color-border-hover: var(--color-border-hover);
+  --nav-box-shadow: var(--box-shadow-md);
+  --nav-box-shadow-hover: var(--box-shadow-hover-md);
+  --nav-transition-duration: var(--transition-duration);
   --nav-bg-transparent: var(--_nav-bg-transparent, transparent);
   background-color: var(--nav-bg-transparent);
   display: flex;

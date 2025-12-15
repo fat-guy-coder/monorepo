@@ -125,25 +125,25 @@ onMounted(() => {
 /* Styles remain the same */
 .search-input {
   // --- 自有 CSS 变量定义 ---
-  --input-height: var(--_input-height, 2rem);
-  --input-padding-horizontal: var(--_input-padding-horizontal, 0.6875rem);
-  --input-bg: var(--_input-bg, var(--color-bg-container));
-  --input-border-color: var(--_input-border-color, var(--color-border));
-  --input-border-radius: var(--_input-border-radius, var(--element-border-radius));
-  --input-border-color-hover: var(--_input-border-color-hover, var(--color-primary));
-  --input-border-color-focus: var(--_input-border-color-focus, var(--color-primary));
-  --input-focus-shadow: var(--_input-focus-shadow, var(--box-shadow-hover));
-  --input-bg-disabled: var(--_input-bg-disabled, var(--color-fill-tertiary));
-  --input-prefix-color: var(--_input-prefix-color, var(--color-text-tertiary));
-  --input-text-color: var(--_input-text-color, var(--color-text));
-  --input-placeholder-color: var(--_input-placeholder-color, var(--color-text-quaternary));
-  --input-clear-color: var(--_input-clear-color, var(--color-text-quaternary));
-  --input-clear-color-hover: var(--_input-clear-color-hover, var(--color-text-secondary));
-  --input-button-bg: var(--_input-button-bg, var(--color-primary));
-  --input-button-text-color: var(--_input-button-text-color, var(--color-text-light-solid));
-  --input-button-bg-hover: var(--_input-button-bg-hover, var(--color-link-hover));
-  --input-spinner-track-color: var(--_input-spinner-track-color, rgba(255, 255, 255, 0.5));
-  --input-spinner-color: var(--_input-spinner-color, var(--color-text-light-solid, #fff));
+  --input-height: 2rem;
+  --input-padding-horizontal: 0.6875rem;
+  --input-bg: var(--color-bg-container);
+  --input-border-color: var(--color-border);
+  --input-border-radius: var(--element-border-radius);
+  --input-border-color-hover: var(--color-primary);
+  --input-border-color-focus: var(--color-primary);
+  --input-focus-shadow: var(--box-shadow-hover);
+  --input-bg-disabled: var(--color-fill-tertiary);
+  --input-prefix-color: var(--color-text-tertiary);
+  --input-text-color: var(--color-text);
+  --input-placeholder-color: var(--color-text-quaternary);
+  --input-clear-color: var(--color-text-quaternary);
+  --input-clear-color-hover: var(--color-text-secondary);
+  --input-button-bg: var(--color-primary);
+  --input-button-text-color: var(--color-text-light-solid);
+  --input-button-bg-hover: var(--color-link-hover);
+  --input-spinner-track-color: rgba(255, 255, 255, 0.5);
+  --input-spinner-color: #fff;
 
   position: relative;
   display: flex;

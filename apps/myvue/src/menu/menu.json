@@ -1,5 +1,13 @@
 [
   {
+    "id": "DragLayoutExample",
+    "name": "DragLayoutExample",
+    "label": "拖拽布局示例 ⭐",
+    "path": "/DragLayoutExample",
+    "parentPath": "/DragLayoutExample",
+    "icon": "🎨"
+  },
+  {
     "id": "LearningAbility",
     "name": "LearningAbility",
     "label": "学习⭐",

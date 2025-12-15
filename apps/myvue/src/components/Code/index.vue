@@ -112,31 +112,31 @@
 
   <style lang="less" scoped>
   .title {
-    color: var(--code-toolbar-title-color, var(--color-text));
+    color: var(--color-text);
   }
 
   .code-block-container {
-    --code-container-bg: var(--_code-container-bg, var(--color-background));
-    --code-container-border-color: var(--_code-container-border-color, var(--color-border));
-    --code-container-shadow: var(--_code-container-shadow, var(--box-shadow-sm));
-    --code-container-radius: var(--_code-container-radius, var(--border-radius-md));
+    --code-container-bg: var(--color-background);
+    --code-container-border-color: var(--color-border);
+    --code-container-shadow: var(--box-shadow-sm);
+    --code-container-radius: var(--border-radius-md);
 
-    --code-toolbar-bg: var(--_code-toolbar-bg, var(--color-background-soft));
-    --code-toolbar-border-color: var(--_code-toolbar-border-color, var(--color-border));
-    --code-toolbar-title-color: var(--_code-toolbar-title-color, var(--color-text));
+    --code-toolbar-bg: var(--color-background-soft);
+    --code-toolbar-border-color: var(--color-border);
+    --code-toolbar-title-color: var(--color-text);
     
-    --code-lang-tag-color: var(--_code-lang-tag-color, var(--color-text-secondary));
+    --code-lang-tag-color: var(--color-text-secondary);
     
-    --code-copy-btn-bg: var(--_code-copy-btn-bg, var(--color-background-soft));
-    --code-copy-btn-border-color: var(--_code-copy-btn-border-color, var(--color-border));
-    --code-copy-btn-color: var(--_code-copy-btn-color, var(--color-text));
-    --code-copy-btn-hover-bg: var(--_code-copy-btn-hover-bg, var(--color-background-mute));
-    --code-copy-btn-hover-border-color: var(--_code-copy-btn-hover-border-color, var(--color-border-hover));
-    --code-copy-status-color: var(--_code-copy-status-color, var(--color-text-secondary));
+    --code-copy-btn-bg: var(--color-background-soft);
+    --code-copy-btn-border-color: var(--color-border);
+    --code-copy-btn-color: var(--color-text);
+    --code-copy-btn-hover-bg: var(--color-background-mute);
+    --code-copy-btn-hover-border-color: var(--color-border-hover);
+    --code-copy-status-color: var(--color-text-secondary);
     
-    --code-block-bg: var(--_code-block-bg, var(--color-background-mute));
-    --code-block-color: var(--_code-block-color, var(--color-text));
-    --code-content-color: var(--_code-content-color, var(--color-text));
+    --code-block-bg: var(--color-background-mute);
+    --code-block-color: var(--color-text);
+    --code-content-color: var(--color-text);
 
     position: relative;
     margin: 0;

@@ -73,7 +73,7 @@ export const useUIConfigStore = defineStore('uiconfig', () => {
   }
 
   onMounted(() => {
-  useUIConfigStore().$subscribe(() => {    localStorage.setItem('uiConfig', JSON.stringify(uiConfig))  },  { flush: 'sync' })
+  useUIConfigStore().$subscribe(() => {  localStorage.setItem('uiConfig', JSON.stringify(uiConfig))  },  { flush: 'sync' })
   })
 
   return { ...toRefs(uiConfig), setTheme, setNavItems,} 

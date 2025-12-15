@@ -139,14 +139,14 @@ watch(visible, (isVisible) => {
 }
 
 .modal-wrapper {
-  --modal-bg: var(--_modal-bg, var(--color-background));
-  --modal-shadow: var(--_modal-shadow, var(--box-shadow-lg));
-  --modal-radius: var(--_modal-radius, var(--border-radius-lg));
+  --modal-bg: var(--color-background);
+  --modal-shadow: var(--box-shadow-lg);
+  --modal-radius: var(--border-radius-lg);
   --modal-header-padding: var(--_modal-header-padding, 1.5rem);
   --modal-body-padding: var(--_modal-body-padding, 1.5rem);
   --modal-footer-padding: var(--_modal-footer-padding, 1rem 1.5rem);
-  --modal-title-color: var(--_modal-title-color, var(--color-heading));
-  --modal-border-color: var(--_modal-border-color, var(--color-border));
+  --modal-title-color: var(--color-heading);
+  --modal-border-color: var(--color-border);
 
   width: 90%;
   max-width: 520px;

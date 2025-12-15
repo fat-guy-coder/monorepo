@@ -84,20 +84,20 @@ const hasTitle = computed(() =>
 <style lang="less" scoped>
 .ui-card {
   // --- 自有 CSS 变量定义 ---
-  --card-padding: var(--_card-padding, var(--padding-2xl));
-  --card-padding-sm: var(--_card-padding-sm, var(--padding-2xl));
-  --card-padding-md: var(--_card-padding-md, calc(var(--padding-2xl) * 0.75));
-  --card-padding-lg: var(--_card-padding-lg, calc(var(--padding-2xl) * 1.25));
-  --card-bg-color: var(--_card-bg-color, var(--color-background));
-  --card-bg-color-hover: var(--_card-bg-color-hover, var(--color-background-soft));
-  --card-text-color: var(--_card-text-color, var(--color-text));
-  --card-title-color: var(--_card-title-color, var(--color-heading));
-  --card-border-radius: var(--_card-border-radius, var(--border-radius-md));
-  --card-border-width: var(--_card-border-width, var(--border-width));
-  --card-border-color: var(--_card-border-color, var(--color-border));
-  --card-border-color-hover: var(--_card-border-color-hover, var(--color-border-hover));
-  --card-box-shadow: var(--_card-box-shadow, var(--box-shadow-md));
-  --card-box-shadow-hover: var(--_card-box-shadow-hover, var(--box-shadow-hover-md));
+  --card-padding: var(--padding-2xl);
+  --card-padding-sm: var(--padding-2xl);
+  --card-padding-md: calc(var(--padding-2xl) * 0.75);
+  --card-padding-lg: calc(var(--padding-2xl) * 1.25);
+  --card-bg-color: var(--color-background);
+  --card-bg-color-hover: var(--color-background-soft);
+  --card-text-color: var(--color-text);
+  --card-title-color: var(--color-heading);
+  --card-border-radius: var(--border-radius-md);
+  --card-border-width: var(--border-width);
+  --card-border-color: var(--color-border);
+  --card-border-color-hover: var(--color-border-hover);
+  --card-box-shadow: var(--box-shadow-md);
+  --card-box-shadow-hover: var(--box-shadow-hover-md);
   --card--title-margin: 0 ;
 
   // Section Variant Styles

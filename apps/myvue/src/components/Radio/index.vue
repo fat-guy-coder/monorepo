@@ -63,11 +63,11 @@ const handleChange = (value: string | number) => {
   --radio-size: 1rem; // 16px
   --radio-gap: 1.5rem; // 24px (horizontal)
   --radio-vertical-gap: 0.75rem; // 12px (vertical)
-  --radio-border-color: var(--_radio-border-color, var(--color-border));
-  --radio-bg: var(--_radio-bg, var(--color-background));
-  --radio-checked-color: var(--_radio-checked-color, var(--color-primary));
-  --radio-text-color: var(--_radio-text-color, var(--color-text));
-  --radio-disabled-color: var(--_radio-disabled-color, var(--color-text-tertiary));
+  --radio-border-color: var(--color-border);
+  --radio-bg: var(--color-background);
+  --radio-checked-color: var(--color-primary);
+  --radio-text-color: var(--color-text);
+  --radio-disabled-color: var(--color-text-tertiary);
 
   display: flex;
   flex-wrap: wrap;

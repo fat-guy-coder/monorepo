@@ -65,7 +65,6 @@
       <div class="mainView" id="mainView" @scroll="handleScroll">
         <Spin :spinning="mainViewLoading" class="mainViewLoading" v-if="activeKey !== '/'"> </Spin>
         <router-view v-slot="{ Component }">
-          <!-- <component :is="Component" @goToByRouteName="goToByName" /> -->
           <transition name="fade" mode="out-in">
             <component :is="Component" @goToByRouteName="goToByName" />
           </transition>

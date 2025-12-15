@@ -173,19 +173,20 @@ defineExpose({
   &.is-expanded {
     pointer-events: auto;
   }
+  //--_([^,]+),[^w+]\)
 
-  --nav-item-color: var(--_nav-item-color, var(--color-text));
-  --nav-item-hover-color: var(--_nav-item-hover-color, var(--color-primary));
-  --nav-item-background: var(--_nav-item-background, var(--color-background-soft));
+  --nav-item-color: var(--color-text);
+  --nav-item-hover-color: var(--color-primary);
+  --nav-item-background: var(--color-background-soft);
   --nav-item-padding: var(--_nav-item-padding, var(--padding-sm) var(--padding-md));
-  --nav-item-gap: var(--_nav-item-gap, var(--gap-md));
-  --nav-item-font-size: var(--_nav-item-font-size, var(--font-size-xs));
-  --nav-item-font-weight: var(--_nav-item-font-weight, var(--font-weight-medium));
-  --nav-item-border-color: var(--_nav-item-border-color, var(--color-border));
-  --nav-item-border-width: var(--_nav-item-border-width, var(--border-width));
-  --nav-item-border-radius: var(--_nav-item-border-radius, var(--border-radius-sm));
-  --nav-item-box-shadow: var(--_nav-item-box-shadow, var(--box-shadow-xs));
-  --nav-item-box-shadow-hover: var(--_nav-item-box-shadow-hover, var(--box-shadow-sm));
+  --nav-item-gap: var(--gap-md);
+  --nav-item-font-size: var(--font-size-xs);
+  --nav-item-font-weight: var(--font-weight-medium);
+  --nav-item-border-color: var(--color-border);
+  --nav-item-border-width: var(--border-width);
+  --nav-item-border-radius: var(--border-radius-sm);
+  --nav-item-box-shadow: var(--box-shadow-xs);
+  --nav-item-box-shadow-hover: var(--box-shadow-sm);
 
   --nav-item-transform-x: var(--_nav-item-transform-x, 0.125rem);
   --nav-item-transform-y: var(--_nav-item-transform-y, 0.125rem);
@@ -201,11 +202,11 @@ defineExpose({
   --navigation-toggle-height: var(--_navigation-toggle-height, calc(var(--nav-item-font-size) * 4));
   --navigation-toggle-icon-size: var(--_navigation-toggle-icon-size, 1rem);
 
-  --navigation-toggle-border-radius: var(--_navigation-toggle-border-radius, var(--border-radius-full));
-  --navigation-toggle-background: var(--_navigation-toggle-background, var(--color-secondary));
-  --navigation-toggle-color: var(--_navigation-toggle-color, var(--color-text));
-  --navigation-toggle-box-shadow: var(--_navigation-toggle-box-shadow, var(--box-shadow-xs));
-  --navigation-toggle-box-shadow-hover: var(--_navigation-toggle-box-shadow-hover, var(--box-shadow-sm));
+  --navigation-toggle-border-radius: var(--border-radius-full);
+  --navigation-toggle-background: var(--color-secondary);
+  --navigation-toggle-color: var(--color-text);
+  --navigation-toggle-box-shadow: var(--box-shadow-xs);
+  --navigation-toggle-box-shadow-hover: var(--box-shadow-sm);
   
   --navigation-toggle-icon-line-width: var(--_navigation-toggle-icon-line-width, 1.25rem);
 }

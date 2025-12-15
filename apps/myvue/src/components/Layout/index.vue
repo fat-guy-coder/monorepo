@@ -1,139 +1,81 @@
 <template>
-  <section class="ui-layout" :class="layoutClasses" :style="componentStyle">
-    <!-- 模式: 侧边栏-顶部-内容 (stc) -->
-    <template v-if="mode === 'stc'">
-      <SideBar v-if="$slots.sider" v-bind="siderProps" v-model:collapsed="internalCollapsed">
-        <slot name="sider"></slot>
-      </SideBar>
-      <section class="ui-layout ui-layout--vertical" :style="contentWrapperStyle">
-        <Header v-if="$slots.header" v-bind="headerProps"><slot name="header"></slot></Header>
-        <Content><slot name="content"></slot></Content>
-        <Footer v-if="$slots.footer" v-bind="footerProps"><slot name="footer"></slot></Footer>
-      </section>
+  <section :is="hasOuterSider ? 'section' : 'div'" class="ui-layout" :class="layoutClasses">
+    <template v-if="headerComponent">
+      <component :is="headerComponent" />
     </template>
-
-    <!-- 模式: 顶部-侧边栏-内容 (tsc) -->
-    <template v-else-if="mode === 'tsc'">
-      <Header v-if="$slots.header" v-bind="headerProps"><slot name="header"></slot></Header>
-      <section class="ui-layout ui-layout--horizontal" :style="contentWrapperStyle">
-        <SideBar v-if="$slots.sider" v-bind="siderProps" v-model:collapsed="internalCollapsed">
-          <slot name="sider"></slot>
-        </SideBar>
-        <Content><slot name="content"></slot></Content>
-      </section>
-    </template>
-
-    <!-- 默认模式: 顶部-内容-底部 (tcf) -->
-    <template v-else>
-       <section class="ui-layout ui-layout--vertical" :style="contentWrapperStyle">
-        <Header v-if="$slots.header" v-bind="headerProps"><slot name="header"></slot></Header>
-        <Content><slot name="content"></slot></Content>
-        <Footer v-if="$slots.footer" v-bind="footerProps"><slot name="footer"></slot></Footer>
-      </section>
+    
+    <section class="ui-layout ui-layout--horizontal">
+      <template v-if="sideBarComponents[0]">
+        <component :is="sideBarComponents[0]" />
+      </template>
+      
+      <div class="ui-layout ui-layout--vertical">
+        <template v-if="contentComponent">
+          <component :is="contentComponent" />
+        </template>
+        <template v-else-if="nestedLayoutComponent">
+          <component :is="nestedLayoutComponent" />
+        </template>
+      </div>
+      
+      <template v-if="sideBarComponents[1]">
+        <component :is="sideBarComponents[1]" :align="'right'" />
+      </template>
+    </section>
+    
+    <template v-if="footerComponent">
+      <component :is="footerComponent" />
     </template>
   </section>
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch, useSlots, type CSSProperties } from 'vue';
-import Header from './Header.vue';
-import SideBar from './SideBar.vue';
-import Content from './Content.vue';
-import Footer from './Footer.vue';
+import { computed, useSlots, type VNode } from 'vue';
 
-type LayoutMode = 'tcf' | 'tsc' | 'stc';
-
-const {
-  mode = 'tcf',
-  collapsed = false,
-  siderProps = {},
-  headerProps = {},
-  footerProps = {},
-  css = {},
-} = defineProps<{
-  mode?: LayoutMode;
-  collapsed?: boolean;
-  siderProps?: InstanceType<typeof SideBar>['$props'];
-  headerProps?: InstanceType<typeof Header>['$props'];
-  footerProps?: InstanceType<typeof Footer>['$props'];
-  css?: Record<string, string>;
-}>();
-
-const emit = defineEmits<{ (e: 'update:collapsed', collapsed: boolean): void; }>();
+defineOptions({
+  name: 'Layout',
+});
 
 const slots = useSlots();
-const internalCollapsed = ref(collapsed);
 
-const componentStyle = computed(() => {
-  return { ...css } as CSSProperties;
-});
+const getComponentFromVNodes = (nodes: VNode[], name: string) => {
+  return nodes.find(node => (node.type as any)?.name === name || (node.type as any)?.__name === name);
+};
 
-// This computed property calculates the necessary padding to avoid content being overlapped by fixed elements.
-const contentWrapperStyle = computed(() => {
-  const style: CSSProperties = {};
-  
-  if (headerProps.fixed) {
-    // Default header height is 4rem
-    style.paddingTop = '4rem'; 
-  }
+const getComponentsFromVNodes = (nodes: VNode[], name: string) => {
+  return nodes.filter(node => (node.type as any)?.name === name || (node.type as any)?.__name === name);
+};
 
-  if (footerProps.fixed) {
-    // Assuming a default footer height, as it's content-based. This might need adjustment.
-    style.paddingBottom = '4rem';
-  }
+const defaultSlot = slots.default ? slots.default() : [];
 
-  if (siderProps.fixed) {
-    const siderWidth = internalCollapsed.value 
-      ? (siderProps.collapsedWidth || '5rem') 
-      : (siderProps.width || '12.5rem');
-    const widthValue = typeof siderWidth === 'number' ? `${siderWidth}px` : siderWidth;
+const headerComponent = computed(() => getComponentFromVNodes(defaultSlot, 'Header'));
+const footerComponent = computed(() => getComponentFromVNodes(defaultSlot, 'Footer'));
+const sideBarComponents = computed(() => getComponentsFromVNodes(defaultSlot, 'SideBar'));
+const contentComponent = computed(() => getComponentFromVNodes(defaultSlot, 'Content'));
+const nestedLayoutComponent = computed(() => getComponentFromVNodes(defaultSlot, 'Layout'));
 
-    if (siderProps.align === 'right') {
-      style.paddingRight = widthValue;
-    } else {
-      style.paddingLeft = widthValue;
-    }
-  }
-
-  return style;
-});
-
-watch(() => collapsed, (newVal) => {
-  internalCollapsed.value = newVal;
-});
-
-watch(internalCollapsed, (newVal) => {
-  if (newVal !== collapsed) {
-    emit('update:collapsed', newVal);
-  }
-});
-
-const hasSider = computed(() => {
-  return (mode === 'tsc' || mode === 'stc') && slots.sider;
-});
+const hasOuterSider = computed(() => sideBarComponents.value.length > 0);
 
 const layoutClasses = computed(() => [
-  `ui-layout--mode-${mode}`,
   {
-    'ui-layout--has-sider': hasSider.value,
-    'ui-layout--vertical': !hasSider.value || mode === 'stc',
-    'ui-layout--horizontal': hasSider.value && mode !== 'stc',
+    'ui-layout--has-sider': hasOuterSider.value,
+    'ui-layout--vertical': !hasOuterSider.value,
+    'ui-layout--horizontal': hasOuterSider.value,
   },
 ]);
+
 </script>
 
 <style lang="less" scoped>
 .ui-layout {
-  --layout-bg: var(--_layout-bg, var(--color-background));
-
   display: flex;
+  flex: 1;
   width: 100%;
-  min-height: 100vh;
-  background: var(--layout-bg);
-  transition: background-color 0.3s ease;
+  background: var(--color-background);
 
   &.ui-layout--vertical {
     flex-direction: column;
+    min-height: 100vh;
   }
 
   &.ui-layout--horizontal {

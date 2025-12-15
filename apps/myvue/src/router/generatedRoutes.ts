@@ -1,5 +1,10 @@
 export default [
   {
+    "name": "DragLayoutExample",
+    "path": "/DragLayoutExample",
+    "component": () => import('@/views/LayoutExample.vue')
+  },
+  {
     "name": "LearningAbility",
     "path": "/LearningAbility",
     "children": [

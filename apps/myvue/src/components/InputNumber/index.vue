@@ -83,14 +83,14 @@ const handleInputChange = (event: Event) => {
 .input-number {
   --input-width: 8rem; // 128px
   --input-height: 2rem; // 32px
-  --input-bg: var(--_input-bg, var(--color-background));
-  --input-border-color: var(--_input-border-color, var(--color-border));
-  --input-text-color: var(--_input-text-color, var(--color-text));
-  --input-focus-border: var(--_input-focus-border, var(--color-primary));
+  --input-bg: var(--color-background);
+  --input-border-color: var(--color-border);
+  --input-text-color: var(--color-text);
+  --input-focus-border: var(--color-primary);
   --input-focus-shadow: var(--_input-focus-shadow, 0 0 0 2px color-mix(in srgb, var(--color-primary) 25%, transparent));
-  --input-disabled-bg: var(--_input-disabled-bg, var(--color-fill-tertiary));
-  --input-btn-color: var(--_input-btn-color, var(--color-text-secondary));
-  --input-btn-hover-bg: var(--_input-btn-hover-bg, var(--color-fill-secondary));
+  --input-disabled-bg: var(--color-fill-tertiary);
+  --input-btn-color: var(--color-text-secondary);
+  --input-btn-hover-bg: var(--color-fill-secondary);
 
   display: inline-flex;
   align-items: center;

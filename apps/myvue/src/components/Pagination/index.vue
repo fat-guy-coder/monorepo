@@ -217,13 +217,13 @@ function handlePageSizeChange() {
 .pagination-container {
   // --- 自有 CSS 变量定义 ---
   // 变量被 props 注入，如果 props 为 null/undefined，则使用第二个值（全局主题变量）作为回退
-  --pagination-text-color: var(--_pagination-text-color, var(--color-text));
-  --pagination-border-color: var(--_pagination-border-color, var(--color-border));
+  --pagination-text-color: var(--color-text);
+  --pagination-border-color: var(--color-border);
   --pagination-bg-color: var(--color-background);
-  --pagination-hover-bg: var(--_pagination-hover-bg, var(--color-background-soft));
-  --pagination-active-bg: var(--_pagination-active-bg, var(--color-primary));
-  --pagination-active-text: var(--_pagination-active-text, white);
-  --pagination-active-border-color: var(--_pagination-active-bg, var(--color-primary));
+  --pagination-hover-bg: var(--color-background-soft);
+  --pagination-active-bg: var(--color-primary);
+  --pagination-active-text: var(--color-text-light-solid);
+  --pagination-active-border-color: var(--color-primary);
 
   display: flex;
   align-items: center;

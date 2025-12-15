@@ -49,7 +49,7 @@ const componentStyle = computed(() => {
   --btn-default-bg: var(--btn-default-bg, --color-background);
   --btn-default-color: var(--btn-default-color, --color-text);
   --btn-default-border: var(--btn-default-border, --color-border);
-  --btn-default-hover-bg: var(--btn-default-hover-bg, var(--color-background-soft));
+  --btn-default-hover-bg: var(--color-background-soft);
   --btn-default-hover-border: var(--btn-default-hover-border, --color-primary);
   --btn-default-hover-color: var(--btn-default-hover-color, --color-primary);
 

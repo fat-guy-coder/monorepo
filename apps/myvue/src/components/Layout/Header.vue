@@ -25,9 +25,10 @@ const componentStyle = computed(() => {
 .ui-layout-header {
   --header-height: var(--_header-height, 4rem); // 64px
   --header-padding: var(--_header-padding, 0 3.125rem); // 0 50px
-  --header-bg: var(--_header-bg, var(--color-background-soft));
-  --header-border-color: var(--_header-border-color, var(--color-border));
+  --header-bg: var(--color-background-soft);
+  --header-border-color: var(--color-border);
   --header-z-index: var(--_header-z-index, 1000);
+  
 
   flex-shrink: 0;
   height: var(--header-height);
@@ -35,6 +36,7 @@ const componentStyle = computed(() => {
   background: var(--header-bg);
   border-bottom: 1px solid var(--header-border-color);
   transition: all 0.3s ease;
+  text-align: center;
 
   &.is-fixed {
     position: fixed;

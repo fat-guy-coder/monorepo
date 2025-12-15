@@ -45,15 +45,15 @@ const componentStyle = computed(() => {
 <style lang="less" scoped>
 .checkbox-label {
   --checkbox-size: 1rem; // 16px
-  --checkbox-border-color: var(--_checkbox-border-color, var(--color-border));
-  --checkbox-bg: var(--_checkbox-bg, var(--color-background));
-  --checkbox-checked-bg: var(--_checkbox-checked-bg, var(--color-primary));
-  --checkbox-checked-border: var(--_checkbox-checked-border, var(--color-primary));
+  --checkbox-border-color: var(--color-border);
+  --checkbox-bg: var(--color-background);
+  --checkbox-checked-bg: var(--color-primary);
+  --checkbox-checked-border: var(--color-primary);
   --checkbox-icon-color: var(--_checkbox-icon-color, #fff);
-  --checkbox-text-color: var(--_checkbox-text-color, var(--color-text));
-  --checkbox-disabled-bg: var(--_checkbox-disabled-bg, var(--color-fill-tertiary));
-  --checkbox-disabled-color: var(--_checkbox-disabled-color, var(--color-text-tertiary));
-  --checkbox-radius: var(--_checkbox-radius, var(--border-radius-sm));
+  --checkbox-text-color: var(--color-text);
+  --checkbox-disabled-bg: var(--color-fill-tertiary);
+  --checkbox-disabled-color: var(--color-text-tertiary);
+  --checkbox-radius: var(--border-radius-sm);
   --checkbox-focus-shadow: var(--_checkbox-focus-shadow, 0 0 0 2px color-mix(in srgb, var(--color-primary) 25%, transparent));
 
   display: inline-flex;

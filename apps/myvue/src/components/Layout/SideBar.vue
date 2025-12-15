@@ -116,11 +116,11 @@ onBeforeUnmount(() => {
 
 <style lang="less" scoped>
 .ui-layout-sider {
-  --sider-bg: var(--_sider-bg, var(--color-background-soft));
-  --sider-border-color: var(--_sider-border-color, var(--color-border));
-  --sider-trigger-bg: var(--_sider-trigger-bg, var(--color-background-mute));
-  --sider-trigger-hover-bg: var(--_sider-trigger-hover-bg, var(--color-background));
-  --sider-trigger-color: var(--_sider-trigger-color, var(--color-text-secondary));
+  --sider-bg: var(--color-background-soft);
+  --sider-border-color: var(--color-border);
+  --sider-trigger-bg: var(--color-background-mute);
+  --sider-trigger-hover-bg: var(--color-background);
+  --sider-trigger-color: var(--color-text-secondary);
   --sider-trigger-height: var(--_sider-trigger-height, 3rem); // 48px
   --sider-z-index: var(--_sider-z-index, 1010);
 

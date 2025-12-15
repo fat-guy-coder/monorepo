@@ -92,21 +92,21 @@ const toggleComplete = (item: ITodo) => {
 .ui-list {
   // --- 自有 CSS 变量定义 ---
   --list-bg-transparent: var(--list-bg-transparent, transparent);
-  --list-bg-normal: var(--_list-normal-bg, var(--color-background));
+  --list-bg-normal: var(--color-background);
   --list-padding: var(--_list-padding, 0);
   --list-item-padding: var(--_list-item-padding, var(--padding-md) var(--padding-lg));
-  --list-item-color: var(--_list-item-color, var(--color-text));
-  --list-item-value-color: var(--_list-item-value-color, var(--color-text-secondary));
-  --list-item-border-color: var(--_list-item-border-color, var(--color-border-secondary));
-  --list-item-hover-bg: var(--_list-item-hover-bg, var(--color-fill-secondary));
-  --list-border-radius: var(--_list-border-radius, var(--border-radius-md));
-  --_list-style: var(--_list-style, var(--list-style));
+  --list-item-color: var(--color-text);
+  --list-item-value-color: var(--color-text-secondary);
+  --list-item-border-color: var(--color-border-secondary);
+  --list-item-hover-bg: var(--color-fill-secondary);
+  --list-border-radius: var(--border-radius-md);
+  --_list-style: var(--list-style);
   
 
 
 
-  --todo-strikethrough-color: var(--_todo-strikethrough-color, var(--color-text-tertiary));
-  --todo-completed-color: var(--_todo-completed-color, var(--color-text-tertiary));
+  --todo-strikethrough-color: var(--color-text-tertiary);
+  --todo-completed-color: var(--color-text-tertiary);
 
   list-style: var(--_list-style);
   padding: var(--list-padding);
