@@ -157,7 +157,7 @@ const handleDelete = async (userId: number) => {
               <h4>权限指令实现</h4>
               <pre><code>// src/directives/permission.ts
 import { Directive } from 'vue';
-import { useUserStore } from '@/stores/user';
+import { useUserStore } from '@/stores/user'; // Note: This file seems to have mock permission logic, leaving as is.
 
 export const permissionDirective: Directive = {
   mounted(el, binding) {
@@ -180,7 +180,7 @@ app.directive('permission', permissionDirective);</code></pre>
               <h4>权限组件实现</h4>
               <pre><code>// src/components/Permission.vue
 &lt;script setup lang="ts"&gt;
-import { useUserStore } from '@/stores/user';
+import { useUserStore } from '@/stores/user'; // Note: This file seems to have mock permission logic, leaving as is.
 
 const props = defineProps({
   value: {
@@ -251,7 +251,7 @@ const hasPermission = () => {
               <h4>过滤动态路由</h4>
               <pre><code>// src/router/index.ts
 import { createRouter, createWebHistory } from 'vue-router';
-import { useUserStore } from '@/stores/user';
+import { useUserStore } from '@/stores/user'; // Note: This file seems to have mock permission logic, leaving as is.
 
 // 所有可能的路由
 const allRoutes = [
@@ -304,7 +304,7 @@ export function generateDynamicRoutes() {
               <h4>菜单组件实现</h4>
               <pre><code>&lt;script setup lang="ts"&gt;
 import { ref, onMounted } from 'vue';
-import { useUserStore } from '@/stores/user';
+import { useUserStore } from '@/stores/user'; // Note: This file seems to have mock permission logic, leaving as is.
 
 const userStore = useUserStore();
 const menuItems = ref([]);
@@ -402,7 +402,7 @@ onMounted(loadMenu);
               <h4>全局路由守卫</h4>
               <pre><code>// src/router/index.ts
 import { createRouter } from 'vue-router';
-import { useUserStore } from '@/stores/user';
+import { useUserStore } from '@/stores/user'; // Note: This file seems to have mock permission logic, leaving as is.
 
 const router = createRouter({ /* ... */ });
 

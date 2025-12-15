@@ -18,7 +18,7 @@
 
 <script setup lang="ts">
 import { onMounted } from 'vue'
-import type { Themes, Theme } from '@/stores/user'
+import { type Theme, type ThemeConfig } from '@/stores/uiconfig'
 
 
 
@@ -32,7 +32,7 @@ interface Props {
     // 展开显示：false时不显示，true时展开显示（带动画）
     show?: boolean
     theme: Theme
-    themes: Themes
+    themes: ThemeConfig[]
 }
 
 const { direction = 'horizontal', show = false, theme = 'light' } = defineProps<Props>()
@@ -151,7 +151,7 @@ onMounted(() => {
     background: var(--theme-buttons-background);
     color: var(--theme-buttons-color);
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: opacity 0.3s ease, transform 0.3s ease;
     min-width: var(--theme-buttons-min-width);
     font-size: var(--theme-buttons-font-size);
     font-weight: var(--theme-buttons-font-weight);

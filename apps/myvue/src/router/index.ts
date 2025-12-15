@@ -35,9 +35,6 @@ const router = createRouter({
       component: notFound,
     }
   ],
-  // scrollBehavior(to, from, savedPosition) {
-  //   return { top: 0 }
-  // },
 })
 
 router.beforeResolve((to, from) => {

@@ -19,7 +19,6 @@
 <script setup lang="ts">
 import { computed, provide, onMounted, type PropType, ref } from 'vue'
 import type { MenuItem as MenuItemType, MenuMode } from './index'
-import { useUserStore } from '@/stores/user'
 
 const props = defineProps({
   items: {
@@ -35,6 +34,10 @@ const props = defineProps({
     default: 'vertical',
   },
   collapsed: {
+    type: Boolean,
+    default: false,
+  },
+  isMobile: {
     type: Boolean,
     default: false,
   },
@@ -134,7 +137,6 @@ const closeKeys = () => {
   openKeys.value = []
 }
 
-const isMobile = computed(() => useUserStore().user.device.isMobile)
 
 const mode = computed(() => props.mode)
 
@@ -153,7 +155,7 @@ provide('menuOnLoad', props.onLoadData ?? null)
 provide('mode', mode)
 provide('collapsed', collapsed)
 provide('viewportWidth', viewportWidth)
-provide('isMobile', isMobile)
+provide('isMobile', props.isMobile)
 </script>
 
 <style lang="less" scoped>

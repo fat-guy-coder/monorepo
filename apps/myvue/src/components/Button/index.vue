@@ -24,7 +24,7 @@ defineOptions({
   name: 'ButtonComponent',
 });
 
-const props = defineProps<{
+const { type = 'default', size = 'medium', loading = false, disabled = false, css = {} } = defineProps<{
   type?: 'default' | 'primary';
   size?: 'small' | 'medium' | 'large';
   loading?: boolean;
@@ -35,29 +35,29 @@ const props = defineProps<{
 
 
 const isDisabled = computed(() => {
-  return props.disabled ||  props.loading;
+  return disabled ||  loading;
 });
 
 const componentStyle = computed(() => {
-  return { ...props.css } as CSSProperties;
+  return { ...css } as CSSProperties;
 });
 
 </script>
 
 <style lang="less" scoped>
 .ui-button {
-  --btn-default-bg: var(--_btn-default-bg, var(--color-background));
-  --btn-default-color: var(--_btn-default-color, var(--color-text));
-  --btn-default-border: var(--_btn-default-border, var(--color-border));
-  --btn-default-hover-bg: var(--_btn-default-hover-bg, var(--color-background-soft));
-  --btn-default-hover-border: var(--_btn-default-hover-border, var(--color-primary));
-  --btn-default-hover-color: var(--_btn-default-hover-color, var(--color-primary));
+  --btn-default-bg: var(--btn-default-bg, --color-background);
+  --btn-default-color: var(--btn-default-color, --color-text);
+  --btn-default-border: var(--btn-default-border, --color-border);
+  --btn-default-hover-bg: var(--btn-default-hover-bg, var(--color-background-soft));
+  --btn-default-hover-border: var(--btn-default-hover-border, --color-primary);
+  --btn-default-hover-color: var(--btn-default-hover-color, --color-primary);
 
-  --btn-primary-bg: var(--_btn-primary-bg, var(--color-primary));
-  --btn-primary-color: var(--_btn-primary-color, #fff);
-  --btn-primary-border: var(--_btn-primary-border, var(--color-primary));
-  --btn-primary-hover-bg: var(--_btn-primary-hover-bg, color-mix(in srgb, var(--color-primary) 85%, black));
-  --btn-primary-hover-border: var(--_btn-primary-hover-border, color-mix(in srgb, var(--color-primary) 85%, black));
+  --btn-primary-bg: var(--btn-primary-bg, --color-primary);
+  --btn-primary-color: var(--btn-primary-color, --color-text);
+  --btn-primary-border: var(--btn-primary-border, --color-border);
+  --btn-primary-hover-bg: var(--btn-primary-hover-bg, color-mix(in srgb, var(--color-primary) 85%, black));
+  --btn-primary-hover-border: var(--btn-primary-hover-border, color-mix(in srgb, var(--color-primary) 85%, black));
 
   display: inline-flex;
   justify-content: center;
@@ -119,7 +119,7 @@ const componentStyle = computed(() => {
   .btn-content {
     display: inline-flex;
     align-items: center;
-    visibility: v-bind("props.loading ? 'hidden' : 'visible'");
+    visibility: v-bind("loading ? 'hidden' : 'visible'");
   }
 }
 

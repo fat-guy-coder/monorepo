@@ -57,7 +57,7 @@
 
 <script setup lang="ts">
 import { computed,  onMounted,  ref, watch, type CSSProperties } from 'vue'
-import { useUserStore } from '@/stores/user'
+import { useDeviceStore } from '@/stores/device'
 import {
   animateHeight,
   calculateAnimationDuration,
@@ -129,7 +129,7 @@ const {
   css?: Record<string, string>
 }>()
 
-const store = useUserStore()
+const deviceStore = useDeviceStore()
 
 
 const isOpen = ref(true)
@@ -168,7 +168,7 @@ const toggleFold = () => {
 }
 
 onMounted(() => {
-  isOpen.value = !store?.user?.device?.isMobile
+  isOpen.value = !deviceStore?.device?.isMobile
 })
 
 const mappedList = computed(() => {

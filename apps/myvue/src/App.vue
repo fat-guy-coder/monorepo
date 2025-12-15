@@ -34,6 +34,7 @@
         <Spin :spinning="loading" class="loading" />
         <Menu
           @select="goto"
+          :isMobile="isMobile"
           :collapsed="Menucollapsed"
           v-show="!loading"
           :mode="Menucollapsed ? 'vertical' : 'inline'"
@@ -54,7 +55,7 @@
           :showContextMenu="showContextMenu"
           @remove="removeTab"
           @remove-other="removeOther"
-          @remove-side="removeSide"
+          @remove-side="removeSide" 
           @set-current-drag-index="setCurrentDragIndex"
           @sort-tab="sortTab"
           @toggle-show-menu="toggleShowMenu"
@@ -84,62 +85,35 @@ import {
   reWashMenus, //重置菜单项匹配状态 具有副作用
   findMenuItemByName, //查找菜单项 通过name
 } from '@/menu'
-import { useTabistStore, type Tab } from '@/stores/tab' //标签列表store
-import { type Theme, useUserStore } from '@/stores/user' //用户信息store
+import { useTabStore } from '@/stores/tab' //标签列表store
+import { useUserStore } from '@/stores/userProfle' //用户信息store
+import { useDeviceStore } from '@/stores/device' //设备信息store
+import { useUIConfigStore, type Theme } from '@/stores/uiconfig' //UI配置store
 import { useRouter } from 'vue-router'
 import { debounce } from '@/function/common' //常用函数
-import { useDetectMobile } from '@/hooks/useDetectMobile'
 import type { NavItem } from './components/Nav' //导航项类型
 import { useGradientAnimation } from '@/hooks/useGradientAnimation' //渐变色动画
+import { useDetectDevice } from '@/hooks/useDetectDevice' //设备信息hook
 // import { request } from '@/request'
 
 //获取用户信息store
 const userStore = useUserStore()
+const deviceStore = useDeviceStore()
+const uiConfigStore = useUIConfigStore()
 
-//用户信息store订阅
-userStore.$subscribe(
-  (_, state) => {
-    localStorage.setItem('user', JSON.stringify(state.user))
-  },
-  { flush: 'sync' },
-)
-
-//主题
-const theme = computed(() => userStore.user.theme)
-
-//主题列表
-const themes = userStore.user.themes
 
 //是否是手机端
-const isMobile = computed(() => userStore.user.device.isMobile)
+const isMobile = computed(() => deviceStore.isMobile)
 
-//固定导航项列表数据
-const navItems = ref<NavItem[]>([
-  {
-    icon: '⚙️',
-    label: '设置',
-    value: 'setting',
-  },
-  {
-    icon: '👤',
-    label: '用户',
-    value: 'user',
-  },
-  {
-    icon: '☀☽',
-    label: '主题',
-    value: 'theme',
-  },
-  {
-    icon: '🏠',
-    label: '首页',
-    value: 'home',
-  },
-])
+//主题
+const theme = computed(() => uiConfigStore.theme)
+const themes = computed(() => uiConfigStore.themes)
+const navItems = computed(() => uiConfigStore.navItems)
+
 
 //当前主题图标
 const currentThemeIcon = computed(() => {
-  return themes.find((i) => i.value === theme.value)?.icon || '☀️'
+  return uiConfigStore.themes.find((i) => i.value === uiConfigStore.theme)?.icon || '☀️'
 })
 
 //主题菜单显示状态
@@ -166,8 +140,7 @@ const themeChange = (theme1: Theme) => {
     return
   }
   //设置用户主题
-  userStore.setUsrTheme(theme1)
-  // 设置到 html 元素上
+  uiConfigStore.setTheme(theme1)
   document.documentElement.setAttribute('data-theme', theme1)
 }
 
@@ -229,7 +202,9 @@ const loading = ref(false)
 
 const mainViewLoading = ref(false)
 
-useDetectMobile(userStore)
+useDetectDevice((device) => {
+  deviceStore.setDevice(device)
+})
 
 onMounted(() => {
   //设置主题
@@ -240,7 +215,7 @@ onMounted(() => {
     container.value.addEventListener('click', closeContextMenu)
   }
   //跳转激活的tab
-  router.push(store.activeKey)
+  router.push(activeKey.value)
   //获取菜单
   getMenus()
 })
@@ -263,15 +238,12 @@ const getMenus = async () => {
   mainViewLoading.value = false
 }
 
-const store = useTabistStore()
+const store = useTabStore()
 
-store.$subscribe(
-  (_, state) => {
-    localStorage.setItem('tabList', JSON.stringify(state.tabList))
-    localStorage.setItem('activeKey', state.activeKey)
-  },
-  { flush: 'sync' },
-)
+const activeKey = computed(() => store.activeKey)
+
+const tabList = computed(() => store.tabList)
+
 
 const showContextMenu = computed(() => store.showContextMenu)
 
@@ -279,13 +251,10 @@ const toggleShowMenu = (value: boolean) => {
   store.toggleShowMenu(value)
 }
 
-const tabList = computed<Tab[]>(() => store.tabList)
-
-const activeKey = computed<string>(() => store.activeKey)
 
 const selectedKeys = computed<string[]>(() => {
-  if (store.activeKey !== '/') {
-    return [store.activeKey]
+  if (activeKey.value !== '/') {
+    return [activeKey.value]
   }
   return []
 })
@@ -317,7 +286,7 @@ const { sortTab, setCurrentDragIndex } = store
 const currentDragIndex = computed<number>(() => store.currentDragIndex)
 
 function tabClick(path: string) {
-  if (path === activeKey.value) {
+  if (path === store.activeKey) {
     return
   }
   mainViewLoading.value = true
@@ -354,7 +323,7 @@ function removeTab(path: string) {
   store.removeTab(path, (p) => {
     router.push({ path: p })
     //手机端不展开菜单
-    if (userStore.user.device.isMobile) return
+    if (isMobile) return
     openKeys.value = findFatherKeysListByKey(p)
     nextTick(() => {
       scrollTo(p)
@@ -365,7 +334,7 @@ function removeOther(path: string) {
   router.push({ path })
   store.removeOther(path, (path) => {
     //手机端不展开菜单
-    if (userStore.user.device.isMobile) return
+    if (isMobile) return
     openKeys.value = findFatherKeysListByKey(path)
     nextTick(() => {
       scrollTo(path)
@@ -377,7 +346,7 @@ function removeSide(index: number, side: 'left' | 'right', key: string) {
   router.push({ path: key })
   store.removeSide(index, side, key, (path) => {
     //手机端不展开菜单
-    if (userStore.user.device.isMobile) return
+    if (isMobile) return
     openKeys.value = findFatherKeysListByKey(path)
     nextTick(() => {
       scrollTo(path)
@@ -386,16 +355,15 @@ function removeSide(index: number, side: 'left' | 'right', key: string) {
 }
 
 function goto({ path, name, label, redirect }: MenuItem) {
-  if (path === activeKey.value) {
+  if (path === store.activeKey) {
     return
   }
   //手机端并且折叠状态下点击菜单后折叠菜单 这里重复赋值 主要处理弹出来的菜单后收拢
-  if (userStore.user.device.isMobile && Menucollapsed.value) Menucollapsed.value = true
+  if (isMobile && Menucollapsed.value) Menucollapsed.value = true
   if (redirect) {
     goToByName(redirect.name, true)
     return
   }
-  console.log()
   mainViewLoading.value = true
   router.push({ path }).then(() => {
     mainViewLoading.value = false
@@ -440,7 +408,7 @@ function goToByName(name: string, isRedirect: boolean = false) {
     },
     (path) => {
       //手机端不展开菜单
-      if (userStore.user.device.isMobile) return
+      if (isMobile) return
       if (isRedirect) {
         const keys = findFatherKeysListByKey(path)
         openKeys.value = [...keys, ...openKeys.value]
@@ -458,7 +426,7 @@ provide('goToByName', goToByName)
 
 const handleScroll = debounce((e: Event) => {
   const scrollTop = (e.target as HTMLElement).scrollTop
-  store.setScrollTop(scrollTop, activeKey.value)
+  store.setScrollTop(scrollTop, store.activeKey)
 }, 100)
 
 //滚进视口

@@ -89,7 +89,7 @@ const menuLoader = inject<((item: MenuItemType) => Promise<MenuItemType[] | void
   null,
 )
 
-const isMobile = inject('isMobile', ref(false)) as Ref<boolean>
+const isMobile = inject('isMobile')
 
 const mode = inject('mode') as Ref<'inline' | 'vertical'>
 
@@ -186,14 +186,14 @@ const getChildrenWrapperPosition = (e: MouseEvent) => {
   } else {
     style.left = left + 'px'
   }
-  if (isMobile.value && props.level !== 0) {
+  if (isMobile && props.level !== 0) {
     style.top = rect.top + rect.height + 'px'
   }
   return style
 }
 
 const handleMouseEnter = async (e: MouseEvent) => {
-  if (isMobile.value) return
+  if (isMobile) return
   handleMouseEnterVertical(e)
 }
 

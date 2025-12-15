@@ -1,9 +1,9 @@
 import { message } from "@/components"
-import { useTabistStore } from "@/stores/tab"
+import { useTabStore } from "@/stores/tab"
 
 
 export function useAutoScroll(to: { name: string }) {
-  const { tabList, } = useTabistStore()
+  const { tabList, } = useTabStore()
   let mainView = document.querySelector('#mainView')
   let tab = tabList.find((i) => i.name === to.name) || null
   if (tab && tab?.scrollTop) {

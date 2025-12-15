@@ -1,4 +1,4 @@
-import { ref, } from 'vue'
+import { onMounted, ref, } from 'vue'
 import { defineStore } from 'pinia'
 
 export type Tab = {
@@ -8,18 +8,25 @@ export type Tab = {
   scrollTop?: number //滚动位置
 }
 
-export const useTabistStore = defineStore('tablist', () => {
-  const list = localStorage.getItem('tabList') ? JSON.parse(localStorage.getItem('tabList') as string) as Tab[] : null
-  //激活标签列表
-  const tabList = ref<Tab[]>(list ? list : [
-    {
+interface TabInfo {
+  list: Tab[]
+  activeKey: string
+}
+
+export const useTabStore = defineStore('tab', () => {
+  const storage = localStorage.getItem('tab')
+  const {list, key} = storage ? JSON.parse(storage) : {
+    list: [{
       name: 'home',
       path: '/',
       label: '🏡 主页',
-    },
-  ])
+    },],
+    key: '/',
+  }
+  //激活标签列表
+  const tabList = ref<Tab[]>(list)
   //激活标签的path
-  const activeKey = ref<string>(localStorage.getItem('activeKey') || '/')
+  const activeKey = ref<string>(key)
 
 
   //移除标签
@@ -112,6 +119,12 @@ export const useTabistStore = defineStore('tablist', () => {
       currentDragIndex.value = index
     }
   }
+
+  onMounted(() => {
+    useTabStore().$subscribe(() => {
+      localStorage.setItem('tab', JSON.stringify({ list: tabList.value, key: activeKey.value }))
+    }, { flush: 'sync' })
+  })
 
   return { tabList, activeKey, activateTab, activateTabOnlyKey, removeTab, removeOther, removeSide, setScrollTop, showContextMenu, toggleShowMenu, setCurrentDragIndex, currentDragIndex, sortTab }
 })
