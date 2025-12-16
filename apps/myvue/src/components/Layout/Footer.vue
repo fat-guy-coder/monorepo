@@ -1,46 +1,32 @@
 <template>
-  <footer class="ui-layout-footer" :class="{ 'is-fixed': fixed }" :style="componentStyle">
+  <footer class="ui-layout-footer">
     <slot></slot>
   </footer>
 </template>
 
 <script setup lang="ts">
-import { computed, type CSSProperties } from 'vue';
-
-defineOptions({
-  name: 'Footer',
-});
-
-const { css = {}, fixed = false } = defineProps<{
-  css?: Record<string, string>;
-  fixed?: boolean;
-}>();
-
-const componentStyle = computed(() => {
-  return { ...css } as CSSProperties;
-});
+defineOptions({ name: 'Footer' });
 </script>
 
 <style lang="less" scoped>
 .ui-layout-footer {
-  --footer-padding: var(--padding-3xl) var(--padding-4xl);
   --footer-bg: var(--color-background-soft);
   --footer-border-color: var(--color-border);
-  --footer-z-index: 1000;
 
-  flex-shrink: 0;
-  padding: var(--footer-padding);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
   background: var(--footer-bg);
   border-top: 1px solid var(--footer-border-color);
-  text-align: center;
   transition: all 0.3s ease;
+  overflow: hidden;
+  flex-shrink: 0; // Prevent shrinking
 
-  &.is-fixed {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: var(--footer-z-index);
+  &[style*="height: 0px"] {
+    padding-top: 0;
+    padding-bottom: 0;
+    border-top-width: 0;
   }
 }
 </style>

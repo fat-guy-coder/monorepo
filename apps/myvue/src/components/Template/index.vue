@@ -1,15 +1,7 @@
 <template>
   <div class="page-container" :class="[`page-container--${currentMode}`]" :style="styleVars">
     <!-- 头部：标题区 -->
-    <header class="page-header">
-      <div class="header-inner">
-        <h1 class="page-title">核心技能模板页</h1>
-        <p class="page-subtitle">以主题变量驱动的卡片式信息布局</p>
-        <p class="page-note">
-          建议：本模板用于承载知识点/功能模块的分区展示。通过主题变量实现深浅/冷暖主题的无缝切换；布局优先采用栅格，在移动端保持优秀可读性与触达性。
-        </p>
-      </div>
-    </header>
+    <PageHeader title="核心技能模板页" subtitle="以主题变量驱动的卡片式信息布局" description="建议：本模板用于承载知识点/功能模块的分区展示。通过主题变量实现深浅/冷暖主题的无缝切换；布局优先采用栅格，在移动端保持优秀可读性与触达性。" />
     <!-- 列表模式和混合模式：导航 -->
     <Nav v-if="currentMode === 'list'" :list="categoryList" show-child />
     <Nav v-if="currentMode === 'mixed'" :list="mixedNavList" show-child />
@@ -102,8 +94,9 @@
                       </Card>
                     </Col>
                     <Col v-else span="24">
+                      ss
                       <Row :gutter="currentConfig.grid?.gutter || 0" :key="item.id">
-                        <Col v-bind="currentConfig.list?.grid?.layout?.keyPoints">
+                        <Col v-bind="currentConfig?.grid?.layout?.keyPoints">
                           <Card :id="item.id"  :title="item.name">
                             <List v-if="item.type === 'plan'" type="plan" :items="item.data as IPlan[]"
                               :show-underline="false" />
@@ -215,12 +208,13 @@
         </Card>
       </Col>
     </Row>
+    <PageFooter />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { List, Card, Nav, Link, NavCard, Code, Row, Col } from '@/components'
+import { List, Card, Nav, Link, NavCard, Code, Row, Col, PageHeader, PageFooter } from '@/components'
 import templateConfig from './Template.json'
 import type {
   IPlan,
@@ -252,7 +246,9 @@ const modeTabs: Array<{ label: string; value: ModeType }> = [
 
 const currentConfig = computed(
   () => {
+
     const config = (templateConfig as any)[currentMode.value] || templateConfig.normal || {}
+    console.log(config.grid?.layout.keyPoints);
     return config
   }
 )

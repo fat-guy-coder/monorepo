@@ -38,10 +38,11 @@
 
 /* 白主题色板 默认亮色主题*/
 @color-light: #ffffff; // 白色背景
-@color-primary: #003d99; // 主色
 @color-light-soft: #f8f8f8; // 柔和白
 @color-light-mute: #f2f2f2; // 淡化白
 @color-light-light: #fafafa; // 浅白
+@color-light-lighter: #f5f5f5; // 更浅白
+@color-primary: #003d99; // 主色
 
 // 高亮色加强对比度，更明显地区分于主题主色
 @color-highlight-text: #0051c8; // 明亮蓝色，较@color-primary明显更亮且偏蓝, 用于强调文本
@@ -93,12 +94,12 @@
 @color-dark-soft: #222222;
 @color-dark-mute: #282828;
 @color-dark-light: #1e1e1e;
+@color-dark-lighter: #141414; // 更深黑
 @color-highlight-dark-text: #00ffff;
 @color-highlight-dark-bg: #1a4d4d;
 @color-highlight-dark-border: #00cccc;
 @color-link-dark-text: #38bdf8;
 @color-link-dark-hover: #2563eb;
-
 /* 黑色主题渐变
     - 起始色为主题底色
     - 渐变色分布为深灰-蓝灰-深蓝-柔青-柔紫-柔金-收尾为 softened 高对比色但不刺眼
@@ -155,6 +156,7 @@
 @warm-background: #fff8f0;
 @warm-background-soft: #ffe9d1;
 @warm-background-mute: #f7d9b5;
+@warm-background-light: #fff2dc; // 暖色背景浅色
 @warm-surface: #fff2dc;
 @warm-text: #7c2d12;
 @warm-text-soft: #9a3412;
@@ -166,7 +168,7 @@
 @highlight-warm-border: #ff8c00;
 @link-warm-text: #ea580c;
 @link-warm-hover: #c2410c;
-
+@warm-background-lighter: #fff0e0; // 更浅米白
 /* 暖色主题渐变
     - 起始色为主题底色
     - 选取高阶的米白、淡橙、柔和粉、柔金、焦糖、带点橘黄和茶色，但整体协调柔和
@@ -210,6 +212,8 @@
 @cool-background: #f0f9ff;
 @cool-background-soft: #e0f2fe;
 @cool-background-mute: #bae6fd;
+@cool-background-light: #dbeafe; // 冷色背景浅色
+@cool-background-lighter: #e0f4ff; // 更浅冷蓝
 @cool-surface: #dbeafe;
 @cool-text: #0c4a6e;
 @cool-text-soft: #075985;
@@ -264,6 +268,8 @@
 @eye-background: #f0f7f2; // very light green-ish white
 @eye-background-soft: #e6f0e9;
 @eye-background-mute: #d9e8de;
+@eye-background-light: #e8f2eb; // 护眼背景浅色
+@eye-background-lighter: #f0f7f2; // 更浅护眼绿
 @eye-surface: #e8f2eb;
 @eye-text: #2a3d33;
 @eye-text-soft: #4a6357;
@@ -314,6 +320,8 @@ body[data-theme='light'] {
   --color-background: @color-light; //白色背景
   --color-background-soft: @color-light-soft; //白色背景柔和
   --color-background-mute: @color-light-mute; //白色背景淡化
+  --color-background-light: @color-light-light; //白色背景浅色
+  --color-background-lighter: @color-light-lighter; //白色背景更浅
   --color-primary: @color-gray-700; //白色主色
   --color-secondary: @color-gray-600; //白色次色
   --color-accent: @color-gray-500; //白色强调
@@ -366,6 +374,8 @@ body[data-theme='dark'] {
   --color-background: @color-dark; //黑色背景
   --color-background-soft: @color-dark-soft; //黑色背景柔和
   --color-background-mute: @color-dark-mute; //黑色背景淡化
+  --color-background-light: @color-dark-light; //黑色背景浅色
+  --color-background-lighter: @color-dark-lighter; //黑色背景更深
   --color-primary: @color-gray-300; //黑色主色
   --color-secondary: @color-gray-400; //黑色次色
   --color-accent: @color-gray-500; //黑色强调
@@ -419,6 +429,8 @@ body[data-theme='warm'] {
   --color-background: @warm-background; //暖色背景
   --color-background-soft: @warm-background-soft; //暖色背景柔和
   --color-background-mute: @warm-background-mute; //暖色背景淡化
+  --color-background-light: @warm-background-light; //暖色背景浅色
+  --color-background-lighter: @warm-background-lighter; //暖色背景更浅
   --color-primary: @warm-primary; //暖色主色
   --color-secondary: @warm-secondary; //暖色次色
   --color-accent: @warm-accent; //暖色强调
@@ -474,6 +486,8 @@ body[data-theme='cool'] {
   --color-background: @cool-background; //冷色背景
   --color-background-soft: @cool-background-soft; //冷色背景柔和
   --color-background-mute: @cool-background-mute; //冷色背景淡化
+  --color-background-light: @cool-background-light; //冷色背景浅色
+  --color-background-lighter: @cool-background-lighter; //冷色背景更浅
   --color-primary: @cool-primary; //冷色主色
   --color-secondary: @cool-secondary; //冷色次色
   --color-accent: @cool-accent; //冷色强调
@@ -528,6 +542,8 @@ body[data-theme='eye-friendly'] {
   --color-background: @eye-background;
   --color-background-soft: @eye-background-soft;
   --color-background-mute: @eye-background-mute;
+  --color-background-light: @eye-background-light; //护眼背景浅色
+  --color-background-lighter: @eye-background-lighter; //护眼背景更浅
   --color-primary: @eye-primary;
   --color-secondary: @eye-secondary;
   --color-accent: @eye-accent;

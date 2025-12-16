@@ -5,7 +5,6 @@
     `custom-link--size-${size}`,
     `custom-link--rounded-${rounded}`,
     `custom-link--anim-${animation}`,
-    `custom-link--gradient-anim-${gradientAnimation}`,
     {
       'custom-link--bordered': bordered,
       'custom-link--block': block,
@@ -50,8 +49,6 @@ interface Props {
   rounded?: 'sm' | 'md' | 'lg' | 'pill'
   /** 悬浮动效 */
   animation?: 'lift' | 'scale' | 'slide' | 'glow' | 'none'
-  /** 渐变动画类型 */
-  gradientAnimation?: 'linear' | 'round'
   /** 是否块级显示 */
   block?: boolean
   /** target 属性（仅 a 标签） */
@@ -59,7 +56,7 @@ interface Props {
 }
 
 
-const {id,route, href = 'javascript:void(0);', type = 'a', text = '', icon = '', showArrow = false, size = 'medium', bordered = false, rounded = 'md', animation = 'lift', gradientAnimation = 'linear', block = false, target = '_self' } = defineProps<Props>()
+const {id,route, href = 'javascript:void(0);', type = 'a', text = '', icon = '', showArrow = false, size = 'medium', bordered = false, rounded = 'md', animation = 'lift', block = false, target = '_self' } = defineProps<Props>()
 
 const goToByName = inject<((name: string) => void)>('goToByName');
 if (!goToByName) {
@@ -122,12 +119,17 @@ const handleClick = (event: MouseEvent) => {
     outline: 2px solid var(--color-primary);
     outline-offset: 2px;
   }
+
+  
+  &:hover {
+    transform: scale(1.05);
+    background-color: red;
+  }
 }
 
 .custom-link--type-card {
   --link-bg: var(--color-link-text);
   --link-text: var(--color-bg-container);
-
   &.custom-link--bordered {
     border-color: var(--color-primary-dark-2);
   }
@@ -140,71 +142,8 @@ const handleClick = (event: MouseEvent) => {
   transition: color 0.4s ease;
 }
 
-.custom-link::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: transparent;
-  z-index: 0;
-  transition: opacity 0.4s ease, transform 0.4s ease;
-  opacity: 0;
-  pointer-events: none;
-}
 
-.custom-link:hover::before {
-  opacity: 1;
-}
 
-// Card Background Animation
-.custom-link--type-card.custom-link--gradient-anim-linear:before {
-  background: linear-gradient(90deg, var(--color-gradient-group-1), var(--color-gradient-group-2), var(--color-gradient-group-1));
-  background-size: 200% 100%;
-  animation: linear-wipe 2s linear infinite;
-}
-
-.custom-link--type-card.custom-link--gradient-anim-round:before {
-  background: radial-gradient(circle, var(--color-gradient-group-1) 0%, var(--color-gradient-group-2) 70%, var(--color-gradient-group-3) 100%);
-  transform: scale(0);
-}
-
-.custom-link--type-card.custom-link--gradient-anim-round:hover::before {
-  transform: scale(2.5);
-}
-
-// A-type Text Animation
-.custom-link--type-a .custom-link__text {
-  background-clip: text;
-  -webkit-background-clip: text;
-}
-
-.custom-link--type-a:hover .custom-link__text {
-  color: transparent; // Make original text transparent to show gradient
-}
-
-.custom-link--type-a.custom-link--gradient-anim-linear:hover .custom-link__text {
-  background-image: linear-gradient(90deg, var(--color-gradient-group-1), var(--color-gradient-group-2), var(--color-gradient-group-1));
-  background-size: 200% 100%;
-  animation: linear-wipe 2s linear infinite;
-}
-
-.custom-link--type-a.custom-link--gradient-anim-round:hover .custom-link__text {
-  background-image: radial-gradient(circle, var(--color-gradient-group-1), var(--color-gradient-group-2));
-}
-
-@keyframes linear-wipe {
-  0% {
-    background-position: 200% 0;
-  }
-
-  100% {
-    background-position: -200% 0;
-  }
-}
-
-// --- Standard Styles ---
 
 // 尺寸变体
 .custom-link--size-small {

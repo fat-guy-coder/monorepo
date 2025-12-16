@@ -40,12 +40,16 @@ const createMarkedAsyncComponent = (loader: () => Promise<any>, name: string) =>
   (asyncComponent as any).__name = name;
   return asyncComponent;
 };
-
+//布局
 const Layout = createMarkedAsyncComponent(() => import('./Layout/index.vue'), 'Layout');
 const Header = createMarkedAsyncComponent(() => import('./Layout/Header.vue'), 'Header');
 const SideBar = createMarkedAsyncComponent(() => import('./Layout/SideBar.vue'), 'SideBar');
 const Content = createMarkedAsyncComponent(() => import('./Layout/Content.vue'), 'Content');
 const Footer = createMarkedAsyncComponent(() => import('./Layout/Footer.vue'), 'Footer');
+
+//page
+const PageHeader = createMarkedAsyncComponent(() => import('./page/pageHeader.vue'), 'PageHeader');
+const PageFooter = createMarkedAsyncComponent(() => import('./page/pageFooter.vue'), 'PageFooter');
 
 export {
   Layout,
@@ -86,4 +90,6 @@ export {
   Transfer,
   // Form,
   // FormItem,
+  PageHeader,
+  PageFooter,
 }

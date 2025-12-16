@@ -1,49 +1,32 @@
 <template>
-  <header class="ui-layout-header" :class="{ 'is-fixed': fixed }" :style="componentStyle">
+  <header class="ui-layout-header">
     <slot></slot>
   </header>
 </template>
 
 <script setup lang="ts">
-import { computed, type CSSProperties } from 'vue';
-
-defineOptions({
-  name: 'Header',
-});
-
-const { css = {}, fixed = false } = defineProps<{
-  css?: Record<string, string>;
-  fixed?: boolean;
-}>();
-
-const componentStyle = computed(() => {
-  return { ...css } as CSSProperties;
-});
+defineOptions({ name: 'Header' });
 </script>
 
 <style lang="less" scoped>
 .ui-layout-header {
-  --header-height: 4rem; // 64px
-  --header-padding: 0 3.125rem; // 0 50px
   --header-bg: var(--color-background-soft);
   --header-border-color: var(--color-border);
-  --header-z-index: 1000;
-  
 
-  flex-shrink: 0;
-  height: var(--header-height);
-  padding: var(--header-padding);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
   background: var(--header-bg);
   border-bottom: 1px solid var(--header-border-color);
   transition: all 0.3s ease;
-  text-align: center;
+  overflow: hidden;
+  flex-shrink: 0; // Prevent shrinking
 
-  &.is-fixed {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: var(--header-z-index);
+  &[style*="height: 0px"] {
+    padding-top: 0;
+    padding-bottom: 0;
+    border-bottom-width: 0;
   }
 }
 </style>
