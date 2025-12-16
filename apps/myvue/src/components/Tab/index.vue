@@ -225,9 +225,7 @@ onUnmounted(() => {
   &::-webkit-scrollbar {
     display: none!important; /* Chrome, Safari, Opera*/
   }
-}
-
-.tabs-nav {
+  .tabs-nav {
   position: relative;
   display: flex;
   align-items: center;
@@ -458,4 +456,6 @@ onUnmounted(() => {
     font-size: 14px;
   }
 }
+}
+
 </style>

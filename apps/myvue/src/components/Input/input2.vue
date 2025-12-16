@@ -186,8 +186,8 @@
   <style scoped lang="less">
   .search-input {
     // --- 自有 CSS 变量定义 ---
-    --input-height: var(--_input-height, 2rem);
-    --input-padding-horizontal: var(--_input-padding-horizontal, 0.6875rem);
+    --input-height: var(--input-height, 2rem);
+    --input-padding-horizontal: var(--input-padding-horizontal, 0.6875rem);
     --input-bg: var(--color-bg-container);
     --input-border-color: var(--color-border);
     --input-border-radius: var(--element-border-radius);
@@ -203,7 +203,7 @@
     --input-button-bg: var(--color-primary);
     --input-button-text-color: var(--color-text-light-solid);
     --input-button-bg-hover: var(--color-link-hover);
-    --input-spinner-track-color: var(--_input-spinner-track-color, rgba(255, 255, 255, 0.5));
+    --input-spinner-track-color: var(--input-spinner-track-color, rgba(255, 255, 255, 0.5));
     --input-spinner-color: var(--color-text-light-solid, #fff);
   
     position: relative;

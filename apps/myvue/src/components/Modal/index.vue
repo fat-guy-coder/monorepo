@@ -142,9 +142,9 @@ watch(visible, (isVisible) => {
   --modal-bg: var(--color-background);
   --modal-shadow: var(--box-shadow-lg);
   --modal-radius: var(--border-radius-lg);
-  --modal-header-padding: var(--_modal-header-padding, 1.5rem);
-  --modal-body-padding: var(--_modal-body-padding, 1.5rem);
-  --modal-footer-padding: var(--_modal-footer-padding, 1rem 1.5rem);
+  --modal-header-padding:  var(--padding-xl);
+  --modal-body-padding: var(--padding-xl);
+  --modal-footer-padding: var(--padding-lg) var(--padding-xl);
   --modal-title-color: var(--color-heading);
   --modal-border-color: var(--color-border);
 

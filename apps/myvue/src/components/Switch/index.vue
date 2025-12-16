@@ -50,9 +50,9 @@ const toggle = () => {
 .ui-switch {
   --switch-bg-off: var(--color-fill-tertiary);
   --switch-bg-on: var(--color-primary);
-  --switch-handle-bg: var(--_switch-handle-bg, #fff);
+  --switch-handle-bg: var(--switch-handle-bg, #fff);
   --switch-handle-shadow: var(--box-shadow-xs);
-  --switch-focus-shadow: var(--_switch-focus-shadow, 0 0 0 2px color-mix(in srgb, var(--color-primary) 25%, transparent));
+  --switch-focus-shadow: var(--switch-focus-shadow, 0 0 0 2px color-mix(in srgb, var(--color-primary) 25%, transparent));
 
   // Sizes
   --switch-width-sm: 1.75rem; // 28px

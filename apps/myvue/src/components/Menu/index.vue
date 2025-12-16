@@ -160,14 +160,21 @@ provide('isMobile', props.isMobile)
 
 <style lang="less" scoped>
 .main-menu {
+  --menu-bg: var(--color-background);
+  --menu-border-radius: var(--border-radius-md);
+  --menu-border-width: var(--border-width);
+  --menu-border-color: var(--color-border);
+  --menu-border-bottom: none;
+  --menu-overflow: visible;
+  --menu-overflow-x: hidden;
   position: relative;
-  background: var(--color-background);
-  border-radius: var(--border-radius-md);
+  background: var(--menu-bg);
+  border-radius: var(--menu-border-radius);
   box-sizing: border-box;
-  border: var(--border-width) solid var(--color-border);
-  border-bottom: none;
-  overflow: visible;
-  overflow-x: hidden;
+  border: var(--menu-border-width) solid var(--menu-border-color);
+  border-bottom: var(--menu-border-bottom);
+  overflow: var(--menu-overflow);
+  overflow-x: var(--menu-overflow-x);
 
   &:hover .menu__settings-btn {
     opacity: 1;

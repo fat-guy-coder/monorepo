@@ -23,7 +23,7 @@ const componentStyle = computed(() => {
 
 <style lang="less" scoped>
 .ui-layout-footer {
-  --footer-padding: 1.5rem 3.125rem // 24px 50px
+  --footer-padding: var(--padding-3xl) var(--padding-4xl);
   --footer-bg: var(--color-background-soft);
   --footer-border-color: var(--color-border);
   --footer-z-index: 1000;

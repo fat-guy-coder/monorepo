@@ -135,18 +135,18 @@ defineExpose({ scrollToTarget })
 
 <style lang="less" scoped>
 .nav-carx {
-  --nav-tag-bg: var(--color-background);
-  --nav-tag-border: var(--color-border);
-  --nav-tag-text: var(--color-text);
-  --nav-tag-radius-md: var(--border-radius-md);
-  --nav-tag-radius-lg: var(--border-radius-lg);
-  --nav-tag-radius-pill: 999px;
+  --nav-card-bg: var(--color-background);
+  --nav-card-border: var(--color-border);
+  --nav-card-text: var(--color-text);
+  --nav-card-radius-md: var(--border-radius-md);
+  --nav-card-radius-lg: var(--border-radius-lg);
+  --nav-card-radius-pill: 999px;
   --nav-carx-gap: var(--gap-md);
   --nav-color-border-hover: var(--color-border-hover);
   --nav-box-shadow: var(--box-shadow-md);
   --nav-box-shadow-hover: var(--box-shadow-hover-md);
   --nav-transition-duration: var(--transition-duration);
-  --nav-bg-transparent: var(--_nav-bg-transparent, transparent);
+  --nav-bg-transparent: var(--nav-bg-transparent, transparent);
   background-color: var(--nav-bg-transparent);
   display: flex;
   flex-wrap: wrap;
@@ -161,7 +161,7 @@ defineExpose({ scrollToTarget })
 }
 
 .nav-carx--borderless {
-  --nav-tag-border: transparent;
+  --nav-card-border: transparent;
 }
 
 .nav-carx__item {
@@ -170,10 +170,10 @@ defineExpose({ scrollToTarget })
   align-items: center;
   gap: var(--gap-md);
   padding: var(--padding-md) var(--padding-xl);
-  border: 1px solid var(--nav-tag-border);
-  border-radius: var(--nav-tag-radius-md);
-  background: var(--nav-tag-bg);
-  color: var(--nav-tag-text);
+  border: 1px solid var(--nav-card-border);
+  border-radius: var(--nav-card-radius-md);
+  background: var(--nav-card-bg);
+  color: var(--nav-card-text);
   transition:
     transform var(--nav-transition-duration) ease,
     box-shadow var(--nav-transition-duration) ease,
@@ -234,11 +234,11 @@ defineExpose({ scrollToTarget })
 }
 
 .nav-carx--rounded-lg .nav-carx__item {
-  border-radius: var(--nav-tag-radius-lg);
+  border-radius: var(--nav-card-radius-lg);
 }
 
 .nav-carx--rounded-pill .nav-carx__item {
-  border-radius: var(--nav-tag-radius-pill);
+  border-radius: var(--nav-card-radius-pill);
 }
 
 .nav-carx__index {

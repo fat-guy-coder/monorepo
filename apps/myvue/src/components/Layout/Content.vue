@@ -22,7 +22,7 @@ const componentStyle = computed(() => {
 
 <style lang="less" scoped>
 .ui-layout-content {
-  --content-padding: 1.5rem; // 24px
+  --content-padding: var(--padding-3xl);
 
   flex: 1; // Grow to fill available space
   padding: var(--content-padding);

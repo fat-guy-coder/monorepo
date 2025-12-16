@@ -173,12 +173,11 @@ defineExpose({
   &.is-expanded {
     pointer-events: auto;
   }
-  //--_([^,]+),[^w+]\)
 
   --nav-item-color: var(--color-text);
   --nav-item-hover-color: var(--color-primary);
   --nav-item-background: var(--color-background-soft);
-  --nav-item-padding: var(--_nav-item-padding, var(--padding-sm) var(--padding-md));
+  --nav-item-padding: var(--padding-sm) var(--padding-md);
   --nav-item-gap: var(--gap-md);
   --nav-item-font-size: var(--font-size-xs);
   --nav-item-font-weight: var(--font-weight-medium);
@@ -188,19 +187,19 @@ defineExpose({
   --nav-item-box-shadow: var(--box-shadow-xs);
   --nav-item-box-shadow-hover: var(--box-shadow-sm);
 
-  --nav-item-transform-x: var(--_nav-item-transform-x, 0.125rem);
-  --nav-item-transform-y: var(--_nav-item-transform-y, 0.125rem);
-  --nav-item-transform-scale: var(--_nav-item-transform-scale, 1.05);
-  --nav-item-transform-duration: var(--_nav-item-transform-duration, 0.3s);
-  --nav-item-transform-easing: var(--_nav-item-transform-easing, cubic-bezier(0.34, 1.56, 0.64, 1));
+  --nav-item-transform-x: 0.125rem;
+  --nav-item-transform-y: 0.125rem;
+  --nav-item-transform-scale: 1.05;
+  --nav-item-transform-duration: var(--transition-duration);
+  --nav-item-transform-easing: cubic-bezier(0.34, 1.56, 0.64, 1);
 
-  --nav-item-transform-slide-y: var(--_nav-item-transform-slide-y, 1.25rem);
-  --nav-item-transform-slide-x: var(--_nav-item-transform-slide-x, 1.25rem);
-  --nav-item-transform-slide-scale: var(--_nav-item-transform-slide-scale, 0.8);
+  --nav-item-transform-slide-y: 1.25rem;
+  --nav-item-transform-slide-x: 1.25rem;
+  --nav-item-transform-slide-scale: 0.8;
 
-  --navigation-toggle-width: var(--_navigation-toggle-width, calc(var(--nav-item-font-size) * 4));
-  --navigation-toggle-height: var(--_navigation-toggle-height, calc(var(--nav-item-font-size) * 4));
-  --navigation-toggle-icon-size: var(--_navigation-toggle-icon-size, 1rem);
+  --navigation-toggle-width: calc(var(--nav-item-font-size) * 4);
+  --navigation-toggle-height: calc(var(--nav-item-font-size) * 4);
+  --navigation-toggle-icon-size: var(--font-size);
 
   --navigation-toggle-border-radius: var(--border-radius-full);
   --navigation-toggle-background: var(--color-secondary);
@@ -208,7 +207,7 @@ defineExpose({
   --navigation-toggle-box-shadow: var(--box-shadow-xs);
   --navigation-toggle-box-shadow-hover: var(--box-shadow-sm);
   
-  --navigation-toggle-icon-line-width: var(--_navigation-toggle-icon-line-width, 1.25rem);
+  --navigation-toggle-icon-line-width: 1.25rem;
 }
 
 

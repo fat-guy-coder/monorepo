@@ -93,8 +93,8 @@ const toggleComplete = (item: ITodo) => {
   // --- 自有 CSS 变量定义 ---
   --list-bg-transparent: var(--list-bg-transparent, transparent);
   --list-bg-normal: var(--color-background);
-  --list-padding: var(--_list-padding, 0);
-  --list-item-padding: var(--_list-item-padding, var(--padding-md) var(--padding-lg));
+  --list-padding: var(--list-padding, 0);
+  --list-item-padding: var(--list-item-padding, var(--padding-md) var(--padding-lg));
   --list-item-color: var(--color-text);
   --list-item-value-color: var(--color-text-secondary);
   --list-item-border-color: var(--color-border-secondary);
@@ -108,7 +108,7 @@ const toggleComplete = (item: ITodo) => {
   --todo-strikethrough-color: var(--color-text-tertiary);
   --todo-completed-color: var(--color-text-tertiary);
 
-  list-style: var(--_list-style);
+  list-style: var(--list-style);
   padding: var(--list-padding);
   margin: 0;
   background: var( --list-bg-normal);
@@ -289,7 +289,7 @@ const toggleComplete = (item: ITodo) => {
 // --- "要点" 类型样式 ---
 .list-type--bullet {
   padding-left: var(--padding-xl);
-  list-style: var(--_list-style);
+  list-style: var(--list-style);
 
   .ui-list-item {
     border-bottom: none;

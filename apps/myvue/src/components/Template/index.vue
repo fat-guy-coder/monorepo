@@ -453,9 +453,4 @@ const mixedNavList = [
 </script>
 
 <style>
-.page-container--waterfall .waterfall-columns-layout {
-  display: grid;
-  grid-template-columns: var(--waterfall-grid-columns);
-  gap: var(--waterfall-grid-gap);
-}
 </style>

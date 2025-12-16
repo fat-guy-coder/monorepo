@@ -57,10 +57,10 @@ const progress = computed(() => {
   --slider-bg: var(--color-fill-tertiary);
   --slider-fill-bg: var(--color-primary);
   --slider-handle-size: 1rem; // 16px
-  --slider-handle-bg: var(--_slider-handle-bg, #fff);
+  --slider-handle-bg: var(--slider-handle-bg, #fff);
   --slider-handle-border: var(--color-primary);
   --slider-handle-shadow: var(--box-shadow-sm);
-  --slider-handle-focus-shadow: var(--_slider-handle-focus-shadow, 0 0 0 3px color-mix(in srgb, var(--color-primary) 25%, transparent));
+  --slider-handle-focus-shadow: var(--slider-handle-focus-shadow, 0 0 0 3px color-mix(in srgb, var(--color-primary) 25%, transparent));
 
   position: relative;
   width: 100%;

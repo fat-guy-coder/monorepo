@@ -121,8 +121,8 @@ onBeforeUnmount(() => {
   --sider-trigger-bg: var(--color-background-mute);
   --sider-trigger-hover-bg: var(--color-background);
   --sider-trigger-color: var(--color-text-secondary);
-  --sider-trigger-height: var(--_sider-trigger-height, 3rem); // 48px
-  --sider-z-index: var(--_sider-z-index, 1010);
+  --sider-trigger-height:  3rem; // 48px
+  --sider-z-index: 1010;
 
   position: relative;
   background: var(--sider-bg);

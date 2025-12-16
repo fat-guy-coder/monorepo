@@ -89,10 +89,10 @@ const handleClick = (event: MouseEvent) => {
   --link-bg: transparent;
   --link-text: var(--color-link-text);
   --link-border: var(--color-border);
-  --link-radius-sm: 8px;
-  --link-radius-md: 12px;
-  --link-radius-lg: 16px;
-  --link-radius-pill: 999px;
+  --link-radius-sm: var(--border-radius-sm);
+  --link-radius-md: var(--border-radius-md);
+  --link-radius-lg: var(--border-radius-lg);
+  --link-radius-pill: var(--border-radius-full);
 
   position: relative;
   display: inline-flex;

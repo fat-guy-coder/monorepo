@@ -49,12 +49,12 @@ const componentStyle = computed(() => {
   --checkbox-bg: var(--color-background);
   --checkbox-checked-bg: var(--color-primary);
   --checkbox-checked-border: var(--color-primary);
-  --checkbox-icon-color: var(--_checkbox-icon-color, #fff);
+  --checkbox-icon-color: var(--checkbox-icon-color, #fff);
   --checkbox-text-color: var(--color-text);
   --checkbox-disabled-bg: var(--color-fill-tertiary);
   --checkbox-disabled-color: var(--color-text-tertiary);
   --checkbox-radius: var(--border-radius-sm);
-  --checkbox-focus-shadow: var(--_checkbox-focus-shadow, 0 0 0 2px color-mix(in srgb, var(--color-primary) 25%, transparent));
+  --checkbox-focus-shadow: var(--checkbox-focus-shadow, 0 0 0 2px color-mix(in srgb, var(--color-primary) 25%, transparent));
 
   display: inline-flex;
   align-items: center;

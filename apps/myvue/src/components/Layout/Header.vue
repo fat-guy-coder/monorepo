@@ -23,11 +23,11 @@ const componentStyle = computed(() => {
 
 <style lang="less" scoped>
 .ui-layout-header {
-  --header-height: var(--_header-height, 4rem); // 64px
-  --header-padding: var(--_header-padding, 0 3.125rem); // 0 50px
+  --header-height: 4rem; // 64px
+  --header-padding: 0 3.125rem; // 0 50px
   --header-bg: var(--color-background-soft);
   --header-border-color: var(--color-border);
-  --header-z-index: var(--_header-z-index, 1000);
+  --header-z-index: 1000;
   
 
   flex-shrink: 0;
