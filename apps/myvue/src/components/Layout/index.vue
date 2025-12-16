@@ -12,7 +12,7 @@
     <div class="resizer horizontal" v-if="headerComponent && headerState.isVisible" @mousedown="handleResize('header', $event)"></div>
 
     <!-- Body -->
-    <section class="ui-layout-body">
+    <section class="ui-layout-body" :class="{'no-overflow': !hasFixedParts}">
       <component v-if="sideBarComponents[0]" :is="sideBarComponents[0]" :style="siderStyle(leftSiderState.isVisible ? leftSiderState.size : 0)" align="left" />
       <component v-if="contentComponent" :is="contentComponent" />
       <component v-if="sideBarComponents[1]" :is="sideBarComponents[1]" :style="siderStyle(rightSiderState.isVisible ? rightSiderState.size : 0)" align="right" />
@@ -223,6 +223,9 @@ const contentComponent = computed(() => getComponentFromVNodes(defaultSlot, 'Con
     flex: 1 1 auto;
     overflow-y: auto; // 只有内容区域滚动
     overflow-x: hidden;
+  }
+  &.no-overflow {
+    overflow: auto;
   }
 }
 
