@@ -18,7 +18,7 @@ const componentStyle = computed(() => {
 
 <style lang="less" scoped>
 .ui-layout-content {
-  --content-bg: #98fb98; // PaleGreen
+  --content-bg: var(--color-background); // PaleGreen
   --content-padding: var(--padding-3xl);
 
   padding: var(--content-padding);

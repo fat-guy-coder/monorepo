@@ -52,6 +52,7 @@ const categoriesData: Category[] = [
       { name: "代码照片", keys: ["Ctrl", "3"], heat: 6 },
       { name: "快捷方式编辑", keys: ["Ctrl", "4"], heat: 5 },
       { name: "驼峰切换", keys: ["Ctrl", "5"], heat: 5 },
+      { name: "打开swaager.json", keys: ["Ctrl", "6"], heat: 5 },
     ]
   },
   {
