@@ -12,11 +12,11 @@
       >
         <div class="control-group">
           <label v-if="headerState.isVisible" class="control-item">
-            <span>显示</span>
+            <span>是否显示</span>
             <Switch v-model="headerState.isVisible" size="small" />
           </label>
           <label v-if="headerState.isVisible" class="control-item">
-            <span>固定</span>
+            <span>固定位置</span>
             <Switch v-model="headerState.isFixed" size="small" />
           </label>
           <button v-else class="restore-trigger" @click="headerState.isVisible = true">

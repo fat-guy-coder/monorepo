@@ -9,11 +9,11 @@
       >
         <div class="control-group">
           <label v-if="footerState.isVisible" class="control-item">
-            <span>显示</span>
+            <span>是否显示</span>
             <Switch v-model="footerState.isVisible" size="small" />
           </label>
           <label v-if="footerState.isVisible" class="control-item">
-            <span>固定</span>
+            <span>固定位置</span>
             <Switch v-model="footerState.isFixed" size="small" />
           </label>
           <button v-else class="restore-trigger" @click="footerState.isVisible = true">

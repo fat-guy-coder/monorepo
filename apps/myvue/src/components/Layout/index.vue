@@ -59,8 +59,12 @@
       >
         <div class="control-group">
           <label v-if="leftSiderState.isVisible" class="control-item">
-            <span>显示</span>
+            <span>是否显示</span>
             <Switch v-model="leftSiderState.isVisible" size="small" />
+          </label>
+          <label v-if="leftSiderState.isVisible" class="control-item">
+            <span>固定位置</span>
+            <Switch v-model="leftSiderState.isFixed" size="small" />
           </label>
           <button v-else class="restore-trigger" @click="leftSiderState.isVisible = true">
             <svg
@@ -83,8 +87,12 @@
       >
         <div class="control-group">
           <label v-if="rightSiderState.isVisible" class="control-item">
-            <span>显示</span>
+            <span>是否显示</span>
             <Switch v-model="rightSiderState.isVisible" size="small" />
+          </label>
+          <label v-if="rightSiderState.isVisible" class="control-item">
+            <span>固定位置</span>
+            <Switch v-model="rightSiderState.isFixed" size="small" />
           </label>
           <button v-else class="restore-trigger" @click="rightSiderState.isVisible = true">
             <svg
@@ -246,7 +254,6 @@ const headerComponent = computed(() => getComponentFromVNodes(defaultSlot, 'Head
 const footerComponent = computed(() => getComponentFromVNodes(defaultSlot, 'Footer'))
 const sideBarComponents = computed(() => getComponentsFromVNodes(defaultSlot, 'SideBar'))
 const contentComponent = computed(() => getComponentFromVNodes(defaultSlot, 'Content'))
-
 </script>
 
 <style lang="less">
