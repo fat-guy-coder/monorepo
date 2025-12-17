@@ -1,8 +1,13 @@
 <template>
-  <header class="layout-header">
+  <header
+    class="layout-header"
+    :style="{
+      height: `${headerState.isVisible ? headerState.size : 0}px`,
+    }"
+  >
     <slot name="control">
       <div
-        class="unified-trigger"
+        class="unified-trigger top"
         :style="{ top: headerState.isVisible ? `${headerState.size}px` : '0' }"
       >
         <div class="control-group">
@@ -52,15 +57,12 @@ defineModel<LayoutPartState>('headerState', { required: true })
   transition: height 0.3s ease;
   flex-shrink: 0; // Prevent shrinking
   position: relative;
+  border-bottom: none;
 
   &[style*='height: 0px'] {
     padding-top: 0;
     padding-bottom: 0;
     border-bottom-width: 0;
-  }
-  .unified-trigger {
-    left: 50%;
-    transform: translateX(-50%);
   }
 }
 </style>

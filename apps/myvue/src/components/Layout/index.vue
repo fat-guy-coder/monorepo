@@ -1,38 +1,7 @@
 <template>
   <section class="layout">
     <!-- Header -->
-    <component
-      v-if="headerComponent"
-      :is="headerComponent"
-      :style="{
-        height: `${headerState.isVisible ? headerState.size : 0}px`,
-      }"
-      v-model:headerState="headerState"
-    >
-      <!-- <template #control>
-        <label v-if="headerState.isVisible" class="control-item">
-          <span>显示</span>
-          <Switch v-model="headerState.isVisible" size="small" />
-        </label>
-        <label v-if="headerState.isVisible" class="control-item">
-          <span>固定</span>
-          <Switch v-model="headerState.isFixed" size="small" />
-        </label>
-        <button v-else class="restore-trigger" @click="headerState.isVisible = true">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            width="16"
-            height="16"
-            fill="currentColor"
-          >
-            <path d="M12 16l-6-6 1.41-1.41L12 13.17l4.59-4.58L18 10z" />
-          </svg>
-        </button>
-      </template>
-      <template #default>
-        Headerasdasd
-      </template> -->
+    <component v-if="headerComponent" :is="headerComponent" v-model:headerState="headerState">
     </component>
     <div
       class="resizer horizontal"
@@ -118,45 +87,7 @@
       v-if="footerComponent && footerState.isVisible"
       @mousedown="handleResize('footer', $event)"
     ></div>
-    <component
-      v-if="footerComponent"
-      :is="footerComponent"
-      :style="{
-        height: `${footerState.isVisible ? footerState.size : 0}px`,
-      }"
-    />
-
-    <!-- Header & Footer Triggers -->
-
-    <div
-      v-if="footerComponent"
-      class="unified-trigger horizontal bottom"
-      :style="{
-        bottom: footerState.isVisible && footerState.isFixed ? `${footerState.size}px` : `-2000px`,
-      }"
-    >
-      <div class="control-group">
-        <label v-if="footerState.isVisible" class="control-item">
-          <span>显示</span>
-          <Switch v-model="footerState.isVisible" size="small" />
-        </label>
-        <label v-if="footerState.isVisible" class="control-item">
-          <span>固定</span>
-          <Switch v-model="footerState.isFixed" size="small" />
-        </label>
-        <button v-else class="restore-trigger" @click="footerState.isVisible = true">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            width="16"
-            height="16"
-            fill="currentColor"
-          >
-            <path d="M12 8l-6 6 1.41 1.41L12 10.83l4.59 4.58L18 14z" />
-          </svg>
-        </button>
-      </div>
-    </div>
+    <component v-if="footerComponent" :is="footerComponent" v-model:footerState="footerState" />
   </section>
 </template>
 
@@ -168,7 +99,6 @@ import type { LayoutPartState } from './index'
 defineOptions({ name: 'Layout' })
 
 // --- State Management ---
-
 
 const headerState = reactive<LayoutPartState>({
   isVisible: true,
@@ -205,8 +135,8 @@ const stateMap = {
 const hasFixedParts = computed(() => {
   const hasFixedHeader = headerComponent.value && headerState.isVisible && headerState.isFixed
   const hasFixedFooter = footerComponent.value && footerState.isVisible && footerState.isFixed
-  console.log(hasFixedHeader)
-  return hasFixedHeader || hasFixedFooter
+  console.log(hasFixedHeader && hasFixedFooter)
+  return hasFixedHeader && hasFixedFooter
 })
 
 // --- Style & Resize Logic ---
@@ -217,7 +147,8 @@ const siderStyle = (width: number): CSSProperties => ({
   width: `${width}px`,
   flexBasis: `${width}px`,
   flexShrink: 0,
-  overflow: 'hidden',
+  overflowX: 'hidden',
+  overflowY: 'auto',
 })
 
 const handleResize = (target: keyof typeof stateMap, event: MouseEvent) => {
@@ -266,7 +197,6 @@ const getComponentsFromVNodes = (nodes: VNode[], name: string) =>
 
 const defaultSlot = slots.default ? slots.default() : []
 const headerComponent = computed(() => getComponentFromVNodes(defaultSlot, 'Header'))
-// const headerSlot = computed(() => getSlotFromVNodes(headerComponent, 'Header'))
 const footerComponent = computed(() => getComponentFromVNodes(defaultSlot, 'Footer'))
 const sideBarComponents = computed(() => getComponentsFromVNodes(defaultSlot, 'SideBar'))
 const contentComponent = computed(() => getComponentFromVNodes(defaultSlot, 'Content'))
@@ -274,7 +204,7 @@ const contentComponent = computed(() => getComponentFromVNodes(defaultSlot, 'Con
 console.log(headerComponent)
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 .layout {
   display: flex;
   flex-direction: column;
@@ -283,64 +213,61 @@ console.log(headerComponent)
   height: 80vh; // 改为 min-height 而不是 height
   background: var(--color-background);
   position: relative;
-}
 
-.overflow-auto {
-  overflow-y: auto;
-}
-
-.layout-body {
-  display: flex;
-  flex: 1;
-  flex-direction: row;
-  position: relative;
-}
-
-.resizer {
-  background-color: transparent;
-  position: relative;
-  z-index: 20;
-
-  &::before {
-    content: '';
-    position: absolute;
-    transition: background-color 0.3s ease;
+  .overflow-auto {
+    overflow-y: auto;
   }
 
-  &:hover::before {
-    background-color: #007bff;
+  .layout-body {
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    position: relative;
   }
 
-  &.vertical {
-    width: 2px;
-    cursor: col-resize;
-    position: absolute;
-    top: 0;
-    bottom: 0;
+  .resizer {
+    background-color: transparent;
+    position: relative;
+    z-index: 20;
 
     &::before {
+      content: '';
+      position: absolute;
+      transition: background-color 0.3s ease;
+    }
+
+    &:hover::before {
+      background-color: #007bff;
+    }
+
+    &.vertical {
+      width: 2px;
+      cursor: col-resize;
+      position: absolute;
       top: 0;
       bottom: 0;
-      left: -4px;
-      right: -4px;
+      &::before {
+        top: 0;
+        bottom: 0;
+        left: -4px;
+        right: -4px;
+      }
+    }
+    &.horizontal {
+      height: 2px;
+      cursor: row-resize;
+      width: 100%;
+
+      &::before {
+        left: 0;
+        right: 0;
+        top: -4px;
+        bottom: -4px;
+      }
     }
   }
 
-  &.horizontal {
-    height: 2px;
-    cursor: row-resize;
-    width: 100%;
-
-    &::before {
-      left: 0;
-      right: 0;
-      top: -4px;
-      bottom: -4px;
-    }
-  }
-}
-
-.unified-trigger {
+  .unified-trigger {
     position: absolute;
     background: var(--color-background-mute);
     border: 1px solid var(--color-border);
@@ -349,81 +276,64 @@ console.log(headerComponent)
     z-index: 25;
     padding: 4px 12px;
     display: flex;
+    &:hover {
+      background: var(--color-background);
+    }
+    &.horizontal {
+      left: 50%;
+      transform: translateX(-50%);
+      transform-origin: center bottom;
+      padding: 8px 4px;
+      &.top {
+        border-top: none;
+        border-radius: 0 0 4px 4px;
+      }
+      &.bottom {
+        border-bottom: none;
+        border-radius: 4px 4px 0 0;
+      }
+    }
+    &.vertical {
+      top: 20rem;
+      transform: translateY(-50%);
+      padding: 8px 4px;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      transform-origin: center right;
+      &.left {
+        border-left: none;
+        border-radius: 0 4px 4px 0;
+      }
+
+      &.right {
+        border-right: none;
+        border-radius: 4px 0 0 4px;
+      }
+    }
     .control-group {
       display: flex;
       flex-direction: column;
       gap: 1.5rem;
       align-items: center;
       background-color: transparent;
+      .control-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.875rem;
+        cursor: pointer;
+        white-space: nowrap;
+      }
+      .restore-trigger {
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        padding: 0;
+        line-height: 1;
+        display: block;
+      }
     }
   }
-
-.unified-trigger {
-
-  &:hover {
-    background: var(--color-background);
-  }
-
-  &.horizontal {
-    left: 50%;
-    transform: translateX(-50%);
-    padding: 4px 12px;
-    display: flex;
-
-    &.top {
-      border-top: none;
-      border-radius: 0 0 4px 4px;
-    }
-
-    &.bottom {
-      border-bottom: none;
-      border-radius: 4px 4px 0 0;
-    }
-  }
-
-  &.vertical {
-    top: 20rem;
-    transform: translateY(-50%);
-    padding: 8px 4px;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-
-    &.left {
-      border-left: none;
-      border-radius: 0 4px 4px 0;
-    }
-
-    &.right {
-      border-right: none;
-      border-radius: 4px 0 0 4px;
-    }
-  }
-}
-
-.control-group {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  align-items: center;
-  background-color: transparent;
-}
-
-.control-item {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.875rem;
-  cursor: pointer;
-  white-space: nowrap;
-}
-
-.restore-trigger {
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  padding: 0;
-  line-height: 1;
-  display: block;
 }
 </style>
