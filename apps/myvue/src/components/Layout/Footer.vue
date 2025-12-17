@@ -4,8 +4,8 @@
   }">
     <slot name="control">
       <div
-        class="unified-trigger bottom"
-        :style="{ bottom: footerState.isVisible ? `${footerState.size}px` : '0' }"
+        class="unified-trigger horizontal bottom"
+        :class="{ 'is-hidden': !footerState.isVisible }"
       >
         <div class="control-group">
           <label v-if="footerState.isVisible" class="control-item">
@@ -30,7 +30,7 @@
         </div>
       </div>
     </slot>
-    <div class="footer-content"><slot name="default">Footer</slot></div>
+    <slot name="default" v-if="footerState.isVisible">Footer</slot>
   </footer>
 </template>
 
@@ -55,6 +55,7 @@ defineModel<LayoutPartState>('footerState', { required: true })
   flex-shrink: 0; // Prevent shrinking
   position: relative;
   border-top: none;
+
 
   &[style*='height: 0px'] {
     padding-top: 0;

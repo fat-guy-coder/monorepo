@@ -7,8 +7,8 @@
   >
     <slot name="control">
       <div
-        class="unified-trigger top"
-        :style="{ top: headerState.isVisible ? `${headerState.size}px` : '0' }"
+        class="unified-trigger horizontal top"
+        :class="{ 'is-hidden': !headerState.isVisible }"
       >
         <div class="control-group">
           <label v-if="headerState.isVisible" class="control-item">

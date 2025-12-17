@@ -4,17 +4,19 @@ import { resolve } from 'node:path'
 import { defineConfig, type PluginOption } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
-import Components from 'unplugin-vue-components/vite';
+//使用unplugin-vue-components插件自动引入components目录下的所有组件
+import Components from 'unplugin-vue-components/vite'
 import { compression, defineAlgorithm } from 'vite-plugin-compression2'
 import zlib from 'zlib'
 const outDir = resolve('../../static/myvue')
 
-
 // 确保NodeLocalStorage可用
 const ensureNodeLocalStorage = () => {
-  const existing = Reflect.get(globalThis, 'localStorage') as {
-    getItem?: (key: string) => string | null
-  } | undefined
+  const existing = Reflect.get(globalThis, 'localStorage') as
+    | {
+        getItem?: (key: string) => string | null
+      }
+    | undefined
   if (existing && typeof existing.getItem === 'function') {
     return
   }
@@ -59,9 +61,10 @@ export default defineConfig(async ({ command }) => {
     Components(),
     compression({
       algorithms: [
-        'gzip', defineAlgorithm('brotliCompress', {
+        'gzip',
+        defineAlgorithm('brotliCompress', {
           [zlib.constants.BROTLI_PARAM_QUALITY]: 6,
-        })
+        }),
       ],
       // deleteOriginalAssets: true,
       threshold: 500,
@@ -79,11 +82,10 @@ export default defineConfig(async ({ command }) => {
       },
       // open: true, // 启动时自动打开浏览器
       port: 8080, // 指定端口号
-
     },
     plugins,
     optimizeDeps: {
-      include: ['vue']
+      include: ['vue'],
     },
     build: {
       outDir,
@@ -95,14 +97,14 @@ export default defineConfig(async ({ command }) => {
         },
         output: {
           manualChunks: {
-            'vue': ['vue', 'vue-router', 'pinia'],
+            vue: ['vue', 'vue-router', 'pinia'],
           },
         },
       },
     },
     resolve: {
       alias: {
-        '@': fileURLToPath(new URL('./src', import.meta.url))
+        '@': fileURLToPath(new URL('./src', import.meta.url)),
       },
     },
     esbuild: {

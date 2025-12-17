@@ -75,6 +75,7 @@
 </template>
 
 <script lang="ts" setup>
+//vue编译器会自动引入components目录下的所有组件，但不是异步组件，这一步是为了将所有组件转换为异步组件，以优化初始加载性能
 import { Menu, RouteTab, ThemeChange, Navigation, Input, Button, message, Spin } from '@/components'
 import { computed, ref, watch, onMounted, onUnmounted, nextTick, provide } from 'vue'
 import {

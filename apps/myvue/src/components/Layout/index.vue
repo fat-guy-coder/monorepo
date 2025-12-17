@@ -1,7 +1,11 @@
 <template>
-  <section class="layout">
+  <section class="layout" :class="{ 'overflow-y-auto': isNotFixedHeaderAndFooter }">
     <!-- Header -->
-    <component v-if="headerComponent" :is="headerComponent" v-model:headerState="headerState">
+    <component
+      v-if="headerComponent && !isJustFixedFooter"
+      :is="headerComponent"
+      v-model:headerState="headerState"
+    >
     </component>
     <div
       class="resizer horizontal"
@@ -9,21 +13,32 @@
       @mousedown="handleResize('header', $event)"
     ></div>
     <!-- Body -->
-    <section class="layout-body" :class="{ 'overflow-auto': hasFixedParts }">
+    <section class="layout-body" :class="{ 'overflow-y-auto': isFixedHeaderOrFooter }">
       <component
-        v-if="sideBarComponents[0]"
-        :is="sideBarComponents[0]"
-        :style="siderStyle(leftSiderState.isVisible ? leftSiderState.size : 0)"
-        align="left"
+        v-if="headerComponent && isJustFixedFooter"
+        :is="headerComponent"
+        v-model:headerState="headerState"
       />
-      <component v-if="contentComponent" :is="contentComponent" />
+      <div class="layout-body-content" :class="{ 'overflow-y-auto': isFixedHeaderAndFooter }">
+        <component
+          v-if="sideBarComponents[0]"
+          :is="sideBarComponents[0]"
+          :style="siderStyle(leftSiderState.isVisible ? leftSiderState.size : 0)"
+          align="left"
+        />
+        <component v-if="contentComponent" :is="contentComponent" />
+        <component
+          v-if="sideBarComponents[1]"
+          :is="sideBarComponents[1]"
+          :style="siderStyle(rightSiderState.isVisible ? rightSiderState.size : 0)"
+          align="right"
+        />
+      </div>
       <component
-        v-if="sideBarComponents[1]"
-        :is="sideBarComponents[1]"
-        :style="siderStyle(rightSiderState.isVisible ? rightSiderState.size : 0)"
-        align="right"
+        v-if="footerComponent && isJustFixedHeader"
+        :is="footerComponent"
+        v-model:footerState="footerState"
       />
-
       <div
         class="resizer vertical"
         v-if="sideBarComponents[0] && leftSiderState.isVisible"
@@ -42,59 +57,67 @@
         class="unified-trigger vertical left"
         :style="{ left: leftSiderState.isVisible ? `${leftSiderState.size}px` : '0' }"
       >
-        <label v-if="leftSiderState.isVisible" class="control-item">
-          <span>显示</span>
-          <Switch v-model="leftSiderState.isVisible" size="small" />
-        </label>
-        <button v-else class="restore-trigger" @click="leftSiderState.isVisible = true">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            width="16"
-            height="16"
-            fill="currentColor"
-          >
-            <path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z" />
-          </svg>
-        </button>
+        <div class="control-group">
+          <label v-if="leftSiderState.isVisible" class="control-item">
+            <span>显示</span>
+            <Switch v-model="leftSiderState.isVisible" size="small" />
+          </label>
+          <button v-else class="restore-trigger" @click="leftSiderState.isVisible = true">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              width="16"
+              height="16"
+              fill="currentColor"
+            >
+              <path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z" />
+            </svg>
+          </button>
+        </div>
       </div>
+
       <div
         v-if="sideBarComponents[1]"
         class="unified-trigger vertical right"
-        :style="{ right: rightSiderState.isVisible ? `${rightSiderState.size}px` : '0' }"
+        :style="{ right: rightSiderState.isVisible ? `${rightSiderState.size + 10}px` : '0' }"
       >
-        <label v-if="rightSiderState.isVisible" class="control-item">
-          <span>显示</span>
-          <Switch v-model="rightSiderState.isVisible" size="small" />
-        </label>
-        <button v-else class="restore-trigger" @click="rightSiderState.isVisible = true">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            width="16"
-            height="16"
-            fill="currentColor"
-          >
-            <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
-          </svg>
-        </button>
+        <div class="control-group">
+          <label v-if="rightSiderState.isVisible" class="control-item">
+            <span>显示</span>
+            <Switch v-model="rightSiderState.isVisible" size="small" />
+          </label>
+          <button v-else class="restore-trigger" @click="rightSiderState.isVisible = true">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              width="16"
+              height="16"
+              fill="currentColor"
+            >
+              <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+            </svg>
+          </button>
+        </div>
       </div>
     </section>
-
     <!-- Footer -->
     <div
       class="resizer horizontal"
       v-if="footerComponent && footerState.isVisible"
       @mousedown="handleResize('footer', $event)"
     ></div>
-    <component v-if="footerComponent" :is="footerComponent" v-model:footerState="footerState" />
+    <component
+      v-if="footerComponent && !isJustFixedHeader"
+      :is="footerComponent"
+      v-model:footerState="footerState"
+    />
   </section>
 </template>
 
 <script setup lang="ts">
-import { computed, useSlots, type VNode, ref, type CSSProperties, reactive } from 'vue'
-import Switch from '@/components/Switch/index.vue'
+import { computed, useSlots, type VNode, reactive, type CSSProperties } from 'vue'
 import type { LayoutPartState } from './index'
+import { Switch } from '@/components'
 
 defineOptions({ name: 'Layout' })
 
@@ -139,6 +162,29 @@ const hasFixedParts = computed(() => {
   return hasFixedHeader && hasFixedFooter
 })
 
+// 计算是否只有固定的 Header
+const isJustFixedHeader = computed(() => {
+  return headerState.isFixed && !footerState.isFixed
+})
+
+// 计算是否只有固定的 Footer
+const isJustFixedFooter = computed(() => {
+  return !headerState.isFixed && footerState.isFixed
+})
+
+// 计算是否同时固定的 Header 和 Footer
+const isFixedHeaderAndFooter = computed(() => {
+  return headerState.isFixed && footerState.isFixed
+})
+
+//计算是否同时都不固定的 Header 和 Footer
+const isNotFixedHeaderAndFooter = computed(() => {
+  return !headerState.isFixed && !footerState.isFixed
+})
+// 计算是否固定的 Header 或 Footer
+const isFixedHeaderOrFooter = computed(() => {
+  return headerState.isFixed || footerState.isFixed
+})
 // --- Style & Resize Logic ---
 const MIN_SIDER_WIDTH = 40
 const MIN_HEADER_FOOTER_HEIGHT = 40
@@ -201,7 +247,6 @@ const footerComponent = computed(() => getComponentFromVNodes(defaultSlot, 'Foot
 const sideBarComponents = computed(() => getComponentsFromVNodes(defaultSlot, 'SideBar'))
 const contentComponent = computed(() => getComponentFromVNodes(defaultSlot, 'Content'))
 
-console.log(headerComponent)
 </script>
 
 <style lang="less">
@@ -210,19 +255,23 @@ console.log(headerComponent)
   flex-direction: column;
   flex: 1;
   width: 100%;
-  height: 80vh; // 改为 min-height 而不是 height
+  height: 100%; // 改为 min-height 而不是 height
   background: var(--color-background);
   position: relative;
 
-  .overflow-auto {
-    overflow-y: auto;
-  }
-
-  .layout-body {
+  .layout-body-content {
     display: flex;
     flex: 1;
     flex-direction: row;
     position: relative;
+  }
+
+  .overflow-y-auto {
+    overflow-y: auto;
+  }
+
+  &.overflow-y-auto {
+    overflow-y: auto;
   }
 
   .resizer {
@@ -285,12 +334,26 @@ console.log(headerComponent)
       transform-origin: center bottom;
       padding: 8px 4px;
       &.top {
+        top: 100%;
         border-top: none;
         border-radius: 0 0 4px 4px;
       }
+
+      &.is-hidden {
+        top: 0;
+      }
       &.bottom {
+        bottom: 100%;
         border-bottom: none;
         border-radius: 4px 4px 0 0;
+      }
+
+      &.top.is-hidden {
+        top: 0;
+      }
+
+      &.bottom.is-hidden {
+        top: -36px;
       }
     }
     &.vertical {
@@ -300,7 +363,7 @@ console.log(headerComponent)
       display: flex;
       flex-direction: column;
       gap: 1rem;
-      transform-origin: center right;
+
       &.left {
         border-left: none;
         border-radius: 0 4px 4px 0;
