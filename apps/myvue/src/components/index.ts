@@ -32,6 +32,7 @@ const InputNumber = defineAsyncComponent(() => import('./InputNumber/index.vue')
 const TimePicker = defineAsyncComponent(() => import('./TimePicker/index.vue'))
 const Upload = defineAsyncComponent(() => import('./Upload/index.vue'))
 const Transfer = defineAsyncComponent(() => import('./Transfer/index.vue'))
+const Tooltip = defineAsyncComponent(() => import('./Tooltip/index.vue'))
 // const Form = defineAsyncComponent(() => import('./Form/Form.vue'))
 // const FormItem = defineAsyncComponent(() => import('./Form/FormItem.vue'))
 
@@ -48,8 +49,8 @@ const Content = createMarkedAsyncComponent(() => import('./Layout/Content.vue'),
 const Footer = createMarkedAsyncComponent(() => import('./Layout/Footer.vue'), 'Footer');
 
 //page
-const PageHeader = createMarkedAsyncComponent(() => import('./page/pageHeader.vue'), 'PageHeader');
-const PageFooter = createMarkedAsyncComponent(() => import('./page/pageFooter.vue'), 'PageFooter');
+const PageHeader = createMarkedAsyncComponent(() => import('./Page/pageHeader.vue'), 'PageHeader');
+const PageFooter = createMarkedAsyncComponent(() => import('./Page/pageFooter.vue'), 'PageFooter');
 
 export {
   Layout,
@@ -92,4 +93,5 @@ export {
   // FormItem,
   PageHeader,
   PageFooter,
+  Tooltip,
 }

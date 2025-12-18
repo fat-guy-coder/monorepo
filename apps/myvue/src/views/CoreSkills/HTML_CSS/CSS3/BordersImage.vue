@@ -115,7 +115,7 @@ border-image-repeat: stretch repeat; /* 水平拉伸，垂直重复 */</code></p
         <div class="demo-controls">
           <div class="control-group">
             <label>边框图像源</label>
-            <select v-model="borderImageSource">
+            <Select v-model="borderImageSource">
               <option v-for="source in imageSources" :key="source.value" :value="source.value">
                 {{ source.label }}
               </option>
@@ -139,7 +139,7 @@ border-image-repeat: stretch repeat; /* 水平拉伸，垂直重复 */</code></p
 
           <div class="control-group">
             <label>重复方式 (repeat)</label>
-            <select v-model="borderImageRepeat">
+            <Select v-model="borderImageRepeat">
               <option value="stretch">stretch (拉伸)</option>
               <option value="repeat">repeat (重复)</option>
               <option value="round">round (圆整)</option>

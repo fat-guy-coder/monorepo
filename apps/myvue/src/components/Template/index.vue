@@ -94,7 +94,6 @@
                       </Card>
                     </Col>
                     <Col v-else span="24">
-                      ss
                       <Row :gutter="currentConfig.grid?.gutter || 0" :key="item.id">
                         <Col v-bind="currentConfig?.grid?.layout?.keyPoints">
                           <Card :id="item.id"  :title="item.name">
@@ -248,7 +247,7 @@ const currentConfig = computed(
   () => {
 
     const config = (templateConfig as any)[currentMode.value] || templateConfig.normal || {}
-    console.log(config.grid?.layout.keyPoints);
+    console.log(config.grid);
     return config
   }
 )

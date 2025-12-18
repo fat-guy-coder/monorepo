@@ -26,7 +26,7 @@
       <div class="controls">
         <div class="control-group">
           <label>选择contain类型：</label>
-          <select v-model="selectedContain">
+          <Select v-model="selectedContain">
             <option v-for="type in containTypes" :key="type.value" :value="type.value">
               {{ type.label }}
             </option>

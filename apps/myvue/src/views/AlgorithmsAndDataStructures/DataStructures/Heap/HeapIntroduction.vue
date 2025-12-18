@@ -211,7 +211,7 @@
           <div class="demo-controls">
             <div class="control-group">
               <label>堆类型:</label>
-              <select v-model="heapType">
+              <Select v-model="heapType">
                 <option value="max">最大堆</option>
                 <option value="min">最小堆</option>
               </select>

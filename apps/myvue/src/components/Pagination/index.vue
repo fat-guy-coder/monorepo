@@ -40,7 +40,7 @@
 
     <!-- 每页条数选择器 -->
     <div v-if="showPageSizeChanger && mode === 'large'" class="pagination-sizer">
-      <select v-model="internalPageSize" :disabled="disabled" @change="handlePageSizeChange">
+      <Select v-model="internalPageSize" :disabled="disabled" @change="handlePageSizeChange">
         <option v-for="size in pageSizeOptions" :key="size" :value="size">{{ size }} 条/页</option>
       </select>
     </div>

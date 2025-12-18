@@ -119,11 +119,11 @@
       <div class="converter">
         <div class="converter-input">
           <input type="text" v-model="inputValue" placeholder="输入数字">
-          <select v-model="fromBase">
+          <Select v-model="fromBase">
             <option v-for="base in bases" :key="base.value" :value="base.value">{{ base.label }}</option>
           </select>
           <span>转换为</span>
-          <select v-model="toBase">
+          <Select v-model="toBase">
             <option v-for="base in bases" :key="base.value" :value="base.value">{{ base.label }}</option>
           </select>
           <button @click="convert">转换</button>

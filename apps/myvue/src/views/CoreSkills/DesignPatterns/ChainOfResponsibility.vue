@@ -209,7 +209,7 @@ console.log(handlerA.handle(600));  // 无法处理</code></pre>
             <div class="demo-controls">
               <div class="request-form">
                 <label>审批类型:</label>
-                <select v-model="requestType">
+                <Select v-model="requestType">
                   <option value="leave">请假申请</option>
                   <option value="expense">报销申请</option>
                   <option value="purchase">采购申请</option>

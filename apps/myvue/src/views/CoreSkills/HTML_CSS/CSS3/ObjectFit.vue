@@ -33,7 +33,7 @@ img{
         <div class="visual-example">
           <h3>object-fit</h3>
           <div class="controls">
-            <select v-model="activeType" class="type-select">
+            <Select v-model="activeType" class="type-select">
               <option v-for="type in objectFitTypes" :key="type.value" :value="type.value">
                 {{ type.label }}
               </option>

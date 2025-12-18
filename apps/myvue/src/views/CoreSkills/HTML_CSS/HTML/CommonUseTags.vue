@@ -258,7 +258,7 @@ const htmlTags: Type[] = [
         type: '表单元素',
         id: 'form-element-select',
         description: '下拉选择框',
-        example: `<select>
+        example: `<Select>
   <option value="1">选项1</option>
   <option value="2">选项2</option>
 </select>`

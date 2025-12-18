@@ -1,5 +1,5 @@
 import fs from 'fs'
-import path ,from 'path'
+import path from 'path'
 import * as compiler from '@vue/compiler-sfc'
 import MagicString from 'magic-string'
 import type { SupportedLanguage } from './index'

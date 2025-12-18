@@ -1,6 +1,6 @@
 <template>
   <main class="ui-layout-content" :style="componentStyle">
-    <slot></slot>
+    <slot>content</slot>
   </main>
 </template>
 
@@ -19,7 +19,7 @@ const componentStyle = computed(() => {
 <style lang="less" scoped>
 .ui-layout-content {
   --content-bg: var(--color-background); // PaleGreen
-
+  text-align: center;
   background: var(--content-bg);
   width: 100%;
 }

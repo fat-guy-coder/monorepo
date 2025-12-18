@@ -43,7 +43,7 @@
               <div class="control-item-content-item" v-for="child in item.children" :key="child.value">
                 <label>{{ child.label }}({{ child.value }})</label>
                 <div v-if="child.type === 'select'">
-                  <select style="width: 100%" v-model:value="(texyOptions as any)[item.value][child.value]"
+                  <Select style="width: 100%" v-model:value="(texyOptions as any)[item.value][child.value]"
                     :options="child.options" />
                 </div>
                 <div v-if="child.type === 'number'">
@@ -51,8 +51,8 @@
                     :min="0" :max="900"></a-input-number>
                 </div>
                 <div v-if="child.type === 'select-number'">
-                  <select style="width: 100%" v-model:value="(texyOptions as any)[item.value][child.value]"
-                    :options="child.options"></select>
+                  <Select style="width: 100%" v-model:value="(texyOptions as any)[item.value][child.value]"
+                    :options="child.options"></Select>
                   <a-input-number style="width: 100%" v-model:value="(texyOptions as any)[item.value][child.value]"
                     :min="0" :max="900"></a-input-number>
                 </div>
@@ -134,6 +134,7 @@
 
 <script setup lang="ts">
 import { ref, computed, reactive, onBeforeMount } from 'vue'
+import { Select } from '@/components'
 
 interface Type {
   label: string

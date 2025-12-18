@@ -110,7 +110,7 @@
           <div class="controls">
             <div class="control-group">
               <label>绘图类型:</label>
-              <select v-model="drawType">
+              <Select v-model="drawType">
                 <option value="shapes">基本形状</option>
                 <option value="gradient">渐变效果</option>
                 <option value="text">文本效果</option>

@@ -16,9 +16,9 @@
       <div class="controls">
         <div class="control-group">
           <label>混合模式：</label>
-          <select v-model="selectedMode">
+          <Select v-model="selectedMode">
             <option v-for="mode in blendModes" :key="mode">{{ mode }}</option>
-          </select>
+          </Select>
         </div>
 
         <div class="control-group">

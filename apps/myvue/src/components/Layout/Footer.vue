@@ -16,6 +16,10 @@
             <span>固定位置</span>
             <Switch v-model="footerState.isFixed" size="small" />
           </label>
+          <label v-if="footerState.isVisible" class="control-item">
+            <span>可折叠</span>
+            <Switch v-model="footerState.collapsible" size="small" />
+          </label>
           <button v-else class="restore-trigger" @click="footerState.isVisible = true">
             <svg
               xmlns="http://www.w3.org/2000/svg"

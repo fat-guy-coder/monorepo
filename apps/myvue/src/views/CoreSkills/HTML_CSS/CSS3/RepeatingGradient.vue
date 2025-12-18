@@ -58,7 +58,7 @@
           </div>
           <div class="control-row">
             <label>重复方式:</label>
-            <select v-model="repeatType">
+            <Select v-model="repeatType">
               <option value="fixed">固定尺寸</option>
               <option value="stretch">拉伸填充</option>
             </select>
@@ -85,14 +85,14 @@
           <h3>径向渐变参数</h3>
           <div class="control-row">
             <label>形状:</label>
-            <select v-model="radialParams.shape">
+            <Select v-model="radialParams.shape">
               <option value="circle">圆形 (circle)</option>
               <option value="ellipse">椭圆 (ellipse)</option>
             </select>
           </div>
           <div class="control-row">
             <label>大小:</label>
-            <select v-model="radialParams.size">
+            <Select v-model="radialParams.size">
               <option value="closest-side">closest-side</option>
               <option value="farthest-side">farthest-side</option>
               <option value="closest-corner">closest-corner</option>

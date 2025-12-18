@@ -45,7 +45,7 @@
           </div>
           <div class="control-group">
             <label>边框样式：</label>
-            <select v-model="strokeDasharray">
+            <Select v-model="strokeDasharray">
               <option value="">实线</option>
               <option value="5,5">虚线</option>
               <option value="10,5">短划线</option>

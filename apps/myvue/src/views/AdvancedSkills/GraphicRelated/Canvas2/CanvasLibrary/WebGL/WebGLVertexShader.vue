@@ -235,7 +235,7 @@ void main() {
               <div class="controls">
                 <div class="control-group">
                   <label>变换类型:</label>
-                  <select v-model="transformType">
+                  <Select v-model="transformType">
                     <option value="translation">平移</option>
                     <option value="rotation">旋转</option>
                     <option value="scale">缩放</option>

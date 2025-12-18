@@ -90,7 +90,7 @@
             <div class="demo-controls">
               <div class="control-group">
                 <label>操作类型:</label>
-                <select v-model="demoOperation" @change="resetDemo">
+                <Select v-model="demoOperation" @change="resetDemo">
                   <option value="find">查找 (Find)</option>
                   <option value="union">合并 (Union)</option>
                   <option value="pathCompression">路径压缩</option>

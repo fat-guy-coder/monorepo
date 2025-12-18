@@ -39,12 +39,12 @@
         <div v-for="attr in attributes.filter(attr => !attr.hiddenInList)" :key="attr.name" class="controller-item">
           <div class="controller-item-name">{{ attr.name }}</div>
           <div class="controller-item-content" v-if="scrollContainerStyleList.includes(attr.index)">
-            <select v-if="attr.type === 'select'" style="width: 100%"
+            <Select v-if="attr.type === 'select'" style="width: 100%"
               v-model:value="(scrollContainerStyle as any)[attr.index]" :options="attr.values" />
             <a-input v-if="attr.type === 'input'" v-model:value="(scrollContainerStyle as any)[attr.index]" />
           </div>
           <div class="controller-item-content" v-if="scrollItemStyleList.includes(attr.index)">
-            <select v-if="attr.type === 'select'" v-model:value="(scrollItemStyle as any)[attr.index]"
+            <Select v-if="attr.type === 'select'" v-model:value="(scrollItemStyle as any)[attr.index]"
               :options="attr.values" />
             <a-input v-if="attr.type === 'input'" v-model:value="(scrollItemStyle as any)[attr.index]" />
           </div>

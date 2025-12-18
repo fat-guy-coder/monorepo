@@ -92,7 +92,7 @@ aspect-ratio: 1;</code></pre>
         <div class="vue-demo">
           <div class="demo-controls">
             <label>选择比例：</label>
-            <select v-model="selectedRatio">
+            <Select v-model="selectedRatio">
               <option v-for="ratio in ratios" :key="ratio" :value="ratio">{{ ratio }}</option>
             </select>
           </div>

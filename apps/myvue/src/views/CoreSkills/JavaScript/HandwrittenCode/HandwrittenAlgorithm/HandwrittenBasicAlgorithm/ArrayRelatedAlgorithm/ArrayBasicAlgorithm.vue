@@ -8,7 +8,7 @@
     <ScrollNav :list="filteredAlgorithms" :keyMap="{ title: 'title' }" />
 
     <div class="search-section">
-      <a-input type="text" v-model:value="search" allow-clear @change="handleSearch" placeholder="搜索算法" />
+      <Input type="text" v-model:value="search" allow-clear @change="handleSearch" placeholder="搜索算法" />
     </div>
 
     <!-- 算法导航 -->
@@ -100,7 +100,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import { Input as AInput } from 'ant-design-vue'
+import { Input } from '@/components'
 import ScrollNav from '@/components/Nav/ScrollNav.vue'
 import { debounce } from '@/function/common'
 

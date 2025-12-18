@@ -21,9 +21,6 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
-    "@codemirror/lang-css": "^6.3.1",
-    "@codemirror/lang-html": "^6.4.11",
-    "@codemirror/lang-javascript": "^6.2.4",
     "@vue/compiler-sfc": "^3.5.25",
     "codemirror": "^6.0.2",
     "less": "^4.4.2",
@@ -32,7 +29,6 @@
     "prismjs": "^1.29.0",
     "utils": "workspace:^",
     "vue": "3.6.0-alpha.1",
-    "vue-codemirror": "^6.1.1",
     "vue-router": "^4.5.0"
   },
   "devDependencies": {

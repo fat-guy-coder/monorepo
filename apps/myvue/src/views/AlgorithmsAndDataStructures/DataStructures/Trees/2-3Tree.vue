@@ -124,7 +124,7 @@
             <div class="demo-controls">
               <div class="control-group">
                 <label>操作类型:</label>
-                <select v-model="demoOperation" @change="resetDemo">
+                <Select v-model="demoOperation" @change="resetDemo">
                   <option value="search">查找</option>
                   <option value="insert">插入</option>
                   <option value="delete">删除</option>

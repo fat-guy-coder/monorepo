@@ -375,7 +375,7 @@ timer.start();</code></pre>
             <div class="demo-controls">
               <div class="control-group">
                 <label>定时器类型：</label>
-                <select v-model="demoType">
+                <Select v-model="demoType">
                   <option value="timeout">setTimeout</option>
                   <option value="interval">setInterval</option>
                   <option value="precision">高精度定时器</option>

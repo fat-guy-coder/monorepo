@@ -102,7 +102,7 @@
             <div class="demo-controls">
               <div class="control-group">
                 <label>数组大小:</label>
-                <select v-model="arraySize" @change="initializeArray">
+                <Select v-model="arraySize" @change="initializeArray">
                   <option value="4">4</option>
                   <option value="8">8</option>
                   <option value="16">16</option>

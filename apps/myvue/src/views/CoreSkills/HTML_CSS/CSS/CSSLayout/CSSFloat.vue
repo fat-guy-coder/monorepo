@@ -27,7 +27,7 @@
       </div>
       <div class="control-group">
         <label>清除方式：</label>
-        <select v-model="clearMethod" class="styled-select">
+        <Select v-model="clearMethod" class="styled-select">
           <option v-for="method in clearMethods" :key="method.value" :value="method.value">
             {{ method.label }}
           </option>

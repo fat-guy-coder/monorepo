@@ -53,7 +53,7 @@
           <div class="filters">
             <div class="filter">
               <label>排序：</label>
-              <select v-model="sortBy">
+              <Select v-model="sortBy">
                 <option value="popularity">流行度</option>
                 <option value="ease">易用性</option>
                 <option value="features">功能丰富度</option>

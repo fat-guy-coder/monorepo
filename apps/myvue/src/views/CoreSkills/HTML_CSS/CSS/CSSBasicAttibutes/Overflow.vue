@@ -26,7 +26,7 @@
         <div class="controls-panel">
           <div class="control-item">
             <label>选择 overflow 类型</label>
-            <select v-model="overflowType">
+            <Select v-model="overflowType">
               <option v-for="type in overflowTypes" :key="type">{{ type }}</option>
             </select>
           </div>

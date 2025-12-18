@@ -24,7 +24,7 @@
         <div class="controls-panel">
           <div class="control-item">
             <label>列表类型</label>
-            <select v-model="listType">
+            <Select v-model="listType">
               <option v-for="type in listTypes" :key="type.value" :value="type">
                 {{ type.label }}
               </option>

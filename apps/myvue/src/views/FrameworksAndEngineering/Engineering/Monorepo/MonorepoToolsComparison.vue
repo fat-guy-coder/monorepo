@@ -66,7 +66,7 @@
           <div class="comparison-filters">
             <div class="filter">
               <label>排序方式：</label>
-              <select v-model="sortBy">
+              <Select v-model="sortBy">
                 <option value="default">默认</option>
                 <option value="performance">性能</option>
                 <option value="popularity">流行度</option>

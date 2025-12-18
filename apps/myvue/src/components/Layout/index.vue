@@ -1,62 +1,43 @@
 <template>
-  <section class="layout" :class="{ 'overflow-y-auto': isNotFixedHeaderAndFooter }">
+  <section class="layout"
+    :class="{ 'overflow-y-auto': isNotFixedHeaderAndFooter, 'sidebar-full-height-layout': isAllFullHeight }">
     <!-- Header -->
-    <component
-      v-if="headerComponent && !isJustFixedFooter"
-      :is="headerComponent"
-      v-model:headerState="headerState"
-    >
+    <component v-if="headerComponent && !isJustFixedFooter && !isAllFullHeight" :is="headerComponent"
+      v-model:headerState="headerState">
     </component>
-    <div
-      class="resizer horizontal"
-      v-if="headerComponent && headerState.isVisible"
-      @mousedown="handleResize('header', $event)"
-    ></div>
+    <component v-if="sideBarComponents[0] && isAllFullHeight" :is="sideBarComponents[0]"
+      :style="siderStyle({ width: leftSiderState.isVisible ? leftSiderState.size : 0, position: leftSiderState.isFixed ? 'sticky' : 'static', top: leftSiderState.top })"
+      align="left" />
+    <div class="resizer vertical" v-if="sideBarComponents[0] && leftSiderState.isVisible && isAllFullHeight"
+      @mousedown="handleResize('leftSider', $event)" :style="{ left: `${leftSiderState.size}px` }"></div>
+    <div class="resizer vertical" v-if="sideBarComponents[1] && rightSiderState.isVisible && isAllFullHeight"
+      @mousedown="handleResize('rightSider', $event)" :style="{ right: `${offsetRightSiderLeft}px` }"></div>
+    <div class="resizer horizontal" v-if="headerComponent && headerState.isVisible && !isAllFullHeight"
+      @mousedown="handleResize('header', $event)"></div>
     <!-- Body -->
-    <section class="layout-body" :class="{ 'overflow-y-auto': isFixedHeaderOrFooter }">
-      <component
-        v-if="headerComponent && isJustFixedFooter"
-        :is="headerComponent"
-        v-model:headerState="headerState"
-      />
-      <div class="layout-body-content" :class="{ 'overflow-y-auto': isFixedHeaderAndFooter }">
-        <component
-          v-if="sideBarComponents[0]"
-          :is="sideBarComponents[0]"
-          :style="siderStyle(leftSiderState.isVisible ? leftSiderState.size : 0)"
-          align="left"
-        />
+    <section class="layout-body" :class="{ 'overflow-y-auto': isFixedHeaderOrFooter && !isAllFullHeight }">
+      <!-- Header -->
+      <component v-if="headerComponent && (isJustFixedFooter || isAllFullHeight)" :is="headerComponent"
+        v-model:headerState="headerState" />
+      <!-- content-container -->
+      <div class="layout-content" :class="{ 'overflow-y-auto': isFixedHeaderAndFooter }">
+        <component v-if="sideBarComponents[0] && !isAllFullHeight" :is="sideBarComponents[0]"
+          :style="siderStyle({ width: leftSiderState.isVisible ? leftSiderState.size : 0, position: leftSiderState.isFixed ? 'sticky' : 'static', top: leftSiderState.top })"
+          align="left" />
         <component v-if="contentComponent" :is="contentComponent" />
-        <component
-          v-if="sideBarComponents[1]"
-          :is="sideBarComponents[1]"
-          :style="siderStyle(rightSiderState.isVisible ? rightSiderState.size : 0)"
-          align="right"
-        />
+        <component v-if="sideBarComponents[1] && !isAllFullHeight" :is="sideBarComponents[1]"
+          :style="siderStyle({ width: rightSiderState.isVisible ? rightSiderState.size : 0, position: rightSiderState.isFixed ? 'sticky' : 'static', top: rightSiderState.top })"
+          align="right" />
       </div>
-      <component
-        v-if="footerComponent && isJustFixedHeader"
-        :is="footerComponent"
-        v-model:footerState="footerState"
-      />
-      <div
-        class="resizer vertical"
-        v-if="sideBarComponents[0] && leftSiderState.isVisible"
-        @mousedown="handleResize('leftSider', $event)"
-        :style="{ left: `${leftSiderState.size - 1}px` }"
-      ></div>
-      <div
-        class="resizer vertical"
-        v-if="sideBarComponents[1] && rightSiderState.isVisible"
-        @mousedown="handleResize('rightSider', $event)"
-        :style="{ right: `${rightSiderState.size - 1}px` }"
-      ></div>
-
-      <div
-        v-if="sideBarComponents[0]"
-        class="unified-trigger vertical left"
-        :style="{ left: leftSiderState.isVisible ? `${leftSiderState.size}px` : '0' }"
-      >
+      <!-- Footer -->
+      <component v-if="footerComponent && (isJustFixedHeader || isAllFullHeight)" :is="footerComponent"
+        v-model:footerState="footerState" />
+      <div class="resizer vertical" v-if="sideBarComponents[0] && leftSiderState.isVisible && !isAllFullHeight"
+        @mousedown="handleResize('leftSider', $event)" :style="{ left: `${leftSiderState.size}px` }"></div>
+      <div class="resizer vertical" v-if="sideBarComponents[1] && rightSiderState.isVisible && !isAllFullHeight"
+        @mousedown="handleResize('rightSider', $event)" :style="{ right: `${offsetRightSiderLeft}px` }"></div>
+      <div v-if="sideBarComponents[0]" class="unified-trigger vertical left"
+        :style="{ left: leftSiderState.isVisible ? `${leftSiderState.size}px` : '0' }">
         <div class="control-group">
           <label v-if="leftSiderState.isVisible" class="control-item">
             <span>是否显示</span>
@@ -66,25 +47,23 @@
             <span>固定位置</span>
             <Switch v-model="leftSiderState.isFixed" size="small" />
           </label>
+          <label v-if="leftSiderState.isVisible" class="control-item">
+            <span>可折叠</span>
+            <Switch v-model="leftSiderState.collapsible" size="small" />
+          </label>
+          <label v-if="leftSiderState.isVisible" class="control-item">
+            <span>占满高度</span>
+            <Switch v-model="leftSiderState.isFullHeight" size="small" />
+          </label>
           <button v-else class="restore-trigger" @click="leftSiderState.isVisible = true">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              width="16"
-              height="16"
-              fill="currentColor"
-            >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
               <path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z" />
             </svg>
           </button>
         </div>
       </div>
-
-      <div
-        v-if="sideBarComponents[1]"
-        class="unified-trigger vertical right"
-        :style="{ right: rightSiderState.isVisible ? `${rightSiderState.size + 10}px` : '0' }"
-      >
+      <div v-if="sideBarComponents[1]" class="unified-trigger vertical right"
+        :style="{ right: rightSiderState.isVisible ? `${offsetRightSiderLeft}px` : '0' }">
         <div class="control-group">
           <label v-if="rightSiderState.isVisible" class="control-item">
             <span>是否显示</span>
@@ -94,14 +73,16 @@
             <span>固定位置</span>
             <Switch v-model="rightSiderState.isFixed" size="small" />
           </label>
+          <label v-if="rightSiderState.isVisible" class="control-item">
+            <span>可折叠</span>
+            <Switch v-model="rightSiderState.collapsible" size="small" />
+          </label>
+          <label v-if="rightSiderState.isVisible" class="control-item">
+            <span>占满高度</span>
+            <Switch v-model="rightSiderState.isFullHeight" size="small" />
+          </label>
           <button v-else class="restore-trigger" @click="rightSiderState.isVisible = true">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              width="16"
-              height="16"
-              fill="currentColor"
-            >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
               <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
             </svg>
           </button>
@@ -109,16 +90,13 @@
       </div>
     </section>
     <!-- Footer -->
-    <div
-      class="resizer horizontal"
-      v-if="footerComponent && footerState.isVisible"
-      @mousedown="handleResize('footer', $event)"
-    ></div>
-    <component
-      v-if="footerComponent && !isJustFixedHeader"
-      :is="footerComponent"
-      v-model:footerState="footerState"
-    />
+    <div class="resizer horizontal" v-if="footerComponent && footerState.isVisible && !isAllFullHeight"
+      @mousedown="handleResize('footer', $event)"></div>
+    <component v-if="footerComponent && !isJustFixedHeader && !isAllFullHeight" :is="footerComponent"
+      v-model:footerState="footerState" />
+    <component v-if="sideBarComponents[1] && isAllFullHeight" :is="sideBarComponents[1]"
+      :style="siderStyle({ width: rightSiderState.isVisible ? rightSiderState.size : 0, position: rightSiderState.isFixed ? 'sticky' : 'static', top: rightSiderState.top })"
+      align="right" />
   </section>
 </template>
 
@@ -126,6 +104,7 @@
 import { computed, useSlots, type VNode, reactive, type CSSProperties } from 'vue'
 import type { LayoutPartState } from './index'
 import { Switch } from '@/components'
+import { throttle } from '@/function/common'
 
 defineOptions({ name: 'Layout' })
 
@@ -147,12 +126,14 @@ const leftSiderState = reactive<LayoutPartState>({
   isVisible: true,
   isFixed: true,
   size: 200,
+  top: 0,
 })
 
 const rightSiderState = reactive<LayoutPartState>({
   isVisible: true,
   isFixed: true,
   size: 200,
+  top: 0,
 })
 
 const stateMap = {
@@ -166,7 +147,6 @@ const stateMap = {
 const hasFixedParts = computed(() => {
   const hasFixedHeader = headerComponent.value && headerState.isVisible && headerState.isFixed
   const hasFixedFooter = footerComponent.value && footerState.isVisible && footerState.isFixed
-  console.log(hasFixedHeader && hasFixedFooter)
   return hasFixedHeader && hasFixedFooter
 })
 
@@ -193,19 +173,34 @@ const isNotFixedHeaderAndFooter = computed(() => {
 const isFixedHeaderOrFooter = computed(() => {
   return headerState.isFixed || footerState.isFixed
 })
+
+//因为动态切换overflow元素带来的滚动条宽度变化，导致的偏移修复
+const offsetRightSiderLeft = computed(() => {
+  return rightSiderState.size + (isFixedHeaderAndFooter.value ? 10 : 0)
+})
+
+
+// 计算sidebar是否左右侧都占满高度
+const isAllFullHeight = computed(() => {
+  return leftSiderState.isFullHeight && rightSiderState.isFullHeight
+})
+
 // --- Style & Resize Logic ---
 const MIN_SIDER_WIDTH = 40
 const MIN_HEADER_FOOTER_HEIGHT = 40
 
-const siderStyle = (width: number): CSSProperties => ({
+const siderStyle = ({ width, position, top }: CSSProperties): CSSProperties => ({
   width: `${width}px`,
   flexBasis: `${width}px`,
   flexShrink: 0,
   overflowX: 'hidden',
   overflowY: 'auto',
+  position: position,
+  top: `${top}px`,
 })
 
-const handleResize = (target: keyof typeof stateMap, event: MouseEvent) => {
+
+const handleResize = throttle((target: keyof typeof stateMap, event: MouseEvent) => {
   event.preventDefault()
   const startX = event.clientX,
     startY = event.clientY
@@ -239,7 +234,7 @@ const handleResize = (target: keyof typeof stateMap, event: MouseEvent) => {
   document.body.style.userSelect = 'none'
   document.body.style.cursor =
     target === 'header' || target === 'footer' ? 'row-resize' : 'col-resize'
-}
+}, 200)
 
 // --- Slot Discovery ---
 const slots = useSlots()
@@ -266,19 +261,32 @@ const contentComponent = computed(() => getComponentFromVNodes(defaultSlot, 'Con
   background: var(--color-background);
   position: relative;
 
-  .layout-body-content {
+
+  &.sidebar-full-height-layout {
+    flex-direction: row;
+
+    .layout-body {
+      flex: 1;
+    }
+
+  }
+
+  .layout-content {
     display: flex;
     flex: 1;
     flex-direction: row;
-    position: relative;
   }
 
   .overflow-y-auto {
     overflow-y: auto;
+    height: 100%;
+    position: relative;
   }
 
   &.overflow-y-auto {
     overflow-y: auto;
+    height: 100%;
+    position: relative;
   }
 
   .resizer {
@@ -302,6 +310,7 @@ const contentComponent = computed(() => getComponentFromVNodes(defaultSlot, 'Con
       position: absolute;
       top: 0;
       bottom: 0;
+
       &::before {
         top: 0;
         bottom: 0;
@@ -309,6 +318,7 @@ const contentComponent = computed(() => getComponentFromVNodes(defaultSlot, 'Con
         right: -4px;
       }
     }
+
     &.horizontal {
       height: 2px;
       cursor: row-resize;
@@ -332,14 +342,17 @@ const contentComponent = computed(() => getComponentFromVNodes(defaultSlot, 'Con
     z-index: 25;
     padding: 4px 12px;
     display: flex;
+
     &:hover {
       background: var(--color-background);
     }
+
     &.horizontal {
       left: 50%;
       transform: translateX(-50%);
       transform-origin: center bottom;
       padding: 8px 4px;
+
       &.top {
         top: 100%;
         border-top: none;
@@ -349,6 +362,7 @@ const contentComponent = computed(() => getComponentFromVNodes(defaultSlot, 'Con
       &.is-hidden {
         top: 0;
       }
+
       &.bottom {
         bottom: 100%;
         border-bottom: none;
@@ -360,11 +374,12 @@ const contentComponent = computed(() => getComponentFromVNodes(defaultSlot, 'Con
       }
 
       &.bottom.is-hidden {
-        top: -36px;
+        top: -2rem;
       }
     }
+
     &.vertical {
-      top: 20rem;
+      top: 50%;
       transform: translateY(-50%);
       padding: 8px 4px;
       display: flex;
@@ -374,19 +389,34 @@ const contentComponent = computed(() => getComponentFromVNodes(defaultSlot, 'Con
       &.left {
         border-left: none;
         border-radius: 0 4px 4px 0;
+
       }
 
       &.right {
         border-right: none;
         border-radius: 4px 0 0 4px;
       }
+
+      &.is-hidden {
+        left: 0px;
+      }
+
+      &.left.is-hidden {
+        left: -2rem;
+      }
+
+      &.right.is-hidden {
+        right: -2rem;
+      }
     }
+
     .control-group {
       display: flex;
       flex-direction: column;
       gap: 1.5rem;
       align-items: center;
       background-color: transparent;
+
       .control-item {
         display: flex;
         align-items: center;
@@ -395,6 +425,7 @@ const contentComponent = computed(() => getComponentFromVNodes(defaultSlot, 'Con
         cursor: pointer;
         white-space: nowrap;
       }
+
       .restore-trigger {
         border: none;
         background: transparent;

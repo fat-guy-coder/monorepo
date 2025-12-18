@@ -339,7 +339,7 @@
       "id": 10,
       "title": "select和option",
       "content": "创建下拉选择列表，option定义选项。",
-      "example": "<select><option value=\"1\">选项1</option></select>",
+      "example": "<Select><option value=\"1\">选项1</option></select>",
       "importance": 2,
       "frequency": 2
     },
