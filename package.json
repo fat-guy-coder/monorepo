@@ -4,6 +4,7 @@
   "description": "我的项目啊",
   "main": "main.js",
   "type": "module",
+  "packageManager": "pnpm@9.15.4",
   "devDependencies": {
     "@inquirer/prompts": "^8.0.1",
     "@tsconfig/node22": "^22.0.0",
@@ -33,25 +34,24 @@
     "gen": "./bin/cli.js"
   },
   "scripts": {
-    "//-- Primary Dev Command --//": "",
-    "dev": "pnpm mf:build && run-p \"dev:**\"",
-
     "//-- Individual Dev Servers --//": "",
-    "dev:main": "pnpm --filter @ld/main run dev",
-    "dev:myvue": "pnpm --filter myvue run dev",
-    "dev:mf": "pnpm --filter @ld/micro-frontend run dev",
-
+    "main:dev": "pnpm --filter @ld/main run dev",
+    "myvue:dev": "pnpm --filter myvue run dev",
+    "//-- Turbo Build Commands --//": "",
+    "turbo:all:build": "turbo run build",
+    "turbo:myvue:build": "turbo run build --filter=myvue",
+    "turbo:main:build": "turbo run build --filter=@ld/main",
+    "turbo:micro-frontend:build": "turbo run build --filter=@ld/micro-frontend",
+    "turbo:project:build": "turbo run build --filter=\"$1\"",
     "//-- Production Build --//": "",
-    "build:prod": "pnpm mf:build && pnpm myvue:build && pnpm main:build",
-    "preview:prod": "vite preview --outDir dist --port 9090",
-
-    "//-- Individual Build & Preview --//": "",
     "main:build": "pnpm --filter @ld/main run build",
     "myvue:build": "pnpm --filter myvue run build",
     "mf:build": "pnpm --filter @ld/micro-frontend run build",
-    "myvue:preview": "pnpm --filter myvue preview --port 8080",
-    "main:preview": "pnpm --filter @ld/main preview --port 9090",
-
+    "all:build": "run-p \"build:**\"",
+    "//--  Preview --//": "",
+    "preview:myvue": "pnpm --filter myvue preview --port 8080",
+    "preview:main": "pnpm --filter @ld/main preview --port 9090",
+    "prod:preview": "run-p \"preview:**\"",
     "//-- Other --//": "",
     "g": "pnpm -F myvue g",
     "translate": "pnpm -F myvue translate",

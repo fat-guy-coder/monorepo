@@ -12,12 +12,6 @@
 - **功能**: 前端技术知识库，包含JavaScript、CSS、框架等学习内容
 - **特色**: 模块化设计，响应式布局，现代化UI
 
-### apps/svelte - Svelte 学习应用
-
-- **框架**: Svelte + GASP + SVG + Canvas
-- **功能**: 动画和图形处理学习
-- **特色**: 高性能动画，交互式图形
-
 ### apps/express - 后端服务
 
 - **框架**: Express + TypeScript

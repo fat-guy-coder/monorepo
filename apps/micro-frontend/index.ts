@@ -25,7 +25,7 @@ export interface StartOptions {
 }
 
 interface AppAssets {
-  scripts: string[];
+  scripts: ScriptInfo[];
   styles: string[];
 }
 
@@ -67,13 +67,18 @@ const emojiToDataURL = (emoji: string): string => {
   return canvas.toDataURL();
 };
 
-const parseAssets = async (app: AppInfo): Promise<AppAssets> => {
+interface ScriptInfo {
+  url: string;
+  isESModule: boolean;
+}
+
+const parseAssets = async (app: AppInfo): Promise<{scripts: ScriptInfo[], styles: string[]}> => {
   const entryKey = typeof app.entry === "string" ? app.entry : app.name;
   if (appAssetsCache.has(entryKey)) {
     return appAssetsCache.get(entryKey)!;
   }
 
-  let scripts: string[] = [];
+  let scripts: ScriptInfo[] = [];
   let styles: string[] = [];
   let baseUrl = "";
 
@@ -94,7 +99,13 @@ const parseAssets = async (app: AppInfo): Promise<AppAssets> => {
 
       doc.querySelectorAll("script").forEach((script) => {
         const src = script.getAttribute("src");
-        if (src) scripts.push(new URL(src, baseUrl).href);
+        if (src) {
+          const isESModule = script.getAttribute("type") === "module";
+          scripts.push({
+            url: new URL(src, baseUrl).href,
+            isESModule
+          });
+        }
       });
       doc.querySelectorAll('link[rel="stylesheet"]').forEach((link) => {
         const href = link.getAttribute("href");
@@ -104,9 +115,12 @@ const parseAssets = async (app: AppInfo): Promise<AppAssets> => {
       console.error(`Failed to parse assets for app: ${app.name}:`, error);
     }
   } else {
-    scripts = Array.isArray(app.entry.scripts)
+    scripts = (Array.isArray(app.entry.scripts)
       ? (app.entry.scripts as unknown as string[])
-      : [app.entry.scripts as unknown as string];
+      : [app.entry.scripts as unknown as string]).map(url => ({
+        url,
+        isESModule: false // 对象格式默认为普通JS
+      }));
     styles = Array.isArray(app.entry.styles)
       ? (app.entry.styles as unknown as string[])
       : [app.entry.styles as unknown as string];
@@ -117,15 +131,43 @@ const parseAssets = async (app: AppInfo): Promise<AppAssets> => {
   return assets;
 };
 
-const executeScripts = async (scripts: string[], sandbox: WindowProxy) => {
-  for (const scriptUrl of scripts) {
+const executeScripts = async (scripts: ScriptInfo[], sandbox: WindowProxy, appName: string) => {
+  for (const scriptInfo of scripts) {
     try {
-      const response = await fetch(scriptUrl);
-      const scriptText = await response.text();
-      const wrappedScript = `(function(window){ with(window) { ${scriptText} } }).call(window, window);`;
-      new Function("window", wrappedScript)(sandbox);
+      const { url: scriptUrl, isESModule } = scriptInfo;
+      
+      if (isESModule) {
+        // ES module 应用 - 动态导入并检查生命周期函数
+        console.log(`Loading ES Module for ${appName}:`, scriptUrl);
+        const module = await import(scriptUrl + '?t=' + Date.now());
+        console.log('ES Module loaded:', Object.keys(module));
+        
+        if (module.bootstrap && module.mount && module.unmount) {
+          // 将生命周期函数挂载到沙箱中
+          (sandbox as any)[`${appName}Lifecycles`] = {
+            bootstrap: module.bootstrap,
+            mount: module.mount,
+            unmount: module.unmount
+          };
+          console.log(`Lifecycles found for ${appName}:`, Object.keys(module));
+        } else {
+          console.warn(`Lifecycle functions not found in ES module for ${appName}`);
+        }
+      } else {
+        // 普通 JS 应用 - 直接在沙箱中执行
+        console.log(`Loading regular JS for ${appName}:`, scriptUrl);
+        const response = await fetch(scriptUrl);
+        const scriptText = await response.text();
+        const wrappedScript = `(function(window){ with(window) { ${scriptText} } }).call(window, window);`;
+        new Function("window", wrappedScript)(sandbox);
+        
+        // 检查是否在全局对象中暴露了生命周期函数
+        if ((sandbox as any)[`${appName}Lifecycles`]) {
+          console.log(`Lifecycles found in global scope for ${appName}`);
+        }
+      }
     } catch (error) {
-      console.error(`Failed to execute script ${scriptUrl}:`, error);
+      console.error(`Failed to execute script ${scriptInfo.url}:`, error);
     }
   }
 };
@@ -242,7 +284,7 @@ export const loadApp = async (app: AppInfo) => {
     mountContainer = container;
   }
 
-  await executeScripts(scripts, sandbox.getProxy());
+  await executeScripts(scripts, sandbox.getProxy(), app.name);
 
   const lifecycles = (sandbox.getProxy() as any)[`${app.name}Lifecycles`];
 

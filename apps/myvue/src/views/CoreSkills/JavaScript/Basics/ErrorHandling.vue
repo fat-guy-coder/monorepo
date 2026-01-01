@@ -978,7 +978,7 @@ debugger;`
         name: 'Sentry',
         description: '实时错误跟踪和监控',
         usage: `// 初始化Sentry
-import * as Sentry from "@sentry/browser";
+// import * as Sentry from "@sentry/browser";  // 演示代码，实际使用时取消注释
 
 Sentry.init({
   dsn: "YOUR_DSN_HERE",
@@ -999,7 +999,7 @@ Sentry.setUser({ email: "user@example.com" });`
         name: 'Bugsnag',
         description: '错误监控和稳定性指标',
         usage: `// 初始化Bugsnag
-import Bugsnag from '@bugsnag/js';
+// import Bugsnag from '@bugsnag/js';
 
 Bugsnag.start({
   apiKey: 'YOUR_API_KEY',

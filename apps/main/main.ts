@@ -9,7 +9,7 @@ import {
 const apps = [
   {
     name: "frontend-learning",
-    entry: "http://localhost:8080", // Production build entry for Vue app
+    entry: "http://localhost:8080", // Preview server entry for Vue app
     container: "#micro-app-container",
     activeRule: "/learning",
     title: "前端学习",

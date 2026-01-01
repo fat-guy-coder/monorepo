@@ -413,8 +413,8 @@ const scrollTo = (id: string) => {
 .fade-enter-active,
 .fade-leave-active {
   transition:
-    transform 1s ease-in-out,
-    opacity 1s ease-in-out;
+    transform 0.2s ease-in-out,
+    opacity 0.2s ease-in-out;
 }
 
 .fade-leave-from {

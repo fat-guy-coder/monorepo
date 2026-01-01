@@ -1,27 +1,53 @@
 {
-  "$schema": "https://turbo.build/schema.jsonhttps://turbo.build/schema.json",
-  "pipeline": {
+  "$schema": "https://turbo.build/schema.json",
+  "tasks": {
     "build": {
-      "outputs": ["dist/**", ".next/**"],
-      "dependsOn": ["^build"]
+      "outputs": [
+        "dist/**"
+      ],
+      "dependsOn": [
+        "^build"
+      ]
     },
-    "test": {
-      "outputs": [],
-      "dependsOn": ["build"]
+    "build:myvue": {
+      "outputs": [
+        "dist/**"
+      ],
+      "dependsOn": []
     },
-    "lint": {
-      "outputs": []
+    "build:main": {
+      "outputs": [
+        "dist/**"
+      ],
+      "dependsOn": [
+        "^build"
+      ]
+    },
+    "build:micro-frontend": {
+      "outputs": [
+        "dist/**"
+      ],
+      "dependsOn": []
     },
     "dev": {
       "cache": false,
       "persistent": true
     },
-    "cache": {
+    "test": {
+      "outputs": [],
+      "dependsOn": [
+        "build"
+      ]
+    },
+    "lint": {
       "outputs": []
     }
   },
-  "cache": true,
-  "globalDependencies": [".env"],
-  "globalEnv": ["API_KEY", "ENV"],
-  "extends": []
+  "globalDependencies": [
+    ".env"
+  ],
+  "globalEnv": [
+    "API_KEY",
+    "ENV"
+  ]
 }

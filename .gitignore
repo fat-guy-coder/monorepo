@@ -14,13 +14,15 @@ apps/main/node_modules/
 apps/main/dist/
 apps/fastify/node_modules/
 apps/fastify/dist/
+packages/micro-frontend/
 apps/micro-frontend/dist/
 apps/micro-frontend/node_modules/
 static/
 .DS_Store
 coverage/
 *.local*
-packages/micro-frontend/
+
+
 
 
 
@@ -35,5 +37,6 @@ packages/micro-frontend/
 *.zip
 *.7z
 .env
+.turbo
 
 *.tsbuildinfo

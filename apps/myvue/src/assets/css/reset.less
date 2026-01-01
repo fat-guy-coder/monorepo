@@ -106,15 +106,15 @@
 }
 
 /* 10) 动画与滚动在减少动效偏好下关闭过渡以提升可达性 */
-@media (prefers-reduced-motion: reduce) {
-  :where(html:focus-within) { scroll-behavior: auto; }
-  :where(*, *::before, *::after) {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
-}
+// @media (prefers-reduced-motion: reduce) {
+//   :where(html:focus-within) { scroll-behavior: auto; }
+//   :where(*, *::before, *::after) {
+//     animation-duration: 0.01ms !important;
+//     animation-iteration-count: 1 !important;
+//     transition-duration: 0.01ms !important;
+//     scroll-behavior: auto !important;
+//   }
+// }
 
 /* 11) 打印：最小扰动的合理默认 */
 @media print {
