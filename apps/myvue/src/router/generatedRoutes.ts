@@ -1,7 +1,7 @@
 export default [
   {
-    "name": "DragLayoutExample",
-    "path": "/DragLayoutExample",
+    "name": "LayoutExample",
+    "path": "/LayoutExample",
     "component": () => import('@/views/LayoutExample.vue')
   },
   {

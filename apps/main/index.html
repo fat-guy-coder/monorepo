@@ -1,16 +1,24 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>demo</title>
+  <title>LD门户</title>
+  <link rel="icon" href="./assets/logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/css/index.css">
 </head>
 
 <body>
-  <div>ssss</div>
-  <script src="./app.js">
-  </script>
+  <header>
+    欢迎来到我的网站，我是DL
+  </header>
+  <main>
+    <div id="app-cards"></div>
+    <div id="micro-app-container" style="display: none;"></div>
+  </main>
+  <a id="back-to-home" class="back-button" style="display: none;">↑ Home</a>
+  <script type="module" src="/main.ts"></script>
 </body>
 
 </html>

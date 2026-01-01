@@ -1,38 +1,38 @@
 import '@/assets/css/main.less'
-import { createApp, } from 'vue'
+import { createApp, type App as VueApp } from 'vue'
 import { createPinia } from 'pinia'
-import './test'
-// import './demo'
 import App from './App.vue'
 import router from './router'
 
-export const app = createApp(App)
+let appInstance: VueApp | null = null
 
+const appRender = (mountElement: string | HTMLElement | ShadowRoot = '#app') => {
+  appInstance = createApp(App)
+  appInstance.use(createPinia())
+  appInstance.use(router)
+  appInstance.mount(mountElement)
+}
 
+// --- Standalone Mode Entry ---
+// Check if running in standalone mode (not imported by the micro-frontend framework)
+if (!(window as any).__IS_MICRO_FRONTEND__) {
+  // In standalone mode, inject styles into the document head
+  appRender()
+}
 
-app.use(createPinia())
+// --- Lifecycles for Micro-Frontend Mode ---
 
-app.use(router)
+export async function bootstrap() {
+  console.log('my-vue-app bootstrapped')
+}
 
+export async function mount(props: { container: HTMLElement | ShadowRoot }) {
+  appRender(props.container)
+}
 
-app.directive('loaded', {
-  mounted(el, binding) {
-    const { value } = binding
-    if (!value) return
-    if (Array.isArray(value)) {
-      value.forEach(item => {
-        item(el)
-      })
-    } else if (typeof value === 'function') {
-      value(el)
-    } else {
-      console.log(value)
-    }
+export async function unmount() {
+  if (appInstance) {
+    appInstance.unmount()
+    appInstance = null
   }
-})
-
-
-
-
-app.mount('#app')
-
+}

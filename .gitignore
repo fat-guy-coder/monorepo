@@ -9,12 +9,19 @@ lerna-debug.log*
 
 node_modules/
 apps/myvue/node_modules/
+apps/myvue/dist/
+apps/main/node_modules/
+apps/main/dist/
 apps/fastify/node_modules/
 apps/fastify/dist/
+apps/micro-frontend/dist/
+apps/micro-frontend/node_modules/
 static/
 .DS_Store
 coverage/
 *.local*
+packages/micro-frontend/
+
 
 
 .vscode/*

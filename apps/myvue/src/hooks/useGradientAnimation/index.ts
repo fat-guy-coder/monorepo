@@ -361,7 +361,6 @@ export function useGradientAnimation(options: UseGradientAnimationOptions = {}) 
     let css = ''
     css += KeyCode
     css += keyframesCode
-    console.log(decompressCodeAdvanced(css, 'css'))
     styleElement = document.createElement('style')
     styleElement.textContent = lightMinifyCode(css, 'css')
     document.head.appendChild(styleElement)

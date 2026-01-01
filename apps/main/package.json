@@ -1,13 +1,17 @@
 {
-  "name": "main",
+  "name": "@ld/main",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "vite --port 9090",
+    "build": "vite build",
+    "preview": "vite preview"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "packageManager": "pnpm@10.4.1"
+  "dependencies": {
+    "@ld/micro-frontend": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.2.2",
+    "vite": "^7.2.4"
+  }
 }

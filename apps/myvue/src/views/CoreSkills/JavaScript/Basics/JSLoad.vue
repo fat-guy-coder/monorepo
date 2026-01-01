@@ -230,18 +230,24 @@
             </ul>
             <p>执行代码</p>
             <ul>
-              <li><p>静态imopr引入，会自动执行，前提是app.js是ES模块</p>
-              <pre><code> import 'module' from 'app.js'</code></pre></li>
-              <li><p>动态import引入，会自动执行，前提是app.js是ES模块</p>
-              <pre><code>import('./app.js').then(module =&gt; {
+              <li>
+                <p>静态imopr引入，会自动执行，前提是app.js是ES模块</p>
+                <pre><code> import 'module' from 'app.js'</code></pre>
+              </li>
+              <li>
+                <p>动态import引入，会自动执行，前提是app.js是ES模块</p>
+                <pre><code>import('./app.js').then(module =&gt; {
 console.log('模块已加载', module);
 }).catch(err =&gt; {
 console.error('模块加载失败', err);
-});</code></pre></li>
-              <li><p>动态添加script标签引入，会自动执行，没限制</p>
-              <pre><code>const script = document.createElement('script');
+});</code></pre>
+              </li>
+              <li>
+                <p>动态添加script标签引入，会自动执行，没限制</p>
+                <pre><code>const script = document.createElement('script');
 script.src = 'app.js';
-document.body.appendChild(script);</code></pre></li>
+document.body.appendChild(script);</code></pre>
+              </li>
             </ul>
             <p>tips:只要js导出内容，浏览器会自动识别为模块js(type="module")</p>
           </div>
@@ -265,19 +271,25 @@ document.body.appendChild(script);</code></pre></li>
             </ul>
             <p>执行代码</p>
             <ul>
-              <li><p>静态imopr引入，会自动执行</p>
-              <pre><code> import 'module' from 'app.js'</code></pre></li>
-              <li><p>动态import引入，会自动执行</p>
-              <pre><code>import('./app.js').then(module =&gt; {
+              <li>
+                <p>静态imopr引入，会自动执行</p>
+                <pre><code> import 'module' from 'app.js'</code></pre>
+              </li>
+              <li>
+                <p>动态import引入，会自动执行</p>
+                <pre><code>import('./app.js').then(module =&gt; {
 console.log('模块已加载', module);
 }).catch(err =&gt; {
 console.error('模块加载失败', err);
-});</code></pre></li>
-              <li><p>动态添加script标签引入，会自动执行，没限制</p>
+});</code></pre>
+              </li>
+              <li>
+                <p>动态添加script标签引入，会自动执行，没限制</p>
               <li>其实多此一举，上面的方法足够了(因为是es模块)</li>
               <pre><code>const script = document.createElement('script');
 script.src = 'app.js';
-document.body.appendChild(script);</code></pre></li>
+document.body.appendChild(script);</code></pre>
+              </li>
             </ul>
           </div>
 
@@ -288,15 +300,55 @@ document.body.appendChild(script);</code></pre></li>
             <p><strong>使用场景：</strong> 预加载下一页资源或非关键资源</p>
             <p><strong>注意事项：</strong> 低优先级，浏览器空闲时加载</p>
             <p>优点</p>
-          <ul>
-            <li>空闲时加载模块，不阻塞页面渲染</li>
-            <li>有助于实现更高效的代码分割和懒加载(预加载)</li>
-            <li>适合大型应用的模块化按需加载场景</li>
-            <li>提升模块加载优先级，优化页面性能</li>
-          </ul>
-          <p>执行代码</p>
-          <p>同上</p>
+            <ul>
+              <li>空闲时加载模块，不阻塞页面渲染</li>
+              <li>有助于实现更高效的代码分割和懒加载(预加载)</li>
+              <li>适合大型应用的模块化按需加载场景</li>
+              <li>提升模块加载优先级，优化页面性能</li>
+            </ul>
+            <p>执行代码</p>
+            <p>同上</p>
           </div>
+
+          <div class="advanced-card">
+            <h3><span class="icon">🗺️</span> Import Map (<code>&lt;script type="importmap"&gt;</code>)</h3>
+            <div class="code-block">
+              &lt;script type="importmap"&gt;<br>
+              &nbsp;{<br>
+              &nbsp;&nbsp;"imports": {<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;"lodash": "https://cdn.jsdelivr.net/npm/lodash-es@4.17.21/lodash.js"<br>
+              &nbsp;&nbsp;}<br>
+              &nbsp;}<br>
+              &lt;/script&gt;
+            </div>
+            <p>
+              <strong>作用：</strong> 定义 ES 模块导入路径映射，允许你为模块起别名或重定向源，是现代浏览器支持的原生能力。
+            </p>
+            <p>
+              <strong>执行时机：</strong> <code>&lt;script type="importmap"&gt;</code> 必须放在第一个模块脚本之前。浏览器解析 import map
+              后再解析模块脚本。
+            </p>
+            <p>
+              <strong>使用场景：</strong> 管理第三方库、重定向依赖、微前端、CDN 切换等需要模块路径灵活映射的场景。
+            </p>
+            <p>
+              <strong>注意事项：</strong> <span class="warn">只在模块脚本 (<code>type="module"</code>) 中生效，并且每个 HTML 文档只允许一个 import
+                map，有兼容性限制（仅现代浏览器支持）。</span>
+            </p>
+            <p>优点</p>
+            <ul>
+              <li>原生支持，无需打包工具参与即可切换依赖源</li>
+              <li>提升灵活性，让浏览器直接管理模块依赖关系</li>
+              <li>便于多入口、多库协同、微前端架构</li>
+              <li>支持 CDN 与本地开发快速切换</li>
+            </ul>
+            <p>执行代码 (在 type="module" 下用映射名):</p>
+            <pre><code>import _ from "lodash";
+console.log(_.camelCase("Hello Import Map!"));
+// 实际加载路径由 importmap 决定
+</code></pre>
+          </div>
+
 
         </div>
       </div>
@@ -356,8 +408,6 @@ const goToESModule = () => {
 </script>
 
 <style lang="less" scoped>
-
-
 :root {
   --primary: #4361ee;
   --primary-light: #eef2ff;
@@ -526,7 +576,7 @@ const goToESModule = () => {
   display: flex;
   gap: 20px;
 
-  > div {
+  >div {
     flex: 1;
     padding: 15px;
     border-radius: 8px;
@@ -793,7 +843,8 @@ const goToESModule = () => {
     grid-template-columns: 1fr;
   }
 
-  .table-header, .table-row {
+  .table-header,
+  .table-row {
     grid-template-columns: 150px repeat(4, 150px);
   }
 }

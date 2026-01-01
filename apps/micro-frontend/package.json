@@ -1,0 +1,25 @@
+{
+  "name": "@ld/micro-frontend",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "dist/ld-micro-frontend.umd.js",
+  "module": "dist/ld-micro-frontend.es.js",
+  "types": "dist/main.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/main.d.ts",
+      "import": "./dist/ld-micro-frontend.es.js",
+      "require": "./dist/ld-micro-frontend.umd.js"
+    }
+  },
+  "scripts": {
+    "dev": "vite build --watch",
+    "build": "vite build",
+    "build:package": "vite build --outDir packages/micro-frontend",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "typescript": "^5.2.2",
+    "vite": "^7.2.4"
+  }
+}

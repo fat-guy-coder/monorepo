@@ -45,7 +45,7 @@
       :leave-to-class="getAnimationStage('leave-to')"
       mode="out-in"
     >
-      <div :key="activeId" v-if="activeId">
+      <div class="nav-carx__container-item" :key="activeId" v-if="activeId">
         <slot :name="activeId"></slot>
       </div>
     </transition>

@@ -8,7 +8,9 @@ import vueJsx from '@vitejs/plugin-vue-jsx'
 import Components from 'unplugin-vue-components/vite'
 import { compression, defineAlgorithm } from 'vite-plugin-compression2'
 import zlib from 'zlib'
-const outDir = resolve(__dirname, '../../static/myvue')
+
+// const outDir = resolve(__dirname, '../../static/myvue')
+const outDir = 'dist'
 
 // 确保NodeLocalStorage可用
 const ensureNodeLocalStorage = () => {

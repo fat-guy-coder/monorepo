@@ -1,10 +1,10 @@
 [
   {
-    "id": "DragLayoutExample",
-    "name": "DragLayoutExample",
+    "id": "LayoutExample",
+    "name": "LayoutExample",
     "label": "拖拽布局示例 ⭐",
-    "path": "/DragLayoutExample",
-    "parentPath": "/DragLayoutExample",
+    "path": "/LayoutExample",
+    "parentPath": "/LayoutExample",
     "icon": "🎨"
   },
   {

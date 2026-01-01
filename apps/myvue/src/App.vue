@@ -1,65 +1,33 @@
 <template>
   <div ref="container" class="main-view-container">
     <!-- 导航组件示例 -->
-    <Navigation
-      position="bottom-right"
-      :offset="{ bottom: '2rem', right: '0.5rem' }"
-      :isMobile="isMobile"
-      @item-click="handleNavClick"
-      :items="navItems"
-    >
+    <Navigation position="bottom-right" :offset="{ bottom: '2rem', right: '0.5rem' }" :isMobile="isMobile"
+      @item-click="handleNavClick" :items="navItems">
       <template #theme="{ item }">
-        <ThemeChange
-          v-model:show="themeMenuShow"
-          :theme="theme"
-          :themes="themes"
-          :direction="isMobile ? 'vertical' : 'horizontal'"
-          @theme-change="themeChange"
-        />
+        <ThemeChange v-model:show="themeMenuShow" :theme="theme" :themes="themes"
+          :direction="isMobile ? 'vertical' : 'horizontal'" @theme-change="themeChange" />
         <span class="nav-icon">{{ currentThemeIcon }}</span>
         <span class="nav-text">{{ item.label }}</span>
       </template>
     </Navigation>
     <div class="menu-container">
       <div class="search">
-        <Input
-          v-if="!Menucollapsed"
-          v-model:value="searchValue"
-          placeholder="目前暂支持菜单搜索"
-          allow-clear
-        ></Input>
+        <Input v-if="!Menucollapsed" v-model:value="searchValue" placeholder="目前暂支持菜单搜索" allow-clear></Input>
         <Button @click="toggleCollapsed"> {{ Menucollapsed ? '➡️' : '⬅️' }} </Button>
       </div>
       <div :class="Menucollapsed ? 'menu-collapsed' : 'menu'">
         <Spin :spinning="loading" class="loading" />
-        <Menu
-          @select="goto"
-          :isMobile="isMobile"
-          :collapsed="Menucollapsed"
-          v-show="!loading"
-          :mode="Menucollapsed ? 'vertical' : 'inline'"
-          :items="menus as any"
-          :selectedKeys="selectedKeys"
-          v-model:openKeys="openKeys"
-        >
+        <Menu @select="goto" :isMobile="isMobile" :collapsed="Menucollapsed" v-show="!loading"
+          :mode="Menucollapsed ? 'vertical' : 'inline'" :items="menus as any" :selectedKeys="selectedKeys"
+          v-model:openKeys="openKeys">
         </Menu>
       </div>
     </div>
     <div class="content">
       <div class="tabs">
-        <RouteTab
-          @tab-click="tabClick"
-          :activeKey="activeKey"
-          :currentDragIndex="currentDragIndex"
-          :tabList="tabList"
-          :showContextMenu="showContextMenu"
-          @remove="removeTab"
-          @remove-other="removeOther"
-          @remove-side="removeSide" 
-          @set-current-drag-index="setCurrentDragIndex"
-          @sort-tab="sortTab"
-          @toggle-show-menu="toggleShowMenu"
-        >
+        <RouteTab @tab-click="tabClick" :activeKey="activeKey" :currentDragIndex="currentDragIndex" :tabList="tabList"
+          :showContextMenu="showContextMenu" @remove="removeTab" @remove-other="removeOther" @remove-side="removeSide"
+          @set-current-drag-index="setCurrentDragIndex" @sort-tab="sortTab" @toggle-show-menu="toggleShowMenu">
         </RouteTab>
       </div>
       <div class="mainView" id="mainView" @scroll="handleScroll">
@@ -445,8 +413,8 @@ const scrollTo = (id: string) => {
 .fade-enter-active,
 .fade-leave-active {
   transition:
-    transform 0.2s ease-in-out,
-    opacity 0.2s ease-in-out;
+    transform 1s ease-in-out,
+    opacity 1s ease-in-out;
 }
 
 .fade-leave-from {

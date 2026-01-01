@@ -76,7 +76,7 @@ const titleInfo = computed(() => {
   return { tag: 'h3', content: title }
 })
 
-const hasTitle = computed(() => 
+const hasTitle = computed(() =>
   !!(title || h1 || h2 || h3 || h4 || h5 || h6 || slots.title)
 )
 </script>
@@ -98,7 +98,7 @@ const hasTitle = computed(() =>
   --card-border-color-hover: var(--color-border-hover);
   --card-box-shadow: var(--box-shadow-md);
   --card-box-shadow-hover: var(--box-shadow-hover-md);
-  --card--title-margin: 0 ;
+  --card--title-margin: 0;
 
   // Section Variant Styles
   --section-card-padding: var(--padding-3xl);
@@ -112,7 +112,7 @@ const hasTitle = computed(() =>
   background: var(--card-bg-color);
   border-radius: var(--card-border-radius);
   padding: var(--card-padding);
-  transition: box-shadow 0.25s ease, transform 0.2s ease, background-color 0.2s ease;
+  transition: all 0.2s ease-in-out;
   background-color: transparent;
 
   &.is-hoverable:hover {
@@ -167,7 +167,7 @@ const hasTitle = computed(() =>
 }
 
 .variant--section-card .ui-card__title {
-    font-size: 1.2em;
+  font-size: 1.2em;
 }
 
 .ui-card__body {

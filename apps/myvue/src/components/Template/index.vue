@@ -1,7 +1,8 @@
 <template>
   <div class="page-container" :class="[`page-container--${currentMode}`]" :style="styleVars">
     <!-- 头部：标题区 -->
-    <PageHeader title="核心技能模板页" subtitle="以主题变量驱动的卡片式信息布局" description="建议：本模板用于承载知识点/功能模块的分区展示。通过主题变量实现深浅/冷暖主题的无缝切换；布局优先采用栅格，在移动端保持优秀可读性与触达性。" />
+    <PageHeader title="核心技能模板页" subtitle="以主题变量驱动的卡片式信息布局"
+      description="建议：本模板用于承载知识点/功能模块的分区展示。通过主题变量实现深浅/冷暖主题的无缝切换；布局优先采用栅格，在移动端保持优秀可读性与触达性。" />
     <!-- 列表模式和混合模式：导航 -->
     <Nav v-if="currentMode === 'list'" :list="categoryList" show-child />
     <Nav v-if="currentMode === 'mixed'" :list="mixedNavList" show-child />
@@ -10,8 +11,7 @@
       <Col span="24">
         <NavCard :items="modeTabs.map((t) => ({ id: t.value, title: t.label }))" size="medium" variant="gradient"
           rounded="md" :direction="(templateConfig.components.navTagCard?.direction as any) || 'horizontal'"
-          :animation="['slide-left']" :enable-scroll="templateConfig.components.navTagCard?.mode === 'scroll'"
-          v-model:active-id="currentMode">
+          :animation="['slide-left']" v-model:active-id="currentMode">
           <!-- 普通模式 -->
           <template #normal>
             <Row :gutter="currentConfig.grid?.gutter || 0">
@@ -68,12 +68,12 @@
 
             <Row :gutter="currentConfig.grid?.gutter || 0" v-for="category in categoryList" :key="category.id">
               <Col v-bind="currentConfig.grid?.layout?.item">
-                <Card as="section"  :hoverable="true" :key="category.id" :id="category.id" class="category-section"
+                <Card as="section" :hoverable="true" :key="category.id" :id="category.id" class="category-section"
                   :title="category.name">
                   <Row :gutter="currentConfig.grid?.gutter || 0" v-for="(item, index) in category.children"
                     :key="item.id">
                     <Col v-if="category.id !== 'key-points'" v-bind="currentConfig.grid?.layout?.item">
-                      <Card :id="item.id"  :bordered="false" :title="item.name">
+                      <Card :id="item.id" :bordered="false" :title="item.name">
                         <List v-if="item.type === 'plan'" type="plan" :items="item.data as IPlan[]"
                           :show-underline="false" />
                         <List v-else-if="item.type === 'list'" type="bullet" :items="item.data as string[]" />
@@ -96,7 +96,7 @@
                     <Col v-else span="24">
                       <Row :gutter="currentConfig.grid?.gutter || 0" :key="item.id">
                         <Col v-bind="currentConfig?.grid?.layout?.keyPoints">
-                          <Card :id="item.id"  :title="item.name">
+                          <Card :id="item.id" :title="item.name">
                             <List v-if="item.type === 'plan'" type="plan" :items="item.data as IPlan[]"
                               :show-underline="false" />
                             <List v-else-if="item.type === 'list'" type="bullet" :items="item.data as string[]" />
@@ -245,9 +245,7 @@ const modeTabs: Array<{ label: string; value: ModeType }> = [
 
 const currentConfig = computed(
   () => {
-
     const config = (templateConfig as any)[currentMode.value] || templateConfig.normal || {}
-    console.log(config.grid);
     return config
   }
 )
@@ -447,5 +445,12 @@ const mixedNavList = [
 ]
 </script>
 
-<style>
+<style lang="less">
+.page-container {
+  color: var(--color-text);
+  /* Increased max-width for better alignment */
+
+  max-width: 80rem;
+  margin: 0 auto;
+}
 </style>

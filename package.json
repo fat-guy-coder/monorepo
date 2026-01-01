@@ -6,31 +6,56 @@
   "type": "module",
   "devDependencies": {
     "@inquirer/prompts": "^8.0.1",
+    "@tsconfig/node22": "^22.0.0",
+    "@types/jsdom": "^21.1.7",
     "@types/node": "^22.13.4",
+    "@vitest/eslint-plugin": "1.1.31",
     "chalk": "^5.4.1",
     "commander": "^14.0.0",
+    "cross-env": "^7.0.3",
+    "eslint": "^9.20.1",
     "husky": "^9.1.7",
+    "jiti": "^2.4.2",
+    "jsdom": "^26.0.0",
+    "npm-run-all2": "^7.0.2",
     "ora": "^8.2.0",
+    "prettier": "^3.5.1",
+    "start-server-and-test": "^2.0.10",
+    "terser": "^5.44.1",
+    "tsx": "^4.19.3",
     "turbo": "^2.5.5",
     "vite": "^7.2.4",
-    "vite-plugin-compression2": "^2.2.0"
+    "vite-plugin-compression2": "^2.4.0",
+    "vite-plugin-dts": "^4.5.4",
+    "vitest": "^3.0.5"
   },
   "bin": {
     "gen": "./bin/cli.js"
   },
   "scripts": {
-    "test": "test",
-    "build": "pnpm -r run build",
-    "turbo": "turbo -r run build",
-    "turbo:graph": "pnpm dlx turbo run build --graph",
-    "turbo:dry": "pnpm dlx turbo run build --dry=json",
-    "turbo:clear": "pnpm dlx turbo prune",
-    "dev": "pnpm -r run dev",
-    "turbo:myvue": "turbo -F myvue run build ",
-    "vite:myvue": "pnpm -F myvue build --config  vite.config.ts",
-    "myvue": "pnpm -F myvue run dev",
+    "//-- Primary Dev Command --//": "",
+    "dev": "pnpm mf:build && run-p \"dev:**\"",
+
+    "//-- Individual Dev Servers --//": "",
+    "dev:main": "pnpm --filter @ld/main run dev",
+    "dev:myvue": "pnpm --filter myvue run dev",
+    "dev:mf": "pnpm --filter @ld/micro-frontend run dev",
+
+    "//-- Production Build --//": "",
+    "build:prod": "pnpm mf:build && pnpm myvue:build && pnpm main:build",
+    "preview:prod": "vite preview --outDir dist --port 9090",
+
+    "//-- Individual Build & Preview --//": "",
+    "main:build": "pnpm --filter @ld/main run build",
+    "myvue:build": "pnpm --filter myvue run build",
+    "mf:build": "pnpm --filter @ld/micro-frontend run build",
+    "myvue:preview": "pnpm --filter myvue preview --port 8080",
+    "main:preview": "pnpm --filter @ld/main preview --port 9090",
+
+    "//-- Other --//": "",
     "g": "pnpm -F myvue g",
-    "translate": "pnpm -F myvue translate"
+    "translate": "pnpm -F myvue translate",
+    "test": "test"
   },
   "keywords": [
     "前端学习网站",
