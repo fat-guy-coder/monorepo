@@ -16,6 +16,7 @@ const appRender = (mountElement: string | HTMLElement | ShadowRoot = '#app') => 
 // --- Standalone Mode Entry ---
 // Check if running in standalone mode (not imported by the micro-frontend framework)
 if (!(window as any).__IS_MICRO_FRONTEND__) {
+  console.log('Running my-vue-app in standalone mode...')
   // In standalone mode, inject styles into the document head
   appRender()
 }
@@ -31,6 +32,7 @@ export async function mount(props: { container: HTMLElement | ShadowRoot }) {
 }
 
 export async function unmount() {
+  console.log('Unmounting my-vue-app...')
   if (appInstance) {
     appInstance.unmount()
     appInstance = null

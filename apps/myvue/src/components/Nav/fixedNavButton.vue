@@ -10,7 +10,7 @@
     <!-- 导航内容区域 -->
     <div class="navigation-content">
       <!-- 展开的导航项 -->
-      <transition-group v-if="isExpanded && items && items.length > 0" name="nav-item" tag="div"
+      <transition-group v-if="isExpanded && hasItems" name="nav-item" tag="div"
         class="navigation-items">
         <div v-for="(item, index) in items" :key="item.value || `nav-item-${index}`" class="navigation-item"
           :style="{ '--delay': `${index * 0.05}s` }" @click="handleItemClick(item)">
@@ -69,6 +69,10 @@ const {
   isMobile: boolean
   css?: Record<string, string>
 }>()
+
+
+// 是否有导航项
+const hasItems = computed(() => items && items.length > 0)
 
 
 // Emits
@@ -206,7 +210,7 @@ defineExpose({
   --navigation-toggle-color: var(--color-text);
   --navigation-toggle-box-shadow: var(--box-shadow-xs);
   --navigation-toggle-box-shadow-hover: var(--box-shadow-sm);
-  
+
   --navigation-toggle-icon-line-width: 1.25rem;
 }
 
