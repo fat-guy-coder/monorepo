@@ -6,7 +6,7 @@
 
 ## 项目结构
 
-### apps/myvue - Vue.js 学习应用
+### apps/front-learning - Vue.js 学习应用
 
 - **框架**: Vue 3 + TypeScript + Less
 - **功能**: 前端技术知识库，包含JavaScript、CSS、框架等学习内容
@@ -21,7 +21,7 @@
 
 ### Set & Map 页面重构 (2025年)
 
-- **文件位置**: `apps/myvue/src/views/CoreSkills/JavaScript/ES/SetMap.vue`
+- **文件位置**: `apps/front-learning/src/views/CoreSkills/JavaScript/ES/SetMap.vue`
 - **改进内容**:
   - 重新设计了完整的Set和Map介绍页面
   - 采用浅色主题，风格整齐紧凑
@@ -32,7 +32,7 @@
 
 ### Promise 实现场景页面 (2025年)
 
-- **文件位置**: `apps/myvue/src/views/CoreSkills/JavaScript/ES/PromiseImplementationScenarios.vue`
+- **文件位置**: `apps/front-learning/src/views/CoreSkills/JavaScript/ES/PromiseImplementationScenarios.vue`
 - **改进内容**:
   - 重新设计了完整的Promise实现场景页面
   - 包含链式调用、并发控制、Scheduler实现、超时控制、async实现等场景
@@ -71,7 +71,7 @@
 
 ### 通用 404 页面
 
-- 文件位置: `apps/myvue/src/views/Other/notFound.vue`
+- 文件位置: `apps/front-learning/src/views/Other/notFound.vue`
 - 特性:
   - 自适应布局，良好移动端体验
   - 使用全局 CSS 变量适配明/暗主题
@@ -79,7 +79,7 @@
   - 提供“返回首页”和“返回上一页”操作
   - 无第三方依赖，零额外打包体积
 - 路由集成:
-  - 在 `apps/myvue/src/router/index.ts` 中配置了兜底路由：`/:pathMatch(.*)*` 指向 404 页面
+  - 在 `apps/front-learning/src/router/index.ts` 中配置了兜底路由：`/:pathMatch(.*)*` 指向 404 页面
 
 ## 开发指南
 

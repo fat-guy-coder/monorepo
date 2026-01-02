@@ -82,7 +82,7 @@
 </template>
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue'
-import { c, f, s, e, ie, o, ios, android, node } from '../Components/Brower'
+import { c, f, s, e, ie, o, ios, android, node } from './Brower'
 import list from '../JavaScript/JSON/browsers.json'
 
 interface Browser {

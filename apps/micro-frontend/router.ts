@@ -1,8 +1,8 @@
-import { type AppInfo, apps, loadApp, unmountApp } from './index';
+import { type AppInfo, apps, loadApp, unmountApp } from "./main";
 
 let currentApp: AppInfo | null = null;
 
-export const handleRouteChange = async () => {
+export const handleRouteChange = async (callback?: (path: string) => void) => {
   const appToLoad = apps.find((app) =>
     window.location.pathname.startsWith(app.activeRule)
   );
@@ -14,6 +14,7 @@ export const handleRouteChange = async () => {
   }
 
   if (appToLoad) {
+    callback && callback(appToLoad.activeRule);
     await loadApp(appToLoad);
     currentApp = appToLoad;
   } else {

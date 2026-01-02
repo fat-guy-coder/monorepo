@@ -11,7 +11,7 @@
   <script setup lang="ts">
   import { provide, reactive, ref, computed, watch, toRaw, nextTick } from 'vue';
   import type { Reactive } from 'vue';
-  import type { FormConfig, FormInstance, ValidateError, FieldConfig, Rule } from './types.d';
+  import type { FormConfig, FormInstance, ValidateError, FieldConfig, Rule } from './types';
   
   defineOptions({
     name: 'Form',

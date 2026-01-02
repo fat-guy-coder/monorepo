@@ -52,7 +52,7 @@
   
   <script setup lang="ts">
   import { ref, watch, onMounted, nextTick, computed, type CSSProperties, inject } from 'vue';
-  import type { FormContext, FormItemContext } from '../Form/types.d';
+  import type { FormContext, FormItemContext } from '../Form/types';
   
   defineOptions({
     name: 'SearchInput',

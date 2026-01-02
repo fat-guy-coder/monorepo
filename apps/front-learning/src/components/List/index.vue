@@ -48,7 +48,7 @@
 <script setup lang="ts">
 import { ref, watch, computed, type CSSProperties } from 'vue'
 import { Link, Progress } from '@/components'
-import type { ListItem, IPlan, ITodo, ILink, IProgress, ITip } from './index.d'
+import type { ListItem, IPlan, ITodo, ILink, IProgress, ITip } from '.'
 
 defineOptions({
   name: 'ListComponent',

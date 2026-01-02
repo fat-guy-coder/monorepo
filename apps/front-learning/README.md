@@ -1,4 +1,4 @@
-# MyVue 前端学习项目
+# front-learning 前端学习项目
 
 ## 项目简介
 
@@ -297,7 +297,7 @@ import '@/assets/css/main.less'
 ## 项目结构
 
 ```bash
-myvue/
+front-learning/
 ├── src/
 │   ├── assets/
 │   │   └── css/

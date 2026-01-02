@@ -9,7 +9,7 @@
         "^build"
       ]
     },
-    "build:myvue": {
+    "build:front-learning": {
       "outputs": [
         "dist/**"
       ],

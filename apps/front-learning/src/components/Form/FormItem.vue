@@ -35,7 +35,7 @@
   
   <script setup lang="ts">
   import { provide, inject, ref, computed, watch, onMounted, onUnmounted, nextTick } from 'vue';
-  import type { Rule, FormContext } from './types.d';
+  import type { Rule, FormContext } from './types';
   
   defineOptions({
     name: 'FormItem',

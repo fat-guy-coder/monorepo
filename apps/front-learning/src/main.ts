@@ -11,12 +11,12 @@ const appRender = (mountElement: string | HTMLElement | ShadowRoot = '#app') => 
   appInstance.use(createPinia())
   appInstance.use(router)
   appInstance.mount(mountElement)
+  return appInstance
 }
 
 // --- Standalone Mode Entry ---
 // Check if running in standalone mode (not imported by the micro-frontend framework)
 if (!(window as any).__IS_MICRO_FRONTEND__) {
-  appRender()
 }
 
 // --- Lifecycles for Micro-Frontend Mode ---
@@ -29,13 +29,12 @@ export async function bootstrap() {
   console.log('frontend-learning app bootstrapped')
 }
 
-
 // @preserve-lifecycle - 打包器请不要重命名此函数
 /**
  * 微前端应用挂载
  */
 export async function mount(props: { container: HTMLElement | ShadowRoot }) {
-  appRender(props.container)
+  return appRender(props.container)
 }
 
 // @preserve-lifecycle - 打包器请不要重命名此函数
@@ -48,4 +47,5 @@ export async function unmount() {
     appInstance.unmount()
     appInstance = null
   }
+  return appInstance
 }

@@ -132,7 +132,7 @@ importers:
         specifier: ^7.2.4
         version: 7.3.0(@types/node@22.19.2)(jiti@2.6.1)(less@4.4.2)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2)
 
-  apps/myvue:
+  apps/front-learning:
     dependencies:
       '@ld/micro-frontend':
         specifier: workspace:*

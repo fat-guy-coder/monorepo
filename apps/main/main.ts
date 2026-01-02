@@ -49,6 +49,11 @@ const mainContent = document.querySelector("main")!;
 const microAppContainer = document.getElementById("micro-app-container")!;
 const backButton = document.getElementById("back-to-home")!;
 
+// Helper function to check if a micro-app route is active
+function isMicroAppActive(): boolean {
+  return apps.some((app) => window.location.pathname.startsWith(app.activeRule));
+}
+
 function showHomePage() {
   mainContent.style.display = "flex";
   microAppContainer.style.display = "none";
@@ -56,7 +61,7 @@ function showHomePage() {
   backButton.classList.remove("visible");
   // Use the framework's API to navigate
   if (window.location.pathname !== "/") {
-    history.pushState(null, "", "/");
+    push("/");
   }
 }
 
@@ -96,26 +101,18 @@ backButton.addEventListener("click", (e) => {
   push("/");
 });
 
-window.addEventListener("popstate", () => {
-  const isMicroAppRoute = apps.some((app) =>
-    window.location.pathname.startsWith(app.activeRule)
-  );
-  if (isMicroAppRoute) {
+function handleRouteChange() {
+  if (isMicroAppActive()) {
     showMicroApp();
   } else {
     showHomePage();
   }
-});
+}
+
+window.addEventListener("popstate", handleRouteChange);
 
 // Initial view check
-const isMicroAppRoute = apps.some((app) =>
-  window.location.pathname.startsWith(app.activeRule)
-);
-if (isMicroAppRoute) {
-  showMicroApp();
-} else {
-  showHomePage();
-}
+handleRouteChange();
 
 /**
  * Register and start the micro-frontend framework
