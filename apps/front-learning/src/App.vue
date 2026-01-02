@@ -1,33 +1,65 @@
 <template>
   <div ref="container" class="main-view-container">
     <!-- 导航组件示例 -->
-    <Navigation position="bottom-right" :offset="{ bottom: '2rem', right: '0.5rem' }" :isMobile="isMobile"
-      @item-click="handleNavClick" :items="navItems">
+    <Navigation
+      position="bottom-right"
+      :offset="{ bottom: '2rem', right: '0.5rem' }"
+      :isMobile="isMobile"
+      @item-click="handleNavClick"
+      :items="navItems"
+    >
       <template #theme="{ item }">
-        <ThemeChange v-model:show="themeMenuShow" :theme="theme" :themes="themes"
-          :direction="isMobile ? 'vertical' : 'horizontal'" @theme-change="themeChange" />
+        <ThemeChange
+          v-model:show="themeMenuShow"
+          :theme="theme"
+          :themes="themes"
+          :direction="isMobile ? 'vertical' : 'horizontal'"
+          @theme-change="themeChange"
+        />
         <span class="nav-icon">{{ currentThemeIcon }}</span>
         <span class="nav-text">{{ item.label }}</span>
       </template>
     </Navigation>
     <div class="menu-container">
       <div class="search">
-        <Input v-if="!Menucollapsed" v-model:value="searchValue" placeholder="目前暂支持菜单搜索" allow-clear></Input>
+        <Input
+          v-if="!Menucollapsed"
+          v-model:value="searchValue"
+          placeholder="目前暂支持菜单搜索"
+          allow-clear
+        ></Input>
         <Button @click="toggleCollapsed"> {{ Menucollapsed ? '➡️' : '⬅️' }} </Button>
       </div>
       <div :class="Menucollapsed ? 'menu-collapsed' : 'menu'">
         <Spin :spinning="loading" class="loading" />
-        <Menu @select="goto" :isMobile="isMobile" :collapsed="Menucollapsed" v-show="!loading"
-          :mode="Menucollapsed ? 'vertical' : 'inline'" :items="menus as any" :selectedKeys="selectedKeys"
-          v-model:openKeys="openKeys">
+        <Menu
+          @select="goto"
+          :isMobile="isMobile"
+          :collapsed="Menucollapsed"
+          v-show="!loading"
+          :mode="Menucollapsed ? 'vertical' : 'inline'"
+          :items="menus as any"
+          :selectedKeys="selectedKeys"
+          v-model:openKeys="openKeys"
+        >
         </Menu>
       </div>
     </div>
     <div class="content">
       <div class="tabs">
-        <RouteTab @tab-click="tabClick" :activeKey="activeKey" :currentDragIndex="currentDragIndex" :tabList="tabList"
-          :showContextMenu="showContextMenu" @remove="removeTab" @remove-other="removeOther" @remove-side="removeSide"
-          @set-current-drag-index="setCurrentDragIndex" @sort-tab="sortTab" @toggle-show-menu="toggleShowMenu">
+        <RouteTab
+          @tab-click="tabClick"
+          :activeKey="activeKey"
+          :currentDragIndex="currentDragIndex"
+          :tabList="tabList"
+          :showContextMenu="showContextMenu"
+          @remove="removeTab"
+          @remove-other="removeOther"
+          @remove-side="removeSide"
+          @set-current-drag-index="setCurrentDragIndex"
+          @sort-tab="sortTab"
+          @toggle-show-menu="toggleShowMenu"
+        >
         </RouteTab>
       </div>
       <div class="mainView" id="mainView" @scroll="handleScroll">
@@ -58,7 +90,7 @@ import { useUserStore } from '@/stores/userProfle' //用户信息store
 import { useDeviceStore } from '@/stores/device' //设备信息store
 import { useUIConfigStore, type Theme } from '@/stores/uiconfig' //UI配置store
 import { useRouter } from 'vue-router'
-import { debounce } from '@/function/common' //常用函数
+import { debounce, scrollIntoViewById } from '@/function/common' //常用函数
 import type { NavItem } from './components/Nav' //导航项类型
 import { useGradientAnimation } from '@/hooks/useGradientAnimation' //渐变色动画
 import { useDetectDevice } from '@/hooks/useDetectDevice' //设备信息hook
@@ -69,7 +101,6 @@ const userStore = useUserStore()
 const deviceStore = useDeviceStore()
 const uiConfigStore = useUIConfigStore()
 
-
 //是否是手机端
 const isMobile = computed(() => deviceStore.isMobile)
 
@@ -77,7 +108,6 @@ const isMobile = computed(() => deviceStore.isMobile)
 const theme = computed(() => uiConfigStore.theme)
 const themes = computed(() => uiConfigStore.themes)
 const navItems = computed(() => uiConfigStore.navItems)
-
 
 //当前主题图标
 const currentThemeIcon = computed(() => {
@@ -114,7 +144,7 @@ const themeChange = (theme1: Theme) => {
 
 //全局渐变色动画
 useGradientAnimation({
-  gradientTypes: ['linear'],
+  gradientTypes: ['linear', 'box-shadow'],
   triggerTimes: ['hover'],
 })
 
@@ -188,10 +218,12 @@ onMounted(() => {
   getMenus()
 })
 
+//卸载时清空菜单列表
 onUnmounted(() => {
   menus.value.length = 0
 })
 
+//获取菜单
 const getMenus = async () => {
   loading.value = true
   mainViewLoading.value = true
@@ -206,20 +238,24 @@ const getMenus = async () => {
   mainViewLoading.value = false
 }
 
+//标签列表store
 const store = useTabStore()
 
+//当前激活的标签
 const activeKey = computed(() => store.activeKey)
 
+//标签列表
 const tabList = computed(() => store.tabList)
 
-
+//是否显示右键菜单
 const showContextMenu = computed(() => store.showContextMenu)
 
+//切换右键菜单显示状态
 const toggleShowMenu = (value: boolean) => {
   store.toggleShowMenu(value)
 }
 
-
+//当前选中的标签key列表
 const selectedKeys = computed<string[]>(() => {
   if (activeKey.value !== '/') {
     return [activeKey.value]
@@ -227,10 +263,13 @@ const selectedKeys = computed<string[]>(() => {
   return []
 })
 
+//当前展开的菜单key列表
 const openKeys = ref<string[]>([])
 
+//搜索值
 const searchValue = ref<string>('')
 
+//显示菜单
 const showMenu = debounce(async (value) => {
   //loading.value = true
   if (!value) {
@@ -245,14 +284,18 @@ const showMenu = debounce(async (value) => {
   scrollTo(selectedKeys[0])
 }, 500)
 
+//监听搜索值
 watch(searchValue, (value) => {
   showMenu(value)
 })
 
+//标签列表store
 const { sortTab, setCurrentDragIndex } = store
 
+//当前拖拽的标签索引
 const currentDragIndex = computed<number>(() => store.currentDragIndex)
 
+//标签点击
 function tabClick(path: string) {
   if (path === store.activeKey) {
     return
@@ -276,6 +319,7 @@ function tabClick(path: string) {
   })
 }
 
+//展开菜单
 function expandMenu(path: string) {
   if (!Menucollapsed.value) {
     openKeys.value = findFatherKeysListByKey(path)
@@ -287,6 +331,7 @@ function expandMenu(path: string) {
   })
 }
 
+//删除标签
 function removeTab(path: string) {
   store.removeTab(path, (p) => {
     router.push({ path: p })
@@ -298,6 +343,8 @@ function removeTab(path: string) {
     })
   })
 }
+
+//删除其他标签
 function removeOther(path: string) {
   router.push({ path })
   store.removeOther(path, (path) => {
@@ -310,6 +357,7 @@ function removeOther(path: string) {
   })
 }
 
+//删除侧边标签
 function removeSide(index: number, side: 'left' | 'right', key: string) {
   router.push({ path: key })
   store.removeSide(index, side, key, (path) => {
@@ -322,6 +370,7 @@ function removeSide(index: number, side: 'left' | 'right', key: string) {
   })
 }
 
+//跳转菜单
 function goto({ path, name, label, redirect }: MenuItem) {
   if (path === store.activeKey) {
     return
@@ -348,6 +397,7 @@ function goto({ path, name, label, redirect }: MenuItem) {
   )
 }
 
+//通过菜单名称跳转
 function goToByName(name: string, isRedirect: boolean = false) {
   let item = findMenuItemByName(name)
   if (name === 'home') {
@@ -390,22 +440,21 @@ function goToByName(name: string, isRedirect: boolean = false) {
   )
 }
 
+//提供跳转菜单名称方法
 provide('goToByName', goToByName)
 
+//滚动事件
 const handleScroll = debounce((e: Event) => {
   const scrollTop = (e.target as HTMLElement).scrollTop
   store.setScrollTop(scrollTop, store.activeKey)
 }, 100)
 
-//滚进视口
+//滚进视口 延时是为了防止滚动条抖动
 const scrollTo = (id: string) => {
-  const element = document.getElementById(id)
-  if (element) {
-    const timer = setTimeout(() => {
-      element.scrollIntoView({ behavior: 'smooth', block: 'center' })
-      clearTimeout(timer)
-    }, 300)
-  }
+  const timer = setTimeout(() => {
+    scrollIntoViewById(id)
+    clearTimeout(timer)
+  }, 300)
 }
 </script>
 

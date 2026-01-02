@@ -34,15 +34,24 @@ export interface StartOptions {
   preload?: boolean; // Whether to preload apps, defaults to true
 }
 
+// Represents both external and inline scripts
+interface ScriptInfo {
+  url?: string; // For external scripts
+  content?: string; // For inline scripts
+  isESModule: boolean;
+}
+
 interface AppAssets {
   scripts: ScriptInfo[];
   styles: string[];
+  preloads: string[];
 }
 
 interface AppInstance {
   name: string;
   sandbox: ProxySandbox;
   styleElements?: HTMLStyleElement[]; // To hold styles for 'runtime' mode
+  preloadLinkElements?: HTMLLinkElement[]; // To hold created link elements for cleanup
   container: HTMLElement | ShadowRoot;
   status: 'MOUNTED' | 'UNMOUNTED';
 }
@@ -81,70 +90,63 @@ const emojiToDataURL = (emoji: string): string => {
   return canvas.toDataURL();
 };
 
-interface ScriptInfo {
-  url: string;
-  isESModule: boolean;
-}
-
 const parseAssets = async (
   app: AppInfo
-): Promise<{ scripts: ScriptInfo[]; styles: string[] }> => {
+): Promise<AppAssets> => {
   const entryKey = typeof app.entry === "string" ? app.entry : app.name;
   if (appAssetsCache.has(entryKey)) {
     return appAssetsCache.get(entryKey)!;
   }
 
-  let scripts: ScriptInfo[] = [];
-  let styles: string[] = [];
+  const scripts: ScriptInfo[] = [];
+  const styles: string[] = [];
+  const preloads: string[] = [];
   let baseUrl = "";
 
-  if (
-    typeof app.entry === "string" ||
-    (typeof app.entry === "object" && typeof app.entry.html === "string")
-  ) {
+  if (typeof app.entry === "string") {
     try {
-      const entry = typeof app.entry === "string" ? app.entry : app.entry.html;
-      if (!entry) {
-        console.error(`Entry not found for app: ${app.name}`);
-        return { scripts: [], styles: [] };
+      const response = await fetch(app.entry);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch entry: ${response.statusText}`);
       }
-      const response = await fetch(entry);
       const html = await response.text();
       const doc = new DOMParser().parseFromString(html, "text/html");
-      baseUrl = new URL(entry as string).origin;
+      baseUrl = new URL(app.entry).origin;
 
+      // Process all script tags, including inline ones
       doc.querySelectorAll("script").forEach((script) => {
         const src = script.getAttribute("src");
+        const isESModule = script.getAttribute("type") === "module";
         if (src) {
-          const isESModule = script.getAttribute("type") === "module";
-          scripts.push({
-            url: new URL(src, baseUrl).href,
-            isESModule,
-          });
+          scripts.push({ url: new URL(src, baseUrl).href, isESModule });
+        } else {
+          scripts.push({ content: script.textContent || "", isESModule });
         }
       });
+
       doc.querySelectorAll('link[rel="stylesheet"]').forEach((link) => {
         const href = link.getAttribute("href");
         if (href) styles.push(new URL(href, baseUrl).href);
       });
+
+      // Process modulepreload links
+      doc.querySelectorAll('link[rel="modulepreload"]').forEach((link) => {
+        const href = link.getAttribute("href");
+        if (href) preloads.push(new URL(href, baseUrl).href);
+      });
+
     } catch (error) {
       console.error(`Failed to parse assets for app: ${app.name}:`, error);
+      return { scripts: [], styles: [], preloads: [] }; // Return empty on error
     }
-  } else {
-    scripts = (
-      Array.isArray(app.entry.scripts)
-        ? (app.entry.scripts as unknown as string[])
-        : [app.entry.scripts as unknown as string]
-    ).map((url) => ({
-      url,
-      isESModule: false, // 对象格式默认为普通JS
-    }));
-    styles = Array.isArray(app.entry.styles)
-      ? (app.entry.styles as unknown as string[])
-      : [app.entry.styles as unknown as string];
+  } else if (typeof app.entry === 'object') {
+    // Handle object-based entry (if needed, simplified for now)
+    const entryObj = app.entry as { scripts?: string[], styles?: string[] };
+    (entryObj.scripts || []).forEach(url => scripts.push({ url, isESModule: false }));
+    (entryObj.styles || []).forEach(url => styles.push(url));
   }
 
-  const assets = { scripts, styles };
+  const assets = { scripts, styles, preloads };
   appAssetsCache.set(entryKey, assets);
   return assets;
 };
@@ -156,44 +158,48 @@ const executeScripts = async (
 ) => {
   for (const scriptInfo of scripts) {
     try {
-      const { url: scriptUrl, isESModule } = scriptInfo;
+      const { url: scriptUrl, content: scriptContent, isESModule } = scriptInfo;
 
-      if (isESModule) {
-        // ES module 应用 - 动态导入并检查生命周期函数
-        console.log(`Loading ES Module for ${appName}:`, scriptUrl);
-        const module = await import(/* @vite-ignore */ scriptUrl);
-        console.log("ES Module loaded:", Object.keys(module));
-
-        if (module.bootstrap && module.mount && module.unmount) {
-          // 将生命周期函数挂载到沙箱中
-          (sandbox as any)[`${appName}Lifecycles`] = {
-            bootstrap: module.bootstrap,
-            mount: module.mount,
-            unmount: module.unmount,
-          };
-          console.log(`Lifecycles found for ${appName}:`, Object.keys(module));
-        } else {
-          console.warn(
-            `Lifecycle functions not found in ES module for ${appName}`
-          );
-        }
-      } else {
-        // 普通 JS 应用 - 直接在沙箱中执行
-        console.log(`Loading regular JS for ${appName}:`, scriptUrl);
-        const response = await fetch(scriptUrl);
-        const scriptText = await response.text();
-        const wrappedScript = `(function(window){ with(window) { ${scriptText} } }).call(window, window);`;
+      // Execute inline script content
+      if (typeof scriptContent === 'string') {
+        const wrappedScript = `(function(window){ with(window) { ${scriptContent} } }).call(window, window);`;
         new Function("window", wrappedScript)(sandbox);
+        continue;
+      }
 
-        // 检查是否在全局对象中暴露了生命周期函数
-        if ((sandbox as any)[`${appName}Lifecycles`]) {
-          console.log(`Lifecycles found in global scope for ${appName}`);
+      // Process external scripts
+      if (scriptUrl) {
+        if (isESModule) {
+          console.log(`Loading ES Module for ${appName}:`, scriptUrl);
+          const module = await import(/* @vite-ignore */ scriptUrl);
+          if (module.bootstrap && module.mount && module.unmount) {
+            (sandbox as any)[`${appName}Lifecycles`] = {
+                bootstrap: module.bootstrap,
+                mount: module.mount,
+                unmount: module.unmount,
+            };
+            console.log(`Lifecycles found for ${appName} in ES module.`);
+          }
+        } else {
+          console.log(`Loading regular JS for ${appName}:`, scriptUrl);
+          const response = await fetch(scriptUrl);
+          const scriptText = await response.text();
+          const wrappedScript = `(function(window){ with(window) { ${scriptText} } }).call(window, window);`;
+          new Function("window", wrappedScript)(sandbox);
         }
       }
     } catch (error) {
-      console.error(`Failed to execute script ${scriptInfo.url}:`, error);
+      console.error(`Failed to execute script for ${appName}:`, error, scriptInfo);
       throw error;
     }
+  }
+  // Final check for lifecycles exposed on the global scope (for non-ESM/UMD)
+  if (!(sandbox as any)[`${appName}Lifecycles`]) {
+     const globalExport = (sandbox as any)[appName];
+     if (globalExport && globalExport.bootstrap && globalExport.mount && globalExport.unmount) {
+         (sandbox as any)[`${appName}Lifecycles`] = globalExport;
+         console.log(`Lifecycles found for ${appName} on sandboxed window object.`);
+     }
   }
 };
 
@@ -248,11 +254,12 @@ export const start = (options: StartOptions = { preload: true }) => {
   originalFavicon = faviconEl ? faviconEl.getAttribute("href") : null;
 
   console.log("Micro-frontend framework started (HTML Entry Mode).");
-  handleRouteChange().then(() => {
-    if (options.preload) {
-      preloadApps();
-    }
-  });
+  
+  if (options.preload) {
+    preloadApps();
+  }
+
+  handleRouteChange();
   window.addEventListener("popstate", () => handleRouteChange());
 };
 
@@ -300,7 +307,21 @@ export const loadApp = async (app: AppInfo) => {
 
     (sandbox.getProxy() as any).__IS_MICRO_FRONTEND_SANDBOX__ = true;
 
-    const { scripts, styles } = await parseAssets(app);
+    const { scripts, styles, preloads } = await parseAssets(app);
+    if (scripts.length === 0) {
+      throw new Error(`No scripts found for app ${app.name}. Check if the entry point is correct and accessible.`);
+    }
+
+    // Handle preloads
+    const preloadLinkElements: HTMLLinkElement[] = [];
+    for (const preloadUrl of preloads) {
+      const link = document.createElement('link');
+      link.rel = 'modulepreload';
+      link.href = preloadUrl;
+      document.head.appendChild(link);
+      preloadLinkElements.push(link);
+    }
+
     const cssIsolationMode = app.cssIsolation ?? "runtime";
 
     let mountContainer: HTMLElement | ShadowRoot = container;
@@ -359,6 +380,7 @@ export const loadApp = async (app: AppInfo) => {
       container: mountContainer,
       status: 'MOUNTED',
       styleElements: cssIsolationMode === 'runtime' ? styleElements : undefined,
+      preloadLinkElements,
     };
     appInstanceCache.set(app.name, instance);
 
@@ -404,6 +426,12 @@ export const unmountApp = async (app: AppInfo) => {
 
     // Hide the container instead of clearing it
     (instance.container.getRootNode() as HTMLElement).style.display = 'none';
+
+    // Clean up preload links
+    if (instance.preloadLinkElements) {
+      instance.preloadLinkElements.forEach((link) => link.remove());
+      instance.preloadLinkElements = [];
+    }
 
     if (globalLifeCycles.afterUnmount) {
       await globalLifeCycles.afterUnmount(app);

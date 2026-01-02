@@ -59,10 +59,6 @@ function showHomePage() {
   microAppContainer.style.display = "none";
   microAppContainer.classList.remove("fullscreen");
   backButton.classList.remove("visible");
-  // Use the framework's API to navigate
-  if (window.location.pathname !== "/") {
-    push("/");
-  }
 }
 
 function showMicroApp() {
@@ -70,6 +66,21 @@ function showMicroApp() {
   microAppContainer.style.display = "block";
   microAppContainer.classList.add("fullscreen");
   backButton.classList.add("visible");
+}
+
+// Centralized route change handler for the main application
+function handleMainAppRouteChange() {
+  if (isMicroAppActive()) {
+    showMicroApp();
+  } else {
+    showHomePage();
+  }
+}
+
+// Custom push function to coordinate main app and micro-frontend framework
+function navigate(path: string) {
+  push(path); // This will call history.pushState and the framework's handleRouteChange
+  handleMainAppRouteChange(); // Manually trigger main app's view change
 }
 
 // Render application cards
@@ -88,8 +99,7 @@ apps.forEach((app) => {
 
   card.addEventListener("click", (e) => {
     e.preventDefault();
-    // Use the framework's push API to trigger navigation and loading
-    push(app.activeRule);
+    navigate(app.activeRule);
   });
   appCardsContainer.appendChild(card);
 });
@@ -97,22 +107,14 @@ apps.forEach((app) => {
 // Event listeners for navigation
 backButton.addEventListener("click", (e) => {
   e.preventDefault();
-  // Use the framework's API to navigate
-  push("/");
+  navigate("/");
 });
 
-function handleRouteChange() {
-  if (isMicroAppActive()) {
-    showMicroApp();
-  } else {
-    showHomePage();
-  }
-}
+// Listen for browser back/forward navigation
+window.addEventListener("popstate", handleMainAppRouteChange);
 
-window.addEventListener("popstate", handleRouteChange);
-
-// Initial view check
-handleRouteChange();
+// Initial view check on page load
+handleMainAppRouteChange();
 
 /**
  * Register and start the micro-frontend framework

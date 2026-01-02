@@ -16,8 +16,6 @@
         </p>
       </div>
       <section class="overview-section">
-
-
         <div class="flowchart">
           <h2>编译过程流程图</h2>
           <div class="flowchart-container">
@@ -102,7 +100,6 @@
         <h2>编译原理核心概念</h2>
         <div class="concepts-container">
           <div class="concept-card" v-for="(concept, index) in concepts" :key="index">
-
             <h3>{{ concept.title }}</h3>
             <p>{{ concept.description }}</p>
           </div>
@@ -117,66 +114,68 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-
+import { ref } from 'vue'
 
 const stages = ref([
   {
-    title: "词法分析 (Lexical Analysis)",
-    description: "将源代码分解为有意义的词素（Token）序列的过程。词法分析器读取字符流，识别出关键字、标识符、常量、运算符等基本单元。",
-    example: "int x = 5; → [关键字'int', 标识符'x', 运算符'=', 常量'5', 分号';']"
+    title: '词法分析 (Lexical Analysis)',
+    description:
+      '将源代码分解为有意义的词素（Token）序列的过程。词法分析器读取字符流，识别出关键字、标识符、常量、运算符等基本单元。',
+    example: "int x = 5; → [关键字'int', 标识符'x', 运算符'=', 常量'5', 分号';']",
   },
   {
-    title: "语法分析 (Syntax Analysis)",
-    description: "根据语言的语法规则，将Token序列构建成语法树（Parse Tree或AST）。此阶段检查程序的结构是否符合语法规则。",
-    example: "表达式 'a + b * c' 构建为 AST: (+ a (* b c))"
+    title: '语法分析 (Syntax Analysis)',
+    description:
+      '根据语言的语法规则，将Token序列构建成语法树（Parse Tree或AST）。此阶段检查程序的结构是否符合语法规则。',
+    example: "表达式 'a + b * c' 构建为 AST: (+ a (* b c))",
   },
   {
-    title: "语义分析 (Semantic Analysis)",
-    description: "检查程序的语义正确性，包括类型检查、作用域分析、变量声明检查等。确保程序在逻辑上是有意义的。",
-    example: "检查 'int a = 'hello';' 中的类型不匹配错误"
+    title: '语义分析 (Semantic Analysis)',
+    description:
+      '检查程序的语义正确性，包括类型检查、作用域分析、变量声明检查等。确保程序在逻辑上是有意义的。',
+    example: "检查 'int a = 'hello';' 中的类型不匹配错误",
   },
   {
-    title: "中间代码生成 (Intermediate Code Generation)",
-    description: "生成与平台无关的中间表示形式，如三地址码、P-代码等。这种中间表示便于后续优化和目标代码生成。",
-    example: "x = y + z * 5 → t1 = z * 5; t2 = y + t1; x = t2"
+    title: '中间代码生成 (Intermediate Code Generation)',
+    description:
+      '生成与平台无关的中间表示形式，如三地址码、P-代码等。这种中间表示便于后续优化和目标代码生成。',
+    example: 'x = y + z * 5 → t1 = z * 5; t2 = y + t1; x = t2',
   },
   {
-    title: "代码优化 (Code Optimization)",
-    description: "对中间代码进行变换，提高程序的执行效率或减少资源占用。包括常量折叠、死代码消除、循环优化等。",
-    example: "x = 2 * 3; → x = 6; （常量折叠）"
+    title: '代码优化 (Code Optimization)',
+    description:
+      '对中间代码进行变换，提高程序的执行效率或减少资源占用。包括常量折叠、死代码消除、循环优化等。',
+    example: 'x = 2 * 3; → x = 6; （常量折叠）',
   },
   {
-    title: "目标代码生成 (Code Generation)",
-    description: "将优化后的中间代码转换为目标机器的汇编语言或机器代码。此阶段需要考虑目标机器的指令集、寄存器分配等问题。",
-    example: "生成 x86、ARM 或 MIPS 等平台的汇编指令"
-  }
-]);
+    title: '目标代码生成 (Code Generation)',
+    description:
+      '将优化后的中间代码转换为目标机器的汇编语言或机器代码。此阶段需要考虑目标机器的指令集、寄存器分配等问题。',
+    example: '生成 x86、ARM 或 MIPS 等平台的汇编指令',
+  },
+])
 
 const concepts = ref([
   {
-
-    title: "有限自动机 (Finite Automata)",
-    description: "用于词法分析的形式化模型，包括确定有限自动机(DFA)和非确定有限自动机(NFA)。"
+    title: '有限自动机 (Finite Automata)',
+    description: '用于词法分析的形式化模型，包括确定有限自动机(DFA)和非确定有限自动机(NFA)。',
   },
   {
-    title: "上下文无关文法 (CFG)",
-    description: "用于描述编程语言语法的形式化方法，通常用巴科斯范式(BNF)或其扩展表示。"
+    title: '上下文无关文法 (CFG)',
+    description: '用于描述编程语言语法的形式化方法，通常用巴科斯范式(BNF)或其扩展表示。',
   },
   {
-    title: "符号表管理",
-    description: "编译器用于存储变量、函数等标识符信息的数据结构，支持快速查找和属性管理。"
+    title: '符号表管理',
+    description: '编译器用于存储变量、函数等标识符信息的数据结构，支持快速查找和属性管理。',
   },
   {
-    title: "优化技术",
-    description: "包括数据流分析、循环优化、寄存器分配等技术，用于提高生成代码的效率。"
-  }
-]);
+    title: '优化技术',
+    description: '包括数据流分析、循环优化、寄存器分配等技术，用于提高生成代码的效率。',
+  },
+])
 </script>
 
 <style lang="less" scoped>
-
-
 // 颜色变量
 @primary-color: #1e88e5;
 @primary-light: #e3f2fd;
@@ -349,7 +348,9 @@ const concepts = ref([
   border-radius: 10px;
   overflow: hidden;
   box-shadow: @card-shadow;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 
   &:hover {
     transform: translateY(-5px);

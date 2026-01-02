@@ -1,10 +1,16 @@
 <template>
-  <component :is="as" class="ui-card" :class="[
-    `size-${size}`,
-    `variant--${variant}`,
-    { 'is-hoverable': hoverable, },
-    { 'is-bordered': bordered } //是否显示边框
-  ]" :style="componentStyle">
+  <component
+    :is="as"
+    class="ui-card"
+    :class="[
+      `size-${size}`,
+      `variant--${variant}`,
+      { 'is-hoverable': hoverable },
+      { 'is-bordered': bordered }, //是否显示边框
+      'gradient-animation-box-shadow-hover',
+    ]"
+    :style="componentStyle"
+  >
     <div v-if="hasTitle" class="ui-card__header">
       <slot name="title">
         <component :is="titleInfo.tag" class="ui-card__title">
@@ -48,7 +54,7 @@ const {
   h6?: string
   variant?: 'default' | 'section-card'
   hoverable?: boolean
-  size?: 'sm' | 'md' | 'lg',
+  size?: 'sm' | 'md' | 'lg'
   bordered?: boolean
   css?: Record<string, string>
 }>()
@@ -56,8 +62,8 @@ const {
 const slots = useSlots()
 
 const componentStyle = computed(() => {
-  return { ...css } as CSSProperties;
-});
+  return { ...css } as CSSProperties
+})
 
 const titleInfo = computed(() => {
   const headings: Record<string, string | undefined> = {
@@ -76,9 +82,7 @@ const titleInfo = computed(() => {
   return { tag: 'h3', content: title }
 })
 
-const hasTitle = computed(() =>
-  !!(title || h1 || h2 || h3 || h4 || h5 || h6 || slots.title)
-)
+const hasTitle = computed(() => !!(title || h1 || h2 || h3 || h4 || h5 || h6 || slots.title))
 </script>
 
 <style lang="less" scoped>
@@ -103,16 +107,20 @@ const hasTitle = computed(() =>
   // Section Variant Styles
   --section-card-padding: var(--padding-3xl);
   --section-card-border-radius: var(--border-radius-lg);
-  --section-card-shadow: 0 0.25rem 1.25rem rgba(0, 0, 0, 0.08);
-  --section-card-shadow-hover: 0 0.5rem 1.875rem rgba(0, 0, 0, 0.12);
-  --section-card-transform-hover: translateY(-0.125rem);
+  --section-card-shadow: var(--box-shadow);
+  --section-card-shadow-hover: var(--box-shadow-hover);
+  --section-card-transform-hover: translate(-1px, -1px);
 
   position: relative;
   color: var(--card-text-color);
   background: var(--card-bg-color);
   border-radius: var(--card-border-radius);
   padding: var(--card-padding);
-  transition: all 0.2s ease-in-out;
+  transition:
+    box-shadow var(--transition-duration-fast) ease-in-out,
+    transform var(--transition-duration-fast) ease-in-out,
+    border-color var(--transition-duration-fast) ease-in-out,
+    background-color var(--transition-duration-fast) ease-in-out;
   background-color: transparent;
 
   &.is-hoverable:hover {

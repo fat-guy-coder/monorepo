@@ -73,17 +73,17 @@
   resize: vertical;
 }
 /* 移除数字输入在 WebKit 的内部按钮高度差异 */
-:where(input[type="number"])::-webkit-inner-spin-button,
-:where(input[type="number"])::-webkit-outer-spin-button {
+:where(input[type='number'])::-webkit-inner-spin-button,
+:where(input[type='number'])::-webkit-outer-spin-button {
   height: auto;
 }
 /* 搜索框一致性 */
-:where(input[type="search"]) {
+:where(input[type='search']) {
   -webkit-appearance: textfield;
   outline-offset: -2px;
 }
-:where(input[type="search"])::-webkit-search-decoration,
-:where(input[type="search"])::-webkit-search-cancel-button {
+:where(input[type='search'])::-webkit-search-decoration,
+:where(input[type='search'])::-webkit-search-cancel-button {
   -webkit-appearance: none;
 }
 
@@ -97,11 +97,15 @@
 }
 
 /* 8) 语义元素显示规则（主要为旧浏览器兜底）*/
-:where(main) { display: block; }
-:where(summary) { display: list-item; }
+:where(main) {
+  display: block;
+}
+:where(summary) {
+  display: list-item;
+}
 
 /* 9) 可访问性与焦点可见性（尊重浏览器默认，仅修正异常） */
-:where([tabindex="-1"]:focus) {
+:where([tabindex='-1']:focus) {
   outline: none !important;
 }
 

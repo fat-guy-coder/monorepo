@@ -3395,7 +3395,25 @@
             "label": "编译原理 ⭐⭐",
             "path": "/CoreSkills/ComputerBasicKnowledge/CompilerPrinciple",
             "parentPath": "/CoreSkills/ComputerBasicKnowledge",
-            "icon": "📜"
+            "icon": "📜",
+            "children": [
+              {
+                "id": "CompilerPrincipleOverview",
+                "name": "CompilerPrincipleOverview",
+                "label": "编译原理概览 ⭐⭐",
+                "path": "/CoreSkills/ComputerBasicKnowledge/CompilerPrinciple/CompilerPrincipleOverview",
+                "parentPath": "/CoreSkills/ComputerBasicKnowledge/CompilerPrinciple",
+                "icon": "📜"
+              },
+              {
+                "id": "AOTAndJIT",
+                "name": "AOTAndJIT",
+                "label": "AOT与JIT ⭐⭐",
+                "path": "/CoreSkills/ComputerBasicKnowledge/CompilerPrinciple/AOTAndJIT",
+                "parentPath": "/CoreSkills/ComputerBasicKnowledge/CompilerPrinciple",
+                "icon": "�"
+              }
+            ]
           },
           {
             "id": "AssemblyLanguage",
@@ -5211,6 +5229,24 @@
           }
         ],
         "icon": "🤝"
+      },
+      {
+        "id": "OtherConceptIntroduction",
+        "name": "OtherConceptIntroduction",
+        "label": "其他概念介绍 ⭐",
+        "path": "/OtherConceptIntroduction",
+        "parentPath": "/OtherConceptIntroduction",
+        "icon": "📜",
+        "children": [
+          {
+            "id": "CodeModelAndEditorComparison",
+            "name": "CodeModelAndEditorComparison",
+            "label": "目前代码模型和编辑器对比 ⭐⭐⭐",
+            "path": "/OtherConceptIntroduction/CodeModelAndEditorComparison",
+            "parentPath": "/OtherConceptIntroduction",
+            "icon": "🤖"
+          }
+        ]
       }
     ],
     "icon": "🎯"
@@ -10460,6 +10496,14 @@
         "path": "/AI/ConceptIntroduction",
         "parentPath": "/AI",
         "children": [
+          {
+            "id": "AIOverview",
+            "name": "AIOverview",
+            "label": "AI概览 ⭐⭐⭐",
+            "path": "/AI/ConceptIntroduction/AIOverview",
+            "parentPath": "/AI/ConceptIntroduction",
+            "icon": "🤖"
+          },
           {
             "id": "Blockchain",
             "name": "Blockchain",

@@ -120,21 +120,21 @@ interface UseGradientAnimationOptions {
 
 /** 动画详情 */
 interface AnimationDetails {
-  backgroundSize: string
-  keyframes: string
-  keyframesName?: string
-  direction?: Direction
-  transform?: string
-  type: GradientType
-  animation?: string
+  backgroundSize: string //背景大小
+  keyframes: string //动画关键帧
+  keyframesName?: string //动画关键帧名称
+  direction?: Direction //动画方向
+  transform?: string //伪元素变换 旋转用于线性渐变斜线动画
+  type: GradientType //渐变类型
+  animation?: string //动画
   insertCode?: string //插入伪元素内的css代码
   isInsertPseudoElement?: boolean //insertCode是否插入伪元素内
-  prefixCode?: string //伪元素之外的前缀代码
+  prefixCode?: string //伪元素之外的前缀代码 例如inset:0;transform:${transform};
 }
 
 /** 渐变动画函数参数 */
 interface HandleAnimationOptions {
-  direction: Direction
+  direction: Direction //动画方向
   aspectRatio?: number //宽高比
   type: GradientType
   spread?: number // 光晕的 spread，单位 rem，控制收窄
@@ -154,11 +154,12 @@ function getGradientAnimationParams(options: UseGradientAnimationOptions = {}) {
     textGradientColors = THEME_FONT_GRADIENT_COLORS, //字体渐变颜色组
     boxShadowColors = THEME_HIGH_CONTRAST_NEON_COLORS, //荧光阴影渐变颜色组
     boxShadowConfig = {
-      x: '0',
-      y: '0',
-      blur: 0,
-      spread: 0.1,
-      brightness: 1,
+      //盒阴影渐变配置
+      x: '0', //x轴偏移量
+      y: '0', //y轴偏移量
+      blur: 0, //模糊半径
+      spread: 0.1, //光晕的 spread，单位 rem，控制收窄
+      brightness: 1, //亮度
     },
     opacity = 1, //全局透明度
     colorsCount = 3, //渐变颜色段数
@@ -241,7 +242,6 @@ export function useGradientAnimation(options: UseGradientAnimationOptions = {}) 
 
     let { aspectRatio } = getGradientAnimationParams(options)
 
-
     //获取clasName上的宽高比 以便对角线方向的线性渐变做适配  没传就用options里的
     // 用正则把w和h的值取出来转化为数字（支持如w100或h50）
     // const widthMatch = className.match(/w(\d+(\.\d+)?)/i)
@@ -251,7 +251,7 @@ export function useGradientAnimation(options: UseGradientAnimationOptions = {}) 
     // console.log(width, height)
     // if (width && height) {
     //   aspectRatio = width / height
- 
+
     // }
 
     //方向集合，用于随机选择方向
