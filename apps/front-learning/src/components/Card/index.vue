@@ -7,7 +7,6 @@
       `variant--${variant}`,
       { 'is-hoverable': hoverable },
       { 'is-bordered': bordered }, //是否显示边框
-      'gradient-animation-box-shadow-hover',
     ]"
     :style="componentStyle"
   >

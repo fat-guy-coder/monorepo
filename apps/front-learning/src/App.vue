@@ -144,7 +144,7 @@ const themeChange = (theme1: Theme) => {
 
 //全局渐变色动画
 useGradientAnimation({
-  gradientTypes: ['linear', 'box-shadow'],
+  gradientTypes: ['linear'],
   triggerTimes: ['hover'],
 })
 
