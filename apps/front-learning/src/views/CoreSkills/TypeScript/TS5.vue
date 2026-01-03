@@ -677,7 +677,6 @@ onMounted(async () => {
       margin: 0.5rem 0 0;
 
       code {
-        color: #f8f8f2;
         font-family: 'Fira Code', 'Courier New', monospace;
         font-size: 0.9rem;
         line-height: 1.5;

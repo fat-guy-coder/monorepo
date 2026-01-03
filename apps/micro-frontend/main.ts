@@ -153,9 +153,10 @@ const parseAssets = async (
 
 const executeScripts = async (
   scripts: ScriptInfo[],
-  sandbox: WindowProxy,
+  sandboxInstance: ProxySandbox,
   appName: string
 ) => {
+  const sandbox = sandboxInstance.getProxy();
   for (const scriptInfo of scripts) {
     try {
       const { url: scriptUrl, content: scriptContent, isESModule } = scriptInfo;
@@ -170,16 +171,16 @@ const executeScripts = async (
       // Process external scripts
       if (scriptUrl) {
         if (isESModule) {
-          console.log(`Loading ES Module for ${appName}:`, scriptUrl);
-          const module = await import(/* @vite-ignore */ scriptUrl);
-          if (module.bootstrap && module.mount && module.unmount) {
-            (sandbox as any)[`${appName}Lifecycles`] = {
-                bootstrap: module.bootstrap,
-                mount: module.mount,
-                unmount: module.unmount,
-            };
-            console.log(`Lifecycles found for ${appName} in ES module.`);
+          console.log(`Fetching and executing ES module for ${appName}:`, scriptUrl);
+          const response = await fetch(scriptUrl);
+          if (!response.ok) {
+            throw new Error(`Failed to fetch script: ${response.statusText}`);
           }
+          const scriptText = await response.text();
+
+          // Use the sandbox's execModule method to handle ES modules correctly.
+          await sandboxInstance.execModule(scriptText);
+          console.log(`ES module executed for ${appName}. Lifecycles should now be on the sandboxed window.`);
         } else {
           console.log(`Loading regular JS for ${appName}:`, scriptUrl);
           const response = await fetch(scriptUrl);
@@ -194,12 +195,12 @@ const executeScripts = async (
     }
   }
   // Final check for lifecycles exposed on the global scope (for non-ESM/UMD)
-  if (!(sandbox as any)[`${appName}Lifecycles`]) {
-     const globalExport = (sandbox as any)[appName];
-     if (globalExport && globalExport.bootstrap && globalExport.mount && globalExport.unmount) {
-         (sandbox as any)[`${appName}Lifecycles`] = globalExport;
-         console.log(`Lifecycles found for ${appName} on sandboxed window object.`);
-     }
+  const lifecycles = (sandbox as any)[appName] || (sandbox as any)[`${appName}Lifecycles`];
+  if (lifecycles && lifecycles.bootstrap && lifecycles.mount && lifecycles.unmount) {
+    (sandbox as any)[`${appName}Lifecycles`] = lifecycles;
+    console.log(`Lifecycles found for ${appName} on sandboxed window object.`);
+  } else {
+    console.warn(`Lifecycles not found for ${appName}. Check if they are exposed correctly on the window object.`);
   }
 };
 
@@ -307,6 +308,7 @@ export const loadApp = async (app: AppInfo) => {
 
     (sandbox.getProxy() as any).__IS_MICRO_FRONTEND_SANDBOX__ = true;
 
+
     const { scripts, styles, preloads } = await parseAssets(app);
     if (scripts.length === 0) {
       throw new Error(`No scripts found for app ${app.name}. Check if the entry point is correct and accessible.`);
@@ -359,7 +361,7 @@ export const loadApp = async (app: AppInfo) => {
       mountContainer = container;
     }
 
-    await executeScripts(scripts, sandbox.getProxy(), app.name);
+    await executeScripts(scripts, sandbox, app.name);
 
     const lifecycles = (sandbox.getProxy() as any)[`${app.name}Lifecycles`];
 

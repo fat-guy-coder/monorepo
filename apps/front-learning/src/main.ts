@@ -1,10 +1,10 @@
 import '@/assets/css/main.less'
-import { createApp, type App as VueApp } from 'vue'
-import { createPinia } from 'pinia'
-import App from './App.vue'
-import router from './router'
+import { createApp, type App as VueApp } from 'vue';
+import { createPinia } from 'pinia';
+import App from './App.vue';
+import router from './router';
 
-let appInstance: VueApp | null = null
+let appInstance: VueApp<Element> | null = null;
 let mountPoint: HTMLDivElement | null = null;
 
 const render = (container: HTMLElement | ShadowRoot) => {
@@ -12,7 +12,6 @@ const render = (container: HTMLElement | ShadowRoot) => {
   mountPoint = document.createElement('div');
   mountPoint.id = 'app';
   container.appendChild(mountPoint);
-
   appInstance = createApp(App)
   appInstance.use(createPinia())
   appInstance.use(router)

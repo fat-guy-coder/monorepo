@@ -85,6 +85,9 @@ export default defineConfig(async ({ command }) => {
       // open: true, // 启动时自动打开浏览器
       port: 8080, // 指定端口号
     },
+    preview: {
+      port: 8081,
+    },
     plugins,
     optimizeDeps: {
       include: ['vue'],

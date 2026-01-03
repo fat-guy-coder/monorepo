@@ -49,7 +49,7 @@
     "mf:build": "pnpm --filter @ld/micro-frontend run build",
     "all:build": "run-p \"build:**\"",
     "//--  Preview --//": "",
-    "front-learning:preview": "pnpm --filter front-learning preview --port 8080",
+    "front-learning:preview": "pnpm --filter front-learning run preview",
     "main:preview": "pnpm --filter @ld/main preview --port 9090",
     "prod:preview": "run-p \"preview:**\"",
     "//-- Other --//": "",

@@ -518,7 +518,6 @@ const userPrefersDark = ref(false);
       box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
 
       code {
-        color: #f8f8f2;
         display: block;
 
         .comment {

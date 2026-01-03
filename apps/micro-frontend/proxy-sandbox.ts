@@ -214,6 +214,71 @@ export class ProxySandbox implements Sandbox {
     return this.proxy;
   }
 
+  /**
+   * Executes a script as a module within the sandbox.
+   * This is necessary for Vite's dev server which serves ES modules.
+   */
+  async execModule(code: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      try {
+        // Create a temporary element to host a shadow root
+        const host = document.createElement('div');
+        host.style.display = 'none';
+        document.body.appendChild(host);
+        const shadow = host.attachShadow({ mode: 'open' });
+
+        // Create the module script
+        const script = document.createElement('script');
+        script.type = 'module';
+
+        // Use 'with' to redirect global scope to the sandbox proxy
+        // The script content is wrapped to be executed within the sandbox context.
+        // We also add a 'done' callback to signal completion.
+        const wrappedCode = `
+          const done = () => window.__module_exec_done__();
+          with(window) { 
+            try {
+              ${code}
+            } catch(e) {
+              window.__module_exec_error__(e);
+            }
+          }
+          // If the module is synchronous and doesn't have top-level await, call done immediately.
+          // For async modules, the user must call done() or it will timeout.
+          if (typeof window.__module_exec_done__ === 'function') { done(); }
+        `;
+
+        script.textContent = wrappedCode;
+
+        let timeoutId = setTimeout(() => {
+          cleanup();
+          reject(new Error('Module execution timed out. Make sure to call done() if using top-level await.'));
+        }, 5000); // 5-second timeout
+
+        const cleanup = () => {
+          clearTimeout(timeoutId);
+          delete (this.proxy as any).__module_exec_done__;
+          delete (this.proxy as any).__module_exec_error__;
+          document.body.removeChild(host);
+        };
+
+        (this.proxy as any).__module_exec_done__ = () => {
+          cleanup();
+          resolve();
+        };
+        (this.proxy as any).__module_exec_error__ = (error: Error) => {
+          cleanup();
+          reject(error);
+        };
+
+        shadow.appendChild(script);
+
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
   addWhitelist(...props: string[]) {
     props.forEach(p => this.whitelist.add(p));
   }

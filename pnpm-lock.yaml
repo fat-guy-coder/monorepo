@@ -110,28 +110,6 @@ importers:
         specifier: ^5.18.0
         version: 5.22.0
 
-  apps/main:
-    dependencies:
-      '@ld/micro-frontend':
-        specifier: workspace:*
-        version: link:../micro-frontend
-    devDependencies:
-      typescript:
-        specifier: ^5.2.2
-        version: 5.9.3
-      vite:
-        specifier: ^7.2.4
-        version: 7.3.0(@types/node@22.19.2)(jiti@2.6.1)(less@4.4.2)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2)
-
-  apps/micro-frontend:
-    devDependencies:
-      typescript:
-        specifier: ^5.2.2
-        version: 5.9.3
-      vite:
-        specifier: ^7.2.4
-        version: 7.3.0(@types/node@22.19.2)(jiti@2.6.1)(less@4.4.2)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2)
-
   apps/front-learning:
     dependencies:
       '@ld/micro-frontend':
@@ -207,6 +185,28 @@ importers:
       vue-tsc:
         specifier: ^2.2.2
         version: 2.2.12(typescript@5.9.3)
+
+  apps/main:
+    dependencies:
+      '@ld/micro-frontend':
+        specifier: workspace:*
+        version: link:../micro-frontend
+    devDependencies:
+      typescript:
+        specifier: ^5.2.2
+        version: 5.9.3
+      vite:
+        specifier: ^7.2.4
+        version: 7.3.0(@types/node@22.19.2)(jiti@2.6.1)(less@4.4.2)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2)
+
+  apps/micro-frontend:
+    devDependencies:
+      typescript:
+        specifier: ^5.2.2
+        version: 5.9.3
+      vite:
+        specifier: ^7.2.4
+        version: 7.3.0(@types/node@22.19.2)(jiti@2.6.1)(less@4.4.2)(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2)
 
   packages/utils: {}
 

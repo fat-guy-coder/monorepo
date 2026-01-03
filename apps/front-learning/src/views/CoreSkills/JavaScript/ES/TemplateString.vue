@@ -669,7 +669,6 @@ var greeting = "Hello, " + name + "!";</code></pre>
       overflow-x: auto;
 
       code {
-        color: #f8f8f2;
         font-family: 'Fira Code', 'Courier New', monospace;
         font-size: 0.85rem;
         line-height: 1.5;
@@ -885,7 +884,6 @@ var greeting = "Hello, " + name + "!";</code></pre>
       overflow-x: auto;
 
       code {
-        color: #f8f8f2;
         font-family: 'Fira Code', 'Courier New', monospace;
         font-size: 0.85rem;
         line-height: 1.5;
