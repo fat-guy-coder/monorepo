@@ -1,13 +1,5 @@
 [
   {
-    "id": "LayoutExample",
-    "name": "LayoutExample",
-    "label": "拖拽布局示例 ⭐",
-    "path": "/LayoutExample",
-    "parentPath": "/LayoutExample",
-    "icon": "🎨"
-  },
-  {
     "id": "LearningAbility",
     "name": "LearningAbility",
     "label": "学习⭐",
@@ -5229,27 +5221,8 @@
           }
         ],
         "icon": "🤝"
-      },
-      {
-        "id": "OtherConceptIntroduction",
-        "name": "OtherConceptIntroduction",
-        "label": "其他概念介绍 ⭐",
-        "path": "/OtherConceptIntroduction",
-        "parentPath": "/OtherConceptIntroduction",
-        "icon": "📜",
-        "children": [
-          {
-            "id": "CodeModelAndEditorComparison",
-            "name": "CodeModelAndEditorComparison",
-            "label": "目前代码模型和编辑器对比 ⭐⭐⭐",
-            "path": "/OtherConceptIntroduction/CodeModelAndEditorComparison",
-            "parentPath": "/OtherConceptIntroduction",
-            "icon": "🤖"
-          }
-        ]
       }
-    ],
-    "icon": "🎯"
+    ]
   },
   {
     "id": "FrameworksAndEngineering",
