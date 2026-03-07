@@ -1,9 +1,9 @@
 export default [
-  {
-    name: 'LayoutExample',
-    path: '/LayoutExample',
-    component: () => import('@/views/LayoutExample.vue'),
-  },
+  // {
+  //   name: 'LayoutExample',
+  //   path: '/LayoutExample',
+  //   component: () => import('@/views/LayoutExample.vue'),
+  // },
   {
     name: 'LearningAbility',
     path: '/LearningAbility',
