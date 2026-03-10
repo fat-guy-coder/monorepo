@@ -1,0 +1,135 @@
+/* ============================================
+   Modern High-Performance Precise Reset (Less)
+   - 侧重性能：极简选择器、低特异性、少枚举
+   - 侧重精准：仅重置跨浏览器差异明显的部分
+   - 采用 :where() 降低特异性，方便覆盖
+   ============================================ */
+
+/* 1) 盒模型：统一 border-box */
+:where(html) {
+  box-sizing: border-box;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+}
+:where(*, *::before, *::after) {
+  box-sizing: inherit;
+}
+
+/* 2) 文档基础 */
+:where(html, body) {
+  height: 100%;
+}
+:where(body) {
+  margin: 0;
+  min-height: 100%;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* 3) 常见文本块移除默认外边距 */
+:where(h1, h2, h3, h4, h5, h6, p, figure, blockquote, dl, dd) {
+  margin: 0;
+}
+
+/* 4) 列表无样式，由业务决定 */
+:where(ul, ol) {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* 5) 链接与图片/媒体的基础重置 */
+:where(a) {
+  color: inherit;
+  text-decoration: none;
+  background-color: transparent;
+}
+:where(img, picture, video, canvas, svg) {
+  display: block;
+  max-width: 100%;
+}
+:where(img) {
+  height: auto;
+  border-style: none;
+}
+:where(svg) {
+  fill: currentColor;
+}
+
+/* 6) 表单元素统一字体与外边距 */
+:where(button, input, select, textarea) {
+  font: inherit;
+  color: inherit;
+  margin: 0;
+}
+:where(button) {
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+:where(textarea) {
+  resize: vertical;
+}
+/* 移除数字输入在 WebKit 的内部按钮高度差异 */
+:where(input[type='number'])::-webkit-inner-spin-button,
+:where(input[type='number'])::-webkit-outer-spin-button {
+  height: auto;
+}
+/* 搜索框一致性 */
+:where(input[type='search']) {
+  -webkit-appearance: textfield;
+  outline-offset: -2px;
+}
+:where(input[type='search'])::-webkit-search-decoration,
+:where(input[type='search'])::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+}
+
+/* 7) 表格 */
+:where(table) {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+:where(th, td) {
+  padding: 0;
+}
+
+/* 8) 语义元素显示规则（主要为旧浏览器兜底）*/
+:where(main) {
+  display: block;
+}
+:where(summary) {
+  display: list-item;
+}
+
+/* 9) 可访问性与焦点可见性（尊重浏览器默认，仅修正异常） */
+:where([tabindex='-1']:focus) {
+  outline: none !important;
+}
+
+/* 10) 动画与滚动在减少动效偏好下关闭过渡以提升可达性 */
+// @media (prefers-reduced-motion: reduce) {
+//   :where(html:focus-within) { scroll-behavior: auto; }
+//   :where(*, *::before, *::after) {
+//     animation-duration: 0.01ms !important;
+//     animation-iteration-count: 1 !important;
+//     transition-duration: 0.01ms !important;
+//     scroll-behavior: auto !important;
+//   }
+// }
+
+/* 11) 打印：最小扰动的合理默认 */
+@media print {
+  :where(body) {
+    color: #000 !important;
+    background: transparent !important;
+  }
+  :where(a) {
+    text-decoration: underline;
+  }
+  :where(img) {
+    max-width: 100% !important;
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "files": [],
+  "apis": [
+    {
+      "name": "LibreTranslate",
+      "type": "libre",
+      "endpoint": "https://libretranslate.de/translate",
+      "enabled": true,
+      "priority": 1
+    },
+    {
+      "name": "Google Translate (Free)",
+      "type": "google",
+      "endpoint": "https://translate.googleapis.com/translate_a/single",
+      "enabled": true,
+      "priority": 2
+    },
+    {
+      "name": "百度翻译",
+      "type": "baidu",
+      "endpoint": "https://fanyi-api.baidu.com/api/trans/vip/translate",
+      "enabled": false,
+      "priority": 3,
+      "apiKey": "",
+      "appId": ""
+    },
+    {
+      "name": "有道翻译",
+      "type": "youdao",
+      "endpoint": "https://openapi.youdao.com/api",
+      "enabled": false,
+      "priority": 4,
+      "apiKey": "",
+      "appId": ""
+    },
+    {
+      "name": "Microsoft Translator",
+      "type": "microsoft",
+      "endpoint": "https://api.cognitive.microsofttranslator.com/translate",
+      "enabled": false,
+      "priority": 5,
+      "apiKey": ""
+    }
+  ]
+}
+

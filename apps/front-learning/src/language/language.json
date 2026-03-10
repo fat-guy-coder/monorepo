@@ -1,0 +1,45 @@
+{
+  "zh-CN": {
+    "common": {
+      "confirm": "确认",
+      "cancel": "取消",
+      "save": "保存",
+      "delete": "删除",
+      "edit": "编辑",
+      "add": "添加",
+      "search": "搜索",
+      "loading": "加载中...",
+      "success": "成功",
+      "error": "错误",
+      "warning": "警告",
+      "info": "提示"
+    },
+    "menu": {
+      "home": "首页",
+      "about": "关于",
+      "contact": "联系"
+    }
+  },
+  "en-US": {
+    "common": {
+      "confirm": "Confirm",
+      "cancel": "Cancel",
+      "save": "Save",
+      "delete": "Delete",
+      "edit": "Edit",
+      "add": "Add",
+      "search": "Search",
+      "loading": "Loading...",
+      "success": "Success",
+      "error": "Error",
+      "warning": "Warning",
+      "info": "Info"
+    },
+    "menu": {
+      "home": "Home",
+      "about": "About",
+      "contact": "Contact"
+    }
+  }
+}
+

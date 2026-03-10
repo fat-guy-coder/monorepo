@@ -8,18 +8,22 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules/
-apps/myvue/node_modules/
-apps/myvue/cypress/
-apps/myvue/src/menu/subMenu/
-apps/svelte/node_modules/
-apps/express/node_modules/
-apps/express/dist/
-apps/express/myvue/
-apps/express/config/
+apps/front-learning/node_modules/
+apps/front-learning/dist/
+apps/main/node_modules/
+apps/main/dist/
+apps/fastify/node_modules/
+apps/fastify/dist/
+packages/micro-frontend/
+apps/micro-frontend/dist/
+apps/micro-frontend/node_modules/
 static/
 .DS_Store
 coverage/
 *.local*
+
+
+
 
 
 .vscode/*
@@ -32,5 +36,7 @@ coverage/
 *.sw?
 *.zip
 *.7z
+.env
+.turbo
 
 *.tsbuildinfo

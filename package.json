@@ -4,39 +4,58 @@
   "description": "我的项目啊",
   "main": "main.js",
   "type": "module",
+  "packageManager": "pnpm@9.15.4",
   "devDependencies": {
+    "@inquirer/prompts": "^8.0.1",
+    "@tsconfig/node22": "^22.0.0",
+    "@types/jsdom": "^21.1.7",
     "@types/node": "^22.13.4",
+    "@vitest/eslint-plugin": "1.1.31",
     "chalk": "^5.4.1",
     "commander": "^14.0.0",
+    "cross-env": "^7.0.3",
+    "eslint": "^9.20.1",
     "husky": "^9.1.7",
-    "inquirer": "^12.9.0",
+    "jiti": "^2.4.2",
+    "jsdom": "^26.0.0",
+    "npm-run-all2": "^7.0.2",
     "ora": "^8.2.0",
+    "prettier": "^3.5.1",
+    "start-server-and-test": "^2.0.10",
+    "terser": "^5.44.1",
+    "tsx": "^4.19.3",
     "turbo": "^2.5.5",
-    "vite": "^7.0.6",
-    "vite-plugin-compression2": "^2.2.0"
+    "vite": "^7.2.4",
+    "vite-plugin-compression2": "^2.4.0",
+    "vite-plugin-dts": "^4.5.4",
+    "vitest": "^3.0.5"
   },
   "bin": {
     "gen": "./bin/cli.js"
   },
   "scripts": {
-    "test": "test",
-    "build": "pnpm -r run build",
-    "turbo": "turbo -r run build",
-    "turbo:graph": "pnpm dlx turbo run build --graph",
-    "turbo:dry": "pnpm dlx turbo run build --dry=json",
-    "turbo:clear": "pnpm dlx turbo prune",
-    "dev": "pnpm -r run dev",
-    "turbo:myvue": "turbo -F myvue run build ",
-    "vite:myvue": "pnpm -F myvue build --config  vite.config.ts",
-    "hello": "pnpm -F myvue hello",
-    "myvue": "pnpm -F myvue run dev",
-    "g": "pnpm -F myvue g",
-    "svelte": "pnpm -F svelte dev",
-    "build:svelte": "pnpm -F svelte build",
-    "preview:svelte": "pnpm -F svelte preview",
-    "build:express": "pnpm -F express run build-only",
-    "turbo:express": "turbo -F express run build-only",
-    "express": "pnpm -F express run dev"
+    "//-- Individual Dev Servers --//": "",
+    "main:dev": "pnpm --filter @ld/main run dev",
+    "front-learning:dev": "pnpm --filter front-learning run dev",
+    "//-- Turbo Build Commands --//": "",
+    "turbo:all:build": "turbo run build",
+    "turbo:front-learning:build": "turbo run build --filter=front-learning",
+    "turbo:main:build": "turbo run build --filter=@ld/main",
+    "turbo:micro-frontend:build": "turbo run build --filter=@ld/micro-frontend",
+    "turbo:project:build": "turbo run build --filter=\"$1\"",
+    "//-- Production Build --//": "",
+    "main:build": "pnpm --filter @ld/main run build",
+    "front-learning:build": "pnpm --filter front-learning run build",
+    "mf:build": "pnpm --filter @ld/micro-frontend run build",
+    "all:build": "run-p \"build:**\"",
+    "//--  Preview --//": "",
+    "front-learning:preview": "pnpm --filter front-learning run preview",
+    "main:preview": "pnpm --filter @ld/main preview --port 9090",
+    "prod:preview": "run-p \"preview:**\"",
+    "//-- Other --//": "",
+    "g": "pnpm -F front-learning g",
+    "translate": "pnpm -F front-learning translate",
+    "test": "test"
   },
   "keywords": [
     "前端学习网站",
@@ -47,6 +66,10 @@
   "pnpm": {
     "onlyBuiltDependencies": [
       "esbuild"
-    ]
+    ],
+    "overrides": {
+      "@tiptap/core": "2.27.1",
+      "@tiptap/pm": "2.27.1"
+    }
   }
 }

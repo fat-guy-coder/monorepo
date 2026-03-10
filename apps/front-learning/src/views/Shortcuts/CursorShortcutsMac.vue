@@ -1,0 +1,280 @@
+<template>
+  <div class="shortcuts-container">
+    <header class="header">
+      <h1 class="title">Mac 光标操作快捷键</h1>
+      <p class="subtitle">提升 macOS 工作效率的必备快捷键指南</p>
+    </header>
+
+    <div class="content-section">
+      <div class="category" v-for="category in categories" :key="category.name">
+        <h2 class="category-title">{{ category.name }}</h2>
+        <div class="shortcut-grid">
+          <div class="shortcut-card" v-for="shortcut in category.shortcuts" :key="shortcut.name">
+            <div class="shortcut-name">{{ shortcut.name }}</div>
+            <div class="shortcut-keys">
+              <kbd v-for="(key, index) in shortcut.keys" :key="index">{{ key }}</kbd>
+            </div>
+            <div class="shortcut-heat" :style="{ backgroundColor: getHeatColor(shortcut.heat) }">
+              {{ shortcut.heat }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <p>熟练使用这些快捷键可显著提升您在 macOS 中的工作效率</p>
+    </footer>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { computed } from 'vue';
+
+interface Shortcut {
+  name: string;
+  keys: string[];
+  heat: number; // 热度值，1-10
+  extra?: string;
+}
+
+interface Category {
+  name: string;
+  shortcuts: Shortcut[];
+}
+
+const getHeatColor = (heat: number): string => {
+  const hue = 240 - heat * 24; // 从蓝色 (240) 到红色 (0)
+  return `hsl(${hue}, 80%, 60%)`;
+};
+
+const categoriesData: Category[] = [
+  {
+    name: "⌨️ 基础编辑",
+    shortcuts: [
+      { name: "复制", keys: ["⌘", "C"], heat: 10 },
+      { name: "粘贴", keys: ["⌘", "V"], heat: 10 },
+      { name: "撤销", keys: ["⌘", "Z"], heat: 9 },
+      { name: "剪切", keys: ["⌘", "X"], heat: 8 },
+      { name: "全选", keys: ["⌘", "A"], heat: 8 },
+      { name: "重做", keys: ["⌘", "⇧", "Z"], heat: 7 },
+      { name: "粘贴无格式", keys: ["⌘", "⌥", "V"], heat: 6 },
+    ]
+  },
+  {
+    name: "🚀 光标导航",
+    shortcuts: [
+      { name: "按词移动", keys: ["⌥", "←/→"], heat: 9 },
+      { name: "行首", keys: ["⌘", "←"], heat: 8 },
+      { name: "行尾", keys: ["⌘", "→"], heat: 8 },
+      { name: "文档开头", keys: ["⌘", "↑"], heat: 7 },
+      { name: "文档结尾", keys: ["⌘", "↓"], heat: 7 },
+      { name: "按段移动", keys: ["⌥", "↑/↓"], heat: 6 },
+      { name: "跳转到行", keys: ["⌘", "L"], heat: 5 },
+    ]
+  },
+  {
+    name: "✂️ 文本操作",
+    shortcuts: [
+      { name: "删除前词", keys: ["⌥", "⌫"], heat: 8 },
+      { name: "删除到行首", keys: ["⌘", "⌫"], heat: 7 },
+      { name: "选中当前词", keys: ["⌥", "双击"], heat: 7 },
+      { name: "删除后词", keys: ["⌥", "⌦"], heat: 6 },
+      { name: "删除到行尾", keys: ["⌘", "⌦"], heat: 6 },
+      { name: "选中当前行", keys: ["⌘", "双击"], heat: 5 },
+      { name: "大小写转换", keys: ["⌥", "⌘", "C"], heat: 4 },
+    ]
+  },
+  {
+    name: "🖥️ 窗口管理",
+    shortcuts: [
+      { name: "切换应用", keys: ["⌘", "Tab"], heat: 10 },
+      { name: "关闭窗口", keys: ["⌘", "W"], heat: 9 },
+      { name: "新建窗口", keys: ["⌘", "N"], heat: 7 },
+      { name: "隐藏当前", keys: ["⌘", "H"], heat: 7 },
+      { name: "全屏", keys: ["⌘", "⌃", "F"], heat: 6 },
+      { name: "最小化", keys: ["⌘", "M"], heat: 6 },
+      { name: "反向切换", keys: ["⌘", "⇧", "Tab"], heat: 5 },
+    ]
+  },
+  {
+    name: "🔍 搜索与系统",
+    shortcuts: [
+      { name: "聚焦搜索", keys: ["⌘", "Space"], heat: 10 },
+      { name: "屏幕截图", keys: ["⌘", "⇧", "4"], heat: 9 },
+      { name: "表情符号", keys: ["⌘", "⌃", "Space"], heat: 8 },
+      { name: "强制退出", keys: ["⌘", "⌥", "Esc"], heat: 7 },
+      { name: "快速查看", keys: ["Space"], heat: 7 },
+      { name: "访达", keys: ["⌘", "⌥", "Space"], heat: 6 },
+      { name: "录屏", keys: ["⌘", "⇧", "5"], heat: 5 },
+    ]
+  },
+  {
+    name: "⚙️ 高级功能",
+    shortcuts: [
+      { name: "终端", keys: ["⌘", "Space"], extra: "输入 Terminal", heat: 8 },
+      { name: "Mission Control", keys: ["⌃", "↑"], heat: 7 },
+      { name: "锁定屏幕", keys: ["⌘", "⌃", "Q"], heat: 6 },
+      { name: "系统偏好", keys: ["⌘", ","], heat: 5 },
+      { name: "Dock 隐藏/显示", keys: ["⌘", "⌥", "D"], heat: 5 },
+      { name: "活动监视器", keys: ["⌘", "Space"], extra: "输入 Activity", heat: 4 },
+      { name: "应用切换器", keys: ["⌃", "↓"], heat: 4 },
+    ]
+  }
+];
+
+const categories = computed(() => {
+  return categoriesData.map(category => ({
+    ...category,
+    shortcuts: [...category.shortcuts].sort((a, b) => b.heat - a.heat)
+  }));
+});
+
+</script>
+
+<style lang="less" scoped>
+
+.shortcuts-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+  color: #1d1d1f;
+  background-color: #fbfbfd;
+  line-height: 1.5;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e0e0e0;
+
+  .title {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #1d1d1f;
+    letter-spacing: -0.5px;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+    color: #86868b;
+    font-weight: 400;
+  }
+}
+
+.content-section {
+  margin-bottom: 1.5rem;
+}
+
+.category {
+  margin-bottom: 2rem;
+
+  .category-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin: 1.5rem 0 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #e0e0e0;
+    color: #0071e3;
+    letter-spacing: -0.3px;
+  }
+}
+
+.shortcut-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 0.8rem;
+}
+
+.shortcut-card {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 0.9rem 1.1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.2s;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+
+  &:hover {
+    background-color: #f5f5f7;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  }
+
+  .shortcut-name {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #1d1d1f;
+    flex-grow: 1;
+  }
+
+  .shortcut-keys {
+    display: flex;
+    gap: 0.4rem;
+    margin-left: 1rem;
+
+    kbd {
+      background-color: #fff;
+      border: 1px solid #d2d2d7;
+      border-radius: 6px;
+      padding: 0.25rem 0.6rem;
+      font-size: 0.8rem;
+      font-family: 'SF Pro Display', -apple-system, sans-serif;
+      color: #515154;
+      box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+      display: inline-flex;
+      align-items: center;
+      min-width: 1.6rem;
+      justify-content: center;
+      font-weight: 500;
+
+      &:first-child {
+        background-color: #f5f5f7;
+      }
+    }
+  }
+
+  .shortcut-heat {
+    margin-left: 1rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 6px;
+    color: white;
+    font-size: 0.8rem;
+    font-weight: 600;
+    min-width: 1.5rem;
+    text-align: center;
+  }
+}
+
+.footer {
+  text-align: center;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e0e0e0;
+  color: #86868b;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+  .shortcuts-container {
+    padding: 1.5rem 1rem;
+  }
+
+  .shortcut-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .header .title {
+    font-size: 1.5rem;
+  }
+
+  .shortcut-card {
+    padding: 0.8rem 1rem;
+  }
+}
+</style>
