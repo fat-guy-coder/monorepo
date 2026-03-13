@@ -1,65 +1,33 @@
 <template>
   <div ref="container" class="main-view-container">
     <!-- 导航组件示例 -->
-    <Navigation
-      position="bottom-right"
-      :offset="{ bottom: '2rem', right: '0.5rem' }"
-      :isMobile="isMobile"
-      @item-click="handleNavClick"
-      :items="navItems"
-    >
+    <Navigation position="bottom-right" :offset="{ bottom: '2rem', right: '0.5rem' }" :isMobile="isMobile"
+      @item-click="handleNavClick" :items="navItems">
       <template #theme="{ item }">
-        <ThemeChange
-          v-model:show="themeMenuShow"
-          :theme="theme"
-          :themes="themes"
-          :direction="isMobile ? 'vertical' : 'horizontal'"
-          @theme-change="themeChange"
-        />
+        <ThemeChange v-model:show="themeMenuShow" :theme="theme" :themes="themes"
+          :direction="isMobile ? 'vertical' : 'horizontal'" @theme-change="themeChange" />
         <span class="nav-icon">{{ currentThemeIcon }}</span>
         <span class="nav-text">{{ item.label }}</span>
       </template>
     </Navigation>
     <div class="menu-container">
       <div class="search">
-        <Input
-          v-if="!Menucollapsed"
-          v-model:value="searchValue"
-          placeholder="目前暂支持菜单搜索"
-          allow-clear
-        ></Input>
+        <Input v-if="!Menucollapsed" v-model:value="searchValue" placeholder="目前暂支持菜单搜索" allow-clear></Input>
         <Button @click="toggleCollapsed"> {{ Menucollapsed ? '➡️' : '⬅️' }} </Button>
       </div>
       <div :class="Menucollapsed ? 'menu-collapsed' : 'menu'">
         <Spin :spinning="loading" class="loading" />
-        <Menu
-          @select="goto"
-          :isMobile="isMobile"
-          :collapsed="Menucollapsed"
-          v-show="!loading"
-          :mode="Menucollapsed ? 'vertical' : 'inline'"
-          :items="menus as any"
-          :selectedKeys="selectedKeys"
-          v-model:openKeys="openKeys"
-        >
+        <Menu @select="goto" :isMobile="isMobile" :collapsed="Menucollapsed" v-show="!loading"
+          :mode="Menucollapsed ? 'vertical' : 'inline'" :items="menus as any" :selectedKeys="selectedKeys"
+          v-model:openKeys="openKeys">
         </Menu>
       </div>
     </div>
     <div class="content">
       <div class="tabs">
-        <RouteTab
-          @tab-click="tabClick"
-          :activeKey="activeKey"
-          :currentDragIndex="currentDragIndex"
-          :tabList="tabList"
-          :showContextMenu="showContextMenu"
-          @remove="removeTab"
-          @remove-other="removeOther"
-          @remove-side="removeSide"
-          @set-current-drag-index="setCurrentDragIndex"
-          @sort-tab="sortTab"
-          @toggle-show-menu="toggleShowMenu"
-        >
+        <RouteTab @tab-click="tabClick" :activeKey="activeKey" :currentDragIndex="currentDragIndex" :tabList="tabList"
+          :showContextMenu="showContextMenu" @remove="removeTab" @remove-other="removeOther" @remove-side="removeSide"
+          @set-current-drag-index="setCurrentDragIndex" @sort-tab="sortTab" @toggle-show-menu="toggleShowMenu">
         </RouteTab>
       </div>
       <div class="mainView" id="mainView" @scroll="handleScroll">
@@ -77,7 +45,7 @@
 <script lang="ts" setup>
 //vue编译器会自动引入components目录下的所有组件，但不是异步组件，这一步是为了将所有组件转换为异步组件，以优化初始加载性能
 import { Menu, RouteTab, ThemeChange, Navigation, Input, Button, message, Spin } from '@/components'
-import { computed, ref, watch, onMounted, onUnmounted, nextTick, provide } from 'vue'
+import { computed, ref, watch, onMounted, onUnmounted, nextTick, provide, getCurrentInstance } from 'vue'
 import {
   type MenuItem, //菜单项类型
   findFatherKeysListByKey, //查找父级菜单key列表
@@ -97,9 +65,10 @@ import { useDetectDevice } from '@/hooks/useDetectDevice' //设备信息hook
 // import { request } from '@/request'
 
 //获取用户信息store
-const userStore = useUserStore()
+// const userStore = useUserStore()
 const deviceStore = useDeviceStore()
 const uiConfigStore = useUIConfigStore()
+
 
 //是否是手机端
 const isMobile = computed(() => deviceStore.isMobile)

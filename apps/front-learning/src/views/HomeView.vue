@@ -1,10 +1,9 @@
 <template>
- <Template />
+  <Template />
 </template>
 
 <script lang="ts" setup>
 import Template from '@/components/Template/index.vue'
-import { useGradientAnimation } from '@/hooks/useGradientAnimation' //渐变色动画
 
 </script>
 
@@ -20,5 +19,4 @@ import { useGradientAnimation } from '@/hooks/useGradientAnimation' //渐变色�
   margin: 100px auto;
   position: absolute;
 }
-
 </style>

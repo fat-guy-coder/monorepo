@@ -1,92 +1,73 @@
-# 前端学习项目
+# Monorepo 项目
 
 ## 项目概述
 
-这是一个综合性的前端学习项目，包含多个子应用和模块，旨在提供全面的前端技术学习资源。
+这是一个综合性的 Monorepo 项目，包含多个前端和后端应用，使用 pnpm workspace 和 Turborepo 进行管理。
 
 ## 项目结构
 
-### apps/front-learning - Vue.js 学习应用
+```
+monorepo/
+├── apps/
+│   ├── front-learning/    # 前端学习网站 (Vue 3)
+│   ├── main/              # 个人主页 (Solid.js)
+│   ├── go/                # Go 学习项目
+│   │   ├── frontend/      # Go 学习网站前端 (Solid.js)
+│   │   └── backend/       # Go 学习网站后端 (Gin)
+│   └── cpp/               # C++ 学习项目
+│       ├── frontend/      # C++ 学习网站前端 (Solid.js)
+│       └── backend/       # C++ 学习网站后端 (Crow)
+├── packages/              # 共享包
+├── turbo.json             # Turborepo 配置
+└── pnpm-workspace.yaml    # pnpm 工作区配置
+```
 
-- **框架**: Vue 3 + TypeScript + Less
-- **功能**: 前端技术知识库，包含JavaScript、CSS、框架等学习内容
-- **特色**: 模块化设计，响应式布局，现代化UI
+## 技术栈概览
 
-### apps/express - 后端服务
+### apps/front-learning
+- **框架**: Vue 3 + TypeScript
+- **样式**: Less
+- **路由**: vue-router
+- **状态**: Pinia
+- **构建**: Vite
 
-- **框架**: Express + TypeScript
-- **功能**: 提供API服务和数据支持
+### apps/main
+- **框架**: Solid.js
+- **路由**: @solidjs/router
+- **样式**: Tailwind CSS v4
+- **动画**: GSAP
+- **构建**: Vite
 
-## 最近更新
+### apps/go
+- **描述**: Go 学习项目
 
-### Set & Map 页面重构 (2025年)
+#### apps/go/frontend
+- **框架**: Solid.js
+- **路由**: @solidjs/router
+- **样式**: Tailwind CSS v4
+- **构建**: Vite
+- **端口**: 5174
 
-- **文件位置**: `apps/front-learning/src/views/CoreSkills/JavaScript/ES/SetMap.vue`
-- **改进内容**:
-  - 重新设计了完整的Set和Map介绍页面
-  - 采用浅色主题，风格整齐紧凑
-  - 详细介绍了概念、特点、API、优缺点、适用场景
-  - 包含完整的代码示例和最佳实践
-  - 响应式设计，支持移动端访问
-  - 使用TypeScript + Less + Scoped + Setup语法
+#### apps/go/backend
+- **框架**: Gin (Go)
+- **端口**: 8080
+- **API**: RESTful
 
-### Promise 实现场景页面 (2025年)
+### apps/cpp
 
-- **文件位置**: `apps/front-learning/src/views/CoreSkills/JavaScript/ES/PromiseImplementationScenarios.vue`
-- **改进内容**:
-  - 重新设计了完整的Promise实现场景页面
-  - 包含链式调用、并发控制、Scheduler实现、超时控制、async实现等场景
-  - 采用浅色主题，风格整齐紧凑
-  - 每个场景都有详细的代码实现和使用示例
-  - 包含可交互的演示功能
-  - 响应式设计，支持移动端访问
+#### apps/cpp/frontend
+- **框架**: Solid.js
+- **路由**: @solidjs/router
+- **样式**: Tailwind CSS v4
+- **构建**: Vite
+- **端口**: 5175
 
-### 页面特性
+#### apps/cpp/backend
+- **框架**: Crow (C++)
+- **端口**: 8081
+- **API**: RESTful
 
-- **概念定义**: 清晰解释Set和Map的基本概念
-- **核心特点**: 突出展示每种数据结构的关键特性
-- **API文档**: 完整的API方法表格，包含参数、返回值、示例
-- **遍历方法**: 详细的遍历方式说明和代码示例
-- **优缺点分析**: 客观分析每种数据结构的优缺点
-- **适用场景**: 实际应用场景和代码示例
-- **对比表格**: Set vs Map vs Object的详细对比
-- **最佳实践**: 开发中的最佳实践建议
-
-### Promise 场景特性
-
-- **链式调用**: 完整的Promise链式调用实现
-- **并发控制**: Promise并发控制器实现
-- **Scheduler**: 任务调度器实现
-- **超时控制**: Promise超时控制机制
-- **async实现**: 使用Promise和Generator实现async/await
-- **高级应用**: 重试机制、缓存机制、进度通知等
-
-### 技术栈
-
-- Vue 3 Composition API
-- TypeScript
-- Less CSS预处理器
-- 响应式设计
-- 现代化UI组件
-
-### 通用 404 页面
-
-- 文件位置: `apps/front-learning/src/views/Other/notFound.vue`
-- 特性:
-  - 自适应布局，良好移动端体验
-  - 使用全局 CSS 变量适配明/暗主题
-  - 轻量 SVG 插画与细微动画（低功耗，避免重资源）
-  - 提供“返回首页”和“返回上一页”操作
-  - 无第三方依赖，零额外打包体积
-- 路由集成:
-  - 在 `apps/front-learning/src/router/index.ts` 中配置了兜底路由：`/:pathMatch(.*)*` 指向 404 页面
-
-## 开发指南
-
-### 环境要求
-
-- Node.js 16+
-- pnpm (推荐包管理器)
+## 快速开始
 
 ### 安装依赖
 
@@ -96,20 +77,42 @@ pnpm install
 
 ### 启动开发服务器
 
+| 命令 | 说明 |
+|------|------|
+| `pnpm front-learning:dev` | 启动前端学习网站 (Vue) |
+| `pnpm main:dev` | 启动个人主页 |
+| `pnpm go:dev` | 启动 Go 学习前端 |
+| `pnpm go-server:dev` | 启动 Go 学习后端 |
+| `pnpm cpp:dev` | 启动 C++ 学习前端 |
+| `pnpm cpp-server:dev` | 启动 C++ 学习后端 (需 CMake 构建) |
+
+### 构建
+
 ```bash
-pnpm dev
+# 构建所有项目
+pnpm all:build
+
+# 构建单个项目
+pnpm front-learning:build
+pnpm main:build
+pnpm go:build
+pnpm cpp:build
 ```
 
-### 构建生产版本
+## 工作区依赖
 
-```bash
-pnpm build
-```
+项目使用 pnpm workspace，共享依赖统一放在根目录的 `package.json` 中：
 
-## 贡献指南
+- solid-js / @solidjs/router (Solid.js 系列)
+- tailwindcss / postcss / autoprefixer (CSS)
+- vite / typescript / vite-plugin-solid (构建)
+- gsap (动画，仅 main 项目使用)
 
-欢迎提交Issue和Pull Request来改进项目。
+子项目的 `package.json` 只保留项目特有的依赖（如 gsap）或必要的开发依赖。
 
-## 许可证
+## 开发规范
 
-MIT License
+1. 使用 TypeScript 进行开发
+2. 遵循项目的技术栈规范
+3. 确保构建通过后再提交代码
+4. 前端项目遵循赛博朋克/科技风设计规范

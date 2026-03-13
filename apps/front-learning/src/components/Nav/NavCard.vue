@@ -1,25 +1,14 @@
 <template>
-  <div
-    class="nav-carx"
-    :class="[
-      `nav-carx--${direction}`,
-      `nav-carx--${size}`,
-      `nav-carx--rounded-${rounded}`,
-      ...animationClasses,
-      { 'nav-carx--borderless': !bordered, 'nav-carx--gradient': variant === 'gradient' },
-    ]"
-    :style="componentStyle"
-    role="navigation"
-    aria-label="内容导航卡片列表"
-  >
-    <button
-      v-for="(item, index) in items"
-      :key="item.id ?? `${item.title}-${index}`"
-      type="button"
-      class="nav-carx__item gradient-animation-linear-hover"
-      :class="{ 'is-active': item.id && item.id === activeId }"
-      @click="handleItemClick(item, index)"
-    >
+  <div class="nav-carx" :class="[
+    `nav-carx--${direction}`,
+    `nav-carx--${size}`,
+    `nav-carx--rounded-${rounded}`,
+    ...animationClasses,
+    { 'nav-carx--borderless': !bordered, 'nav-carx--gradient': variant === 'gradient' },
+  ]" :style="componentStyle" role="navigation" aria-label="内容导航卡片列表">
+    <button v-for="(item, index) in items" :key="item.id ?? `${item.title}-${index}`" type="button"
+      class="nav-carx__item gradient-animation-linear-hover" :class="{ 'is-active': item.id && item.id === activeId }"
+      @click="handleItemClick(item, index)">
       <div class="nav-carx__prefix">
         <slot name="prefix" :item="item" :index="index">
           <span v-if="showIndex" class="nav-carx__index">{{ index + 1 }}</span>
@@ -36,15 +25,10 @@
     </button>
   </div>
   <div class="nav-carx__container">
-    <transition
-      :enter-from-class="getAnimationStage('enter-from')"
-      :enter-active-class="getAnimationStage('enter-active')"
-      :enter-to-class="getAnimationStage('enter-to')"
-      :leave-from-class="getAnimationStage('leave-from')"
-      :leave-active-class="getAnimationStage('leave-active')"
-      :leave-to-class="getAnimationStage('leave-to')"
-      mode="out-in"
-    >
+    <transition :enter-from-class="getAnimationStage('enter-from')"
+      :enter-active-class="getAnimationStage('enter-active')" :enter-to-class="getAnimationStage('enter-to')"
+      :leave-from-class="getAnimationStage('leave-from')" :leave-active-class="getAnimationStage('leave-active')"
+      :leave-to-class="getAnimationStage('leave-to')" mode="out-in">
       <div class="nav-carx__container-item" :key="activeId" v-if="activeId">
         <slot :name="activeId"></slot>
       </div>
@@ -52,7 +36,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup lang="ts" vapor>
 import { computed, type CSSProperties } from 'vue'
 import { type AnimationType, type AnimationStage, getAnimationClassName } from '@/function'
 
@@ -94,7 +78,7 @@ const getAnimationStage = (stage: AnimationStage): string => {
   return getAnimationClassName(animation, stage)
 }
 
-const emit = defineEmits<{ 
+const emit = defineEmits<{
   (e: 'select', item: NavTagItem, index: number): void
 }>()
 
@@ -181,6 +165,7 @@ defineExpose({ scrollToTarget })
   box-shadow: var(--box-shadow-xs);
   position: relative;
   overflow: hidden;
+
   &:hover {
     border-color: var(--nav-color-border-hover);
     box-shadow: var(--nav-box-shadow-hover);
@@ -294,6 +279,7 @@ defineExpose({ scrollToTarget })
 }
 
 @keyframes pulse-border {
+
   0%,
   100% {
     box-shadow: 0 0 0 0 var(--color-highlight-bg);

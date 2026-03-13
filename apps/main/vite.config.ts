@@ -1,29 +1,21 @@
-import { defineConfig } from "vite";
-import { compression, defineAlgorithm } from "vite-plugin-compression2";
-import zlib from "zlib";
+import { defineConfig } from 'vite'
+import solid from 'vite-plugin-solid'
+import { fileURLToPath, URL } from 'node:url'
 
-// https://vitejs.dev/config/
 export default defineConfig({
+  plugins: [solid()],
+  resolve: {
+    alias: {
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
+    },
+    dedupe: ['solid-js'],
+  },
   server: {
-    port: 9090,
-    // Allow access from any network interface
-    host: "0.0.0.0",
+    port: 8090,
+    strictPort: true,
   },
   build: {
-    // Output to a unified dist folder at the workspace root
-    outDir: "dist",
-    emptyOutDir: true,
+    target: 'esnext',
   },
-  plugins: [
-    compression({
-      algorithms: [
-        "gzip",
-        defineAlgorithm("brotliCompress", {
-          [zlib.constants.BROTLI_PARAM_QUALITY]: 6,
-        }),
-      ],
-      // deleteOriginalAssets: true,
-      threshold: 500,
-    }),
-  ],
-});
+})
+

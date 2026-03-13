@@ -186,7 +186,6 @@ function merge<T>(left: T[], right: T[], compareFn?: (a: T, b: T) => number): T[
 export function scrollIntoViewById(elementId: string, behavior: 'smooth' | 'instant' = 'smooth') {
   const element = document.getElementById(elementId)
   if (element) {
-    console.log(element.scrollIntoView)
     if (element.scrollIntoView) {
       element.scrollIntoView({ behavior, block: 'center' })
     } else {

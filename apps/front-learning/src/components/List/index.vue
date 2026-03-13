@@ -45,7 +45,7 @@
   </ul>
 </template>
 
-<script setup lang="ts">
+<script setup lang="ts" vapor>
 import { ref, watch, computed, type CSSProperties } from 'vue'
 import { Link, Progress } from '@/components'
 import type { ListItem, IPlan, ITodo, ILink, IProgress, ITip } from '.'
@@ -86,8 +86,6 @@ const toggleComplete = (item: ITodo) => {
 </script>
 
 <style lang="less" scoped>
-
-
 .ui-list {
   // --- 自有 CSS 变量定义 ---
   --list-bg-transparent: var(--list-bg-transparent, transparent);
@@ -100,7 +98,7 @@ const toggleComplete = (item: ITodo) => {
   --list-item-hover-bg: var(--color-fill-secondary);
   --list-border-radius: var(--border-radius-md);
   --_list-style: var(--list-style);
-  
+
 
 
 
@@ -110,7 +108,7 @@ const toggleComplete = (item: ITodo) => {
   list-style: var(--list-style);
   padding: var(--list-padding);
   margin: 0;
-  background: var( --list-bg-normal);
+  background: var(--list-bg-normal);
   border-radius: var(--list-border-radius);
   overflow: hidden; // 确保子元素的圆角生效
 
@@ -124,6 +122,7 @@ const toggleComplete = (item: ITodo) => {
   color: var(--list-item-color);
   border-bottom: 1px solid var(--list-item-border-color);
   border-radius: var(--list-border-radius);
+
   &:last-child {
     border-bottom: none;
   }
@@ -216,8 +215,8 @@ const toggleComplete = (item: ITodo) => {
   }
 }
 
-.ui-card{
-  .list-type--plan{
+.ui-card {
+  .list-type--plan {
     background-color: var(--list-bg-transparent);
   }
 }
@@ -272,7 +271,7 @@ const toggleComplete = (item: ITodo) => {
     word-break: break-word; // 强制长单词换行
   }
 
-  // --- 响应式布局 --- 
+  // --- 响应式布局 ---
   @media (max-width: 767.98px) {
     .plan-item {
       flex-direction: column;
@@ -339,7 +338,7 @@ const toggleComplete = (item: ITodo) => {
   .tips-item {
     padding: var(--list-item-padding);
     border-radius: var(--list-border-radius);
- 
+
     margin-bottom: var(--gap-lg);
   }
 

@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(go version:*)",
+      "Bash(go mod:*)",
+      "Bash(go env:*)",
+      "Bash(pnpm install:*)",
+      "Bash(pnpm go:dev)",
+      "Bash(pnpm go-server:dev)",
+      "Bash(curl -s http://localhost:8080/api/health)",
+      "Bash(mv apps/go/* apps/go/frontend/)",
+      "Bash(mv apps/go-server/* apps/go/backend/)",
+      "Bash(mv apps/go/frontend/frontend/* apps/go/frontend/)",
+      "Bash(rm -rf apps/go/frontend/frontend)",
+      "Bash(netstat -ano)",
+      "Bash(taskkill /PID 13224 /F)",
+      "Bash(powershell -Command \"Stop-Process -Id 13224 -Force\")",
+      "Bash(powershell -Command \"Stop-Process -Id 24464 -Force; Stop-Process -Id 8092 -Force\")",
+      "Bash(pnpm cpp:dev)"
+    ]
+  }
+}

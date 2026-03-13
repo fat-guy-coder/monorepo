@@ -1,48 +1,28 @@
 <template>
   <div class="page-container" :class="[`page-container--${currentMode}`]" :style="styleVars">
     <!-- 头部：标题区 -->
-    <PageHeader
-      title="核心技能模板页"
-      subtitle="以主题变量驱动的卡片式信息布局"
-      description="建议：本模板用于承载知识点/功能模块的分区展示。通过主题变量实现深浅/冷暖主题的无缝切换；布局优先采用栅格，在移动端保持优秀可读性与触达性。"
-    />
+    <PageHeader title="核心技能模板页" subtitle="以主题变量驱动的卡片式信息布局"
+      description="建议：本模板用于承载知识点/功能模块的分区展示。通过主题变量实现深浅/冷暖主题的无缝切换；布局优先采用栅格，在移动端保持优秀可读性与触达性。" />
     <!-- 列表模式和混合模式：导航 -->
     <Nav v-if="currentMode === 'list'" show-back-to-top :list="categoryList" show-child />
     <Nav v-if="currentMode === 'mixed'" show-back-to-top :list="mixedNavList" show-child />
     <!-- 模式切换 Tabs -->
     <Row :gutter="currentConfig.grid?.gutter || 0">
       <Col span="24">
-        <NavCard
-          :items="modeTabs.map((t) => ({ id: t.value, title: t.label }))"
-          size="medium"
-          variant="gradient"
-          rounded="md"
-          :direction="(templateConfig.components.navTagCard?.direction as any) || 'horizontal'"
-          :animation="['slide-left']"
-          v-model:active-id="currentMode"
-        >
+        <NavCard :items="modeTabs.map((t) => ({ id: t.value, title: t.label }))" size="medium" variant="gradient"
+          rounded="md" :direction="(templateConfig.components.navTagCard?.direction as any) || 'horizontal'"
+          :animation="['slide-left']" v-model:active-id="currentMode">
           <!-- 普通模式 -->
           <template #normal>
             <Row :gutter="currentConfig.grid?.gutter || 0">
               <Col v-bind="currentConfig.grid?.layout?.row1?.planOverview">
-                <Card
-                  class="card-large"
-                  :hoverable="true"
-                  :bordered="true"
-                  title="概览 · 今日学习计划"
-                  id="planOverview"
-                >
+                <Card class="card-large" :hoverable="true" :bordered="true" title="概览 · 今日学习计划" id="planOverview">
                   <List type="plan" :items="planList" :show-underline="false" />
                 </Card>
               </Col>
 
               <Col v-bind="currentConfig.grid?.layout?.row1?.keyPoints1">
-                <Card
-                  class="card-small"
-                  :hoverable="true"
-                  :h3="smallCards[0]?.title"
-                  id="keyPoints1"
-                >
+                <Card class="card-small" :hoverable="true" :h3="smallCards[0]?.title" id="keyPoints1">
                   <List type="bullet" :items="smallCards[0]?.items || []" />
                 </Card>
               </Col>
@@ -50,23 +30,13 @@
 
             <Row :gutter="currentConfig.grid?.gutter || 0">
               <Col v-bind="currentConfig.grid?.layout?.row2?.keyPoints2">
-                <Card
-                  class="card-small"
-                  :hoverable="true"
-                  :h3="smallCards[1]?.title"
-                  id="keyPoints2"
-                >
+                <Card class="card-small" :hoverable="true" :h3="smallCards[1]?.title" id="keyPoints2">
                   <List type="bullet" :items="smallCards[1]?.items || []" />
                 </Card>
               </Col>
 
               <Col v-bind="currentConfig.grid?.layout?.row2?.keyPoints3">
-                <Card
-                  class="card-small"
-                  :hoverable="true"
-                  :h3="smallCards[2]?.title"
-                  id="keyPoints3"
-                >
+                <Card class="card-small" :hoverable="true" :h3="smallCards[2]?.title" id="keyPoints3">
                   <List type="bullet" :items="smallCards[2]?.items || []" />
                 </Card>
               </Col>
@@ -74,12 +44,7 @@
 
             <Row :gutter="currentConfig.grid?.gutter || 0">
               <Col v-bind="currentConfig.grid?.layout?.row3?.codeExample">
-                <Card
-                  class="card-large"
-                  :hoverable="true"
-                  title="示例 · 类型系统要点"
-                  id="codeExample"
-                >
+                <Card class="card-large" :hoverable="true" title="示例 · 类型系统要点" id="codeExample">
                   <Code :code="codeSnippet" language="ts" title="类型系统示例" />
                 </Card>
               </Col>
@@ -100,102 +65,42 @@
           </template>
           <!-- 列表模式 -->
           <template #list>
-            <Row
-              :gutter="currentConfig.grid?.gutter || 0"
-              v-for="category in categoryList"
-              :key="category.id"
-            >
+            <Row :gutter="currentConfig.grid?.gutter || 0" v-for="category in categoryList" :key="category.id">
               <Col v-bind="currentConfig.grid?.layout?.item">
-                <Card
-                  as="section"
-                  :hoverable="true"
-                  :key="category.id"
-                  :id="category.id"
-                  class="category-section"
-                  :title="category.name"
-                >
-                  <Row
-                    :gutter="currentConfig.grid?.gutter || 0"
-                    v-for="(item, index) in category.children"
-                    :key="item.id"
-                  >
-                    <Col
-                      v-if="category.id !== 'key-points'"
-                      v-bind="currentConfig.grid?.layout?.item"
-                    >
+                <Card as="section" :hoverable="true" :key="category.id" :id="category.id" class="category-section"
+                  :title="category.name">
+                  <Row :gutter="currentConfig.grid?.gutter || 0" v-for="(item, index) in category.children"
+                    :key="item.id">
+                    <Col v-if="category.id !== 'key-points'" v-bind="currentConfig.grid?.layout?.item">
                       <Card :id="item.id" :bordered="false" :title="item.name">
-                        <List
-                          v-if="item.type === 'plan'"
-                          type="plan"
-                          :items="item.data as IPlan[]"
-                          :show-underline="false"
-                        />
-                        <List
-                          v-else-if="item.type === 'list'"
-                          type="bullet"
-                          :items="item.data as string[]"
-                        />
-                        <Code
-                          v-else-if="item.type === 'code'"
-                          :code="item.data as string"
-                          language="ts"
-                          :hidden-toolbar="false"
-                        />
-                        <List
-                          v-else-if="item.type === 'todo'"
-                          type="todo"
-                          :items="item.data as ITodo[]"
-                          :show-underline="false"
-                        />
-                        <List
-                          v-else-if="item.type === 'links'"
-                          type="link"
-                          :items="item.data as ILink[]"
-                          :show-underline="false"
-                        />
+                        <List v-if="item.type === 'plan'" type="plan" :items="item.data as IPlan[]"
+                          :show-underline="false" />
+                        <List v-else-if="item.type === 'list'" type="bullet" :items="item.data as string[]" />
+                        <Code v-else-if="item.type === 'code'" :code="item.data as string" language="ts"
+                          :hidden-toolbar="false" />
+                        <List v-else-if="item.type === 'todo'" type="todo" :items="item.data as ITodo[]"
+                          :show-underline="false" />
+                        <List v-else-if="item.type === 'links'" type="link" :items="item.data as ILink[]"
+                          :show-underline="false" />
                         <div v-else-if="item.type === 'tags'" class="chip-list">
-                          <Link
-                            v-for="tag in item.data as ITag[]"
-                            :key="tag.id"
-                            :id="tag.id"
-                            :href="tag.href"
-                            :text="tag.label"
-                            size="small"
-                          />
+                          <Link v-for="tag in item.data as ITag[]" :key="tag.id" :id="tag.id" :href="tag.href"
+                            :text="tag.label" size="small" />
                         </div>
-                        <List
-                          v-else-if="item.type === 'progress'"
-                          :items="item.data as IProgress[]"
-                          :show-underline="false"
-                        >
+                        <List v-else-if="item.type === 'progress'" :items="item.data as IProgress[]"
+                          :show-underline="false">
                         </List>
-                        <List
-                          v-else-if="item.type === 'tips'"
-                          :items="(item.data as ITip[]).map((i) => i.text)"
-                        />
+                        <List v-else-if="item.type === 'tips'" :items="(item.data as ITip[]).map((i) => i.text)" />
                       </Card>
                     </Col>
                     <Col v-else span="24">
                       <Row :gutter="currentConfig.grid?.gutter || 0" :key="item.id">
                         <Col v-bind="currentConfig?.grid?.layout?.keyPoints">
                           <Card :id="item.id" :title="item.name">
-                            <List
-                              v-if="item.type === 'plan'"
-                              type="plan"
-                              :items="item.data as IPlan[]"
-                              :show-underline="false"
-                            />
-                            <List
-                              v-else-if="item.type === 'list'"
-                              type="bullet"
-                              :items="item.data as string[]"
-                            />
-                            <Code
-                              v-else-if="item.type === 'code'"
-                              :code="item.data as string"
-                              language="ts"
-                              :hidden-toolbar="false"
-                            />
+                            <List v-if="item.type === 'plan'" type="plan" :items="item.data as IPlan[]"
+                              :show-underline="false" />
+                            <List v-else-if="item.type === 'list'" type="bullet" :items="item.data as string[]" />
+                            <Code v-else-if="item.type === 'code'" :code="item.data as string" language="ts"
+                              :hidden-toolbar="false" />
                           </Card>
                         </Col>
                       </Row>
@@ -207,74 +112,32 @@
           </template>
           <!-- 瀑布模式 -->
           <template #waterfall>
-            <Card
-              as="section"
-              v-for="chapter in waterfallChapters"
-              :key="chapter.id"
-              :id="chapter.id"
-              class="waterfall-column-section"
-              :title="chapter.title"
-            >
-              <List
-                v-if="chapter.type === 'plan'"
-                type="plan"
-                :items="chapter.data as IPlan[]"
-                :show-underline="false"
-              />
-              <List
-                v-else-if="chapter.type === 'points'"
-                :items="chapter.data as ISmallCard[]"
-                :show-underline="false"
-              >
+            <Card as="section" v-for="chapter in waterfallChapters" :key="chapter.id" :id="chapter.id"
+              class="waterfall-column-section" :title="chapter.title">
+              <List v-if="chapter.type === 'plan'" type="plan" :items="chapter.data as IPlan[]"
+                :show-underline="false" />
+              <List v-else-if="chapter.type === 'points'" :items="chapter.data as ISmallCard[]" :show-underline="false">
                 <template #item="{ item: point }">
                   <Card :title="(point as ISmallCard).title">
                     <List type="bullet" :items="(point as ISmallCard).items" />
                   </Card>
                 </template>
               </List>
-              <Code
-                v-else-if="chapter.type === 'code'"
-                :code="chapter.data as string"
-                language="ts"
-                :hidden-toolbar="false"
-              />
-              <List
-                v-else-if="chapter.type === 'todo'"
-                type="todo"
-                :items="chapter.data as ITodo[]"
-                :show-underline="false"
-              />
-              <List
-                v-else-if="chapter.type === 'links'"
-                type="link"
-                :items="chapter.data as ILink[]"
-                :show-underline="false"
-              />
+              <Code v-else-if="chapter.type === 'code'" :code="chapter.data as string" language="ts"
+                :hidden-toolbar="false" />
+              <List v-else-if="chapter.type === 'todo'" type="todo" :items="chapter.data as ITodo[]"
+                :show-underline="false" />
+              <List v-else-if="chapter.type === 'links'" type="link" :items="chapter.data as ILink[]"
+                :show-underline="false" />
               <div v-else-if="chapter.type === 'tags'" class="waterfall-tags-container">
-                <Link
-                  v-for="tag in chapter.data as ITag[]"
-                  :key="tag.id"
-                  :id="tag.id"
-                  :href="tag.href"
-                  :text="tag.label"
-                  size="medium"
-                  variant="gradient"
-                  :gradient-colors="['#1677ff', '#69b1ff']"
-                  rounded="pill"
-                  animation="glow"
-                  target="_blank"
-                />
+                <Link v-for="tag in chapter.data as ITag[]" :key="tag.id" :id="tag.id" :href="tag.href"
+                  :text="tag.label" size="medium" variant="gradient" :gradient-colors="['#1677ff', '#69b1ff']"
+                  rounded="pill" animation="glow" target="_blank" />
               </div>
-              <List
-                v-else-if="chapter.type === 'progress'"
-                :items="chapter.data as IProgress[]"
-                :show-underline="false"
-              >
+              <List v-else-if="chapter.type === 'progress'" :items="chapter.data as IProgress[]"
+                :show-underline="false">
               </List>
-              <List
-                v-else-if="chapter.type === 'tips'"
-                :items="(chapter.data as ITip[]).map((i) => i.text)"
-              />
+              <List v-else-if="chapter.type === 'tips'" :items="(chapter.data as ITip[]).map((i) => i.text)" />
             </Card>
           </template>
           <!-- 混合模式 -->
@@ -282,12 +145,7 @@
             <div class="mixed-content">
               <Row :gutter="currentConfig.grid?.gutter || 0">
                 <Col v-bind="currentConfig.grid?.layout?.row1?.planOverview">
-                  <Card
-                    class="card-large"
-                    :hoverable="true"
-                    :bordered="true"
-                    title="📅 概览 · 今日学习计划"
-                  >
+                  <Card class="card-large" :hoverable="true" :bordered="true" title="📅 概览 · 今日学习计划">
                     <List type="plan" :items="planList" :show-underline="false" />
                   </Card>
                 </Col>
@@ -318,22 +176,11 @@
     <!-- Standalone Sections -->
     <Row :gutter="currentConfig.grid?.gutter || 0">
       <Col v-bind="templateConfig.common?.grid?.layout?.row1?.quickNav">
-        <Card
-          as="section"
-          class="page-section"
-          variant="section-card"
-          :hoverable="true"
-          title="专题 · 快速导航"
-          id="quickNav"
-        >
-          <NavCard
-            :items="tags.map((t) => ({ id: t.id, title: t.label }))"
-            size="medium"
-            variant="gradient"
-            rounded="md"
-            :direction="(templateConfig.components.navTagCard?.direction as any) || 'horizontal'"
-            :enable-scroll="templateConfig.components.navTagCard?.mode === 'scroll'"
-          >
+        <Card as="section" class="page-section" variant="section-card" :hoverable="true" title="专题 · 快速导航"
+          id="quickNav">
+          <NavCard :items="tags.map((t) => ({ id: t.id, title: t.label }))" size="medium" variant="gradient"
+            rounded="md" :direction="(templateConfig.components.navTagCard?.direction as any) || 'horizontal'"
+            :enable-scroll="templateConfig.components.navTagCard?.mode === 'scroll'">
             <template #[i.id] v-for="i in tags">
               <Card :hoverable="true" :h3="i.label">
                 <List :items="tips.map((tip) => tip.text)" />
@@ -346,28 +193,14 @@
 
     <Row :gutter="currentConfig.grid?.gutter || 0">
       <Col v-bind="templateConfig.common?.grid?.layout?.row2?.progress">
-        <Card
-          as="section"
-          class="page-section"
-          variant="section-card"
-          :hoverable="true"
-          title="进度 · 可视化"
-          id="progress"
-        >
+        <Card as="section" class="page-section" variant="section-card" :hoverable="true" title="进度 · 可视化" id="progress">
           <List :items="progresses" type="progress" :show-underline="false"> </List>
         </Card>
       </Col>
     </Row>
     <Row :gutter="currentConfig.grid?.gutter || 0">
       <Col v-bind="templateConfig.common?.grid?.layout?.row3?.tips">
-        <Card
-          as="section"
-          class="page-section"
-          variant="section-card"
-          :hoverable="true"
-          title="Tips · 温馨提示"
-          id="tips"
-        >
+        <Card as="section" class="page-section" variant="section-card" :hoverable="true" title="Tips · 温馨提示" id="tips">
           <List :items="tips as ITip[]" type="tips" />
         </Card>
       </Col>

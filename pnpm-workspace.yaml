@@ -4,6 +4,9 @@ packages:
 
   # 包含 apps 目录下所有子目录
   - 'apps/*'
+  - 'apps/go/frontend'
+  - 'apps/go/backend'
+  - 'apps/cpp/frontend'
 
   # 排除 test 目录
   - '!**/test/**'

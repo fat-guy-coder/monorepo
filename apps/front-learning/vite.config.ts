@@ -11,36 +11,7 @@ import VueDevTools from 'vite-plugin-vue-devtools'
 
 const outDir = 'dist'
 
-// 确保NodeLocalStorage可用
-const ensureNodeLocalStorage = () => {
-  const existing = Reflect.get(globalThis, 'localStorage') as
-    | {
-        getItem?: (key: string) => string | null
-      }
-    | undefined
-  if (existing && typeof existing.getItem === 'function') {
-    return
-  }
-  const store = new Map<string, string>()
-  const memoryStorage = {
-    getItem: (key: string) => (store.has(key) ? store.get(key)! : null),
-    setItem: (key: string, value: string) => {
-      store.set(key, String(value))
-    },
-    removeItem: (key: string) => {
-      store.delete(key)
-    },
-    clear: () => {
-      store.clear()
-    },
-    key: (index: number) => Array.from(store.keys())[index] ?? null,
-    get length() {
-      return store.size
-    },
-  }
 
-  Reflect.set(globalThis, 'localStorage', memoryStorage)
-}
 
 // https://vite.dev/config/
 export default defineConfig((env: ConfigEnv) => {
@@ -50,15 +21,12 @@ export default defineConfig((env: ConfigEnv) => {
   const isAnalyze = process.env.ANALYZE === 'true'
 
   const plugins: PluginOption[] = [
-    vue({
-      // @ts-ignore - 忽略 TypeScript 检查
-      vapor: true,
-    }),
+    vue(),
     vueJsx(),
   ]
 
   if (isDev) {
-    ensureNodeLocalStorage()
+
     plugins.push(VueDevTools({ launchEditor: 'cursor' }))
   }
 
@@ -107,7 +75,7 @@ export default defineConfig((env: ConfigEnv) => {
       dedupe: ['vue', 'vue-router', 'pinia'],
     },
     optimizeDeps: {
-      include: ['vue', 'vue-router', 'pinia', '@ld/micro-frontend', 'codemirror', 'prismjs'],
+      include: ['vue', 'vue-router', 'pinia', 'codemirror', 'prismjs'],
       esbuildOptions: {
         target: 'esnext',
       },

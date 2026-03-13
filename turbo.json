@@ -15,20 +15,6 @@
       ],
       "dependsOn": []
     },
-    "build:main": {
-      "outputs": [
-        "dist/**"
-      ],
-      "dependsOn": [
-        "^build"
-      ]
-    },
-    "build:micro-frontend": {
-      "outputs": [
-        "dist/**"
-      ],
-      "dependsOn": []
-    },
     "dev": {
       "cache": false,
       "persistent": true
