@@ -1,5 +1,5 @@
 import { fileURLToPath, URL } from 'node:url'
-import { resolve } from 'node:path'
+import { resolve, dirname } from 'node:path'
 import { defineConfig, type ConfigEnv, type PluginOption, type ESBuildOptions } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
@@ -11,6 +11,12 @@ import VueDevTools from 'vite-plugin-vue-devtools'
 
 const outDir = 'dist'
 
+const __filename = fileURLToPath(import.meta.url);
+
+const __dirname = dirname(__filename);
+
+// 路径工具函数
+const resolvePath = (path: string) => resolve(__dirname, path);
 
 
 // https://vite.dev/config/
@@ -50,9 +56,8 @@ export default defineConfig((env: ConfigEnv) => {
     server: {
       proxy: {
         '/api': {
-          target: 'http://localhost:8888',
+          target: 'http://localhost:3000',
           changeOrigin: true,
-          rewrite: (path: string) => path.replace(/^\/api/, ''),
         },
       },
       port: 8080,
@@ -70,6 +75,7 @@ export default defineConfig((env: ConfigEnv) => {
     resolve: {
       alias: {
         '@': fileURLToPath(new URL('./src', import.meta.url)),
+        '@config': resolvePath('config'),
       },
       // 在 monorepo 下能更好地优化 workspace 依赖
       dedupe: ['vue', 'vue-router', 'pinia'],

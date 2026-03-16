@@ -2,9 +2,17 @@ import { existsSync, mkdirSync, writeFileSync, readFileSync } from 'fs';
 import path from 'path';
 //import { program } from 'commander'
 import { select } from '@inquirer/prompts'
-//引入菜单
-import menu from '../src/menu/menu.json';
 
+// 从 API 获取菜单数据
+async function fetchMenu() {
+  const API_URL = process.env.API_URL || 'http://localhost:3000';
+  const response = await fetch(`${API_URL}/api/menus`);
+  const result = await response.json();
+  if (result.code !== 200) {
+    throw new Error(result.message || 'Failed to fetch menu');
+  }
+  return result.data;
+}
 
 //配置json
 const config = {
@@ -94,14 +102,25 @@ interface MenuItem {
   label: string;
   name: string;
   path: string;
+  icon?: string;
+  order?: number;
   children?: MenuItem[];
   redirect?: { name: string };
 }
 
 
+// 路由项类型
+interface RouteItem {
+  name: string;
+  path: string;
+  component?: string;
+  children?: RouteItem[];
+  redirect?: { name: string };
+}
+
 // 递归生成路由
-function addRouteToRouter(routes: MenuItem[]) {
-  const recursive = (routes: MenuItem[]) => {
+function addRouteToRouter(routes: MenuItem[]): RouteItem[] {
+  const recursive = (routes: MenuItem[]): RouteItem[] => {
     return routes.map(({ name, path, children, redirect }) => {
       if (children) {
         return {
@@ -160,8 +179,8 @@ function generateView(menu: MenuItem[], basePath: string) {
 
 
 //生成路由文件routes.ts
-function generateRoutesFile(filePath: string) {
-  const routes = addRouteToRouter(menu as MenuItem[]);
+function generateRoutesFile(filePath: string, menu: MenuItem[]) {
+  const routes = addRouteToRouter(menu);
   const content = `export default ${JSON.stringify(routes, null, 2).replace(/"component": "(.+?)"/g, '"component": $1')};
   `;
   writeFileSync(filePath, content, 'utf-8');
@@ -169,10 +188,19 @@ function generateRoutesFile(filePath: string) {
 
 
 
-//生成页面单文件
-generateView(menu as MenuItem[], config.GenrateFolderPath);
+//主函数
+async function main() {
+  // 从 API 获取菜单
+  const menu = await fetchMenu();
+  console.log('获取到菜单数据:', menu.length, '条');
 
-//生成路由文件routes.ts
-generateRoutesFile(config.GenrateRoutesFilePath);
+  //生成页面单文件
+  generateView(menu, config.GenrateFolderPath);
 
-//生成路由
+  //生成路由文件routes.ts
+  generateRoutesFile(config.GenrateRoutesFilePath, menu);
+
+  console.log('路由和视图生成完成');
+}
+
+main();

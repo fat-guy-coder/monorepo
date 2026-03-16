@@ -45,7 +45,7 @@
 <script lang="ts" setup>
 //vue编译器会自动引入components目录下的所有组件，但不是异步组件，这一步是为了将所有组件转换为异步组件，以优化初始加载性能
 import { Menu, RouteTab, ThemeChange, Navigation, Input, Button, message, Spin } from '@/components'
-import { computed, ref, watch, onMounted, onUnmounted, nextTick, provide, getCurrentInstance } from 'vue'
+import { computed, ref, watch, onMounted, onUnmounted, nextTick, provide } from 'vue'
 import {
   type MenuItem, //菜单项类型
   findFatherKeysListByKey, //查找父级菜单key列表
@@ -53,6 +53,7 @@ import {
   reWashMenus, //重置菜单项匹配状态 具有副作用
   findMenuItemByName, //查找菜单项 通过name
 } from '@/menu'
+import { getApiMenus } from '@/api/menu'
 import { useTabStore } from '@/stores/tab' //标签列表store
 import { useUserStore } from '@/stores/userProfle' //用户信息store
 import { useDeviceStore } from '@/stores/device' //设备信息store
@@ -196,13 +197,8 @@ onUnmounted(() => {
 const getMenus = async () => {
   loading.value = true
   mainViewLoading.value = true
-  // const { data, needLoadKeys: n } = await getMainMenu()
-  // menus.value = addKeysToRoutes(data as MenuItem[])
-  // needLoadKeys.value = n
-  // const { data } = await request('/menu')
-  // menus.value = addKeysToRoutes(data.menu)
-  const { default: rawMenus } = await import('@/menu/menu.json')
-  menus.value = rawMenus as MenuItem[]
+  const { data } = await getApiMenus()
+  menus.value = data as MenuItem[]
   loading.value = false
   mainViewLoading.value = false
 }

@@ -36,7 +36,7 @@
   </div>
 </template>
 
-<script setup lang="ts" vapor>
+<script setup lang="ts">
 import { computed, type CSSProperties } from 'vue'
 import { type AnimationType, type AnimationStage, getAnimationClassName } from '@/function'
 

@@ -7,11 +7,19 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  name      String?
+model Menu {
+  id        String   @id @default(uuid())
+  name      String
+  label     String
+  path      String?
+  icon      String?
+  order     Int      @default(0)
+  parentId  String?
+  parent    Menu?    @relation("MenuToMenu", fields: [parentId], references: [id])
+  children  Menu[]   @relation("MenuToMenu")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([parentId])
 }
 
