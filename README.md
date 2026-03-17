@@ -11,12 +11,6 @@ monorepo/
 ├── apps/
 │   ├── front-learning/    # 前端学习网站 (Vue 3)
 │   ├── main/              # 个人主页 (Solid.js)
-│   ├── go/                # Go 学习项目
-│   │   ├── frontend/      # Go 学习网站前端 (Solid.js)
-│   │   └── backend/       # Go 学习网站后端 (Gin)
-│   └── cpp/               # C++ 学习项目
-│       ├── frontend/      # C++ 学习网站前端 (Solid.js)
-│       └── backend/       # C++ 学习网站后端 (Crow)
 ├── packages/              # 共享包
 ├── turbo.json             # Turborepo 配置
 └── pnpm-workspace.yaml    # pnpm 工作区配置
@@ -32,40 +26,12 @@ monorepo/
 - **构建**: Vite
 
 ### apps/main
-- **框架**: Solid.js
-- **路由**: @solidjs/router
+- **框架**: Vue 3 + TypeScript
+- **路由**: vue-router
 - **样式**: Tailwind CSS v4
 - **动画**: GSAP
 - **构建**: Vite
 
-### apps/go
-- **描述**: Go 学习项目
-
-#### apps/go/frontend
-- **框架**: Solid.js
-- **路由**: @solidjs/router
-- **样式**: Tailwind CSS v4
-- **构建**: Vite
-- **端口**: 5174
-
-#### apps/go/backend
-- **框架**: Gin (Go)
-- **端口**: 8080
-- **API**: RESTful
-
-### apps/cpp
-
-#### apps/cpp/frontend
-- **框架**: Solid.js
-- **路由**: @solidjs/router
-- **样式**: Tailwind CSS v4
-- **构建**: Vite
-- **端口**: 5175
-
-#### apps/cpp/backend
-- **框架**: Crow (C++)
-- **端口**: 8081
-- **API**: RESTful
 
 ## 快速开始
 
@@ -81,10 +47,6 @@ pnpm install
 |------|------|
 | `pnpm front-learning:dev` | 启动前端学习网站 (Vue) |
 | `pnpm main:dev` | 启动个人主页 |
-| `pnpm go:dev` | 启动 Go 学习前端 |
-| `pnpm go-server:dev` | 启动 Go 学习后端 |
-| `pnpm cpp:dev` | 启动 C++ 学习前端 |
-| `pnpm cpp-server:dev` | 启动 C++ 学习后端 (需 CMake 构建) |
 
 ### 构建
 
@@ -95,15 +57,13 @@ pnpm all:build
 # 构建单个项目
 pnpm front-learning:build
 pnpm main:build
-pnpm go:build
-pnpm cpp:build
 ```
 
 ## 工作区依赖
 
 项目使用 pnpm workspace，共享依赖统一放在根目录的 `package.json` 中：
 
-- solid-js / @solidjs/router (Solid.js 系列)
+- vue / vue-router (vye 系列)
 - tailwindcss / postcss / autoprefixer (CSS)
 - vite / typescript / vite-plugin-solid (构建)
 - gsap (动画，仅 main 项目使用)
