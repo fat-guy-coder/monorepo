@@ -122,7 +122,9 @@ interface RouteItem {
 function addRouteToRouter(routes: MenuItem[]): RouteItem[] {
   const recursive = (routes: MenuItem[]): RouteItem[] => {
     return routes.map(({ name, path, children, redirect }) => {
-      if (children) {
+      // 检查是否有子菜单（有非空 children 数组）
+      const hasChildren = children && children.length > 0
+      if (hasChildren) {
         return {
           name,
           path,
