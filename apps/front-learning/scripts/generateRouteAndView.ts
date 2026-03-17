@@ -1,7 +1,6 @@
 import { existsSync, mkdirSync, writeFileSync, readFileSync } from 'fs';
 import path from 'path';
-//import { program } from 'commander'
-import { select } from '@inquirer/prompts'
+
 
 // 从 API 获取菜单数据
 async function fetchMenu() {
@@ -31,68 +30,10 @@ const config = {
 
 
 
-async function getArg() {
-
-  const default_config = await select({
-    message: '是否默认配置',
-    choices: [
-      {
-        name: '默认配置',
-        value: true,
-        description: '使用默认配置',
-      },
-      {
-        name: '自定义配置',
-        value: false,
-        description: '根据选项生成配置',
-      },
-    ],
-  })
-
-  let useAi = 'base'
-
-  let useCss = 'yes'
-
-  if (!default_config) {
-    const useAi = await select({
-      message: '选择基础或者ai生成vue模板单文件',
-      choices: [
-        {
-          name: '基础版本',
-          value: 'base',
-          description: '基础版本，提供拖拽布局和文字、图片编辑',
-        },
-        {
-          name: 'ai生成',
-          value: 'ai',
-          description: '根据ai生成模板文件',
-        },
-      ],
-    })
-
-    if (useAi === 'ai') {
-      useCss = await select({
-        message: '是否根据模板css文件格式生成模板',
-        choices: [
-          { name: '好', value: 'yes', description: 'ai会根据模板css样式生成template', },
-          { name: '自由生成', value: 'ai', description: 'ai自由发挥样式', },
-        ]
-      })
-    }
-
-  }
-
-  return { useAi, useCss, default_config }
-}
 
 
 
-const options = await getArg()
 
-Object.assign(config, options)
-
-
-console.log('options', options)
 
 
 
