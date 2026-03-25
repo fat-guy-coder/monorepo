@@ -9,10 +9,15 @@ export default async function menuRoutes(fastify, options) {
     return menus
       .filter(m => m.parentId === parentId)
       .sort((a, b) => a.order - b.order)
-      .map(m => ({
-        ...m,
-        children: buildTree(menus, m.id)
-      }))
+      .map(m => {
+        const children = buildTree(menus, m.id)
+        // 如果没有子菜单，不返回 children 字段
+        if (children.length === 0) {
+          const { children: _, ...rest } = m
+          return rest
+        }
+        return { ...m, children }
+      })
   }
 
   // 简单内存缓存
@@ -153,19 +158,34 @@ export default async function menuRoutes(fastify, options) {
     }
 
     let result = menus
+
+    // 删除叶子节点的 children 属性
+    const removeEmptyChildren = (items) => {
+      return items.map(item => {
+        if (item.children && item.children.length > 0) {
+          return { ...item, children: removeEmptyChildren(item.children) }
+        } else {
+          const { children, ...rest } = item
+          return rest
+        }
+      })
+    }
+    result = removeEmptyChildren(result)
+
     // 如果 flat=true，返回扁平结构
     if (flat === 'true') {
       // 递归扁平化
       const flatten = (items) => {
         return items.reduce((acc, item) => {
-          acc.push(item)
-          if (item.children && item.children.length > 0) {
-            acc.push(...flatten(item.children))
+          const { children, ...rest } = item
+          acc.push(rest)
+          if (children && children.length > 0) {
+            acc.push(...flatten(children))
           }
           return acc
         }, [])
       }
-      result = flatten(menus)
+      result = flatten(result)
     }
 
     // 暂时禁用缓存
@@ -211,7 +231,23 @@ export default async function menuRoutes(fastify, options) {
       include: { children: true, parent: true }
     })
     if (!menu) return reply.code(404).send(error('Menu not found', 404))
-    return success(menu)
+    // 删除空 children
+    const result = { ...menu }
+    if (menu.children && menu.children.length === 0) {
+      delete result.children
+    } else if (menu.children && menu.children.length > 0) {
+      result.children = menu.children.map(c => {
+        if (c.children && c.children.length === 0) {
+          const { children: _, ...rest } = c
+          return rest
+        }
+        return c
+      })
+    }
+    if (menu.parent) {
+      result.parent = menu.parent
+    }
+    return success(result)
   })
 
   // GET /menus/:id/children - 获取子菜单
@@ -235,7 +271,16 @@ export default async function menuRoutes(fastify, options) {
       include: { children: true }
     })
 
-    return success(menus)
+    // 删除空 children
+    const result = menus.map(m => {
+      if (m.children && m.children.length === 0) {
+        const { children: _, ...rest } = m
+        return rest
+      }
+      return m
+    })
+
+    return success(result)
   })
 
   // POST /menus - 创建菜单

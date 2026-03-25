@@ -55,7 +55,6 @@ import {
 } from '@/menu'
 import { getApiMenus } from '@/api/menu'
 import { useTabStore } from '@/stores/tab' //标签列表store
-import { useUserStore } from '@/stores/userProfle' //用户信息store
 import { useDeviceStore } from '@/stores/device' //设备信息store
 import { useUIConfigStore, type Theme } from '@/stores/uiconfig' //UI配置store
 import { useRouter } from 'vue-router'
@@ -364,7 +363,7 @@ function goto({ path, name, label, redirect }: MenuItem) {
 
 //通过菜单名称跳转
 function goToByName(name: string, isRedirect: boolean = false) {
-  let item = findMenuItemByName(name)
+  let item = findMenuItemByName(menus.value, name)
   if (name === 'home') {
     item = {
       id: 'home',

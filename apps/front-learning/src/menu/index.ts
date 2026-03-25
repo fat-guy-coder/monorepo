@@ -1,4 +1,4 @@
-import menus from './menu.json'
+
 import type { VNode } from 'vue'
 
 
@@ -31,7 +31,7 @@ export function findFatherKeysListByKey(key: string): string[] {
 }
 
 //查找菜单项 通过name
-export function findMenuItemByName(name: string): MenuItem | undefined {
+export function findMenuItemByName(menuList: MenuItem[], name: string): MenuItem | undefined {
   // 递归查找routesWithKeys中name等于传入name的项，找到则返回该项，否则返回undefined
   function findInRoutes(routes: MenuItem[], name: string): MenuItem | undefined {
     for (const route of routes) {
@@ -45,7 +45,7 @@ export function findMenuItemByName(name: string): MenuItem | undefined {
     }
     return undefined
   }
-  return findInRoutes(menus as MenuItem[], name)
+  return findInRoutes(menuList, name)
 }
 
 //重置菜单项匹配状态 具有副作用
@@ -53,7 +53,7 @@ export function findMenuItemByName(name: string): MenuItem | undefined {
 * 重置菜单项匹配状态
 * @param data 菜单项列表
 * @param callback 回调函数
-* @returns 
+* @returns
 */
 export function reWashMenus(data: MenuItem[], callback?: (i: MenuItem) => void) {
   const cb = callback
@@ -125,7 +125,7 @@ export function findMatchingLabels(routes: MenuItem[], value: string): Keys {
 * 删除子菜单 副作用
 * @param routes 菜单项列表
 * @param name 菜单项名称
-* @returns 
+* @returns
 */
 export const deleteChild = (routes: MenuItem[], name: string) => {
   const recursion = (routes: MenuItem[]) => {
@@ -147,7 +147,7 @@ export const deleteChild = (routes: MenuItem[], name: string) => {
 * @param routes 菜单项列表
 * @param name 菜单项名称
 * @param child 子菜单项列表
-* @returns 
+* @returns
 */
 export const addChild = (routes: MenuItem[], name: string, child: MenuItem[]) => {
   const recursion = (routes: MenuItem[]) => {
@@ -168,7 +168,7 @@ export const addChild = (routes: MenuItem[], name: string, child: MenuItem[]) =>
 * @param routes 菜单项列表
 * @param name 菜单项名称
 * @param loading 加载状态
-* @returns 
+* @returns
 */
 export const changeLoading = (routes: MenuItem[], name: string, loading: boolean) => {
   const recursion = (routes: MenuItem[]) => {

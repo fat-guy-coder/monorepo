@@ -5880,7 +5880,7 @@ export default [
               {
                 "name": "SvgLibrary",
                 "path": "/AdvancedSkills/GraphicRelated/SvgOpearation/SvgLibrary",
-                "children": []
+                "component": () => import('@/views/AdvancedSkills/GraphicRelated/SvgOpearation/SvgLibrary.vue')
               }
             ]
           }
@@ -6155,7 +6155,7 @@ export default [
       {
         "name": "AudioAndVideoProcessing",
         "path": "/AdvancedSkills/AudioAndVideoProcessing",
-        "children": []
+        "component": () => import('@/views/AdvancedSkills/AudioAndVideoProcessing.vue')
       },
       {
         "name": "OtherLanguage",
@@ -6356,7 +6356,7 @@ export default [
       {
         "name": "TeamInfrastructure",
         "path": "/ProjectsAndSoftSkills/TeamInfrastructure",
-        "children": []
+        "component": () => import('@/views/ProjectsAndSoftSkills/TeamInfrastructure.vue')
       },
       {
         "name": "ToolCompile",

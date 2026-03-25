@@ -12,6 +12,8 @@ apps/front-learning/node_modules/
 apps/front-learning/dist/
 apps/fastify/node_modules/
 apps/fastify/dist/
+apps/admin/node_modules/
+apps/admin/dist/
 static/
 .DS_Store
 coverage/
