@@ -1,8 +1,7 @@
 import { http } from "@/utils/http";
 
 export type UserResult = {
-  code: number;
-  message: string;
+  success: boolean;
   data: {
     /** 头像 */
     avatar: string;
@@ -24,8 +23,7 @@ export type UserResult = {
 };
 
 export type RefreshTokenResult = {
-  code: number;
-  message: string;
+  success: boolean;
   data: {
     /** `token` */
     accessToken: string;
@@ -33,42 +31,6 @@ export type RefreshTokenResult = {
     refreshToken: string;
     /** `accessToken`的过期时间（格式'xxxx/xx/xx xx:xx:xx'） */
     expires: Date;
-  };
-};
-
-export type UserInfo = {
-  /** 头像 */
-  avatar: string;
-  /** 用户名 */
-  username: string;
-  /** 昵称 */
-  nickname: string;
-  /** 邮箱 */
-  email: string;
-  /** 联系电话 */
-  phone: string;
-  /** 简介 */
-  description: string;
-};
-
-export type UserInfoResult = {
-  code: number;
-  message: string;
-  data: UserInfo;
-};
-
-type ResultTable = {
-  code: number;
-  message: string;
-  data?: {
-    /** 列表数据 */
-    list: Array<any>;
-    /** 总条目数 */
-    total?: number;
-    /** 每页显示条目个数 */
-    pageSize?: number;
-    /** 当前页数 */
-    currentPage?: number;
   };
 };
 
@@ -80,14 +42,4 @@ export const getLogin = (data?: object) => {
 /** 刷新`token` */
 export const refreshTokenApi = (data?: object) => {
   return http.request<RefreshTokenResult>("post", "/refresh-token", { data });
-};
-
-/** 账户设置-个人信息 */
-export const getMine = (data?: object) => {
-  return http.request<UserInfoResult>("get", "/mine", { data });
-};
-
-/** 账户设置-个人安全日志 */
-export const getMineLogs = (data?: object) => {
-  return http.request<ResultTable>("get", "/mine-logs", { data });
 };

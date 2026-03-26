@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { $t } from "@/plugins/i18n";
 import { emitter } from "@/utils/mitt";
 import NProgress from "@/utils/progress";
 import { RouteConfigs } from "../../types";
@@ -32,11 +31,11 @@ const {
   visible,
   showTags,
   instance,
-  tagsStyle,
   multiTags,
   tagsViews,
   buttonTop,
   buttonLeft,
+  showModel,
   translateX,
   isFixedTag,
   pureSetting,
@@ -52,7 +51,6 @@ const {
   onMounted,
   onMouseenter,
   onMouseleave,
-  transformI18n,
   onContentFullScreen
 } = useTags();
 
@@ -347,10 +345,10 @@ function onClickDrop(key, item, selectRoute?: RouteConfigs) {
       setTimeout(() => {
         if (pureSetting.hiddenSideBar) {
           tagsViews[6].icon = ExitFullscreen;
-          tagsViews[6].text = $t("buttons.pureContentExitFullScreen");
+          tagsViews[6].text = "内容区退出全屏";
         } else {
           tagsViews[6].icon = Fullscreen;
-          tagsViews[6].text = $t("buttons.pureContentFullScreen");
+          tagsViews[6].text = "内容区全屏";
         }
       }, 100);
       break;
@@ -542,8 +540,8 @@ onMounted(() => {
   });
 
   // 改变标签风格
-  emitter.on("tagViewsTagsStyle", key => {
-    tagsStyle.value = key;
+  emitter.on("tagViewsShowModel", key => {
+    showModel.value = key;
   });
 
   //  接收侧边栏切换传递过来的参数
@@ -559,9 +557,9 @@ onMounted(() => {
 });
 
 onBeforeUnmount(() => {
-  // 解绑`tagViewsChange`、`tagViewsTagsStyle`、`changLayoutRoute`公共事件，防止多次触发
+  // 解绑`tagViewsChange`、`tagViewsShowModel`、`changLayoutRoute`公共事件，防止多次触发
   emitter.off("tagViewsChange");
-  emitter.off("tagViewsTagsStyle");
+  emitter.off("tagViewsShowModel");
   emitter.off("changLayoutRoute");
 });
 </script>
@@ -574,7 +572,7 @@ onBeforeUnmount(() => {
     <div
       ref="scrollbarDom"
       class="scroll-container"
-      :class="tagsStyle === 'chrome' && 'chrome-scroll-container'"
+      :class="showModel === 'chrome' && 'chrome-scroll-container'"
       @wheel.prevent="handleWheel"
     >
       <div ref="tabDom" class="tab select-none" :style="getTabStyle">
@@ -585,7 +583,7 @@ onBeforeUnmount(() => {
           :class="[
             'scroll-item is-closable',
             linkIsActive(item),
-            tagsStyle === 'chrome' && 'chrome-item',
+            showModel === 'chrome' && 'chrome-item',
             isFixedTag(item) && 'fixed-tag'
           ]"
           @contextmenu.prevent="openMenu(item, $event)"
@@ -593,11 +591,11 @@ onBeforeUnmount(() => {
           @mouseleave.prevent="onMouseleave(index)"
           @click="tagOnClick(item)"
         >
-          <template v-if="tagsStyle !== 'chrome'">
+          <template v-if="showModel !== 'chrome'">
             <span
               class="tag-title dark:text-text_color_primary! dark:hover:text-primary!"
             >
-              {{ transformI18n(item.meta.title) }}
+              {{ item.meta.title }}
             </span>
             <span
               v-if="
@@ -612,21 +610,17 @@ onBeforeUnmount(() => {
               <IconifyIconOffline :icon="Close" />
             </span>
             <span
-              v-if="tagsStyle !== 'card'"
+              v-if="showModel !== 'card'"
               :ref="'schedule' + index"
               :class="[scheduleIsActive(item)]"
             />
           </template>
           <div v-else class="chrome-tab">
-            <span
-              v-if="index !== 0 && index !== activeIndex"
-              class="chrome-tab-divider bg-[#e2e2e2] dark:bg-[#2d2d2d]"
-            />
             <div class="chrome-tab__bg">
               <TagChrome />
             </div>
             <span class="tag-title">
-              {{ transformI18n(item.meta.title) }}
+              {{ item.meta.title }}
             </span>
             <span
               v-if="isFixedTag(item) ? false : index !== 0"
@@ -635,6 +629,7 @@ onBeforeUnmount(() => {
             >
               <IconifyIconOffline :icon="Close" />
             </span>
+            <span class="chrome-tab-divider" />
           </div>
         </div>
       </div>
@@ -658,7 +653,7 @@ onBeforeUnmount(() => {
         >
           <li v-if="item.show" @click="selectTag(key, item)">
             <IconifyIconOffline :icon="item.icon" />
-            {{ transformI18n(item.text) }}
+            {{ item.text }}
           </li>
         </div>
       </ul>
@@ -682,7 +677,7 @@ onBeforeUnmount(() => {
             :disabled="item.disabled"
           >
             <IconifyIconOffline :icon="item.icon" />
-            {{ transformI18n(item.text) }}
+            {{ item.text }}
           </el-dropdown-item>
         </el-dropdown-menu>
       </template>

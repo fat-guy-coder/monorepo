@@ -8,14 +8,7 @@ type Events = {
   logoChange: boolean;
   tagViewsChange: string;
   changLayoutRoute: string;
-  tagViewsTagsStyle: string;
-  imageInfo: {
-    img: HTMLImageElement;
-    height: number;
-    width: number;
-    x: number;
-    y: number;
-  };
+  tagViewsShowModel: string;
 };
 
 export const emitter: Emitter<Events> = mitt<Events>();

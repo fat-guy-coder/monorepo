@@ -123,7 +123,10 @@ function handleClose(
       v-if="options?.fullscreenIcon || options?.headerRenderer"
       #header="{ close, titleId, titleClass }"
     >
-      <div v-if="options?.fullscreenIcon" class="flex-bc">
+      <div
+        v-if="options?.fullscreenIcon"
+        class="flex items-center justify-between"
+      >
         <span :id="titleId" :class="titleClass">{{ options?.title }}</span>
         <i
           v-if="!options?.fullscreen"

@@ -9,7 +9,6 @@ import {
   onUnmounted,
   onBeforeMount
 } from "vue";
-import { useI18n } from "vue-i18n";
 import { emitter } from "@/utils/mitt";
 import LayPanel from "../lay-panel/index.vue";
 import { useNav } from "@/layout/hooks/useNav";
@@ -26,7 +25,6 @@ import DayIcon from "@/assets/svg/day.svg?component";
 import DarkIcon from "@/assets/svg/dark.svg?component";
 import SystemIcon from "@/assets/svg/system.svg?component";
 
-const { t } = useI18n();
 const { device } = useNav();
 const { isDark } = useDark();
 const { $storage } = useGlobal<GlobalPropertiesApi>();
@@ -37,7 +35,7 @@ const horizontalRef = ref();
 
 const {
   dataTheme,
-  themeMode,
+  overallStyle,
   layoutTheme,
   themeColors,
   toggleClass,
@@ -50,25 +48,20 @@ if (unref(layoutTheme)) {
   const layout = unref(layoutTheme).layout;
   const theme = unref(layoutTheme).theme;
   document.documentElement.setAttribute("data-theme", theme);
-  setMenuLayout(layout);
+  setLayoutModel(layout);
 }
 
-/** 页签风格默认为谷歌风格 */
-const tagsStyleValue = ref($storage.configure?.tagsStyle ?? "chrome");
+/** 默认灵动模式 */
+const markValue = ref($storage.configure?.showModel ?? "smart");
 
 const logoVal = ref($storage.configure?.showLogo ?? true);
-
-const watermarkConfigs = reactive({
-  enable: $storage.configure.watermark,
-  text: $storage.configure.watermarkText
-});
 
 const settings = reactive({
   greyVal: $storage.configure.grey,
   weakVal: $storage.configure.weak,
   tabsVal: $storage.configure.hideTabs,
   showLogo: $storage.configure.showLogo,
-  tagsStyle: $storage.configure.tagsStyle,
+  showModel: $storage.configure.showModel,
   hideFooter: $storage.configure.hideFooter,
   multiTagsCache: $storage.configure.multiTagsCache,
   stretch: $storage.configure.stretch
@@ -129,17 +122,9 @@ const multiTagsCacheChange = () => {
 
 function onChange({ option }) {
   const { value } = option;
-  tagsStyleValue.value = value;
-  storageConfigureChange("tagsStyle", value);
-  emitter.emit("tagViewsTagsStyle", value);
-}
-
-function onWatermarkSwitchChange(value) {
-  storageConfigureChange("watermark", value);
-}
-
-function onWatermarkInputChange(text) {
-  storageConfigureChange("watermarkText", text);
+  markValue.value = value;
+  storageConfigureChange("showModel", value);
+  emitter.emit("tagViewsShowModel", value);
 }
 
 /** 侧边栏Logo */
@@ -160,13 +145,13 @@ function setFalse(Doms): any {
 const stretchTypeOptions = computed<Array<OptionsType>>(() => {
   return [
     {
-      label: t("panel.pureStretchFixed"),
-      tip: t("panel.pureStretchFixedTip"),
+      label: "固定",
+      tip: "紧凑页面，轻松找到所需信息",
       value: "fixed"
     },
     {
-      label: t("panel.pureStretchCustom"),
-      tip: t("panel.pureStretchCustomTip"),
+      label: "自定义",
+      tip: "最小1280、最大1600",
       value: "custom"
     }
   ];
@@ -202,30 +187,30 @@ const getThemeColor = computed(() => {
 });
 
 const pClass = computed(() => {
-  return ["mb-3!", "font-medium", "text-sm", "dark:text-white"];
+  return ["mb-[12px]!", "font-medium", "text-sm", "dark:text-white"];
 });
 
 const themeOptions = computed<Array<OptionsType>>(() => {
   return [
     {
-      label: t("panel.pureThemeModeLight"),
+      label: "浅色",
       icon: DayIcon,
       theme: "light",
-      tip: t("panel.pureThemeModeLightTip"),
+      tip: "清新启航，点亮舒适的工作界面",
       iconAttrs: { fill: isDark.value ? "#fff" : "#000" }
     },
     {
-      label: t("panel.pureThemeModeDark"),
+      label: "深色",
       icon: DarkIcon,
       theme: "dark",
-      tip: t("panel.pureThemeModeDarkTip"),
+      tip: "月光序曲，沉醉于夜的静谧雅致",
       iconAttrs: { fill: isDark.value ? "#fff" : "#000" }
     },
     {
-      label: t("panel.pureThemeModeSystem"),
+      label: "自动",
       icon: SystemIcon,
       theme: "system",
-      tip: t("panel.pureThemeModeSystemTip"),
+      tip: "同步时光，界面随晨昏自然呼应",
       iconAttrs: { fill: isDark.value ? "#fff" : "#000" }
     }
   ];
@@ -234,25 +219,25 @@ const themeOptions = computed<Array<OptionsType>>(() => {
 const markOptions = computed<Array<OptionsType>>(() => {
   return [
     {
-      label: t("panel.pureTagsStyleSmart"),
-      tip: t("panel.pureTagsStyleSmartTip"),
+      label: "灵动",
+      tip: "灵动标签，添趣生辉",
       value: "smart"
     },
     {
-      label: t("panel.pureTagsStyleCard"),
-      tip: t("panel.pureTagsStyleCardTip"),
+      label: "卡片",
+      tip: "卡片标签，高效浏览",
       value: "card"
     },
     {
-      label: t("panel.pureTagsStyleChrome"),
-      tip: t("panel.pureTagsStyleChromeTip"),
+      label: "谷歌",
+      tip: "谷歌风格，经典美观",
       value: "chrome"
     }
   ];
 });
 
-/** 设置菜单布局 */
-function setMenuLayout(layout: string) {
+/** 设置导航模式 */
+function setLayoutModel(layout: string) {
   layoutTheme.value.layout = layout;
   window.document.body.setAttribute("layout", layout);
   $storage.layout = {
@@ -262,7 +247,7 @@ function setMenuLayout(layout: string) {
     sidebarStatus: $storage.layout?.sidebarStatus,
     epThemeColor: $storage.layout?.epThemeColor,
     themeColor: $storage.layout?.themeColor,
-    themeMode: $storage.layout?.themeMode
+    overallStyle: $storage.layout?.overallStyle
   };
   useAppStoreHook().setLayout(layout);
 }
@@ -289,15 +274,15 @@ watch($storage, ({ layout }) => {
 
 const mediaQueryList = window.matchMedia("(prefers-color-scheme: dark)");
 
-/** 根据操作系统主题设置平台主题模式 */
+/** 根据操作系统主题设置平台整体风格 */
 function updateTheme() {
-  if (themeMode.value !== "system") return;
+  if (overallStyle.value !== "system") return;
   if (mediaQueryList.matches) {
     dataTheme.value = true;
   } else {
     dataTheme.value = false;
   }
-  dataThemeChange(themeMode.value);
+  dataThemeChange(overallStyle.value);
 }
 
 function removeMatchMedia() {
@@ -330,25 +315,25 @@ onUnmounted(() => removeMatchMedia);
 <template>
   <LayPanel>
     <div class="p-5">
-      <p :class="pClass">{{ t("panel.pureThemeMode") }}</p>
+      <p :class="pClass">整体风格</p>
       <Segmented
         resize
         class="select-none"
-        :modelValue="themeMode === 'system' ? 2 : dataTheme ? 1 : 0"
+        :modelValue="overallStyle === 'system' ? 2 : dataTheme ? 1 : 0"
         :options="themeOptions"
         @change="
           theme => {
             theme.index === 1 && theme.index !== 2
               ? (dataTheme = true)
               : (dataTheme = false);
-            themeMode = theme.option.theme;
+            overallStyle = theme.option.theme;
             dataThemeChange(theme.option.theme);
             theme.index === 2 && watchSystemThemeChange();
           }
         "
       />
 
-      <p :class="['mt-5!', pClass]">{{ t("panel.pureThemeColor") }}</p>
+      <p :class="['mt-5!', pClass]">主题色</p>
       <ul class="theme-color">
         <li
           v-for="(item, index) in themeColors"
@@ -358,8 +343,8 @@ onUnmounted(() => removeMatchMedia);
           @click="setLayoutThemeColor(item.themeColor)"
         >
           <el-icon
-            class="mt-px"
-            :size="20"
+            style="margin: 0.1em 0.1em 0 0"
+            :size="17"
             :color="getThemeColor(item.themeColor)"
           >
             <IconifyIconOffline :icon="Check" />
@@ -367,16 +352,16 @@ onUnmounted(() => removeMatchMedia);
         </li>
       </ul>
 
-      <p :class="['mt-5!', pClass]">{{ t("panel.pureMenuLayout") }}</p>
+      <p :class="['mt-5!', pClass]">导航模式</p>
       <ul class="pure-theme">
         <li
           ref="verticalRef"
           v-tippy="{
-            content: t('panel.pureVerticalTip'),
+            content: '左侧菜单，亲切熟悉',
             zIndex: 41000
           }"
           :class="layoutTheme.layout === 'vertical' ? 'is-select' : ''"
-          @click="setMenuLayout('vertical')"
+          @click="setLayoutModel('vertical')"
         >
           <div />
           <div />
@@ -385,11 +370,11 @@ onUnmounted(() => removeMatchMedia);
           v-if="device !== 'mobile'"
           ref="horizontalRef"
           v-tippy="{
-            content: t('panel.pureHorizontalTip'),
+            content: '顶部菜单，简洁概览',
             zIndex: 41000
           }"
           :class="layoutTheme.layout === 'horizontal' ? 'is-select' : ''"
-          @click="setMenuLayout('horizontal')"
+          @click="setLayoutModel('horizontal')"
         >
           <div />
           <div />
@@ -398,11 +383,11 @@ onUnmounted(() => removeMatchMedia);
           v-if="device !== 'mobile'"
           ref="mixRef"
           v-tippy="{
-            content: t('panel.pureMixTip'),
+            content: '混合菜单，灵活多变',
             zIndex: 41000
           }"
           :class="layoutTheme.layout === 'mix' ? 'is-select' : ''"
-          @click="setMenuLayout('mix')"
+          @click="setLayoutModel('mix')"
         >
           <div />
           <div />
@@ -410,7 +395,7 @@ onUnmounted(() => removeMatchMedia);
       </ul>
 
       <span v-if="useAppStoreHook().getViewportWidth > 1280">
-        <p :class="['mt-5!', pClass]">{{ t("panel.pureStretch") }}</p>
+        <p :class="['mt-5!', pClass]">页宽</p>
         <Segmented
           resize
           class="mb-2 select-none"
@@ -429,7 +414,7 @@ onUnmounted(() => removeMatchMedia);
         <button
           v-else
           v-ripple="{ class: 'text-gray-300' }"
-          class="bg-transparent flex-c w-full h-20 rounded-md border border-(--pure-border-color)"
+          class="bg-transparent flex-c w-full h-20 rounded-md border border-[var(--pure-border-color)]"
           @click="setStretch(!settings.stretch)"
         >
           <div
@@ -451,81 +436,55 @@ onUnmounted(() => removeMatchMedia);
         </button>
       </span>
 
-      <p :class="['mt-5!', pClass]">{{ t("panel.pureTagsStyle") }}</p>
+      <p :class="['mt-4!', pClass]">页签风格</p>
       <Segmented
         resize
         class="select-none"
-        :modelValue="
-          tagsStyleValue === 'smart' ? 0 : tagsStyleValue === 'card' ? 1 : 2
-        "
+        :modelValue="markValue === 'smart' ? 0 : markValue === 'card' ? 1 : 2"
         :options="markOptions"
         @change="onChange"
       />
 
-      <p class="mt-5! font-medium text-sm dark:text-white">
-        {{ t("panel.pureFullScreenWatermark") }}
-      </p>
+      <p class="mt-5! font-medium text-sm dark:text-white">界面显示</p>
       <ul class="setting">
         <li>
-          <span class="dark:text-white">
-            {{ t("panel.pureEnableWatermark") }}
-          </span>
+          <span class="dark:text-white">灰色模式</span>
           <el-switch
-            v-model="watermarkConfigs.enable"
+            v-model="settings.greyVal"
             inline-prompt
-            :active-text="t('buttons.pureOpenText')"
-            :inactive-text="t('buttons.pureCloseText')"
-            @change="onWatermarkSwitchChange"
+            active-text="开"
+            inactive-text="关"
+            @change="greyChange"
           />
         </li>
-        <li v-if="watermarkConfigs.enable" v-motion-fade>
-          <span class="dark:text-white">
-            {{ t("panel.pureWatermarkText") }}
-          </span>
-          <el-input
-            v-model="watermarkConfigs.text"
-            class="w-32!"
-            clearable
-            :placeholder="t('panel.pureWatermarkTextPlaceholder')"
-            @input="onWatermarkInputChange"
-          />
-        </li>
-      </ul>
-
-      <p class="mt-3! font-medium text-sm dark:text-white">
-        {{ t("panel.pureInterfaceDisplay") }}
-      </p>
-      <ul class="setting">
         <li>
-          <span class="dark:text-white">{{ t("panel.pureHiddenTags") }}</span>
+          <span class="dark:text-white">色弱模式</span>
+          <el-switch
+            v-model="settings.weakVal"
+            inline-prompt
+            active-text="开"
+            inactive-text="关"
+            @change="weekChange"
+          />
+        </li>
+        <li>
+          <span class="dark:text-white">隐藏标签页</span>
           <el-switch
             v-model="settings.tabsVal"
             inline-prompt
-            :active-text="t('buttons.pureOpenText')"
-            :inactive-text="t('buttons.pureCloseText')"
+            active-text="开"
+            inactive-text="关"
             @change="tagsChange"
           />
         </li>
         <li>
-          <span class="dark:text-white">{{ t("panel.pureHiddenFooter") }}</span>
+          <span class="dark:text-white">隐藏页脚</span>
           <el-switch
             v-model="settings.hideFooter"
             inline-prompt
-            :active-text="t('buttons.pureOpenText')"
-            :inactive-text="t('buttons.pureCloseText')"
+            active-text="开"
+            inactive-text="关"
             @change="hideFooterChange"
-          />
-        </li>
-        <li>
-          <span class="dark:text-white">
-            {{ t("panel.pureMultiTagsCache") }}
-          </span>
-          <el-switch
-            v-model="settings.multiTagsCache"
-            inline-prompt
-            :active-text="t('buttons.pureOpenText')"
-            :inactive-text="t('buttons.pureCloseText')"
-            @change="multiTagsCacheChange"
           />
         </li>
         <li>
@@ -535,29 +494,19 @@ onUnmounted(() => removeMatchMedia);
             inline-prompt
             :active-value="true"
             :inactive-value="false"
-            :active-text="t('buttons.pureOpenText')"
-            :inactive-text="t('buttons.pureCloseText')"
+            active-text="开"
+            inactive-text="关"
             @change="logoChange"
           />
         </li>
         <li>
-          <span class="dark:text-white">{{ t("panel.pureGreyModel") }}</span>
+          <span class="dark:text-white">页签持久化</span>
           <el-switch
-            v-model="settings.greyVal"
+            v-model="settings.multiTagsCache"
             inline-prompt
-            :active-text="t('buttons.pureOpenText')"
-            :inactive-text="t('buttons.pureCloseText')"
-            @change="greyChange"
-          />
-        </li>
-        <li>
-          <span class="dark:text-white">{{ t("panel.pureWeakModel") }}</span>
-          <el-switch
-            v-model="settings.weakVal"
-            inline-prompt
-            :active-text="t('buttons.pureOpenText')"
-            :inactive-text="t('buttons.pureCloseText')"
-            @change="weekChange"
+            active-text="开"
+            inactive-text="关"
+            @change="multiTagsCacheChange"
           />
         </li>
       </ul>
@@ -583,24 +532,17 @@ onUnmounted(() => removeMatchMedia);
 }
 
 .theme-color {
-  display: flex;
-  gap: 8px;
-  margin-top: 8px;
+  height: 20px;
 
   li {
-    position: relative;
-    width: 21px;
-    height: 21px;
+    float: left;
+    height: 20px;
+    margin-right: 8px;
     cursor: pointer;
     border-radius: 4px;
-    box-shadow: rgb(0 0 0 / 15%) 0 0 0 1px inset;
-    transition: all 0.2s ease;
 
-    &:hover {
-      box-shadow:
-        rgb(0 0 0 / 25%) 0 0 0 1px inset,
-        0 2px 4px rgb(0 0 0 / 15%);
-      transform: scale(1.1);
+    &:nth-child(1) {
+      border: 1px solid #ddd;
     }
   }
 }

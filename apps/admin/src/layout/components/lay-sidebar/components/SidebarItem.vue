@@ -4,7 +4,6 @@ import { posix } from "path-browserify";
 import { menuType } from "@/layout/types";
 import { ReText } from "@/components/ReText";
 import { useNav } from "@/layout/hooks/useNav";
-import { transformI18n } from "@/plugins/i18n";
 import SidebarLinkItem from "./SidebarLinkItem.vue";
 import SidebarExtraIcon from "./SidebarExtraIcon.vue";
 import { useRenderIcon } from "@/components/ReIcon/src/hooks";
@@ -71,7 +70,7 @@ const textClass = computed(() => {
     ((layout.value === "vertical" && item.parentId === null) ||
       (layout.value === "mix" && item.pathList.length === 2))
   ) {
-    return `${baseClass} min-w-13.5! text-center! px-3!`;
+    return `${baseClass} min-w-[54px]! text-center! px-3!`;
   }
   return baseClass;
 });
@@ -159,9 +158,9 @@ function resolvePath(routePath) {
             item?.pathList?.length === 2)
         "
         truncated
-        class="w-full! px-3! min-w-13.5! text-center! text-inherit!"
+        class="w-full! px-3! min-w-[54px]! text-center! text-inherit!"
       >
-        {{ transformI18n(onlyOneChild.meta.title) }}
+        {{ onlyOneChild.meta.title }}
       </el-text>
 
       <template #title>
@@ -173,7 +172,7 @@ function resolvePath(routePath) {
             }"
             class="w-full! text-inherit!"
           >
-            {{ transformI18n(onlyOneChild.meta.title) }}
+            {{ onlyOneChild.meta.title }}
           </ReText>
           <SidebarExtraIcon :extraIcon="onlyOneChild.meta.extraIcon" />
         </div>
@@ -212,7 +211,7 @@ function resolvePath(routePath) {
         }"
         :class="textClass"
       >
-        {{ transformI18n(item.meta.title) }}
+        {{ item.meta.title }}
       </ReText>
       <SidebarExtraIcon v-if="!isCollapse" :extraIcon="item.meta.extraIcon" />
     </template>

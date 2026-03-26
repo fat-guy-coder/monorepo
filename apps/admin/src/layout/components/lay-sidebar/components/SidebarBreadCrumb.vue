@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { isEqual } from "@pureadmin/utils";
-import { transformI18n } from "@/plugins/i18n";
 import { useRoute, useRouter } from "vue-router";
 import { ref, watch, onMounted, toRaw } from "vue";
 import { getParentPaths, findRouteByPath } from "@/router/utils";
@@ -105,7 +104,7 @@ watch(
 </script>
 
 <template>
-  <el-breadcrumb class="leading-12.5! select-none" separator="/">
+  <el-breadcrumb class="leading-[50px]! select-none" separator="/">
     <transition-group name="breadcrumb">
       <el-breadcrumb-item
         v-for="item in levelList"
@@ -113,7 +112,7 @@ watch(
         class="inline! items-stretch!"
       >
         <a @click.prevent="handleLink(item)">
-          {{ transformI18n(item.meta.title) }}
+          {{ item.meta.title }}
         </a>
       </el-breadcrumb-item>
     </transition-group>

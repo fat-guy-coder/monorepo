@@ -42,9 +42,5 @@
 }
 
 @utility navbar-bg-hover {
-  @apply select-none dark:text-white dark:hover:bg-[#242424]!;
-}
-
-@utility animate-scale-bounce {
-  animation: pure-scale-bounce 0.3s ease-in-out;
+  @apply dark:text-white dark:hover:bg-[#242424]!;
 }

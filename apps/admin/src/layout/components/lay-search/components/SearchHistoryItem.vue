@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { optionsItem } from "../types";
-import { transformI18n } from "@/plugins/i18n";
 import { useRenderIcon } from "@/components/ReIcon/src/hooks";
 import StarIcon from "~icons/ep/star";
 import CloseIcon from "~icons/ep/close";
@@ -29,17 +28,17 @@ function handleDelete(item) {
 <template>
   <component :is="useRenderIcon(item.meta?.icon)" />
   <span class="history-item-title">
-    {{ transformI18n(item.meta?.title) }}
+    {{ item.meta?.title }}
   </span>
   <IconifyIconOffline
     v-show="item.type === 'history'"
     :icon="StarIcon"
-    class="size-4.5 mr-2 hover:text-[#d7d5d4]"
+    class="w-[18px] h-[18px] mr-2 hover:text-[#d7d5d4]"
     @click.stop="handleCollect(item)"
   />
   <IconifyIconOffline
     :icon="CloseIcon"
-    class="size-4.5 hover:text-[#d7d5d4] cursor-pointer"
+    class="w-[18px] h-[18px] hover:text-[#d7d5d4] cursor-pointer"
     @click.stop="handleDelete(item)"
   />
 </template>

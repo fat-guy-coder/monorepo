@@ -1,8 +1,7 @@
-import "@/utils/sso";
+// import "@/utils/sso";
 import Cookies from "js-cookie";
 import { getConfig } from "@/config";
 import NProgress from "@/utils/progress";
-import { transformI18n } from "@/plugins/i18n";
 import { buildHierarchyTree } from "@/utils/tree";
 import remainingRouter from "./modules/remaining";
 import { useMultiTagsStoreHook } from "@/store/modules/multiTags";
@@ -120,7 +119,7 @@ const whiteList = ["/login"];
 
 const { VITE_HIDE_HOME } = import.meta.env;
 
-router.beforeEach((to: ToRouteType, _from) => {
+router.beforeEach((to: ToRouteType, _from, next) => {
   to.meta.loaded = loadedPaths.has(to.path);
 
   if (!to.meta.loaded) {
@@ -140,32 +139,30 @@ router.beforeEach((to: ToRouteType, _from) => {
     to.matched.some(item => {
       if (!item.meta.title) return "";
       const Title = getConfig().Title;
-      if (Title)
-        document.title = `${transformI18n(item.meta.title)} | ${Title}`;
-      else document.title = transformI18n(item.meta.title);
+      if (Title) document.title = `${item.meta.title} | ${Title}`;
+      else document.title = item.meta.title as string;
     });
   }
   /** 如果已经登录并存在登录信息后不能跳转到路由白名单，而是继续保持在当前页面 */
   function toCorrectRoute() {
-    return whiteList.includes(to.fullPath) ? _from.fullPath : undefined;
+    whiteList.includes(to.fullPath) ? next(_from.fullPath) : next();
   }
   if (Cookies.get(multipleTabsKey) && userInfo) {
     // 无权限跳转403页面
     if (to.meta?.roles && !isOneOfArray(to.meta?.roles, userInfo?.roles)) {
-      return { path: "/error/403" };
+      next({ path: "/error/403" });
     }
     // 开启隐藏首页后在浏览器地址栏手动输入首页welcome路由则跳转到404页面
     if (VITE_HIDE_HOME === "true" && to.fullPath === "/welcome") {
-      return { path: "/error/404" };
+      next({ path: "/error/404" });
     }
     if (_from?.name) {
       // name为超链接
       if (externalLink) {
         openLink(to?.name as string);
         NProgress.done();
-        return false;
       } else {
-        return toCorrectRoute();
+        toCorrectRoute();
       }
     } else {
       // 刷新
@@ -205,18 +202,18 @@ router.beforeEach((to: ToRouteType, _from) => {
           if (isAllEmpty(to.name)) router.push(to.fullPath);
         });
       }
-      return toCorrectRoute();
+      toCorrectRoute();
     }
   } else {
     if (to.path !== "/login") {
       if (whiteList.indexOf(to.path) !== -1) {
-        return true;
+        next();
       } else {
         removeToken();
-        return { path: "/login" };
+        next({ path: "/login" });
       }
     } else {
-      return true;
+      next();
     }
   }
 });

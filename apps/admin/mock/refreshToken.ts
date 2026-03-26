@@ -8,8 +8,7 @@ export default defineFakeRoute([
     response: ({ body }) => {
       if (body.refreshToken) {
         return {
-          code: 0,
-          message: "操作成功",
+          success: true,
           data: {
             accessToken: "eyJhbGciOiJIUzUxMiJ9.newAdmin",
             refreshToken: "eyJhbGciOiJIUzUxMiJ9.newAdminRefresh",
@@ -19,8 +18,7 @@ export default defineFakeRoute([
         };
       } else {
         return {
-          code: 10001,
-          message: "请求参数缺失或格式不正确",
+          success: false,
           data: {}
         };
       }

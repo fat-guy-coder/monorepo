@@ -24,10 +24,7 @@ watch(
 </script>
 
 <template>
-  <span
-    class="fullscreen-icon navbar-bg-hover hover:[&>svg]:animate-scale-bounce"
-    @click="toggle"
-  >
+  <span class="fullscreen-icon navbar-bg-hover" @click="toggle">
     <IconifyIconOffline :icon="screenIcon" />
   </span>
 </template>

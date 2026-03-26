@@ -10,8 +10,6 @@ import type {
   PureHttpRequestConfig
 } from "./types.d";
 import { stringify } from "qs";
-import { message } from "@/utils/message";
-import { $t, transformI18n } from "@/plugins/i18n";
 import { getToken, formatToken } from "@/utils/auth";
 import { useUserStoreHook } from "@/store/modules/user";
 
@@ -91,13 +89,6 @@ class PureHttp {
                         config.headers["Authorization"] = formatToken(token);
                         PureHttp.requests.forEach(cb => cb(token));
                         PureHttp.requests = [];
-                      })
-                      .catch(_err => {
-                        PureHttp.requests = [];
-                        useUserStoreHook().logOut();
-                        message(transformI18n($t("login.pureLoginExpired")), {
-                          type: "warning"
-                        });
                       })
                       .finally(() => {
                         PureHttp.isRefreshing = false;

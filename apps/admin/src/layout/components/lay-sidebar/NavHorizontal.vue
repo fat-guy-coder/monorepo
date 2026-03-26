@@ -6,16 +6,12 @@ import LayNotice from "../lay-notice/index.vue";
 import { responsiveStorageNameSpace } from "@/config";
 import { ref, nextTick, computed, onMounted } from "vue";
 import { storageLocal, isAllEmpty } from "@pureadmin/utils";
-import { useTranslationLang } from "../../hooks/useTranslationLang";
 import { usePermissionStoreHook } from "@/store/modules/permission";
 import LaySidebarItem from "../lay-sidebar/components/SidebarItem.vue";
 import LaySidebarFullScreen from "../lay-sidebar/components/SidebarFullScreen.vue";
 
-import GlobalizationIcon from "@/assets/svg/globalization.svg?component";
-import AccountSettingsIcon from "~icons/ri/user-settings-line";
 import LogoutCircleRLine from "~icons/ri/logout-circle-r-line";
 import Setting from "~icons/ri/settings-3-line";
-import Check from "~icons/ep/check";
 
 const menuRef = ref();
 const showLogo = ref(
@@ -24,9 +20,8 @@ const showLogo = ref(
   )?.showLogo ?? true
 );
 
-const { t, route, locale, translationCh, translationEn } =
-  useTranslationLang(menuRef);
 const {
+  route,
   title,
   logout,
   onPanel,
@@ -34,10 +29,7 @@ const {
   username,
   userAvatar,
   backTopMenu,
-  avatarsStyle,
-  toAccountSettings,
-  getDropdownItemStyle,
-  getDropdownItemClass
+  avatarsStyle
 } = useNav();
 
 const defaultActive = computed(() =>
@@ -81,38 +73,6 @@ onMounted(() => {
     <div class="horizontal-header-right">
       <!-- 菜单搜索 -->
       <LaySearch id="header-search" />
-      <!-- 国际化 -->
-      <el-dropdown id="header-translation" trigger="click">
-        <div
-          class="globalization-icon navbar-bg-hover hover:[&>svg]:animate-scale-bounce"
-        >
-          <IconifyIconOffline :icon="GlobalizationIcon" />
-        </div>
-        <template #dropdown>
-          <el-dropdown-menu class="translation">
-            <el-dropdown-item
-              :style="getDropdownItemStyle(locale, 'zh')"
-              :class="['dark:text-white!', getDropdownItemClass(locale, 'zh')]"
-              @click="translationCh"
-            >
-              <span v-show="locale === 'zh'" class="check-zh">
-                <IconifyIconOffline :icon="Check" />
-              </span>
-              简体中文
-            </el-dropdown-item>
-            <el-dropdown-item
-              :style="getDropdownItemStyle(locale, 'en')"
-              :class="['dark:text-white!', getDropdownItemClass(locale, 'en')]"
-              @click="translationEn"
-            >
-              <span v-show="locale === 'en'" class="check-en">
-                <IconifyIconOffline :icon="Check" />
-              </span>
-              English
-            </el-dropdown-item>
-          </el-dropdown-menu>
-        </template>
-      </el-dropdown>
       <!-- 全屏 -->
       <LaySidebarFullScreen id="full-screen" />
       <!-- 消息通知 -->
@@ -124,27 +84,20 @@ onMounted(() => {
           <p v-if="username" class="dark:text-white">{{ username }}</p>
         </span>
         <template #dropdown>
-          <el-dropdown-item @click="toAccountSettings">
-            <IconifyIconOffline
-              :icon="AccountSettingsIcon"
-              style="margin: 5px"
-            />
-            {{ t("buttons.pureAccountSettings") }}
-          </el-dropdown-item>
           <el-dropdown-menu class="logout">
             <el-dropdown-item @click="logout">
               <IconifyIconOffline
                 :icon="LogoutCircleRLine"
                 style="margin: 5px"
               />
-              {{ t("buttons.pureLoginOut") }}
+              退出系统
             </el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>
       <span
-        class="set-icon navbar-bg-hover hover:[&>svg]:animate-scale-bounce"
-        :title="t('buttons.pureOpenSystemSet')"
+        class="set-icon navbar-bg-hover"
+        title="打开系统配置"
         @click="onPanel"
       >
         <IconifyIconOffline :icon="Setting" />
@@ -158,26 +111,10 @@ onMounted(() => {
   opacity: 0.45;
 }
 
-.translation {
-  :deep(.el-dropdown-menu__item) {
-    padding: 5px 40px;
-  }
-
-  .check-zh {
-    position: absolute;
-    left: 20px;
-  }
-
-  .check-en {
-    position: absolute;
-    left: 20px;
-  }
-}
-
 .logout {
   width: 120px;
 
-  :deep(.el-dropdown-menu__item) {
+  ::v-deep(.el-dropdown-menu__item) {
     display: inline-flex;
     flex-wrap: wrap;
     min-width: 100%;

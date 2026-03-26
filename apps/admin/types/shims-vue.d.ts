@@ -5,4 +5,7 @@ declare module "*.vue" {
   export default component;
 }
 
-declare module "vue3-puzzle-vcode";
+declare module "*.scss" {
+  const scss: Record<string, string>;
+  export default scss;
+}

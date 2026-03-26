@@ -9,7 +9,7 @@ import {
   __APP_INFO__
 } from "./build/utils";
 
-export default async ({ mode }: ConfigEnv): Promise<UserConfigExport> => {
+export default ({ mode }: ConfigEnv): UserConfigExport => {
   const { VITE_CDN, VITE_PORT, VITE_COMPRESSION, VITE_PUBLIC_PATH } =
     wrapperEnv(loadEnv(mode, root));
   return {
@@ -30,7 +30,7 @@ export default async ({ mode }: ConfigEnv): Promise<UserConfigExport> => {
         clientFiles: ["./index.html", "./src/{views,components}/*"]
       }
     },
-    plugins: await getPluginsList(VITE_CDN, VITE_COMPRESSION),
+    plugins: getPluginsList(VITE_CDN, VITE_COMPRESSION),
     // https://cn.vitejs.dev/config/dep-optimization-options.html#dep-optimization-options
     optimizeDeps: {
       include,
@@ -42,7 +42,7 @@ export default async ({ mode }: ConfigEnv): Promise<UserConfigExport> => {
       sourcemap: false,
       // 消除打包大小超过500kb警告
       chunkSizeWarningLimit: 4000,
-      rolldownOptions: {
+      rollupOptions: {
         input: {
           index: pathResolve("./index.html", import.meta.url)
         },
@@ -51,10 +51,6 @@ export default async ({ mode }: ConfigEnv): Promise<UserConfigExport> => {
           chunkFileNames: "static/js/[name]-[hash].js",
           entryFileNames: "static/js/[name]-[hash].js",
           assetFileNames: "static/[ext]/[name]-[hash].[ext]"
-        },
-        checks: {
-          pluginTimings: false,
-          toleratedTransform: false
         }
       }
     },

@@ -8,8 +8,7 @@ export default defineFakeRoute([
     response: ({ body }) => {
       if (body.username === "admin") {
         return {
-          code: 0,
-          message: "操作成功",
+          success: true,
           data: {
             avatar: "https://avatars.githubusercontent.com/u/44761321",
             username: "admin",
@@ -25,8 +24,7 @@ export default defineFakeRoute([
         };
       } else {
         return {
-          code: 0,
-          message: "操作成功",
+          success: true,
           data: {
             avatar: "https://avatars.githubusercontent.com/u/52823142",
             username: "common",
