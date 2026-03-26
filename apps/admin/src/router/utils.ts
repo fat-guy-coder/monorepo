@@ -147,7 +147,7 @@ function addPathMatch() {
       name: "PageNotFound",
       component: () => import("@/views/error/404.vue"),
       meta: {
-        title: "404",
+        title: "menus.purePageNotFound",
         showLink: false
       }
     });
@@ -209,18 +209,26 @@ function initRouter() {
       });
     } else {
       return new Promise(resolve => {
-        getAsyncRoutes().then(({ data }) => {
-          handleAsyncRoutes(cloneDeep(data));
-          storageLocal().setItem(key, data);
-          resolve(router);
+        getAsyncRoutes().then(({ code, data }) => {
+          if (code === 0) {
+            handleAsyncRoutes(cloneDeep(data));
+            storageLocal().setItem(key, data);
+            resolve(router);
+          } else {
+            resolve(router);
+          }
         });
       });
     }
   } else {
     return new Promise(resolve => {
-      getAsyncRoutes().then(({ data }) => {
-        handleAsyncRoutes(cloneDeep(data));
-        resolve(router);
+      getAsyncRoutes().then(({ code, data }) => {
+        if (code === 0) {
+          handleAsyncRoutes(cloneDeep(data));
+          resolve(router);
+        } else {
+          resolve(router);
+        }
       });
     });
   }

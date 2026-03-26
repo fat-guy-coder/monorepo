@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useI18n } from "vue-i18n";
 import { emitter } from "@/utils/mitt";
 import { onClickOutside } from "@vueuse/core";
 import { ref, computed, onMounted, onBeforeUnmount } from "vue";
@@ -10,13 +11,10 @@ const show = ref<Boolean>(false);
 
 const iconClass = computed(() => {
   return [
-    "w-[22px]",
-    "h-[22px]",
-    "flex",
-    "justify-center",
-    "items-center",
+    "size-5.5",
+    "flex-c",
     "outline-hidden",
-    "rounded-[4px]",
+    "rounded-sm",
     "cursor-pointer",
     "transition-colors",
     "hover:bg-[#0000000f]",
@@ -25,6 +23,7 @@ const iconClass = computed(() => {
   ];
 });
 
+const { t } = useI18n();
 const { onReset } = useDataThemeChange();
 
 onClickOutside(target, (event: any) => {
@@ -49,12 +48,14 @@ onBeforeUnmount(() => {
     <div class="right-panel-background" />
     <div ref="target" class="right-panel bg-bg_color">
       <div
-        class="project-configuration border-0 border-b-[1px] border-solid border-[var(--pure-border-color)]"
+        class="flex-bc py-3 px-5 border-0 border-l border-solid border-(--pure-border-color)"
       >
-        <h4 class="dark:text-white">系统配置</h4>
+        <h4 class="dark:text-white">
+          {{ t("panel.pureSystemSet") }}
+        </h4>
         <span
           v-tippy="{
-            content: '关闭配置',
+            content: t('panel.pureCloseSystemSet'),
             placement: 'bottom-start',
             zIndex: 41000
           }"
@@ -69,16 +70,18 @@ onBeforeUnmount(() => {
           />
         </span>
       </div>
-      <el-scrollbar>
+      <el-scrollbar
+        class="border-y border-l border-r-0 border-solid border-(--pure-border-color) h-[calc(100vh-104px)]!"
+      >
         <slot />
       </el-scrollbar>
 
       <div
-        class="flex justify-end p-3 border-0 border-t-[1px] border-solid border-[var(--pure-border-color)]"
+        class="flex justify-end p-3 border-0 border-l border-solid border-(--pure-border-color)"
       >
         <el-button
           v-tippy="{
-            content: '清空缓存并返回登录页',
+            content: t('panel.pureClearCacheAndToLogin'),
             placement: 'left-start',
             zIndex: 41000
           }"
@@ -87,7 +90,7 @@ onBeforeUnmount(() => {
           bg
           @click="onReset"
         >
-          清空缓存
+          {{ t("panel.pureClearCache") }}
         </el-button>
       </div>
     </div>
@@ -95,10 +98,6 @@ onBeforeUnmount(() => {
 </template>
 
 <style lang="scss" scoped>
-:deep(.el-scrollbar) {
-  height: calc(100vh - 110px);
-}
-
 .right-panel-background {
   position: fixed;
   top: 0;
@@ -134,12 +133,5 @@ onBeforeUnmount(() => {
   .right-panel {
     transform: translate(0);
   }
-}
-
-.project-configuration {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 14px 20px;
 }
 </style>

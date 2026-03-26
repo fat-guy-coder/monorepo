@@ -93,7 +93,7 @@ declare global {
     Layout?: string;
     Theme?: string;
     DarkMode?: boolean;
-    OverallStyle?: string;
+    ThemeMode?: string;
     Grey?: boolean;
     Weak?: boolean;
     HideTabs?: boolean;
@@ -102,12 +102,22 @@ declare global {
     SidebarStatus?: boolean;
     EpThemeColor?: string;
     ShowLogo?: boolean;
-    ShowModel?: string;
+    Watermark?: boolean;
+    WatermarkText?: string;
+    TagsStyle?: string;
     MenuArrowIconNoTransition?: boolean;
     CachingAsyncRoutes?: boolean;
     TooltipEffect?: Effect;
     ResponsiveStorageNameSpace?: string;
     MenuSearchHistory?: number;
+    MapConfigure?: {
+      amapKey?: string;
+      options: {
+        resizeEnable?: boolean;
+        center?: number[];
+        zoom?: number;
+      };
+    };
   }
 
   /**
@@ -132,10 +142,20 @@ declare global {
     sidebarStatus?: boolean;
     epThemeColor?: string;
     themeColor?: string;
-    overallStyle?: string;
+    themeMode?: string;
     showLogo?: boolean;
-    showModel?: string;
+    watermark?: boolean;
+    watermarkText?: string;
+    tagsStyle?: string;
     menuSearchHistory?: number;
+    mapConfigure?: {
+      amapKey?: string;
+      options: {
+        resizeEnable?: boolean;
+        center?: number[];
+        zoom?: number;
+      };
+    };
     username?: string;
   }
 
@@ -153,7 +173,7 @@ declare global {
       sidebarStatus?: boolean;
       epThemeColor?: string;
       themeColor?: string;
-      overallStyle?: string;
+      themeMode?: string;
     };
     configure: {
       grey?: boolean;
@@ -161,7 +181,9 @@ declare global {
       hideTabs?: boolean;
       hideFooter?: boolean;
       showLogo?: boolean;
-      showModel?: string;
+      watermark?: boolean;
+      watermarkText?: string;
+      tagsStyle?: string;
       multiTagsCache?: boolean;
       stretch?: boolean | number;
     };

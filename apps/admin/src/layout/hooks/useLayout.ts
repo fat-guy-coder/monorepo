@@ -1,4 +1,5 @@
 import { computed } from "vue";
+import { useI18n } from "vue-i18n";
 import { routerArrays } from "../types";
 import { useGlobal } from "@pureadmin/utils";
 import { useMultiTagsStore } from "@/store/modules/multiTags";
@@ -14,6 +15,11 @@ export function useLayout() {
     ) {
       $storage.tags = routerArrays;
     }
+    /** 国际化 */
+    if (!$storage.locale) {
+      $storage.locale = { locale: $config?.Locale ?? "zh" };
+      useI18n().locale.value = $config?.Locale ?? "zh";
+    }
     /** 导航 */
     if (!$storage.layout) {
       $storage.layout = {
@@ -23,7 +29,7 @@ export function useLayout() {
         sidebarStatus: $config?.SidebarStatus ?? true,
         epThemeColor: $config?.EpThemeColor ?? "#409EFF",
         themeColor: $config?.Theme ?? "light",
-        overallStyle: $config?.OverallStyle ?? "light"
+        themeMode: $config?.ThemeMode ?? "light"
       };
     }
     /** 灰色模式、色弱模式、隐藏标签页 */
@@ -34,7 +40,9 @@ export function useLayout() {
         hideTabs: $config?.HideTabs ?? false,
         hideFooter: $config.HideFooter ?? true,
         showLogo: $config?.ShowLogo ?? true,
-        showModel: $config?.ShowModel ?? "smart",
+        watermark: $config?.Watermark ?? false,
+        watermarkText: $config?.WatermarkText ?? "",
+        tagsStyle: $config?.TagsStyle ?? "chrome",
         multiTagsCache: $config?.MultiTagsCache ?? false,
         stretch: $config?.Stretch ?? false
       };

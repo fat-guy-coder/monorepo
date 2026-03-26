@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { message } from "@/utils/message";
 import { initRouter } from "@/router/utils";
 import { storageLocal } from "@pureadmin/utils";
 import { type CSSProperties, ref, computed } from "vue";
@@ -32,12 +33,13 @@ const options = [
 function onChange() {
   useUserStoreHook()
     .loginByUsername({ username: username.value, password: "admin123" })
-    .then(res => {
-      if (res.success) {
-        storageLocal().removeItem("async-routes");
-        usePermissionStoreHook().clearAllCachePage();
-        initRouter();
-      }
+    .then(() => {
+      storageLocal().removeItem("async-routes");
+      usePermissionStoreHook().clearAllCachePage();
+      initRouter();
+    })
+    .catch(err => {
+      message(err, { type: "error" });
     });
 }
 </script>
@@ -52,8 +54,15 @@ function onChange() {
         <div class="card-header">
           <span>当前角色：{{ username }}</span>
         </div>
+        <el-link
+          class="mt-2"
+          href="https://github.com/pure-admin/vue-pure-admin/blob/main/src/views/permission/page/index.vue"
+          target="_blank"
+        >
+          代码位置 src/views/permission/page/index.vue
+        </el-link>
       </template>
-      <el-select v-model="username" class="w-[160px]!" @change="onChange">
+      <el-select v-model="username" class="w-40!" @change="onChange">
         <el-option
           v-for="item in options"
           :key="item.value"
