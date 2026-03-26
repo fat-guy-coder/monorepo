@@ -69,6 +69,7 @@
     "responsive-storage": "^2.2.0",
     "sortablejs": "^1.15.6",
     "vue": "^3.5.22",
+    "vue-demi": "^0.14.10",
     "vue-router": "^4.6.3",
     "vue-tippy": "^6.7.1",
     "vue-types": "^6.0.0"
@@ -105,7 +106,6 @@
     "postcss-load-config": "^6.0.1",
     "postcss-scss": "^4.0.9",
     "prettier": "^3.6.2",
-    "rimraf": "^6.0.1",
     "rollup-plugin-visualizer": "^6.0.5",
     "sass": "^1.93.2",
     "stylelint": "^16.25.0",
@@ -131,32 +131,5 @@
   "engines": {
     "node": "^20.19.0 || >=22.13.0",
     "pnpm": ">=9"
-  },
-  "pnpm": {
-    "allowedDeprecatedVersions": {
-      "are-we-there-yet": "*",
-      "sourcemap-codec": "*",
-      "lodash.isequal": "*",
-      "domexception": "*",
-      "w3c-hr-time": "*",
-      "inflight": "*",
-      "npmlog": "*",
-      "rimraf": "*",
-      "stable": "*",
-      "gauge": "*",
-      "abab": "*",
-      "glob": "*"
-    },
-    "onlyBuiltDependencies": [
-      "@parcel/watcher",
-      "core-js",
-      "es5-ext",
-      "esbuild",
-      "typeit",
-      "vue-demi"
-    ],
-    "ignoredBuiltDependencies": [
-      "@tailwindcss/oxide"
-    ]
   }
 }

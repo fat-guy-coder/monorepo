@@ -1,43 +1,91 @@
-<h1>vue-pure-admin精简版（非国际化版本）</h1>
+# Admin 管理后台
 
-[![license](https://img.shields.io/github/license/pure-admin/vue-pure-admin.svg)](LICENSE)
+基于 [vue-pure-admin](https://github.com/pure-admin/vue-pure-admin) 精简版的中后台管理系统。
 
-**中文** | [English](./README.en-US.md)
+## 技术栈
 
-## 介绍
+- **Vue3** - 渐进式 JavaScript 框架
+- **Vite** - 下一代前端构建工具
+- **TypeScript** - JavaScript 超集
+- **Element Plus** - 基于 Vue 3 的组件库
+- **Pinia** - Vue 状态管理
+- **Tailwind CSS** - 功能优先的 CSS 框架
 
-精简版是基于 [vue-pure-admin](https://github.com/pure-admin/vue-pure-admin) 提炼出的架子，包含主体功能，更适合实际项目开发，打包后的大小在全局引入 [element-plus](https://element-plus.org) 的情况下仍然低于 `2.3MB`，并且会永久同步完整版的代码。开启 `brotli` 压缩和 `cdn` 替换本地库模式后，打包大小低于 `350kb`
+## 功能模块
 
-## 版本选择
+- 菜单管理（CRUD）
+- 系统管理（扩展中）
 
-当前是非国际化版本，如果您需要国际化版本 [请点击](https://github.com/pure-admin/pure-admin-thin/tree/i18n)
+## 项目结构
 
-## 配套视频
+```
+monorepo/
+├── apps/
+│   ├── admin/           # 管理后台（本项目）
+│   ├── front-learning/  # 前端学习网站
+│   └── fastify/         # 后端 API 服务
+├── packages/            # 共享包
+└── pnpm-workspace.yaml  # pnpm 工作区配置
+```
 
-[点我查看 UI 设计](https://www.bilibili.com/video/BV17g411T7rq)  
-[点我查看快速开发教程](https://www.bilibili.com/video/BV1kg411v7QT)
+## 快速开始
 
-## 配套保姆级文档
+### 安装依赖
 
-[点我查看 vue-pure-admin 文档](https://pure-admin.cn/)  
-[点我查看 @pureadmin/utils 文档](https://pure-admin-utils.netlify.app)
+```bash
+pnpm install
+```
 
-## 高级服务
+### 启动开发服务器
 
-[点我查看详情](https://pure-admin.cn/pages/service/)
+```bash
+# 根目录运行
+pnpm admin:dev
 
-## 预览
+# 或直接运行
+cd apps/admin
+pnpm dev
+```
 
-[查看预览](https://pure-admin-thin.netlify.app/#/login)
+### 项目构建
 
-## 维护者
+```bash
+pnpm admin:build
+```
 
-[xiaoxian521](https://github.com/xiaoxian521)
+## 环境变量
 
-## ⚠️ 注意
+在 `.env.development` 或 `.env.production` 中配置：
 
-精简版不接受任何 `issues` 和 `pr`，如果有问题请到完整版 [issues](https://github.com/pure-admin/vue-pure-admin/issues/new/choose) 去提，谢谢！
+```env
+VITE_PORT=8848
+VITE_API_BASE=http://localhost:3000
+VITE_ROUTER_HISTORY=hash
+```
+
+## API 接口
+
+依赖于 Fastify 后端服务，请确保以下服务正在运行：
+
+```bash
+docker-compose up -d fastify postgres
+```
+
+### 菜单管理接口
+
+| 接口 | 方法 | 说明 |
+|------|------|------|
+| `/api/menus` | GET | 获取菜单列表 |
+| `/api/menus/:id` | GET | 获取单个菜单 |
+| `/api/menus` | POST | 创建菜单 |
+| `/api/menus/:id` | PUT | 更新菜单 |
+| `/api/menus/:id` | DELETE | 删除菜单 |
+
+## 文档
+
+- [vue-pure-admin 文档](https://pure-admin.cn/)
+- [@pureadmin/utils 工具库文档](https://pure-admin-utils.netlify.app)
 
 ## 许可证
 
-[MIT © 2020-present, pure-admin](./LICENSE)
+基于 [MIT](./LICENSE) 协议开源

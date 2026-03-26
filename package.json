@@ -14,6 +14,7 @@
     "jiti": "^2.4.2",
     "postcss": "^8.5.8",
     "prettier": "^3.5.1",
+    "rimraf": "^6.0.1",
     "tailwindcss": "^4.2.1",
     "terser": "^5.44.1",
     "tsx": "^4.19.3",
@@ -41,7 +42,7 @@
     "front-learning:preview": "pnpm --filter front-learning run preview",
     "main:preview": "pnpm --filter main run preview",
     "prod:preview": "run-p \"preview:**\"",
-    "g": "pnpm -F front-learning g",
+    "front-learning:gen": "pnpm -F front-learning g",
     "gen:api": "pnpm -F front-learning gen:api",
     "gen:api:module": "pnpm -F front-learning gen:api:module",
     "translate": "pnpm -F front-learning translate",
@@ -55,11 +56,42 @@
   "license": "ISC",
   "pnpm": {
     "onlyBuiltDependencies": [
-      "esbuild"
+      "esbuild",
+      "@parcel/watcher",
+      "core-js",
+      "es5-ext",
+      "typeit",
+      "vue-demi"
     ],
+    "ignoredBuiltDependencies": [
+      "@tailwindcss/oxide"
+    ],
+    "allowedDeprecatedVersions": {
+      "are-we-there-yet": "*",
+      "sourcemap-codec": "*",
+      "lodash.isequal": "*",
+      "domexception": "*",
+      "w3c-hr-time": "*",
+      "inflight": "*",
+      "npmlog": "*",
+      "rimraf": "*",
+      "stable": "*",
+      "gauge": "*",
+      "abab": "*",
+      "glob": "*"
+    },
     "overrides": {
       "@tiptap/core": "2.27.1",
       "@tiptap/pm": "2.27.1"
     }
+  },
+  "dependencies": {
+    "@element-plus/icons-vue": "^2.3.2",
+    "commander": "^14.0.3",
+    "js-yaml": "^4.1.1",
+    "tippy.js": "^6.3.7",
+    "vue-demi": "^0.14.10",
+    "vue-json-pretty": "^2.6.0",
+    "yaml": "^2.8.2"
   }
 }

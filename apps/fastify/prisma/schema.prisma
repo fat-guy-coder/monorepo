@@ -14,6 +14,7 @@ model Menu {
   path      String?
   icon      String?
   order     Int      @default(0)
+  project   String   @default("default")
   parentId  String?
   parent    Menu?    @relation("MenuToMenu", fields: [parentId], references: [id])
   children  Menu[]   @relation("MenuToMenu")
@@ -21,5 +22,6 @@ model Menu {
   updatedAt DateTime @updatedAt
 
   @@index([parentId])
+  @@index([project])
 }
 
