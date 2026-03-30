@@ -59,6 +59,19 @@ docker-compose up -d
 # 启动后端 API + 数据库
 docker-compose up -d fastify postgres
 
+# 启动管理后台
+docker-compose up -d admin
+
+# 更新prisma schema
+docker exec fastify npx prisma generate
+docker exec fastify npx prisma migrate dev --name init
+docker exec fastify npx prisma studio
+
+# 更新prisma schema
+docker exec fastify npx prisma generate
+docker exec fastify npx prisma migrate dev --name init
+docker exec fastify npx prisma studio
+
 # 启动特定服务
 docker-compose up -d fastify
 docker-compose up -d postgres
@@ -75,6 +88,10 @@ docker-compose down
 
 # 停止并删除数据卷（清空数据库）
 docker-compose down -v
+
+# 重启
+docker-compose restart fastify
+docker-compose restart postgres
 
 # 重新构建镜像（代码修改后）
 docker-compose build fastify

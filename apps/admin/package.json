@@ -19,7 +19,9 @@
     "lint:stylelint": "stylelint --cache --fix \"**/*.{html,vue,css,scss}\" --cache-location node_modules/.cache/stylelint/",
     "lint": "pnpm lint:eslint && pnpm lint:prettier && pnpm lint:stylelint",
     "prepare": "husky",
-    "preinstall": "npx only-allow pnpm"
+    "preinstall": "npx only-allow pnpm",
+    "gen:api": "tsx scripts/gen-api/index.ts",
+    "gen:api:module": "pnpm gen:api --module"
   },
   "keywords": [
     "pure-admin-thin",

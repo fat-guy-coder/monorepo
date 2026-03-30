@@ -3,7 +3,7 @@ import { ref, onMounted, computed } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { Search } from "@element-plus/icons-vue";
 import type { MenuItem } from "@/api/menu";
-import { getRootMenus, getMenuById, createMenu, updateMenu, deleteMenu } from "@/api/menu";
+import { getApiMenus, getApiMenusId, postApiMenus, putApiMenusId, deleteApiMenusId, getApiMenusIdChildren } from "@/api/menu";
 
 defineOptions({
   name: "SystemMenu"
@@ -26,6 +26,8 @@ const dialogVisible = ref(false);
 const dialogTitle = ref("新增菜单");
 const isEdit = ref(false);
 const formRef = ref();
+const treeRef = ref();
+const expandedKeys = ref<string[]>([]); // 保存展开的节点
 
 // 表单数据
 const menuForm = ref<Partial<MenuItem>>({
@@ -41,7 +43,7 @@ const menuForm = ref<Partial<MenuItem>>({
 async function fetchRootMenus() {
   loading.value = true;
   try {
-    const res = await getRootMenus({ root: "true" });
+    const res = await getApiMenus({ project: currentProject.value, root: "true" });
     if (res.code === 200) {
       rootMenus.value = res.data;
     } else {
@@ -56,9 +58,8 @@ async function fetchRootMenus() {
 
 // 加载所有菜单扁平数据（用于搜索，按需加载）
 async function fetchAllMenusFlat() {
-  if (allMenusFlat.value.length > 0) return; // 已有数据，不再请求
   try {
-    const res = await getRootMenus({ flat: "true" });
+    const res = await getApiMenus({ project: currentProject.value, flat: "true" });
     if (res.code === 200) {
       allMenusFlat.value = res.data;
     }
@@ -75,18 +76,77 @@ async function loadChildren(node: any, resolve: (data: MenuItem[]) => void) {
     return;
   }
   try {
-    const res = await getMenuById(node.data.id);
+    const res = await getApiMenusIdChildren(node.data.id);
     if (res.code === 200) {
-      const children = res.data.map((item: MenuItem) => ({
-        ...item,
-        children: undefined
-      }));
-      resolve(children);
+      resolve(res.data);
     } else {
       resolve([]);
     }
   } catch (e) {
     resolve([]);
+  }
+}
+
+// 保存展开的节点
+function onNodeExpand(data: MenuItem) {
+  if (!expandedKeys.value.includes(data.id)) {
+    expandedKeys.value.push(data.id);
+  }
+}
+
+// 父级菜单搜索
+const parentMenuOptions = ref<MenuItem[]>([]);
+const parentMenuLoading = ref(false);
+
+async function searchParentMenus(query: string) {
+  // 如果没有输入内容且没有选中的父节点，不查询
+  if (!query || query.trim() === '') {
+    // 如果已有选中的父节点，保留它在选项中
+    if (menuForm.value.parentId) {
+      // 确保选中的父节点在选项中
+      if (!parentMenuOptions.value.some(item => item.id === menuForm.value.parentId)) {
+        // 选项中没有，需要加载
+        await loadParentMenuOption(menuForm.value.parentId);
+      }
+    } else {
+      parentMenuOptions.value = [];
+    }
+    return;
+  }
+  parentMenuLoading.value = true;
+  try {
+    // 传入 search 参数，后端模糊搜索
+    const res = await getApiMenus({ project: currentProject.value, flat: "true", search: query });
+    if (res.code === 200) {
+      // 添加"无父级"选项在最前面
+      parentMenuOptions.value = [
+        { id: '', name: '', label: '无父级', project: '' } as MenuItem,
+        ...res.data
+      ];
+    }
+  } catch (e) {
+    // 静默失败
+  } finally {
+    parentMenuLoading.value = false;
+  }
+}
+
+// 打开编辑对话框时，如果该节点有父节点，需要加载父节点信息
+async function loadParentMenuOption(parentId: string | undefined) {
+  if (!parentId) return;
+  // 检查父节点是否已在选项中
+  if (parentMenuOptions.value.some(item => item.id === parentId)) return;
+  // 如果选项为空，先查询一次获取父节点
+  const res = await getApiMenus({ project: currentProject.value, flat: "true" });
+  if (res.code === 200) {
+    const parent = res.data.find((menu: MenuItem) => menu.id === parentId);
+    if (parent) {
+      parentMenuOptions.value = [
+        { id: '', name: '', label: '无父级', project: '' } as MenuItem,
+        parent,
+        ...parentMenuOptions.value.filter(item => item.id !== '' && item.id !== parentId)
+      ];
+    }
   }
 }
 
@@ -114,12 +174,12 @@ const searchResults = computed(() => {
 // 项目切换
 function handleProjectChange() {
   searchQuery.value = "";
+  allMenusFlat.value = []; // 清空搜索数据，重新按需加载
   fetchRootMenus();
-  fetchAllMenusFlat();
 }
 
 // 打开新增对话框
-function openAddDialog(parentId?: string) {
+async function openAddDialog(parentId?: string) {
   dialogTitle.value = "新增菜单";
   isEdit.value = false;
   menuForm.value = {
@@ -130,34 +190,93 @@ function openAddDialog(parentId?: string) {
     order: 0,
     parentId: parentId || undefined
   };
+  // 清空父级菜单选项
+  parentMenuOptions.value = [];
+  // 如果有父节点，需要加载父节点信息用于显示
+  if (parentId) {
+    await loadParentMenuOption(parentId);
+  }
   dialogVisible.value = true;
 }
 
 // 打开编辑对话框
-function openEditDialog(row: MenuItem) {
+async function openEditDialog(row: MenuItem) {
   dialogTitle.value = "编辑菜单";
   isEdit.value = true;
   menuForm.value = { ...row };
+  // 清空父级菜单选项
+  parentMenuOptions.value = [];
+  // 如果有父节点，需要加载父节点信息用于显示
+  if (row.parentId) {
+    await loadParentMenuOption(row.parentId);
+  }
   dialogVisible.value = true;
 }
 
 // 提交表单
 async function handleSubmit() {
   try {
+    // 确保 parentId 为 null 而不是空字符串
+    const submitData = {
+      ...menuForm.value,
+      parentId: menuForm.value.parentId || null
+    };
     const res = isEdit.value
-      ? await updateMenu(menuForm.value.id!, menuForm.value)
-      : await createMenu(menuForm.value);
+      ? await putApiMenusId(menuForm.value.id!, submitData as any)
+      : await postApiMenus(submitData as any);
 
     if (res.code === 200) {
       ElMessage.success(isEdit.value ? "更新成功" : "创建成功");
       dialogVisible.value = false;
-      fetchRootMenus();
+
+      if (treeRef.value) {
+        if (isEdit.value) {
+          // 编辑：获取旧节点
+          const node = treeRef.value.getNode(menuForm.value.id);
+          if (node) {
+            const oldParentId = node.parent?.data?.id;
+            const newParentId = submitData.parentId;
+            if (oldParentId !== newParentId) {
+              // 移动了父节点
+              // 保存子节点数据
+              const childNodesData = node.childNodes?.map((child: any) => child.data) || [];
+              // 从旧父节点移除
+              treeRef.value.remove(menuForm.value.id);
+              if (newParentId) {
+                const newParentNode = treeRef.value.getNode(newParentId);
+                if (newParentNode && newParentNode.expanded) {
+                  // 根据是否有子节点决定是否带 children
+                  const dataToAppend = childNodesData.length > 0
+                    ? { ...res.data, children: childNodesData }
+                    : { ...res.data, children: undefined };
+                  treeRef.value.append(dataToAppend, newParentNode);
+                }
+              }
+            } else {
+              Object.assign(node.data, submitData);
+            }
+          }
+        } else {
+          // 新增：追加到父节点
+          const parentId = submitData.parentId;
+          if (parentId) {
+            const parentNode = treeRef.value.getNode(parentId);
+            if (parentNode && parentNode.expanded) {
+              treeRef.value.append(res.data, parentNode);
+            }
+          } else {
+            // 顶级菜单刷新根菜单
+            fetchRootMenus();
+          }
+        }
+      }
+      // 刷新扁平数据（搜索和父级菜单用）
       fetchAllMenusFlat();
     } else {
       ElMessage.error(res.message || "操作失败");
     }
-  } catch (e) {
-    ElMessage.error("操作失败");
+  } catch (e: any) {
+    ElMessage.error(e?.message || "操作失败");
   }
 }
 
@@ -167,16 +286,23 @@ async function handleDelete(row: MenuItem) {
     await ElMessageBox.confirm(`确定删除菜单 "${row.label}" 及其所有子菜单吗？`, "提示", {
       type: "warning"
     });
-    const res = await deleteMenu(row.id);
+    const res = await deleteApiMenusId(row.id);
     if (res.code === 200) {
       ElMessage.success("删除成功");
-      fetchRootMenus();
+      // 从树中移除该节点
+      if (treeRef.value) {
+        treeRef.value.remove(row.id);
+      }
+      // 刷新扁平数据（搜索和父级菜单用）
       fetchAllMenusFlat();
     } else {
       ElMessage.error(res.message || "删除失败");
     }
-  } catch (e) {
-    // 用户取消
+  } catch (e: any) {
+    // 用户取消或操作失败
+    if (e !== "cancel") {
+      ElMessage.error(e?.message || "删除失败");
+    }
   }
 }
 
@@ -192,21 +318,10 @@ onMounted(() => {
       <el-card shadow="never">
         <div class="flex flex-wrap gap-4 items-center">
           <el-select v-model="currentProject" @change="handleProjectChange" class="w-40">
-            <el-option
-              v-for="item in projects"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            />
+            <el-option v-for="item in projects" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
 
-          <el-input
-            v-model="searchQuery"
-            placeholder="搜索菜单"
-            class="w-56"
-            clearable
-            :prefix-icon="Search"
-          />
+          <el-input v-model="searchQuery" placeholder="搜索菜单" class="w-56" clearable :prefix-icon="Search" />
 
           <el-button type="primary" @click="openAddDialog()">
             新增菜单
@@ -218,14 +333,7 @@ onMounted(() => {
     <!-- 菜单列表 -->
     <el-card shadow="never">
       <!-- 搜索模式：表格展示扁平结果 -->
-      <el-table
-        v-if="isSearchMode"
-        v-loading="loading"
-        :data="searchResults"
-        border
-        stripe
-        class="w-full"
-      >
+      <el-table v-if="isSearchMode" v-loading="loading" :data="searchResults" border stripe class="w-full">
         <el-table-column prop="label" label="菜单名称" min-width="120" />
         <el-table-column prop="name" label="路由名称" min-width="120" />
         <el-table-column prop="order" label="排序" width="80" align="center" />
@@ -247,18 +355,9 @@ onMounted(() => {
       </el-table>
 
       <!-- 树形懒加载模式 -->
-      <el-tree
-        v-else
-        v-loading="loading"
-        :data="rootMenus"
-        :props="{ label: 'label', children: 'children', hasChildren: 'hasChildren' }"
-        node-key="id"
-        :expand-on-click-node="false"
-        :expand-first-node-only="true"
-        lazy
-        :load="loadChildren"
-        class="w-full"
-      >
+      <el-tree ref="treeRef" v-else v-loading="loading" :data="rootMenus"
+        :props="{ label: 'label', children: 'children', isLeaf: 'isLeaf' }" node-key="id" :expand-on-click-node="false"
+        :expanded-keys="expandedKeys" @node-expand="onNodeExpand" lazy :load="loadChildren" class="w-full">
         <template #default="{ data }">
           <span class="flex items-center justify-between w-full">
             <span class="font-medium">{{ data.label }}</span>
@@ -289,7 +388,7 @@ onMounted(() => {
           <el-input v-model="menuForm.name" placeholder="请输入路由名称" />
         </el-form-item>
         <el-form-item label="路径">
-          <el-input v-model="menuForm.path" placeholder="请输入路径" />
+          <span style="color: #909399; font-size: 12px;">{{ menuForm.path || '自动生成' }}</span>
         </el-form-item>
         <el-form-item label="图标">
           <el-input v-model="menuForm.icon" placeholder="请输入图标" />
@@ -298,13 +397,18 @@ onMounted(() => {
           <el-input-number v-model="menuForm.order" :min="0" />
         </el-form-item>
         <el-form-item label="父级菜单">
-          <el-select v-model="menuForm.parentId" placeholder="请选择" clearable class="w-full">
-            <el-option
-              v-for="item in parentMenuOptions"
-              :key="item.id"
-              :label="item.label"
-              :value="item.id"
-            />
+          <el-select
+            v-model="menuForm.parentId"
+            placeholder="输入搜索父级菜单"
+            clearable
+            filterable
+            remote
+            reserve-keyword
+            :remote-method="searchParentMenus"
+            :loading="parentMenuLoading"
+            class="w-full"
+          >
+            <el-option v-for="item in parentMenuOptions" :key="item.id" :label="item.label" :value="item.id" />
           </el-select>
         </el-form-item>
       </el-form>

@@ -12,8 +12,7 @@ export interface MenuItem {
   createdAt: string;
   updatedAt: string;
   children?: MenuItem[];
-  hasChildren?: boolean; // 是否有子菜单（用于懒加载显示箭头）
-  _loaded?: boolean; // 自定义属性，标记是否已加载子菜单
+  isLeaf?: boolean; // 是否是叶子节点（控制树箭头显示）
 }
 
 export interface ApiResponse<T = any> {
@@ -25,7 +24,7 @@ export interface ApiResponse<T = any> {
 // 当前项目标识
 const PROJECT = "front_learning";
 
-export function getRootMenus(params?: { project?: string; flat?: string; root?: string }) {
+export function getRootMenus(params?: { project?: string; flat?: string; root?: string; search?: string }) {
   return http.request<ApiResponse<MenuItem[]>>("get", "/api/menus", {
     params: { project: PROJECT, ...params }
   });

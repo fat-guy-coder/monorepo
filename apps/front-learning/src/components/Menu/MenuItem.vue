@@ -102,8 +102,11 @@ const shouldRenderChildren = ref(false)
 
 const isSelected = computed(() => selectedKeys.value.includes(props.item.path ?? ''))
 const hasLocalChildren = computed(() => localChildren.value.length > 0)
+// isLeaf 表示叶子节点（没有子菜单），isLeaf=false 表示有子菜单
+const isLeafNode = computed(() => props.item.isLeaf === true)
+// 有远程子菜单的条件：不是叶子节点 且 有远程加载器
 const expectRemoteChildren = computed(
-  () => !!props.item.hasChildren && typeof menuLoader === 'function',
+  () => !isLeafNode.value && typeof menuLoader === 'function',
 )
 const hasPotentialChildren = computed(() => hasLocalChildren.value || expectRemoteChildren.value)
 const canToggle = computed(() => hasPotentialChildren.value)

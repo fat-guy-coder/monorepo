@@ -5,6 +5,7 @@ export interface MenuItem {
     path: string;
     icon?: string;
     hasChildren?: boolean;
+    isLeaf?: boolean;
     children?: MenuItem[];
     [key: string]: unknown;
 }

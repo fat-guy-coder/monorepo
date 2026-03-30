@@ -10,6 +10,7 @@ import {
   formatFlatteningRoutes
 } from "../utils";
 import { useMultiTagsStoreHook } from "./multiTags";
+import { getApiMenus } from "@/api/menu";
 
 export const usePermissionStore = defineStore("pure-permission", {
   state: () => ({
@@ -31,6 +32,34 @@ export const usePermissionStore = defineStore("pure-permission", {
       this.flatteningRoutes = formatFlatteningRoutes(
         this.constantMenus.concat(routes) as any
       );
+    },
+    /** 从数据库加载菜单（用于 admin 项目） */
+    async loadMenusFromDb(project: string = "admin") {
+      try {
+        const res = await getApiMenus({ project, tree: "true" });
+        if (res.code === 200 && res.data) {
+          // 将数据库菜单格式转换为路由格式
+          const dbMenus = this.convertDbMenusToRoutes(res.data);
+          this.wholeMenus = dbMenus;
+        }
+      } catch (e) {
+        console.error("加载菜单失败:", e);
+      }
+    },
+    /** 将数据库菜单格式转换为路由格式 */
+    convertDbMenusToRoutes(menus: any[]): any[] {
+      return menus.map(menu => ({
+        path: menu.path,
+        name: menu.name,
+        meta: {
+          title: menu.label,
+          icon: menu.icon,
+          rank: menu.order
+        },
+        children: menu.children && menu.children.length > 0
+          ? this.convertDbMenusToRoutes(menu.children)
+          : undefined
+      }));
     },
     /** 监听缓存页面是否存在于标签页，不存在则删除 */
     clearCache() {

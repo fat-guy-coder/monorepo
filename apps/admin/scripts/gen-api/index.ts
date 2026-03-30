@@ -236,7 +236,7 @@ async function emitModuleApi(
 
       // Extract the actual data type from response schema
       // The Fastify response is { code, message, data: T } but ApiResult already wraps this
-      // So we need to extract 'data' property type, not the whole wrapper
+      // So we need to extract 'data' property's schema type, not the whole wrapper
       let respType = 'unknown';
       if (respSchema) {
         if (respSchema.type === 'object' && respSchema.properties?.data) {
@@ -294,24 +294,26 @@ async function emitModuleApi(
 
       jsdocLines.push(' */');
 
-      const requestObjLines: string[] = [
-        `url: ${urlExpr},`,
-        `method: '${method}',`,
-      ];
+      const requestObjLines: string[] = [];
 
-      if (queryParams.length) requestObjLines.push('params,');
-      if (bodyTypeRaw) requestObjLines.push('data,');
+      if (queryParams.length) requestObjLines.push('params');
+      if (bodyTypeRaw) requestObjLines.push('data');
+
+      const httpMethod = method.toLowerCase();
+      const configArg = requestObjLines.length > 0
+        ? `{ ${requestObjLines.join(', ')} }`
+        : '';
 
       funcChunks.push(
         `${jsdocLines.join('\n')}\n` +
         `export function ${funcName}(${args.join(', ')}): ApiResult<${respType}> {\n` +
-        `  return request({\n    ${requestObjLines.join('\n    ')}\n  })\n` +
+        `  return http.${httpMethod}(${urlExpr}, ${configArg})\n` +
         `}`
       );
     }
   }
 
-  const defaultRequestImportCode = "import { request, type ApiResult } from '@/request'";
+  const defaultRequestImportCode = "import { http, type ApiResult } from '@/utils/http'";
   const requestImportCode = genApiConfig.requestImportCode || defaultRequestImportCode;
 
   const header = [

@@ -192,11 +192,11 @@ onUnmounted(() => {
   menus.value.length = 0
 })
 
-//获取菜单
+//获取菜单（完整树结构）
 const getMenus = async () => {
   loading.value = true
   mainViewLoading.value = true
-  const { data } = await getApiMenus()
+  const { data } = await getApiMenus({ tree: 'true' })
   menus.value = data as MenuItem[]
   loading.value = false
   mainViewLoading.value = false

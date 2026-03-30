@@ -27,6 +27,18 @@ export interface PureHttpRequestConfig extends AxiosRequestConfig {
   beforeResponseCallback?: (response: PureHttpResponse) => void;
 }
 
+/**
+ * API 请求结果类型
+ * 返回统一的 ApiResponse 格式
+ */
+export type ApiResult<T> = Promise<ApiResponse<T>>;
+
+export interface ApiResponse<T = any> {
+  code: number;
+  message: string;
+  data: T;
+}
+
 export default class PureHttp {
   request<T>(
     method: RequestMethods,

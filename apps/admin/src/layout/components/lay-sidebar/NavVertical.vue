@@ -31,10 +31,12 @@ const {
 
 const subMenuData = ref([]);
 
+const permissionStore = usePermissionStoreHook();
+
 const menuData = computed(() => {
   return pureApp.layout === "mix" && device.value !== "mobile"
     ? subMenuData.value
-    : usePermissionStoreHook().wholeMenus;
+    : permissionStore.wholeMenus;
 });
 
 const loading = computed(() =>
@@ -52,19 +54,19 @@ function getSubMenuData() {
   // path的上级路由组成的数组
   const parentPathArr = getParentPaths(
     path,
-    usePermissionStoreHook().wholeMenus
+    permissionStore.wholeMenus
   );
   // 当前路由的父级路由信息
   const parenetRoute = findRouteByPath(
     parentPathArr[0] || path,
-    usePermissionStoreHook().wholeMenus
+    permissionStore.wholeMenus
   );
   if (!parenetRoute?.children) return;
   subMenuData.value = parenetRoute?.children;
 }
 
 watch(
-  () => [route.path, usePermissionStoreHook().wholeMenus],
+  () => [route.path, permissionStore.wholeMenus],
   () => {
     if (route.path.includes("/redirect")) return;
     getSubMenuData();
@@ -72,7 +74,7 @@ watch(
   }
 );
 
-onMounted(() => {
+onMounted(async () => {
   getSubMenuData();
 
   emitter.on("logoChange", key => {

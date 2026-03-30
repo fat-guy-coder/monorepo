@@ -74,37 +74,37 @@ class PureHttp {
         return whiteList.some(url => config.url.endsWith(url))
           ? config
           : new Promise(resolve => {
-              const data = getToken();
-              if (data) {
-                const now = new Date().getTime();
-                const expired = parseInt(data.expires) - now <= 0;
-                if (expired) {
-                  if (!PureHttp.isRefreshing) {
-                    PureHttp.isRefreshing = true;
-                    // token过期刷新
-                    useUserStoreHook()
-                      .handRefreshToken({ refreshToken: data.refreshToken })
-                      .then(res => {
-                        const token = res.data.accessToken;
-                        config.headers["Authorization"] = formatToken(token);
-                        PureHttp.requests.forEach(cb => cb(token));
-                        PureHttp.requests = [];
-                      })
-                      .finally(() => {
-                        PureHttp.isRefreshing = false;
-                      });
-                  }
-                  resolve(PureHttp.retryOriginalRequest(config));
-                } else {
-                  config.headers["Authorization"] = formatToken(
-                    data.accessToken
-                  );
-                  resolve(config);
+            const data = getToken();
+            if (data) {
+              const now = new Date().getTime();
+              const expired = parseInt(data.expires) - now <= 0;
+              if (expired) {
+                if (!PureHttp.isRefreshing) {
+                  PureHttp.isRefreshing = true;
+                  // token过期刷新
+                  useUserStoreHook()
+                    .handRefreshToken({ refreshToken: data.refreshToken })
+                    .then(res => {
+                      const token = res.data.accessToken;
+                      config.headers["Authorization"] = formatToken(token);
+                      PureHttp.requests.forEach(cb => cb(token));
+                      PureHttp.requests = [];
+                    })
+                    .finally(() => {
+                      PureHttp.isRefreshing = false;
+                    });
                 }
+                resolve(PureHttp.retryOriginalRequest(config));
               } else {
+                config.headers["Authorization"] = formatToken(
+                  data.accessToken
+                );
                 resolve(config);
               }
-            });
+            } else {
+              resolve(config);
+            }
+          });
       },
       error => {
         return Promise.reject(error);
@@ -182,6 +182,25 @@ class PureHttp {
   ): Promise<T> {
     return this.request<T>("get", url, params, config);
   }
+
+  /** 单独抽离的`put`工具函数 */
+  public put<T, P>(
+    url: string,
+    params?: AxiosRequestConfig<P>,
+    config?: PureHttpRequestConfig
+  ): Promise<T> {
+    return this.request<T>("put", url, params, config);
+  }
+
+  /** 单独抽离的`delete`工具函数 */
+  public delete<T, P>(
+    url: string,
+    params?: AxiosRequestConfig<P>,
+    config?: PureHttpRequestConfig
+  ): Promise<T> {
+    return this.request<T>("delete", url, params, config);
+  }
 }
 
 export const http = new PureHttp();
+export type { ApiResult } from "./types.d";

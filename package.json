@@ -43,8 +43,11 @@
     "main:preview": "pnpm --filter main run preview",
     "prod:preview": "run-p \"preview:**\"",
     "front-learning:gen": "pnpm -F front-learning g",
-    "gen:api": "pnpm -F front-learning gen:api",
-    "gen:api:module": "pnpm -F front-learning gen:api:module",
+    "fastify:s-g": "pnpm -F fastify swagger:generate",
+    "front-learning:g-a": "pnpm -F front-learning gen:api",
+    "front-learning:g-a-m": "pnpm -F front-learning gen:api:module",
+    "admin:g-a": "pnpm -F pure-admin-thin gen:api",
+    "admin:g-a-m": "pnpm -F pure-admin-thin gen:api:module",
     "translate": "pnpm -F front-learning translate",
     "test": "test"
   },

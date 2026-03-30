@@ -4,7 +4,43 @@ info:
   description: 菜单管理 API 文档
   version: 1.0.0
 components:
-  schemas: {}
+  schemas:
+    def-0:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        label:
+          type: string
+        path:
+          type: string
+          nullable: true
+        icon:
+          type: string
+          nullable: true
+        order:
+          type: integer
+        project:
+          type: string
+        parentId:
+          type: string
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        hasChildren:
+          type: boolean
+        isLeaf:
+          type: boolean
+        match:
+          type: boolean
+          description: 搜索时标记是否匹配搜索条件
+      title: MenuItem
 paths:
   /api/menus:
     get:
@@ -25,11 +61,45 @@ paths:
               - 'true'
               - 'false'
           in: query
+          name: root
+          required: false
+        - schema:
+            type: string
+            enum:
+              - 'true'
+              - 'false'
+          in: query
           name: flat
+          required: false
+        - schema:
+            type: string
+            enum:
+              - 'true'
+              - 'false'
+          in: query
+          name: tree
+          required: false
+        - schema:
+            type: string
+          in: query
+          name: search
           required: false
       responses:
         '200':
           description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  message:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/def-0'
     post:
       requestBody:
         required: true
@@ -56,8 +126,19 @@ paths:
                 parentId:
                   type: string
       responses:
-        '200':
+        '201':
           description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/def-0'
   /api/menus/{id}:
     get:
       parameters:
@@ -69,6 +150,17 @@ paths:
       responses:
         '200':
           description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/def-0'
     put:
       requestBody:
         required: true
@@ -100,6 +192,17 @@ paths:
       responses:
         '200':
           description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/def-0'
     delete:
       parameters:
         - schema:
@@ -110,6 +213,17 @@ paths:
       responses:
         '200':
           description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  message:
+                    type: string
+                  data:
+                    type: 'null'
   /api/menus/{id}/children:
     get:
       parameters:
@@ -121,5 +235,18 @@ paths:
       responses:
         '200':
           description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  message:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/def-0'
 servers:
   - url: http://localhost:3000
