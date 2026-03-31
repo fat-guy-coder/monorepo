@@ -24,13 +24,13 @@
       </FunctionCard>
 
       <FunctionCard title="attr()" syntax="attr(attribute-name)" description="获取元素的属性值"
-        example="width: attr(width); width: attr(width, number);" :scenes="['获取元素的属性值', '动态设置元素的属性值']" :pros="['获取元素的属性值', '动态设置元素的属性值']"
-        :cons="['不支持旧浏览器']" color-type="other">
+        example="width: attr(width); width: attr(width, number);" :scenes="['获取元素的属性值', '动态设置元素的属性值']"
+        :pros="['获取元素的属性值', '动态设置元素的属性值']" :cons="['不支持旧浏览器']" color-type="other">
       </FunctionCard>
 
       <FunctionCard title="max()" syntax="max(value1, value2, ...)" description="一个逗号分隔的表达式列表中选择最大的值作为属性的值"
-        example="width: max(100px, 10%);" :scenes="['限制最小宽度', '响应式设计']" :pros="['简化条件判断', '提高可读性']"
-        :cons="['不支持旧浏览器']" color-type="math">
+        example="width: max(100px, 10%);" :scenes="['限制最小宽度', '响应式设计']" :pros="['简化条件判断', '提高可读性']" :cons="['不支持旧浏览器']"
+        color-type="math">
       </FunctionCard>
 
       <FunctionCard title="min()" description="一个逗号分隔的表达式列表中选择最小的值作为属性的值" syntax="min(value1, value2, ...)"
@@ -38,10 +38,9 @@
         color-type="math">
       </FunctionCard>
 
-      <FunctionCard title="minmax()" description="定义了一个长宽范围的闭区间，它与CSS 网格布局一起使用"
-        syntax="minmax(min, max)" example="grid-template-columns: minmax(200px, 1fr); grid-template-rows: minmax(100px, 1fr);"
-        :scenes="['自适应布局', '限制尺寸范围']" :pros="['简化响应式设计', '避免过小或过大的尺寸']" :cons="['不支持旧浏览器']"
-        color-type="math">
+      <FunctionCard title="minmax()" description="定义了一个长宽范围的闭区间，它与CSS 网格布局一起使用" syntax="minmax(min, max)"
+        example="grid-template-columns: minmax(200px, 1fr); grid-template-rows: minmax(100px, 1fr);"
+        :scenes="['自适应布局', '限制尺寸范围']" :pros="['简化响应式设计', '避免过小或过大的尺寸']" :cons="['不支持旧浏览器']" color-type="math">
       </FunctionCard>
 
     </section>
@@ -157,7 +156,7 @@ P3：默认值 (1, 1)
 <script setup lang="ts">
 import { ref, onBeforeMount } from 'vue'
 import FunctionCard from '../Components/FunctionCard.vue'
-import NavBar from '@/components/Nav/ScrollNav.vue'
+import NavBar from 'components/Nav/ScrollNav.vue'
 
 interface Category {
   name: string

@@ -18,12 +18,7 @@
           <p class="group-desc">{{ item.description }}</p>
 
           <div class="method-grid">
-            <div
-              class="method-card"
-              v-for="method in item.methods"
-              :key="method.id"
-              :id="method.id"
-            >
+            <div class="method-card" v-for="method in item.methods" :key="method.id" :id="method.id">
               <div class="method-header">
                 <h3>{{ method.name }}</h3>
                 <div class="method-since">{{ method.since }}</div>
@@ -56,17 +51,10 @@
                 <div class="extend" v-if="method.extend">
                   <h4>
                     扩展
-                    <a
-                      @click="method.extendExpand = method.extendExpand === 1 ? 2 : 1"
-                      v-if="method.extendExpand"
-                      class="extend-toggle"
-                      >{{ method.extendExpand === 2 ? '收起' : '展开' }}</a
-                    >
+                    <a @click="method.extendExpand = method.extendExpand === 1 ? 2 : 1" v-if="method.extendExpand"
+                      class="extend-toggle">{{ method.extendExpand === 2 ? '收起' : '展开' }}</a>
                   </h4>
-                  <ul
-                    class="extend-list"
-                    :style="{ height: method.extendExpand === 2 ? 'auto' : '0px' }"
-                  >
+                  <ul class="extend-list" :style="{ height: method.extendExpand === 2 ? 'auto' : '0px' }">
                     <li v-for="extend in method.extend" :key="extend.id">
                       <div class="extend-title">{{ extend.description }}</div>
                       <div class="code-example">
@@ -132,7 +120,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import Nav from '@/components/Nav/ScrollNav.vue'
+import Nav from 'components/Nav/ScrollNav.vue'
 
 const emit = defineEmits(['goToByRouteName'])
 

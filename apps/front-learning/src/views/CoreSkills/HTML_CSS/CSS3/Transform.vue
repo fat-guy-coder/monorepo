@@ -43,11 +43,7 @@
           <h3>transform-style 属性定义了元素的子元素是否保留其3D变换。</h3>
           <div class="origin-controls">
             <div class="origin-control">
-              <Select
-                style="width: 120px"
-                v-model:value="currentTransform.transformStyle"
-                :options="transformStyle"
-              />
+              <Select style="width: 120px" v-model:value="currentTransform.transformStyle" :options="transformStyle" />
             </div>
           </div>
         </div>
@@ -83,33 +79,17 @@
           <h3>backface-visibility 属性定义了元素的背面是否可见。</h3>
           <div class="origin-controls">
             <div class="origin-control">
-              <Select
-                style="width: 120px"
-                v-model:value="backfaceVisibility"
-                :options="backfaceVisibilityOptions"
-              />
+              <Select style="width: 120px" v-model:value="backfaceVisibility" :options="backfaceVisibilityOptions" />
             </div>
           </div>
         </div>
 
         <div class="control-group">
           <h2 class="control-title">当前属性值控制</h2>
-          <div
-            class="origin-controls"
-            v-for="(option, index) in currentTransform?.values"
-            :key="index"
-          >
+          <div class="origin-controls" v-for="(option, index) in currentTransform?.values" :key="index">
             <div class="origin-control">
-              <label
-                >{{ option.label }} <span>{{ option.value }}{{ option.unit }}</span></label
-              >
-              <input
-                type="range"
-                v-model="option.value"
-                :min="option.min"
-                :max="option.max"
-                :step="option.step"
-              />
+              <label>{{ option.label }} <span>{{ option.value }}{{ option.unit }}</span></label>
+              <input type="range" v-model="option.value" :min="option.min" :max="option.max" :step="option.step" />
             </div>
           </div>
         </div>
@@ -120,21 +100,15 @@
       </div>
       <div class="demo-container">
         <div class="demo-area" :style="{ perspective: perspective + 'px' }">
-          <div
-            class="transform-box"
-            :style="{
-              transform: currentTransformValue,
-              transformOrigin: `${transformOrigin.x}% ${transformOrigin.y}% ${transformOrigin.z}px`,
-            }"
-          >
-            <div
-              class="origin-point"
-              :style="{
-                left: `${transformOrigin.x}%`,
-                top: `${transformOrigin.y}%`,
-                transform: `translateZ(${transformOrigin.z}px)`,
-              }"
-            ></div>
+          <div class="transform-box" :style="{
+            transform: currentTransformValue,
+            transformOrigin: `${transformOrigin.x}% ${transformOrigin.y}% ${transformOrigin.z}px`,
+          }">
+            <div class="origin-point" :style="{
+              left: `${transformOrigin.x}%`,
+              top: `${transformOrigin.y}%`,
+              transform: `translateZ(${transformOrigin.z}px)`,
+            }"></div>
             <div class="element-front">
               <div class="coordinate-label">X</div>
               <div class="coordinate-label">Y</div>
@@ -146,12 +120,8 @@
           <div class="control-group transform-options">
             <h2 class="control-title">变换</h2>
             <div class="button-grid">
-              <button
-                v-for="option in transformOptions"
-                :key="option.type"
-                @click="applyTransform(option)"
-                :class="{ active: currentTransform?.type === option.type }"
-              >
+              <button v-for="option in transformOptions" :key="option.type" @click="applyTransform(option)"
+                :class="{ active: currentTransform?.type === option.type }">
                 {{ option.label }}
               </button>
             </div>
@@ -189,8 +159,8 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import Select from '@/components/Select/index.vue'
-import CodeBlock from '@/components/Code/index.vue'
+import Select from 'components/Select/index.vue'
+import CodeBlock from 'components/Code/index.vue'
 
 type TransformType =
   | 'translate'

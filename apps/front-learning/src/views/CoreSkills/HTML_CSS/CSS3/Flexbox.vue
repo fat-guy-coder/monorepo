@@ -106,7 +106,7 @@
 </template>
 
 <script setup lang="ts">
-import CodeBlock from '@/components/Code/index.vue'
+import CodeBlock from 'components/Code/index.vue'
 import { ref, reactive, computed } from 'vue'
 
 type FlexDirection = 'row' | 'row-reverse' | 'column' | 'column-reverse'

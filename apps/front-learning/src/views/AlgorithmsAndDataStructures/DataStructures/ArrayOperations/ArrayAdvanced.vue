@@ -8,12 +8,8 @@
           <i class="icon search-icon">🔍</i>
         </div>
         <div class="category-filters">
-          <button
-            v-for="type in types"
-            :key="type"
-            :class="['category-btn', { active: activeType === type }]"
-            @click="toggleCategory(type)"
-          >
+          <button v-for="type in types" :key="type" :class="['category-btn', { active: activeType === type }]"
+            @click="toggleCategory(type)">
             {{ type }}
           </button>
         </div>
@@ -23,12 +19,8 @@
     <ScrollNav :list="menuList" scroll-to="start" />
 
     <div class="algorithms-container">
-      <div
-        v-for="algorithm in filteredAlgorithms"
-        :key="algorithm.id"
-        :id="algorithm.id"
-        :class="['algorithm-card', algorithm.category]"
-      >
+      <div v-for="algorithm in filteredAlgorithms" :key="algorithm.id" :id="algorithm.id"
+        :class="['algorithm-card', algorithm.category]">
         <div class="card-header">
           <div class="algorithm-icon">{{ algorithm.icon }}</div>
           <div class="algorithm-title">
@@ -66,7 +58,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import ScrollNav from '@/components/Nav/ScrollNav.vue'
+import ScrollNav from 'components/Nav/ScrollNav.vue'
 
 // 定义算法数据类型
 interface Algorithm {
@@ -307,6 +299,7 @@ const toggleCategory = (category: string) => {
     .algorithm-steps {
       padding: 1.2rem 1.5rem;
       border-bottom: 1px solid #f0f0f0;
+
       ul {
         list-style: none;
         padding: 0;

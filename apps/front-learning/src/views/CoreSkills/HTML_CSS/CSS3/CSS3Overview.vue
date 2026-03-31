@@ -9,20 +9,14 @@
       <p class="subtitle">全面梳理CSS3核心特性、语法及最佳实践，按重要性和使用频率排序</p>
     </header>
     <ScrollNav :list="knowledgeData" showChild :keyMap="{ children: 'items' }" />
-    <KnowledgeUnit
-      showJump
-      :knowledgeData="knowledgeData"
-      :selectedVersions="selectedVersions"
-      :selectedTypes="selectedTypes"
-      :searchTerm="searchTerm"
-      @goToByRouteName="goToByRouteName"
-    />
+    <KnowledgeUnit showJump :knowledgeData="knowledgeData" :selectedVersions="selectedVersions"
+      :selectedTypes="selectedTypes" :searchTerm="searchTerm" @goToByRouteName="goToByRouteName" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
-import ScrollNav from '@/components/Nav/ScrollNav.vue'
+import ScrollNav from 'components/Nav/ScrollNav.vue'
 import KnowledgeUnit, { type KnowledgeCategory } from '../../Components/KnowledgeUnit.vue'
 
 // 知识点数据

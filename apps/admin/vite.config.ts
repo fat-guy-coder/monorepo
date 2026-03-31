@@ -1,67 +1,135 @@
-import { getPluginsList } from "./build/plugins";
-import { include, exclude } from "./build/optimize";
-import { type UserConfigExport, type ConfigEnv, loadEnv } from "vite";
-import {
-  root,
-  alias,
-  wrapperEnv,
-  pathResolve,
-  __APP_INFO__
-} from "./build/utils";
+import { fileURLToPath, URL } from 'node:url'
+import { resolve, dirname } from 'node:path'
+import { defineConfig, type ConfigEnv, type PluginOption, type ESBuildOptions } from 'vite'
+import vue from '@vitejs/plugin-vue'
+import vueJsx from '@vitejs/plugin-vue-jsx'
+// 使用 unplugin-vue-components 插件自动引入 components 目录下的所有组件
+import Components from 'unplugin-vue-components/vite'
+import { compression, defineAlgorithm } from 'vite-plugin-compression2'
+import zlib from 'zlib'
+import VueDevTools from 'vite-plugin-vue-devtools'
 
-export default ({ mode }: ConfigEnv): UserConfigExport => {
-  const { VITE_CDN, VITE_PORT, VITE_COMPRESSION, VITE_PUBLIC_PATH } =
-    wrapperEnv(loadEnv(mode, root));
-  return {
-    base: VITE_PUBLIC_PATH,
-    root,
-    resolve: {
-      alias
-    },
-    // 服务端渲染
+const outDir = 'dist'
+
+const __filename = fileURLToPath(import.meta.url);
+
+const __dirname = dirname(__filename);
+
+// 路径工具函数
+const resolvePath = (path: string) => resolve(__dirname, path);
+
+
+// https://vite.dev/config/
+export default defineConfig((env: ConfigEnv) => {
+  const { command, mode } = env
+  const isBuild = command === 'build'
+  const isDev = command === 'serve'
+  const isAnalyze = process.env.ANALYZE === 'true'
+
+  const plugins: PluginOption[] = [
+    vue(),
+    vueJsx(),
+  ]
+
+  if (isDev) {
+
+    plugins.push(VueDevTools({ launchEditor: 'cursor' }))
+  }
+
+  plugins.push(
+    Components({
+      dts: false,
+    }),
+    compression({
+      algorithms: [
+        'gzip',
+        defineAlgorithm('brotliCompress', {
+          [zlib.constants.BROTLI_PARAM_QUALITY]: 11,
+        }),
+      ],
+      threshold: 512,
+      deleteOriginalAssets: false,
+    }),
+  )
+  // 统一使用 object 形式，保证类型推导完整
+  const baseConfig = {
     server: {
-      // 端口号
-      port: VITE_PORT,
-      host: "0.0.0.0",
-      // 本地跨域代理 https://cn.vitejs.dev/config/server-options.html#server-proxy
       proxy: {
         '/api': {
           target: 'http://localhost:3000',
-          changeOrigin: true
-        }
+          changeOrigin: true,
+        },
       },
-      // 预热文件以提前转换和缓存结果，降低启动期间的初始页面加载时长并防止转换瀑布
-      warmup: {
-        clientFiles: ["./index.html", "./src/{views,components}/*"]
-      }
+      port: 9999,
+      strictPort: true,
+      cors: true,
+      hmr: {
+        overlay: true,
+      },
     },
-    plugins: getPluginsList(VITE_CDN, VITE_COMPRESSION),
-    // https://cn.vitejs.dev/config/dep-optimization-options.html#dep-optimization-options
+    preview: {
+      port: 9998,
+      strictPort: true,
+    },
+    plugins,
+    resolve: {
+      alias: {
+        '@': fileURLToPath(new URL('./src', import.meta.url)),
+        '@config': resolvePath('config'),
+        'components': fileURLToPath(new URL('../../packages/components/src/components', import.meta.url)),
+      },
+      // 在 monorepo 下能更好地优化 workspace 依赖
+      dedupe: ['vue', 'vue-router', 'pinia'],
+    },
     optimizeDeps: {
-      include,
-      exclude
+      include: ['vue', 'vue-router', 'pinia', 'codemirror', 'prismjs'],
+      esbuildOptions: {
+        target: 'esnext',
+      },
     },
     build: {
-      // https://cn.vitejs.dev/guide/build.html#browser-compatibility
-      target: "es2015",
+      outDir,
+      emptyOutDir: true,
+      target: 'esnext',
+      cssCodeSplit: true,
       sourcemap: false,
-      // 消除打包大小超过500kb警告
-      chunkSizeWarningLimit: 4000,
+      modulePreload: {
+        polyfill: false,
+      },
+      minify: 'esbuild' as const,
       rollupOptions: {
-        input: {
-          index: pathResolve("./index.html", import.meta.url)
-        },
-        // 静态资源分类打包
+        // 不使用自定义 treeshake，避免 Vue 3.6 alpha / Pinia 内部 .ids 等被误删导致运行时报错
         output: {
-          chunkFileNames: "static/js/[name]-[hash].js",
-          entryFileNames: "static/js/[name]-[hash].js",
-          assetFileNames: "static/[ext]/[name]-[hash].[ext]"
-        }
-      }
+          chunkFileNames: 'assets/js/[name]-[hash].js',
+          entryFileNames: 'assets/js/[name]-[hash].js',
+          assetFileNames: (assetInfo: { name?: string }) => {
+            if (/\.(css)$/.test(assetInfo.name ?? '')) {
+              return 'assets/css/[name]-[hash][extname]'
+            }
+            if (/\.(png|jpe?g|gif|svg|webp|avif)$/.test(assetInfo.name ?? '')) {
+              return 'assets/img/[name]-[hash][extname]'
+            }
+            if (/\.(woff2?|ttf|eot|otf)$/.test(assetInfo.name ?? '')) {
+              return 'assets/fonts/[name]-[hash][extname]'
+            }
+            return 'assets/[name]-[hash][extname]'
+          },
+          // 不手动拆分 Vue 相关包，交给 Rollup 默认分包，避免 "reading 'ids' of null"
+        },
+      },
+      chunkSizeWarningLimit: 600,
     },
-    define: {
-      __INTLIFY_PROD_DEVTOOLS__: false,
-      __APP_INFO__: JSON.stringify(__APP_INFO__)
-    }
-  };
-};
+    esbuild: {
+      sourcemap: !isBuild,
+      // 显式标注为 ESBuildOptions 以匹配类型
+      legalComments: 'none' as ESBuildOptions['legalComments'],
+    },
+  }
+
+  // 预留一个简单的分析开关，将来可挂上 rollup-plugin-visualizer 等
+  if (isBuild && isAnalyze) {
+    // 在这里可以按需 push 额外分析插件
+  }
+
+  return baseConfig
+})

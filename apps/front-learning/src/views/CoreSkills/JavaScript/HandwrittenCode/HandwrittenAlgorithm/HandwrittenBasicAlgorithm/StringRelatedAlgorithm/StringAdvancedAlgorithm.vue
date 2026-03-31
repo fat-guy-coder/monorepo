@@ -5,35 +5,21 @@
       <p class="subtitle">常见字符串处理问题与高效解决方案</p>
     </div>
 
-    <ScrollNav :list="navList" scroll-to="start"  show-back-to-top/>
+    <ScrollNav :list="navList" scroll-to="start" show-back-to-top />
 
     <div class="types-container">
-      <div
-        class="type-tag"
-        @click="selectType('全部')"
-        :class="{ active: activeType.length === 0 }"
-      >
+      <div class="type-tag" @click="selectType('全部')" :class="{ active: activeType.length === 0 }">
         全部
       </div>
-      <div
-        v-for="(type, typeIndex) in types"
-        :key="typeIndex"
-        class="type-tag"
-        @click="selectType(type)"
-        :class="{ active: activeType.includes(type) }"
-      >
+      <div v-for="(type, typeIndex) in types" :key="typeIndex" class="type-tag" @click="selectType(type)"
+        :class="{ active: activeType.includes(type) }">
         {{ type }}
       </div>
     </div>
 
     <div class="algorithms-grid">
-      <div
-        v-for="(algorithm, index) in filteredAlgorithms"
-        :key="index"
-        class="algorithm-card"
-        :class="{ expanded: expandedCard === index }"
-        :id="algorithm.id"
-      >
+      <div v-for="(algorithm, index) in filteredAlgorithms" :key="index" class="algorithm-card"
+        :class="{ expanded: expandedCard === index }" :id="algorithm.id">
         <h2 class="card-header">{{ algorithm.title }}</h2>
         <div class="card-difficulty">
           {{ algorithm.difficulty }}
@@ -81,7 +67,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
-import ScrollNav from '@/components/Nav/ScrollNav.vue'
+import ScrollNav from 'components/Nav/ScrollNav.vue'
 
 // 当前展开的卡片索引
 const expandedCard = ref(0)
@@ -170,8 +156,7 @@ onMounted(async () => {
 @text-color: #334155;
 @border-color: #e2e8f0;
 @code-bg: #2d3748;
-@shadow:
-  0 4px 6px -1px rgba(0, 0, 0, 0.1),
+@shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
   0 2px 4px -1px rgba(0, 0, 0, 0.06);
 
 .string-algorithms-container {
@@ -237,6 +222,7 @@ onMounted(async () => {
     color: white;
   }
 }
+
 .algorithms-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));

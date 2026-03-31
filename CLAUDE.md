@@ -76,3 +76,36 @@ monorepo/
 4. 动画使用 GSAP + CSS (main 项目)
 5. 确保构建通过后再提交代码
 6. **遵循科技风设计规范**
+
+## 工作区共享组件 (packages/components)
+
+**优先使用工作区组件，避免重复造轮子**
+
+### 引入方式
+
+```typescript
+import { Button, Input, Select, Modal, Tree, message } from 'components'
+```
+
+### 常用组件
+
+| 组件 | 说明 |
+|------|------|
+| Button | 按钮 (default/primary) |
+| Input | 输入框 |
+| Select | 下拉选择 |
+| Modal | 模态框 |
+| Tree | 树形组件 |
+| Menu | 菜单 |
+| message | 消息提示 (success/error/warning/info) |
+
+### 完整组件列表
+
+见 [packages/components/README.md](packages/components/README.md)
+
+### 创建新组件
+
+1. 在 `packages/components/src/components/` 下创建组件文件夹
+2. 导出类型声明和组件
+3. 在 `packages/components/src/components/index.ts` 中注册
+4. 组件文档放在组件文件夹下的 readme.md

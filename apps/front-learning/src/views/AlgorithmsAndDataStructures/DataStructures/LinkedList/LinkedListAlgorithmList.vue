@@ -15,30 +15,15 @@
     </div>
 
     <div class="stats-bar">
-      <span
-        class="stat-value"
-        :class="{ active: activeType.includes('all') }"
-        @click="filterAlgorithms('all')"
-        >全部</span
-      >
-      <span
-        class="stat-value"
-        :class="{ active: activeType.includes(type) }"
-        v-for="type in typeList"
-        :key="type"
-        @click="filterAlgorithms(type)"
-        >{{ type }}</span
-      >
+      <span class="stat-value" :class="{ active: activeType.includes('all') }"
+        @click="filterAlgorithms('all')">全部</span>
+      <span class="stat-value" :class="{ active: activeType.includes(type) }" v-for="type in typeList" :key="type"
+        @click="filterAlgorithms(type)">{{ type }}</span>
     </div>
 
     <div class="algorithm-list">
-      <div
-        v-for="(algo, index) in filteredAlgorithms"
-        :key="algo.id"
-        :id="algo.id"
-        class="algorithm-card"
-        :class="{ featured: index < 3 }"
-      >
+      <div v-for="(algo, index) in filteredAlgorithms" :key="algo.id" :id="algo.id" class="algorithm-card"
+        :class="{ featured: index < 3 }">
         <div class="card-header">
           <div class="algorithm-rank">{{ index + 1 }}</div>
           <h2 class="algorithm-title">{{ algo.title }}</h2>
@@ -79,14 +64,14 @@
     </div>
 
     <footer class="footer">
-      <p>链表算法总结  | 前端开发与算法学习</p>
+      <p>链表算法总结 | 前端开发与算法学习</p>
     </footer>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import ScrollNav from '@/components/Nav/ScrollNav.vue'
+import ScrollNav from 'components/Nav/ScrollNav.vue'
 
 interface Algorithm {
   id: string
@@ -290,10 +275,12 @@ const filterAlgorithms = (type: Type | 'all') => {
     border-radius: 10px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     cursor: pointer;
+
     &:hover {
       background: @primary-color;
       color: white;
     }
+
     &.active {
       background: @primary-color;
       color: white;
@@ -405,6 +392,7 @@ const filterAlgorithms = (type: Type | 'all') => {
     margin-right: 8px;
     min-width: 90px;
   }
+
   margin-bottom: 20px;
 }
 

@@ -50,7 +50,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
-import CodeBlock from '@/components/Code/index.vue'
+import CodeBlock from 'components/Code/index.vue'
 
 interface TreeMethod {
   id: number
@@ -65,7 +65,7 @@ interface TreeMethod {
 
 const treeMethods = ref<TreeMethod[]>([])
 
-onMounted(async() => {
+onMounted(async () => {
   const res = await import('@/views/CoreSkills/JavaScript/JSON/treeMethods.json')
   const data = res.default
   treeMethods.value = data
@@ -198,14 +198,17 @@ const categorizedMethods = computed(() => [
       background: rgba(155, 89, 182, 0.1);
       color: #9b59b6;
     }
+
     &.bfs {
       background: rgba(46, 204, 113, 0.1);
       color: #2ecc71;
     }
+
     &.conversion {
       background: rgba(241, 196, 15, 0.1);
       color: #f1c40f;
     }
+
     &.comparison {
       background: rgba(231, 76, 60, 0.1);
       color: #e74c3c;
@@ -324,12 +327,15 @@ const categorizedMethods = computed(() => [
     &.dfs {
       background: #9b59b6;
     }
+
     &.bfs {
       background: #2ecc71;
     }
+
     &.conversion {
       background: #f1c40f;
     }
+
     &.comparison {
       background: #e74c3c;
     }

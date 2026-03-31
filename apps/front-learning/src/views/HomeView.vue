@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts" setup>
-import Template from '@/components/Template/index.vue'
+import Template from 'components/Template/index.vue'
 
 </script>
 

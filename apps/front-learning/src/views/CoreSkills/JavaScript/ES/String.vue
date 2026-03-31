@@ -192,7 +192,7 @@ const str = `Hello ${name}, your score is ${score}`</code></pre>
 
 <script setup lang="ts">
 import '@/assets/css/main.less';
-import Nav from '@/components/Nav/ScrollNav.vue';
+import Nav from 'components/Nav/ScrollNav.vue';
 
 const methods = [
   {

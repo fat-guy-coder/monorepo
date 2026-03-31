@@ -15,22 +15,14 @@
       </div>
     </div>
 
-    <ScrollNav
-      :list="navList"
-    />
+    <ScrollNav :list="navList" />
 
     <div class="knowledge-grid">
-      <div
-        v-for="(point, index) in knowledgePoints"
-        :key="point.title"
-        :id="point.id"
-        class="knowledge-card"
-        :class="{
-          hot: point.hotness >= 9,
-          medium: point.hotness >= 7 && point.hotness < 9,
-          new: point.isVue3,
-        }"
-      >
+      <div v-for="(point, index) in knowledgePoints" :key="point.title" :id="point.id" class="knowledge-card" :class="{
+        hot: point.hotness >= 9,
+        medium: point.hotness >= 7 && point.hotness < 9,
+        new: point.isVue3,
+      }">
         <div class="card-header">
           <span class="card-number">#{{ index + 1 }}</span>
           <div class="hotness">
@@ -51,12 +43,7 @@
         <div class="card-footer">
           <span class="interview-frequency">面试频率: {{ getFrequencyText(point.frequency) }}</span>
           <div class="importance">
-            <div
-              v-for="star in 5"
-              :key="star"
-              class="star"
-              :class="{ filled: star <= point.importance }"
-            ></div>
+            <div v-for="star in 5" :key="star" class="star" :class="{ filled: star <= point.importance }"></div>
           </div>
         </div>
       </div>
@@ -80,7 +67,7 @@
 </template>
 
 <script setup lang="ts">
-import ScrollNav from '@/components/Nav/ScrollNav.vue'
+import ScrollNav from 'components/Nav/ScrollNav.vue'
 import { computed, onMounted, ref } from 'vue'
 
 interface KnowledgePoint {

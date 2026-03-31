@@ -13,12 +13,8 @@
 
     <!-- 算法导航 -->
     <section class="algorithm-nav">
-      <div
-        v-for="(category, index) in categories"
-        :key="index"
-        :class="['nav-item', { active: activeCategory === category.id }]"
-        @click="handleCategoryClick(category.id)"
-      >
+      <div v-for="(category, index) in categories" :key="index"
+        :class="['nav-item', { active: activeCategory === category.id }]" @click="handleCategoryClick(category.id)">
         <div class="category-icon">{{ category.icon }}</div>
         <div class="category-name">{{ category.name }}</div>
       </div>
@@ -26,12 +22,7 @@
 
     <!-- 算法列表 -->
     <section class="algorithm-list">
-      <div
-        v-for="(algo, index) in filteredAlgorithms"
-        :key="index"
-        :id="algo.id"
-        class="algorithm-card"
-      >
+      <div v-for="(algo, index) in filteredAlgorithms" :key="index" :id="algo.id" class="algorithm-card">
         <div class="card-header">
           <div class="algo-icon">{{ algo.icon }}</div>
           <div class="algo-title">
@@ -100,8 +91,8 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import { Input } from '@/components'
-import ScrollNav from '@/components/Nav/ScrollNav.vue'
+import { Input } from 'components'
+import ScrollNav from 'components/Nav/ScrollNav.vue'
 import { debounce } from '@/function/common'
 
 // 算法分类
@@ -349,6 +340,7 @@ const handleSearch = debounce(() => {
       .star {
         font-size: 1.2rem;
         margin-left: 0.5rem;
+
         &.filled {
           color: @secondary-color;
         }
@@ -458,12 +450,15 @@ const handleSearch = debounce(() => {
       }
     }
   }
+
   .thinking-section {
     padding: 1.5rem;
     padding-bottom: 0;
+
     .steps {
       display: flex;
       gap: 1rem;
+
       ul {
         list-style: none;
         flex: 1;
@@ -603,6 +598,7 @@ const handleSearch = debounce(() => {
   }
 
   .rotated {
+
     .array-item:nth-child(1),
     .array-item:nth-child(2) {
       background: lighten(@accent-color, 35%);

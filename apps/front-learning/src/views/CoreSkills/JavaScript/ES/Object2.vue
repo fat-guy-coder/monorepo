@@ -129,7 +129,7 @@
 <script setup lang="ts">
 import '@/assets/css/main.less';
 import { ref, onBeforeMount } from 'vue';
-import Nav from '@/components/Nav/ScrollNav.vue';
+import Nav from 'components/Nav/ScrollNav.vue';
 
 interface Method {
   name: string;

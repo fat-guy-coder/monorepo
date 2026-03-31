@@ -76,6 +76,7 @@ export default defineConfig((env: ConfigEnv) => {
       alias: {
         '@': fileURLToPath(new URL('./src', import.meta.url)),
         '@config': resolvePath('config'),
+        'components': fileURLToPath(new URL('../../packages/components/src/components', import.meta.url)),
       },
       // 在 monorepo 下能更好地优化 workspace 依赖
       dedupe: ['vue', 'vue-router', 'pinia'],

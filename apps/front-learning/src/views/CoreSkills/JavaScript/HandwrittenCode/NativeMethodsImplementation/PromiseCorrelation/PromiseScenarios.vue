@@ -15,13 +15,8 @@
       </div>
 
       <div class="category-filter">
-        <button
-          v-for="category in categories"
-          :key="category"
-          @click="toggleCategory(category)"
-          :class="{ active: selectedCategories.includes(category) }"
-          class="category-btn"
-        >
+        <button v-for="category in categories" :key="category" @click="toggleCategory(category)"
+          :class="{ active: selectedCategories.includes(category) }" class="category-btn">
           {{ category }}
         </button>
       </div>
@@ -29,19 +24,10 @@
 
     <!-- 知识点展示区域 -->
     <div class="knowledge-container">
-      <div
-        v-for="(category, catIndex) in filteredKnowledge"
-        :key="catIndex"
-        class="category-section"
-        :id="category.id"
-      >
+      <div v-for="(category, catIndex) in filteredKnowledge" :key="catIndex" class="category-section" :id="category.id">
         <h2 class="category-title">
-          <span
-            >{{ category.title }}
-            <span :style="{ color: getDifficultyColor(category.difficulty) }"
-              >难度:{{ category.difficulty }}</span
-            ></span
-          >
+          <span>{{ category.title }}
+            <span :style="{ color: getDifficultyColor(category.difficulty) }">难度:{{ category.difficulty }}</span></span>
           <div class="stars">
             <span>重要程度:</span>
             <span v-for="n in 5" :key="n" :class="{ filled: n <= category.important }">★</span>
@@ -54,7 +40,7 @@
               <h3>{{ item.title }}</h3>
               <span class="difficulty" :style="{ color: getDifficultyColor(item.difficulty) }">{{
                 item.difficulty
-              }}</span>
+                }}</span>
               <div class="stars">
                 <span>重要程度:</span>
                 <span v-for="n in 5" :key="n" :class="{ filled: n <= item.important }">★</span>
@@ -86,8 +72,8 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import CodeBlock from '@/components/Code/index.vue'
-import ScrollNav from '@/components/Nav/ScrollNav.vue'
+import CodeBlock from 'components/Code/index.vue'
+import ScrollNav from 'components/Nav/ScrollNav.vue'
 
 // 知识点类型定义
 interface KnowledgeItem {

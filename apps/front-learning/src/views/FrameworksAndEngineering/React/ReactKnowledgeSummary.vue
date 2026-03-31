@@ -65,7 +65,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
-import { Spin } from '@/components';
+import { Spin } from 'components';
 import KnowledgeSection from './Components/KnowledgeSection.vue';
 
 interface KnowledgeItem {
@@ -108,8 +108,6 @@ const currentYear = computed(() => new Date().getFullYear());
 </script>
 
 <style lang="less" scoped>
-
-
 @primary: #61dafb;
 @secondary: #282c34;
 @text-primary: #2d3748;

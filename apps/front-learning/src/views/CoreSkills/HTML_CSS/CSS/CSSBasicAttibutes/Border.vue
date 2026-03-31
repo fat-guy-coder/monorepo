@@ -105,7 +105,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Select } from '@/components'
+import { Select } from 'components'
 
 const borderColor = ref('#42b983')
 const borderWidth = ref(4)

@@ -41,9 +41,7 @@
             <h3>{{ feature.title }}</h3>
             <p>{{ feature.description }}</p>
             <div class="goto">
-              <Button class="button" @click.prevent.stop="goToByRouteName(feature.routeName)"
-                >跳转</Button
-              >
+              <Button class="button" @click.prevent.stop="goToByRouteName(feature.routeName)">跳转</Button>
             </div>
           </div>
         </div>
@@ -250,21 +248,17 @@ document.body.appendChild(script);</code></pre>
           <p>浏览器解析JavaScript的过程主要包括以下几个步骤：</p>
           <ol>
             <li>
-              <strong>下载：</strong
-              >浏览器从服务器下载JavaScript文件。这个过程可能涉及到HTTP请求，浏览器会根据HTML文档中的
+              <strong>下载：</strong>浏览器从服务器下载JavaScript文件。这个过程可能涉及到HTTP请求，浏览器会根据HTML文档中的
               &lt;script&gt;标签来识别需要下载的脚本。
             </li>
             <li>
-              <strong>解析：</strong
-              >浏览器将JavaScript代码解析为抽象语法树（AST）。在这个阶段，浏览器会检查代码的语法是否正确，并将其转换为一种更易于处理的结构。
+              <strong>解析：</strong>浏览器将JavaScript代码解析为抽象语法树（AST）。在这个阶段，浏览器会检查代码的语法是否正确，并将其转换为一种更易于处理的结构。
             </li>
             <li>
-              <strong>编译：</strong
-              >将AST编译为字节码或机器码。现代浏览器通常会使用即时编译（JIT）技术，将代码编译为机器码，以提高执行效率。
+              <strong>编译：</strong>将AST编译为字节码或机器码。现代浏览器通常会使用即时编译（JIT）技术，将代码编译为机器码，以提高执行效率。
             </li>
             <li>
-              <strong>执行：</strong
-              >执行编译后的代码，更新DOM和处理事件。执行过程中，JavaScript引擎会根据代码的逻辑来操作网页的内容和响应用户的交互。
+              <strong>执行：</strong>执行编译后的代码，更新DOM和处理事件。执行过程中，JavaScript引擎会根据代码的逻辑来操作网页的内容和响应用户的交互。
             </li>
           </ol>
           <p>这个过程确保JavaScript代码能够高效地在浏览器中运行，并与网页的其他部分进行交互。</p>
@@ -276,7 +270,7 @@ document.body.appendChild(script);</code></pre>
 
 <script setup lang="ts">
 import { defineEmits } from 'vue'
-import { Button } from '@/components'
+import { Button } from 'components'
 
 
 
@@ -433,7 +427,7 @@ const cons: string[] = [
   margin: 0;
 }
 
-.javascript-docs > div > p {
+.javascript-docs>div>p {
   font-size: 1.1rem;
   line-height: 1.7;
   max-width: 900px;
@@ -710,7 +704,7 @@ const cons: string[] = [
   color: #4338ca;
 }
 
-.js-process-section .process-description > p {
+.js-process-section .process-description>p {
   margin-top: 0;
 }
 

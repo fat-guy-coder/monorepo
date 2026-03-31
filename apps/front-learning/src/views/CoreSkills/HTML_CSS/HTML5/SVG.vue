@@ -153,7 +153,7 @@
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
-import { Button } from '@/components'
+import { Button } from 'components'
 
 const router = useRouter()
 
@@ -163,8 +163,6 @@ function goto() {
 </script>
 
 <style lang="less">
-
-
 .svg-doc {
   max-width: 1200px;
   margin: 2rem auto;
@@ -194,13 +192,11 @@ function goto() {
     .header-wave {
       width: 120px;
       height: 4px;
-      background: repeating-linear-gradient(
-        90deg,
-        #3498db 0px,
-        #3498db 10px,
-        #2ecc71 10px,
-        #2ecc71 20px
-      );
+      background: repeating-linear-gradient(90deg,
+          #3498db 0px,
+          #3498db 10px,
+          #2ecc71 10px,
+          #2ecc71 20px);
       margin: 1.5rem auto;
     }
   }

@@ -8,11 +8,8 @@
         <!-- 图形展示区 -->
         <div class="svg-wrapper">
           <svg class="svg-box" :viewBox="shape.viewBox">
-            <component
-              :is="shape.type"
-              v-bind="shape.attrs"
-              :points="shape.pointList?.map((i) => i.join(' '))?.join(',')"
-            />
+            <component :is="shape.type" v-bind="shape.attrs"
+              :points="shape.pointList?.map((i) => i.join(' '))?.join(',')" />
           </svg>
         </div>
 
@@ -25,14 +22,8 @@
                 {{ param.label }}:
                 <span class="param-value">{{ shape.attrs[key] }}{{ param.unit }}</span>
               </label>
-              <input
-                type="range"
-                v-model.number="shape.attrs[key]"
-                :min="param.min"
-                :max="param.max"
-                :step="param.step || 1"
-                class="slider"
-              />
+              <input type="range" v-model.number="shape.attrs[key]" :min="param.min" :max="param.max"
+                :step="param.step || 1" class="slider" />
             </div>
           </template>
           <template v-else>
@@ -41,28 +32,14 @@
                 <label class="param-label">
                   x:<span class="param-value">{{ (point as any)[0] }}</span>
                 </label>
-                <input
-                  type="range"
-                  v-model.number="(point as any)[0]"
-                  min="0"
-                  max="100"
-                  :step="1"
-                  class="slider"
-                />
+                <input type="range" v-model.number="(point as any)[0]" min="0" max="100" :step="1" class="slider" />
                 <Button @click="deletePoint(index, key)">删除</Button>
               </div>
               <div class="poly-slider-group">
                 <label class="param-label">
                   y:<span class="param-value">{{ (point as any)[1] }}</span>
                 </label>
-                <input
-                  type="range"
-                  v-model.number="(point as any)[1]"
-                  min="0"
-                  max="100"
-                  :step="1"
-                  class="slider"
-                />
+                <input type="range" v-model.number="(point as any)[1]" min="0" max="100" :step="1" class="slider" />
               </div>
             </div>
             <Button @click="addPoint(index)">添加点</Button>
@@ -76,14 +53,8 @@
       </div>
     </div>
     <Modal v-model:open="open" title="添加x与y" @ok="handleOk">
-      <Form
-        ref="formRef"
-        :model="formState"
-        name="basic"
-        :label-col="{ span: 8 }"
-        :wrapper-col="{ span: 16 }"
-        autocomplete="off"
-      >
+      <Form ref="formRef" :model="formState" name="basic" :label-col="{ span: 8 }" :wrapper-col="{ span: 16 }"
+        autocomplete="off">
         <a-form-item label="X坐标" name="x" :rules="[{ required: true, message: '输入x' }]">
           <a-input-number v-model:value="formState.x" max="100" />
         </a-form-item>
@@ -97,7 +68,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Button } from '@/components'
+import { Button } from 'components'
 // import { Modal, Form } from 'ant-design-vue'
 
 type ControlUnit = {

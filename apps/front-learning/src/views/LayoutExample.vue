@@ -16,7 +16,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { Layout, Header, SideBar, Content, Footer } from '@/components'
+import { Layout, Header, SideBar, Content, Footer } from 'components'
 
 </script>
 <style lang="less" scoped>

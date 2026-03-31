@@ -436,7 +436,7 @@ export default async function menuRoutes (fastify, options) {
           icon: { type: 'string' },
           order: { type: 'integer' },
           project: { type: 'string' },
-          parentId: { type: 'string' }
+          parentId: { type: 'string', nullable: true }
         }
       },
       response: {
@@ -453,11 +453,14 @@ export default async function menuRoutes (fastify, options) {
   }, async (req, reply) => {
     const body = req.body || {}
 
+    // 处理 parentId：空字符串、undefined、null 都转为 null
+    const parentId = body.parentId && body.parentId.trim() !== '' ? body.parentId : null;
+
     // 自动生成路径：父节点路径 + "/" + name
     let generatedPath = null
-    if (body.parentId) {
+    if (parentId) {
       const parentMenu = await fastify.prisma.menu.findUnique({
-        where: { id: body.parentId }
+        where: { id: parentId }
       })
       if (parentMenu) {
         generatedPath = parentMenu.path ? `${parentMenu.path}/${body.name}` : `/${body.name}`
@@ -475,7 +478,7 @@ export default async function menuRoutes (fastify, options) {
         icon: body.icon ?? null,
         order: body.order ?? 0,
         project: body.project ?? 'default',
-        parentId: body.parentId ?? null
+        parentId: parentId
       }
     })
     // 新创建的菜单默认是叶子节点
@@ -501,7 +504,7 @@ export default async function menuRoutes (fastify, options) {
           icon: { type: 'string' },
           order: { type: 'integer' },
           project: { type: 'string' },
-          parentId: { type: 'string' }
+          parentId: { type: 'string', nullable: true }
         }
       },
       response: {
@@ -527,8 +530,8 @@ export default async function menuRoutes (fastify, options) {
         return reply.code(404).send(error('Menu not found', 404))
       }
 
-      // 处理 parentId：空字符串转为 null
-      const parentId = body.parentId === '' || body.parentId === undefined ? null : body.parentId;
+      // 处理 parentId：空字符串、undefined、null 都转为 null
+      const parentId = (body.parentId === '' || body.parentId === undefined || body.parentId === null) ? null : body.parentId;
 
       // 自动生成路径：父节点路径 + "/" + name（如果 name 或 parentId 变了）
       let generatedPath = existingMenu.path

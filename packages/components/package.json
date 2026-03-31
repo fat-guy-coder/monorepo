@@ -1,0 +1,27 @@
+{
+  "name": "components",
+  "version": "1.0.0",
+  "description": "Shared Vue 3 UI components",
+  "type": "module",
+  "main": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./*": "./src/components/*"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "peerDependencies": {
+    "vue": "3.6.0-beta.7",
+    "vue-router": "^4.5.0",
+    "pinia": "^3.0.1"
+  },
+  "dependencies": {
+    "@element-plus/icons-vue": "^2.3.2",
+    "prismjs": "^1.29.0",
+    "vue-demi": "^0.14.10"
+  }
+}

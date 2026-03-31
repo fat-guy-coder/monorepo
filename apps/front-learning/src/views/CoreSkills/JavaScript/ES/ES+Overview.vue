@@ -8,18 +8,13 @@
     <ScrollNav :list="versions" :keyMap="{ children: 'features' }" :showChild="true" />
 
     <div class="version-timeline">
-      <div
-        v-for="version in versions"
-        :key="version.year"
-        class="version-card"
-        :class="'version-' + version.year"
-        :id="version.id"
-      >
+      <div v-for="version in versions" :key="version.year" class="version-card" :class="'version-' + version.year"
+        :id="version.id">
         <h2 class="version-title">ES{{ version.year }}</h2>
         <div class="features-list">
           <div v-for="feature in version.features" :key="feature.name" class="feature-item" :id="feature.id">
             <h3 class="feature-name">
-               <a @click="handleClick(feature.route)">{{ feature.name }}</a>
+              <a @click="handleClick(feature.route)">{{ feature.name }}</a>
             </h3>
             <p class="feature-desc">{{ feature.description }}</p>
             <pre class="feature-code"><code>{{ feature.code }}</code></pre>
@@ -32,7 +27,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref, defineEmits } from 'vue'
-import ScrollNav from '@/components/Nav/ScrollNav.vue'
+import ScrollNav from 'components/Nav/ScrollNav.vue'
 
 const versions = ref<ESVersion[]>([])
 

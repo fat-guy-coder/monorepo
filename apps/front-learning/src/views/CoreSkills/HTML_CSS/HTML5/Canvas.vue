@@ -173,7 +173,7 @@ ctx.fillText('Hello Canvas', 100, 100);</code></pre>
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { Button } from '@/components'
+import { Button } from 'components'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
@@ -338,6 +338,7 @@ code {
 }
 
 @media (max-width: 768px) {
+
   .concept-grid,
   .case-grid,
   .warning-grid {

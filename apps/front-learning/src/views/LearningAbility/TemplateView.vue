@@ -404,7 +404,7 @@ type ReadonlyUser = Readonly<User>`" language="ts" title="类型系统示例" />
             </div>
             <ul v-if="item.type === 'tips' && Array.isArray(item.data)" class="tip-list">
               <li v-for="tip in item.data as Array<{ id: string; text: string }>" :key="tip.id" :id="tip.id">{{ tip.text
-                }}
+              }}
               </li>
             </ul>
           </div>
@@ -461,7 +461,7 @@ type ReadonlyUser = Readonly<User>`" language="ts" title="类型系统示例" />
             </div>
             <ul v-if="item.type === 'tips' && Array.isArray(item.data)" class="tip-list">
               <li v-for="tip in item.data as Array<{ id: string; text: string }>" :key="tip.id" :id="tip.id">{{ tip.text
-                }}
+              }}
               </li>
             </ul>
           </div>
@@ -630,11 +630,11 @@ type ReadonlyUser = Readonly<User>`" language="ts" :hidden-toolbar="false" />
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import Card from '@/components/Card/index.vue'
-import Nav from '@/components/Nav/ScrollNav.vue'
-import Link from '@/components/Link/index.vue'
-import NavTagCard from '@/components/Nav/NavCard.vue'
-import Code from '@/components/Code/index.vue'
+import Card from 'components/Card/index.vue'
+import Nav from 'components/Nav/ScrollNav.vue'
+import Link from 'components/Link/index.vue'
+import NavTagCard from 'components/Nav/NavCard.vue'
+import Code from 'components/Code/index.vue'
 import templateConfig from './Template.json'
 // import { useLanguage } from '@/language'
 

@@ -212,7 +212,7 @@
 </template>
 
 <script setup lang="ts">
-import codeBlock from '@/components/Code/index.vue'
+import codeBlock from 'components/Code/index.vue'
 import { onMounted, ref, onUnmounted } from 'vue'
 
 const codeText = ref('')
@@ -227,9 +227,6 @@ onUnmounted(() => {
 </script>
 
 <style lang="less" scoped>
-
-
-
 .promise-implementation-container {
   font-family:
     'Inter',

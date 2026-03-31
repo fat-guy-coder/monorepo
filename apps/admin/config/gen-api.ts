@@ -9,5 +9,5 @@ export const genApiConfig = {
   outDir: path.resolve(UI2_ROOT, 'src', 'api'),
   serverBase: '', // Default can be empty, will be read from swagger spec
   urlPrefix: '', // 路由已在 swagger 中包含 /api 前缀
-  requestImportCode: "import { http , type ApiResult } from '@/utils/http'",
+  requestImportCode: "import { request, type ApiResult } from '@/request'",
 };

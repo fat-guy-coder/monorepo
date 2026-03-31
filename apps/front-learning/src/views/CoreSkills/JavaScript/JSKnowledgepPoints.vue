@@ -14,13 +14,8 @@
       </div>
 
       <div class="category-filter">
-        <button
-          v-for="category in categories"
-          :key="category"
-          @click="toggleCategory(category)"
-          :class="{ active: selectedCategories.includes(category) }"
-          class="category-btn"
-        >
+        <button v-for="category in categories" :key="category" @click="toggleCategory(category)"
+          :class="{ active: selectedCategories.includes(category) }" class="category-btn">
           {{ category }}
         </button>
       </div>
@@ -28,19 +23,11 @@
 
     <!-- 知识点展示区域 -->
     <div class="knowledge-container">
-      <div
-        v-for="(category, catIndex) in filteredKnowledge"
-        :key="catIndex"
-        class="category-section"
-      >
+      <div v-for="(category, catIndex) in filteredKnowledge" :key="catIndex" class="category-section">
         <h2 class="category-title">{{ category.name }}</h2>
         <div class="knowledge-grid">
-          <div
-            v-for="(item, index) in category.items"
-            :key="index"
-            class="knowledge-card"
-            @mouseenter="getCodePositon($event, item.id)"
-          >
+          <div v-for="(item, index) in category.items" :key="index" class="knowledge-card"
+            @mouseenter="getCodePositon($event, item.id)">
             <div class="card-header">
               <h3>
                 <a @click="goToRoute(item.route)">{{ item.name }}</a>
@@ -53,13 +40,10 @@
             <div class="tags">
               <span v-for="(tag, tagIndex) in item.tags" :key="tagIndex" class="tag">{{
                 tag
-              }}</span>
+                }}</span>
             </div>
-            <pre
-              :id="item.id"
-              class="code-block"
-              :style="{ top: tipsAbsolutePosition.Y, left: tipsAbsolutePosition.X }"
-            ><CodeBlock :code="item.code" language="js" hiddenToolbar /></pre>
+            <pre :id="item.id" class="code-block"
+              :style="{ top: tipsAbsolutePosition.Y, left: tipsAbsolutePosition.X }"><CodeBlock :code="item.code" language="js" hiddenToolbar /></pre>
           </div>
         </div>
       </div>
@@ -74,7 +58,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import CodeBlock from '@/components/Code/index.vue'
+import CodeBlock from 'components/Code/index.vue'
 
 const emit = defineEmits(['goToByRouteName'])
 
@@ -401,7 +385,8 @@ const getCodePositon = async (event: MouseEvent, id: string) => {
     color: #fff;
     background-color: #000;
   }
-  &:hover > .code-block {
+
+  &:hover>.code-block {
     position: absolute;
     height: auto;
     width: auto;

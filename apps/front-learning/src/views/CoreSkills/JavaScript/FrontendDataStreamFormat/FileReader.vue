@@ -37,12 +37,8 @@
       <h2 class="section-title">🛠️ 基本用法</h2>
       <div class="usage-example">
         <div class="code-tabs">
-          <div
-            v-for="(tab, index) in tabs"
-            :key="index"
-            :class="['tab', { active: activeTab === index }]"
-            @click="activeTab = index"
-          >
+          <div v-for="(tab, index) in tabs" :key="index" :class="['tab', { active: activeTab === index }]"
+            @click="activeTab = index">
             {{ tab.label }}
           </div>
         </div>
@@ -197,7 +193,7 @@ reader.readAsArrayBuffer(chunk);</code></pre>
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import CodeBlock from '@/components/Code/index.vue'
+import CodeBlock from 'components/Code/index.vue'
 
 const activeTab = ref(0)
 

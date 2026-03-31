@@ -31,8 +31,8 @@
     "front-learning:dev": "pnpm --filter front-learning run dev",
     "main:dev": "pnpm --filter main run dev",
     "fastify:dev": "pnpm --filter fastify run dev",
-    "admin:dev": "pnpm --filter pure-admin-thin run dev",
-    "admin:build": "pnpm --filter pure-admin-thin run build",
+    "admin:dev": "pnpm --filter admin run dev",
+    "admin:build": "pnpm --filter admin run build",
     "turbo:all:build": "turbo run build",
     "turbo:front-learning:build": "turbo run build --filter=front-learning",
     "turbo:project:build": "turbo run build --filter=\"$1\"",
@@ -43,11 +43,12 @@
     "main:preview": "pnpm --filter main run preview",
     "prod:preview": "run-p \"preview:**\"",
     "front-learning:gen": "pnpm -F front-learning g",
+    "admin:gen": "pnpm -F admin g",
     "fastify:s-g": "pnpm -F fastify swagger:generate",
     "front-learning:g-a": "pnpm -F front-learning gen:api",
     "front-learning:g-a-m": "pnpm -F front-learning gen:api:module",
-    "admin:g-a": "pnpm -F pure-admin-thin gen:api",
-    "admin:g-a-m": "pnpm -F pure-admin-thin gen:api:module",
+    "admin:g-a": "pnpm -F admin gen:api",
+    "admin:g-a-m": "pnpm -F admin gen:api:module",
     "translate": "pnpm -F front-learning translate",
     "test": "test"
   },
@@ -92,9 +93,12 @@
     "@element-plus/icons-vue": "^2.3.2",
     "commander": "^14.0.3",
     "js-yaml": "^4.1.1",
+    "pinia": "^3.0.1",
     "tippy.js": "^6.3.7",
+    "vue": "3.6.0-beta.7",
     "vue-demi": "^0.14.10",
     "vue-json-pretty": "^2.6.0",
+    "vue-router": "^4.5.0",
     "yaml": "^2.8.2"
   }
 }

@@ -66,7 +66,7 @@
               <li><b>单括号、点方括，函数调用最优先</b></li>
               <li><b>一元运算（! ~ ++ -- + - typeof等）紧随其后</b></li>
               <li><b>乘除取余（* / %）快于加减（+ -）</b></li>
-              <li><b>移位（<< >> >>>）比大小（&lt; &gt; &lt;= &gt;=）先</b></li>
+              <li><b>移位（<<>> >>>）比大小（&lt; &gt; &lt;= &gt;=）先</b></li>
               <li><b>等于不等（== != === !==）再后面</b></li>
               <li><b>按位与（&）再按位异或（^）再按位或（|）</b></li>
               <li><b>逻辑与（&&）优于逻辑或（||）</b></li>
@@ -93,8 +93,10 @@
           </h3>
           <div class="example-group">
             <pre class="code-block">const result = 1 + 2 * 3; <span class="comment">// 7（乘法优先）</span></pre>
-            <pre class="code-block">const value = false || true && false; <span class="comment">// false（相当于 false || (true && false)）</span></pre>
-            <pre class="code-block">const output = true ? 'A' : 'B' + 'C'; <span class="comment">// 'A'（相当于 true ? 'A' : ('B' + 'C')）</span></pre>
+            <pre
+              class="code-block">const value = false || true && false; <span class="comment">// false（相当于 false || (true && false)）</span></pre>
+            <pre
+              class="code-block">const output = true ? 'A' : 'B' + 'C'; <span class="comment">// 'A'（相当于 true ? 'A' : ('B' + 'C')）</span></pre>
           </div>
         </div>
       </div>
@@ -127,17 +129,13 @@
         </h2>
 
         <div class="expression-input">
-          <input
-            v-model="expression"
-            type="text"
-            placeholder="输入 JavaScript 表达式，如: 1 + 2 * 3"
-            @keyup.enter="evaluateExpression"
-          >
+          <input v-model="expression" type="text" placeholder="输入 JavaScript 表达式，如: 1 + 2 * 3"
+            @keyup.enter="evaluateExpression">
           <Button @click="evaluateExpression">
-          计算
+            计算
           </Button>
           <Button @click="loadExample">
-          示例
+            示例
           </Button>
         </div>
 
@@ -175,7 +173,7 @@
 </template>
 
 <script setup lang="ts">
-import { Button } from '@/components';
+import { Button } from 'components';
 import { ref } from 'vue';
 
 // 运算符优先级数据
@@ -352,9 +350,6 @@ evaluateExpression();
 </script>
 
 <style lang="less" scoped>
-
-
-
 :root {
   --primary: #4361ee;
   --primary-light: #eef2ff;
@@ -387,25 +382,29 @@ evaluateExpression();
   max-width: 1200px;
   margin: 0 auto;
 }
-.memory-tips-section{
+
+.memory-tips-section {
   margin-top: 20px;
   padding: 20px;
   background-color: #f8f9fa;
   border-radius: 16px;
   box-shadow: var(--shadow);
-  .memory-tips-content{
-    p{
+
+  .memory-tips-content {
+    p {
       margin-bottom: 10px;
     }
   }
-  .memory-tips-list{
-    li{
+
+  .memory-tips-list {
+    li {
       margin-bottom: 10px;
       padding-left: 20px;
       font-size: 1.1rem;
     }
   }
 }
+
 .header {
   text-align: center;
   margin-bottom: 40px;
@@ -495,20 +494,23 @@ evaluateExpression();
     color: white;
     font-weight: 600;
     justify-content: flex-start;
-    border:1px solid rgb(162, 210, 255);
+    border: 1px solid rgb(162, 210, 255);
 
     .header-item {
       padding: 15px;
       flex: 1;
+
       // text-align: center;
-      &:nth-child(1){
+      &:nth-child(1) {
         flex: 0.5;
         text-align: center;
       }
-      &:nth-child(2){
+
+      &:nth-child(2) {
         flex: 1.5;
       }
-      &:nth-child(3){
+
+      &:nth-child(3) {
         flex: 2;
       }
     }
@@ -787,7 +789,9 @@ evaluateExpression();
   .table-row {
     flex-direction: column;
 
-    .row-priority, .row-type, .row-operators {
+    .row-priority,
+    .row-type,
+    .row-operators {
       width: 100%;
       padding: 10px 15px;
     }

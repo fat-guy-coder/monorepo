@@ -10,12 +10,8 @@
 
     <div class="content-wrapper">
       <nav class="navigation">
-        <div
-          v-for="(section, index) in sections"
-          :key="index"
-          :class="['nav-item', { active: activeSection === index }]"
-          @click="activeSection = index"
-        >
+        <div v-for="(section, index) in sections" :key="index"
+          :class="['nav-item', { active: activeSection === index }]" @click="activeSection = index">
           <span class="nav-icon">{{ section.icon }}</span>
           <span class="nav-text">{{ section.title }}</span>
         </div>
@@ -181,7 +177,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import CodeBlock from '@/components/Code/index.vue'
+import CodeBlock from 'components/Code/index.vue'
 
 // 模拟 Electron 版本
 const electronVersion = '26.0.0'
@@ -429,8 +425,6 @@ npm run publish`
 </script>
 
 <style lang="less" scoped>
-
-
 :root {
   --primary-color: #47848f;
   --primary-light: #e6f4f1;

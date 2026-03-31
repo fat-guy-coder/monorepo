@@ -42,7 +42,7 @@
                   <div class="module-icon">{{ module.icon }}</div>
                   <div class="module-info">
                     <h4>
-                      <Link :route="module.route" >{{ module.title }}</Link>
+                      <Link :route="module.route">{{ module.title }}</Link>
                     </h4>
                     <p class="module-desc">{{ module.description }}</p>
                   </div>
@@ -59,7 +59,7 @@
                     <h5>学习要点</h5>
                     <div class="topics-grid">
                       <div v-for="topic in module.topics" :key="topic.route">
-                        <Link :route="topic.route"  class="topic-check">✓</Link>
+                        <Link :route="topic.route" class="topic-check">✓</Link>
                         {{ topic.title }}
                       </div>
                     </div>
@@ -138,7 +138,7 @@
               <div class="skills-list">
                 <span v-for="skill in level.skills" :key="skill" class="skill-tag">{{
                   skill
-                  }}</span>
+                }}</span>
               </div>
             </div>
             <div class="level-responsibilities">
@@ -165,7 +165,7 @@
               <div class="tip-actions">
                 <span v-for="action in tip.actions" :key="action" class="action-tag">{{
                   action
-                  }}</span>
+                }}</span>
               </div>
             </div>
           </div>
@@ -183,7 +183,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import Link from '@/components/Link/index.vue'
+import Link from 'components/Link/index.vue'
 
 const emit = defineEmits(['goToByRouteName'])
 

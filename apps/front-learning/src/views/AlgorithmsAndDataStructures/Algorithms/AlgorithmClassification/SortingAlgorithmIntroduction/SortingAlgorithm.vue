@@ -30,13 +30,8 @@
       </div>
 
       <div class="tabs">
-        <Button
-          v-for="(algorithm, index) in algorithms"
-          :key="index"
-          type="primary"
-          @click="activeAlgorithm = algorithm"
-          :class="{ active: activeAlgorithm.name === algorithm.name }"
-        >
+        <Button v-for="(algorithm, index) in algorithms" :key="index" type="primary"
+          @click="activeAlgorithm = algorithm" :class="{ active: activeAlgorithm.name === algorithm.name }">
           {{ algorithm.name }}
         </Button>
       </div>
@@ -229,9 +224,9 @@
 
 <script lang="ts" setup>
 import { ref, onBeforeMount } from 'vue'
-import { Button } from '@/components'
-import SortAlgorithBarCharts, { type LogItem } from '@/components/Charts/SortAlgorithBarCharts.vue'
-// import Pie from '@/components/Charts/pie.vue'
+import { Button } from 'components'
+import SortAlgorithBarCharts, { type LogItem } from 'components/Charts/SortAlgorithBarCharts.vue'
+// import Pie from 'components/Charts/pie.vue'
 
 const log = ref<LogItem[]>([])
 

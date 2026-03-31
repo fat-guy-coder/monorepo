@@ -197,9 +197,7 @@
                 </tbody>
               </table>
               <p class="note">
-                备注：array添加最快<b>这是push的性能</b>，Map和Set次之，object次之，<b
-                  >乱序加入array最慢O(n)</b
-                >
+                备注：array添加最快<b>这是push的性能</b>，Map和Set次之，object次之，<b>乱序加入array最慢O(n)</b>
               </p>
             </div>
           </div>
@@ -326,10 +324,7 @@
           <div class="analysis-item">
             <h3>使用建议</h3>
             <ul>
-              <li
-                v-for="recommendation in testResults.summary.recommendations"
-                :key="recommendation"
-              >
+              <li v-for="recommendation in testResults.summary.recommendations" :key="recommendation">
                 {{ recommendation }}
               </li>
             </ul>
@@ -431,8 +426,8 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import CodeBlock from '@/components/Code/index.vue'
-import Nav from '@/components/Nav/ScrollNav.vue'
+import CodeBlock from 'components/Code/index.vue'
+import Nav from 'components/Nav/ScrollNav.vue'
 import testResults from '../JSON/dataStructurePerformence.json'
 
 const sections = [
@@ -776,6 +771,7 @@ class ConfigManager {
   transform-style: preserve-3d;
   transform: rotateZ(180deg) rotateY(180deg);
 }
+
 .performance-comparison {
   max-width: 1000px;
   margin: 0 auto;
@@ -987,15 +983,18 @@ class ConfigManager {
     display: flex;
     justify-content: center;
     flex-direction: column;
+
     .chart-canvas {
       margin: 0 auto;
     }
+
     .chart-button {
       display: flex;
       justify-content: center;
       align-items: center;
       margin-top: 1rem;
       gap: 10px;
+
       .chart-button-item {
         width: 100px;
         height: 30px;
@@ -1006,12 +1005,15 @@ class ConfigManager {
         font-weight: 500;
         justify-content: center;
         align-items: center;
+
         &:nth-child(1) {
           background: #ef4444;
         }
+
         &:nth-child(2) {
           background: #3b82f6;
         }
+
         &:nth-child(3) {
           background: #10b981;
         }

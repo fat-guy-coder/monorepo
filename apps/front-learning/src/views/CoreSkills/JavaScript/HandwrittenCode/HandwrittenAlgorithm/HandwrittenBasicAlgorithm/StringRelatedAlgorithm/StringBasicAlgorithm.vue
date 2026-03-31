@@ -10,24 +10,14 @@
       <span class="search-icon">🔍</span>
     </div>
     <div class="type-box">
-      <button
-        v-for="type in types"
-        :key="type"
-        class="type-item"
-        :class="type === activeType ? 'active' : ''"
-        @click="handleTypeClick(type)"
-      >
+      <button v-for="type in types" :key="type" class="type-item" :class="type === activeType ? 'active' : ''"
+        @click="handleTypeClick(type)">
         {{ type }}
       </button>
     </div>
 
     <div class="algorithm-grid" v-show="activeType !== '总结'">
-      <div
-        v-for="algorithm in filteredAlgorithms"
-        :key="algorithm.id"
-        :id="algorithm.id"
-        class="algorithm-card"
-      >
+      <div v-for="algorithm in filteredAlgorithms" :key="algorithm.id" :id="algorithm.id" class="algorithm-card">
         <div class="card-header">
           <div class="algorithm-icon">{{ algorithm.icon }}</div>
           <h2 class="algorithm-title">{{ algorithm.title }}</h2>
@@ -70,11 +60,7 @@
             <a @click="handleShowMore(algorithm)">{{ algorithm.showMore ? '收起' : '查看' }}</a>
           </h3>
           <div class="other-solution" v-show="algorithm.showMore && algorithm.solution.length > 0">
-            <div
-              v-for="solution in algorithm.solution"
-              :key="solution.index"
-              class="other-solution-item"
-            >
+            <div v-for="solution in algorithm.solution" :key="solution.index" class="other-solution-item">
               <h3>{{ solution.index }}.{{ solution.title }}</h3>
               <p>{{ solution.description }}</p>
               <div class="algorithm-code">
@@ -240,7 +226,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import ScrollNav from '@/components/Nav/ScrollNav.vue'
+import ScrollNav from 'components/Nav/ScrollNav.vue'
 // import { EncodeAndDecode } from './demo.ts'
 
 interface Algorithm {
@@ -359,6 +345,7 @@ const filteredAlgorithms = computed(() => {
   justify-content: center;
   margin-bottom: 20px;
   gap: 10px;
+
   .type-item {
     color: #000;
     border: none;
@@ -367,6 +354,7 @@ const filteredAlgorithms = computed(() => {
     font-size: 1.1rem;
     cursor: pointer;
     transition: all 0.3s ease;
+
     &.active {
       background-color: #4c6ef5;
       color: white;
@@ -650,6 +638,7 @@ const filteredAlgorithms = computed(() => {
     font-size: 1.1rem;
     line-height: 1.6;
     color: #4a5568;
+
     .algorithm-type-item {
       margin-right: 10px;
       padding: 5px 10px;
@@ -727,6 +716,7 @@ const filteredAlgorithms = computed(() => {
       content: '💾 ';
     }
   }
+
   .other-solution {
     .other-solution-item {
       margin-bottom: 20px;

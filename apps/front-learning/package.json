@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "commander": "^14.0.3",
+    "components": "workspace:^",
     "less": "^4.4.2",
     "pinia": "^3.0.1",
     "prismjs": "^1.29.0",

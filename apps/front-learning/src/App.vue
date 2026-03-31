@@ -44,7 +44,7 @@
 
 <script lang="ts" setup>
 //vue编译器会自动引入components目录下的所有组件，但不是异步组件，这一步是为了将所有组件转换为异步组件，以优化初始加载性能
-import { Menu, RouteTab, ThemeChange, Navigation, Input, Button, message, Spin } from '@/components'
+import { Menu, RouteTab, ThemeChange, Navigation, Input, Button, message, Spin } from 'components'
 import { computed, ref, watch, onMounted, onUnmounted, nextTick, provide } from 'vue'
 import {
   type MenuItem, //菜单项类型
@@ -59,7 +59,7 @@ import { useDeviceStore } from '@/stores/device' //设备信息store
 import { useUIConfigStore, type Theme } from '@/stores/uiconfig' //UI配置store
 import { useRouter } from 'vue-router'
 import { debounce, scrollIntoViewById } from '@/function/common' //常用函数
-import type { NavItem } from './components/Nav' //导航项类型
+import type { NavItem } from 'components' //导航项类型
 import { useGradientAnimation } from '@/hooks/useGradientAnimation' //渐变色动画
 import { useDetectDevice } from '@/hooks/useDetectDevice' //设备信息hook
 // import { request } from '@/request'
@@ -196,7 +196,7 @@ onUnmounted(() => {
 const getMenus = async () => {
   loading.value = true
   mainViewLoading.value = true
-  const { data } = await getApiMenus({ tree: 'true' })
+  const { data } = await getApiMenus({ tree: 'true', project: 'front_learning' })
   menus.value = data as MenuItem[]
   loading.value = false
   mainViewLoading.value = false

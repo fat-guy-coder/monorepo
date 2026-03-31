@@ -2,38 +2,24 @@
   <!-- 知识点展示区域 -->
   <div class="knowledge-container">
     <Spin :spinning="loading">
-      <div
-        v-for="(category, catIndex) in filteredKnowledge"
-        :key="catIndex"
-        :id="category.id"
-        class="category-section"
-      >
+      <div v-for="(category, catIndex) in filteredKnowledge" :key="catIndex" :id="category.id" class="category-section">
         <div class="category-header">
           <h2 class="category-title">{{ category.name }}</h2>
           <div class="item-count">{{ category.items.length }} 项</div>
         </div>
         <div class="knowledge-grid">
-          <div
-            v-for="(item, index) in category.items"
-            :key="index"
-            :id="item.id"
-            class="knowledge-card"
-            :style="{ 'border-left': `4px solid ${getVersionColor(item.version || 'ES6')}` }"
-          >
+          <div v-for="(item, index) in category.items" :key="index" :id="item.id" class="knowledge-card"
+            :style="{ 'border-left': `4px solid ${getVersionColor(item.version || 'ES6')}` }">
             <div class="card-header">
               <h3>
                 <a v-if="item.route && showJump" @click="goToByRouteName(item.route)">{{
                   item.name
-                }}</a>
+                  }}</a>
                 <span v-else>{{ item.name }}</span>
               </h3>
               <div class="proposal-status" v-if="item.proposal">提案中</div>
               <div class="meta">
-                <span
-                  class="version"
-                  v-if="item.version"
-                  :style="{ backgroundColor: getVersionColor(item.version) }"
-                >
+                <span class="version" v-if="item.version" :style="{ backgroundColor: getVersionColor(item.version) }">
                   {{ item.version }}
                 </span>
                 <div class="stars" v-if="item.importance">
@@ -45,7 +31,7 @@
             <div class="tags">
               <span v-for="(tag, tagIndex) in item.tags" :key="tagIndex" class="tag">{{
                 tag
-              }}</span>
+                }}</span>
             </div>
             <div v-if="item.example" class="example">
               <pre>{{ item.example }}</pre>
@@ -53,13 +39,10 @@
             <template v-if="item.browserSupport && item.browserSupport.length > 0">
               <div>浏览器支持情况(以上版本)</div>
               <div class="browser-support-container">
-                <span v-for="(i, index) in item.browserSupport" :key="index" class="browser-support"
-                  ><component :is="getBrowserSupportIcon(i.b)"></component
-                  ><span v-if="i.ns">不支持</span
-                  ><span v-else
-                    ><span v-if="i.e">实验性</span><span v-else>{{ i.v }}</span></span
-                  ></span
-                >
+                <span v-for="(i, index) in item.browserSupport" :key="index" class="browser-support">
+                  <component :is="getBrowserSupportIcon(i.b)"></component><span v-if="i.ns">不支持</span><span v-else><span
+                      v-if="i.e">实验性</span><span v-else>{{ i.v }}</span></span>
+                </span>
               </div>
             </template>
           </div>
@@ -70,7 +53,7 @@
 </template>
 
 <script setup lang="ts">
-import { Spin } from '@/components'
+import { Spin } from 'components'
 import { ref, computed } from 'vue'
 import { getBrowserSupportIcon } from './Brower'
 
@@ -182,6 +165,7 @@ const goToByRouteName = (route: string) => {
 @warning-color: #ffd166;
 @error-color: #ef476f;
 @info-color: #118ab2;
+
 .knowledge-container {
   display: flex;
   flex-direction: column;
@@ -222,6 +206,7 @@ const goToByRouteName = (route: string) => {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 20px;
+
   .browser-support-container {
     display: flex;
     align-items: center;
@@ -230,6 +215,7 @@ const goToByRouteName = (route: string) => {
     font-size: 0.85rem;
     color: #666;
     margin-top: 10px;
+
     .browser-support {
       padding: 0 2px;
       display: block;
@@ -338,6 +324,7 @@ const goToByRouteName = (route: string) => {
     }
   }
 }
+
 @media (max-width: 768px) {
   .controls {
     flex-direction: column;
@@ -360,6 +347,7 @@ const goToByRouteName = (route: string) => {
     font-size: 1.3rem;
   }
 }
+
 @media (max-width: 480px) {
   .version-filter {
     justify-content: flex-start;

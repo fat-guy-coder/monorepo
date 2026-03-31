@@ -289,7 +289,7 @@ ipcRenderer.on('app-update', (event, update) => {
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import CodeBlock from '@/components/Code/index.vue';
+import CodeBlock from 'components/Code/index.vue';
 
 // Electron 版本信息
 const electronVersion = '23.1.1';
@@ -407,9 +407,6 @@ const activeTab = ref('main');
 </script>
 
 <style lang="less" scoped>
-
-
-
 // 颜色变量
 @primary-color: #47848f;
 @secondary-color: #2ecc71;

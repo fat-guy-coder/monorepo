@@ -134,7 +134,7 @@
 
 <script setup lang="ts">
 import { ref, computed, reactive, onBeforeMount } from 'vue'
-import { Select } from '@/components'
+import { Select } from 'components'
 
 interface Type {
   label: string

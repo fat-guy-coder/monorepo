@@ -1,1 +1,24 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" class="icon" viewBox="0 0 1024 1024"><path fill="#386BF3" d="M410.558.109c0 210.974-300.876 361.752-300.876 633.548 0 174.943 134.704 316.787 300.876 316.787s300.877-141.817 300.877-316.787C711.408 361.752 410.558 210.974 410.558.109"/><path fill="#C3D2FB" d="M613.469 73.665c0 211.055-300.877 361.914-300.877 633.547C312.592 882.156 447.296 1024 613.47 1024s300.876-141.817 300.876-316.788C914.29 435.58 613.469 284.72 613.469 73.665"/><path fill="#303F5B" d="M312.592 707.212c0-183.713 137.636-312.171 226.723-441.39 81.702 106.112 172.12 218.74 172.12 367.726A309.755 309.755 0 0 1 420.36 950.064a323.1 323.1 0 0 1-107.769-242.852z"/></svg>
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="brandGradient" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#42d392" />
+      <stop offset="100%" stop-color="#61dafb" />
+    </linearGradient>
+  </defs>
+
+  <!-- Final position adjustment for geometric balance -->
+  <g transform="translate(85, 115) rotate(45)">
+    <!-- Sabot pieces scaled down and moved out for better composition -->
+    <g transform="translate(-25, 0) rotate(-10) scale(0.95)">
+      <path d="M -15 -80 L -40 -60 C -35 0, -35 30, -20 60 Z" fill="#A0AEC0"/>
+    </g>
+    <g transform="translate(25, 0) rotate(10) scale(0.95)">
+      <path d="M 15 -80 L 40 -60 C 35 0, 35 30, 20 60 Z" fill="#CBD5E0"/>
+    </g>
+
+    <!-- Penetrator Core and Fins, shifted slightly relative to the sabot -->
+    <g transform="translate(0, 5)">
+      <path d="M 0,-135 L 8,-110 L 8,40 L 25,50 L 25,70 L 8,70 L 8,80 L -8,80 L -8,70 L -25,70 L -25,50 L -8,40 L -8,-110 Z" fill="url(#brandGradient)"/>
+    </g>
+  </g>
+</svg>
