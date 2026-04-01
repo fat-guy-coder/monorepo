@@ -38,11 +38,15 @@
       <div class="modal-form">
         <div class="form-item">
           <label>菜单名称 <span class="required">*</span></label>
-          <Input v-model="formData.name" placeholder="请输入菜单名称" />
+          <Input v-model="formData.label" placeholder="请输入菜单名称" />
+        </div>
+        <div class="form-item">
+          <label>英文名称 <span class="required">*</span></label>
+          <Input v-model="formData.name" placeholder="请输入英文名称" />
         </div>
         <div class="form-item">
           <label>路由路径</label>
-          <Input :model-value="computedPath" readonly placeholder="自动生成" />
+          <span class="display-text path-text">{{ formData.path || '-' }}</span>
         </div>
         <div class="form-item">
           <label>图标</label>
@@ -63,7 +67,7 @@
 
 <script setup lang="ts">
 import { ref, reactive, onMounted, computed } from 'vue'
-import { Tree, Select, Input, InputNumber, Button, Modal, Spin, message } from 'components'
+import { Tree, Select, Input, InputNumber, Button, Modal, Spin, message, confirm } from 'components'
 import type { TreeNode } from 'components'
 import {
   getApiMenus,
@@ -198,7 +202,7 @@ const handleNodeCollapse = (node: TreeNode) => {
 
 const resetForm = () => {
   formData.name = ''
-  formData.path = ''
+  formData.label = ''
   formData.icon = ''
   formData.order = 0
   formData.project = searchForm.project || ''
@@ -225,7 +229,9 @@ const handleEditOf = (node: TreeNode) => {
   modalMode.value = 'edit'
   // Use node data directly since it's already populated from API
   formData.id = node.id as string
-  formData.name = (node.name as string) || node.label || ''
+  formData.label = node.label || (node.name as string) || ''
+  formData.name = (node.name as string) || ''
+  formData.path = (node.path as string) || ''
   formData.icon = (node.icon as string) || ''
   formData.order = (node.order as number) || 0
   formData.project = (node.project as string) || ''
@@ -234,7 +240,15 @@ const handleEditOf = (node: TreeNode) => {
 }
 
 const handleDeleteOf = async (node: TreeNode) => {
-  if (!confirm(`确定要删除菜单"${node.label}"吗？`)) return
+  const confirmed = await confirm({
+    title: '删除确认',
+    message: `确定要删除菜单"${node.label}"吗？`,
+    confirmText: '删除',
+    cancelText: '取消',
+    confirmType: 'danger',
+  })
+  if (!confirmed) return
+
   try {
     await deleteApiMenusId(node.id as string)
     message.success('删除成功')
@@ -245,20 +259,24 @@ const handleDeleteOf = async (node: TreeNode) => {
 }
 
 const handleSubmit = async () => {
-  if (!formData.name) {
+  if (!formData.label) {
     message.error('请输入菜单名称')
+    return
+  }
+  if (!formData.name) {
+    message.error('请输入英文名称')
     return
   }
 
   try {
-    // Generate full path from parent + name
+    // Generate full path from parent path + "/" + name
     const fullPath = computedPath.value
 
     if (modalMode.value === 'edit' && formData.id) {
       // Update existing menu
       const updateData: PutApiMenusIdRequest = {
         name: formData.name,
-        label: formData.name,
+        label: formData.label,
         path: fullPath,
         icon: formData.icon,
         order: formData.order,
@@ -271,7 +289,7 @@ const handleSubmit = async () => {
       // Create new menu
       const createData: PostApiMenusRequest = {
         name: formData.name,
-        label: formData.name,
+        label: formData.label,
         path: fullPath,
         icon: formData.icon,
         order: formData.order,
@@ -402,7 +420,18 @@ onMounted(() => {
   transition: opacity 0.15s;
 }
 
-.tree-node:hover .node-actions {
+.tree-item:hover .node-actions {
   opacity: 1;
+}
+
+.display-text {
+  padding: 8px 0;
+  color: var(--color-text);
+  font-size: 14px;
+}
+
+.path-text {
+  font-family: monospace;
+  color: var(--color-text-secondary);
 }
 </style>

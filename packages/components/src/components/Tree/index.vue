@@ -1,16 +1,16 @@
 <template>
   <div class="tree-container">
     <TreeItem
-      v-for="node in data"
-      :key="node.id"
-      :node="node"
+      v-for="treeNode in data"
+      :key="treeNode.id"
+      :node="treeNode"
       :level="0"
       :expandedKeys="expandedKeys"
       @click="handleNodeClick"
       @toggle="handleNodeToggle"
     >
-      <template #extra="{ node }">
-        <slot name="node-extra" :node="node" />
+      <template #extra>
+        <slot name="node-extra" :node="treeNode" />
       </template>
     </TreeItem>
   </div>

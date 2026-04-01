@@ -1,8 +1,8 @@
 export default [
   {
-    "name": "welcome",
-    "path": "/welcome",
-    "component": () => import('@/views/welcome.vue')
+    "name": "home",
+    "path": "/home",
+    "component": () => import('@/views/home.vue')
   },
   {
     "name": "system",

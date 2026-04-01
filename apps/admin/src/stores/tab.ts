@@ -15,13 +15,14 @@ interface TabInfo {
 
 export const useTabStore = defineStore('tab', () => {
   const storage = localStorage.getItem('tab')
-  const {list, key} = storage ? JSON.parse(storage) : {
-    list: [{
-      name: 'home',
-      path: '/',
-      label: '🏡 主页',
-    },],
-    key: '/',
+  const { list, key } = storage ? JSON.parse(storage) : {
+    list: [
+      {
+        name: 'home',
+        path: '/home',
+        label: '🏡 主页',
+      },
+    ], key: '/home'
   }
   //激活标签列表
   const tabList = ref<Tab[]>(list)

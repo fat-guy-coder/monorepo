@@ -16,16 +16,17 @@
         </svg>
       </span>
       <span v-else class="tree-arrow-placeholder"></span>
+      <span v-if="node.icon" class="tree-icon">{{ node.icon }}</span>
       <span class="tree-label">{{ node.label }}</span>
-      <span v-if="$slots.extra" class="tree-extra">
-        <slot name="extra" :node="node" />
-      </span>
+    </div>
+    <div v-if="$slots.extra" class="tree-actions" @click.stop>
+      <slot name="extra" :node="node" />
     </div>
     <div v-if="isExpanded && hasChildren" class="tree-children">
       <TreeItem
-        v-for="child in node.children"
-        :key="child.id"
-        :node="child"
+        v-for="childNode in node.children"
+        :key="childNode.id"
+        :node="childNode"
         :level="level + 1"
         :expandedKeys="expandedKeys"
         :nodeId="nodeId"
@@ -33,7 +34,7 @@
         @toggle="handleChildToggle"
       >
         <template #extra>
-          <slot name="extra" :node="node" />
+          <slot name="extra" :node="childNode" />
         </template>
       </TreeItem>
     </div>
@@ -89,10 +90,16 @@ const handleChildToggle = (node: TreeNode, expanded: boolean) => {
   cursor: pointer;
   border-radius: 4px;
   transition: background-color 0.15s;
+  position: relative;
+  padding-right: 120px;
 }
 
 .tree-node:hover {
   background-color: var(--color-hover, #f5f5f5);
+}
+
+.tree-node:hover + .tree-actions {
+  opacity: 1;
 }
 
 .tree-arrow {
@@ -125,9 +132,25 @@ const handleChildToggle = (node: TreeNode, expanded: boolean) => {
   color: var(--color-text-primary, #333);
 }
 
+.tree-icon {
+  margin-right: 6px;
+  font-size: 14px;
+}
+
 .tree-extra {
   display: flex;
   align-items: center;
+}
+
+.tree-actions {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  gap: 4px;
+  opacity: 0;
+  transition: opacity 0.15s;
 }
 
 .tree-children {

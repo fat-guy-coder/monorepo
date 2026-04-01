@@ -268,6 +268,10 @@ class FetchClient {
         // JSON 格式
         body = JSON.stringify(data);
       }
+    } else if (!data && ['DELETE', 'HEAD'].includes(upperCaseMethod)) {
+      // DELETE/HEAD 请求没有 body 时，删除 Content-Type
+      delete mergedHeaders['Content-Type'];
+      delete mergedHeaders['content-type'];
     }
 
     // 构建 fetch 选项

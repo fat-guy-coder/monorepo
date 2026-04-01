@@ -1,5 +1,6 @@
 import { defineAsyncComponent } from 'vue'
 import message from './Message'
+import { confirm } from './Confirm'
 
 // 导出类型
 export type { NavItem } from './Nav'
@@ -101,4 +102,5 @@ export {
   PageFooter,
   Tooltip,
   Tree,
+  confirm,
 }

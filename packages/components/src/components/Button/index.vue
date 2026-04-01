@@ -25,7 +25,7 @@ defineOptions({
 });
 
 const { type = 'default', size = 'medium', loading = false, disabled = false, css = {} } = defineProps<{
-  type?: 'default' | 'primary';
+  type?: 'default' | 'primary' | 'danger';
   size?: 'small' | 'medium' | 'large';
   loading?: boolean;
   disabled?: boolean;
@@ -93,6 +93,24 @@ const componentStyle = computed(() => {
     &:not(:disabled):hover {
       background-color: var(--btn-primary-hover-bg);
       border-color: var(--btn-primary-hover-border);
+    }
+  }
+
+  // Danger Type
+  &.btn-type--danger {
+    --btn-danger-bg: #ff3333;
+    --btn-danger-color: #ffffff;
+    --btn-danger-border: #ff3333;
+    --btn-danger-hover-bg: color-mix(in srgb, #ff3333 85%, black);
+    --btn-danger-hover-border: color-mix(in srgb, #ff3333 85%, black);
+
+    background-color: var(--btn-danger-bg);
+    color: var(--btn-danger-color);
+    border: 1px solid var(--btn-danger-border);
+
+    &:not(:disabled):hover {
+      background-color: var(--btn-danger-hover-bg);
+      border-color: var(--btn-danger-hover-border);
     }
   }
 

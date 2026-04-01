@@ -26,7 +26,7 @@
                   <span v-else>{{ cancelText || '取消' }}</span>
                 </slot>
               </Button>
-              <Button v-if="showConfirm" type="primary" @click="handleConfirm" :loading="loading">
+              <Button v-if="showConfirm" :type="confirmType" @click="handleConfirm" :loading="loading">
                 <slot name="confirm">
                   <component :is="confirmTextVNode" v-if="isVNode(confirmText)" />
                   <span v-else>{{ confirmText || '确认' }}</span>
@@ -50,6 +50,7 @@ const {
   title = '',
   confirmText,
   cancelText,
+  confirmType = 'primary',
   showConfirm = true,
   showCancel = true,
   showClose = true,
@@ -62,6 +63,7 @@ const {
   title?: string;
   confirmText?: string | VNode;
   cancelText?: string | VNode;
+  confirmType?: 'default' | 'primary' | 'danger';
   showConfirm?: boolean;
   showCancel?: boolean;
   showClose?: boolean;
