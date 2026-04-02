@@ -2,6 +2,8 @@ export interface TreeNode {
   id: string | number
   label: string
   children?: TreeNode[]
+  icon?: string
+  expanded?: boolean
   [key: string]: unknown
 }
 

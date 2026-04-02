@@ -1,6 +1,6 @@
 // --- 默认颜色变量 ---
 export const THEME_MAIN_GRADIENT_COLOR = 'var(--color-gradient-group-1)'
-// 主题次要渐变颜色变量数组 根据 theme.less 中的定义顺序
+// 主题次要渐变颜色变量数组
 export const THEME_SECONDARY_GRADIENT_COLORS = [
   'var(--color-gradient-group-2)',
   'var(--color-gradient-group-3)',
@@ -22,8 +22,6 @@ export const THEME_HIGH_CONTRAST_NEON_COLORS = [
 ]
 
 export const THEME__MAIN_TEXT_COLOR = 'var(--color-text)'
-
-//
 
 //字体渐变颜色变量数组
 export const THEME_FONT_GRADIENT_COLORS = [

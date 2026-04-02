@@ -1,17 +1,8 @@
 <template>
   <nav class="main-menu" :style="menuStyle">
     <ul class="menu__list">
-      <MenuItem
-        v-for="item in items"
-        :key="item.path"
-        :item="item"
-        :level="0"
-        :is-open="openKeys.includes(item.path)"
-        :mode="mode"
-        @toggle="handleToggle"
-        @select="handleSelect"
-        @close="closeKeys"
-      />
+      <MenuItem v-for="item in items" :key="item.path" :item="item" :level="0" :is-open="openKeys.includes(item.path)"
+        :mode="mode" @toggle="handleToggle" @select="handleSelect" @close="closeKeys" />
     </ul>
   </nav>
 </template>

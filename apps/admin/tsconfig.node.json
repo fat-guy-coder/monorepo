@@ -19,8 +19,8 @@
       "node"
     ],
     "paths": {
-      "@config/*": ["./config/*"]
-    },
-    "baseUrl": "."
+      "@config/*": ["./config/*"],
+      "*": ["./*"]
+    }
   }
 }

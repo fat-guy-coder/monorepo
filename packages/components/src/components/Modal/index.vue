@@ -182,7 +182,7 @@ watch(visible, (isVisible) => {
   border: none;
   font-size: 1.75rem;
   line-height: 1;
-  color: var(--color-text-secondary);
+  color: var(--color-text-soft);
   cursor: pointer;
   padding: 0.5rem;
   margin: -0.5rem; // Enlarge clickable area

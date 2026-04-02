@@ -1,159 +1,238 @@
 <template>
   <button
-    class="ui-button"
-    :class="[
-      `btn-type--${type}`,
-      `btn-size--${size}`,
-      { 'is-loading': loading, 'is-disabled': isDisabled }
-    ]"
+    class="ui-btn"
+    :class="[typeClass, sizeClass, { 'is-plain': plain, 'is-text': text, 'is-round': round, 'is-circle': circle, 'is-disabled': isDisabled }]"
     :disabled="isDisabled"
-    :style="componentStyle"
   >
-    <span v-if="loading" class="spinner"></span>
-    <span class="btn-content">
+    <span v-if="loading" class="ui-btn-spinner"></span>
+    <span :class="{ 'is-hidden': loading }">
       <slot></slot>
     </span>
   </button>
 </template>
 
 <script setup lang="ts">
-import { computed, type CSSProperties, inject } from 'vue';
+import { computed } from 'vue'
 
+defineOptions({ name: 'UIButton' })
 
-defineOptions({
-  name: 'ButtonComponent',
-});
+const props = withDefaults(defineProps<{
+  type?: 'default' | 'primary' | 'success' | 'warning' | 'danger' | 'info'
+  size?: 'sm' | 'md' | 'lg'
+  plain?: boolean
+  text?: boolean
+  round?: boolean
+  circle?: boolean
+  loading?: boolean
+  disabled?: boolean
+}>(), {
+  type: 'default',
+  size: 'md',
+  plain: false,
+  text: false,
+  round: false,
+  circle: false,
+  loading: false,
+  disabled: false,
+})
 
-const { type = 'default', size = 'medium', loading = false, disabled = false, css = {} } = defineProps<{
-  type?: 'default' | 'primary' | 'danger';
-  size?: 'small' | 'medium' | 'large';
-  loading?: boolean;
-  disabled?: boolean;
-  css?: Record<string, string>;
-}>();
+const isDisabled = computed(() => props.disabled || props.loading)
 
-
-
-const isDisabled = computed(() => {
-  return disabled ||  loading;
-});
-
-const componentStyle = computed(() => {
-  return { ...css } as CSSProperties;
-});
-
+const typeClass = computed(() => `ui-btn--${props.type}`)
+const sizeClass = computed(() => `ui-btn--${props.size}`)
 </script>
 
-<style lang="less" scoped>
-.ui-button {
-  --btn-default-bg: var(--btn-default-bg, --color-background);
-  --btn-default-color: var(--btn-default-color, --color-text);
-  --btn-default-border: var(--btn-default-border, --color-border);
-  --btn-default-hover-bg: var(--color-background-soft);
-  --btn-default-hover-border: var(--btn-default-hover-border, --color-primary);
-  --btn-default-hover-color: var(--btn-default-hover-color, --color-primary);
-
-  --btn-primary-bg: var(--btn-primary-bg, --color-primary);
-  --btn-primary-color: var(--btn-primary-color, --color-text);
-  --btn-primary-border: var(--btn-primary-border, --color-border);
-  --btn-primary-hover-bg: var(--btn-primary-hover-bg, color-mix(in srgb, var(--color-primary) 85%, black));
-  --btn-primary-hover-border: var(--btn-primary-hover-border, color-mix(in srgb, var(--color-primary) 85%, black));
-
+<style scoped>
+.ui-btn {
   display: inline-flex;
-  justify-content: center;
   align-items: center;
-  gap: 0.5rem;
-  border-radius: var(--border-radius-md);
-  cursor: pointer;
-  transition: all 0.2s ease;
+  justify-content: center;
+  gap: 0.375rem;
   font-weight: 500;
-  text-align: center;
-  white-space: nowrap;
+  border-radius: var(--radius, 4px);
+  transition: all var(--transition, 0.3s);
+  cursor: pointer;
   user-select: none;
-
-  // Default Type
-  &.btn-type--default {
-    background-color: var(--btn-default-bg);
-    color: var(--btn-default-color);
-    border: 1px solid var(--btn-default-border);
-
-    &:not(:disabled):hover {
-      background-color: var(--btn-default-hover-bg);
-      border-color: var(--btn-default-hover-border);
-      color: var(--btn-default-hover-color);
-    }
-  }
-
-  // Primary Type
-  &.btn-type--primary {
-    background-color: var(--btn-primary-bg);
-    color: var(--btn-primary-color);
-    border: 1px solid var(--btn-primary-border);
-
-    &:not(:disabled):hover {
-      background-color: var(--btn-primary-hover-bg);
-      border-color: var(--btn-primary-hover-border);
-    }
-  }
-
-  // Danger Type
-  &.btn-type--danger {
-    --btn-danger-bg: #ff3333;
-    --btn-danger-color: #ffffff;
-    --btn-danger-border: #ff3333;
-    --btn-danger-hover-bg: color-mix(in srgb, #ff3333 85%, black);
-    --btn-danger-hover-border: color-mix(in srgb, #ff3333 85%, black);
-
-    background-color: var(--btn-danger-bg);
-    color: var(--btn-danger-color);
-    border: 1px solid var(--btn-danger-border);
-
-    &:not(:disabled):hover {
-      background-color: var(--btn-danger-hover-bg);
-      border-color: var(--btn-danger-hover-border);
-    }
-  }
-
-  // Sizes
-  &.btn-size--small {
-    padding: 0.25rem 0.75rem;
-    font-size: 0.875rem;
-  }
-  &.btn-size--medium {
-    padding: 0.5rem 1rem;
-    font-size: 0.95rem;
-  }
-  &.btn-size--large {
-    padding: 0.75rem 1.5rem;
-    font-size: 1rem;
-  }
-
-  // Disabled State
-  &.is-disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-  }
-
-  .btn-content {
-    display: inline-flex;
-    align-items: center;
-    visibility: v-bind("loading ? 'hidden' : 'visible'");
-  }
+  white-space: nowrap;
+  position: relative;
+  border: 1px solid transparent;
 }
 
-.spinner {
+.ui-btn:focus {
+  outline: none;
+}
+
+.ui-btn:focus-visible {
+  outline: 2px solid var(--color-primary, #003d99);
+  outline-offset: 2px;
+}
+
+/* Types */
+.ui-btn--default {
+  background-color: var(--color-background, #ffffff);
+  color: var(--color-text, #303133);
+  border-color: var(--color-border, #dcdfe6);
+}
+.ui-btn--default:hover:not(:disabled) {
+  border-color: var(--color-primary, #003d99);
+  color: var(--color-primary, #003d99);
+}
+.ui-btn--default:active:not(:disabled) {
+  background-color: var(--color-primary, #003d99);
+  border-color: var(--color-primary, #003d99);
+  color: #ffffff;
+}
+
+.ui-btn--primary {
+  background-color: var(--color-primary, #003d99);
+  color: #ffffff;
+  border-color: var(--color-primary, #003d99);
+}
+.ui-btn--primary:hover:not(:disabled) {
+  background-color: color-mix(in srgb, var(--color-primary, #003d99) 85%, black);
+  border-color: color-mix(in srgb, var(--color-primary, #003d99) 85%, black);
+}
+.ui-btn--primary:active:not(:disabled) {
+  background-color: color-mix(in srgb, var(--color-primary, #003d99) 70%, black);
+  border-color: color-mix(in srgb, var(--color-primary, #003d99) 70%, black);
+}
+
+.ui-btn--success {
+  background-color: var(--color-success, #28a745);
+  color: #ffffff;
+  border-color: var(--color-success, #28a745);
+}
+.ui-btn--success:hover:not(:disabled) {
+  background-color: color-mix(in srgb, var(--color-success, #28a745) 85%, black);
+  border-color: color-mix(in srgb, var(--color-success, #28a745) 85%, black);
+}
+.ui-btn--success:active:not(:disabled) {
+  background-color: color-mix(in srgb, var(--color-success, #28a745) 70%, black);
+  border-color: color-mix(in srgb, var(--color-success, #28a745) 70%, black);
+}
+
+.ui-btn--warning {
+  background-color: var(--color-warning, #ffc107);
+  color: #ffffff;
+  border-color: var(--color-warning, #ffc107);
+}
+.ui-btn--warning:hover:not(:disabled) {
+  background-color: color-mix(in srgb, var(--color-warning, #ffc107) 85%, black);
+  border-color: color-mix(in srgb, var(--color-warning, #ffc107) 85%, black);
+}
+.ui-btn--warning:active:not(:disabled) {
+  background-color: color-mix(in srgb, var(--color-warning, #ffc107) 70%, black);
+  border-color: color-mix(in srgb, var(--color-warning, #ffc107) 70%, black);
+}
+
+.ui-btn--danger {
+  background-color: var(--color-error, #dc3545);
+  color: #ffffff;
+  border-color: var(--color-error, #dc3545);
+}
+.ui-btn--danger:hover:not(:disabled) {
+  background-color: color-mix(in srgb, var(--color-error, #dc3545) 85%, black);
+  border-color: color-mix(in srgb, var(--color-error, #dc3545) 85%, black);
+}
+.ui-btn--danger:active:not(:disabled) {
+  background-color: color-mix(in srgb, var(--color-error, #dc3545) 70%, black);
+  border-color: color-mix(in srgb, var(--color-error, #dc3545) 70%, black);
+}
+
+.ui-btn--info {
+  background-color: var(--color-info, #007bff);
+  color: #ffffff;
+  border-color: var(--color-info, #007bff);
+}
+.ui-btn--info:hover:not(:disabled) {
+  background-color: color-mix(in srgb, var(--color-info, #007bff) 85%, black);
+  border-color: color-mix(in srgb, var(--color-info, #007bff) 85%, black);
+}
+.ui-btn--info:active:not(:disabled) {
+  background-color: color-mix(in srgb, var(--color-info, #007bff) 70%, black);
+  border-color: color-mix(in srgb, var(--color-info, #007bff) 70%, black);
+}
+
+/* Sizes */
+.ui-btn--sm {
+  padding: 0.375rem 0.75rem;
+  font-size: var(--font-size-sm, 0.875rem);
+}
+.ui-btn--md {
+  padding: 0.5rem 1rem;
+  font-size: var(--font-size-base, 0.9375rem);
+}
+.ui-btn--lg {
+  padding: 0.75rem 1.5rem;
+  font-size: var(--font-size-lg, 1.125rem);
+}
+
+/* Plain variant */
+.is-plain.ui-btn--default {
+  background-color: color-mix(in srgb, var(--color-primary, #003d99) 10%, transparent);
+  border-color: color-mix(in srgb, var(--color-primary, #003d99) 30%, transparent);
+  color: var(--color-primary, #003d99);
+}
+.is-plain.ui-btn--default:hover:not(:disabled) {
+  background-color: var(--color-primary, #003d99);
+  border-color: var(--color-primary, #003d99);
+  color: #ffffff;
+}
+
+/* Text variant */
+.is-text {
+  background-color: transparent;
+  border-color: transparent;
+}
+.is-text:hover:not(:disabled) {
+  background-color: var(--color-background, #ffffff);
+}
+.is-text.ui-btn--primary {
+  color: var(--color-primary, #003d99);
+}
+.is-text.ui-btn--primary:hover:not(:disabled) {
+  background-color: color-mix(in srgb, var(--color-primary, #003d99) 10%, transparent);
+}
+
+/* Round */
+.is-round {
+  border-radius: 9999px;
+}
+
+/* Circle */
+.is-circle {
+  border-radius: 50%;
+  padding: 0.5rem;
+}
+.is-circle.ui-btn--sm {
+  padding: 0.375rem;
+}
+.is-circle.ui-btn--lg {
+  padding: 0.75rem;
+}
+
+/* Disabled */
+.is-disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Spinner */
+.ui-btn-spinner {
   position: absolute;
-  display: inline-block;
   width: 1em;
   height: 1em;
   border: 2px solid currentColor;
   border-radius: 50%;
   border-top-color: transparent;
-  opacity: 0.8;
-  animation: spin 1s ease-in-out infinite;
+  animation: btn-spin 0.9s linear infinite;
 }
 
-@keyframes spin {
+.is-hidden {
+  visibility: hidden;
+}
+
+@keyframes btn-spin {
   to { transform: rotate(360deg); }
 }
 </style>

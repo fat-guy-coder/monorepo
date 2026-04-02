@@ -12,7 +12,7 @@
     </Navigation>
     <div class="menu-container">
       <div class="search">
-        <Input v-if="!Menucollapsed" v-model:value="searchValue" placeholder="目前暂支持菜单搜索" allow-clear></Input>
+        <Input v-if="!Menucollapsed" v-model:modelValue="searchValue" placeholder="目前暂支持菜单搜索" allow-clear></Input>
         <Button @click="toggleCollapsed"> {{ Menucollapsed ? '➡️' : '⬅️' }} </Button>
       </div>
       <div :class="Menucollapsed ? 'menu-collapsed' : 'menu'">

@@ -1,14 +1,23 @@
 {
   "name": "utils",
   "version": "1.0.0",
-  "description": "",
+  "description": "Shared utilities and Tailwind config for monorepo",
   "main": "src/index.js",
   "type": "module",
+  "exports": {
+    "./common": "./src/common.ts",
+    "./tailwind": "./src/tailwind.config.ts",
+    "./theme": "./src/theme.ts",
+    "./theme.css": "./src/theme.css"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "packageManager": "pnpm@10.4.1"
+  "packageManager": "pnpm@10.4.1",
+  "dependencies": {
+    "tailwindcss": "^4.2.1"
+  }
 }

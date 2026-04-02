@@ -9,21 +9,6 @@ export default [
         "component": () => import('@/views/LearningAbility/FrontendIsWhat.vue')
       },
       {
-        "name": "FrontendProspect",
-        "path": "/LearningAbility/FrontendProspect",
-        "component": () => import('@/views/LearningAbility/FrontendProspect.vue')
-      },
-      {
-        "name": "LearningRoutes",
-        "path": "/LearningAbility/LearningRoutes",
-        "component": () => import('@/views/LearningAbility/LearningRoutes.vue')
-      },
-      {
-        "name": "RecommendedWebsites",
-        "path": "/LearningAbility/RecommendedWebsites",
-        "component": () => import('@/views/LearningAbility/RecommendedWebsites.vue')
-      },
-      {
         "name": "FrontendSalary",
         "path": "/LearningAbility/FrontendSalary",
         "component": () => import('@/views/LearningAbility/FrontendSalary.vue')
@@ -1998,6 +1983,11 @@ export default [
             "component": () => import('@/views/CoreSkills/TypeScript/TSProsAndCons.vue')
           }
         ]
+      },
+      {
+        "name": "RecommendedWebsites",
+        "path": "/LearningAbility/RecommendedWebsites",
+        "component": () => import('@/views/LearningAbility/RecommendedWebsites.vue')
       },
       {
         "name": "ComputerBasicKnowledge",
@@ -4526,6 +4516,969 @@ export default [
     ]
   },
   {
+    "name": "AdvancedSkills",
+    "path": "/AdvancedSkills",
+    "children": [
+      {
+        "name": "NodeJS",
+        "path": "/AdvancedSkills/NodeJS",
+        "children": [
+          {
+            "name": "NodeJSBasicKnowledge",
+            "path": "/AdvancedSkills/NodeJS/NodeJSBasicKnowledge",
+            "component": () => import('@/views/AdvancedSkills/NodeJS/NodeJSBasicKnowledge.vue')
+          },
+          {
+            "name": "NodeJSKnowledgeRoadmap",
+            "path": "/AdvancedSkills/NodeJS/NodeJSKnowledgeRoadmap",
+            "component": () => import('@/views/AdvancedSkills/NodeJS/NodeJSKnowledgeRoadmap.vue')
+          },
+          {
+            "name": "GlobalVariables",
+            "path": "/AdvancedSkills/NodeJS/GlobalVariables",
+            "component": () => import('@/views/AdvancedSkills/NodeJS/GlobalVariables.vue')
+          },
+          {
+            "name": "NodeModules",
+            "path": "/AdvancedSkills/NodeJS/NodeModules",
+            "children": [
+              {
+                "name": "FileSystem",
+                "path": "/AdvancedSkills/NodeJS/NodeModules/FileSystem",
+                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeModules/FileSystem.vue')
+              },
+              {
+                "name": "Path",
+                "path": "/AdvancedSkills/NodeJS/NodeModules/Path",
+                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeModules/Path.vue')
+              },
+              {
+                "name": "HTTP",
+                "path": "/AdvancedSkills/NodeJS/NodeModules/HTTP",
+                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeModules/HTTP.vue')
+              },
+              {
+                "name": "HTTPS",
+                "path": "/AdvancedSkills/NodeJS/NodeModules/HTTPS",
+                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeModules/HTTPS.vue')
+              },
+              {
+                "name": "Stream",
+                "path": "/AdvancedSkills/NodeJS/NodeModules/Stream",
+                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeModules/Stream.vue')
+              },
+              {
+                "name": "Events2",
+                "path": "/AdvancedSkills/NodeJS/NodeModules/Events2",
+                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeModules/Events2.vue')
+              },
+              {
+                "name": "OS",
+                "path": "/AdvancedSkills/NodeJS/NodeModules/OS",
+                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeModules/OS.vue')
+              },
+              {
+                "name": "Process",
+                "path": "/AdvancedSkills/NodeJS/NodeModules/Process",
+                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeModules/Process.vue')
+              },
+              {
+                "name": "ProcessNextTick",
+                "path": "/AdvancedSkills/NodeJS/NodeModules/ProcessNextTick",
+                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeModules/ProcessNextTick.vue')
+              },
+              {
+                "name": "ChildProcess",
+                "path": "/AdvancedSkills/NodeJS/NodeModules/ChildProcess",
+                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeModules/ChildProcess.vue')
+              },
+              {
+                "name": "Buffer",
+                "path": "/AdvancedSkills/NodeJS/NodeModules/Buffer",
+                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeModules/Buffer.vue')
+              },
+              {
+                "name": "Util",
+                "path": "/AdvancedSkills/NodeJS/NodeModules/Util",
+                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeModules/Util.vue')
+              },
+              {
+                "name": "Crypto",
+                "path": "/AdvancedSkills/NodeJS/NodeModules/Crypto",
+                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeModules/Crypto.vue')
+              },
+              {
+                "name": "cryptoAdvanced",
+                "path": "/AdvancedSkills/NodeJS/NodeModules/cryptoAdvanced",
+                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeModules/cryptoAdvanced.vue')
+              },
+              {
+                "name": "Net",
+                "path": "/AdvancedSkills/NodeJS/NodeModules/Net",
+                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeModules/Net.vue')
+              },
+              {
+                "name": "DNS",
+                "path": "/AdvancedSkills/NodeJS/NodeModules/DNS",
+                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeModules/DNS.vue')
+              },
+              {
+                "name": "TLS",
+                "path": "/AdvancedSkills/NodeJS/NodeModules/TLS",
+                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeModules/TLS.vue')
+              },
+              {
+                "name": "URL",
+                "path": "/AdvancedSkills/NodeJS/NodeModules/URL",
+                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeModules/URL.vue')
+              },
+              {
+                "name": "QueryString",
+                "path": "/AdvancedSkills/NodeJS/NodeModules/QueryString",
+                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeModules/QueryString.vue')
+              },
+              {
+                "name": "Readline",
+                "path": "/AdvancedSkills/NodeJS/NodeModules/Readline",
+                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeModules/Readline.vue')
+              },
+              {
+                "name": "Assert",
+                "path": "/AdvancedSkills/NodeJS/NodeModules/Assert",
+                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeModules/Assert.vue')
+              },
+              {
+                "name": "Zlib",
+                "path": "/AdvancedSkills/NodeJS/NodeModules/Zlib",
+                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeModules/Zlib.vue')
+              },
+              {
+                "name": "VM",
+                "path": "/AdvancedSkills/NodeJS/NodeModules/VM",
+                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeModules/VM.vue')
+              },
+              {
+                "name": "Module",
+                "path": "/AdvancedSkills/NodeJS/NodeModules/Module",
+                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeModules/Module.vue')
+              },
+              {
+                "name": "Punycode",
+                "path": "/AdvancedSkills/NodeJS/NodeModules/Punycode",
+                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeModules/Punycode.vue')
+              },
+              {
+                "name": "Timers",
+                "path": "/AdvancedSkills/NodeJS/NodeModules/Timers",
+                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeModules/Timers.vue')
+              },
+              {
+                "name": "Domain",
+                "path": "/AdvancedSkills/NodeJS/NodeModules/Domain",
+                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeModules/Domain.vue')
+              }
+            ]
+          },
+          {
+            "name": "NodeAdvancedModules",
+            "path": "/AdvancedSkills/NodeJS/NodeAdvancedModules",
+            "children": [
+              {
+                "name": "Cluster",
+                "path": "/AdvancedSkills/NodeJS/NodeAdvancedModules/Cluster",
+                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeAdvancedModules/Cluster.vue')
+              },
+              {
+                "name": "Dgram",
+                "path": "/AdvancedSkills/NodeJS/NodeAdvancedModules/Dgram",
+                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeAdvancedModules/Dgram.vue')
+              },
+              {
+                "name": "Inspector",
+                "path": "/AdvancedSkills/NodeJS/NodeAdvancedModules/Inspector",
+                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeAdvancedModules/Inspector.vue')
+              },
+              {
+                "name": "Net",
+                "path": "/AdvancedSkills/NodeJS/NodeAdvancedModules/Net",
+                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeAdvancedModules/Net.vue')
+              },
+              {
+                "name": "PerfHooks",
+                "path": "/AdvancedSkills/NodeJS/NodeAdvancedModules/PerfHooks",
+                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeAdvancedModules/PerfHooks.vue')
+              },
+              {
+                "name": "REPL",
+                "path": "/AdvancedSkills/NodeJS/NodeAdvancedModules/REPL",
+                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeAdvancedModules/REPL.vue')
+              },
+              {
+                "name": "TLS",
+                "path": "/AdvancedSkills/NodeJS/NodeAdvancedModules/TLS",
+                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeAdvancedModules/TLS.vue')
+              },
+              {
+                "name": "TraceEvents",
+                "path": "/AdvancedSkills/NodeJS/NodeAdvancedModules/TraceEvents",
+                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeAdvancedModules/TraceEvents.vue')
+              },
+              {
+                "name": "WorkerThreads",
+                "path": "/AdvancedSkills/NodeJS/NodeAdvancedModules/WorkerThreads",
+                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeAdvancedModules/WorkerThreads.vue')
+              }
+            ]
+          },
+          {
+            "name": "PackageManager",
+            "path": "/AdvancedSkills/NodeJS/PackageManager",
+            "children": [
+              {
+                "name": "Npm",
+                "path": "/AdvancedSkills/NodeJS/PackageManager/Npm",
+                "children": [
+                  {
+                    "name": "NpmBasicKnowledge",
+                    "path": "/AdvancedSkills/NodeJS/PackageManager/Npm/NpmBasicKnowledge",
+                    "component": () => import('@/views/AdvancedSkills/NodeJS/PackageManager/Npm/NpmBasicKnowledge.vue')
+                  },
+                  {
+                    "name": "NpmCommonCommands",
+                    "path": "/AdvancedSkills/NodeJS/PackageManager/Npm/NpmCommonCommands",
+                    "component": () => import('@/views/AdvancedSkills/NodeJS/PackageManager/Npm/NpmCommonCommands.vue')
+                  },
+                  {
+                    "name": "Npx",
+                    "path": "/AdvancedSkills/NodeJS/PackageManager/Npm/Npx",
+                    "component": () => import('@/views/AdvancedSkills/NodeJS/PackageManager/Npm/Npx.vue')
+                  },
+                  {
+                    "name": "PackageJson",
+                    "path": "/AdvancedSkills/NodeJS/PackageManager/Npm/PackageJson",
+                    "component": () => import('@/views/AdvancedSkills/NodeJS/PackageManager/Npm/PackageJson.vue')
+                  },
+                  {
+                    "name": "PackageLockJson",
+                    "path": "/AdvancedSkills/NodeJS/PackageManager/Npm/PackageLockJson",
+                    "component": () => import('@/views/AdvancedSkills/NodeJS/PackageManager/Npm/PackageLockJson.vue')
+                  },
+                  {
+                    "name": "NpmrcFile",
+                    "path": "/AdvancedSkills/NodeJS/PackageManager/Npm/NpmrcFile",
+                    "component": () => import('@/views/AdvancedSkills/NodeJS/PackageManager/Npm/NpmrcFile.vue')
+                  }
+                ]
+              },
+              {
+                "name": "Yarn",
+                "path": "/AdvancedSkills/NodeJS/PackageManager/Yarn",
+                "children": [
+                  {
+                    "name": "YarnBasicKnowledge",
+                    "path": "/AdvancedSkills/NodeJS/PackageManager/Yarn/YarnBasicKnowledge",
+                    "component": () => import('@/views/AdvancedSkills/NodeJS/PackageManager/Yarn/YarnBasicKnowledge.vue')
+                  },
+                  {
+                    "name": "YarnCommonCommands",
+                    "path": "/AdvancedSkills/NodeJS/PackageManager/Yarn/YarnCommonCommands",
+                    "component": () => import('@/views/AdvancedSkills/NodeJS/PackageManager/Yarn/YarnCommonCommands.vue')
+                  }
+                ]
+              },
+              {
+                "name": "Pnpm",
+                "path": "/AdvancedSkills/NodeJS/PackageManager/Pnpm",
+                "children": [
+                  {
+                    "name": "PnpmBasicKnowledge",
+                    "path": "/AdvancedSkills/NodeJS/PackageManager/Pnpm/PnpmBasicKnowledge",
+                    "component": () => import('@/views/AdvancedSkills/NodeJS/PackageManager/Pnpm/PnpmBasicKnowledge.vue')
+                  },
+                  {
+                    "name": "PnpmCommonCommands",
+                    "path": "/AdvancedSkills/NodeJS/PackageManager/Pnpm/PnpmCommonCommands",
+                    "component": () => import('@/views/AdvancedSkills/NodeJS/PackageManager/Pnpm/PnpmCommonCommands.vue')
+                  }
+                ]
+              },
+              {
+                "name": "PackageManagerComparison",
+                "path": "/AdvancedSkills/NodeJS/PackageManager/PackageManagerComparison",
+                "component": () => import('@/views/AdvancedSkills/NodeJS/PackageManager/PackageManagerComparison.vue')
+              },
+              {
+                "name": "HardLinkAndSoftLinkAndSymbolLink",
+                "path": "/AdvancedSkills/NodeJS/PackageManager/HardLinkAndSoftLinkAndSymbolLink",
+                "component": () => import('@/views/AdvancedSkills/NodeJS/PackageManager/HardLinkAndSoftLinkAndSymbolLink.vue')
+              },
+              {
+                "name": "NpmDownloadPackage",
+                "path": "/AdvancedSkills/NodeJS/PackageManager/NpmDownloadPackage",
+                "component": () => import('@/views/AdvancedSkills/NodeJS/PackageManager/NpmDownloadPackage.vue')
+              },
+              {
+                "name": "NodeFindPackage",
+                "path": "/AdvancedSkills/NodeJS/PackageManager/NodeFindPackage",
+                "component": () => import('@/views/AdvancedSkills/NodeJS/PackageManager/NodeFindPackage.vue')
+              },
+              {
+                "name": "UploadPackage",
+                "path": "/AdvancedSkills/NodeJS/PackageManager/UploadPackage",
+                "component": () => import('@/views/AdvancedSkills/NodeJS/PackageManager/UploadPackage.vue')
+              }
+            ]
+          },
+          {
+            "name": "NodeJsFramework",
+            "path": "/AdvancedSkills/NodeJS/NodeJsFramework",
+            "children": [
+              {
+                "name": "FrameworkComparison",
+                "path": "/AdvancedSkills/NodeJS/NodeJsFramework/FrameworkComparison",
+                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeJsFramework/FrameworkComparison.vue')
+              },
+              {
+                "name": "Express",
+                "path": "/AdvancedSkills/NodeJS/NodeJsFramework/Express",
+                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeJsFramework/Express.vue')
+              },
+              {
+                "name": "Nest",
+                "path": "/AdvancedSkills/NodeJS/NodeJsFramework/Nest",
+                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeJsFramework/Nest.vue')
+              },
+              {
+                "name": "Koa",
+                "path": "/AdvancedSkills/NodeJS/NodeJsFramework/Koa",
+                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeJsFramework/Koa.vue')
+              }
+            ]
+          },
+          {
+            "name": "NodeOther",
+            "path": "/AdvancedSkills/NodeJS/NodeOther",
+            "children": [
+              {
+                "name": "WriteCommandLineTool",
+                "path": "/AdvancedSkills/NodeJS/NodeOther/WriteCommandLineTool",
+                "children": [
+                  {
+                    "name": "CommandLineToolOverview",
+                    "path": "/AdvancedSkills/NodeJS/NodeOther/WriteCommandLineTool/CommandLineToolOverview",
+                    "component": () => import('@/views/AdvancedSkills/NodeJS/NodeOther/WriteCommandLineTool/CommandLineToolOverview.vue')
+                  },
+                  {
+                    "name": "Commander",
+                    "path": "/AdvancedSkills/NodeJS/NodeOther/WriteCommandLineTool/Commander",
+                    "component": () => import('@/views/AdvancedSkills/NodeJS/NodeOther/WriteCommandLineTool/Commander.vue')
+                  },
+                  {
+                    "name": "Inquirer",
+                    "path": "/AdvancedSkills/NodeJS/NodeOther/WriteCommandLineTool/Inquirer",
+                    "component": () => import('@/views/AdvancedSkills/NodeJS/NodeOther/WriteCommandLineTool/Inquirer.vue')
+                  },
+                  {
+                    "name": "Chalk",
+                    "path": "/AdvancedSkills/NodeJS/NodeOther/WriteCommandLineTool/Chalk",
+                    "component": () => import('@/views/AdvancedSkills/NodeJS/NodeOther/WriteCommandLineTool/Chalk.vue')
+                  },
+                  {
+                    "name": "Ora",
+                    "path": "/AdvancedSkills/NodeJS/NodeOther/WriteCommandLineTool/Ora",
+                    "component": () => import('@/views/AdvancedSkills/NodeJS/NodeOther/WriteCommandLineTool/Ora.vue')
+                  },
+                  {
+                    "name": "EnquirerAndYargs",
+                    "path": "/AdvancedSkills/NodeJS/NodeOther/WriteCommandLineTool/EnquirerAndYargs",
+                    "component": () => import('@/views/AdvancedSkills/NodeJS/NodeOther/WriteCommandLineTool/EnquirerAndYargs.vue')
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "bun",
+        "path": "/AdvancedSkills/bun",
+        "children": [
+          {
+            "name": "BunIntroduction",
+            "path": "/AdvancedSkills/bun/BunIntroduction",
+            "component": () => import('@/views/AdvancedSkills/bun/BunIntroduction.vue')
+          }
+        ]
+      },
+      {
+        "name": "GraphicRelated",
+        "path": "/AdvancedSkills/GraphicRelated",
+        "children": [
+          {
+            "name": "Canvas2",
+            "path": "/AdvancedSkills/GraphicRelated/Canvas2",
+            "children": [
+              {
+                "name": "CanvasBase",
+                "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasBase",
+                "children": [
+                  {
+                    "name": "CanvasIntroduction",
+                    "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasBase/CanvasIntroduction",
+                    "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasBase/CanvasIntroduction.vue')
+                  },
+                  {
+                    "name": "CanvasAPI",
+                    "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasBase/CanvasAPI",
+                    "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasBase/CanvasAPI.vue')
+                  },
+                  {
+                    "name": "CanvasBaseShape",
+                    "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasBase/CanvasBaseShape",
+                    "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasBase/CanvasBaseShape.vue')
+                  },
+                  {
+                    "name": "CanvasBezierCurve",
+                    "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasBase/CanvasBezierCurve",
+                    "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasBase/CanvasBezierCurve.vue')
+                  },
+                  {
+                    "name": "CanvasSaveAndRestore",
+                    "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasBase/CanvasSaveAndRestore",
+                    "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasBase/CanvasSaveAndRestore.vue')
+                  }
+                ]
+              },
+              {
+                "name": "CanvasAdvanced",
+                "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasAdvanced",
+                "children": [
+                  {
+                    "name": "DigitalImageProcessing",
+                    "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasAdvanced/DigitalImageProcessing",
+                    "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasAdvanced/DigitalImageProcessing.vue')
+                  },
+                  {
+                    "name": "ImageRecognition",
+                    "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasAdvanced/ImageRecognition",
+                    "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasAdvanced/ImageRecognition.vue')
+                  },
+                  {
+                    "name": "DigitalDrawShape",
+                    "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasAdvanced/DigitalDrawShape",
+                    "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasAdvanced/DigitalDrawShape.vue')
+                  },
+                  {
+                    "name": "CanvasEventHandling",
+                    "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasAdvanced/CanvasEventHandling",
+                    "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasAdvanced/CanvasEventHandling.vue')
+                  }
+                ]
+              },
+              {
+                "name": "CanvasLibrary",
+                "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary",
+                "children": [
+                  {
+                    "name": "WebGL",
+                    "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/WebGL",
+                    "children": [
+                      {
+                        "name": "WebGLBase",
+                        "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/WebGL/WebGLBase",
+                        "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/WebGL/WebGLBase.vue')
+                      },
+                      {
+                        "name": "WebGLLearningRoadmap",
+                        "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/WebGL/WebGLLearningRoadmap",
+                        "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/WebGL/WebGLLearningRoadmap.vue')
+                      },
+                      {
+                        "name": "WebGLRenderProcess",
+                        "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/WebGL/WebGLRenderProcess",
+                        "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/WebGL/WebGLRenderProcess.vue')
+                      },
+                      {
+                        "name": "WebGLVertexShader",
+                        "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/WebGL/WebGLVertexShader",
+                        "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/WebGL/WebGLVertexShader.vue')
+                      },
+                      {
+                        "name": "WebGLFragmentShader",
+                        "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/WebGL/WebGLFragmentShader",
+                        "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/WebGL/WebGLFragmentShader.vue')
+                      },
+                      {
+                        "name": "WebGLTexture",
+                        "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/WebGL/WebGLTexture",
+                        "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/WebGL/WebGLTexture.vue')
+                      },
+                      {
+                        "name": "WebGLBuffer",
+                        "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/WebGL/WebGLBuffer",
+                        "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/WebGL/WebGLBuffer.vue')
+                      },
+                      {
+                        "name": "WebGLFrameBuffer",
+                        "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/WebGL/WebGLFrameBuffer",
+                        "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/WebGL/WebGLFrameBuffer.vue')
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Echarts",
+                    "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/Echarts",
+                    "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/Echarts.vue')
+                  },
+                  {
+                    "name": "ThreeJs",
+                    "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/ThreeJs",
+                    "children": [
+                      {
+                        "name": "ThreeJsIntroduction",
+                        "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/ThreeJs/ThreeJsIntroduction",
+                        "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/ThreeJs/ThreeJsIntroduction.vue')
+                      },
+                      {
+                        "name": "ThreeJsBase",
+                        "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/ThreeJs/ThreeJsBase",
+                        "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/ThreeJs/ThreeJsBase.vue')
+                      },
+                      {
+                        "name": "ThreeJsLearningRoadmap",
+                        "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/ThreeJs/ThreeJsLearningRoadmap",
+                        "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/ThreeJs/ThreeJsLearningRoadmap.vue')
+                      },
+                      {
+                        "name": "ThreeJsBaseThreeElements",
+                        "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/ThreeJs/ThreeJsBaseThreeElements",
+                        "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/ThreeJs/ThreeJsBaseThreeElements.vue')
+                      },
+                      {
+                        "name": "ThreeJsCamera",
+                        "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/ThreeJs/ThreeJsCamera",
+                        "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/ThreeJs/ThreeJsCamera.vue')
+                      },
+                      {
+                        "name": "ThreeJsScene",
+                        "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/ThreeJs/ThreeJsScene",
+                        "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/ThreeJs/ThreeJsScene.vue')
+                      },
+                      {
+                        "name": "ThreeJsMesh",
+                        "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/ThreeJs/ThreeJsMesh",
+                        "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/ThreeJs/ThreeJsMesh.vue')
+                      },
+                      {
+                        "name": "ThreeJsOrbitControls",
+                        "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/ThreeJs/ThreeJsOrbitControls",
+                        "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/ThreeJs/ThreeJsOrbitControls.vue')
+                      },
+                      {
+                        "name": "ThreeJsMaterial",
+                        "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/ThreeJs/ThreeJsMaterial",
+                        "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/ThreeJs/ThreeJsMaterial.vue')
+                      },
+                      {
+                        "name": "ThreeJsTexture",
+                        "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/ThreeJs/ThreeJsTexture",
+                        "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/ThreeJs/ThreeJsTexture.vue')
+                      },
+                      {
+                        "name": "ThreeJsSticker",
+                        "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/ThreeJs/ThreeJsSticker",
+                        "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/ThreeJs/ThreeJsSticker.vue')
+                      },
+                      {
+                        "name": "ThreeJsLight",
+                        "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/ThreeJs/ThreeJsLight",
+                        "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/ThreeJs/ThreeJsLight.vue')
+                      },
+                      {
+                        "name": "ThreeJsShadow",
+                        "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/ThreeJs/ThreeJsShadow",
+                        "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/ThreeJs/ThreeJsShadow.vue')
+                      },
+                      {
+                        "name": "ThreeJsAntialiasing",
+                        "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/ThreeJs/ThreeJsAntialiasing",
+                        "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/ThreeJs/ThreeJsAntialiasing.vue')
+                      },
+                      {
+                        "name": "ThreeJsPerformanceOptimization",
+                        "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/ThreeJs/ThreeJsPerformanceOptimization",
+                        "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/ThreeJs/ThreeJsPerformanceOptimization.vue')
+                      }
+                    ]
+                  },
+                  {
+                    "name": "BabylonJs",
+                    "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/BabylonJs",
+                    "children": [
+                      {
+                        "name": "BabylonJsIntroduction",
+                        "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/BabylonJs/BabylonJsIntroduction",
+                        "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/BabylonJs/BabylonJsIntroduction.vue')
+                      },
+                      {
+                        "name": "BabylonJsBase",
+                        "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/BabylonJs/BabylonJsBase",
+                        "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/BabylonJs/BabylonJsBase.vue')
+                      }
+                    ]
+                  },
+                  {
+                    "name": "G6",
+                    "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/G6",
+                    "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/G6.vue')
+                  },
+                  {
+                    "name": "FabricJs",
+                    "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/FabricJs",
+                    "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/FabricJs.vue')
+                  },
+                  {
+                    "name": "Konva",
+                    "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/Konva",
+                    "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/Konva.vue')
+                  },
+                  {
+                    "name": "D3js",
+                    "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/D3js",
+                    "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/D3js.vue')
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "SvgOpearation",
+            "path": "/AdvancedSkills/GraphicRelated/SvgOpearation",
+            "children": [
+              {
+                "name": "SvgIntroduction",
+                "path": "/AdvancedSkills/GraphicRelated/SvgOpearation/SvgIntroduction",
+                "component": () => import('@/views/AdvancedSkills/GraphicRelated/SvgOpearation/SvgIntroduction.vue')
+              },
+              {
+                "name": "SvgBase",
+                "path": "/AdvancedSkills/GraphicRelated/SvgOpearation/SvgBase",
+                "children": [
+                  {
+                    "name": "SvgBaseShape",
+                    "path": "/AdvancedSkills/GraphicRelated/SvgOpearation/SvgBase/SvgBaseShape",
+                    "component": () => import('@/views/AdvancedSkills/GraphicRelated/SvgOpearation/SvgBase/SvgBaseShape.vue')
+                  },
+                  {
+                    "name": "SvgPath",
+                    "path": "/AdvancedSkills/GraphicRelated/SvgOpearation/SvgBase/SvgPath",
+                    "component": () => import('@/views/AdvancedSkills/GraphicRelated/SvgOpearation/SvgBase/SvgPath.vue')
+                  },
+                  {
+                    "name": "FillAndStroke",
+                    "path": "/AdvancedSkills/GraphicRelated/SvgOpearation/SvgBase/FillAndStroke",
+                    "component": () => import('@/views/AdvancedSkills/GraphicRelated/SvgOpearation/SvgBase/FillAndStroke.vue')
+                  },
+                  {
+                    "name": "DefineAndUse",
+                    "path": "/AdvancedSkills/GraphicRelated/SvgOpearation/SvgBase/DefineAndUse",
+                    "component": () => import('@/views/AdvancedSkills/GraphicRelated/SvgOpearation/SvgBase/DefineAndUse.vue')
+                  },
+                  {
+                    "name": "SvgElementTable",
+                    "path": "/AdvancedSkills/GraphicRelated/SvgOpearation/SvgBase/SvgElementTable",
+                    "component": () => import('@/views/AdvancedSkills/GraphicRelated/SvgOpearation/SvgBase/SvgElementTable.vue')
+                  }
+                ]
+              },
+              {
+                "name": "SvgLibrary",
+                "path": "/AdvancedSkills/GraphicRelated/SvgOpearation/SvgLibrary",
+                "component": () => import('@/views/AdvancedSkills/GraphicRelated/SvgOpearation/SvgLibrary.vue')
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "AnimationRelated",
+        "path": "/AdvancedSkills/AnimationRelated",
+        "children": [
+          {
+            "name": "CSSAnimationVsJSAnimation",
+            "path": "/AdvancedSkills/AnimationRelated/CSSAnimationVsJSAnimation",
+            "component": () => import('@/views/AdvancedSkills/AnimationRelated/CSSAnimationVsJSAnimation.vue')
+          },
+          {
+            "name": "AnimationLibrary",
+            "path": "/AdvancedSkills/AnimationRelated/AnimationLibrary",
+            "children": [
+              {
+                "name": "GASP",
+                "path": "/AdvancedSkills/AnimationRelated/AnimationLibrary/GASP",
+                "component": () => import('@/views/AdvancedSkills/AnimationRelated/AnimationLibrary/GASP.vue')
+              },
+              {
+                "name": "Motion",
+                "path": "/AdvancedSkills/AnimationRelated/AnimationLibrary/Motion",
+                "component": () => import('@/views/AdvancedSkills/AnimationRelated/AnimationLibrary/Motion.vue')
+              },
+              {
+                "name": "AnimeJs",
+                "path": "/AdvancedSkills/AnimationRelated/AnimationLibrary/AnimeJs",
+                "component": () => import('@/views/AdvancedSkills/AnimationRelated/AnimationLibrary/AnimeJs.vue')
+              },
+              {
+                "name": "MatterJs",
+                "path": "/AdvancedSkills/AnimationRelated/AnimationLibrary/MatterJs",
+                "component": () => import('@/views/AdvancedSkills/AnimationRelated/AnimationLibrary/MatterJs.vue')
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "FrontendSecurity",
+        "path": "/AdvancedSkills/FrontendSecurity",
+        "children": [
+          {
+            "name": "SecurityOverview",
+            "path": "/AdvancedSkills/FrontendSecurity/SecurityOverview",
+            "component": () => import('@/views/AdvancedSkills/FrontendSecurity/SecurityOverview.vue')
+          },
+          {
+            "name": "XSS",
+            "path": "/AdvancedSkills/FrontendSecurity/XSS",
+            "component": () => import('@/views/AdvancedSkills/FrontendSecurity/XSS.vue')
+          },
+          {
+            "name": "CSRF",
+            "path": "/AdvancedSkills/FrontendSecurity/CSRF",
+            "component": () => import('@/views/AdvancedSkills/FrontendSecurity/CSRF.vue')
+          },
+          {
+            "name": "CSP",
+            "path": "/AdvancedSkills/FrontendSecurity/CSP",
+            "component": () => import('@/views/AdvancedSkills/FrontendSecurity/CSP.vue')
+          },
+          {
+            "name": "SQLInjection",
+            "path": "/AdvancedSkills/FrontendSecurity/SQLInjection",
+            "component": () => import('@/views/AdvancedSkills/FrontendSecurity/SQLInjection.vue')
+          },
+          {
+            "name": "ClickJacking",
+            "path": "/AdvancedSkills/FrontendSecurity/ClickJacking",
+            "component": () => import('@/views/AdvancedSkills/FrontendSecurity/ClickJacking.vue')
+          },
+          {
+            "name": "ManInTheMiddleAttack",
+            "path": "/AdvancedSkills/FrontendSecurity/ManInTheMiddleAttack",
+            "component": () => import('@/views/AdvancedSkills/FrontendSecurity/ManInTheMiddleAttack.vue')
+          },
+          {
+            "name": "DependencyExploitation",
+            "path": "/AdvancedSkills/FrontendSecurity/DependencyExploitation",
+            "component": () => import('@/views/AdvancedSkills/FrontendSecurity/DependencyExploitation.vue')
+          },
+          {
+            "name": "DenialOfServiceAttack",
+            "path": "/AdvancedSkills/FrontendSecurity/DenialOfServiceAttack",
+            "component": () => import('@/views/AdvancedSkills/FrontendSecurity/DenialOfServiceAttack.vue')
+          },
+          {
+            "name": "integrity",
+            "path": "/AdvancedSkills/FrontendSecurity/integrity",
+            "component": () => import('@/views/AdvancedSkills/FrontendSecurity/integrity.vue')
+          }
+        ]
+      },
+      {
+        "name": "NewTechnology",
+        "path": "/AdvancedSkills/NewTechnology",
+        "children": [
+          {
+            "name": "NewTechnologyList",
+            "path": "/AdvancedSkills/NewTechnology/NewTechnologyList",
+            "component": () => import('@/views/AdvancedSkills/NewTechnology/NewTechnologyList.vue')
+          },
+          {
+            "name": "WebGPU",
+            "path": "/AdvancedSkills/NewTechnology/WebGPU",
+            "children": [
+              {
+                "name": "WebGPUIntroduction",
+                "path": "/AdvancedSkills/NewTechnology/WebGPU/WebGPUIntroduction",
+                "component": () => import('@/views/AdvancedSkills/NewTechnology/WebGPU/WebGPUIntroduction.vue')
+              }
+            ]
+          },
+          {
+            "name": "WebAssembly1",
+            "path": "/AdvancedSkills/NewTechnology/WebAssembly1",
+            "component": () => import('@/views/AdvancedSkills/NewTechnology/WebAssembly1.vue')
+          },
+          {
+            "name": "WebRTC",
+            "path": "/AdvancedSkills/NewTechnology/WebRTC",
+            "component": () => import('@/views/AdvancedSkills/NewTechnology/WebRTC.vue')
+          }
+        ]
+      },
+      {
+        "name": "OtherEnd",
+        "path": "/AdvancedSkills/OtherEnd",
+        "children": [
+          {
+            "name": "PWA",
+            "path": "/AdvancedSkills/OtherEnd/PWA",
+            "component": () => import('@/views/AdvancedSkills/OtherEnd/PWA.vue')
+          },
+          {
+            "name": "MobileEnd",
+            "path": "/AdvancedSkills/OtherEnd/MobileEnd",
+            "children": [
+              {
+                "name": "MobileHtml5Adaptation",
+                "path": "/AdvancedSkills/OtherEnd/MobileEnd/MobileHtml5Adaptation",
+                "component": () => import('@/views/AdvancedSkills/OtherEnd/MobileEnd/MobileHtml5Adaptation.vue')
+              },
+              {
+                "name": "UniApp",
+                "path": "/AdvancedSkills/OtherEnd/MobileEnd/UniApp",
+                "component": () => import('@/views/AdvancedSkills/OtherEnd/MobileEnd/UniApp.vue')
+              },
+              {
+                "name": "Flutter",
+                "path": "/AdvancedSkills/OtherEnd/MobileEnd/Flutter",
+                "component": () => import('@/views/AdvancedSkills/OtherEnd/MobileEnd/Flutter.vue')
+              },
+              {
+                "name": "MiniProgram",
+                "path": "/AdvancedSkills/OtherEnd/MobileEnd/MiniProgram",
+                "children": [
+                  {
+                    "name": "MiniProgramBasicKnowledge",
+                    "path": "/AdvancedSkills/OtherEnd/MobileEnd/MiniProgram/MiniProgramBasicKnowledge",
+                    "component": () => import('@/views/AdvancedSkills/OtherEnd/MobileEnd/MiniProgram/MiniProgramBasicKnowledge.vue')
+                  },
+                  {
+                    "name": "WeChatCommonComponents",
+                    "path": "/AdvancedSkills/OtherEnd/MobileEnd/MiniProgram/WeChatCommonComponents",
+                    "component": () => import('@/views/AdvancedSkills/OtherEnd/MobileEnd/MiniProgram/WeChatCommonComponents.vue')
+                  },
+                  {
+                    "name": "WeChatCommonAPI",
+                    "path": "/AdvancedSkills/OtherEnd/MobileEnd/MiniProgram/WeChatCommonAPI",
+                    "component": () => import('@/views/AdvancedSkills/OtherEnd/MobileEnd/MiniProgram/WeChatCommonAPI.vue')
+                  },
+                  {
+                    "name": "WeChatHighOrderComponentsAndAPI",
+                    "path": "/AdvancedSkills/OtherEnd/MobileEnd/MiniProgram/WeChatHighOrderComponentsAndAPI",
+                    "component": () => import('@/views/AdvancedSkills/OtherEnd/MobileEnd/MiniProgram/WeChatHighOrderComponentsAndAPI.vue')
+                  }
+                ]
+              },
+              {
+                "name": "Arkjs",
+                "path": "/AdvancedSkills/OtherEnd/MobileEnd/Arkjs",
+                "component": () => import('@/views/AdvancedSkills/OtherEnd/MobileEnd/Arkjs.vue')
+              }
+            ]
+          },
+          {
+            "name": "DesktopEnd",
+            "path": "/AdvancedSkills/OtherEnd/DesktopEnd",
+            "children": [
+              {
+                "name": "DesktopFrameworkComparison",
+                "path": "/AdvancedSkills/OtherEnd/DesktopEnd/DesktopFrameworkComparison",
+                "component": () => import('@/views/AdvancedSkills/OtherEnd/DesktopEnd/DesktopFrameworkComparison.vue')
+              },
+              {
+                "name": "Electron",
+                "path": "/AdvancedSkills/OtherEnd/DesktopEnd/Electron",
+                "children": [
+                  {
+                    "name": "CoreConcepts",
+                    "path": "/AdvancedSkills/OtherEnd/DesktopEnd/Electron/CoreConcepts",
+                    "component": () => import('@/views/AdvancedSkills/OtherEnd/DesktopEnd/Electron/CoreConcepts.vue')
+                  },
+                  {
+                    "name": "CoreFeaturesAndInterfaces",
+                    "path": "/AdvancedSkills/OtherEnd/DesktopEnd/Electron/CoreFeaturesAndInterfaces",
+                    "component": () => import('@/views/AdvancedSkills/OtherEnd/DesktopEnd/Electron/CoreFeaturesAndInterfaces.vue')
+                  },
+                  {
+                    "name": "ElectronLifeCycle",
+                    "path": "/AdvancedSkills/OtherEnd/DesktopEnd/Electron/ElectronLifeCycle",
+                    "component": () => import('@/views/AdvancedSkills/OtherEnd/DesktopEnd/Electron/ElectronLifeCycle.vue')
+                  },
+                  {
+                    "name": "NativeAPI",
+                    "path": "/AdvancedSkills/OtherEnd/DesktopEnd/Electron/NativeAPI",
+                    "component": () => import('@/views/AdvancedSkills/OtherEnd/DesktopEnd/Electron/NativeAPI.vue')
+                  },
+                  {
+                    "name": "IPC",
+                    "path": "/AdvancedSkills/OtherEnd/DesktopEnd/Electron/IPC",
+                    "component": () => import('@/views/AdvancedSkills/OtherEnd/DesktopEnd/Electron/IPC.vue')
+                  },
+                  {
+                    "name": "ElectronPerformanceOptimization",
+                    "path": "/AdvancedSkills/OtherEnd/DesktopEnd/Electron/ElectronPerformanceOptimization",
+                    "component": () => import('@/views/AdvancedSkills/OtherEnd/DesktopEnd/Electron/ElectronPerformanceOptimization.vue')
+                  },
+                  {
+                    "name": "RelatedEcosystemAndTools",
+                    "path": "/AdvancedSkills/OtherEnd/DesktopEnd/Electron/RelatedEcosystemAndTools",
+                    "component": () => import('@/views/AdvancedSkills/OtherEnd/DesktopEnd/Electron/RelatedEcosystemAndTools.vue')
+                  },
+                  {
+                    "name": "PackagingAndPublishing",
+                    "path": "/AdvancedSkills/OtherEnd/DesktopEnd/Electron/PackagingAndPublishing",
+                    "component": () => import('@/views/AdvancedSkills/OtherEnd/DesktopEnd/Electron/PackagingAndPublishing.vue')
+                  },
+                  {
+                    "name": "Security",
+                    "path": "/AdvancedSkills/OtherEnd/DesktopEnd/Electron/Security",
+                    "component": () => import('@/views/AdvancedSkills/OtherEnd/DesktopEnd/Electron/Security.vue')
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "LinuxSystem",
+            "path": "/AdvancedSkills/OtherEnd/LinuxSystem",
+            "children": [
+              {
+                "name": "LinuxBasicIntroduction",
+                "path": "/AdvancedSkills/OtherEnd/LinuxSystem/LinuxBasicIntroduction",
+                "component": () => import('@/views/AdvancedSkills/OtherEnd/LinuxSystem/LinuxBasicIntroduction.vue')
+              },
+              {
+                "name": "LinuxCommandOverview",
+                "path": "/AdvancedSkills/OtherEnd/LinuxSystem/LinuxCommandOverview",
+                "component": () => import('@/views/AdvancedSkills/OtherEnd/LinuxSystem/LinuxCommandOverview.vue')
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "AudioAndVideoProcessing",
+        "path": "/AdvancedSkills/AudioAndVideoProcessing",
+        "component": () => import('@/views/AdvancedSkills/AudioAndVideoProcessing.vue')
+      },
+      {
+        "name": "OtherLanguage",
+        "path": "/AdvancedSkills/OtherLanguage",
+        "component": () => import('@/views/AdvancedSkills/OtherLanguage.vue')
+      }
+    ]
+  },
+  {
     "name": "AlgorithmsAndDataStructures",
     "path": "/AlgorithmsAndDataStructures",
     "children": [
@@ -5213,958 +6166,6 @@ export default [
     ]
   },
   {
-    "name": "AdvancedSkills",
-    "path": "/AdvancedSkills",
-    "children": [
-      {
-        "name": "NodeJS",
-        "path": "/AdvancedSkills/NodeJS",
-        "children": [
-          {
-            "name": "NodeJSBasicKnowledge",
-            "path": "/AdvancedSkills/NodeJS/NodeJSBasicKnowledge",
-            "component": () => import('@/views/AdvancedSkills/NodeJS/NodeJSBasicKnowledge.vue')
-          },
-          {
-            "name": "NodeJSKnowledgeRoadmap",
-            "path": "/AdvancedSkills/NodeJS/NodeJSKnowledgeRoadmap",
-            "component": () => import('@/views/AdvancedSkills/NodeJS/NodeJSKnowledgeRoadmap.vue')
-          },
-          {
-            "name": "GlobalVariables",
-            "path": "/AdvancedSkills/NodeJS/GlobalVariables",
-            "component": () => import('@/views/AdvancedSkills/NodeJS/GlobalVariables.vue')
-          },
-          {
-            "name": "NodeModules",
-            "path": "/AdvancedSkills/NodeJS/NodeModules",
-            "children": [
-              {
-                "name": "FileSystem",
-                "path": "/AdvancedSkills/NodeJS/NodeModules/FileSystem",
-                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeModules/FileSystem.vue')
-              },
-              {
-                "name": "Path",
-                "path": "/AdvancedSkills/NodeJS/NodeModules/Path",
-                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeModules/Path.vue')
-              },
-              {
-                "name": "HTTP",
-                "path": "/AdvancedSkills/NodeJS/NodeModules/HTTP",
-                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeModules/HTTP.vue')
-              },
-              {
-                "name": "HTTPS",
-                "path": "/AdvancedSkills/NodeJS/NodeModules/HTTPS",
-                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeModules/HTTPS.vue')
-              },
-              {
-                "name": "Stream",
-                "path": "/AdvancedSkills/NodeJS/NodeModules/Stream",
-                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeModules/Stream.vue')
-              },
-              {
-                "name": "Events2",
-                "path": "/AdvancedSkills/NodeJS/NodeModules/Events2",
-                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeModules/Events2.vue')
-              },
-              {
-                "name": "OS",
-                "path": "/AdvancedSkills/NodeJS/NodeModules/OS",
-                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeModules/OS.vue')
-              },
-              {
-                "name": "Process",
-                "path": "/AdvancedSkills/NodeJS/NodeModules/Process",
-                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeModules/Process.vue')
-              },
-              {
-                "name": "ProcessNextTick",
-                "path": "/AdvancedSkills/NodeJS/NodeModules/ProcessNextTick",
-                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeModules/ProcessNextTick.vue')
-              },
-              {
-                "name": "ChildProcess",
-                "path": "/AdvancedSkills/NodeJS/NodeModules/ChildProcess",
-                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeModules/ChildProcess.vue')
-              },
-              {
-                "name": "Buffer",
-                "path": "/AdvancedSkills/NodeJS/NodeModules/Buffer",
-                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeModules/Buffer.vue')
-              },
-              {
-                "name": "Util",
-                "path": "/AdvancedSkills/NodeJS/NodeModules/Util",
-                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeModules/Util.vue')
-              },
-              {
-                "name": "Crypto",
-                "path": "/AdvancedSkills/NodeJS/NodeModules/Crypto",
-                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeModules/Crypto.vue')
-              },
-              {
-                "name": "cryptoAdvanced",
-                "path": "/AdvancedSkills/NodeJS/NodeModules/cryptoAdvanced",
-                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeModules/cryptoAdvanced.vue')
-              },
-              {
-                "name": "Net",
-                "path": "/AdvancedSkills/NodeJS/NodeModules/Net",
-                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeModules/Net.vue')
-              },
-              {
-                "name": "DNS",
-                "path": "/AdvancedSkills/NodeJS/NodeModules/DNS",
-                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeModules/DNS.vue')
-              },
-              {
-                "name": "TLS",
-                "path": "/AdvancedSkills/NodeJS/NodeModules/TLS",
-                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeModules/TLS.vue')
-              },
-              {
-                "name": "URL",
-                "path": "/AdvancedSkills/NodeJS/NodeModules/URL",
-                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeModules/URL.vue')
-              },
-              {
-                "name": "QueryString",
-                "path": "/AdvancedSkills/NodeJS/NodeModules/QueryString",
-                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeModules/QueryString.vue')
-              },
-              {
-                "name": "Readline",
-                "path": "/AdvancedSkills/NodeJS/NodeModules/Readline",
-                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeModules/Readline.vue')
-              },
-              {
-                "name": "Assert",
-                "path": "/AdvancedSkills/NodeJS/NodeModules/Assert",
-                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeModules/Assert.vue')
-              },
-              {
-                "name": "Zlib",
-                "path": "/AdvancedSkills/NodeJS/NodeModules/Zlib",
-                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeModules/Zlib.vue')
-              },
-              {
-                "name": "VM",
-                "path": "/AdvancedSkills/NodeJS/NodeModules/VM",
-                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeModules/VM.vue')
-              },
-              {
-                "name": "Module",
-                "path": "/AdvancedSkills/NodeJS/NodeModules/Module",
-                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeModules/Module.vue')
-              },
-              {
-                "name": "Punycode",
-                "path": "/AdvancedSkills/NodeJS/NodeModules/Punycode",
-                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeModules/Punycode.vue')
-              },
-              {
-                "name": "Timers",
-                "path": "/AdvancedSkills/NodeJS/NodeModules/Timers",
-                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeModules/Timers.vue')
-              },
-              {
-                "name": "Domain",
-                "path": "/AdvancedSkills/NodeJS/NodeModules/Domain",
-                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeModules/Domain.vue')
-              }
-            ]
-          },
-          {
-            "name": "NodeAdvancedModules",
-            "path": "/AdvancedSkills/NodeJS/NodeAdvancedModules",
-            "children": [
-              {
-                "name": "Cluster",
-                "path": "/AdvancedSkills/NodeJS/NodeAdvancedModules/Cluster",
-                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeAdvancedModules/Cluster.vue')
-              },
-              {
-                "name": "Dgram",
-                "path": "/AdvancedSkills/NodeJS/NodeAdvancedModules/Dgram",
-                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeAdvancedModules/Dgram.vue')
-              },
-              {
-                "name": "Inspector",
-                "path": "/AdvancedSkills/NodeJS/NodeAdvancedModules/Inspector",
-                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeAdvancedModules/Inspector.vue')
-              },
-              {
-                "name": "Net",
-                "path": "/AdvancedSkills/NodeJS/NodeAdvancedModules/Net",
-                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeAdvancedModules/Net.vue')
-              },
-              {
-                "name": "PerfHooks",
-                "path": "/AdvancedSkills/NodeJS/NodeAdvancedModules/PerfHooks",
-                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeAdvancedModules/PerfHooks.vue')
-              },
-              {
-                "name": "REPL",
-                "path": "/AdvancedSkills/NodeJS/NodeAdvancedModules/REPL",
-                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeAdvancedModules/REPL.vue')
-              },
-              {
-                "name": "TLS",
-                "path": "/AdvancedSkills/NodeJS/NodeAdvancedModules/TLS",
-                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeAdvancedModules/TLS.vue')
-              },
-              {
-                "name": "TraceEvents",
-                "path": "/AdvancedSkills/NodeJS/NodeAdvancedModules/TraceEvents",
-                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeAdvancedModules/TraceEvents.vue')
-              },
-              {
-                "name": "WorkerThreads",
-                "path": "/AdvancedSkills/NodeJS/NodeAdvancedModules/WorkerThreads",
-                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeAdvancedModules/WorkerThreads.vue')
-              }
-            ]
-          },
-          {
-            "name": "PackageManager",
-            "path": "/AdvancedSkills/NodeJS/PackageManager",
-            "children": [
-              {
-                "name": "Npm",
-                "path": "/AdvancedSkills/NodeJS/PackageManager/Npm",
-                "children": [
-                  {
-                    "name": "NpmBasicKnowledge",
-                    "path": "/AdvancedSkills/NodeJS/PackageManager/Npm/NpmBasicKnowledge",
-                    "component": () => import('@/views/AdvancedSkills/NodeJS/PackageManager/Npm/NpmBasicKnowledge.vue')
-                  },
-                  {
-                    "name": "NpmCommonCommands",
-                    "path": "/AdvancedSkills/NodeJS/PackageManager/Npm/NpmCommonCommands",
-                    "component": () => import('@/views/AdvancedSkills/NodeJS/PackageManager/Npm/NpmCommonCommands.vue')
-                  },
-                  {
-                    "name": "Npx",
-                    "path": "/AdvancedSkills/NodeJS/PackageManager/Npm/Npx",
-                    "component": () => import('@/views/AdvancedSkills/NodeJS/PackageManager/Npm/Npx.vue')
-                  },
-                  {
-                    "name": "PackageJson",
-                    "path": "/AdvancedSkills/NodeJS/PackageManager/Npm/PackageJson",
-                    "component": () => import('@/views/AdvancedSkills/NodeJS/PackageManager/Npm/PackageJson.vue')
-                  },
-                  {
-                    "name": "PackageLockJson",
-                    "path": "/AdvancedSkills/NodeJS/PackageManager/Npm/PackageLockJson",
-                    "component": () => import('@/views/AdvancedSkills/NodeJS/PackageManager/Npm/PackageLockJson.vue')
-                  },
-                  {
-                    "name": "NpmrcFile",
-                    "path": "/AdvancedSkills/NodeJS/PackageManager/Npm/NpmrcFile",
-                    "component": () => import('@/views/AdvancedSkills/NodeJS/PackageManager/Npm/NpmrcFile.vue')
-                  }
-                ]
-              },
-              {
-                "name": "Yarn",
-                "path": "/AdvancedSkills/NodeJS/PackageManager/Yarn",
-                "children": [
-                  {
-                    "name": "YarnBasicKnowledge",
-                    "path": "/AdvancedSkills/NodeJS/PackageManager/Yarn/YarnBasicKnowledge",
-                    "component": () => import('@/views/AdvancedSkills/NodeJS/PackageManager/Yarn/YarnBasicKnowledge.vue')
-                  },
-                  {
-                    "name": "YarnCommonCommands",
-                    "path": "/AdvancedSkills/NodeJS/PackageManager/Yarn/YarnCommonCommands",
-                    "component": () => import('@/views/AdvancedSkills/NodeJS/PackageManager/Yarn/YarnCommonCommands.vue')
-                  }
-                ]
-              },
-              {
-                "name": "Pnpm",
-                "path": "/AdvancedSkills/NodeJS/PackageManager/Pnpm",
-                "children": [
-                  {
-                    "name": "PnpmBasicKnowledge",
-                    "path": "/AdvancedSkills/NodeJS/PackageManager/Pnpm/PnpmBasicKnowledge",
-                    "component": () => import('@/views/AdvancedSkills/NodeJS/PackageManager/Pnpm/PnpmBasicKnowledge.vue')
-                  },
-                  {
-                    "name": "PnpmCommonCommands",
-                    "path": "/AdvancedSkills/NodeJS/PackageManager/Pnpm/PnpmCommonCommands",
-                    "component": () => import('@/views/AdvancedSkills/NodeJS/PackageManager/Pnpm/PnpmCommonCommands.vue')
-                  }
-                ]
-              },
-              {
-                "name": "PackageManagerComparison",
-                "path": "/AdvancedSkills/NodeJS/PackageManager/PackageManagerComparison",
-                "component": () => import('@/views/AdvancedSkills/NodeJS/PackageManager/PackageManagerComparison.vue')
-              },
-              {
-                "name": "HardLinkAndSoftLinkAndSymbolLink",
-                "path": "/AdvancedSkills/NodeJS/PackageManager/HardLinkAndSoftLinkAndSymbolLink",
-                "component": () => import('@/views/AdvancedSkills/NodeJS/PackageManager/HardLinkAndSoftLinkAndSymbolLink.vue')
-              },
-              {
-                "name": "NpmDownloadPackage",
-                "path": "/AdvancedSkills/NodeJS/PackageManager/NpmDownloadPackage",
-                "component": () => import('@/views/AdvancedSkills/NodeJS/PackageManager/NpmDownloadPackage.vue')
-              },
-              {
-                "name": "NodeFindPackage",
-                "path": "/AdvancedSkills/NodeJS/PackageManager/NodeFindPackage",
-                "component": () => import('@/views/AdvancedSkills/NodeJS/PackageManager/NodeFindPackage.vue')
-              },
-              {
-                "name": "UploadPackage",
-                "path": "/AdvancedSkills/NodeJS/PackageManager/UploadPackage",
-                "component": () => import('@/views/AdvancedSkills/NodeJS/PackageManager/UploadPackage.vue')
-              }
-            ]
-          },
-          {
-            "name": "NodeJsFramework",
-            "path": "/AdvancedSkills/NodeJS/NodeJsFramework",
-            "children": [
-              {
-                "name": "FrameworkComparison",
-                "path": "/AdvancedSkills/NodeJS/NodeJsFramework/FrameworkComparison",
-                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeJsFramework/FrameworkComparison.vue')
-              },
-              {
-                "name": "Express",
-                "path": "/AdvancedSkills/NodeJS/NodeJsFramework/Express",
-                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeJsFramework/Express.vue')
-              },
-              {
-                "name": "Nest",
-                "path": "/AdvancedSkills/NodeJS/NodeJsFramework/Nest",
-                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeJsFramework/Nest.vue')
-              },
-              {
-                "name": "Koa",
-                "path": "/AdvancedSkills/NodeJS/NodeJsFramework/Koa",
-                "component": () => import('@/views/AdvancedSkills/NodeJS/NodeJsFramework/Koa.vue')
-              }
-            ]
-          },
-          {
-            "name": "NodeOther",
-            "path": "/AdvancedSkills/NodeJS/NodeOther",
-            "children": [
-              {
-                "name": "WriteCommandLineTool",
-                "path": "/AdvancedSkills/NodeJS/NodeOther/WriteCommandLineTool",
-                "children": [
-                  {
-                    "name": "CommandLineToolOverview",
-                    "path": "/AdvancedSkills/NodeJS/NodeOther/WriteCommandLineTool/CommandLineToolOverview",
-                    "component": () => import('@/views/AdvancedSkills/NodeJS/NodeOther/WriteCommandLineTool/CommandLineToolOverview.vue')
-                  },
-                  {
-                    "name": "Commander",
-                    "path": "/AdvancedSkills/NodeJS/NodeOther/WriteCommandLineTool/Commander",
-                    "component": () => import('@/views/AdvancedSkills/NodeJS/NodeOther/WriteCommandLineTool/Commander.vue')
-                  },
-                  {
-                    "name": "Inquirer",
-                    "path": "/AdvancedSkills/NodeJS/NodeOther/WriteCommandLineTool/Inquirer",
-                    "component": () => import('@/views/AdvancedSkills/NodeJS/NodeOther/WriteCommandLineTool/Inquirer.vue')
-                  },
-                  {
-                    "name": "Chalk",
-                    "path": "/AdvancedSkills/NodeJS/NodeOther/WriteCommandLineTool/Chalk",
-                    "component": () => import('@/views/AdvancedSkills/NodeJS/NodeOther/WriteCommandLineTool/Chalk.vue')
-                  },
-                  {
-                    "name": "Ora",
-                    "path": "/AdvancedSkills/NodeJS/NodeOther/WriteCommandLineTool/Ora",
-                    "component": () => import('@/views/AdvancedSkills/NodeJS/NodeOther/WriteCommandLineTool/Ora.vue')
-                  },
-                  {
-                    "name": "EnquirerAndYargs",
-                    "path": "/AdvancedSkills/NodeJS/NodeOther/WriteCommandLineTool/EnquirerAndYargs",
-                    "component": () => import('@/views/AdvancedSkills/NodeJS/NodeOther/WriteCommandLineTool/EnquirerAndYargs.vue')
-                  }
-                ]
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "name": "GraphicRelated",
-        "path": "/AdvancedSkills/GraphicRelated",
-        "children": [
-          {
-            "name": "Canvas2",
-            "path": "/AdvancedSkills/GraphicRelated/Canvas2",
-            "children": [
-              {
-                "name": "CanvasBase",
-                "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasBase",
-                "children": [
-                  {
-                    "name": "CanvasIntroduction",
-                    "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasBase/CanvasIntroduction",
-                    "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasBase/CanvasIntroduction.vue')
-                  },
-                  {
-                    "name": "CanvasAPI",
-                    "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasBase/CanvasAPI",
-                    "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasBase/CanvasAPI.vue')
-                  },
-                  {
-                    "name": "CanvasBaseShape",
-                    "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasBase/CanvasBaseShape",
-                    "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasBase/CanvasBaseShape.vue')
-                  },
-                  {
-                    "name": "CanvasBezierCurve",
-                    "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasBase/CanvasBezierCurve",
-                    "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasBase/CanvasBezierCurve.vue')
-                  },
-                  {
-                    "name": "CanvasSaveAndRestore",
-                    "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasBase/CanvasSaveAndRestore",
-                    "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasBase/CanvasSaveAndRestore.vue')
-                  }
-                ]
-              },
-              {
-                "name": "CanvasAdvanced",
-                "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasAdvanced",
-                "children": [
-                  {
-                    "name": "DigitalImageProcessing",
-                    "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasAdvanced/DigitalImageProcessing",
-                    "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasAdvanced/DigitalImageProcessing.vue')
-                  },
-                  {
-                    "name": "ImageRecognition",
-                    "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasAdvanced/ImageRecognition",
-                    "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasAdvanced/ImageRecognition.vue')
-                  },
-                  {
-                    "name": "DigitalDrawShape",
-                    "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasAdvanced/DigitalDrawShape",
-                    "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasAdvanced/DigitalDrawShape.vue')
-                  },
-                  {
-                    "name": "CanvasEventHandling",
-                    "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasAdvanced/CanvasEventHandling",
-                    "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasAdvanced/CanvasEventHandling.vue')
-                  }
-                ]
-              },
-              {
-                "name": "CanvasLibrary",
-                "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary",
-                "children": [
-                  {
-                    "name": "WebGL",
-                    "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/WebGL",
-                    "children": [
-                      {
-                        "name": "WebGLBase",
-                        "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/WebGL/WebGLBase",
-                        "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/WebGL/WebGLBase.vue')
-                      },
-                      {
-                        "name": "WebGLLearningRoadmap",
-                        "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/WebGL/WebGLLearningRoadmap",
-                        "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/WebGL/WebGLLearningRoadmap.vue')
-                      },
-                      {
-                        "name": "WebGLRenderProcess",
-                        "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/WebGL/WebGLRenderProcess",
-                        "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/WebGL/WebGLRenderProcess.vue')
-                      },
-                      {
-                        "name": "WebGLVertexShader",
-                        "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/WebGL/WebGLVertexShader",
-                        "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/WebGL/WebGLVertexShader.vue')
-                      },
-                      {
-                        "name": "WebGLFragmentShader",
-                        "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/WebGL/WebGLFragmentShader",
-                        "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/WebGL/WebGLFragmentShader.vue')
-                      },
-                      {
-                        "name": "WebGLTexture",
-                        "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/WebGL/WebGLTexture",
-                        "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/WebGL/WebGLTexture.vue')
-                      },
-                      {
-                        "name": "WebGLBuffer",
-                        "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/WebGL/WebGLBuffer",
-                        "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/WebGL/WebGLBuffer.vue')
-                      },
-                      {
-                        "name": "WebGLFrameBuffer",
-                        "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/WebGL/WebGLFrameBuffer",
-                        "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/WebGL/WebGLFrameBuffer.vue')
-                      }
-                    ]
-                  },
-                  {
-                    "name": "Echarts",
-                    "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/Echarts",
-                    "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/Echarts.vue')
-                  },
-                  {
-                    "name": "ThreeJs",
-                    "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/ThreeJs",
-                    "children": [
-                      {
-                        "name": "ThreeJsIntroduction",
-                        "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/ThreeJs/ThreeJsIntroduction",
-                        "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/ThreeJs/ThreeJsIntroduction.vue')
-                      },
-                      {
-                        "name": "ThreeJsBase",
-                        "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/ThreeJs/ThreeJsBase",
-                        "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/ThreeJs/ThreeJsBase.vue')
-                      },
-                      {
-                        "name": "ThreeJsLearningRoadmap",
-                        "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/ThreeJs/ThreeJsLearningRoadmap",
-                        "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/ThreeJs/ThreeJsLearningRoadmap.vue')
-                      },
-                      {
-                        "name": "ThreeJsBaseThreeElements",
-                        "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/ThreeJs/ThreeJsBaseThreeElements",
-                        "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/ThreeJs/ThreeJsBaseThreeElements.vue')
-                      },
-                      {
-                        "name": "ThreeJsCamera",
-                        "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/ThreeJs/ThreeJsCamera",
-                        "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/ThreeJs/ThreeJsCamera.vue')
-                      },
-                      {
-                        "name": "ThreeJsScene",
-                        "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/ThreeJs/ThreeJsScene",
-                        "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/ThreeJs/ThreeJsScene.vue')
-                      },
-                      {
-                        "name": "ThreeJsMesh",
-                        "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/ThreeJs/ThreeJsMesh",
-                        "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/ThreeJs/ThreeJsMesh.vue')
-                      },
-                      {
-                        "name": "ThreeJsOrbitControls",
-                        "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/ThreeJs/ThreeJsOrbitControls",
-                        "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/ThreeJs/ThreeJsOrbitControls.vue')
-                      },
-                      {
-                        "name": "ThreeJsMaterial",
-                        "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/ThreeJs/ThreeJsMaterial",
-                        "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/ThreeJs/ThreeJsMaterial.vue')
-                      },
-                      {
-                        "name": "ThreeJsTexture",
-                        "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/ThreeJs/ThreeJsTexture",
-                        "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/ThreeJs/ThreeJsTexture.vue')
-                      },
-                      {
-                        "name": "ThreeJsSticker",
-                        "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/ThreeJs/ThreeJsSticker",
-                        "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/ThreeJs/ThreeJsSticker.vue')
-                      },
-                      {
-                        "name": "ThreeJsLight",
-                        "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/ThreeJs/ThreeJsLight",
-                        "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/ThreeJs/ThreeJsLight.vue')
-                      },
-                      {
-                        "name": "ThreeJsShadow",
-                        "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/ThreeJs/ThreeJsShadow",
-                        "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/ThreeJs/ThreeJsShadow.vue')
-                      },
-                      {
-                        "name": "ThreeJsAntialiasing",
-                        "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/ThreeJs/ThreeJsAntialiasing",
-                        "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/ThreeJs/ThreeJsAntialiasing.vue')
-                      },
-                      {
-                        "name": "ThreeJsPerformanceOptimization",
-                        "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/ThreeJs/ThreeJsPerformanceOptimization",
-                        "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/ThreeJs/ThreeJsPerformanceOptimization.vue')
-                      }
-                    ]
-                  },
-                  {
-                    "name": "BabylonJs",
-                    "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/BabylonJs",
-                    "children": [
-                      {
-                        "name": "BabylonJsIntroduction",
-                        "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/BabylonJs/BabylonJsIntroduction",
-                        "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/BabylonJs/BabylonJsIntroduction.vue')
-                      },
-                      {
-                        "name": "BabylonJsBase",
-                        "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/BabylonJs/BabylonJsBase",
-                        "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/BabylonJs/BabylonJsBase.vue')
-                      }
-                    ]
-                  },
-                  {
-                    "name": "G6",
-                    "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/G6",
-                    "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/G6.vue')
-                  },
-                  {
-                    "name": "FabricJs",
-                    "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/FabricJs",
-                    "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/FabricJs.vue')
-                  },
-                  {
-                    "name": "Konva",
-                    "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/Konva",
-                    "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/Konva.vue')
-                  },
-                  {
-                    "name": "D3js",
-                    "path": "/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/D3js",
-                    "component": () => import('@/views/AdvancedSkills/GraphicRelated/Canvas2/CanvasLibrary/D3js.vue')
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "name": "SvgOpearation",
-            "path": "/AdvancedSkills/GraphicRelated/SvgOpearation",
-            "children": [
-              {
-                "name": "SvgIntroduction",
-                "path": "/AdvancedSkills/GraphicRelated/SvgOpearation/SvgIntroduction",
-                "component": () => import('@/views/AdvancedSkills/GraphicRelated/SvgOpearation/SvgIntroduction.vue')
-              },
-              {
-                "name": "SvgBase",
-                "path": "/AdvancedSkills/GraphicRelated/SvgOpearation/SvgBase",
-                "children": [
-                  {
-                    "name": "SvgBaseShape",
-                    "path": "/AdvancedSkills/GraphicRelated/SvgOpearation/SvgBase/SvgBaseShape",
-                    "component": () => import('@/views/AdvancedSkills/GraphicRelated/SvgOpearation/SvgBase/SvgBaseShape.vue')
-                  },
-                  {
-                    "name": "SvgPath",
-                    "path": "/AdvancedSkills/GraphicRelated/SvgOpearation/SvgBase/SvgPath",
-                    "component": () => import('@/views/AdvancedSkills/GraphicRelated/SvgOpearation/SvgBase/SvgPath.vue')
-                  },
-                  {
-                    "name": "FillAndStroke",
-                    "path": "/AdvancedSkills/GraphicRelated/SvgOpearation/SvgBase/FillAndStroke",
-                    "component": () => import('@/views/AdvancedSkills/GraphicRelated/SvgOpearation/SvgBase/FillAndStroke.vue')
-                  },
-                  {
-                    "name": "DefineAndUse",
-                    "path": "/AdvancedSkills/GraphicRelated/SvgOpearation/SvgBase/DefineAndUse",
-                    "component": () => import('@/views/AdvancedSkills/GraphicRelated/SvgOpearation/SvgBase/DefineAndUse.vue')
-                  },
-                  {
-                    "name": "SvgElementTable",
-                    "path": "/AdvancedSkills/GraphicRelated/SvgOpearation/SvgBase/SvgElementTable",
-                    "component": () => import('@/views/AdvancedSkills/GraphicRelated/SvgOpearation/SvgBase/SvgElementTable.vue')
-                  }
-                ]
-              },
-              {
-                "name": "SvgLibrary",
-                "path": "/AdvancedSkills/GraphicRelated/SvgOpearation/SvgLibrary",
-                "component": () => import('@/views/AdvancedSkills/GraphicRelated/SvgOpearation/SvgLibrary.vue')
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "name": "AnimationRelated",
-        "path": "/AdvancedSkills/AnimationRelated",
-        "children": [
-          {
-            "name": "CSSAnimationVsJSAnimation",
-            "path": "/AdvancedSkills/AnimationRelated/CSSAnimationVsJSAnimation",
-            "component": () => import('@/views/AdvancedSkills/AnimationRelated/CSSAnimationVsJSAnimation.vue')
-          },
-          {
-            "name": "AnimationLibrary",
-            "path": "/AdvancedSkills/AnimationRelated/AnimationLibrary",
-            "children": [
-              {
-                "name": "GASP",
-                "path": "/AdvancedSkills/AnimationRelated/AnimationLibrary/GASP",
-                "component": () => import('@/views/AdvancedSkills/AnimationRelated/AnimationLibrary/GASP.vue')
-              },
-              {
-                "name": "Motion",
-                "path": "/AdvancedSkills/AnimationRelated/AnimationLibrary/Motion",
-                "component": () => import('@/views/AdvancedSkills/AnimationRelated/AnimationLibrary/Motion.vue')
-              },
-              {
-                "name": "AnimeJs",
-                "path": "/AdvancedSkills/AnimationRelated/AnimationLibrary/AnimeJs",
-                "component": () => import('@/views/AdvancedSkills/AnimationRelated/AnimationLibrary/AnimeJs.vue')
-              },
-              {
-                "name": "MatterJs",
-                "path": "/AdvancedSkills/AnimationRelated/AnimationLibrary/MatterJs",
-                "component": () => import('@/views/AdvancedSkills/AnimationRelated/AnimationLibrary/MatterJs.vue')
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "name": "FrontendSecurity",
-        "path": "/AdvancedSkills/FrontendSecurity",
-        "children": [
-          {
-            "name": "SecurityOverview",
-            "path": "/AdvancedSkills/FrontendSecurity/SecurityOverview",
-            "component": () => import('@/views/AdvancedSkills/FrontendSecurity/SecurityOverview.vue')
-          },
-          {
-            "name": "XSS",
-            "path": "/AdvancedSkills/FrontendSecurity/XSS",
-            "component": () => import('@/views/AdvancedSkills/FrontendSecurity/XSS.vue')
-          },
-          {
-            "name": "CSRF",
-            "path": "/AdvancedSkills/FrontendSecurity/CSRF",
-            "component": () => import('@/views/AdvancedSkills/FrontendSecurity/CSRF.vue')
-          },
-          {
-            "name": "CSP",
-            "path": "/AdvancedSkills/FrontendSecurity/CSP",
-            "component": () => import('@/views/AdvancedSkills/FrontendSecurity/CSP.vue')
-          },
-          {
-            "name": "SQLInjection",
-            "path": "/AdvancedSkills/FrontendSecurity/SQLInjection",
-            "component": () => import('@/views/AdvancedSkills/FrontendSecurity/SQLInjection.vue')
-          },
-          {
-            "name": "ClickJacking",
-            "path": "/AdvancedSkills/FrontendSecurity/ClickJacking",
-            "component": () => import('@/views/AdvancedSkills/FrontendSecurity/ClickJacking.vue')
-          },
-          {
-            "name": "ManInTheMiddleAttack",
-            "path": "/AdvancedSkills/FrontendSecurity/ManInTheMiddleAttack",
-            "component": () => import('@/views/AdvancedSkills/FrontendSecurity/ManInTheMiddleAttack.vue')
-          },
-          {
-            "name": "DependencyExploitation",
-            "path": "/AdvancedSkills/FrontendSecurity/DependencyExploitation",
-            "component": () => import('@/views/AdvancedSkills/FrontendSecurity/DependencyExploitation.vue')
-          },
-          {
-            "name": "DenialOfServiceAttack",
-            "path": "/AdvancedSkills/FrontendSecurity/DenialOfServiceAttack",
-            "component": () => import('@/views/AdvancedSkills/FrontendSecurity/DenialOfServiceAttack.vue')
-          },
-          {
-            "name": "integrity",
-            "path": "/AdvancedSkills/FrontendSecurity/integrity",
-            "component": () => import('@/views/AdvancedSkills/FrontendSecurity/integrity.vue')
-          }
-        ]
-      },
-      {
-        "name": "NewTechnology",
-        "path": "/AdvancedSkills/NewTechnology",
-        "children": [
-          {
-            "name": "NewTechnologyList",
-            "path": "/AdvancedSkills/NewTechnology/NewTechnologyList",
-            "component": () => import('@/views/AdvancedSkills/NewTechnology/NewTechnologyList.vue')
-          },
-          {
-            "name": "WebGPU",
-            "path": "/AdvancedSkills/NewTechnology/WebGPU",
-            "children": [
-              {
-                "name": "WebGPUIntroduction",
-                "path": "/AdvancedSkills/NewTechnology/WebGPU/WebGPUIntroduction",
-                "component": () => import('@/views/AdvancedSkills/NewTechnology/WebGPU/WebGPUIntroduction.vue')
-              }
-            ]
-          },
-          {
-            "name": "WebAssembly1",
-            "path": "/AdvancedSkills/NewTechnology/WebAssembly1",
-            "component": () => import('@/views/AdvancedSkills/NewTechnology/WebAssembly1.vue')
-          },
-          {
-            "name": "WebRTC",
-            "path": "/AdvancedSkills/NewTechnology/WebRTC",
-            "component": () => import('@/views/AdvancedSkills/NewTechnology/WebRTC.vue')
-          }
-        ]
-      },
-      {
-        "name": "OtherEnd",
-        "path": "/AdvancedSkills/OtherEnd",
-        "children": [
-          {
-            "name": "PWA",
-            "path": "/AdvancedSkills/OtherEnd/PWA",
-            "component": () => import('@/views/AdvancedSkills/OtherEnd/PWA.vue')
-          },
-          {
-            "name": "MobileEnd",
-            "path": "/AdvancedSkills/OtherEnd/MobileEnd",
-            "children": [
-              {
-                "name": "MobileHtml5Adaptation",
-                "path": "/AdvancedSkills/OtherEnd/MobileEnd/MobileHtml5Adaptation",
-                "component": () => import('@/views/AdvancedSkills/OtherEnd/MobileEnd/MobileHtml5Adaptation.vue')
-              },
-              {
-                "name": "UniApp",
-                "path": "/AdvancedSkills/OtherEnd/MobileEnd/UniApp",
-                "component": () => import('@/views/AdvancedSkills/OtherEnd/MobileEnd/UniApp.vue')
-              },
-              {
-                "name": "Flutter",
-                "path": "/AdvancedSkills/OtherEnd/MobileEnd/Flutter",
-                "component": () => import('@/views/AdvancedSkills/OtherEnd/MobileEnd/Flutter.vue')
-              },
-              {
-                "name": "MiniProgram",
-                "path": "/AdvancedSkills/OtherEnd/MobileEnd/MiniProgram",
-                "children": [
-                  {
-                    "name": "MiniProgramBasicKnowledge",
-                    "path": "/AdvancedSkills/OtherEnd/MobileEnd/MiniProgram/MiniProgramBasicKnowledge",
-                    "component": () => import('@/views/AdvancedSkills/OtherEnd/MobileEnd/MiniProgram/MiniProgramBasicKnowledge.vue')
-                  },
-                  {
-                    "name": "WeChatCommonComponents",
-                    "path": "/AdvancedSkills/OtherEnd/MobileEnd/MiniProgram/WeChatCommonComponents",
-                    "component": () => import('@/views/AdvancedSkills/OtherEnd/MobileEnd/MiniProgram/WeChatCommonComponents.vue')
-                  },
-                  {
-                    "name": "WeChatCommonAPI",
-                    "path": "/AdvancedSkills/OtherEnd/MobileEnd/MiniProgram/WeChatCommonAPI",
-                    "component": () => import('@/views/AdvancedSkills/OtherEnd/MobileEnd/MiniProgram/WeChatCommonAPI.vue')
-                  },
-                  {
-                    "name": "WeChatHighOrderComponentsAndAPI",
-                    "path": "/AdvancedSkills/OtherEnd/MobileEnd/MiniProgram/WeChatHighOrderComponentsAndAPI",
-                    "component": () => import('@/views/AdvancedSkills/OtherEnd/MobileEnd/MiniProgram/WeChatHighOrderComponentsAndAPI.vue')
-                  }
-                ]
-              },
-              {
-                "name": "Arkjs",
-                "path": "/AdvancedSkills/OtherEnd/MobileEnd/Arkjs",
-                "component": () => import('@/views/AdvancedSkills/OtherEnd/MobileEnd/Arkjs.vue')
-              }
-            ]
-          },
-          {
-            "name": "DesktopEnd",
-            "path": "/AdvancedSkills/OtherEnd/DesktopEnd",
-            "children": [
-              {
-                "name": "DesktopFrameworkComparison",
-                "path": "/AdvancedSkills/OtherEnd/DesktopEnd/DesktopFrameworkComparison",
-                "component": () => import('@/views/AdvancedSkills/OtherEnd/DesktopEnd/DesktopFrameworkComparison.vue')
-              },
-              {
-                "name": "Electron",
-                "path": "/AdvancedSkills/OtherEnd/DesktopEnd/Electron",
-                "children": [
-                  {
-                    "name": "CoreConcepts",
-                    "path": "/AdvancedSkills/OtherEnd/DesktopEnd/Electron/CoreConcepts",
-                    "component": () => import('@/views/AdvancedSkills/OtherEnd/DesktopEnd/Electron/CoreConcepts.vue')
-                  },
-                  {
-                    "name": "CoreFeaturesAndInterfaces",
-                    "path": "/AdvancedSkills/OtherEnd/DesktopEnd/Electron/CoreFeaturesAndInterfaces",
-                    "component": () => import('@/views/AdvancedSkills/OtherEnd/DesktopEnd/Electron/CoreFeaturesAndInterfaces.vue')
-                  },
-                  {
-                    "name": "ElectronLifeCycle",
-                    "path": "/AdvancedSkills/OtherEnd/DesktopEnd/Electron/ElectronLifeCycle",
-                    "component": () => import('@/views/AdvancedSkills/OtherEnd/DesktopEnd/Electron/ElectronLifeCycle.vue')
-                  },
-                  {
-                    "name": "NativeAPI",
-                    "path": "/AdvancedSkills/OtherEnd/DesktopEnd/Electron/NativeAPI",
-                    "component": () => import('@/views/AdvancedSkills/OtherEnd/DesktopEnd/Electron/NativeAPI.vue')
-                  },
-                  {
-                    "name": "IPC",
-                    "path": "/AdvancedSkills/OtherEnd/DesktopEnd/Electron/IPC",
-                    "component": () => import('@/views/AdvancedSkills/OtherEnd/DesktopEnd/Electron/IPC.vue')
-                  },
-                  {
-                    "name": "ElectronPerformanceOptimization",
-                    "path": "/AdvancedSkills/OtherEnd/DesktopEnd/Electron/ElectronPerformanceOptimization",
-                    "component": () => import('@/views/AdvancedSkills/OtherEnd/DesktopEnd/Electron/ElectronPerformanceOptimization.vue')
-                  },
-                  {
-                    "name": "RelatedEcosystemAndTools",
-                    "path": "/AdvancedSkills/OtherEnd/DesktopEnd/Electron/RelatedEcosystemAndTools",
-                    "component": () => import('@/views/AdvancedSkills/OtherEnd/DesktopEnd/Electron/RelatedEcosystemAndTools.vue')
-                  },
-                  {
-                    "name": "PackagingAndPublishing",
-                    "path": "/AdvancedSkills/OtherEnd/DesktopEnd/Electron/PackagingAndPublishing",
-                    "component": () => import('@/views/AdvancedSkills/OtherEnd/DesktopEnd/Electron/PackagingAndPublishing.vue')
-                  },
-                  {
-                    "name": "Security",
-                    "path": "/AdvancedSkills/OtherEnd/DesktopEnd/Electron/Security",
-                    "component": () => import('@/views/AdvancedSkills/OtherEnd/DesktopEnd/Electron/Security.vue')
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "name": "LinuxSystem",
-            "path": "/AdvancedSkills/OtherEnd/LinuxSystem",
-            "children": [
-              {
-                "name": "LinuxBasicIntroduction",
-                "path": "/AdvancedSkills/OtherEnd/LinuxSystem/LinuxBasicIntroduction",
-                "component": () => import('@/views/AdvancedSkills/OtherEnd/LinuxSystem/LinuxBasicIntroduction.vue')
-              },
-              {
-                "name": "LinuxCommandOverview",
-                "path": "/AdvancedSkills/OtherEnd/LinuxSystem/LinuxCommandOverview",
-                "component": () => import('@/views/AdvancedSkills/OtherEnd/LinuxSystem/LinuxCommandOverview.vue')
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "name": "AudioAndVideoProcessing",
-        "path": "/AdvancedSkills/AudioAndVideoProcessing",
-        "component": () => import('@/views/AdvancedSkills/AudioAndVideoProcessing.vue')
-      },
-      {
-        "name": "OtherLanguage",
-        "path": "/AdvancedSkills/OtherLanguage",
-        "component": () => import('@/views/AdvancedSkills/OtherLanguage.vue')
-      }
-    ]
-  },
-  {
     "name": "ProjectsAndSoftSkills",
     "path": "/ProjectsAndSoftSkills",
     "children": [
@@ -6581,37 +6582,6 @@ export default [
         "name": "MyTheme",
         "path": "/Me/MyTheme",
         "component": () => import('@/views/Me/MyTheme.vue')
-      }
-    ]
-  },
-  {
-    "name": "ServerConfig",
-    "path": "/ServerConfig",
-    "children": [
-      {
-        "name": "APIManagement",
-        "path": "/ServerConfig/APIManagement",
-        "component": () => import('@/views/ServerConfig/APIManagement.vue')
-      },
-      {
-        "name": "DataManagement",
-        "path": "/ServerConfig/DataManagement",
-        "component": () => import('@/views/ServerConfig/DataManagement.vue')
-      },
-      {
-        "name": "EnvVariables",
-        "path": "/ServerConfig/EnvVariables",
-        "component": () => import('@/views/ServerConfig/EnvVariables.vue')
-      },
-      {
-        "name": "ServiceControl",
-        "path": "/ServerConfig/ServiceControl",
-        "component": () => import('@/views/ServerConfig/ServiceControl.vue')
-      },
-      {
-        "name": "LogViewer",
-        "path": "/ServerConfig/LogViewer",
-        "component": () => import('@/views/ServerConfig/LogViewer.vue')
       }
     ]
   }

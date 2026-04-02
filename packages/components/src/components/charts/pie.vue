@@ -3,13 +3,8 @@
     <div class="chart-header">
       <h2>{{ title }}</h2>
       <div class="legend">
-        <div
-          v-for="(item, index) in segments"
-          :key="index"
-          class="legend-item"
-          :class="{ 'inactive': !item.active }"
-          @click="toggleSegment(index)"
-        >
+        <div v-for="(item, index) in segments" :key="index" class="legend-item" :class="{ 'inactive': !item.active }"
+          @click="toggleSegment(index)">
           <div class="color-box" :style="{ backgroundColor: item.color }"></div>
           <span class="label">{{ item.label }}</span>
           <span class="value">{{ item.value }} ({{ item.percentage }}%)</span>
@@ -19,11 +14,7 @@
 
     <div class="chart-wrapper" ref="chartContainer">
       <canvas ref="canvas" @mousemove="handleMouseMove" @click="handleClick"></canvas>
-      <div
-        v-if="activeSegment"
-        class="tooltip"
-        :style="{ left: tooltipX + 'px', top: tooltipY + 'px' }"
-      >
+      <div v-if="activeSegment" class="tooltip" :style="{ left: tooltipX + 'px', top: tooltipY + 'px' }">
         <div class="tooltip-header">{{ activeSegment.label }}</div>
         <div class="tooltip-content">
           值: {{ activeSegment.value }}<br>
@@ -35,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import { debounce } from '@/function/common'
+import { debounce } from 'utils/common'
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 
 // 定义类型

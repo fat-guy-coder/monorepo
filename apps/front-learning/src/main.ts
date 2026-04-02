@@ -1,3 +1,4 @@
+import 'utils/theme.css'
 import '@/assets/css/main.less'
 import { createApp, vaporInteropPlugin } from 'vue';
 import { createPinia } from 'pinia';

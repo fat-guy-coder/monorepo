@@ -35,7 +35,6 @@
     "@vitejs/plugin-vue": "6.0.0-beta.2",
     "@vitejs/plugin-vue-jsx": "beta",
     "@vue/tsconfig": "^0.7.0",
-    "unplugin-vue-components": "^28.4.0",
     "vite-plugin-vue-devtools": "latest",
     "vue-tsc": "^2.2.2"
   }

@@ -3,6 +3,7 @@ import { resolve, dirname } from 'node:path'
 import { defineConfig, type ConfigEnv, type PluginOption, type ESBuildOptions } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
+import tailwindcss from '@tailwindcss/vite'
 // 使用 unplugin-vue-components 插件自动引入 components 目录下的所有组件
 import Components from 'unplugin-vue-components/vite'
 import { compression, defineAlgorithm } from 'vite-plugin-compression2'
@@ -29,6 +30,7 @@ export default defineConfig((env: ConfigEnv) => {
   const plugins: PluginOption[] = [
     vue(),
     vueJsx(),
+    tailwindcss(),
   ]
 
   if (isDev) {
@@ -77,6 +79,7 @@ export default defineConfig((env: ConfigEnv) => {
         '@': fileURLToPath(new URL('./src', import.meta.url)),
         '@config': resolvePath('config'),
         'components': fileURLToPath(new URL('../../packages/components/src/components', import.meta.url)),
+        'utils': fileURLToPath(new URL('../../packages/utils/src', import.meta.url)),
       },
       // 在 monorepo 下能更好地优化 workspace 依赖
       dedupe: ['vue', 'vue-router', 'pinia'],

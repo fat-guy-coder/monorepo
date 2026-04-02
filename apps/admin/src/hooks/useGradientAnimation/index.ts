@@ -5,7 +5,7 @@ import {
   THEME_SECONDARY_GRADIENT_COLORS,
   THEME_FONT_GRADIENT_COLORS,
   THEME__MAIN_TEXT_COLOR,
-} from '@/assets/css/theme/index'
+} from 'utils/theme'
 import { lightMinifyCode, decompressCodeAdvanced } from '@/function/code'
 import { random, randPick } from '@/function/math'
 

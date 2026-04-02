@@ -138,29 +138,28 @@ onUnmounted(() => {
 
 .custom-select {
   position: relative;
-  width: var(--select-width);
+  width: 100%;
   font-size: var(--select-font-size);
 
   // 组件内部可调变量（统一从全局 theme.less 派生）
-  --select-width: 13.75rem; // 220px / 16
   --select-font-size: var(--font-size-sm);
 
-  --select-bg: var(--color-background-soft);
+  --select-height: 2rem;
+  --select-bg: var(--color-bg-container);
   --select-border-color: var(--color-border);
   --select-border-color-hover: var(--color-border-hover);
-  --select-border-radius: var(--border-radius-sm);
+  --select-border-radius: var(--element-border-radius);
 
   --select-text-color: var(--color-text);
-  --select-placeholder-color: var(--color-text-soft);
-  --select-arrow-color: var(--color-text-soft);
+  --select-placeholder-color: var(--color-text-quaternary);
+  --select-arrow-color: var(--color-text-tertiary);
 
-  --select-padding-y: var(--padding-sm);
-  --select-padding-x: var(--padding-md);
+  --select-padding-x: 0.6875rem;
 
   --select-dropdown-bg: var(--color-background);
   --select-dropdown-border-color: var(--color-border);
-  --select-dropdown-radius: var(--border-radius-sm);
-  --select-dropdown-shadow: var(--box-shadow-sm);
+  --select-dropdown-radius: var(--element-border-radius);
+  --select-dropdown-shadow: var(--box-shadow);
   --select-dropdown-max-height: 12.5rem; // 200px
 
   --select-option-padding-y: var(--padding-sm);
@@ -176,14 +175,16 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--select-padding-y) var(--select-padding-x);
+  height: var(--select-height);
+  padding: 0 var(--select-padding-x);
   background-color: var(--select-bg);
-  border: var(--border-width) solid var(--select-border-color);
+  border: 0.0625rem solid var(--select-border-color);
   border-radius: var(--select-border-radius);
   cursor: pointer;
   transition:
     border-color var(--select-transition-duration) ease,
     box-shadow var(--select-transition-duration) ease;
+  box-sizing: border-box;
 
   &:hover {
     border-color: var(--select-border-color-hover);
@@ -191,7 +192,7 @@ onUnmounted(() => {
 
   &.is-open {
     border-color: var(--color-primary);
-    box-shadow: 0 0 0 0.125rem color-mix(in srgb, var(--color-primary) 20%, transparent); // 2px
+    box-shadow: var(--box-shadow-hover);
   }
 }
 
@@ -201,11 +202,13 @@ onUnmounted(() => {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  font-size: var(--select-font-size);
 }
 
 .placeholder {
   color: var(--select-placeholder-color);
   flex: 1;
+  font-size: var(--select-font-size);
 }
 
 .filter-input {
@@ -216,6 +219,7 @@ onUnmounted(() => {
   color: var(--select-text-color);
   font-size: inherit;
   min-width: 60px;
+  height: 100%;
 }
 
 .arrow-icon {
@@ -236,7 +240,7 @@ onUnmounted(() => {
   right: 0;
   z-index: 1000;
   background-color: var(--select-dropdown-bg);
-  border: var(--border-width) solid var(--select-dropdown-border-color);
+  border: 0.0625rem solid var(--select-dropdown-border-color);
   border-radius: var(--select-dropdown-radius);
   box-shadow: var(--select-dropdown-shadow);
   max-height: var(--select-dropdown-max-height);

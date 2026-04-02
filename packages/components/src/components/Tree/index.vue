@@ -9,8 +9,8 @@
       @click="handleNodeClick"
       @toggle="handleNodeToggle"
     >
-      <template #extra>
-        <slot name="node-extra" :node="treeNode" />
+      <template #node="{ node: treeNode, expanded }">
+        <slot name="node" :node="treeNode" :expanded="expanded" />
       </template>
     </TreeItem>
   </div>

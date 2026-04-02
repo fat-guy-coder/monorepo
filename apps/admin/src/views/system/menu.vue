@@ -22,11 +22,13 @@
       <div v-else-if="treeData.length === 0" class="empty">暂无菜单数据</div>
       <Tree v-else ref="treeRef" :data="treeData" :default-expanded-keys="defaultExpandedKeys"
         @node-click="handleNodeClick" @node-expand="handleNodeExpand" @node-collapse="handleNodeCollapse">
-        <template #node-extra="{ node }">
+        <template #node="{ node, expanded }">
+          <span class="tree-icon">{{ node.icon }}</span>
+          <span class="tree-label">{{ node.label }}</span>
           <span class="node-actions">
-            <Button size="small" @click.stop="handleAddChildOf(node)">新增</Button>
-            <Button size="small" @click.stop="handleEditOf(node)">编辑</Button>
-            <Button size="small" @click.stop="handleDeleteOf(node)" class="btn-danger">删除</Button>
+            <Button size="small" text @click.stop="handleAddChildOf(node)">新增</Button>
+            <Button size="small" text @click.stop="handleEditOf(node)">编辑</Button>
+            <Button size="small" text @click.stop="handleDeleteOf(node)">删除</Button>
           </span>
         </template>
       </Tree>
@@ -318,9 +320,12 @@ onMounted(() => {
   height: 100%;
   display: flex;
   flex-direction: column;
+  box-sizing: border-box;
+
 }
 
 .menu-header {
+  flex-shrink: 0;
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
@@ -340,6 +345,7 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   gap: 4px;
+  min-width: 160px;
 }
 
 .form-item label {
@@ -349,11 +355,12 @@ onMounted(() => {
 
 .menu-tree-container {
   flex: 1;
+  min-height: 200px;
   background: var(--color-background);
   border-radius: 8px;
   padding: 16px;
-  overflow: auto;
-  min-height: 200px;
+  box-sizing: border-box;
+
 }
 
 .loading,
@@ -416,12 +423,39 @@ onMounted(() => {
   display: flex;
   gap: 4px;
   margin-left: 8px;
-  opacity: 0;
-  transition: opacity 0.15s;
 }
 
-.tree-item:hover .node-actions {
-  opacity: 1;
+.tree-arrow-placeholder {
+  width: 16px;
+  height: 16px;
+  margin-right: 4px;
+}
+
+.tree-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  margin-right: 4px;
+  color: var(--color-text-secondary, #999);
+  transition: transform 0.2s;
+}
+
+.tree-arrow.expanded {
+  transform: rotate(90deg);
+}
+
+.tree-icon {
+  margin-right: 6px;
+  font-size: 14px;
+}
+
+.tree-label {
+  flex: 1;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .display-text {

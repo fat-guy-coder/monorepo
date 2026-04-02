@@ -97,7 +97,7 @@ const triggerSearch = () => {
 };
 
 const handleClear = () => {
-  emit('update:value', '');
+  emit('update:modelValue', '');
   nextTick(() => {
     inputRef.value?.focus();
   });
