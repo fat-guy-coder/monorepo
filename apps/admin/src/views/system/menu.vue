@@ -26,9 +26,9 @@
           <span class="tree-icon">{{ node.icon }}</span>
           <span class="tree-label">{{ node.label }}</span>
           <span class="node-actions">
-            <Button size="small" text @click.stop="handleAddChildOf(node)">新增</Button>
-            <Button size="small" text @click.stop="handleEditOf(node)">编辑</Button>
-            <Button size="small" text @click.stop="handleDeleteOf(node)">删除</Button>
+            <Button size="sm" text @click.stop="handleAddChildOf(node)">新增</Button>
+            <Button size="sm" text @click.stop="handleEditOf(node)">编辑</Button>
+            <Button size="sm" text @click.stop="handleDeleteOf(node)">删除</Button>
           </span>
         </template>
       </Tree>
@@ -88,14 +88,14 @@ const defaultExpandedKeys = ref<(string | number)[]>([])
 const selectedNode = ref<TreeNode | null>(null)
 
 const searchForm = reactive({
-  project: 'front_learning',
-  label: 'front_learning',
+  project: 'learning',
+  label: 'learning',
 })
 
 // Project options for select
 const projectOptions = [
   { label: 'admin', value: 'admin' },
-  { label: 'front-learning', value: 'front_learning' },
+  { label: 'learning', value: 'learning' },
   { label: 'main', value: 'main' },
 ]
 
@@ -116,6 +116,78 @@ const parentMenuOptions = computed(() => {
   }
   return flatten(treeData.value)
 })
+
+// Find node in tree by id
+const findNode = (nodes: TreeNode[], id: string): TreeNode | null => {
+  for (const node of nodes) {
+    if (node.id === id) return node
+    if (node.children) {
+      const found = findNode(node.children, id)
+      if (found) return found
+    }
+  }
+  return null
+}
+
+// Find parent node in tree by child id
+const findParentNode = (nodes: TreeNode[], childId: string): TreeNode | null => {
+  for (const node of nodes) {
+    if (node.children?.some(child => child.id === childId)) {
+      return node
+    }
+    if (node.children) {
+      const found = findParentNode(node.children, childId)
+      if (found) return found
+    }
+  }
+  return null
+}
+
+// Update node in tree by id
+const updateNodeInTree = (nodes: TreeNode[], id: string, updates: Partial<TreeNode>): boolean => {
+  for (const node of nodes) {
+    if (node.id === id) {
+      Object.assign(node, updates)
+      return true
+    }
+    if (node.children && updateNodeInTree(node.children, id, updates)) {
+      return true
+    }
+  }
+  return false
+}
+
+// Remove node from tree by id
+const removeNodeFromTree = (nodes: TreeNode[], id: string): boolean => {
+  const index = nodes.findIndex(node => node.id === id)
+  if (index !== -1) {
+    nodes.splice(index, 1)
+    return true
+  }
+  for (const node of nodes) {
+    if (node.children && removeNodeFromTree(node.children, id)) {
+      return true
+    }
+  }
+  return false
+}
+
+// Add child node to parent in tree
+const addChildToNode = (nodes: TreeNode[], parentId: string, newChild: TreeNode): boolean => {
+  for (const node of nodes) {
+    if (node.id === parentId) {
+      if (!node.children) {
+        node.children = []
+      }
+      node.children.push(newChild)
+      return true
+    }
+    if (node.children && addChildToNode(node.children, parentId, newChild)) {
+      return true
+    }
+  }
+  return false
+}
 
 // Compute full path based on parent path + name
 const computedPath = computed(() => {
@@ -254,7 +326,10 @@ const handleDeleteOf = async (node: TreeNode) => {
   try {
     await deleteApiMenusId(node.id as string)
     message.success('删除成功')
-    fetchMenus()
+    // 从树中直接移除节点
+    removeNodeFromTree(treeData.value, node.id as string)
+    // 如果被删除的是默认展开的节点，也移除
+    defaultExpandedKeys.value = defaultExpandedKeys.value.filter(key => key !== node.id)
   } catch (error) {
     message.error('删除失败')
   }
@@ -287,6 +362,16 @@ const handleSubmit = async () => {
       }
       await putApiMenusId(formData.id, updateData)
       message.success('更新成功')
+      // 直接更新树中对应节点
+      updateNodeInTree(treeData.value, formData.id, {
+        label: formData.label,
+        name: formData.name,
+        path: fullPath,
+        icon: formData.icon,
+        order: formData.order,
+        project: formData.project,
+        parentId: formData.parentId,
+      })
     } else {
       // Create new menu
       const createData: PostApiMenusRequest = {
@@ -298,11 +383,33 @@ const handleSubmit = async () => {
         project: formData.project,
         parentId: formData.parentId,
       }
-      await postApiMenus(createData)
+      const res = await postApiMenus(createData)
       message.success('创建成功')
+      // 构建新节点
+      const newNode: TreeNode = {
+        id: res.data?.id ?? `temp-${Date.now()}`,
+        label: formData.label,
+        name: formData.name,
+        path: fullPath,
+        icon: formData.icon,
+        order: formData.order,
+        project: formData.project,
+        parentId: formData.parentId,
+        children: [],
+      }
+      // 如果有父节点，添加到父节点的 children 中
+      if (formData.parentId) {
+        addChildToNode(treeData.value, formData.parentId, newNode)
+        // 确保父节点是展开的
+        if (!defaultExpandedKeys.value.includes(formData.parentId)) {
+          defaultExpandedKeys.value.push(formData.parentId)
+        }
+      } else {
+        // 根节点直接添加
+        treeData.value.push(newNode)
+      }
     }
     modalVisible.value = false
-    fetchMenus()
   } catch (error) {
     console.error('Failed to submit:', error)
     message.error('操作失败')
