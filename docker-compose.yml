@@ -19,23 +19,23 @@ services:
       timeout: 5s
       retries: 5
 
-  fastify:
+  backend:
     build:
-      context: ./apps/fastify       # 指定后端目录作为构建上下文
+      context: ./apps/backend       # 指定后端目录作为构建上下文
       dockerfile: Dockerfile
-    container_name: fastify
+    container_name: backend
     ports:
-      - "3000:3000"               # 映射 Fastify 端口
+      - "3000:3000"               # 映射后端端口
     environment:
       DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
       NODE_ENV: development
     volumes:
-      - ./apps/fastify:/app             # 挂载代码，实现热重载
+      - ./apps/backend:/app             # 挂载代码，实现热重载
       - /app/node_modules          # 避免覆盖容器内的 node_modules
     depends_on:
       postgres:
         condition: service_healthy
-    command: npm run dev           # 假设 dev 脚本使用 nodemon 或类似工具
+    command: bun --hot run src/server.ts  # Bun 热更新模式
 
 volumes:
   postgres_data:

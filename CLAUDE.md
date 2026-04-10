@@ -5,7 +5,9 @@
 ```
 monorepo/
 ├── apps/
-│   ├── front-learning/    # 前端学习网站 (Vue 3)
+│   ├── admin/             # 管理后台 (Vue 3)
+│   ├── backend/           # 后端服务 (Bun + Drizzle)
+│   ├── learning/          # 学习网站 (Vue 3)
 │   ├── main/              # 个人主页 (Vue 3)
 ├── packages/              # 共享包
 ├── turbo.json             # Turborepo 配置
@@ -16,7 +18,7 @@ monorepo/
 
 项目使用 pnpm workspace，根目录 `package.json` 中的 `devDependencies` 供所有子项目共享使用。
 
-### apps/front-learning
+### apps/learning - 学习网站
 
 - **框架**: Vue 3 + TypeScript + Less
 - **路由**: vue-router
@@ -31,19 +33,23 @@ monorepo/
 - **样式**: Less
 - **端口**: 待定
 
+### apps/backend - 后端服务
+
+- **运行时**: Bun
+- **框架**: 原生 HTTP 服务器
+- **ORM**: Drizzle ORM
+- **数据库**: PostgreSQL
+- **端口**: 3000
+
 
 ## 常用命令
 
 | 命令 | 说明 |
 |------|------|
 | `pnpm install` | 安装所有依赖 |
-| `pnpm front-learning:dev` | 启动前端学习网站 |
+| `pnpm backend:dev` | 启动后端服务 (Bun) |
+| `pnpm learning:dev` | 启动学习网站 |
 | `pnpm main:dev` | 启动个人主页 |
-| `pnpm go:dev` | 启动 Go 前端 |
-| `pnpm go-server:dev` | 启动 Go 后端 |
-| `pnpm cpp:dev` | 启动 C++ 前端 |
-| `pnpm cpp-server:dev` | 启动 C++ 后端 (需 CMake) |
-| `pnpm go:build` | 构建 Go 前端 |
 
 ## 设计规范 (apps/main, apps/go, apps/cpp)
 

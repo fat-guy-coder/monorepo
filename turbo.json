@@ -9,7 +9,7 @@
         "^build"
       ]
     },
-    "build:front-learning": {
+    "build:learning": {
       "outputs": [
         "dist/**"
       ],

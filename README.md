@@ -10,9 +10,9 @@
 monorepo/
 ├── apps/
 │   ├── admin/              # 管理后台 (Vue 3 + Element Plus)
-│   ├── front-learning/      # 前端学习网站 (Vue 3)
+│   ├── learning/            # 学习网站 (Vue 3)
 │   ├── main/               # 个人主页 (Vue 3)
-│   └── fastify/            # 后端 API 服务 (Fastify + Prisma)
+│   └── backend/            # 后端 API 服务 (Bun + Drizzle)
 ├── packages/               # 共享包
 ├── docker-compose.yml       # Docker 编排配置
 ├── turbo.json              # Turborepo 配置
@@ -28,7 +28,7 @@ monorepo/
 - **构建**: Vite
 - **端口**: 8848
 
-### apps/front-learning - 前端学习网站
+### apps/learning - 学习网站
 - **框架**: Vue 3 + TypeScript
 - **样式**: Less
 - **路由**: vue-router
@@ -42,9 +42,9 @@ monorepo/
 - **动画**: GSAP
 - **构建**: Vite
 
-### apps/fastify - 后端 API
-- **框架**: Fastify
-- **ORM**: Prisma
+### apps/backend - 后端 API
+- **框架**: Bun (原生 HTTP)
+- **ORM**: Drizzle ORM
 - **数据库**: PostgreSQL
 - **端口**: 3000
 
@@ -57,30 +57,23 @@ monorepo/
 docker-compose up -d
 
 # 启动后端 API + 数据库
-docker-compose up -d fastify postgres
+docker-compose up -d backend postgres
 
 # 启动管理后台
 docker-compose up -d admin
 
-# 更新prisma schema
-docker exec fastify npx prisma generate
-docker exec fastify npx prisma migrate dev --name init
-docker exec fastify npx prisma studio
-
-# 更新prisma schema
-docker exec fastify npx prisma generate
-docker exec fastify npx prisma migrate dev --name init
-docker exec fastify npx prisma studio
+# 更新 drizzle schema
+docker exec backend bun run db:push
 
 # 启动特定服务
-docker-compose up -d fastify
+docker-compose up -d backend
 docker-compose up -d postgres
 
 # 查看服务状态
 docker-compose ps
 
 # 查看日志
-docker-compose logs -f fastify
+docker-compose logs -f backend
 docker-compose logs -f postgres
 
 # 停止服务
@@ -90,22 +83,22 @@ docker-compose down
 docker-compose down -v
 
 # 重启
-docker-compose restart fastify
+docker-compose restart backend
 docker-compose restart postgres
 
 # 重新构建镜像（代码修改后）
-docker-compose build fastify
-docker-compose up -d fastify
+docker-compose build backend
+docker-compose up -d backend
 ```
 
 ### 数据库迁移
 
 ```bash
-# 运行迁移
-docker exec fastify npx prisma migrate dev --name init
+# 推送 schema 到数据库
+docker exec backend bun run db:push
 
-# 查看 Prisma Studio
-docker exec -it fastify npx prisma studio
+# 生成迁移文件
+docker exec backend bun run db:generate
 ```
 
 ## 快速开始
@@ -121,9 +114,9 @@ pnpm install
 | 命令 | 说明 |
 |------|------|
 | `pnpm admin:dev` | 启动管理后台 (端口 8848) |
-| `pnpm front-learning:dev` | 启动前端学习网站 |
+| `pnpm learning:dev` | 启动学习网站 |
 | `pnpm main:dev` | 启动个人主页 |
-| `pnpm fastify:dev` | 启动后端 API (Docker) |
+| `pnpm backend:dev` | 启动后端 API (Docker) |
 
 ### 构建
 
@@ -133,7 +126,7 @@ pnpm all:build
 
 # 构建单个项目
 pnpm admin:build
-pnpm front-learning:build
+pnpm learning:build
 pnpm main:build
 ```
 
