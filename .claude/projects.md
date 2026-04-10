@@ -1,6 +1,6 @@
 # 项目技术栈
 
-## apps/front-learning
+## apps/learning
 
 ### Dependencies (package.json)
 - vue: 3.6.0-alpha.1

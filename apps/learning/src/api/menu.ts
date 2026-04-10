@@ -104,3 +104,18 @@ export function getApiMenusIdChildren(id: string): ApiResult<Array<MenuItem>> {
     method: 'get',
   })
 }
+
+/**
+ * 搜索菜单，返回匹配项及其父链
+ */
+export function getApiMenusSearch(params?: { project?: string; search?: string }): ApiResult<{
+  matched: MenuItem[]
+  openKeys: string[]
+  selectedKeys: string[]
+}> {
+  return request({
+    url: `/api/menus/search`,
+    method: 'get',
+    params,
+  })
+}

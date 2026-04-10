@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3>⌨️ 我的主题 ⭐⭐⭐</h3>
+    <h3>软链接和硬链接</h3>
   </div>
 </template>
 

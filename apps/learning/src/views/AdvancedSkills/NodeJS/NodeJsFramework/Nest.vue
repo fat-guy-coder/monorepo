@@ -7,7 +7,7 @@
         <div class="tech-stack">
           <div class="tech-badge">Node.js</div>
           <div class="tech-badge">TypeScript</div>
-          <div class="tech-badge">Express/Fastify</div>
+          <div class="tech-badge">Express/backend</div>
           <div class="tech-badge">RxJS</div>
           <div class="tech-badge">GraphQL</div>
           <div class="tech-badge">WebSockets</div>
@@ -34,7 +34,7 @@
                 <li>开箱即用的应用程序架构</li>
                 <li>面向 AOP（面向切面编程）</li>
                 <li>高度可测试性</li>
-                <li>平台无关（支持 Express/Fastify）</li>
+                <li>平台无关（支持 Express/backend）</li>
                 <li>渐进式框架，易于学习和扩展</li>
               </ul>
             </div>
@@ -341,7 +341,7 @@ const app = await NestFactory.createMicroservice(AppModule, {
                   <div class="icon">⚡</div>
                   <div>
                     <strong>高性能</strong>
-                    <p>默认使用 Fastify，性能优于 Express</p>
+                    <p>默认使用 backend，性能优于 Express</p>
                   </div>
                 </li>
                 <li>
@@ -426,7 +426,7 @@ const app = await NestFactory.createMicroservice(AppModule, {
               <ul>
                 <li>小型项目/原型验证 - Express/Koa</li>
                 <li>函数式计算 - Serverless Framework</li>
-                <li>无架构约束 - Fastify/Hapi</li>
+                <li>无架构约束 - backend/Hapi</li>
                 <li>全栈 JavaScript - Next.js/Nuxt.js API Routes</li>
               </ul>
             </div>

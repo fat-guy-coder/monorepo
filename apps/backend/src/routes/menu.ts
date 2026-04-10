@@ -1,6 +1,6 @@
 import { db, rawQuery } from '../db'
 import { menu } from '../db/schema'
-import { eq, isNull, or, asc } from 'drizzle-orm'
+import { eq, isNull, or, asc, like } from 'drizzle-orm'
 
 // 统一响应格式
 const success = (data: any, message = 'success') => ({ code: 200, message, data })
@@ -153,6 +153,153 @@ routes.push({
   }
 })
 
+// GET /menus/search - 搜索菜单，返回匹配项及其父链
+routes.push({
+  method: 'GET',
+  pattern: /^\/api\/menus\/search$/,
+  handler: async (ctx) => {
+    const { project, search: searchTerm } = ctx.query
+
+    try {
+      // 获取所有菜单
+      const allMenus = await db.select().from(menu).where(project ? eq(menu.project, project) : undefined)
+      const lowerSearch = searchTerm?.toLowerCase()
+
+      // 构建菜单映射
+      const menuMap = new Map<string, any>()
+      allMenus.forEach(m => {
+        menuMap.set(m.id, { ...m, children: [] })
+      })
+
+      // 构建 id -> parentId 的映射
+      const parentMap = new Map<string, string | null>()
+      allMenus.forEach(m => parentMap.set(m.id, m.parentId))
+
+      // 如果没有搜索词，返回根菜单
+      if (!lowerSearch) {
+        const rootMenus = allMenus.filter(m => !m.parentId)
+        const result = rootMenus.map(m => {
+          const node = menuMap.get(m.id)
+          const children = allMenus.filter(c => c.parentId === m.id)
+          return {
+            ...node,
+            isLeaf: children.length === 0,
+            children: children.length > 0 ? children.map(c => ({
+              ...c,
+              isLeaf: !allMenus.some(child => child.parentId === c.id)
+            })) : undefined
+          }
+        }).sort((a, b) => (a.order || 0) - (b.order || 0))
+
+        return Response.json(success({ matched: result, openKeys: [], selectedKeys: [] }))
+      }
+
+      // 1. 查找所有匹配的菜单项
+      const matchedMenus = allMenus.filter(m =>
+        m.label.toLowerCase().includes(lowerSearch) ||
+        m.name.toLowerCase().includes(lowerSearch)
+      )
+
+      if (matchedMenus.length === 0) {
+        return Response.json(success({ matched: [], openKeys: [], selectedKeys: [] }))
+      }
+
+      // 2. 收集需要展示的节点ID
+      // 规则：匹配项所在层级，显示该层级的所有子菜单（同级菜单全部展开）
+      const visibleIds = new Set<string>()
+      const openKeysSet = new Set<string>()  // 存储 paths
+      const selectedKeys: string[] = []
+
+      for (const matched of matchedMenus) {
+        selectedKeys.push(matched.path as string)
+
+        // 获取完整的祖先链（从根到当前匹配项）
+        const ancestorIds: string[] = []
+        let currentId: string | null = matched.id
+        while (currentId) {
+          ancestorIds.unshift(currentId)
+          currentId = parentMap.get(currentId) || null
+        }
+
+        // 对每一层级的节点
+        for (let i = 0; i < ancestorIds.length; i++) {
+          const currentId = ancestorIds[i]
+          const current = menuMap.get(currentId)
+          if (!current) continue
+
+          // 标记匹配项
+          if (currentId === matched.id) {
+            current.match = true
+          }
+
+          // 收集该节点的所有子菜单（同级菜单全部加入）
+          const childrenOfCurrent = allMenus.filter(m => m.parentId === currentId)
+          childrenOfCurrent.forEach(c => visibleIds.add(c.id))
+
+          // 如果当前节点不是根节点，它的父级path加入openKeys
+          if (i > 0) {
+            const parentId = ancestorIds[i - 1]
+            const parentNode = menuMap.get(parentId)
+            if (parentNode) {
+              openKeysSet.add(parentNode.path)
+            }
+          }
+        }
+      }
+
+      // 3. 构建返回的菜单树
+      // 获取所有顶级可见节点
+      const rootVisibleIds = Array.from(visibleIds).filter(id => {
+        const parentId = parentMap.get(id)
+        return !parentId || !visibleIds.has(parentId)
+      })
+
+      // 递归构建子树
+      function buildSubTree(parentId: string): any[] {
+        const children = allMenus
+          .filter(m => m.parentId === parentId && visibleIds.has(m.id))
+          .sort((a, b) => (a.order || 0) - (b.order || 0))
+          .map(c => {
+            const node = menuMap.get(c.id)
+            const grandchildren = buildSubTree(c.id)
+            return {
+              ...node,
+              isLeaf: grandchildren.length === 0,
+              children: grandchildren.length > 0 ? grandchildren : undefined
+            }
+          })
+        return children
+      }
+
+      // 构建结果：从每个根节点开始
+      const result = rootVisibleIds
+        .sort((a, b) => {
+          const nodeA = menuMap.get(a)
+          const nodeB = menuMap.get(b)
+          return (nodeA?.order || 0) - (nodeB?.order || 0)
+        })
+        .map(rootId => {
+          const rootNode = menuMap.get(rootId)
+          const children = buildSubTree(rootId)
+          return {
+            ...rootNode,
+            isLeaf: children.length === 0,
+            children: children.length > 0 ? children : undefined
+          }
+        })
+
+      return Response.json(success({
+        matched: result,
+        openKeys: Array.from(openKeysSet),
+        selectedKeys
+      }))
+    } catch (err: any) {
+      console.error(err)
+      return Response.json(error('搜索失败: ' + err.message), { status: 500 })
+    }
+  }
+})
+
 // GET /menus/:id
 routes.push({
   method: 'GET',
@@ -221,12 +368,34 @@ routes.push({
       generatedPath = `/${body.name}`
     }
 
+    // 获取同级菜单数量，用于计算 order
+    const siblings = await db.select().from(menu).where(
+      parentId ? eq(menu.parentId, parentId) : or(isNull(menu.parentId), eq(menu.parentId, ''))
+    )
+    const siblingCount = siblings.length
+
+    // 如果指定了 order，则插入到该位置，后续菜单 order +1；否则放到最后
+    let finalOrder: number
+    if (body.order !== undefined && body.order !== null) {
+      finalOrder = body.order
+      // 将 >= 目标 order 的同级菜单 order +1
+      for (const sibling of siblings) {
+        const siblingOrder = sibling.order ?? 0
+        if (siblingOrder >= finalOrder) {
+          await rawQuery`UPDATE menu SET "order" = ${siblingOrder + 1} WHERE id = ${sibling.id}`
+        }
+      }
+    } else {
+      // 未指定 order，放到同级菜单末尾
+      finalOrder = siblingCount
+    }
+
     const [newMenu] = await db.insert(menu).values({
       name: body.name,
       label: body.label,
       path: generatedPath,
       icon: body.icon ?? null,
-      order: body.order ?? 0,
+      order: finalOrder,
       project: body.project ?? 'default',
       parentId: parentId
     }).returning()
@@ -257,14 +426,16 @@ routes.push({
 
       // 自动生成路径：父节点路径 + "/" + name（如果 name 或 parentId 变了）
       let generatedPath = existingMenu.path
-      if (body.name !== undefined || body.parentId !== undefined) {
+      const parentIdChanged = body.parentId !== undefined && body.parentId !== (existingMenu.parentId || '')
+      if (body.name !== undefined || parentIdChanged) {
         if (parentId) {
+          // 有父级菜单
           const parentMenu = allMenus.find(m => m.id === parentId)
           if (parentMenu) {
             generatedPath = parentMenu.path ? `${parentMenu.path}/${body.name || existingMenu.name}` : `/${body.name || existingMenu.name}`
           }
         } else {
-          // 顶级菜单
+          // 顶级菜单（根目录）
           generatedPath = `/${body.name || existingMenu.name}`
         }
       }
@@ -276,7 +447,39 @@ routes.push({
       const order = body.order !== undefined ? body.order : existingMenu.order
       const project = body.project !== undefined ? body.project : existingMenu.project
 
+      // 如果 order 改变了，处理 order 互换（同级菜单中如果已存在该 order，则互换）
+      if (body.order !== undefined && body.order !== existingMenu.order) {
+        const targetOrder = body.order
+        // 找到同级菜单中拥有相同 order 的菜单
+        const siblingWithSameOrder = allMenus.find(m =>
+          m.id !== id &&
+          m.parentId === (existingMenu.parentId || '') &&
+          (m.order ?? 0) === targetOrder
+        )
+        if (siblingWithSameOrder) {
+          // 互换 order
+          await rawQuery`UPDATE menu SET "order" = ${targetOrder} WHERE id = ${id}`
+          await rawQuery`UPDATE menu SET "order" = ${existingMenu.order ?? 0} WHERE id = ${siblingWithSameOrder.id}`
+        } else {
+          await rawQuery`UPDATE menu SET "order" = ${targetOrder} WHERE id = ${id}`
+        }
+      }
+
       const result = await rawQuery`UPDATE menu SET name = ${name}, label = ${label}, path = ${generatedPath}, icon = ${icon}, "order" = ${order}, project = ${project}, parent_id = ${parentId} WHERE id = ${id} RETURNING *`
+
+      // 如果 parentId 改变了，递归更新所有子菜单的路径
+      if (parentIdChanged && generatedPath && generatedPath !== existingMenu.path) {
+        const updateChildrenPaths = async (parentId: string, newParentPath: string) => {
+          const children = allMenus.filter(m => m.parentId === parentId)
+          for (const child of children) {
+            const childNewPath = `${newParentPath}/${child.name}`
+            await rawQuery`UPDATE menu SET path = ${childNewPath} WHERE id = ${child.id}`
+            // 递归更新子菜单
+            await updateChildrenPaths(child.id, childNewPath)
+          }
+        }
+        await updateChildrenPaths(id, generatedPath)
+      }
 
       // 检查是否有子菜单，返回 isLeaf
       const childCount = allMenus.filter(m => m.parentId === id).length

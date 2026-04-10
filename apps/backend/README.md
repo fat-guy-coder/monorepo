@@ -1,10 +1,10 @@
-# Fastify + PostgreSQL + Prisma（JavaScript 版）
+# backend + PostgreSQL + Prisma（JavaScript 版）
 
-基于 Fastify 的极简 REST API，使用 Prisma 连接 PostgreSQL。已集成 CORS、Helmet 与 Swagger UI（接口文档）。本项目为 JS 版本（不含 TypeScript）。
+基于 backend 的极简 REST API，使用 Prisma 连接 PostgreSQL。已集成 CORS、Helmet 与 Swagger UI（接口文档）。本项目为 JS 版本（不含 TypeScript）。
 
 ## 技术栈
 
-- **Fastify** - 高性能 Web 框架
+- **backend** - 高性能 Web 框架
 - **Prisma** - ORM
 - **PostgreSQL** - 数据库
 - **Docker** - 容器化部署
@@ -14,11 +14,11 @@
 ### 常用命令
 
 ```bash
-# 启动所有服务（Fastify + PostgreSQL）
+# 启动所有服务（backend + PostgreSQL）
 docker-compose up -d
 
-# 启动 Fastify（需要 PostgreSQL 已运行）
-docker-compose up -d fastify
+# 启动 backend（需要 PostgreSQL 已运行）
+docker-compose up -d backend
 
 # 启动 PostgreSQL
 docker-compose up -d postgres
@@ -27,7 +27,7 @@ docker-compose up -d postgres
 docker-compose ps
 
 # 查看日志
-docker-compose logs -f fastify
+docker-compose logs -f backend
 docker-compose logs -f postgres
 
 # 停止服务
@@ -37,18 +37,18 @@ docker-compose down
 docker-compose down -v
 
 # 重新构建镜像（代码修改后）
-docker-compose build fastify
-docker-compose up -d fastify
+docker-compose build backend
+docker-compose up -d backend
 ```
 
 ### 数据库迁移
 
 ```bash
 # 运行迁移（创建/更新数据表）
-docker exec fastify npx prisma migrate dev --name init
+docker exec backend npx prisma migrate dev --name init
 
 # 生产环境迁移
-docker exec fastify npx prisma migrate deploy
+docker exec backend npx prisma migrate deploy
 ```
 
 ### 环境变量
@@ -78,10 +78,10 @@ pnpm install
 
 ### 环境变量
 
-在 apps/fastify 下创建 .env 文件：
+在 apps/backend 下创建 .env 文件：
 
 ```
-DATABASE_URL="postgresql://postgres:postgres@localhost:5432/fastifydb?schema=public"
+DATABASE_URL="postgresql://postgres:postgres@localhost:5432/backenddb?schema=public"
 PORT=3000
 HOST=0.0.0.0
 ```
@@ -100,7 +100,7 @@ pnpm prisma:migrate
 
 ```bash
 # Docker 方式（推荐）
-docker-compose up -d fastify
+docker-compose up -d backend
 
 # 本地开发
 pnpm dev

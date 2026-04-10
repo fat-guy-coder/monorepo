@@ -14,6 +14,7 @@ export type MenuItem = {
   children?: MenuItem[]//子菜单项列表
   loading?: boolean//菜单项加载状态
   match?: boolean//菜单项匹配状态
+  isLeaf?: boolean//是否是叶子节点
   redirect?: { name: string, path: string }//菜单项重定向
 }
 

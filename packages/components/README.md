@@ -1,6 +1,6 @@
 # Components 工作区组件库
 
-工作区共享的 Vue 3 组件库，供 admin、front-learning 等项目使用。
+工作区共享的 Vue 3 组件库，供 admin、learning 等项目使用。
 
 ## 引入
 

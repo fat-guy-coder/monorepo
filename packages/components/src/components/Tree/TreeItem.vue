@@ -48,8 +48,21 @@ const childrenRef = ref<HTMLElement | null>(null)
 const isAnimating = ref(false)
 
 const isExpanded = computed(() => props.expandedKeys.includes(props.node.id))
-const isLeaf = computed(() => !props.node.children || props.node.children.length === 0)
-const hasChildren = computed(() => props.node.children && props.node.children.length > 0)
+// 优先使用 node 上的 isLeaf 属性，如果没有则根据 children 判断
+const isLeaf = computed(() => {
+  const nodeIsLeaf = (props.node as any).isLeaf
+  if (nodeIsLeaf !== undefined) {
+    return nodeIsLeaf
+  }
+  return !props.node.children || props.node.children.length === 0
+})
+const hasChildren = computed(() => {
+  const nodeIsLeaf = (props.node as any).isLeaf
+  if (nodeIsLeaf !== undefined) {
+    return !nodeIsLeaf
+  }
+  return !!(props.node.children && props.node.children.length > 0)
+})
 
 watch(isExpanded, async (expanded) => {
   if (!childrenRef.value || !hasChildren.value) return

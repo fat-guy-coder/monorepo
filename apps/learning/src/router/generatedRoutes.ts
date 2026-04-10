@@ -1848,6 +1848,11 @@ export default [
         ]
       },
       {
+        "name": "RecommendedWebsites",
+        "path": "/LearningAbility/RecommendedWebsites",
+        "component": () => import('@/views/LearningAbility/RecommendedWebsites.vue')
+      },
+      {
         "name": "TypeScript",
         "path": "/CoreSkills/TypeScript",
         "children": [
@@ -1985,11 +1990,6 @@ export default [
         ]
       },
       {
-        "name": "RecommendedWebsites",
-        "path": "/LearningAbility/RecommendedWebsites",
-        "component": () => import('@/views/LearningAbility/RecommendedWebsites.vue')
-      },
-      {
         "name": "ComputerBasicKnowledge",
         "path": "/CoreSkills/ComputerBasicKnowledge",
         "children": [
@@ -2063,6 +2063,22 @@ export default [
                 "name": "OperatingSystems",
                 "path": "/CoreSkills/ComputerBasicKnowledge/OperatingSystem/OperatingSystems",
                 "component": () => import('@/views/CoreSkills/ComputerBasicKnowledge/OperatingSystem/OperatingSystems.vue')
+              },
+              {
+                "name": "FileSystem",
+                "path": "/CoreSkills/ComputerBasicKnowledge/OperatingSystem/FileSystem",
+                "children": [
+                  {
+                    "name": "FileSystemPrinciple",
+                    "path": "/CoreSkills/ComputerBasicKnowledge/OperatingSystem/FileSystem/FileSystemPrinciple",
+                    "component": () => import('@/views/CoreSkills/ComputerBasicKnowledge/OperatingSystem/FileSystem/FileSystemPrinciple.vue')
+                  },
+                  {
+                    "name": "HardlinkAndSoftlink",
+                    "path": "/CoreSkills/ComputerBasicKnowledge/OperatingSystem/FileSystem/HardlinkAndSoftlink",
+                    "component": () => import('@/views/CoreSkills/ComputerBasicKnowledge/OperatingSystem/FileSystem/HardlinkAndSoftlink.vue')
+                  }
+                ]
               },
               {
                 "name": "ProcessAndThread",
@@ -3138,98 +3154,6 @@ export default [
             "name": "SourceMap1",
             "path": "/CoreSkills/FrontendDebug/SourceMap1",
             "component": () => import('@/views/CoreSkills/FrontendDebug/SourceMap1.vue')
-          }
-        ]
-      },
-      {
-        "name": "TeamCollaboration",
-        "path": "/CoreSkills/TeamCollaboration",
-        "children": [
-          {
-            "name": "GitBase",
-            "path": "/CoreSkills/TeamCollaboration/GitBase",
-            "component": () => import('@/views/CoreSkills/TeamCollaboration/GitBase.vue')
-          },
-          {
-            "name": "GitWorkflow",
-            "path": "/CoreSkills/TeamCollaboration/GitWorkflow",
-            "component": () => import('@/views/CoreSkills/TeamCollaboration/GitWorkflow.vue')
-          },
-          {
-            "name": "GitIgnore",
-            "path": "/CoreSkills/TeamCollaboration/GitIgnore",
-            "component": () => import('@/views/CoreSkills/TeamCollaboration/GitIgnore.vue')
-          },
-          {
-            "name": "GitCommand",
-            "path": "/CoreSkills/TeamCollaboration/GitCommand",
-            "component": () => import('@/views/CoreSkills/TeamCollaboration/GitCommand.vue')
-          },
-          {
-            "name": "GitConflict",
-            "path": "/CoreSkills/TeamCollaboration/GitConflict",
-            "component": () => import('@/views/CoreSkills/TeamCollaboration/GitConflict.vue')
-          },
-          {
-            "name": "GitBranch",
-            "path": "/CoreSkills/TeamCollaboration/GitBranch",
-            "component": () => import('@/views/CoreSkills/TeamCollaboration/GitBranch.vue')
-          },
-          {
-            "name": "ResetAndRestoreAndRevert",
-            "path": "/CoreSkills/TeamCollaboration/ResetAndRestoreAndRevert",
-            "children": [
-              {
-                "name": "Reset",
-                "path": "/CoreSkills/TeamCollaboration/ResetAndRestoreAndRevert/Reset",
-                "component": () => import('@/views/CoreSkills/TeamCollaboration/ResetAndRestoreAndRevert/Reset.vue')
-              },
-              {
-                "name": "Revert",
-                "path": "/CoreSkills/TeamCollaboration/ResetAndRestoreAndRevert/Revert",
-                "component": () => import('@/views/CoreSkills/TeamCollaboration/ResetAndRestoreAndRevert/Revert.vue')
-              },
-              {
-                "name": "Restore",
-                "path": "/CoreSkills/TeamCollaboration/ResetAndRestoreAndRevert/Restore",
-                "component": () => import('@/views/CoreSkills/TeamCollaboration/ResetAndRestoreAndRevert/Restore.vue')
-              },
-              {
-                "name": "ResetAndRestoreAndRevertSummary",
-                "path": "/CoreSkills/TeamCollaboration/ResetAndRestoreAndRevert/ResetAndRestoreAndRevertSummary",
-                "component": () => import('@/views/CoreSkills/TeamCollaboration/ResetAndRestoreAndRevert/ResetAndRestoreAndRevertSummary.vue')
-              }
-            ]
-          },
-          {
-            "name": "LogAndReflog",
-            "path": "/CoreSkills/TeamCollaboration/LogAndReflog",
-            "component": () => import('@/views/CoreSkills/TeamCollaboration/LogAndReflog.vue')
-          },
-          {
-            "name": "GitCherryPick",
-            "path": "/CoreSkills/TeamCollaboration/GitCherryPick",
-            "component": () => import('@/views/CoreSkills/TeamCollaboration/GitCherryPick.vue')
-          },
-          {
-            "name": "Rebase",
-            "path": "/CoreSkills/TeamCollaboration/Rebase",
-            "component": () => import('@/views/CoreSkills/TeamCollaboration/Rebase.vue')
-          },
-          {
-            "name": "GitTagAndGitAlias",
-            "path": "/CoreSkills/TeamCollaboration/GitTagAndGitAlias",
-            "component": () => import('@/views/CoreSkills/TeamCollaboration/GitTagAndGitAlias.vue')
-          },
-          {
-            "name": "Husky1",
-            "path": "/CoreSkills/TeamCollaboration/Husky1",
-            "component": () => import('@/views/CoreSkills/TeamCollaboration/Husky1.vue')
-          },
-          {
-            "name": "FeatureBranchAndTrunkBased",
-            "path": "/CoreSkills/TeamCollaboration/FeatureBranchAndTrunkBased",
-            "component": () => import('@/views/CoreSkills/TeamCollaboration/FeatureBranchAndTrunkBased.vue')
           }
         ]
       }
@@ -4520,6 +4444,17 @@ export default [
     "path": "/AdvancedSkills",
     "children": [
       {
+        "name": "bun",
+        "path": "/AdvancedSkills/bun",
+        "children": [
+          {
+            "name": "BunIntroduction",
+            "path": "/AdvancedSkills/bun/BunIntroduction",
+            "component": () => import('@/views/AdvancedSkills/bun/BunIntroduction.vue')
+          }
+        ]
+      },
+      {
         "name": "NodeJS",
         "path": "/AdvancedSkills/NodeJS",
         "children": [
@@ -4896,17 +4831,6 @@ export default [
                 ]
               }
             ]
-          }
-        ]
-      },
-      {
-        "name": "bun",
-        "path": "/AdvancedSkills/bun",
-        "children": [
-          {
-            "name": "BunIntroduction",
-            "path": "/AdvancedSkills/bun/BunIntroduction",
-            "component": () => import('@/views/AdvancedSkills/bun/BunIntroduction.vue')
           }
         ]
       },
@@ -6582,6 +6506,103 @@ export default [
         "name": "MyTheme",
         "path": "/Me/MyTheme",
         "component": () => import('@/views/Me/MyTheme.vue')
+      }
+    ]
+  },
+  {
+    "name": "TeamCollaboration",
+    "path": "/TeamCollaboration",
+    "children": [
+      {
+        "name": "GitBase",
+        "path": "/TeamCollaboration/GitBase",
+        "component": () => import('@/views/TeamCollaboration/GitBase.vue')
+      },
+      {
+        "name": "GitCommandEncyclopedia",
+        "path": "/TeamCollaboration/GitCommandEncyclopedia",
+        "component": () => import('@/views/TeamCollaboration/GitCommandEncyclopedia.vue')
+      },
+      {
+        "name": "GitWorkflow",
+        "path": "/TeamCollaboration/GitWorkflow",
+        "component": () => import('@/views/TeamCollaboration/GitWorkflow.vue')
+      },
+      {
+        "name": "GitIgnore",
+        "path": "/TeamCollaboration/GitIgnore",
+        "component": () => import('@/views/TeamCollaboration/GitIgnore.vue')
+      },
+      {
+        "name": "GitCommand",
+        "path": "/TeamCollaboration/GitCommand",
+        "component": () => import('@/views/TeamCollaboration/GitCommand.vue')
+      },
+      {
+        "name": "GitConflict",
+        "path": "/TeamCollaboration/GitConflict",
+        "component": () => import('@/views/TeamCollaboration/GitConflict.vue')
+      },
+      {
+        "name": "GitBranch",
+        "path": "/TeamCollaboration/GitBranch",
+        "component": () => import('@/views/TeamCollaboration/GitBranch.vue')
+      },
+      {
+        "name": "ResetAndRestoreAndRevert",
+        "path": "/TeamCollaboration/ResetAndRestoreAndRevert",
+        "children": [
+          {
+            "name": "Reset",
+            "path": "/TeamCollaboration/ResetAndRestoreAndRevert/Reset",
+            "component": () => import('@/views/TeamCollaboration/ResetAndRestoreAndRevert/Reset.vue')
+          },
+          {
+            "name": "Revert",
+            "path": "/TeamCollaboration/ResetAndRestoreAndRevert/Revert",
+            "component": () => import('@/views/TeamCollaboration/ResetAndRestoreAndRevert/Revert.vue')
+          },
+          {
+            "name": "Restore",
+            "path": "/TeamCollaboration/ResetAndRestoreAndRevert/Restore",
+            "component": () => import('@/views/TeamCollaboration/ResetAndRestoreAndRevert/Restore.vue')
+          },
+          {
+            "name": "ResetAndRestoreAndRevertSummary",
+            "path": "/TeamCollaboration/ResetAndRestoreAndRevert/ResetAndRestoreAndRevertSummary",
+            "component": () => import('@/views/TeamCollaboration/ResetAndRestoreAndRevert/ResetAndRestoreAndRevertSummary.vue')
+          }
+        ]
+      },
+      {
+        "name": "LogAndReflog",
+        "path": "/TeamCollaboration/LogAndReflog",
+        "component": () => import('@/views/TeamCollaboration/LogAndReflog.vue')
+      },
+      {
+        "name": "GitCherryPick",
+        "path": "/TeamCollaboration/GitCherryPick",
+        "component": () => import('@/views/TeamCollaboration/GitCherryPick.vue')
+      },
+      {
+        "name": "Rebase",
+        "path": "/TeamCollaboration/Rebase",
+        "component": () => import('@/views/TeamCollaboration/Rebase.vue')
+      },
+      {
+        "name": "GitTagAndGitAlias",
+        "path": "/TeamCollaboration/GitTagAndGitAlias",
+        "component": () => import('@/views/TeamCollaboration/GitTagAndGitAlias.vue')
+      },
+      {
+        "name": "Husky1",
+        "path": "/TeamCollaboration/Husky1",
+        "component": () => import('@/views/TeamCollaboration/Husky1.vue')
+      },
+      {
+        "name": "FeatureBranchAndTrunkBased",
+        "path": "/TeamCollaboration/FeatureBranchAndTrunkBased",
+        "component": () => import('@/views/TeamCollaboration/FeatureBranchAndTrunkBased.vue')
       }
     ]
   }

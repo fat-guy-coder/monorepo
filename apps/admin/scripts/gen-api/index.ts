@@ -235,7 +235,7 @@ async function emitModuleApi(
       const respSchema = pickSuccessResponseSchema(op);
 
       // Extract the actual data type from response schema
-      // The Fastify response is { code, message, data: T } but ApiResult already wraps this
+      // The backend response is { code, message, data: T } but ApiResult already wraps this
       // So we need to extract 'data' property type, not the whole wrapper
       let respType = 'unknown';
       if (respSchema) {

@@ -19,7 +19,7 @@
         <Spin :spinning="loading" class="loading" />
         <Menu @select="goto" :isMobile="isMobile" :collapsed="Menucollapsed" v-show="!loading"
           :mode="Menucollapsed ? 'vertical' : 'inline'" :items="menus as any" :selectedKeys="selectedKeys"
-          v-model:openKeys="openKeys">
+          v-model:openKeys="openKeys" :onLoadData="loadChildren">
         </Menu>
       </div>
     </div>
@@ -49,11 +49,9 @@ import { computed, ref, watch, onMounted, onUnmounted, nextTick, provide } from 
 import {
   type MenuItem, //菜单项类型
   findFatherKeysListByKey, //查找父级菜单key列表
-  findMatchingLabels, //查找匹配的项并改变菜单项的label 返回openKeys和selectedKeys 具有副作用
-  reWashMenus, //重置菜单项匹配状态 具有副作用
   findMenuItemByName, //查找菜单项 通过name
 } from '@/menu'
-import { getApiMenus } from '@/api/menu'
+import { getApiMenus, getApiMenusSearch } from '@/api/menu'
 import { useTabStore } from '@/stores/tab' //标签列表store
 import { useDeviceStore } from '@/stores/device' //设备信息store
 import { useUIConfigStore, type Theme } from '@/stores/uiconfig' //UI配置store
@@ -62,6 +60,7 @@ import { debounce, scrollIntoViewById } from '@/function/common' //常用函数
 import type { NavItem } from 'components' //导航项类型
 import { useGradientAnimation } from '@/hooks/useGradientAnimation' //渐变色动画
 import { useDetectDevice } from '@/hooks/useDetectDevice' //设备信息hook
+import { loadViewByPath } from '@/views/views-loader' //动态视图加载器
 // import { request } from '@/request'
 
 //获取用户信息store
@@ -192,14 +191,30 @@ onUnmounted(() => {
   menus.value.length = 0
 })
 
-//获取菜单（完整树结构）
+//获取菜单（只加载根菜单，按需加载子菜单）
 const getMenus = async () => {
   loading.value = true
   mainViewLoading.value = true
-  const { data } = await getApiMenus({ tree: 'true', project: 'front_learning' })
-  menus.value = data as MenuItem[]
+  const { data } = await getApiMenus({ root: 'true', project: 'learning' })
+  menus.value = (data as MenuItem[]).map(item => ({ ...item, loading: false }))
   loading.value = false
   mainViewLoading.value = false
+}
+
+// 动态加载子菜单
+const loadChildren = async (parentItem: any): Promise<void> => {
+  if (parentItem.isLeaf) return
+  if (parentItem.children?.length > 0) return // 已有子菜单
+
+  parentItem.loading = true
+  try {
+    const { data } = await getApiMenus({ parentId: parentItem.id })
+    parentItem.children = data as MenuItem[]
+  } catch (e) {
+    message.error('加载子菜单失败')
+  } finally {
+    parentItem.loading = false
+  }
 }
 
 //标签列表store
@@ -235,17 +250,27 @@ const searchValue = ref<string>('')
 
 //显示菜单
 const showMenu = debounce(async (value) => {
-  //loading.value = true
   if (!value) {
     openKeys.value = []
-    reWashMenus(menus.value)
-    //loading.value = false
+    // 清空搜索时恢复加载根菜单
+    await getMenus()
     return
   }
-  const { selectedKeys, openKeys: keys } = findMatchingLabels(menus.value, value)
-  openKeys.value = keys
-  await nextTick()
-  scrollTo(selectedKeys[0])
+
+  // 调用搜索 API
+  try {
+    const { data } = await getApiMenusSearch({ project: 'learning', search: value })
+    if (data && data.matched) {
+      // 更新 openKeys（父级菜单路径）
+      openKeys.value = data.openKeys
+      // 用搜索结果替换菜单树
+      menus.value = data.matched as unknown as MenuItem[]
+      await nextTick()
+      scrollTo(data.selectedKeys[0])
+    }
+  } catch (e) {
+    console.error('搜索失败:', e)
+  }
 }, 500)
 
 //监听搜索值
@@ -335,7 +360,7 @@ function removeSide(index: number, side: 'left' | 'right', key: string) {
 }
 
 //跳转菜单
-function goto({ path, name, label, redirect }: MenuItem) {
+function goto({ path, name, label, redirect, isLeaf }: MenuItem) {
   if (path === store.activeKey) {
     return
   }
@@ -345,6 +370,23 @@ function goto({ path, name, label, redirect }: MenuItem) {
     goToByName(redirect.name, true)
     return
   }
+
+  // 动态注册路由（仅对叶子菜单生效）
+  if (isLeaf) {
+    const routeName = name
+    // 检查路由是否已注册
+    if (!router.hasRoute(routeName)) {
+      // 使用 views-loader 动态加载组件
+      const viewPath = path.startsWith('/') ? path : `/${path}`
+      const component = loadViewByPath(viewPath)
+      router.addRoute({
+        path: viewPath,
+        name: routeName,
+        component,
+      })
+    }
+  }
+
   mainViewLoading.value = true
   router.push({ path }).then(() => {
     mainViewLoading.value = false

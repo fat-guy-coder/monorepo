@@ -25,6 +25,7 @@
         <template #node="{ node, expanded }">
           <span class="tree-icon">{{ node.icon }}</span>
           <span class="tree-label">{{ node.label }}</span>
+          <span v-if="node.loading" class="loading-indicator">加载中...</span>
           <span class="node-actions">
             <Button size="sm" text @click.stop="handleAddChildOf(node)">新增</Button>
             <Button size="sm" text @click.stop="handleEditOf(node)">编辑</Button>
@@ -114,7 +115,8 @@ const parentMenuOptions = computed(() => {
     }
     return result
   }
-  return flatten(treeData.value)
+  // 添加"根目录"选项，value 为空字符串表示顶级菜单
+  return [{ label: '根目录', value: '' }, ...flatten(treeData.value)]
 })
 
 // Find node in tree by id
@@ -228,18 +230,20 @@ const menuToTreeNode = (menu: MenuItem): TreeNode => {
   return {
     id: menu.id ?? '',
     label: menu.label || menu.name || '',
-    children: children?.map(menuToTreeNode),
+    // 如果 API 返回了 children，用它；否则不设置 children，表示可能有子菜单（需要异步加载）
+    children: children ? children.map(menuToTreeNode) : undefined,
+    loading: false,
     ...rest,
   } as TreeNode
 }
 
-// Fetch menus from API
+// Fetch root menus from API
 const fetchMenus = async () => {
   loading.value = true
   try {
     const res = await getApiMenus({
       project: searchForm.project || undefined,
-      tree: 'true',
+      root: 'true',
     })
     if (res.data && Array.isArray(res.data)) {
       treeData.value = res.data.map(menuToTreeNode)
@@ -254,6 +258,29 @@ const fetchMenus = async () => {
   }
 }
 
+// Load children for a node
+const loadNodeChildren = async (node: TreeNode) => {
+  if (node.loading) return
+  if (node.children && node.children.length > 0) return // 已有子菜单
+
+  node.loading = true
+  try {
+    const res = await getApiMenus({ parentId: node.id as string })
+    if (res.data && Array.isArray(res.data)) {
+      node.children = res.data.map(menuToTreeNode)
+      // 如果没有子菜单，更新 isLeaf 为 true
+      if (node.children.length === 0) {
+        node.isLeaf = true
+      }
+    }
+  } catch (error) {
+    console.error('Failed to load children:', error)
+    message.error('加载子菜单失败')
+  } finally {
+    node.loading = false
+  }
+}
+
 const handleSearch = () => {
   fetchMenus()
 }
@@ -262,10 +289,12 @@ const handleNodeClick = (node: TreeNode) => {
   selectedNode.value = node
 }
 
-const handleNodeExpand = (node: TreeNode) => {
+const handleNodeExpand = async (node: TreeNode) => {
   if (!defaultExpandedKeys.value.includes(node.id)) {
     defaultExpandedKeys.value.push(node.id)
   }
+  // 异步加载子菜单
+  await loadNodeChildren(node)
 }
 
 const handleNodeCollapse = (node: TreeNode) => {
@@ -556,6 +585,12 @@ onMounted(() => {
 .tree-icon {
   margin-right: 6px;
   font-size: 14px;
+}
+
+.loading-indicator {
+  margin-left: 8px;
+  font-size: 12px;
+  color: var(--color-text-secondary);
 }
 
 .tree-label {

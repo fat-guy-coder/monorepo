@@ -2,7 +2,6 @@ import { createRouter, createWebHistory } from 'vue-router'
 import { useAutoScroll } from '@/hooks/useAutoScroll'
 import HomeView from '@/views/HomeView.vue'
 import type { VNode } from 'vue'
-import routes from './generatedRoutes'
 import notFound from '@/views/Other/notFound.vue'
 import DragLayoutExample from '@/views/LayoutExample.vue'
 
@@ -34,7 +33,6 @@ const router = createRouter({
       name: 'drag-layout',
       component: DragLayoutExample,
     },
-    ...routes,
     {
       path: '/:pathMatch(.*)*',
       name: 'notFound',
