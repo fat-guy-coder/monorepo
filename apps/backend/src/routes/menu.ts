@@ -467,17 +467,24 @@ routes.push({
 
       const result = await rawQuery`UPDATE menu SET name = ${name}, label = ${label}, path = ${generatedPath}, icon = ${icon}, "order" = ${order}, project = ${project}, parent_id = ${parentId} WHERE id = ${id} RETURNING *`
 
+      // 递归更新子菜单路径的函数
+      const updateChildrenPaths = async (parentId: string, newParentPath: string) => {
+        const children = allMenus.filter(m => m.parentId === parentId)
+        for (const child of children) {
+          const childNewPath = `${newParentPath}/${child.name}`
+          await rawQuery`UPDATE menu SET path = ${childNewPath} WHERE id = ${child.id}`
+          // 递归更新子菜单
+          await updateChildrenPaths(child.id, childNewPath)
+        }
+      }
+
       // 如果 parentId 改变了，递归更新所有子菜单的路径
       if (parentIdChanged && generatedPath && generatedPath !== existingMenu.path) {
-        const updateChildrenPaths = async (parentId: string, newParentPath: string) => {
-          const children = allMenus.filter(m => m.parentId === parentId)
-          for (const child of children) {
-            const childNewPath = `${newParentPath}/${child.name}`
-            await rawQuery`UPDATE menu SET path = ${childNewPath} WHERE id = ${child.id}`
-            // 递归更新子菜单
-            await updateChildrenPaths(child.id, childNewPath)
-          }
-        }
+        await updateChildrenPaths(id, generatedPath)
+      }
+
+      // 如果 name 改变了，递归更新所有子菜单的路径
+      if (body.name !== undefined && body.name !== existingMenu.name && generatedPath) {
         await updateChildrenPaths(id, generatedPath)
       }
 

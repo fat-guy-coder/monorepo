@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3>🗺️ 学习进度 ⭐</h3>
+    <h3>AI类型 ⭐⭐⭐</h3>
   </div>
 </template>
 

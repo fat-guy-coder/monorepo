@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3>服务控制</h3>
+    <h3>建模</h3>
   </div>
 </template>
 

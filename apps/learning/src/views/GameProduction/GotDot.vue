@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3>🌐 前端前景 ⭐⭐⭐</h3>
+    <h3>GotDot</h3>
   </div>
 </template>
 

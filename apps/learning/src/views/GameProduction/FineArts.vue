@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3>环境变量设置</h3>
+    <h3>美术</h3>
   </div>
 </template>
 

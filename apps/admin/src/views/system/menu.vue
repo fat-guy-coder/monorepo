@@ -311,6 +311,7 @@ const resetForm = () => {
   formData.project = searchForm.project || ''
   formData.parentId = ''
   formData.id = ''
+  formData.path = ''
 }
 
 const handleAddRoot = () => {
