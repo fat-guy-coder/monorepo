@@ -2,7 +2,6 @@
   <li class="menu-item" :style="{ '--level': level }" @click.stop.prevent="handleClick"
     @mouseenter.stop.prevent="handleMouseEnter" @mouseleave="handleMouseLeave">
     <div class="menu-item__title" :class="titleClasses" :id="item.path">
-      <span v-if="item.icon" class="menu-item__icon">{{ item.icon }}</span>
       <span :class="['menu-item__label']" :title="item.label || item.name">
         {{ item.label || item.name }}
       </span>
@@ -326,12 +325,6 @@ function isMouseInElement(element: HTMLElement, mouseX: number, mouseY: number) 
     padding-left: calc(var(--gap-sm) + var(--level, 0) * var(--gap-md));
     cursor: pointer;
     border-radius: var(--border-radius-md);
-  }
-  
-  .menu-item__icon {
-    margin-right: var(--gap-xs);
-    font-size: var(--font-size-normal);
-    flex-shrink: 0;
   }
   
   .menu-item__label {

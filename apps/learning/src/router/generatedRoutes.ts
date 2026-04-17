@@ -1,5 +1,1058 @@
 export default [
   {
+    "name": "ComputerBasicKnowledge",
+    "path": "/ComputerBasicKnowledge",
+    "children": [
+      {
+        "name": "ComputerLearningPath",
+        "path": "/ComputerBasicKnowledge/ComputerLearningPath",
+        "component": () => import('@/views/ComputerBasicKnowledge/ComputerLearningPath.vue')
+      },
+      {
+        "name": "CompilerPrinciple",
+        "path": "/ComputerBasicKnowledge/CompilerPrinciple",
+        "children": [
+          {
+            "name": "CompilerPrincipleOverview",
+            "path": "/ComputerBasicKnowledge/CompilerPrinciple/CompilerPrincipleOverview",
+            "component": () => import('@/views/ComputerBasicKnowledge/CompilerPrinciple/CompilerPrincipleOverview.vue')
+          },
+          {
+            "name": "AssemblyLanguage",
+            "path": "/ComputerBasicKnowledge/CompilerPrinciple/AssemblyLanguage",
+            "component": () => import('@/views/ComputerBasicKnowledge/CompilerPrinciple/AssemblyLanguage.vue')
+          },
+          {
+            "name": "AOTAndJIT",
+            "path": "/ComputerBasicKnowledge/CompilerPrinciple/AOTAndJIT",
+            "component": () => import('@/views/ComputerBasicKnowledge/CompilerPrinciple/AOTAndJIT.vue')
+          }
+        ]
+      },
+      {
+        "name": "ComputerComposition",
+        "path": "/ComputerBasicKnowledge/ComputerComposition",
+        "children": [
+          {
+            "name": "ComputerHardwareLearningRoadmap",
+            "path": "/ComputerBasicKnowledge/ComputerComposition/ComputerHardwareLearningRoadmap",
+            "component": () => import('@/views/ComputerBasicKnowledge/ComputerComposition/ComputerHardwareLearningRoadmap.vue')
+          },
+          {
+            "name": "ComputerHardware",
+            "path": "/ComputerBasicKnowledge/ComputerComposition/ComputerHardware",
+            "children": [
+              {
+                "name": "CPU",
+                "path": "/ComputerBasicKnowledge/ComputerComposition/ComputerHardware/CPU",
+                "component": () => import('@/views/ComputerBasicKnowledge/ComputerComposition/ComputerHardware/CPU.vue')
+              },
+              {
+                "name": "GPU",
+                "path": "/ComputerBasicKnowledge/ComputerComposition/ComputerHardware/GPU",
+                "component": () => import('@/views/ComputerBasicKnowledge/ComputerComposition/ComputerHardware/GPU.vue')
+              },
+              {
+                "name": "Memory",
+                "path": "/ComputerBasicKnowledge/ComputerComposition/ComputerHardware/Memory",
+                "component": () => import('@/views/ComputerBasicKnowledge/ComputerComposition/ComputerHardware/Memory.vue')
+              },
+              {
+                "name": "hardDrave",
+                "path": "/ComputerBasicKnowledge/ComputerComposition/ComputerHardware/hardDrave",
+                "component": () => import('@/views/ComputerBasicKnowledge/ComputerComposition/ComputerHardware/hardDrave.vue')
+              },
+              {
+                "name": "motherboard",
+                "path": "/ComputerBasicKnowledge/ComputerComposition/ComputerHardware/motherboard",
+                "component": () => import('@/views/ComputerBasicKnowledge/ComputerComposition/ComputerHardware/motherboard.vue')
+              }
+            ]
+          },
+          {
+            "name": "ComputerHistory",
+            "path": "/ComputerBasicKnowledge/ComputerComposition/ComputerHistory",
+            "component": () => import('@/views/ComputerBasicKnowledge/ComputerComposition/ComputerHistory.vue')
+          },
+          {
+            "name": "BinaryConversion",
+            "path": "/ComputerBasicKnowledge/ComputerComposition/BinaryConversion",
+            "component": () => import('@/views/ComputerBasicKnowledge/ComputerComposition/BinaryConversion.vue')
+          },
+          {
+            "name": "DigitalLogic",
+            "path": "/ComputerBasicKnowledge/ComputerComposition/DigitalLogic",
+            "component": () => import('@/views/ComputerBasicKnowledge/ComputerComposition/DigitalLogic.vue')
+          }
+        ]
+      },
+      {
+        "name": "ComputerNetwork",
+        "path": "/ComputerBasicKnowledge/ComputerNetwork",
+        "component": () => import('@/views/ComputerBasicKnowledge/ComputerNetwork.vue')
+      },
+      {
+        "name": "CharacterEncoding",
+        "path": "/ComputerBasicKnowledge/CharacterEncoding",
+        "component": () => import('@/views/ComputerBasicKnowledge/CharacterEncoding.vue')
+      },
+      {
+        "name": "BasicAlgorithm",
+        "path": "/ComputerBasicKnowledge/BasicAlgorithm",
+        "children": [
+          {
+            "name": "SortingAlgorithm1",
+            "path": "/ComputerBasicKnowledge/BasicAlgorithm/SortingAlgorithm1",
+            "component": () => import('@/views/ComputerBasicKnowledge/BasicAlgorithm/SortingAlgorithm1.vue')
+          },
+          {
+            "name": "SearchAlgorithm1",
+            "path": "/ComputerBasicKnowledge/BasicAlgorithm/SearchAlgorithm1",
+            "component": () => import('@/views/ComputerBasicKnowledge/BasicAlgorithm/SearchAlgorithm1.vue')
+          },
+          {
+            "name": "RecursiveAlgorithm1",
+            "path": "/ComputerBasicKnowledge/BasicAlgorithm/RecursiveAlgorithm1",
+            "component": () => import('@/views/ComputerBasicKnowledge/BasicAlgorithm/RecursiveAlgorithm1.vue')
+          },
+          {
+            "name": "DynamicProgrammingBasic",
+            "path": "/ComputerBasicKnowledge/BasicAlgorithm/DynamicProgrammingBasic",
+            "component": () => import('@/views/ComputerBasicKnowledge/BasicAlgorithm/DynamicProgrammingBasic.vue')
+          },
+          {
+            "name": "GreedyAlgorithm1",
+            "path": "/ComputerBasicKnowledge/BasicAlgorithm/GreedyAlgorithm1",
+            "component": () => import('@/views/ComputerBasicKnowledge/BasicAlgorithm/GreedyAlgorithm1.vue')
+          },
+          {
+            "name": "DivideAndConquer1",
+            "path": "/ComputerBasicKnowledge/BasicAlgorithm/DivideAndConquer1",
+            "component": () => import('@/views/ComputerBasicKnowledge/BasicAlgorithm/DivideAndConquer1.vue')
+          },
+          {
+            "name": "BacktrackingAlgorithm1",
+            "path": "/ComputerBasicKnowledge/BasicAlgorithm/BacktrackingAlgorithm1",
+            "component": () => import('@/views/ComputerBasicKnowledge/BasicAlgorithm/BacktrackingAlgorithm1.vue')
+          },
+          {
+            "name": "BranchAndBoundAlgorithm1",
+            "path": "/ComputerBasicKnowledge/BasicAlgorithm/BranchAndBoundAlgorithm1",
+            "component": () => import('@/views/ComputerBasicKnowledge/BasicAlgorithm/BranchAndBoundAlgorithm1.vue')
+          }
+        ]
+      },
+      {
+        "name": "DataStructureBasic",
+        "path": "/ComputerBasicKnowledge/DataStructureBasic",
+        "children": [
+          {
+            "name": "Array2",
+            "path": "/ComputerBasicKnowledge/DataStructureBasic/Array2",
+            "component": () => import('@/views/ComputerBasicKnowledge/DataStructureBasic/Array2.vue')
+          },
+          {
+            "name": "LinkedList1",
+            "path": "/ComputerBasicKnowledge/DataStructureBasic/LinkedList1",
+            "component": () => import('@/views/ComputerBasicKnowledge/DataStructureBasic/LinkedList1.vue')
+          },
+          {
+            "name": "Stack1",
+            "path": "/ComputerBasicKnowledge/DataStructureBasic/Stack1",
+            "component": () => import('@/views/ComputerBasicKnowledge/DataStructureBasic/Stack1.vue')
+          },
+          {
+            "name": "Queue1",
+            "path": "/ComputerBasicKnowledge/DataStructureBasic/Queue1",
+            "component": () => import('@/views/ComputerBasicKnowledge/DataStructureBasic/Queue1.vue')
+          },
+          {
+            "name": "Tree1",
+            "path": "/ComputerBasicKnowledge/DataStructureBasic/Tree1",
+            "component": () => import('@/views/ComputerBasicKnowledge/DataStructureBasic/Tree1.vue')
+          },
+          {
+            "name": "Graph1",
+            "path": "/ComputerBasicKnowledge/DataStructureBasic/Graph1",
+            "component": () => import('@/views/ComputerBasicKnowledge/DataStructureBasic/Graph1.vue')
+          },
+          {
+            "name": "Heap1",
+            "path": "/ComputerBasicKnowledge/DataStructureBasic/Heap1",
+            "component": () => import('@/views/ComputerBasicKnowledge/DataStructureBasic/Heap1.vue')
+          },
+          {
+            "name": "HashTable1",
+            "path": "/ComputerBasicKnowledge/DataStructureBasic/HashTable1",
+            "component": () => import('@/views/ComputerBasicKnowledge/DataStructureBasic/HashTable1.vue')
+          }
+        ]
+      },
+      {
+        "name": "OperatingSystem",
+        "path": "/ComputerBasicKnowledge/OperatingSystem",
+        "children": [
+          {
+            "name": "OperatingSystems",
+            "path": "/ComputerBasicKnowledge/OperatingSystem/OperatingSystems",
+            "component": () => import('@/views/ComputerBasicKnowledge/OperatingSystem/OperatingSystems.vue')
+          },
+          {
+            "name": "FileSystem",
+            "path": "/ComputerBasicKnowledge/OperatingSystem/FileSystem",
+            "children": [
+              {
+                "name": "FileSystemPrinciple",
+                "path": "/ComputerBasicKnowledge/OperatingSystem/FileSystem/FileSystemPrinciple",
+                "component": () => import('@/views/ComputerBasicKnowledge/OperatingSystem/FileSystem/FileSystemPrinciple.vue')
+              },
+              {
+                "name": "HardlinkAndSoftlink",
+                "path": "/ComputerBasicKnowledge/OperatingSystem/FileSystem/HardlinkAndSoftlink",
+                "component": () => import('@/views/ComputerBasicKnowledge/OperatingSystem/FileSystem/HardlinkAndSoftlink.vue')
+              }
+            ]
+          },
+          {
+            "name": "ProcessAndThread",
+            "path": "/ComputerBasicKnowledge/OperatingSystem/ProcessAndThread",
+            "component": () => import('@/views/ComputerBasicKnowledge/OperatingSystem/ProcessAndThread.vue')
+          },
+          {
+            "name": "ProcessAndThreadConcepts",
+            "path": "/ComputerBasicKnowledge/OperatingSystem/ProcessAndThreadConcepts",
+            "component": () => import('@/views/ComputerBasicKnowledge/OperatingSystem/ProcessAndThreadConcepts.vue')
+          },
+          {
+            "name": "InterProcessCommunication",
+            "path": "/ComputerBasicKnowledge/OperatingSystem/InterProcessCommunication",
+            "component": () => import('@/views/ComputerBasicKnowledge/OperatingSystem/InterProcessCommunication.vue')
+          },
+          {
+            "name": "ProcessScheduling",
+            "path": "/ComputerBasicKnowledge/OperatingSystem/ProcessScheduling",
+            "component": () => import('@/views/ComputerBasicKnowledge/OperatingSystem/ProcessScheduling.vue')
+          },
+          {
+            "name": "ProcessSchedulingAlgorithm",
+            "path": "/ComputerBasicKnowledge/OperatingSystem/ProcessSchedulingAlgorithm",
+            "component": () => import('@/views/ComputerBasicKnowledge/OperatingSystem/ProcessSchedulingAlgorithm.vue')
+          }
+        ]
+      },
+      {
+        "name": "CommandLineCollection",
+        "path": "/ComputerBasicKnowledge/CommandLineCollection",
+        "children": [
+          {
+            "name": "CMDCommand",
+            "path": "/ComputerBasicKnowledge/CommandLineCollection/CMDCommand",
+            "component": () => import('@/views/ComputerBasicKnowledge/CommandLineCollection/CMDCommand.vue')
+          },
+          {
+            "name": "macCommand",
+            "path": "/ComputerBasicKnowledge/CommandLineCollection/macCommand",
+            "component": () => import('@/views/ComputerBasicKnowledge/CommandLineCollection/macCommand.vue')
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "TeamCollaboration",
+    "path": "/TeamCollaboration",
+    "children": [
+      {
+        "name": "GitBase",
+        "path": "/TeamCollaboration/GitBase",
+        "component": () => import('@/views/TeamCollaboration/GitBase.vue')
+      },
+      {
+        "name": "GitWorkflow",
+        "path": "/TeamCollaboration/GitWorkflow",
+        "component": () => import('@/views/TeamCollaboration/GitWorkflow.vue')
+      },
+      {
+        "name": "GitCommand",
+        "path": "/TeamCollaboration/GitCommand",
+        "component": () => import('@/views/TeamCollaboration/GitCommand.vue')
+      },
+      {
+        "name": "GitCommandEncyclopedia",
+        "path": "/TeamCollaboration/GitCommandEncyclopedia",
+        "component": () => import('@/views/TeamCollaboration/GitCommandEncyclopedia.vue')
+      },
+      {
+        "name": "GitConflict",
+        "path": "/TeamCollaboration/GitConflict",
+        "component": () => import('@/views/TeamCollaboration/GitConflict.vue')
+      },
+      {
+        "name": "GitBranch",
+        "path": "/TeamCollaboration/GitBranch",
+        "component": () => import('@/views/TeamCollaboration/GitBranch.vue')
+      },
+      {
+        "name": "ResetAndRestoreAndRevert",
+        "path": "/TeamCollaboration/ResetAndRestoreAndRevert",
+        "children": [
+          {
+            "name": "Reset",
+            "path": "/TeamCollaboration/ResetAndRestoreAndRevert/Reset",
+            "component": () => import('@/views/TeamCollaboration/ResetAndRestoreAndRevert/Reset.vue')
+          },
+          {
+            "name": "Revert",
+            "path": "/TeamCollaboration/ResetAndRestoreAndRevert/Revert",
+            "component": () => import('@/views/TeamCollaboration/ResetAndRestoreAndRevert/Revert.vue')
+          },
+          {
+            "name": "Restore",
+            "path": "/TeamCollaboration/ResetAndRestoreAndRevert/Restore",
+            "component": () => import('@/views/TeamCollaboration/ResetAndRestoreAndRevert/Restore.vue')
+          },
+          {
+            "name": "ResetAndRestoreAndRevertSummary",
+            "path": "/TeamCollaboration/ResetAndRestoreAndRevert/ResetAndRestoreAndRevertSummary",
+            "component": () => import('@/views/TeamCollaboration/ResetAndRestoreAndRevert/ResetAndRestoreAndRevertSummary.vue')
+          }
+        ]
+      },
+      {
+        "name": "LogAndReflog",
+        "path": "/TeamCollaboration/LogAndReflog",
+        "component": () => import('@/views/TeamCollaboration/LogAndReflog.vue')
+      },
+      {
+        "name": "GitCherryPick",
+        "path": "/TeamCollaboration/GitCherryPick",
+        "component": () => import('@/views/TeamCollaboration/GitCherryPick.vue')
+      },
+      {
+        "name": "Rebase",
+        "path": "/TeamCollaboration/Rebase",
+        "component": () => import('@/views/TeamCollaboration/Rebase.vue')
+      },
+      {
+        "name": "GitTagAndGitAlias",
+        "path": "/TeamCollaboration/GitTagAndGitAlias",
+        "component": () => import('@/views/TeamCollaboration/GitTagAndGitAlias.vue')
+      },
+      {
+        "name": "Husky1",
+        "path": "/TeamCollaboration/Husky1",
+        "component": () => import('@/views/TeamCollaboration/Husky1.vue')
+      },
+      {
+        "name": "FeatureBranchAndTrunkBased",
+        "path": "/TeamCollaboration/FeatureBranchAndTrunkBased",
+        "component": () => import('@/views/TeamCollaboration/FeatureBranchAndTrunkBased.vue')
+      },
+      {
+        "name": "GitIgnore",
+        "path": "/TeamCollaboration/GitIgnore",
+        "component": () => import('@/views/TeamCollaboration/GitIgnore.vue')
+      },
+      {
+        "name": "GitBisect",
+        "path": "/TeamCollaboration/GitBisect",
+        "component": () => import('@/views/TeamCollaboration/GitBisect.vue')
+      },
+      {
+        "name": "Svn",
+        "path": "/TeamCollaboration/Svn",
+        "component": () => import('@/views/TeamCollaboration/Svn.vue')
+      }
+    ]
+  },
+  {
+    "name": "AlgorithmsAndDataStructures",
+    "path": "/AlgorithmsAndDataStructures",
+    "children": [
+      {
+        "name": "WhyAlgorithmsAndDataStructures",
+        "path": "/AlgorithmsAndDataStructures/WhyAlgorithmsAndDataStructures",
+        "component": () => import('@/views/AlgorithmsAndDataStructures/WhyAlgorithmsAndDataStructures.vue')
+      },
+      {
+        "name": "DataStructures",
+        "path": "/AlgorithmsAndDataStructures/DataStructures",
+        "children": [
+          {
+            "name": "DataStructuresIntroduction",
+            "path": "/AlgorithmsAndDataStructures/DataStructures/DataStructuresIntroduction",
+            "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/DataStructuresIntroduction.vue')
+          },
+          {
+            "name": "Stack",
+            "path": "/AlgorithmsAndDataStructures/DataStructures/Stack",
+            "children": [
+              {
+                "name": "StackBase",
+                "path": "/AlgorithmsAndDataStructures/DataStructures/Stack/StackBase",
+                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/Stack/StackBase.vue')
+              },
+              {
+                "name": "StackAlgorithm",
+                "path": "/AlgorithmsAndDataStructures/DataStructures/Stack/StackAlgorithm",
+                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/Stack/StackAlgorithm.vue')
+              }
+            ]
+          },
+          {
+            "name": "ArrayOperations",
+            "path": "/AlgorithmsAndDataStructures/DataStructures/ArrayOperations",
+            "children": [
+              {
+                "name": "ArrayBasic",
+                "path": "/AlgorithmsAndDataStructures/DataStructures/ArrayOperations/ArrayBasic",
+                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/ArrayOperations/ArrayBasic.vue')
+              },
+              {
+                "name": "ArrayAlgorithm",
+                "path": "/AlgorithmsAndDataStructures/DataStructures/ArrayOperations/ArrayAlgorithm",
+                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/ArrayOperations/ArrayAlgorithm.vue')
+              }
+            ]
+          },
+          {
+            "name": "LinkedList",
+            "path": "/AlgorithmsAndDataStructures/DataStructures/LinkedList",
+            "children": [
+              {
+                "name": "LinkedListBasic",
+                "path": "/AlgorithmsAndDataStructures/DataStructures/LinkedList/LinkedListBasic",
+                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/LinkedList/LinkedListBasic.vue')
+              },
+              {
+                "name": "LinkedListBasicOperations",
+                "path": "/AlgorithmsAndDataStructures/DataStructures/LinkedList/LinkedListBasicOperations",
+                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/LinkedList/LinkedListBasicOperations.vue')
+              },
+              {
+                "name": "LinkedListBasicAlgorithm",
+                "path": "/AlgorithmsAndDataStructures/DataStructures/LinkedList/LinkedListBasicAlgorithm",
+                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/LinkedList/LinkedListBasicAlgorithm.vue')
+              },
+              {
+                "name": "LinkedListAlgorithmList",
+                "path": "/AlgorithmsAndDataStructures/DataStructures/LinkedList/LinkedListAlgorithmList",
+                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/LinkedList/LinkedListAlgorithmList.vue')
+              }
+            ]
+          },
+          {
+            "name": "Queue",
+            "path": "/AlgorithmsAndDataStructures/DataStructures/Queue",
+            "children": [
+              {
+                "name": "QueueBase",
+                "path": "/AlgorithmsAndDataStructures/DataStructures/Queue/QueueBase",
+                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/Queue/QueueBase.vue')
+              },
+              {
+                "name": "QueueAlgorithm",
+                "path": "/AlgorithmsAndDataStructures/DataStructures/Queue/QueueAlgorithm",
+                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/Queue/QueueAlgorithm.vue')
+              }
+            ]
+          },
+          {
+            "name": "HashTable",
+            "path": "/AlgorithmsAndDataStructures/DataStructures/HashTable",
+            "children": [
+              {
+                "name": "HashTableIntroduction",
+                "path": "/AlgorithmsAndDataStructures/DataStructures/HashTable/HashTableIntroduction",
+                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/HashTable/HashTableIntroduction.vue')
+              },
+              {
+                "name": "HashTableImplementation",
+                "path": "/AlgorithmsAndDataStructures/DataStructures/HashTable/HashTableImplementation",
+                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/HashTable/HashTableImplementation.vue')
+              },
+              {
+                "name": "HashTableAlgorithm",
+                "path": "/AlgorithmsAndDataStructures/DataStructures/HashTable/HashTableAlgorithm",
+                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/HashTable/HashTableAlgorithm.vue')
+              }
+            ]
+          },
+          {
+            "name": "Trees",
+            "path": "/AlgorithmsAndDataStructures/DataStructures/Trees",
+            "children": [
+              {
+                "name": "TreeBasic",
+                "path": "/AlgorithmsAndDataStructures/DataStructures/Trees/TreeBasic",
+                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/Trees/TreeBasic.vue')
+              },
+              {
+                "name": "TreeClassification",
+                "path": "/AlgorithmsAndDataStructures/DataStructures/Trees/TreeClassification",
+                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/Trees/TreeClassification.vue')
+              },
+              {
+                "name": "TrieTree",
+                "path": "/AlgorithmsAndDataStructures/DataStructures/Trees/TrieTree",
+                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/Trees/TrieTree.vue')
+              },
+              {
+                "name": "BinaryTreeAndBinarySearchTree",
+                "path": "/AlgorithmsAndDataStructures/DataStructures/Trees/BinaryTreeAndBinarySearchTree",
+                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/Trees/BinaryTreeAndBinarySearchTree.vue')
+              },
+              {
+                "name": "2-3Tree",
+                "path": "/AlgorithmsAndDataStructures/DataStructures/Trees/2-3Tree",
+                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/Trees/2-3Tree.vue')
+              },
+              {
+                "name": "BTreeAndBPlusTree",
+                "path": "/AlgorithmsAndDataStructures/DataStructures/Trees/BTreeAndBPlusTree",
+                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/Trees/BTreeAndBPlusTree.vue')
+              },
+              {
+                "name": "RedBlackTree",
+                "path": "/AlgorithmsAndDataStructures/DataStructures/Trees/RedBlackTree",
+                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/Trees/RedBlackTree.vue')
+              },
+              {
+                "name": "SegmentTree",
+                "path": "/AlgorithmsAndDataStructures/DataStructures/Trees/SegmentTree",
+                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/Trees/SegmentTree.vue')
+              },
+              {
+                "name": "HuffmanTree",
+                "path": "/AlgorithmsAndDataStructures/DataStructures/Trees/HuffmanTree",
+                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/Trees/HuffmanTree.vue')
+              },
+              {
+                "name": "TreeTraversal",
+                "path": "/AlgorithmsAndDataStructures/DataStructures/Trees/TreeTraversal",
+                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/Trees/TreeTraversal.vue')
+              },
+              {
+                "name": "TreeBasicAlgorithm",
+                "path": "/AlgorithmsAndDataStructures/DataStructures/Trees/TreeBasicAlgorithm",
+                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/Trees/TreeBasicAlgorithm.vue')
+              }
+            ]
+          },
+          {
+            "name": "Heap",
+            "path": "/AlgorithmsAndDataStructures/DataStructures/Heap",
+            "children": [
+              {
+                "name": "HeapIntroduction",
+                "path": "/AlgorithmsAndDataStructures/DataStructures/Heap/HeapIntroduction",
+                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/Heap/HeapIntroduction.vue')
+              },
+              {
+                "name": "HeapImplementation",
+                "path": "/AlgorithmsAndDataStructures/DataStructures/Heap/HeapImplementation",
+                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/Heap/HeapImplementation.vue')
+              }
+            ]
+          },
+          {
+            "name": "Graph",
+            "path": "/AlgorithmsAndDataStructures/DataStructures/Graph",
+            "children": [
+              {
+                "name": "GraphBasic",
+                "path": "/AlgorithmsAndDataStructures/DataStructures/Graph/GraphBasic",
+                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/Graph/GraphBasic.vue')
+              },
+              {
+                "name": "GraphClassification",
+                "path": "/AlgorithmsAndDataStructures/DataStructures/Graph/GraphClassification",
+                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/Graph/GraphClassification.vue')
+              },
+              {
+                "name": "GraphStorageWay",
+                "path": "/AlgorithmsAndDataStructures/DataStructures/Graph/GraphStorageWay",
+                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/Graph/GraphStorageWay.vue')
+              },
+              {
+                "name": "GraphAlgorithm1",
+                "path": "/AlgorithmsAndDataStructures/DataStructures/Graph/GraphAlgorithm1",
+                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/Graph/GraphAlgorithm1.vue')
+              },
+              {
+                "name": "DijkstraAlgorithm1",
+                "path": "/AlgorithmsAndDataStructures/DataStructures/Graph/DijkstraAlgorithm1",
+                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/Graph/DijkstraAlgorithm1.vue')
+              },
+              {
+                "name": "FloydAlgorithm",
+                "path": "/AlgorithmsAndDataStructures/DataStructures/Graph/FloydAlgorithm",
+                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/Graph/FloydAlgorithm.vue')
+              },
+              {
+                "name": "BellmanFordAlgorithm",
+                "path": "/AlgorithmsAndDataStructures/DataStructures/Graph/BellmanFordAlgorithm",
+                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/Graph/BellmanFordAlgorithm.vue')
+              },
+              {
+                "name": "PrimAndKruskalAlgorithm",
+                "path": "/AlgorithmsAndDataStructures/DataStructures/Graph/PrimAndKruskalAlgorithm",
+                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/Graph/PrimAndKruskalAlgorithm.vue')
+              },
+              {
+                "name": "TopologicalSorting",
+                "path": "/AlgorithmsAndDataStructures/DataStructures/Graph/TopologicalSorting",
+                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/Graph/TopologicalSorting.vue')
+              }
+            ]
+          },
+          {
+            "name": "OtherDataStructures",
+            "path": "/AlgorithmsAndDataStructures/DataStructures/OtherDataStructures",
+            "children": [
+              {
+                "name": "OtherDataStructuresIntroduction",
+                "path": "/AlgorithmsAndDataStructures/DataStructures/OtherDataStructures/OtherDataStructuresIntroduction",
+                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/OtherDataStructures/OtherDataStructuresIntroduction.vue')
+              },
+              {
+                "name": "SkipList",
+                "path": "/AlgorithmsAndDataStructures/DataStructures/OtherDataStructures/SkipList",
+                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/OtherDataStructures/SkipList.vue')
+              },
+              {
+                "name": "BloomFilter",
+                "path": "/AlgorithmsAndDataStructures/DataStructures/OtherDataStructures/BloomFilter",
+                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/OtherDataStructures/BloomFilter.vue')
+              },
+              {
+                "name": "UnionFind",
+                "path": "/AlgorithmsAndDataStructures/DataStructures/OtherDataStructures/UnionFind",
+                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/OtherDataStructures/UnionFind.vue')
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Algorithms",
+        "path": "/AlgorithmsAndDataStructures/Algorithms",
+        "children": [
+          {
+            "name": "AlgorithmIntroduction",
+            "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmIntroduction",
+            "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmIntroduction.vue')
+          },
+          {
+            "name": "60Algorithms",
+            "path": "/AlgorithmsAndDataStructures/Algorithms/60Algorithms",
+            "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/60Algorithms.vue')
+          },
+          {
+            "name": "AlgorithmBasic",
+            "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmBasic",
+            "children": [
+              {
+                "name": "Complexity",
+                "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmBasic/Complexity",
+                "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmBasic/Complexity.vue')
+              },
+              {
+                "name": "Recursion",
+                "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmBasic/Recursion",
+                "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmBasic/Recursion.vue')
+              },
+              {
+                "name": "SortingAlgorithm3",
+                "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmBasic/SortingAlgorithm3",
+                "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmBasic/SortingAlgorithm3.vue')
+              },
+              {
+                "name": "GreedyAlgorithmIntroduction",
+                "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmBasic/GreedyAlgorithmIntroduction",
+                "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmBasic/GreedyAlgorithmIntroduction.vue')
+              },
+              {
+                "name": "BacktrackingAlgorithmIntroduction",
+                "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmBasic/BacktrackingAlgorithmIntroduction",
+                "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmBasic/BacktrackingAlgorithmIntroduction.vue')
+              },
+              {
+                "name": "DivideAndConquerAlgorithm",
+                "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmBasic/DivideAndConquerAlgorithm",
+                "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmBasic/DivideAndConquerAlgorithm.vue')
+              },
+              {
+                "name": "SearchAlgorithmIntroduction",
+                "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmBasic/SearchAlgorithmIntroduction",
+                "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmBasic/SearchAlgorithmIntroduction.vue')
+              },
+              {
+                "name": "DynamicProgramming1",
+                "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmBasic/DynamicProgramming1",
+                "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmBasic/DynamicProgramming1.vue')
+              }
+            ]
+          },
+          {
+            "name": "AlgorithmClassification",
+            "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification",
+            "children": [
+              {
+                "name": "AlgorithmClassificationIntroduction",
+                "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/AlgorithmClassificationIntroduction",
+                "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/AlgorithmClassificationIntroduction.vue')
+              },
+              {
+                "name": "SortingAlgorithmIntroduction",
+                "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/SortingAlgorithmIntroduction",
+                "children": [
+                  {
+                    "name": "SortingAlgorithm",
+                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/SortingAlgorithmIntroduction/SortingAlgorithm",
+                    "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/SortingAlgorithmIntroduction/SortingAlgorithm.vue')
+                  },
+                  {
+                    "name": "OtherSortingAlgorithm",
+                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/SortingAlgorithmIntroduction/OtherSortingAlgorithm",
+                    "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/SortingAlgorithmIntroduction/OtherSortingAlgorithm.vue')
+                  }
+                ]
+              },
+              {
+                "name": "RecursionAlgorithm",
+                "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/RecursionAlgorithm",
+                "children": [
+                  {
+                    "name": "RecursionAlgorithmBasic",
+                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/RecursionAlgorithm/RecursionAlgorithmBasic",
+                    "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/RecursionAlgorithm/RecursionAlgorithmBasic.vue')
+                  },
+                  {
+                    "name": "RecursionAlgorithmProblem",
+                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/RecursionAlgorithm/RecursionAlgorithmProblem",
+                    "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/RecursionAlgorithm/RecursionAlgorithmProblem.vue')
+                  }
+                ]
+              },
+              {
+                "name": "DivideAndConquerAlgorithm2",
+                "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/DivideAndConquerAlgorithm2",
+                "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/DivideAndConquerAlgorithm2.vue')
+              },
+              {
+                "name": "DynamicProgramming",
+                "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/DynamicProgramming",
+                "children": [
+                  {
+                    "name": "DynamicProgrammingStateDefinitionAndStateTransitionEquation",
+                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/DynamicProgramming/DynamicProgrammingStateDefinitionAndStateTransitionEquation",
+                    "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/DynamicProgramming/DynamicProgrammingStateDefinitionAndStateTransitionEquation.vue')
+                  },
+                  {
+                    "name": "DynamicProgrammingClassification",
+                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/DynamicProgramming/DynamicProgrammingClassification",
+                    "children": [
+                      {
+                        "name": "DynamicProgrammingClassificationOverview",
+                        "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/DynamicProgramming/DynamicProgrammingClassification/DynamicProgrammingClassificationOverview",
+                        "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/DynamicProgramming/DynamicProgrammingClassification/DynamicProgrammingClassificationOverview.vue')
+                      },
+                      {
+                        "name": "DynamicProgrammingKnapsackProblem",
+                        "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/DynamicProgramming/DynamicProgrammingClassification/DynamicProgrammingKnapsackProblem",
+                        "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/DynamicProgramming/DynamicProgrammingClassification/DynamicProgrammingKnapsackProblem.vue')
+                      },
+                      {
+                        "name": "DynamicProgrammingLinearDP",
+                        "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/DynamicProgramming/DynamicProgrammingClassification/DynamicProgrammingLinearDP",
+                        "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/DynamicProgramming/DynamicProgrammingClassification/DynamicProgrammingLinearDP.vue')
+                      },
+                      {
+                        "name": "DynamicProgrammingIntervalDP",
+                        "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/DynamicProgramming/DynamicProgrammingClassification/DynamicProgrammingIntervalDP",
+                        "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/DynamicProgramming/DynamicProgrammingClassification/DynamicProgrammingIntervalDP.vue')
+                      },
+                      {
+                        "name": "DynamicProgrammingTreeDP",
+                        "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/DynamicProgramming/DynamicProgrammingClassification/DynamicProgrammingTreeDP",
+                        "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/DynamicProgramming/DynamicProgrammingClassification/DynamicProgrammingTreeDP.vue')
+                      },
+                      {
+                        "name": "DynamicProgrammingStateCompressionDP",
+                        "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/DynamicProgramming/DynamicProgrammingClassification/DynamicProgrammingStateCompressionDP",
+                        "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/DynamicProgramming/DynamicProgrammingClassification/DynamicProgrammingStateCompressionDP.vue')
+                      },
+                      {
+                        "name": "DynamicProgrammingSpecificDP",
+                        "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/DynamicProgramming/DynamicProgrammingClassification/DynamicProgrammingSpecificDP",
+                        "children": [
+                          {
+                            "name": "Robbery",
+                            "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/DynamicProgramming/DynamicProgrammingClassification/DynamicProgrammingSpecificDP/Robbery",
+                            "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/DynamicProgramming/DynamicProgrammingClassification/DynamicProgrammingSpecificDP/Robbery.vue')
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "name": "DynamicProgrammingProblem",
+                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/DynamicProgramming/DynamicProgrammingProblem",
+                    "children": [
+                      {
+                        "name": "DynamicProgrammingSimpleDP",
+                        "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/DynamicProgramming/DynamicProgrammingProblem/DynamicProgrammingSimpleDP",
+                        "children": [
+                          {
+                            "name": "LongestIncreasingSubsequence2",
+                            "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/DynamicProgramming/DynamicProgrammingProblem/DynamicProgrammingSimpleDP/LongestIncreasingSubsequence2",
+                            "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/DynamicProgramming/DynamicProgrammingProblem/DynamicProgrammingSimpleDP/LongestIncreasingSubsequence2.vue')
+                          }
+                        ]
+                      },
+                      {
+                        "name": "DynamicProgrammingMediumDP",
+                        "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/DynamicProgramming/DynamicProgrammingProblem/DynamicProgrammingMediumDP",
+                        "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/DynamicProgramming/DynamicProgrammingProblem/DynamicProgrammingMediumDP.vue')
+                      },
+                      {
+                        "name": "DynamicProgrammingHardDP",
+                        "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/DynamicProgramming/DynamicProgrammingProblem/DynamicProgrammingHardDP",
+                        "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/DynamicProgramming/DynamicProgrammingProblem/DynamicProgrammingHardDP.vue')
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "SearchAlgorithm",
+                "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/SearchAlgorithm",
+                "children": [
+                  {
+                    "name": "DepthFirstSearch",
+                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/SearchAlgorithm/DepthFirstSearch",
+                    "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/SearchAlgorithm/DepthFirstSearch.vue')
+                  },
+                  {
+                    "name": "BreadthFirstSearch",
+                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/SearchAlgorithm/BreadthFirstSearch",
+                    "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/SearchAlgorithm/BreadthFirstSearch.vue')
+                  },
+                  {
+                    "name": "BinarySearch",
+                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/SearchAlgorithm/BinarySearch",
+                    "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/SearchAlgorithm/BinarySearch.vue')
+                  },
+                  {
+                    "name": "BacktrackingAlgorithm",
+                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/SearchAlgorithm/BacktrackingAlgorithm",
+                    "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/SearchAlgorithm/BacktrackingAlgorithm.vue')
+                  },
+                  {
+                    "name": "EnumerationAlgorithm",
+                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/SearchAlgorithm/EnumerationAlgorithm",
+                    "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/SearchAlgorithm/EnumerationAlgorithm.vue')
+                  }
+                ]
+              },
+              {
+                "name": "GreedyAlgorithm",
+                "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/GreedyAlgorithm",
+                "children": [
+                  {
+                    "name": "GreedyAlgorithmProblem",
+                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/GreedyAlgorithm/GreedyAlgorithmProblem",
+                    "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/GreedyAlgorithm/GreedyAlgorithmProblem.vue')
+                  },
+                  {
+                    "name": "DijkstraAlgorithm",
+                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/GreedyAlgorithm/DijkstraAlgorithm",
+                    "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/GreedyAlgorithm/DijkstraAlgorithm.vue')
+                  }
+                ]
+              },
+              {
+                "name": "MappingAlgorithm",
+                "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/MappingAlgorithm",
+                "children": [
+                  {
+                    "name": "VLQ",
+                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/MappingAlgorithm/VLQ",
+                    "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/MappingAlgorithm/VLQ.vue')
+                  },
+                  {
+                    "name": "HashAlgorithm",
+                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/MappingAlgorithm/HashAlgorithm",
+                    "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/MappingAlgorithm/HashAlgorithm.vue')
+                  },
+                  {
+                    "name": "BitOpe",
+                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/MappingAlgorithm/BitOpe",
+                    "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/MappingAlgorithm/BitOpe.vue')
+                  }
+                ]
+              },
+              {
+                "name": "CompressionAlgorithm",
+                "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/CompressionAlgorithm",
+                "children": [
+                  {
+                    "name": "LossyCompressionAlgorithmIntroduction",
+                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/CompressionAlgorithm/LossyCompressionAlgorithmIntroduction",
+                    "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/CompressionAlgorithm/LossyCompressionAlgorithmIntroduction.vue')
+                  },
+                  {
+                    "name": "LosslessCompressionAlgorithmIntroduction",
+                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/CompressionAlgorithm/LosslessCompressionAlgorithmIntroduction",
+                    "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/CompressionAlgorithm/LosslessCompressionAlgorithmIntroduction.vue')
+                  },
+                  {
+                    "name": "HuffmanEncoding1",
+                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/CompressionAlgorithm/HuffmanEncoding1",
+                    "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/CompressionAlgorithm/HuffmanEncoding1.vue')
+                  },
+                  {
+                    "name": "LZ77Algorithm",
+                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/CompressionAlgorithm/LZ77Algorithm",
+                    "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/CompressionAlgorithm/LZ77Algorithm.vue')
+                  },
+                  {
+                    "name": "DEFLATEAlgorithm",
+                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/CompressionAlgorithm/DEFLATEAlgorithm",
+                    "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/CompressionAlgorithm/DEFLATEAlgorithm.vue')
+                  },
+                  {
+                    "name": "ReferenceCounting",
+                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/CompressionAlgorithm/ReferenceCounting",
+                    "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/CompressionAlgorithm/ReferenceCounting.vue')
+                  }
+                ]
+              },
+              {
+                "name": "OtherAlgorithm",
+                "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/OtherAlgorithm",
+                "children": [
+                  {
+                    "name": "SlidingWindowAlgorithm",
+                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/OtherAlgorithm/SlidingWindowAlgorithm",
+                    "children": [
+                      {
+                        "name": "LRUAlgorithm",
+                        "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/OtherAlgorithm/SlidingWindowAlgorithm/LRUAlgorithm",
+                        "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/OtherAlgorithm/SlidingWindowAlgorithm/LRUAlgorithm.vue')
+                      }
+                    ]
+                  },
+                  {
+                    "name": "BoidsAlgorithm",
+                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/OtherAlgorithm/BoidsAlgorithm",
+                    "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/OtherAlgorithm/BoidsAlgorithm.vue')
+                  }
+                ]
+              },
+              {
+                "name": "StringAlgorithm",
+                "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/StringAlgorithm",
+                "children": [
+                  {
+                    "name": "StringMatchingAlgorithm",
+                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/StringAlgorithm/StringMatchingAlgorithm",
+                    "children": [
+                      {
+                        "name": "StringMatchingAlgorithmIntroduction",
+                        "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/StringAlgorithm/StringMatchingAlgorithm/StringMatchingAlgorithmIntroduction",
+                        "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/StringAlgorithm/StringMatchingAlgorithm/StringMatchingAlgorithmIntroduction.vue')
+                      },
+                      {
+                        "name": "BFAndRKHash",
+                        "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/StringAlgorithm/StringMatchingAlgorithm/BFAndRKHash",
+                        "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/StringAlgorithm/StringMatchingAlgorithm/BFAndRKHash.vue')
+                      },
+                      {
+                        "name": "KMP",
+                        "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/StringAlgorithm/StringMatchingAlgorithm/KMP",
+                        "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/StringAlgorithm/StringMatchingAlgorithm/KMP.vue')
+                      },
+                      {
+                        "name": "BM",
+                        "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/StringAlgorithm/StringMatchingAlgorithm/BM",
+                        "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/StringAlgorithm/StringMatchingAlgorithm/BM.vue')
+                      },
+                      {
+                        "name": "Sunday",
+                        "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/StringAlgorithm/StringMatchingAlgorithm/Sunday",
+                        "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/StringAlgorithm/StringMatchingAlgorithm/Sunday.vue')
+                      }
+                    ]
+                  },
+                  {
+                    "name": "StringEditDistanceAlgorithm",
+                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/StringAlgorithm/StringEditDistanceAlgorithm",
+                    "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/StringAlgorithm/StringEditDistanceAlgorithm.vue')
+                  },
+                  {
+                    "name": "StringPermutationAlgorithm",
+                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/StringAlgorithm/StringPermutationAlgorithm",
+                    "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/StringAlgorithm/StringPermutationAlgorithm.vue')
+                  },
+                  {
+                    "name": "StringCompressionAlgorithm",
+                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/StringAlgorithm/StringCompressionAlgorithm",
+                    "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/StringAlgorithm/StringCompressionAlgorithm.vue')
+                  }
+                ]
+              },
+              {
+                "name": "AdvancedAlgorithm",
+                "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/AdvancedAlgorithm",
+                "children": [
+                  {
+                    "name": "AdvancedAlgorithmOverview",
+                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/AdvancedAlgorithm/AdvancedAlgorithmOverview",
+                    "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/AdvancedAlgorithm/AdvancedAlgorithmOverview.vue')
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "HighFrequencyAlgorithms",
+            "path": "/AlgorithmsAndDataStructures/Algorithms/HighFrequencyAlgorithms",
+            "children": [
+              {
+                "name": "ProductionHighFrequencyAlgorithms",
+                "path": "/AlgorithmsAndDataStructures/Algorithms/HighFrequencyAlgorithms/ProductionHighFrequencyAlgorithms",
+                "children": [
+                  {
+                    "name": "ProductionHighFrequencyAlgorithmsList",
+                    "path": "/AlgorithmsAndDataStructures/Algorithms/HighFrequencyAlgorithms/ProductionHighFrequencyAlgorithms/ProductionHighFrequencyAlgorithmsList",
+                    "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/HighFrequencyAlgorithms/ProductionHighFrequencyAlgorithms/ProductionHighFrequencyAlgorithmsList.vue')
+                  },
+                  {
+                    "name": "TwoSum",
+                    "path": "/AlgorithmsAndDataStructures/Algorithms/HighFrequencyAlgorithms/ProductionHighFrequencyAlgorithms/TwoSum",
+                    "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/HighFrequencyAlgorithms/ProductionHighFrequencyAlgorithms/TwoSum.vue')
+                  }
+                ]
+              },
+              {
+                "name": "InterviewHighFrequencyAlgorithms",
+                "path": "/AlgorithmsAndDataStructures/Algorithms/HighFrequencyAlgorithms/InterviewHighFrequencyAlgorithms",
+                "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/HighFrequencyAlgorithms/InterviewHighFrequencyAlgorithms.vue')
+              }
+            ]
+          },
+          {
+            "name": "AlgorithmProblemLibrary",
+            "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmProblemLibrary",
+            "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmProblemLibrary.vue')
+          }
+        ]
+      }
+    ]
+  },
+  {
     "name": "front",
     "path": "/front",
     "children": [
@@ -4731,22 +5784,6 @@ export default [
                     ]
                   }
                 ]
-              },
-              {
-                "name": "LinuxSystem",
-                "path": "/front/AdvancedSkills/OtherEnd/LinuxSystem",
-                "children": [
-                  {
-                    "name": "LinuxBasicIntroduction",
-                    "path": "/front/AdvancedSkills/OtherEnd/LinuxSystem/LinuxBasicIntroduction",
-                    "component": () => import('@/views/front/AdvancedSkills/OtherEnd/LinuxSystem/LinuxBasicIntroduction.vue')
-                  },
-                  {
-                    "name": "LinuxCommandOverview",
-                    "path": "/front/AdvancedSkills/OtherEnd/LinuxSystem/LinuxCommandOverview",
-                    "component": () => import('@/views/front/AdvancedSkills/OtherEnd/LinuxSystem/LinuxCommandOverview.vue')
-                  }
-                ]
               }
             ]
           },
@@ -4885,27 +5922,6 @@ export default [
                     "component": () => import('@/views/front/ProjectsAndSoftSkills/businessAndImplementation/ProjectRelated/InterfaceAutoGenerateTypeFile.vue')
                   }
                 ]
-              }
-            ]
-          },
-          {
-            "name": "ProjectOrganization",
-            "path": "/front/ProjectsAndSoftSkills/ProjectOrganization",
-            "children": [
-              {
-                "name": "STAR",
-                "path": "/front/ProjectsAndSoftSkills/ProjectOrganization/STAR",
-                "component": () => import('@/views/front/ProjectsAndSoftSkills/ProjectOrganization/STAR.vue')
-              },
-              {
-                "name": "TechnicalChallenges",
-                "path": "/front/ProjectsAndSoftSkills/ProjectOrganization/TechnicalChallenges",
-                "component": () => import('@/views/front/ProjectsAndSoftSkills/ProjectOrganization/TechnicalChallenges.vue')
-              },
-              {
-                "name": "Reflection",
-                "path": "/front/ProjectsAndSoftSkills/ProjectOrganization/Reflection",
-                "component": () => import('@/views/front/ProjectsAndSoftSkills/ProjectOrganization/Reflection.vue')
               }
             ]
           },
@@ -5055,1439 +6071,403 @@ export default [
     "path": "/backend",
     "children": [
       {
-        "name": "NodeJS",
-        "path": "/backend/NodeJS",
+        "name": "BackendLanguage",
+        "path": "/backend/BackendLanguage",
         "children": [
           {
-            "name": "NodeJSBasicKnowledge",
-            "path": "/backend/NodeJS/NodeJSBasicKnowledge",
-            "component": () => import('@/views/backend/NodeJS/NodeJSBasicKnowledge.vue')
+            "name": "BackendLanauageRank",
+            "path": "/backend/BackendLanguage/BackendLanauageRank",
+            "component": () => import('@/views/backend/BackendLanguage/BackendLanauageRank.vue')
           },
           {
-            "name": "NodeJSKnowledgeRoadmap",
-            "path": "/backend/NodeJS/NodeJSKnowledgeRoadmap",
-            "component": () => import('@/views/backend/NodeJS/NodeJSKnowledgeRoadmap.vue')
-          },
-          {
-            "name": "GlobalVariables",
-            "path": "/backend/NodeJS/GlobalVariables",
-            "component": () => import('@/views/backend/NodeJS/GlobalVariables.vue')
-          },
-          {
-            "name": "NodeModules",
-            "path": "/backend/NodeJS/NodeModules",
+            "name": "NodeJS",
+            "path": "/backend/BackendLanguage/NodeJS",
             "children": [
               {
-                "name": "FileSystem",
-                "path": "/backend/NodeJS/NodeModules/FileSystem",
-                "component": () => import('@/views/backend/NodeJS/NodeModules/FileSystem.vue')
+                "name": "NodeJSBasicKnowledge",
+                "path": "/backend/BackendLanguage/NodeJS/NodeJSBasicKnowledge",
+                "component": () => import('@/views/backend/BackendLanguage/NodeJS/NodeJSBasicKnowledge.vue')
               },
               {
-                "name": "Path",
-                "path": "/backend/NodeJS/NodeModules/Path",
-                "component": () => import('@/views/backend/NodeJS/NodeModules/Path.vue')
+                "name": "NodeJSKnowledgeRoadmap",
+                "path": "/backend/BackendLanguage/NodeJS/NodeJSKnowledgeRoadmap",
+                "component": () => import('@/views/backend/BackendLanguage/NodeJS/NodeJSKnowledgeRoadmap.vue')
               },
               {
-                "name": "HTTP",
-                "path": "/backend/NodeJS/NodeModules/HTTP",
-                "component": () => import('@/views/backend/NodeJS/NodeModules/HTTP.vue')
+                "name": "GlobalVariables",
+                "path": "/backend/BackendLanguage/NodeJS/GlobalVariables",
+                "component": () => import('@/views/backend/BackendLanguage/NodeJS/GlobalVariables.vue')
               },
               {
-                "name": "HTTPS",
-                "path": "/backend/NodeJS/NodeModules/HTTPS",
-                "component": () => import('@/views/backend/NodeJS/NodeModules/HTTPS.vue')
-              },
-              {
-                "name": "Stream",
-                "path": "/backend/NodeJS/NodeModules/Stream",
-                "component": () => import('@/views/backend/NodeJS/NodeModules/Stream.vue')
-              },
-              {
-                "name": "Events2",
-                "path": "/backend/NodeJS/NodeModules/Events2",
-                "component": () => import('@/views/backend/NodeJS/NodeModules/Events2.vue')
-              },
-              {
-                "name": "OS",
-                "path": "/backend/NodeJS/NodeModules/OS",
-                "component": () => import('@/views/backend/NodeJS/NodeModules/OS.vue')
-              },
-              {
-                "name": "Process",
-                "path": "/backend/NodeJS/NodeModules/Process",
-                "component": () => import('@/views/backend/NodeJS/NodeModules/Process.vue')
-              },
-              {
-                "name": "ProcessNextTick",
-                "path": "/backend/NodeJS/NodeModules/ProcessNextTick",
-                "component": () => import('@/views/backend/NodeJS/NodeModules/ProcessNextTick.vue')
-              },
-              {
-                "name": "ChildProcess",
-                "path": "/backend/NodeJS/NodeModules/ChildProcess",
-                "component": () => import('@/views/backend/NodeJS/NodeModules/ChildProcess.vue')
-              },
-              {
-                "name": "Buffer",
-                "path": "/backend/NodeJS/NodeModules/Buffer",
-                "component": () => import('@/views/backend/NodeJS/NodeModules/Buffer.vue')
-              },
-              {
-                "name": "Util",
-                "path": "/backend/NodeJS/NodeModules/Util",
-                "component": () => import('@/views/backend/NodeJS/NodeModules/Util.vue')
-              },
-              {
-                "name": "Crypto",
-                "path": "/backend/NodeJS/NodeModules/Crypto",
-                "component": () => import('@/views/backend/NodeJS/NodeModules/Crypto.vue')
-              },
-              {
-                "name": "cryptoAdvanced",
-                "path": "/backend/NodeJS/NodeModules/cryptoAdvanced",
-                "component": () => import('@/views/backend/NodeJS/NodeModules/cryptoAdvanced.vue')
-              },
-              {
-                "name": "Net",
-                "path": "/backend/NodeJS/NodeModules/Net",
-                "component": () => import('@/views/backend/NodeJS/NodeModules/Net.vue')
-              },
-              {
-                "name": "DNS",
-                "path": "/backend/NodeJS/NodeModules/DNS",
-                "component": () => import('@/views/backend/NodeJS/NodeModules/DNS.vue')
-              },
-              {
-                "name": "TLS",
-                "path": "/backend/NodeJS/NodeModules/TLS",
-                "component": () => import('@/views/backend/NodeJS/NodeModules/TLS.vue')
-              },
-              {
-                "name": "URL",
-                "path": "/backend/NodeJS/NodeModules/URL",
-                "component": () => import('@/views/backend/NodeJS/NodeModules/URL.vue')
-              },
-              {
-                "name": "QueryString",
-                "path": "/backend/NodeJS/NodeModules/QueryString",
-                "component": () => import('@/views/backend/NodeJS/NodeModules/QueryString.vue')
-              },
-              {
-                "name": "Readline",
-                "path": "/backend/NodeJS/NodeModules/Readline",
-                "component": () => import('@/views/backend/NodeJS/NodeModules/Readline.vue')
-              },
-              {
-                "name": "Assert",
-                "path": "/backend/NodeJS/NodeModules/Assert",
-                "component": () => import('@/views/backend/NodeJS/NodeModules/Assert.vue')
-              },
-              {
-                "name": "Zlib",
-                "path": "/backend/NodeJS/NodeModules/Zlib",
-                "component": () => import('@/views/backend/NodeJS/NodeModules/Zlib.vue')
-              },
-              {
-                "name": "VM",
-                "path": "/backend/NodeJS/NodeModules/VM",
-                "component": () => import('@/views/backend/NodeJS/NodeModules/VM.vue')
-              },
-              {
-                "name": "Module",
-                "path": "/backend/NodeJS/NodeModules/Module",
-                "component": () => import('@/views/backend/NodeJS/NodeModules/Module.vue')
-              },
-              {
-                "name": "Punycode",
-                "path": "/backend/NodeJS/NodeModules/Punycode",
-                "component": () => import('@/views/backend/NodeJS/NodeModules/Punycode.vue')
-              },
-              {
-                "name": "Timers",
-                "path": "/backend/NodeJS/NodeModules/Timers",
-                "component": () => import('@/views/backend/NodeJS/NodeModules/Timers.vue')
-              },
-              {
-                "name": "Domain",
-                "path": "/backend/NodeJS/NodeModules/Domain",
-                "component": () => import('@/views/backend/NodeJS/NodeModules/Domain.vue')
-              }
-            ]
-          },
-          {
-            "name": "NodeAdvancedModules",
-            "path": "/backend/NodeJS/NodeAdvancedModules",
-            "children": [
-              {
-                "name": "Cluster",
-                "path": "/backend/NodeJS/NodeAdvancedModules/Cluster",
-                "component": () => import('@/views/backend/NodeJS/NodeAdvancedModules/Cluster.vue')
-              },
-              {
-                "name": "Dgram",
-                "path": "/backend/NodeJS/NodeAdvancedModules/Dgram",
-                "component": () => import('@/views/backend/NodeJS/NodeAdvancedModules/Dgram.vue')
-              },
-              {
-                "name": "Inspector",
-                "path": "/backend/NodeJS/NodeAdvancedModules/Inspector",
-                "component": () => import('@/views/backend/NodeJS/NodeAdvancedModules/Inspector.vue')
-              },
-              {
-                "name": "Net",
-                "path": "/backend/NodeJS/NodeAdvancedModules/Net",
-                "component": () => import('@/views/backend/NodeJS/NodeAdvancedModules/Net.vue')
-              },
-              {
-                "name": "PerfHooks",
-                "path": "/backend/NodeJS/NodeAdvancedModules/PerfHooks",
-                "component": () => import('@/views/backend/NodeJS/NodeAdvancedModules/PerfHooks.vue')
-              },
-              {
-                "name": "REPL",
-                "path": "/backend/NodeJS/NodeAdvancedModules/REPL",
-                "component": () => import('@/views/backend/NodeJS/NodeAdvancedModules/REPL.vue')
-              },
-              {
-                "name": "TLS",
-                "path": "/backend/NodeJS/NodeAdvancedModules/TLS",
-                "component": () => import('@/views/backend/NodeJS/NodeAdvancedModules/TLS.vue')
-              },
-              {
-                "name": "TraceEvents",
-                "path": "/backend/NodeJS/NodeAdvancedModules/TraceEvents",
-                "component": () => import('@/views/backend/NodeJS/NodeAdvancedModules/TraceEvents.vue')
-              },
-              {
-                "name": "WorkerThreads",
-                "path": "/backend/NodeJS/NodeAdvancedModules/WorkerThreads",
-                "component": () => import('@/views/backend/NodeJS/NodeAdvancedModules/WorkerThreads.vue')
-              }
-            ]
-          },
-          {
-            "name": "PackageManager",
-            "path": "/backend/NodeJS/PackageManager",
-            "children": [
-              {
-                "name": "Npm",
-                "path": "/backend/NodeJS/PackageManager/Npm",
+                "name": "NodeModules",
+                "path": "/backend/BackendLanguage/NodeJS/NodeModules",
                 "children": [
                   {
-                    "name": "NpmBasicKnowledge",
-                    "path": "/backend/NodeJS/PackageManager/Npm/NpmBasicKnowledge",
-                    "component": () => import('@/views/backend/NodeJS/PackageManager/Npm/NpmBasicKnowledge.vue')
+                    "name": "FileSystem",
+                    "path": "/backend/BackendLanguage/NodeJS/NodeModules/FileSystem",
+                    "component": () => import('@/views/backend/BackendLanguage/NodeJS/NodeModules/FileSystem.vue')
                   },
                   {
-                    "name": "NpmCommonCommands",
-                    "path": "/backend/NodeJS/PackageManager/Npm/NpmCommonCommands",
-                    "component": () => import('@/views/backend/NodeJS/PackageManager/Npm/NpmCommonCommands.vue')
+                    "name": "Path",
+                    "path": "/backend/BackendLanguage/NodeJS/NodeModules/Path",
+                    "component": () => import('@/views/backend/BackendLanguage/NodeJS/NodeModules/Path.vue')
                   },
                   {
-                    "name": "Npx",
-                    "path": "/backend/NodeJS/PackageManager/Npm/Npx",
-                    "component": () => import('@/views/backend/NodeJS/PackageManager/Npm/Npx.vue')
+                    "name": "HTTP",
+                    "path": "/backend/BackendLanguage/NodeJS/NodeModules/HTTP",
+                    "component": () => import('@/views/backend/BackendLanguage/NodeJS/NodeModules/HTTP.vue')
                   },
                   {
-                    "name": "PackageJson",
-                    "path": "/backend/NodeJS/PackageManager/Npm/PackageJson",
-                    "component": () => import('@/views/backend/NodeJS/PackageManager/Npm/PackageJson.vue')
+                    "name": "HTTPS",
+                    "path": "/backend/BackendLanguage/NodeJS/NodeModules/HTTPS",
+                    "component": () => import('@/views/backend/BackendLanguage/NodeJS/NodeModules/HTTPS.vue')
                   },
                   {
-                    "name": "PackageLockJson",
-                    "path": "/backend/NodeJS/PackageManager/Npm/PackageLockJson",
-                    "component": () => import('@/views/backend/NodeJS/PackageManager/Npm/PackageLockJson.vue')
+                    "name": "Stream",
+                    "path": "/backend/BackendLanguage/NodeJS/NodeModules/Stream",
+                    "component": () => import('@/views/backend/BackendLanguage/NodeJS/NodeModules/Stream.vue')
                   },
                   {
-                    "name": "NpmrcFile",
-                    "path": "/backend/NodeJS/PackageManager/Npm/NpmrcFile",
-                    "component": () => import('@/views/backend/NodeJS/PackageManager/Npm/NpmrcFile.vue')
+                    "name": "Events2",
+                    "path": "/backend/BackendLanguage/NodeJS/NodeModules/Events2",
+                    "component": () => import('@/views/backend/BackendLanguage/NodeJS/NodeModules/Events2.vue')
+                  },
+                  {
+                    "name": "OS",
+                    "path": "/backend/BackendLanguage/NodeJS/NodeModules/OS",
+                    "component": () => import('@/views/backend/BackendLanguage/NodeJS/NodeModules/OS.vue')
+                  },
+                  {
+                    "name": "Process",
+                    "path": "/backend/BackendLanguage/NodeJS/NodeModules/Process",
+                    "component": () => import('@/views/backend/BackendLanguage/NodeJS/NodeModules/Process.vue')
+                  },
+                  {
+                    "name": "ProcessNextTick",
+                    "path": "/backend/BackendLanguage/NodeJS/NodeModules/ProcessNextTick",
+                    "component": () => import('@/views/backend/BackendLanguage/NodeJS/NodeModules/ProcessNextTick.vue')
+                  },
+                  {
+                    "name": "ChildProcess",
+                    "path": "/backend/BackendLanguage/NodeJS/NodeModules/ChildProcess",
+                    "component": () => import('@/views/backend/BackendLanguage/NodeJS/NodeModules/ChildProcess.vue')
+                  },
+                  {
+                    "name": "Buffer",
+                    "path": "/backend/BackendLanguage/NodeJS/NodeModules/Buffer",
+                    "component": () => import('@/views/backend/BackendLanguage/NodeJS/NodeModules/Buffer.vue')
+                  },
+                  {
+                    "name": "Util",
+                    "path": "/backend/BackendLanguage/NodeJS/NodeModules/Util",
+                    "component": () => import('@/views/backend/BackendLanguage/NodeJS/NodeModules/Util.vue')
+                  },
+                  {
+                    "name": "Crypto",
+                    "path": "/backend/BackendLanguage/NodeJS/NodeModules/Crypto",
+                    "component": () => import('@/views/backend/BackendLanguage/NodeJS/NodeModules/Crypto.vue')
+                  },
+                  {
+                    "name": "cryptoAdvanced",
+                    "path": "/backend/BackendLanguage/NodeJS/NodeModules/cryptoAdvanced",
+                    "component": () => import('@/views/backend/BackendLanguage/NodeJS/NodeModules/cryptoAdvanced.vue')
+                  },
+                  {
+                    "name": "Net",
+                    "path": "/backend/BackendLanguage/NodeJS/NodeModules/Net",
+                    "component": () => import('@/views/backend/BackendLanguage/NodeJS/NodeModules/Net.vue')
+                  },
+                  {
+                    "name": "DNS",
+                    "path": "/backend/BackendLanguage/NodeJS/NodeModules/DNS",
+                    "component": () => import('@/views/backend/BackendLanguage/NodeJS/NodeModules/DNS.vue')
+                  },
+                  {
+                    "name": "TLS",
+                    "path": "/backend/BackendLanguage/NodeJS/NodeModules/TLS",
+                    "component": () => import('@/views/backend/BackendLanguage/NodeJS/NodeModules/TLS.vue')
+                  },
+                  {
+                    "name": "URL",
+                    "path": "/backend/BackendLanguage/NodeJS/NodeModules/URL",
+                    "component": () => import('@/views/backend/BackendLanguage/NodeJS/NodeModules/URL.vue')
+                  },
+                  {
+                    "name": "QueryString",
+                    "path": "/backend/BackendLanguage/NodeJS/NodeModules/QueryString",
+                    "component": () => import('@/views/backend/BackendLanguage/NodeJS/NodeModules/QueryString.vue')
+                  },
+                  {
+                    "name": "Readline",
+                    "path": "/backend/BackendLanguage/NodeJS/NodeModules/Readline",
+                    "component": () => import('@/views/backend/BackendLanguage/NodeJS/NodeModules/Readline.vue')
+                  },
+                  {
+                    "name": "Assert",
+                    "path": "/backend/BackendLanguage/NodeJS/NodeModules/Assert",
+                    "component": () => import('@/views/backend/BackendLanguage/NodeJS/NodeModules/Assert.vue')
+                  },
+                  {
+                    "name": "Zlib",
+                    "path": "/backend/BackendLanguage/NodeJS/NodeModules/Zlib",
+                    "component": () => import('@/views/backend/BackendLanguage/NodeJS/NodeModules/Zlib.vue')
+                  },
+                  {
+                    "name": "VM",
+                    "path": "/backend/BackendLanguage/NodeJS/NodeModules/VM",
+                    "component": () => import('@/views/backend/BackendLanguage/NodeJS/NodeModules/VM.vue')
+                  },
+                  {
+                    "name": "Module",
+                    "path": "/backend/BackendLanguage/NodeJS/NodeModules/Module",
+                    "component": () => import('@/views/backend/BackendLanguage/NodeJS/NodeModules/Module.vue')
+                  },
+                  {
+                    "name": "Punycode",
+                    "path": "/backend/BackendLanguage/NodeJS/NodeModules/Punycode",
+                    "component": () => import('@/views/backend/BackendLanguage/NodeJS/NodeModules/Punycode.vue')
+                  },
+                  {
+                    "name": "Timers",
+                    "path": "/backend/BackendLanguage/NodeJS/NodeModules/Timers",
+                    "component": () => import('@/views/backend/BackendLanguage/NodeJS/NodeModules/Timers.vue')
+                  },
+                  {
+                    "name": "Domain",
+                    "path": "/backend/BackendLanguage/NodeJS/NodeModules/Domain",
+                    "component": () => import('@/views/backend/BackendLanguage/NodeJS/NodeModules/Domain.vue')
                   }
                 ]
               },
               {
-                "name": "Yarn",
-                "path": "/backend/NodeJS/PackageManager/Yarn",
+                "name": "NodeAdvancedModules",
+                "path": "/backend/BackendLanguage/NodeJS/NodeAdvancedModules",
                 "children": [
                   {
-                    "name": "YarnBasicKnowledge",
-                    "path": "/backend/NodeJS/PackageManager/Yarn/YarnBasicKnowledge",
-                    "component": () => import('@/views/backend/NodeJS/PackageManager/Yarn/YarnBasicKnowledge.vue')
+                    "name": "Cluster",
+                    "path": "/backend/BackendLanguage/NodeJS/NodeAdvancedModules/Cluster",
+                    "component": () => import('@/views/backend/BackendLanguage/NodeJS/NodeAdvancedModules/Cluster.vue')
                   },
                   {
-                    "name": "YarnCommonCommands",
-                    "path": "/backend/NodeJS/PackageManager/Yarn/YarnCommonCommands",
-                    "component": () => import('@/views/backend/NodeJS/PackageManager/Yarn/YarnCommonCommands.vue')
+                    "name": "Dgram",
+                    "path": "/backend/BackendLanguage/NodeJS/NodeAdvancedModules/Dgram",
+                    "component": () => import('@/views/backend/BackendLanguage/NodeJS/NodeAdvancedModules/Dgram.vue')
+                  },
+                  {
+                    "name": "Inspector",
+                    "path": "/backend/BackendLanguage/NodeJS/NodeAdvancedModules/Inspector",
+                    "component": () => import('@/views/backend/BackendLanguage/NodeJS/NodeAdvancedModules/Inspector.vue')
+                  },
+                  {
+                    "name": "Net",
+                    "path": "/backend/BackendLanguage/NodeJS/NodeAdvancedModules/Net",
+                    "component": () => import('@/views/backend/BackendLanguage/NodeJS/NodeAdvancedModules/Net.vue')
+                  },
+                  {
+                    "name": "PerfHooks",
+                    "path": "/backend/BackendLanguage/NodeJS/NodeAdvancedModules/PerfHooks",
+                    "component": () => import('@/views/backend/BackendLanguage/NodeJS/NodeAdvancedModules/PerfHooks.vue')
+                  },
+                  {
+                    "name": "REPL",
+                    "path": "/backend/BackendLanguage/NodeJS/NodeAdvancedModules/REPL",
+                    "component": () => import('@/views/backend/BackendLanguage/NodeJS/NodeAdvancedModules/REPL.vue')
+                  },
+                  {
+                    "name": "TLS",
+                    "path": "/backend/BackendLanguage/NodeJS/NodeAdvancedModules/TLS",
+                    "component": () => import('@/views/backend/BackendLanguage/NodeJS/NodeAdvancedModules/TLS.vue')
+                  },
+                  {
+                    "name": "TraceEvents",
+                    "path": "/backend/BackendLanguage/NodeJS/NodeAdvancedModules/TraceEvents",
+                    "component": () => import('@/views/backend/BackendLanguage/NodeJS/NodeAdvancedModules/TraceEvents.vue')
+                  },
+                  {
+                    "name": "WorkerThreads",
+                    "path": "/backend/BackendLanguage/NodeJS/NodeAdvancedModules/WorkerThreads",
+                    "component": () => import('@/views/backend/BackendLanguage/NodeJS/NodeAdvancedModules/WorkerThreads.vue')
                   }
                 ]
               },
               {
-                "name": "Pnpm",
-                "path": "/backend/NodeJS/PackageManager/Pnpm",
+                "name": "PackageManager",
+                "path": "/backend/BackendLanguage/NodeJS/PackageManager",
                 "children": [
                   {
-                    "name": "PnpmBasicKnowledge",
-                    "path": "/backend/NodeJS/PackageManager/Pnpm/PnpmBasicKnowledge",
-                    "component": () => import('@/views/backend/NodeJS/PackageManager/Pnpm/PnpmBasicKnowledge.vue')
+                    "name": "Npm",
+                    "path": "/backend/BackendLanguage/NodeJS/PackageManager/Npm",
+                    "children": [
+                      {
+                        "name": "NpmBasicKnowledge",
+                        "path": "/backend/BackendLanguage/NodeJS/PackageManager/Npm/NpmBasicKnowledge",
+                        "component": () => import('@/views/backend/BackendLanguage/NodeJS/PackageManager/Npm/NpmBasicKnowledge.vue')
+                      },
+                      {
+                        "name": "NpmCommonCommands",
+                        "path": "/backend/BackendLanguage/NodeJS/PackageManager/Npm/NpmCommonCommands",
+                        "component": () => import('@/views/backend/BackendLanguage/NodeJS/PackageManager/Npm/NpmCommonCommands.vue')
+                      },
+                      {
+                        "name": "Npx",
+                        "path": "/backend/BackendLanguage/NodeJS/PackageManager/Npm/Npx",
+                        "component": () => import('@/views/backend/BackendLanguage/NodeJS/PackageManager/Npm/Npx.vue')
+                      },
+                      {
+                        "name": "PackageJson",
+                        "path": "/backend/BackendLanguage/NodeJS/PackageManager/Npm/PackageJson",
+                        "component": () => import('@/views/backend/BackendLanguage/NodeJS/PackageManager/Npm/PackageJson.vue')
+                      },
+                      {
+                        "name": "PackageLockJson",
+                        "path": "/backend/BackendLanguage/NodeJS/PackageManager/Npm/PackageLockJson",
+                        "component": () => import('@/views/backend/BackendLanguage/NodeJS/PackageManager/Npm/PackageLockJson.vue')
+                      },
+                      {
+                        "name": "NpmrcFile",
+                        "path": "/backend/BackendLanguage/NodeJS/PackageManager/Npm/NpmrcFile",
+                        "component": () => import('@/views/backend/BackendLanguage/NodeJS/PackageManager/Npm/NpmrcFile.vue')
+                      }
+                    ]
                   },
                   {
-                    "name": "PnpmCommonCommands",
-                    "path": "/backend/NodeJS/PackageManager/Pnpm/PnpmCommonCommands",
-                    "component": () => import('@/views/backend/NodeJS/PackageManager/Pnpm/PnpmCommonCommands.vue')
+                    "name": "Yarn",
+                    "path": "/backend/BackendLanguage/NodeJS/PackageManager/Yarn",
+                    "children": [
+                      {
+                        "name": "YarnBasicKnowledge",
+                        "path": "/backend/BackendLanguage/NodeJS/PackageManager/Yarn/YarnBasicKnowledge",
+                        "component": () => import('@/views/backend/BackendLanguage/NodeJS/PackageManager/Yarn/YarnBasicKnowledge.vue')
+                      },
+                      {
+                        "name": "YarnCommonCommands",
+                        "path": "/backend/BackendLanguage/NodeJS/PackageManager/Yarn/YarnCommonCommands",
+                        "component": () => import('@/views/backend/BackendLanguage/NodeJS/PackageManager/Yarn/YarnCommonCommands.vue')
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Pnpm",
+                    "path": "/backend/BackendLanguage/NodeJS/PackageManager/Pnpm",
+                    "children": [
+                      {
+                        "name": "PnpmBasicKnowledge",
+                        "path": "/backend/BackendLanguage/NodeJS/PackageManager/Pnpm/PnpmBasicKnowledge",
+                        "component": () => import('@/views/backend/BackendLanguage/NodeJS/PackageManager/Pnpm/PnpmBasicKnowledge.vue')
+                      },
+                      {
+                        "name": "PnpmCommonCommands",
+                        "path": "/backend/BackendLanguage/NodeJS/PackageManager/Pnpm/PnpmCommonCommands",
+                        "component": () => import('@/views/backend/BackendLanguage/NodeJS/PackageManager/Pnpm/PnpmCommonCommands.vue')
+                      }
+                    ]
+                  },
+                  {
+                    "name": "PackageManagerComparison",
+                    "path": "/backend/BackendLanguage/NodeJS/PackageManager/PackageManagerComparison",
+                    "component": () => import('@/views/backend/BackendLanguage/NodeJS/PackageManager/PackageManagerComparison.vue')
+                  },
+                  {
+                    "name": "HardLinkAndSoftLinkAndSymbolLink",
+                    "path": "/backend/BackendLanguage/NodeJS/PackageManager/HardLinkAndSoftLinkAndSymbolLink",
+                    "component": () => import('@/views/backend/BackendLanguage/NodeJS/PackageManager/HardLinkAndSoftLinkAndSymbolLink.vue')
+                  },
+                  {
+                    "name": "NpmDownloadPackage",
+                    "path": "/backend/BackendLanguage/NodeJS/PackageManager/NpmDownloadPackage",
+                    "component": () => import('@/views/backend/BackendLanguage/NodeJS/PackageManager/NpmDownloadPackage.vue')
+                  },
+                  {
+                    "name": "NodeFindPackage",
+                    "path": "/backend/BackendLanguage/NodeJS/PackageManager/NodeFindPackage",
+                    "component": () => import('@/views/backend/BackendLanguage/NodeJS/PackageManager/NodeFindPackage.vue')
+                  },
+                  {
+                    "name": "UploadPackage",
+                    "path": "/backend/BackendLanguage/NodeJS/PackageManager/UploadPackage",
+                    "component": () => import('@/views/backend/BackendLanguage/NodeJS/PackageManager/UploadPackage.vue')
                   }
                 ]
               },
               {
-                "name": "PackageManagerComparison",
-                "path": "/backend/NodeJS/PackageManager/PackageManagerComparison",
-                "component": () => import('@/views/backend/NodeJS/PackageManager/PackageManagerComparison.vue')
+                "name": "NodeJsFramework",
+                "path": "/backend/BackendLanguage/NodeJS/NodeJsFramework",
+                "children": [
+                  {
+                    "name": "FrameworkComparison",
+                    "path": "/backend/BackendLanguage/NodeJS/NodeJsFramework/FrameworkComparison",
+                    "component": () => import('@/views/backend/BackendLanguage/NodeJS/NodeJsFramework/FrameworkComparison.vue')
+                  },
+                  {
+                    "name": "Express",
+                    "path": "/backend/BackendLanguage/NodeJS/NodeJsFramework/Express",
+                    "component": () => import('@/views/backend/BackendLanguage/NodeJS/NodeJsFramework/Express.vue')
+                  },
+                  {
+                    "name": "Nest",
+                    "path": "/backend/BackendLanguage/NodeJS/NodeJsFramework/Nest",
+                    "component": () => import('@/views/backend/BackendLanguage/NodeJS/NodeJsFramework/Nest.vue')
+                  },
+                  {
+                    "name": "Koa",
+                    "path": "/backend/BackendLanguage/NodeJS/NodeJsFramework/Koa",
+                    "component": () => import('@/views/backend/BackendLanguage/NodeJS/NodeJsFramework/Koa.vue')
+                  }
+                ]
               },
               {
-                "name": "HardLinkAndSoftLinkAndSymbolLink",
-                "path": "/backend/NodeJS/PackageManager/HardLinkAndSoftLinkAndSymbolLink",
-                "component": () => import('@/views/backend/NodeJS/PackageManager/HardLinkAndSoftLinkAndSymbolLink.vue')
-              },
-              {
-                "name": "NpmDownloadPackage",
-                "path": "/backend/NodeJS/PackageManager/NpmDownloadPackage",
-                "component": () => import('@/views/backend/NodeJS/PackageManager/NpmDownloadPackage.vue')
-              },
-              {
-                "name": "NodeFindPackage",
-                "path": "/backend/NodeJS/PackageManager/NodeFindPackage",
-                "component": () => import('@/views/backend/NodeJS/PackageManager/NodeFindPackage.vue')
-              },
-              {
-                "name": "UploadPackage",
-                "path": "/backend/NodeJS/PackageManager/UploadPackage",
-                "component": () => import('@/views/backend/NodeJS/PackageManager/UploadPackage.vue')
+                "name": "bun",
+                "path": "/backend/BackendLanguage/NodeJS/bun",
+                "children": [
+                  {
+                    "name": "BunIntroduction",
+                    "path": "/backend/BackendLanguage/NodeJS/bun/BunIntroduction",
+                    "component": () => import('@/views/backend/BackendLanguage/NodeJS/bun/BunIntroduction.vue')
+                  },
+                  {
+                    "name": "BunModules",
+                    "path": "/backend/BackendLanguage/NodeJS/bun/BunModules",
+                    "component": () => import('@/views/backend/BackendLanguage/NodeJS/bun/BunModules.vue')
+                  }
+                ]
               }
             ]
           },
           {
-            "name": "NodeJsFramework",
-            "path": "/backend/NodeJS/NodeJsFramework",
+            "name": "Python",
+            "path": "/backend/BackendLanguage/Python",
             "children": [
               {
-                "name": "FrameworkComparison",
-                "path": "/backend/NodeJS/NodeJsFramework/FrameworkComparison",
-                "component": () => import('@/views/backend/NodeJS/NodeJsFramework/FrameworkComparison.vue')
+                "name": "PythonOverview",
+                "path": "/backend/BackendLanguage/Python/PythonOverview",
+                "component": () => import('@/views/backend/BackendLanguage/Python/PythonOverview.vue')
               },
               {
-                "name": "Express",
-                "path": "/backend/NodeJS/NodeJsFramework/Express",
-                "component": () => import('@/views/backend/NodeJS/NodeJsFramework/Express.vue')
-              },
-              {
-                "name": "Nest",
-                "path": "/backend/NodeJS/NodeJsFramework/Nest",
-                "component": () => import('@/views/backend/NodeJS/NodeJsFramework/Nest.vue')
-              },
-              {
-                "name": "Koa",
-                "path": "/backend/NodeJS/NodeJsFramework/Koa",
-                "component": () => import('@/views/backend/NodeJS/NodeJsFramework/Koa.vue')
-              }
-            ]
-          },
-          {
-            "name": "NodeOther",
-            "path": "/backend/NodeJS/NodeOther",
-            "children": [
-              {
-                "name": "WriteCommandLineTool",
-                "path": "/backend/NodeJS/NodeOther/WriteCommandLineTool",
-                "children": [
-                  {
-                    "name": "CommandLineToolOverview",
-                    "path": "/backend/NodeJS/NodeOther/WriteCommandLineTool/CommandLineToolOverview",
-                    "component": () => import('@/views/backend/NodeJS/NodeOther/WriteCommandLineTool/CommandLineToolOverview.vue')
-                  },
-                  {
-                    "name": "Commander",
-                    "path": "/backend/NodeJS/NodeOther/WriteCommandLineTool/Commander",
-                    "component": () => import('@/views/backend/NodeJS/NodeOther/WriteCommandLineTool/Commander.vue')
-                  },
-                  {
-                    "name": "Inquirer",
-                    "path": "/backend/NodeJS/NodeOther/WriteCommandLineTool/Inquirer",
-                    "component": () => import('@/views/backend/NodeJS/NodeOther/WriteCommandLineTool/Inquirer.vue')
-                  },
-                  {
-                    "name": "Chalk",
-                    "path": "/backend/NodeJS/NodeOther/WriteCommandLineTool/Chalk",
-                    "component": () => import('@/views/backend/NodeJS/NodeOther/WriteCommandLineTool/Chalk.vue')
-                  },
-                  {
-                    "name": "Ora",
-                    "path": "/backend/NodeJS/NodeOther/WriteCommandLineTool/Ora",
-                    "component": () => import('@/views/backend/NodeJS/NodeOther/WriteCommandLineTool/Ora.vue')
-                  },
-                  {
-                    "name": "EnquirerAndYargs",
-                    "path": "/backend/NodeJS/NodeOther/WriteCommandLineTool/EnquirerAndYargs",
-                    "component": () => import('@/views/backend/NodeJS/NodeOther/WriteCommandLineTool/EnquirerAndYargs.vue')
-                  }
-                ]
+                "name": "PythonLearningRouteMap",
+                "path": "/backend/BackendLanguage/Python/PythonLearningRouteMap",
+                "component": () => import('@/views/backend/BackendLanguage/Python/PythonLearningRouteMap.vue')
               }
             ]
           }
         ]
       },
       {
-        "name": "bun",
-        "path": "/backend/bun",
+        "name": "DataBase",
+        "path": "/backend/DataBase",
         "children": [
           {
-            "name": "BunIntroduction",
-            "path": "/backend/bun/BunIntroduction",
-            "component": () => import('@/views/backend/bun/BunIntroduction.vue')
+            "name": "Redis",
+            "path": "/backend/DataBase/Redis",
+            "component": () => import('@/views/backend/DataBase/Redis.vue')
           }
         ]
       }
     ]
   },
   {
-    "name": "TeamCollaboration",
-    "path": "/TeamCollaboration",
-    "children": [
-      {
-        "name": "GitBase",
-        "path": "/TeamCollaboration/GitBase",
-        "component": () => import('@/views/TeamCollaboration/GitBase.vue')
-      },
-      {
-        "name": "GitWorkflow",
-        "path": "/TeamCollaboration/GitWorkflow",
-        "component": () => import('@/views/TeamCollaboration/GitWorkflow.vue')
-      },
-      {
-        "name": "GitCommand",
-        "path": "/TeamCollaboration/GitCommand",
-        "component": () => import('@/views/TeamCollaboration/GitCommand.vue')
-      },
-      {
-        "name": "GitCommandEncyclopedia",
-        "path": "/TeamCollaboration/GitCommandEncyclopedia",
-        "component": () => import('@/views/TeamCollaboration/GitCommandEncyclopedia.vue')
-      },
-      {
-        "name": "GitConflict",
-        "path": "/TeamCollaboration/GitConflict",
-        "component": () => import('@/views/TeamCollaboration/GitConflict.vue')
-      },
-      {
-        "name": "GitBranch",
-        "path": "/TeamCollaboration/GitBranch",
-        "component": () => import('@/views/TeamCollaboration/GitBranch.vue')
-      },
-      {
-        "name": "ResetAndRestoreAndRevert",
-        "path": "/TeamCollaboration/ResetAndRestoreAndRevert",
-        "children": [
-          {
-            "name": "Reset",
-            "path": "/TeamCollaboration/ResetAndRestoreAndRevert/Reset",
-            "component": () => import('@/views/TeamCollaboration/ResetAndRestoreAndRevert/Reset.vue')
-          },
-          {
-            "name": "Revert",
-            "path": "/TeamCollaboration/ResetAndRestoreAndRevert/Revert",
-            "component": () => import('@/views/TeamCollaboration/ResetAndRestoreAndRevert/Revert.vue')
-          },
-          {
-            "name": "Restore",
-            "path": "/TeamCollaboration/ResetAndRestoreAndRevert/Restore",
-            "component": () => import('@/views/TeamCollaboration/ResetAndRestoreAndRevert/Restore.vue')
-          },
-          {
-            "name": "ResetAndRestoreAndRevertSummary",
-            "path": "/TeamCollaboration/ResetAndRestoreAndRevert/ResetAndRestoreAndRevertSummary",
-            "component": () => import('@/views/TeamCollaboration/ResetAndRestoreAndRevert/ResetAndRestoreAndRevertSummary.vue')
-          }
-        ]
-      },
-      {
-        "name": "LogAndReflog",
-        "path": "/TeamCollaboration/LogAndReflog",
-        "component": () => import('@/views/TeamCollaboration/LogAndReflog.vue')
-      },
-      {
-        "name": "GitCherryPick",
-        "path": "/TeamCollaboration/GitCherryPick",
-        "component": () => import('@/views/TeamCollaboration/GitCherryPick.vue')
-      },
-      {
-        "name": "Rebase",
-        "path": "/TeamCollaboration/Rebase",
-        "component": () => import('@/views/TeamCollaboration/Rebase.vue')
-      },
-      {
-        "name": "GitTagAndGitAlias",
-        "path": "/TeamCollaboration/GitTagAndGitAlias",
-        "component": () => import('@/views/TeamCollaboration/GitTagAndGitAlias.vue')
-      },
-      {
-        "name": "Husky1",
-        "path": "/TeamCollaboration/Husky1",
-        "component": () => import('@/views/TeamCollaboration/Husky1.vue')
-      },
-      {
-        "name": "FeatureBranchAndTrunkBased",
-        "path": "/TeamCollaboration/FeatureBranchAndTrunkBased",
-        "component": () => import('@/views/TeamCollaboration/FeatureBranchAndTrunkBased.vue')
-      },
-      {
-        "name": "GitBisect",
-        "path": "/TeamCollaboration/GitBisect",
-        "component": () => import('@/views/TeamCollaboration/GitBisect.vue')
-      },
-      {
-        "name": "GitIgnore",
-        "path": "/TeamCollaboration/GitIgnore",
-        "component": () => import('@/views/TeamCollaboration/GitIgnore.vue')
-      }
-    ]
-  },
-  {
-    "name": "ComputerBasicKnowledge",
-    "path": "/ComputerBasicKnowledge",
-    "children": [
-      {
-        "name": "ComputerLearningPath",
-        "path": "/ComputerBasicKnowledge/ComputerLearningPath",
-        "component": () => import('@/views/ComputerBasicKnowledge/ComputerLearningPath.vue')
-      },
-      {
-        "name": "ComputerComposition",
-        "path": "/ComputerBasicKnowledge/ComputerComposition",
-        "children": [
-          {
-            "name": "ComputerHistory",
-            "path": "/ComputerBasicKnowledge/ComputerComposition/ComputerHistory",
-            "component": () => import('@/views/ComputerBasicKnowledge/ComputerComposition/ComputerHistory.vue')
-          },
-          {
-            "name": "ComputerCompositionOverview",
-            "path": "/ComputerBasicKnowledge/ComputerComposition/ComputerCompositionOverview",
-            "component": () => import('@/views/ComputerBasicKnowledge/ComputerComposition/ComputerCompositionOverview.vue')
-          },
-          {
-            "name": "ComputerCompositionParts",
-            "path": "/ComputerBasicKnowledge/ComputerComposition/ComputerCompositionParts",
-            "children": [
-              {
-                "name": "cpu",
-                "path": "/ComputerBasicKnowledge/ComputerComposition/ComputerCompositionParts/cpu",
-                "component": () => import('@/views/ComputerBasicKnowledge/ComputerComposition/ComputerCompositionParts/cpu.vue')
-              },
-              {
-                "name": "Memory",
-                "path": "/ComputerBasicKnowledge/ComputerComposition/ComputerCompositionParts/Memory",
-                "component": () => import('@/views/ComputerBasicKnowledge/ComputerComposition/ComputerCompositionParts/Memory.vue')
-              },
-              {
-                "name": "HardDisk",
-                "path": "/ComputerBasicKnowledge/ComputerComposition/ComputerCompositionParts/HardDisk",
-                "component": () => import('@/views/ComputerBasicKnowledge/ComputerComposition/ComputerCompositionParts/HardDisk.vue')
-              },
-              {
-                "name": "MainBoard",
-                "path": "/ComputerBasicKnowledge/ComputerComposition/ComputerCompositionParts/MainBoard",
-                "component": () => import('@/views/ComputerBasicKnowledge/ComputerComposition/ComputerCompositionParts/MainBoard.vue')
-              },
-              {
-                "name": "IO",
-                "path": "/ComputerBasicKnowledge/ComputerComposition/ComputerCompositionParts/IO",
-                "component": () => import('@/views/ComputerBasicKnowledge/ComputerComposition/ComputerCompositionParts/IO.vue')
-              },
-              {
-                "name": "GraphicsCard",
-                "path": "/ComputerBasicKnowledge/ComputerComposition/ComputerCompositionParts/GraphicsCard",
-                "component": () => import('@/views/ComputerBasicKnowledge/ComputerComposition/ComputerCompositionParts/GraphicsCard.vue')
-              }
-            ]
-          },
-          {
-            "name": "BinaryConversion",
-            "path": "/ComputerBasicKnowledge/ComputerComposition/BinaryConversion",
-            "component": () => import('@/views/ComputerBasicKnowledge/ComputerComposition/BinaryConversion.vue')
-          },
-          {
-            "name": "DigitalLogic",
-            "path": "/ComputerBasicKnowledge/ComputerComposition/DigitalLogic",
-            "component": () => import('@/views/ComputerBasicKnowledge/ComputerComposition/DigitalLogic.vue')
-          }
-        ]
-      },
-      {
-        "name": "OperatingSystem",
-        "path": "/ComputerBasicKnowledge/OperatingSystem",
-        "children": [
-          {
-            "name": "OperatingSystems",
-            "path": "/ComputerBasicKnowledge/OperatingSystem/OperatingSystems",
-            "component": () => import('@/views/ComputerBasicKnowledge/OperatingSystem/OperatingSystems.vue')
-          },
-          {
-            "name": "FileSystem",
-            "path": "/ComputerBasicKnowledge/OperatingSystem/FileSystem",
-            "children": [
-              {
-                "name": "HardlinkAndSoftlink",
-                "path": "/ComputerBasicKnowledge/OperatingSystem/FileSystem/HardlinkAndSoftlink",
-                "component": () => import('@/views/ComputerBasicKnowledge/OperatingSystem/FileSystem/HardlinkAndSoftlink.vue')
-              },
-              {
-                "name": "FileSystemPrinciple",
-                "path": "/ComputerBasicKnowledge/OperatingSystem/FileSystem/FileSystemPrinciple",
-                "component": () => import('@/views/ComputerBasicKnowledge/OperatingSystem/FileSystem/FileSystemPrinciple.vue')
-              }
-            ]
-          },
-          {
-            "name": "ProcessAndThread",
-            "path": "/ComputerBasicKnowledge/OperatingSystem/ProcessAndThread",
-            "component": () => import('@/views/ComputerBasicKnowledge/OperatingSystem/ProcessAndThread.vue')
-          },
-          {
-            "name": "ProcessAndThreadConcepts",
-            "path": "/ComputerBasicKnowledge/OperatingSystem/ProcessAndThreadConcepts",
-            "component": () => import('@/views/ComputerBasicKnowledge/OperatingSystem/ProcessAndThreadConcepts.vue')
-          },
-          {
-            "name": "InterProcessCommunication",
-            "path": "/ComputerBasicKnowledge/OperatingSystem/InterProcessCommunication",
-            "component": () => import('@/views/ComputerBasicKnowledge/OperatingSystem/InterProcessCommunication.vue')
-          },
-          {
-            "name": "ProcessScheduling",
-            "path": "/ComputerBasicKnowledge/OperatingSystem/ProcessScheduling",
-            "component": () => import('@/views/ComputerBasicKnowledge/OperatingSystem/ProcessScheduling.vue')
-          },
-          {
-            "name": "ProcessSchedulingAlgorithm",
-            "path": "/ComputerBasicKnowledge/OperatingSystem/ProcessSchedulingAlgorithm",
-            "component": () => import('@/views/ComputerBasicKnowledge/OperatingSystem/ProcessSchedulingAlgorithm.vue')
-          }
-        ]
-      },
-      {
-        "name": "CompilerPrinciple",
-        "path": "/ComputerBasicKnowledge/CompilerPrinciple",
-        "children": [
-          {
-            "name": "CompilerPrincipleOverview",
-            "path": "/ComputerBasicKnowledge/CompilerPrinciple/CompilerPrincipleOverview",
-            "component": () => import('@/views/ComputerBasicKnowledge/CompilerPrinciple/CompilerPrincipleOverview.vue')
-          },
-          {
-            "name": "AOTAndJIT",
-            "path": "/ComputerBasicKnowledge/CompilerPrinciple/AOTAndJIT",
-            "component": () => import('@/views/ComputerBasicKnowledge/CompilerPrinciple/AOTAndJIT.vue')
-          }
-        ]
-      },
-      {
-        "name": "AssemblyLanguage",
-        "path": "/ComputerBasicKnowledge/AssemblyLanguage",
-        "component": () => import('@/views/ComputerBasicKnowledge/AssemblyLanguage.vue')
-      },
-      {
-        "name": "CharacterEncoding",
-        "path": "/ComputerBasicKnowledge/CharacterEncoding",
-        "component": () => import('@/views/ComputerBasicKnowledge/CharacterEncoding.vue')
-      },
-      {
-        "name": "BasicAlgorithm",
-        "path": "/ComputerBasicKnowledge/BasicAlgorithm",
-        "children": [
-          {
-            "name": "SortingAlgorithm1",
-            "path": "/ComputerBasicKnowledge/BasicAlgorithm/SortingAlgorithm1",
-            "component": () => import('@/views/ComputerBasicKnowledge/BasicAlgorithm/SortingAlgorithm1.vue')
-          },
-          {
-            "name": "SearchAlgorithm1",
-            "path": "/ComputerBasicKnowledge/BasicAlgorithm/SearchAlgorithm1",
-            "component": () => import('@/views/ComputerBasicKnowledge/BasicAlgorithm/SearchAlgorithm1.vue')
-          },
-          {
-            "name": "RecursiveAlgorithm1",
-            "path": "/ComputerBasicKnowledge/BasicAlgorithm/RecursiveAlgorithm1",
-            "component": () => import('@/views/ComputerBasicKnowledge/BasicAlgorithm/RecursiveAlgorithm1.vue')
-          },
-          {
-            "name": "DynamicProgrammingBasic",
-            "path": "/ComputerBasicKnowledge/BasicAlgorithm/DynamicProgrammingBasic",
-            "component": () => import('@/views/ComputerBasicKnowledge/BasicAlgorithm/DynamicProgrammingBasic.vue')
-          },
-          {
-            "name": "GreedyAlgorithm1",
-            "path": "/ComputerBasicKnowledge/BasicAlgorithm/GreedyAlgorithm1",
-            "component": () => import('@/views/ComputerBasicKnowledge/BasicAlgorithm/GreedyAlgorithm1.vue')
-          },
-          {
-            "name": "DivideAndConquer1",
-            "path": "/ComputerBasicKnowledge/BasicAlgorithm/DivideAndConquer1",
-            "component": () => import('@/views/ComputerBasicKnowledge/BasicAlgorithm/DivideAndConquer1.vue')
-          },
-          {
-            "name": "BacktrackingAlgorithm1",
-            "path": "/ComputerBasicKnowledge/BasicAlgorithm/BacktrackingAlgorithm1",
-            "component": () => import('@/views/ComputerBasicKnowledge/BasicAlgorithm/BacktrackingAlgorithm1.vue')
-          },
-          {
-            "name": "BranchAndBoundAlgorithm1",
-            "path": "/ComputerBasicKnowledge/BasicAlgorithm/BranchAndBoundAlgorithm1",
-            "component": () => import('@/views/ComputerBasicKnowledge/BasicAlgorithm/BranchAndBoundAlgorithm1.vue')
-          }
-        ]
-      },
-      {
-        "name": "DataStructureBasic",
-        "path": "/ComputerBasicKnowledge/DataStructureBasic",
-        "children": [
-          {
-            "name": "Array2",
-            "path": "/ComputerBasicKnowledge/DataStructureBasic/Array2",
-            "component": () => import('@/views/ComputerBasicKnowledge/DataStructureBasic/Array2.vue')
-          },
-          {
-            "name": "LinkedList1",
-            "path": "/ComputerBasicKnowledge/DataStructureBasic/LinkedList1",
-            "component": () => import('@/views/ComputerBasicKnowledge/DataStructureBasic/LinkedList1.vue')
-          },
-          {
-            "name": "Stack1",
-            "path": "/ComputerBasicKnowledge/DataStructureBasic/Stack1",
-            "component": () => import('@/views/ComputerBasicKnowledge/DataStructureBasic/Stack1.vue')
-          },
-          {
-            "name": "Queue1",
-            "path": "/ComputerBasicKnowledge/DataStructureBasic/Queue1",
-            "component": () => import('@/views/ComputerBasicKnowledge/DataStructureBasic/Queue1.vue')
-          },
-          {
-            "name": "Tree1",
-            "path": "/ComputerBasicKnowledge/DataStructureBasic/Tree1",
-            "component": () => import('@/views/ComputerBasicKnowledge/DataStructureBasic/Tree1.vue')
-          },
-          {
-            "name": "Graph1",
-            "path": "/ComputerBasicKnowledge/DataStructureBasic/Graph1",
-            "component": () => import('@/views/ComputerBasicKnowledge/DataStructureBasic/Graph1.vue')
-          },
-          {
-            "name": "Heap1",
-            "path": "/ComputerBasicKnowledge/DataStructureBasic/Heap1",
-            "component": () => import('@/views/ComputerBasicKnowledge/DataStructureBasic/Heap1.vue')
-          },
-          {
-            "name": "HashTable1",
-            "path": "/ComputerBasicKnowledge/DataStructureBasic/HashTable1",
-            "component": () => import('@/views/ComputerBasicKnowledge/DataStructureBasic/HashTable1.vue')
-          }
-        ]
-      },
-      {
-        "name": "CMDCommand",
-        "path": "/ComputerBasicKnowledge/CMDCommand",
-        "component": () => import('@/views/ComputerBasicKnowledge/CMDCommand.vue')
-      },
-      {
-        "name": "macCommand",
-        "path": "/ComputerBasicKnowledge/macCommand",
-        "component": () => import('@/views/ComputerBasicKnowledge/macCommand.vue')
-      }
-    ]
-  },
-  {
-    "name": "AlgorithmsAndDataStructures",
-    "path": "/AlgorithmsAndDataStructures",
-    "children": [
-      {
-        "name": "WhyAlgorithmsAndDataStructures",
-        "path": "/AlgorithmsAndDataStructures/WhyAlgorithmsAndDataStructures",
-        "component": () => import('@/views/AlgorithmsAndDataStructures/WhyAlgorithmsAndDataStructures.vue')
-      },
-      {
-        "name": "DataStructures",
-        "path": "/AlgorithmsAndDataStructures/DataStructures",
-        "children": [
-          {
-            "name": "DataStructuresIntroduction",
-            "path": "/AlgorithmsAndDataStructures/DataStructures/DataStructuresIntroduction",
-            "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/DataStructuresIntroduction.vue')
-          },
-          {
-            "name": "Stack",
-            "path": "/AlgorithmsAndDataStructures/DataStructures/Stack",
-            "children": [
-              {
-                "name": "StackBase",
-                "path": "/AlgorithmsAndDataStructures/DataStructures/Stack/StackBase",
-                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/Stack/StackBase.vue')
-              },
-              {
-                "name": "StackAlgorithm",
-                "path": "/AlgorithmsAndDataStructures/DataStructures/Stack/StackAlgorithm",
-                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/Stack/StackAlgorithm.vue')
-              }
-            ]
-          },
-          {
-            "name": "ArrayOperations",
-            "path": "/AlgorithmsAndDataStructures/DataStructures/ArrayOperations",
-            "children": [
-              {
-                "name": "ArrayBasic",
-                "path": "/AlgorithmsAndDataStructures/DataStructures/ArrayOperations/ArrayBasic",
-                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/ArrayOperations/ArrayBasic.vue')
-              },
-              {
-                "name": "ArrayAlgorithm",
-                "path": "/AlgorithmsAndDataStructures/DataStructures/ArrayOperations/ArrayAlgorithm",
-                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/ArrayOperations/ArrayAlgorithm.vue')
-              }
-            ]
-          },
-          {
-            "name": "LinkedList",
-            "path": "/AlgorithmsAndDataStructures/DataStructures/LinkedList",
-            "children": [
-              {
-                "name": "LinkedListBasic",
-                "path": "/AlgorithmsAndDataStructures/DataStructures/LinkedList/LinkedListBasic",
-                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/LinkedList/LinkedListBasic.vue')
-              },
-              {
-                "name": "LinkedListBasicOperations",
-                "path": "/AlgorithmsAndDataStructures/DataStructures/LinkedList/LinkedListBasicOperations",
-                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/LinkedList/LinkedListBasicOperations.vue')
-              },
-              {
-                "name": "LinkedListBasicAlgorithm",
-                "path": "/AlgorithmsAndDataStructures/DataStructures/LinkedList/LinkedListBasicAlgorithm",
-                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/LinkedList/LinkedListBasicAlgorithm.vue')
-              },
-              {
-                "name": "LinkedListAlgorithmList",
-                "path": "/AlgorithmsAndDataStructures/DataStructures/LinkedList/LinkedListAlgorithmList",
-                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/LinkedList/LinkedListAlgorithmList.vue')
-              }
-            ]
-          },
-          {
-            "name": "Queue",
-            "path": "/AlgorithmsAndDataStructures/DataStructures/Queue",
-            "children": [
-              {
-                "name": "QueueBase",
-                "path": "/AlgorithmsAndDataStructures/DataStructures/Queue/QueueBase",
-                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/Queue/QueueBase.vue')
-              },
-              {
-                "name": "QueueAlgorithm",
-                "path": "/AlgorithmsAndDataStructures/DataStructures/Queue/QueueAlgorithm",
-                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/Queue/QueueAlgorithm.vue')
-              }
-            ]
-          },
-          {
-            "name": "HashTable",
-            "path": "/AlgorithmsAndDataStructures/DataStructures/HashTable",
-            "children": [
-              {
-                "name": "HashTableIntroduction",
-                "path": "/AlgorithmsAndDataStructures/DataStructures/HashTable/HashTableIntroduction",
-                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/HashTable/HashTableIntroduction.vue')
-              },
-              {
-                "name": "HashTableImplementation",
-                "path": "/AlgorithmsAndDataStructures/DataStructures/HashTable/HashTableImplementation",
-                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/HashTable/HashTableImplementation.vue')
-              },
-              {
-                "name": "HashTableAlgorithm",
-                "path": "/AlgorithmsAndDataStructures/DataStructures/HashTable/HashTableAlgorithm",
-                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/HashTable/HashTableAlgorithm.vue')
-              }
-            ]
-          },
-          {
-            "name": "Trees",
-            "path": "/AlgorithmsAndDataStructures/DataStructures/Trees",
-            "children": [
-              {
-                "name": "TreeBasic",
-                "path": "/AlgorithmsAndDataStructures/DataStructures/Trees/TreeBasic",
-                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/Trees/TreeBasic.vue')
-              },
-              {
-                "name": "TreeClassification",
-                "path": "/AlgorithmsAndDataStructures/DataStructures/Trees/TreeClassification",
-                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/Trees/TreeClassification.vue')
-              },
-              {
-                "name": "TrieTree",
-                "path": "/AlgorithmsAndDataStructures/DataStructures/Trees/TrieTree",
-                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/Trees/TrieTree.vue')
-              },
-              {
-                "name": "BinaryTreeAndBinarySearchTree",
-                "path": "/AlgorithmsAndDataStructures/DataStructures/Trees/BinaryTreeAndBinarySearchTree",
-                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/Trees/BinaryTreeAndBinarySearchTree.vue')
-              },
-              {
-                "name": "2-3Tree",
-                "path": "/AlgorithmsAndDataStructures/DataStructures/Trees/2-3Tree",
-                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/Trees/2-3Tree.vue')
-              },
-              {
-                "name": "BTreeAndBPlusTree",
-                "path": "/AlgorithmsAndDataStructures/DataStructures/Trees/BTreeAndBPlusTree",
-                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/Trees/BTreeAndBPlusTree.vue')
-              },
-              {
-                "name": "RedBlackTree",
-                "path": "/AlgorithmsAndDataStructures/DataStructures/Trees/RedBlackTree",
-                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/Trees/RedBlackTree.vue')
-              },
-              {
-                "name": "SegmentTree",
-                "path": "/AlgorithmsAndDataStructures/DataStructures/Trees/SegmentTree",
-                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/Trees/SegmentTree.vue')
-              },
-              {
-                "name": "HuffmanTree",
-                "path": "/AlgorithmsAndDataStructures/DataStructures/Trees/HuffmanTree",
-                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/Trees/HuffmanTree.vue')
-              },
-              {
-                "name": "TreeTraversal",
-                "path": "/AlgorithmsAndDataStructures/DataStructures/Trees/TreeTraversal",
-                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/Trees/TreeTraversal.vue')
-              },
-              {
-                "name": "TreeBasicAlgorithm",
-                "path": "/AlgorithmsAndDataStructures/DataStructures/Trees/TreeBasicAlgorithm",
-                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/Trees/TreeBasicAlgorithm.vue')
-              }
-            ]
-          },
-          {
-            "name": "Heap",
-            "path": "/AlgorithmsAndDataStructures/DataStructures/Heap",
-            "children": [
-              {
-                "name": "HeapIntroduction",
-                "path": "/AlgorithmsAndDataStructures/DataStructures/Heap/HeapIntroduction",
-                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/Heap/HeapIntroduction.vue')
-              },
-              {
-                "name": "HeapImplementation",
-                "path": "/AlgorithmsAndDataStructures/DataStructures/Heap/HeapImplementation",
-                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/Heap/HeapImplementation.vue')
-              }
-            ]
-          },
-          {
-            "name": "Graph",
-            "path": "/AlgorithmsAndDataStructures/DataStructures/Graph",
-            "children": [
-              {
-                "name": "GraphBasic",
-                "path": "/AlgorithmsAndDataStructures/DataStructures/Graph/GraphBasic",
-                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/Graph/GraphBasic.vue')
-              },
-              {
-                "name": "GraphClassification",
-                "path": "/AlgorithmsAndDataStructures/DataStructures/Graph/GraphClassification",
-                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/Graph/GraphClassification.vue')
-              },
-              {
-                "name": "GraphStorageWay",
-                "path": "/AlgorithmsAndDataStructures/DataStructures/Graph/GraphStorageWay",
-                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/Graph/GraphStorageWay.vue')
-              },
-              {
-                "name": "GraphAlgorithm1",
-                "path": "/AlgorithmsAndDataStructures/DataStructures/Graph/GraphAlgorithm1",
-                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/Graph/GraphAlgorithm1.vue')
-              },
-              {
-                "name": "DijkstraAlgorithm1",
-                "path": "/AlgorithmsAndDataStructures/DataStructures/Graph/DijkstraAlgorithm1",
-                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/Graph/DijkstraAlgorithm1.vue')
-              },
-              {
-                "name": "FloydAlgorithm",
-                "path": "/AlgorithmsAndDataStructures/DataStructures/Graph/FloydAlgorithm",
-                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/Graph/FloydAlgorithm.vue')
-              },
-              {
-                "name": "BellmanFordAlgorithm",
-                "path": "/AlgorithmsAndDataStructures/DataStructures/Graph/BellmanFordAlgorithm",
-                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/Graph/BellmanFordAlgorithm.vue')
-              },
-              {
-                "name": "PrimAndKruskalAlgorithm",
-                "path": "/AlgorithmsAndDataStructures/DataStructures/Graph/PrimAndKruskalAlgorithm",
-                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/Graph/PrimAndKruskalAlgorithm.vue')
-              },
-              {
-                "name": "TopologicalSorting",
-                "path": "/AlgorithmsAndDataStructures/DataStructures/Graph/TopologicalSorting",
-                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/Graph/TopologicalSorting.vue')
-              }
-            ]
-          },
-          {
-            "name": "OtherDataStructures",
-            "path": "/AlgorithmsAndDataStructures/DataStructures/OtherDataStructures",
-            "children": [
-              {
-                "name": "OtherDataStructuresIntroduction",
-                "path": "/AlgorithmsAndDataStructures/DataStructures/OtherDataStructures/OtherDataStructuresIntroduction",
-                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/OtherDataStructures/OtherDataStructuresIntroduction.vue')
-              },
-              {
-                "name": "SkipList",
-                "path": "/AlgorithmsAndDataStructures/DataStructures/OtherDataStructures/SkipList",
-                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/OtherDataStructures/SkipList.vue')
-              },
-              {
-                "name": "BloomFilter",
-                "path": "/AlgorithmsAndDataStructures/DataStructures/OtherDataStructures/BloomFilter",
-                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/OtherDataStructures/BloomFilter.vue')
-              },
-              {
-                "name": "UnionFind",
-                "path": "/AlgorithmsAndDataStructures/DataStructures/OtherDataStructures/UnionFind",
-                "component": () => import('@/views/AlgorithmsAndDataStructures/DataStructures/OtherDataStructures/UnionFind.vue')
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "name": "Algorithms",
-        "path": "/AlgorithmsAndDataStructures/Algorithms",
-        "children": [
-          {
-            "name": "AlgorithmIntroduction",
-            "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmIntroduction",
-            "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmIntroduction.vue')
-          },
-          {
-            "name": "60Algorithms",
-            "path": "/AlgorithmsAndDataStructures/Algorithms/60Algorithms",
-            "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/60Algorithms.vue')
-          },
-          {
-            "name": "AlgorithmBasic",
-            "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmBasic",
-            "children": [
-              {
-                "name": "Complexity",
-                "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmBasic/Complexity",
-                "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmBasic/Complexity.vue')
-              },
-              {
-                "name": "Recursion",
-                "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmBasic/Recursion",
-                "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmBasic/Recursion.vue')
-              },
-              {
-                "name": "SortingAlgorithm3",
-                "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmBasic/SortingAlgorithm3",
-                "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmBasic/SortingAlgorithm3.vue')
-              },
-              {
-                "name": "GreedyAlgorithmIntroduction",
-                "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmBasic/GreedyAlgorithmIntroduction",
-                "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmBasic/GreedyAlgorithmIntroduction.vue')
-              },
-              {
-                "name": "BacktrackingAlgorithmIntroduction",
-                "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmBasic/BacktrackingAlgorithmIntroduction",
-                "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmBasic/BacktrackingAlgorithmIntroduction.vue')
-              },
-              {
-                "name": "DivideAndConquerAlgorithm",
-                "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmBasic/DivideAndConquerAlgorithm",
-                "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmBasic/DivideAndConquerAlgorithm.vue')
-              },
-              {
-                "name": "SearchAlgorithmIntroduction",
-                "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmBasic/SearchAlgorithmIntroduction",
-                "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmBasic/SearchAlgorithmIntroduction.vue')
-              },
-              {
-                "name": "DynamicProgramming1",
-                "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmBasic/DynamicProgramming1",
-                "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmBasic/DynamicProgramming1.vue')
-              }
-            ]
-          },
-          {
-            "name": "AlgorithmClassification",
-            "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification",
-            "children": [
-              {
-                "name": "AlgorithmClassificationIntroduction",
-                "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/AlgorithmClassificationIntroduction",
-                "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/AlgorithmClassificationIntroduction.vue')
-              },
-              {
-                "name": "SortingAlgorithmIntroduction",
-                "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/SortingAlgorithmIntroduction",
-                "children": [
-                  {
-                    "name": "SortingAlgorithm",
-                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/SortingAlgorithmIntroduction/SortingAlgorithm",
-                    "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/SortingAlgorithmIntroduction/SortingAlgorithm.vue')
-                  },
-                  {
-                    "name": "OtherSortingAlgorithm",
-                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/SortingAlgorithmIntroduction/OtherSortingAlgorithm",
-                    "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/SortingAlgorithmIntroduction/OtherSortingAlgorithm.vue')
-                  }
-                ]
-              },
-              {
-                "name": "RecursionAlgorithm",
-                "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/RecursionAlgorithm",
-                "children": [
-                  {
-                    "name": "RecursionAlgorithmBasic",
-                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/RecursionAlgorithm/RecursionAlgorithmBasic",
-                    "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/RecursionAlgorithm/RecursionAlgorithmBasic.vue')
-                  },
-                  {
-                    "name": "RecursionAlgorithmProblem",
-                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/RecursionAlgorithm/RecursionAlgorithmProblem",
-                    "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/RecursionAlgorithm/RecursionAlgorithmProblem.vue')
-                  }
-                ]
-              },
-              {
-                "name": "DivideAndConquerAlgorithm2",
-                "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/DivideAndConquerAlgorithm2",
-                "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/DivideAndConquerAlgorithm2.vue')
-              },
-              {
-                "name": "DynamicProgramming",
-                "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/DynamicProgramming",
-                "children": [
-                  {
-                    "name": "DynamicProgrammingStateDefinitionAndStateTransitionEquation",
-                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/DynamicProgramming/DynamicProgrammingStateDefinitionAndStateTransitionEquation",
-                    "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/DynamicProgramming/DynamicProgrammingStateDefinitionAndStateTransitionEquation.vue')
-                  },
-                  {
-                    "name": "DynamicProgrammingClassification",
-                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/DynamicProgramming/DynamicProgrammingClassification",
-                    "children": [
-                      {
-                        "name": "DynamicProgrammingClassificationOverview",
-                        "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/DynamicProgramming/DynamicProgrammingClassification/DynamicProgrammingClassificationOverview",
-                        "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/DynamicProgramming/DynamicProgrammingClassification/DynamicProgrammingClassificationOverview.vue')
-                      },
-                      {
-                        "name": "DynamicProgrammingKnapsackProblem",
-                        "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/DynamicProgramming/DynamicProgrammingClassification/DynamicProgrammingKnapsackProblem",
-                        "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/DynamicProgramming/DynamicProgrammingClassification/DynamicProgrammingKnapsackProblem.vue')
-                      },
-                      {
-                        "name": "DynamicProgrammingLinearDP",
-                        "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/DynamicProgramming/DynamicProgrammingClassification/DynamicProgrammingLinearDP",
-                        "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/DynamicProgramming/DynamicProgrammingClassification/DynamicProgrammingLinearDP.vue')
-                      },
-                      {
-                        "name": "DynamicProgrammingIntervalDP",
-                        "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/DynamicProgramming/DynamicProgrammingClassification/DynamicProgrammingIntervalDP",
-                        "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/DynamicProgramming/DynamicProgrammingClassification/DynamicProgrammingIntervalDP.vue')
-                      },
-                      {
-                        "name": "DynamicProgrammingTreeDP",
-                        "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/DynamicProgramming/DynamicProgrammingClassification/DynamicProgrammingTreeDP",
-                        "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/DynamicProgramming/DynamicProgrammingClassification/DynamicProgrammingTreeDP.vue')
-                      },
-                      {
-                        "name": "DynamicProgrammingStateCompressionDP",
-                        "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/DynamicProgramming/DynamicProgrammingClassification/DynamicProgrammingStateCompressionDP",
-                        "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/DynamicProgramming/DynamicProgrammingClassification/DynamicProgrammingStateCompressionDP.vue')
-                      },
-                      {
-                        "name": "DynamicProgrammingSpecificDP",
-                        "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/DynamicProgramming/DynamicProgrammingClassification/DynamicProgrammingSpecificDP",
-                        "children": [
-                          {
-                            "name": "Robbery",
-                            "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/DynamicProgramming/DynamicProgrammingClassification/DynamicProgrammingSpecificDP/Robbery",
-                            "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/DynamicProgramming/DynamicProgrammingClassification/DynamicProgrammingSpecificDP/Robbery.vue')
-                          }
-                        ]
-                      }
-                    ]
-                  },
-                  {
-                    "name": "DynamicProgrammingProblem",
-                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/DynamicProgramming/DynamicProgrammingProblem",
-                    "children": [
-                      {
-                        "name": "DynamicProgrammingSimpleDP",
-                        "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/DynamicProgramming/DynamicProgrammingProblem/DynamicProgrammingSimpleDP",
-                        "children": [
-                          {
-                            "name": "LongestIncreasingSubsequence2",
-                            "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/DynamicProgramming/DynamicProgrammingProblem/DynamicProgrammingSimpleDP/LongestIncreasingSubsequence2",
-                            "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/DynamicProgramming/DynamicProgrammingProblem/DynamicProgrammingSimpleDP/LongestIncreasingSubsequence2.vue')
-                          }
-                        ]
-                      },
-                      {
-                        "name": "DynamicProgrammingMediumDP",
-                        "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/DynamicProgramming/DynamicProgrammingProblem/DynamicProgrammingMediumDP",
-                        "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/DynamicProgramming/DynamicProgrammingProblem/DynamicProgrammingMediumDP.vue')
-                      },
-                      {
-                        "name": "DynamicProgrammingHardDP",
-                        "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/DynamicProgramming/DynamicProgrammingProblem/DynamicProgrammingHardDP",
-                        "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/DynamicProgramming/DynamicProgrammingProblem/DynamicProgrammingHardDP.vue')
-                      }
-                    ]
-                  }
-                ]
-              },
-              {
-                "name": "SearchAlgorithm",
-                "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/SearchAlgorithm",
-                "children": [
-                  {
-                    "name": "DepthFirstSearch",
-                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/SearchAlgorithm/DepthFirstSearch",
-                    "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/SearchAlgorithm/DepthFirstSearch.vue')
-                  },
-                  {
-                    "name": "BreadthFirstSearch",
-                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/SearchAlgorithm/BreadthFirstSearch",
-                    "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/SearchAlgorithm/BreadthFirstSearch.vue')
-                  },
-                  {
-                    "name": "BinarySearch",
-                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/SearchAlgorithm/BinarySearch",
-                    "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/SearchAlgorithm/BinarySearch.vue')
-                  },
-                  {
-                    "name": "BacktrackingAlgorithm",
-                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/SearchAlgorithm/BacktrackingAlgorithm",
-                    "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/SearchAlgorithm/BacktrackingAlgorithm.vue')
-                  },
-                  {
-                    "name": "EnumerationAlgorithm",
-                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/SearchAlgorithm/EnumerationAlgorithm",
-                    "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/SearchAlgorithm/EnumerationAlgorithm.vue')
-                  }
-                ]
-              },
-              {
-                "name": "GreedyAlgorithm",
-                "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/GreedyAlgorithm",
-                "children": [
-                  {
-                    "name": "GreedyAlgorithmProblem",
-                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/GreedyAlgorithm/GreedyAlgorithmProblem",
-                    "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/GreedyAlgorithm/GreedyAlgorithmProblem.vue')
-                  },
-                  {
-                    "name": "DijkstraAlgorithm",
-                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/GreedyAlgorithm/DijkstraAlgorithm",
-                    "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/GreedyAlgorithm/DijkstraAlgorithm.vue')
-                  }
-                ]
-              },
-              {
-                "name": "MappingAlgorithm",
-                "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/MappingAlgorithm",
-                "children": [
-                  {
-                    "name": "VLQ",
-                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/MappingAlgorithm/VLQ",
-                    "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/MappingAlgorithm/VLQ.vue')
-                  },
-                  {
-                    "name": "HashAlgorithm",
-                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/MappingAlgorithm/HashAlgorithm",
-                    "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/MappingAlgorithm/HashAlgorithm.vue')
-                  },
-                  {
-                    "name": "BitOpe",
-                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/MappingAlgorithm/BitOpe",
-                    "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/MappingAlgorithm/BitOpe.vue')
-                  }
-                ]
-              },
-              {
-                "name": "CompressionAlgorithm",
-                "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/CompressionAlgorithm",
-                "children": [
-                  {
-                    "name": "LossyCompressionAlgorithmIntroduction",
-                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/CompressionAlgorithm/LossyCompressionAlgorithmIntroduction",
-                    "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/CompressionAlgorithm/LossyCompressionAlgorithmIntroduction.vue')
-                  },
-                  {
-                    "name": "LosslessCompressionAlgorithmIntroduction",
-                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/CompressionAlgorithm/LosslessCompressionAlgorithmIntroduction",
-                    "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/CompressionAlgorithm/LosslessCompressionAlgorithmIntroduction.vue')
-                  },
-                  {
-                    "name": "HuffmanEncoding1",
-                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/CompressionAlgorithm/HuffmanEncoding1",
-                    "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/CompressionAlgorithm/HuffmanEncoding1.vue')
-                  },
-                  {
-                    "name": "LZ77Algorithm",
-                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/CompressionAlgorithm/LZ77Algorithm",
-                    "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/CompressionAlgorithm/LZ77Algorithm.vue')
-                  },
-                  {
-                    "name": "DEFLATEAlgorithm",
-                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/CompressionAlgorithm/DEFLATEAlgorithm",
-                    "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/CompressionAlgorithm/DEFLATEAlgorithm.vue')
-                  },
-                  {
-                    "name": "ReferenceCounting",
-                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/CompressionAlgorithm/ReferenceCounting",
-                    "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/CompressionAlgorithm/ReferenceCounting.vue')
-                  }
-                ]
-              },
-              {
-                "name": "OtherAlgorithm",
-                "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/OtherAlgorithm",
-                "children": [
-                  {
-                    "name": "SlidingWindowAlgorithm",
-                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/OtherAlgorithm/SlidingWindowAlgorithm",
-                    "children": [
-                      {
-                        "name": "LRUAlgorithm",
-                        "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/OtherAlgorithm/SlidingWindowAlgorithm/LRUAlgorithm",
-                        "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/OtherAlgorithm/SlidingWindowAlgorithm/LRUAlgorithm.vue')
-                      }
-                    ]
-                  },
-                  {
-                    "name": "BoidsAlgorithm",
-                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/OtherAlgorithm/BoidsAlgorithm",
-                    "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/OtherAlgorithm/BoidsAlgorithm.vue')
-                  }
-                ]
-              },
-              {
-                "name": "StringAlgorithm",
-                "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/StringAlgorithm",
-                "children": [
-                  {
-                    "name": "StringMatchingAlgorithm",
-                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/StringAlgorithm/StringMatchingAlgorithm",
-                    "children": [
-                      {
-                        "name": "StringMatchingAlgorithmIntroduction",
-                        "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/StringAlgorithm/StringMatchingAlgorithm/StringMatchingAlgorithmIntroduction",
-                        "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/StringAlgorithm/StringMatchingAlgorithm/StringMatchingAlgorithmIntroduction.vue')
-                      },
-                      {
-                        "name": "BFAndRKHash",
-                        "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/StringAlgorithm/StringMatchingAlgorithm/BFAndRKHash",
-                        "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/StringAlgorithm/StringMatchingAlgorithm/BFAndRKHash.vue')
-                      },
-                      {
-                        "name": "KMP",
-                        "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/StringAlgorithm/StringMatchingAlgorithm/KMP",
-                        "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/StringAlgorithm/StringMatchingAlgorithm/KMP.vue')
-                      },
-                      {
-                        "name": "BM",
-                        "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/StringAlgorithm/StringMatchingAlgorithm/BM",
-                        "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/StringAlgorithm/StringMatchingAlgorithm/BM.vue')
-                      },
-                      {
-                        "name": "Sunday",
-                        "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/StringAlgorithm/StringMatchingAlgorithm/Sunday",
-                        "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/StringAlgorithm/StringMatchingAlgorithm/Sunday.vue')
-                      }
-                    ]
-                  },
-                  {
-                    "name": "StringEditDistanceAlgorithm",
-                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/StringAlgorithm/StringEditDistanceAlgorithm",
-                    "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/StringAlgorithm/StringEditDistanceAlgorithm.vue')
-                  },
-                  {
-                    "name": "StringPermutationAlgorithm",
-                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/StringAlgorithm/StringPermutationAlgorithm",
-                    "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/StringAlgorithm/StringPermutationAlgorithm.vue')
-                  },
-                  {
-                    "name": "StringCompressionAlgorithm",
-                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/StringAlgorithm/StringCompressionAlgorithm",
-                    "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/StringAlgorithm/StringCompressionAlgorithm.vue')
-                  }
-                ]
-              },
-              {
-                "name": "AdvancedAlgorithm",
-                "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/AdvancedAlgorithm",
-                "children": [
-                  {
-                    "name": "AdvancedAlgorithmOverview",
-                    "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/AdvancedAlgorithm/AdvancedAlgorithmOverview",
-                    "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/AdvancedAlgorithm/AdvancedAlgorithmOverview.vue')
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "name": "HighFrequencyAlgorithms",
-            "path": "/AlgorithmsAndDataStructures/Algorithms/HighFrequencyAlgorithms",
-            "children": [
-              {
-                "name": "ProductionHighFrequencyAlgorithms",
-                "path": "/AlgorithmsAndDataStructures/Algorithms/HighFrequencyAlgorithms/ProductionHighFrequencyAlgorithms",
-                "children": [
-                  {
-                    "name": "ProductionHighFrequencyAlgorithmsList",
-                    "path": "/AlgorithmsAndDataStructures/Algorithms/HighFrequencyAlgorithms/ProductionHighFrequencyAlgorithms/ProductionHighFrequencyAlgorithmsList",
-                    "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/HighFrequencyAlgorithms/ProductionHighFrequencyAlgorithms/ProductionHighFrequencyAlgorithmsList.vue')
-                  },
-                  {
-                    "name": "TwoSum",
-                    "path": "/AlgorithmsAndDataStructures/Algorithms/HighFrequencyAlgorithms/ProductionHighFrequencyAlgorithms/TwoSum",
-                    "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/HighFrequencyAlgorithms/ProductionHighFrequencyAlgorithms/TwoSum.vue')
-                  }
-                ]
-              },
-              {
-                "name": "InterviewHighFrequencyAlgorithms",
-                "path": "/AlgorithmsAndDataStructures/Algorithms/HighFrequencyAlgorithms/InterviewHighFrequencyAlgorithms",
-                "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/HighFrequencyAlgorithms/InterviewHighFrequencyAlgorithms.vue')
-              }
-            ]
-          },
-          {
-            "name": "AlgorithmProblemLibrary",
-            "path": "/AlgorithmsAndDataStructures/Algorithms/AlgorithmProblemLibrary",
-            "component": () => import('@/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmProblemLibrary.vue')
-          }
-        ]
-      }
-    ]
+    "name": "OtherCategories",
+    "path": "/OtherCategories",
+    "component": () => import('@/views/OtherCategories.vue')
   },
   {
     "name": "AI",

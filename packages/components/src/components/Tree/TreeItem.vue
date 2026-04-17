@@ -9,7 +9,6 @@
       </span>
       <span v-else class="tree-arrow-placeholder"></span>
       <slot name="node" :node="node" :expanded="isExpanded">
-        <span v-if="node.icon" class="tree-icon">{{ node.icon }}</span>
         <span class="tree-label">{{ node.label }}</span>
       </slot>
     </div>
@@ -166,11 +165,6 @@ const handleChildToggle = (node: TreeNode, expanded: boolean) => {
   white-space: nowrap;
   font-size: 14px;
   color: var(--color-text, #333);
-}
-
-.tree-icon {
-  margin-right: 6px;
-  font-size: 14px;
 }
 
 .tree-extra {

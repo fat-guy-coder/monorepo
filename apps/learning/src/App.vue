@@ -60,7 +60,7 @@ import { debounce, scrollIntoViewById } from '@/function/common' //常用函数
 import type { NavItem } from 'components' //导航项类型
 import { useGradientAnimation } from '@/hooks/useGradientAnimation' //渐变色动画
 import { useDetectDevice } from '@/hooks/useDetectDevice' //设备信息hook
-import { loadViewByPath } from '@/views/views-loader' //动态视图加载器
+import { loadViewByPath, viewExists } from '@/views/views-loader' //动态视图加载器
 // import { request } from '@/request'
 
 //获取用户信息store
@@ -172,7 +172,7 @@ useDetectDevice((device) => {
   deviceStore.setDevice(device)
 })
 
-onMounted(() => {
+onMounted(async () => {
   //设置主题
   themeChange(theme.value)
   //右键菜单
@@ -180,10 +180,10 @@ onMounted(() => {
   if (container.value) {
     container.value.addEventListener('click', closeContextMenu)
   }
+  //获取菜单（先获取菜单再跳转激活的tab，确保路由已注册）
+  await getMenus()
   //跳转激活的tab
   router.push(activeKey.value)
-  //获取菜单
-  getMenus()
 })
 
 //卸载时清空菜单列表
@@ -199,6 +199,40 @@ const getMenus = async () => {
   menus.value = (data as MenuItem[]).map(item => ({ ...item, loading: false }))
   loading.value = false
   mainViewLoading.value = false
+
+  // 注册所有叶子路由（包括 tabList 中已存在的标签对应的路由）
+  registerLeafRoutes(menus.value)
+  // 遍历 tabList 注册可能存在的叶子路由
+  store.tabList.forEach(tab => {
+    if (!router.hasRoute(tab.name)) {
+      registerRouteByPath(tab.path, tab.name)
+    }
+  })
+}
+
+// 根据 path 和 name 注册路由
+function registerRouteByPath(path: string, name: string) {
+  const viewPath = path.startsWith('/') ? path : `/${path}`
+  if (!router.hasRoute(name) && viewExists(viewPath)) {
+    const component = loadViewByPath(viewPath)
+    router.addRoute({
+      path: viewPath,
+      name,
+      component,
+    })
+  }
+}
+
+// 递归注册所有叶子菜单的路由
+function registerLeafRoutes(menuItems: MenuItem[]) {
+  for (const item of menuItems) {
+    if (item.isLeaf) {
+      registerRouteByPath(item.path, item.name)
+    }
+    if (item.children?.length) {
+      registerLeafRoutes(item.children)
+    }
+  }
 }
 
 // 动态加载子菜单

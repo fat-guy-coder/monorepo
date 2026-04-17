@@ -23,7 +23,6 @@
       <Tree v-else ref="treeRef" :data="treeData" :default-expanded-keys="defaultExpandedKeys"
         @node-click="handleNodeClick" @node-expand="handleNodeExpand" @node-collapse="handleNodeCollapse">
         <template #node="{ node, expanded }">
-          <span class="tree-icon">{{ node.icon }}</span>
           <span class="tree-label">{{ node.label }}</span>
           <span v-if="node.loading" class="loading-indicator">加载中...</span>
           <span class="node-actions">
@@ -50,10 +49,6 @@
         <div class="form-item">
           <label>路由路径</label>
           <span class="display-text path-text">{{ formData.path || '-' }}</span>
-        </div>
-        <div class="form-item">
-          <label>图标</label>
-          <Input v-model="formData.icon" placeholder="请输入图标" />
         </div>
         <div class="form-item">
           <label>排序</label>
@@ -181,6 +176,8 @@ const addChildToNode = (nodes: TreeNode[], parentId: string, newChild: TreeNode)
       if (!node.children) {
         node.children = []
       }
+      // 更新父节点的 isLeaf 为 false，确保显示展开图标
+      node.isLeaf = false
       node.children.push(newChild)
       return true
     }
