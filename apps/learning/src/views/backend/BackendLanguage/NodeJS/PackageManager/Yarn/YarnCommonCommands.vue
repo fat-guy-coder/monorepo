@@ -1,11 +1,7 @@
 <template>
-  <div>
-    <h3>yarn常用命令 ⭐⭐</h3>
-  </div>
+  <div>📦 yarn常用命令 ⭐⭐</div>
 </template>
-
-<script setup lang="ts">
-
+<script lang="ts" setup>
 </script>
-
-<style scoped></style>
+<style scoped>
+</style>

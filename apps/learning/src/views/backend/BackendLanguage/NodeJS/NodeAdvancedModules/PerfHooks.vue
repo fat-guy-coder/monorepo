@@ -1,11 +1,7 @@
 <template>
-  <div>
-    <h3>perf_hooks (性能分析) ⭐</h3>
-  </div>
+  <div>🧪 perf_hooks (性能分析) ⭐</div>
 </template>
-
-<script setup lang="ts">
-
+<script lang="ts" setup>
 </script>
-
-<style scoped></style>
+<style scoped>
+</style>

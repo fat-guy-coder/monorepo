@@ -1,11 +1,7 @@
 <template>
-  <div>
-    <h3>worker_threads (线程) ⭐</h3>
-  </div>
+  <div>⏰ worker_threads (线程) ⭐</div>
 </template>
-
-<script setup lang="ts">
-
+<script lang="ts" setup>
 </script>
-
-<style scoped></style>
+<style scoped>
+</style>

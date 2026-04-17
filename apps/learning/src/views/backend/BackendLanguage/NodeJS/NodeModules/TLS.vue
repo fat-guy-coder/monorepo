@@ -1,11 +1,7 @@
 <template>
-  <div>
-    <h3>tls (安全/加密) ⭐</h3>
-  </div>
+  <div>🔒 tls (安全/加密) ⭐</div>
 </template>
-
-<script setup lang="ts">
-
+<script lang="ts" setup>
 </script>
-
-<style scoped></style>
+<style scoped>
+</style>

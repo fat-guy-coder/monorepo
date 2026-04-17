@@ -1,11 +1,7 @@
 <template>
-  <div>
-    <h3>pnpm基础知识 ⭐⭐</h3>
-  </div>
+  <div>📦 pnpm基础知识 ⭐⭐</div>
 </template>
-
-<script setup lang="ts">
-
+<script lang="ts" setup>
 </script>
-
-<style scoped></style>
+<style scoped>
+</style>

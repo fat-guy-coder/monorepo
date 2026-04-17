@@ -1,11 +1,7 @@
 <template>
-  <div>
-    <h3>querystring (查询字符串) ⭐</h3>
-  </div>
+  <div>📦 querystring(查询字符串) ⭐</div>
 </template>
-
-<script setup lang="ts">
-
+<script lang="ts" setup>
 </script>
-
-<style scoped></style>
+<style scoped>
+</style>

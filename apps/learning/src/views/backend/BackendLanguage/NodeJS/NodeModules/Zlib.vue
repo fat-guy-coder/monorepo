@@ -1,11 +1,7 @@
 <template>
-  <div>
-    <h3>zlib (压缩) ⭐</h3>
-  </div>
+  <div>📦 zlib(压缩) ⭐</div>
 </template>
-
-<script setup lang="ts">
-
+<script lang="ts" setup>
 </script>
-
-<style scoped></style>
+<style scoped>
+</style>

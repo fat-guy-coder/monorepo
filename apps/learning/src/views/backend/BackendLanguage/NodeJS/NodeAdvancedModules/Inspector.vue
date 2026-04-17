@@ -1,11 +1,7 @@
 <template>
-  <div>
-    <h3>inspector (调试) ⭐</h3>
-  </div>
+  <div>🗂️ inspector (调试) ⭐</div>
 </template>
-
-<script setup lang="ts">
-
+<script lang="ts" setup>
 </script>
-
-<style scoped></style>
+<style scoped>
+</style>

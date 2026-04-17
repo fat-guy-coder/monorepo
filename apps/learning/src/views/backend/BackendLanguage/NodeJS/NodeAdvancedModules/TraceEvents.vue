@@ -1,11 +1,7 @@
 <template>
-  <div>
-    <h3>trace_events (追踪事件) ⭐</h3>
-  </div>
+  <div>🔍 trace_events (追踪事件) ⭐</div>
 </template>
-
-<script setup lang="ts">
-
+<script lang="ts" setup>
 </script>
-
-<style scoped></style>
+<style scoped>
+</style>

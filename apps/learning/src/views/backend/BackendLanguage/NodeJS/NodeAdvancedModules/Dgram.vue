@@ -1,11 +1,7 @@
 <template>
-  <div>
-    <h3>dgram (UDP数据报) ⭐</h3>
-  </div>
+  <div>🌐 dgram (UDP数据报) ⭐</div>
 </template>
-
-<script setup lang="ts">
-
+<script lang="ts" setup>
 </script>
-
-<style scoped></style>
+<style scoped>
+</style>

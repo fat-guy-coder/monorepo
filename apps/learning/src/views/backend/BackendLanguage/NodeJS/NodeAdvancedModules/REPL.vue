@@ -1,11 +1,7 @@
 <template>
-  <div>
-    <h3>repl (交互解释器) ⭐</h3>
-  </div>
+  <div>🛠️ repl (交互解释器) ⭐</div>
 </template>
-
-<script setup lang="ts">
-
+<script lang="ts" setup>
 </script>
-
-<style scoped></style>
+<style scoped>
+</style>

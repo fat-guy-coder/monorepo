@@ -1,11 +1,7 @@
 <template>
-  <div>
-    <h3>timers (定时器) ⭐</h3>
-  </div>
+  <div>📝 timers (定时器) ⭐</div>
 </template>
-
-<script setup lang="ts">
-
+<script lang="ts" setup>
 </script>
-
-<style scoped></style>
+<style scoped>
+</style>

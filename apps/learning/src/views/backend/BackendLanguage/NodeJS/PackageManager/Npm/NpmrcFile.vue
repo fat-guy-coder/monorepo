@@ -1,11 +1,7 @@
 <template>
-  <div>
-    <h3>.npmrc文件 ⭐⭐</h3>
-  </div>
+  <div>🔒 .npmrc文件 ⭐⭐</div>
 </template>
-
-<script setup lang="ts">
-
+<script lang="ts" setup>
 </script>
-
-<style scoped></style>
+<style scoped>
+</style>

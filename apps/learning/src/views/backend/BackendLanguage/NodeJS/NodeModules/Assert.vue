@@ -1,11 +1,7 @@
 <template>
-  <div>
-    <h3>assert (断言) ⭐</h3>
-  </div>
+  <div>📦 assert(断言) ⭐</div>
 </template>
-
-<script setup lang="ts">
-
+<script lang="ts" setup>
 </script>
-
-<style scoped></style>
+<style scoped>
+</style>

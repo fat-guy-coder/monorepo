@@ -1,11 +1,7 @@
 <template>
-  <div>
-    <h3>domain (错误处理) ⭐</h3>
-  </div>
+  <div>📂 domain (错误处理) ⭐</div>
 </template>
-
-<script setup lang="ts">
-
+<script lang="ts" setup>
 </script>
-
-<style scoped></style>
+<style scoped>
+</style>

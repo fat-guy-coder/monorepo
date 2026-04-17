@@ -1,11 +1,7 @@
 <template>
-  <div>
-    <h3>module (模块管理) ⭐</h3>
-  </div>
+  <div>🗂️ module (模块管理) ⭐</div>
 </template>
-
-<script setup lang="ts">
-
+<script lang="ts" setup>
 </script>
-
-<style scoped></style>
+<style scoped>
+</style>

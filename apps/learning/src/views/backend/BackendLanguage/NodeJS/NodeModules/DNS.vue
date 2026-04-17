@@ -1,11 +1,7 @@
 <template>
-  <div>
-    <h3>dns (域名解析) ⭐</h3>
-  </div>
+  <div>🌐 dns (域名解析) ⭐</div>
 </template>
-
-<script setup lang="ts">
-
+<script lang="ts" setup>
 </script>
-
-<style scoped></style>
+<style scoped>
+</style>

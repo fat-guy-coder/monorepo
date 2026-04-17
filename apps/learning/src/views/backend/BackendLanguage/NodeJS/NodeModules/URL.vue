@@ -1,11 +1,7 @@
 <template>
-  <div>
-    <h3>url (网址解析) ⭐</h3>
-  </div>
+  <div>📦 url(网址解析) ⭐</div>
 </template>
-
-<script setup lang="ts">
-
+<script lang="ts" setup>
 </script>
-
-<style scoped></style>
+<style scoped>
+</style>
