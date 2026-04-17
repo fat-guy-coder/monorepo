@@ -18,7 +18,8 @@
       "Bash(powershell -Command \"Stop-Process -Id 24464 -Force; Stop-Process -Id 8092 -Force\")",
       "Bash(pnpm cpp:dev)",
       "Bash(find apps/learning/src -name \"*.vue.js\" -delete)",
-      "Bash(find apps/learning/src -name \"*.ts.js\" -delete)"
+      "Bash(find apps/learning/src -name \"*.ts.js\" -delete)",
+      "Bash(xargs sed *)"
     ]
   }
 }
