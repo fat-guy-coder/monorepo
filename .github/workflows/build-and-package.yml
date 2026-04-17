@@ -31,8 +31,48 @@ jobs:
       - name: Build projects
         run: pnpm turbo run build
 
-      # ========== 上传所有文件并重启服务 ==========
-      - name: Deploy all
+      # ========== 上传 admin ==========
+      - name: Upload admin
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          port: ${{ secrets.SERVER_PORT }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          command: |
+            mkdir -p ${{ env.DEPLOY_PATH }}/admin
+          source: "apps/admin/dist/"
+          target: "${{ env.DEPLOY_PATH }}/admin/"
+
+      # ========== 上传 learning ==========
+      - name: Upload learning
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          port: ${{ secrets.SERVER_PORT }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          command: |
+            mkdir -p ${{ env.DEPLOY_PATH }}/learning
+          source: "apps/learning/dist/"
+          target: "${{ env.DEPLOY_PATH }}/learning/"
+
+      # ========== 上传 backend ==========
+      - name: Upload backend
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          port: ${{ secrets.SERVER_PORT }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          command: |
+            mkdir -p ${{ env.DEPLOY_PATH }}/backend
+          source: "apps/backend/"
+          target: "${{ env.DEPLOY_PATH }}/backend/"
+          exclude: "node_modules/**"
+
+      # ========== 上传 nginx 配置并重启服务 ==========
+      - name: Deploy nginx and restart backend
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SERVER_HOST }}
@@ -42,15 +82,6 @@ jobs:
           script: |
             set -e
 
-            # 上传 admin (rsync 源路径带 / 表示只传目录内容)
-            rsync -av --delete apps/admin/dist/ $DEPLOY_PATH/admin/
-
-            # 上传 learning
-            rsync -av --delete apps/learning/dist/ $DEPLOY_PATH/learning/
-
-            # 上传 backend (排除 node_modules)
-            rsync -av --delete --exclude='node_modules' apps/backend/ $DEPLOY_PATH/backend/
-
             # 上传 nginx 配置
             cp nginx.conf /www/server/nginx/nginx.conf
 
@@ -58,7 +89,7 @@ jobs:
             nginx -t && nginx -s reload
 
             # 重启 backend Docker
-            cd $DEPLOY_PATH/backend
+            cd ${{ env.DEPLOY_PATH }}/backend
             if [ $(docker ps -aq -f name=backend-app) ]; then
               docker stop backend-app && docker rm backend-app
             fi
