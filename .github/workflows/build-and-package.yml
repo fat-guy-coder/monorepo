@@ -28,16 +28,22 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build projects
-        run: pnpm turbo run build
+      - name: Build admin
+        run: pnpm --filter admin build
+
+      - name: Build learning
+        run: pnpm --filter learning build
+
+      - name: Build backend
+        run: pnpm --filter backend build
 
       # ========== 打包待上传文件 ==========
       - name: Prepare deploy packages
         run: |
           mkdir -p dist
-          cd apps/admin/dist && tar -cf ../../../dist/admin.tar .
-          cd apps/learning/dist && tar -cf ../../../dist/learning.tar .
-          cd apps/backend && tar -cf ../../dist/backend.tar --exclude=node_modules .
+          tar -cf dist/admin.tar -C apps/admin dist
+          tar -cf dist/learning.tar -C apps/learning dist
+          tar -cf dist/backend.tar -C apps/backend --exclude=node_modules .
 
       # ========== 上传并解压 admin ==========
       - name: Deploy admin
