@@ -5,36 +5,30 @@ on:
     branches: [master]
   workflow_dispatch:
 
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: true
+
 env:
   DEPLOY_PATH: /www/wwwroot
 
 jobs:
-  build-and-deploy:
+  detect-changes:
     runs-on: ubuntu-latest
-
+    outputs:
+      admin: ${{ steps.changes.outputs.admin }}
+      learning: ${{ steps.changes.outputs.learning }}
+      backend: ${{ steps.changes.outputs.backend }}
+      any: ${{ steps.changes.outputs.any }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'pnpm'
 
       - name: Detect changed apps
         id: changes
         uses: dorny/paths-filter@v3
         with:
           filters: |
-            shared:
-              - 'packages/**'
-              - 'package.json'
-              - 'pnpm-lock.yaml'
-              - 'pnpm-workspace.yaml'
             admin:
               - 'apps/admin/**'
               - 'packages/**'
@@ -62,42 +56,35 @@ jobs:
               - 'pnpm-lock.yaml'
               - 'pnpm-workspace.yaml'
 
+  deploy-admin:
+    needs: detect-changes
+    if: needs.detect-changes.outputs.admin == 'true' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
       - name: Install dependencies
-        if: steps.changes.outputs.any == 'true' || github.event_name == 'workflow_dispatch'
         run: pnpm install --frozen-lockfile
 
       - name: Build admin
-        if: steps.changes.outputs.admin == 'true' || github.event_name == 'workflow_dispatch'
         run: pnpm --filter admin build
 
-      - name: Build learning
-        if: steps.changes.outputs.learning == 'true' || github.event_name == 'workflow_dispatch'
-        run: pnpm --filter learning build
-
-      - name: Build backend
-        if: steps.changes.outputs.backend == 'true' || github.event_name == 'workflow_dispatch'
-        run: pnpm --filter backend build
-
-      # ========== 按变更打包待上传文件 ==========
-      - name: Prepare deploy packages
-        if: steps.changes.outputs.any == 'true' || github.event_name == 'workflow_dispatch'
+      - name: Package admin
         run: |
           mkdir -p dist
-          # 仅打包 dist 内部文件，避免解压后出现 admin/dist、learning/dist 嵌套
-          if [ "${{ steps.changes.outputs.admin }}" = "true" ] || [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            tar -cf dist/admin.tar -C apps/admin/dist .
-          fi
-          if [ "${{ steps.changes.outputs.learning }}" = "true" ] || [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            tar -cf dist/learning.tar -C apps/learning/dist .
-          fi
-          # 后端打包为应用根内容，排除 node_modules
-          if [ "${{ steps.changes.outputs.backend }}" = "true" ] || [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            tar --exclude=node_modules -cf dist/backend.tar -C apps/backend .
-          fi
+          tar -cf dist/admin.tar -C apps/admin/dist .
 
-      # ========== 上传并解压 admin ==========
-      - name: Deploy admin
-        if: steps.changes.outputs.admin == 'true' || github.event_name == 'workflow_dispatch'
+      - name: Upload admin package
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.SERVER_HOST }}
@@ -110,7 +97,6 @@ jobs:
           overwrite: true
 
       - name: Extract admin
-        if: steps.changes.outputs.admin == 'true' || github.event_name == 'workflow_dispatch'
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SERVER_HOST }}
@@ -123,9 +109,35 @@ jobs:
             tar -xf admin.tar -C admin
             rm admin.tar
 
-      # ========== 上传并解压 learning ==========
-      - name: Deploy learning
-        if: steps.changes.outputs.learning == 'true' || github.event_name == 'workflow_dispatch'
+  deploy-learning:
+    needs: detect-changes
+    if: needs.detect-changes.outputs.learning == 'true' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build learning
+        run: pnpm --filter learning build
+
+      - name: Package learning
+        run: |
+          mkdir -p dist
+          tar -cf dist/learning.tar -C apps/learning/dist .
+
+      - name: Upload learning package
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.SERVER_HOST }}
@@ -138,7 +150,6 @@ jobs:
           overwrite: true
 
       - name: Extract learning
-        if: steps.changes.outputs.learning == 'true' || github.event_name == 'workflow_dispatch'
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SERVER_HOST }}
@@ -151,9 +162,20 @@ jobs:
             tar -xf learning.tar -C learning
             rm learning.tar
 
-      # ========== 上传并解压 backend ==========
-      - name: Deploy backend
-        if: steps.changes.outputs.backend == 'true' || github.event_name == 'workflow_dispatch'
+  deploy-backend:
+    needs: detect-changes
+    if: needs.detect-changes.outputs.backend == 'true' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Package backend
+        run: |
+          mkdir -p dist
+          tar --exclude=node_modules -cf dist/backend.tar -C apps/backend .
+
+      - name: Upload backend package
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.SERVER_HOST }}
@@ -166,7 +188,6 @@ jobs:
           overwrite: true
 
       - name: Extract and restart backend
-        if: steps.changes.outputs.backend == 'true' || github.event_name == 'workflow_dispatch'
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SERVER_HOST }}
