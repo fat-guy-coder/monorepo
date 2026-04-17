@@ -40,8 +40,7 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           source: "apps/admin/dist/*"
-          target: "${{ env.DEPLOY_PATH }}/admin"
-          strip_components: 2
+          target: "${{ env.DEPLOY_PATH }}/admin/"
 
       # ========== 上传 learning ==========
       - name: Upload learning
@@ -52,8 +51,7 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           source: "apps/learning/dist/*"
-          target: "${{ env.DEPLOY_PATH }}/learning"
-          strip_components: 2
+          target: "${{ env.DEPLOY_PATH }}/learning/"
 
       # ========== 上传 backend ==========
       - name: Upload backend
@@ -64,9 +62,8 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           source: "apps/backend/*"
-          target: "${{ env.DEPLOY_PATH }}/backend"
+          target: "${{ env.DEPLOY_PATH }}/backend/"
           exclude: "node_modules/**"
-          strip_components: 1
 
       # ========== 重启 backend Docker ==========
       - name: Restart backend Docker
