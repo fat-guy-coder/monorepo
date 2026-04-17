@@ -129,9 +129,16 @@ jobs:
             if [ $(docker ps -aq -f name=backend-app) ]; then
               docker stop backend-app && docker rm backend-app
             fi
+
+            if [ -z "${{ secrets.DATABASE_URL }}" ]; then
+              echo "ERROR: GitHub Secret DATABASE_URL is empty"
+              exit 1
+            fi
+
             docker build -t backend-app .
             docker run -d \
               --name backend-app \
               -p 3000:3000 \
+              -e DATABASE_URL='${{ secrets.DATABASE_URL }}' \
               --restart always \
               backend-app
