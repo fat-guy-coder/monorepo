@@ -31,42 +31,8 @@ jobs:
       - name: Build projects
         run: pnpm turbo run build
 
-      # ========== 上传 admin ==========
-      - name: Upload admin
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ secrets.SERVER_HOST }}
-          port: ${{ secrets.SERVER_PORT }}
-          username: ${{ secrets.SERVER_USER }}
-          key: ${{ secrets.SERVER_SSH_KEY }}
-          source: "apps/admin/dist/*"
-          target: "${{ env.DEPLOY_PATH }}/admin/"
-
-      # ========== 上传 learning ==========
-      - name: Upload learning
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ secrets.SERVER_HOST }}
-          port: ${{ secrets.SERVER_PORT }}
-          username: ${{ secrets.SERVER_USER }}
-          key: ${{ secrets.SERVER_SSH_KEY }}
-          source: "apps/learning/dist/*"
-          target: "${{ env.DEPLOY_PATH }}/learning/"
-
-      # ========== 上传 backend ==========
-      - name: Upload backend
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ secrets.SERVER_HOST }}
-          port: ${{ secrets.SERVER_PORT }}
-          username: ${{ secrets.SERVER_USER }}
-          key: ${{ secrets.SERVER_SSH_KEY }}
-          source: "apps/backend/*"
-          target: "${{ env.DEPLOY_PATH }}/backend/"
-          exclude: "node_modules/**"
-
-      # ========== 重启 backend Docker ==========
-      - name: Restart backend Docker
+      # ========== 上传所有文件并重启服务 ==========
+      - name: Deploy all
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SERVER_HOST }}
@@ -74,16 +40,28 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
+            set -e
+
+            # 上传 admin (rsync 源路径带 / 表示只传目录内容)
+            rsync -av --delete apps/admin/dist/ $DEPLOY_PATH/admin/
+
+            # 上传 learning
+            rsync -av --delete apps/learning/dist/ $DEPLOY_PATH/learning/
+
+            # 上传 backend (排除 node_modules)
+            rsync -av --delete --exclude='node_modules' apps/backend/ $DEPLOY_PATH/backend/
+
+            # 上传 nginx 配置
+            cp nginx.conf /www/server/nginx/nginx.conf
+
+            # 重载 nginx
             nginx -t && nginx -s reload
 
-            cd ${{ env.DEPLOY_PATH }}/backend
-
-            # 如果容器已存在，先停止并删除
+            # 重启 backend Docker
+            cd $DEPLOY_PATH/backend
             if [ $(docker ps -aq -f name=backend-app) ]; then
               docker stop backend-app && docker rm backend-app
             fi
-
-            # 构建并启动新的 Docker 容器
             docker build -t backend-app .
             docker run -d \
               --name backend-app \
