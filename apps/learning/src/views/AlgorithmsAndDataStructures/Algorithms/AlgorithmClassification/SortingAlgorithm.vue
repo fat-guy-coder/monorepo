@@ -88,7 +88,7 @@
         </div>
       </div>
 
-      <SortAlgorithBarCharts v-model:selectedAlgorithm="activeAlgorithm.name" v-model:log="log" />
+      <sortAlgorithBarCharts v-model:selectedAlgorithm="activeAlgorithm.name" v-model:log="log" />
       <div class="options">
         <Button type="primary" @click="sortBy('sortTime')">排序时间</Button>
         <Button type="primary" @click="sortBy('compare')">比较次数</Button>
@@ -225,8 +225,7 @@
 <script lang="ts" setup>
 import { ref, onBeforeMount, computed } from 'vue'
 import { Button } from 'components'
-import SortAlgorithBarCharts, { type LogItem } from 'components/Charts/SortAlgorithBarCharts.vue'
-import Pie from 'components/Charts/Pie.vue'
+import sortAlgorithBarCharts, { type LogItem } from 'components/Charts/sortAlgorithBarCharts.vue'
 
 const log = ref<LogItem[]>([])
 

@@ -19,7 +19,9 @@
       "Bash(pnpm cpp:dev)",
       "Bash(find apps/learning/src -name \"*.vue.js\" -delete)",
       "Bash(find apps/learning/src -name \"*.ts.js\" -delete)",
-      "Bash(xargs sed *)"
+      "Bash(xargs sed *)",
+      "Bash(sed -i \"s|SortAlgorithBarCharts|sortAlgorithBarCharts|g\" \"apps/learning/src/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/SortingAlgorithm.vue\")",
+      "Bash(sed -i \"s|SortAlgorithBarCharts|sortAlgorithBarCharts|g\" \"apps/learning/src/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/SortingAlgorithmIntroduction/SortingAlgorithm.vue\")"
     ]
   }
 }
