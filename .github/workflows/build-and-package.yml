@@ -41,9 +41,11 @@ jobs:
       - name: Prepare deploy packages
         run: |
           mkdir -p dist
-          tar -cf dist/admin.tar -C apps/admin dist
-          tar -cf dist/learning.tar -C apps/learning dist
-          tar -cf dist/backend.tar -C apps/backend --exclude=node_modules .
+          # 仅打包 dist 内部文件，避免解压后出现 admin/dist、learning/dist 嵌套
+          tar -cf dist/admin.tar -C apps/admin/dist .
+          tar -cf dist/learning.tar -C apps/learning/dist .
+          # 后端打包为应用根内容，排除 node_modules
+          tar --exclude=node_modules -cf dist/backend.tar -C apps/backend .
 
       # ========== 上传并解压 admin ==========
       - name: Deploy admin
@@ -54,7 +56,8 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           source: "dist/admin.tar"
-          target: "${{ env.DEPLOY_PATH }}/admin.tar"
+          target: "${{ env.DEPLOY_PATH }}"
+          strip_components: 1
 
       - name: Extract admin
         uses: appleboy/ssh-action@master
@@ -78,7 +81,8 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           source: "dist/learning.tar"
-          target: "${{ env.DEPLOY_PATH }}/learning.tar"
+          target: "${{ env.DEPLOY_PATH }}"
+          strip_components: 1
 
       - name: Extract learning
         uses: appleboy/ssh-action@master
@@ -102,7 +106,8 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           source: "dist/backend.tar"
-          target: "${{ env.DEPLOY_PATH }}/backend.tar"
+          target: "${{ env.DEPLOY_PATH }}"
+          strip_components: 1
 
       - name: Extract and restart backend
         uses: appleboy/ssh-action@master
