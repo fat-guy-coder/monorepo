@@ -58,6 +58,7 @@ jobs:
           source: "dist/admin.tar"
           target: "${{ env.DEPLOY_PATH }}"
           strip_components: 1
+          overwrite: true
 
       - name: Extract admin
         uses: appleboy/ssh-action@master
@@ -83,6 +84,7 @@ jobs:
           source: "dist/learning.tar"
           target: "${{ env.DEPLOY_PATH }}"
           strip_components: 1
+          overwrite: true
 
       - name: Extract learning
         uses: appleboy/ssh-action@master
@@ -108,6 +110,7 @@ jobs:
           source: "dist/backend.tar"
           target: "${{ env.DEPLOY_PATH }}"
           strip_components: 1
+          overwrite: true
 
       - name: Extract and restart backend
         uses: appleboy/ssh-action@master
