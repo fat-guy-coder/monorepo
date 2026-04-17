@@ -36,8 +36,8 @@ jobs:
         run: |
           mkdir -p dist
           cd apps/admin/dist && tar -cf ../../../dist/admin.tar .
-          cd ../../learning/dist && tar -cf ../../../dist/learning.tar .
-          cd ../../backend && tar -cf ../dist/backend.tar --exclude=node_modules .
+          cd apps/learning/dist && tar -cf ../../../dist/learning.tar .
+          cd apps/backend && tar -cf ../../dist/backend.tar --exclude=node_modules .
 
       # ========== 上传并解压 admin ==========
       - name: Deploy admin
