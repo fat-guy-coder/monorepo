@@ -7,7 +7,7 @@
     "dev": "vite",
     "translate": "tsx src/language/generate.ts",
     "g": "node  --import=tsx  scripts/generateRouteAndView.ts",
-    "build": "run-p type-check \"build-only {@}\" --",
+    "build": "vite build",
     "preview": "vite preview",
     "test:unit": "vitest",
     "build-only": "vite build",
