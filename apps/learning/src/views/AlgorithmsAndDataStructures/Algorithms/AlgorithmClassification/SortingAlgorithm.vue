@@ -225,7 +225,7 @@
 <script lang="ts" setup>
 import { ref, onBeforeMount, computed } from 'vue'
 import { Button } from 'components'
-import sortAlgorithBarCharts, { type LogItem } from 'components/Charts/sortAlgorithBarCharts.vue'
+import sortAlgorithBarCharts, { type LogItem } from 'components/charts/sortAlgorithBarCharts.vue'
 
 const log = ref<LogItem[]>([])
 
