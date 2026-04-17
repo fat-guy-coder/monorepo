@@ -41,7 +41,6 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           source: "apps/admin/dist/*"
           target: "${{ env.DEPLOY_PATH }}/admin"
-          strip_components: 1
 
       # ========== 上传 learning ==========
       - name: Upload learning
@@ -53,7 +52,6 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           source: "apps/learning/dist/*"
           target: "${{ env.DEPLOY_PATH }}/learning"
-          strip_components: 1
 
       # ========== 上传 backend ==========
       - name: Upload backend
@@ -67,6 +65,17 @@ jobs:
           target: "${{ env.DEPLOY_PATH }}/backend"
           exclude: "node_modules/**"
 
+      # ========== 上传 nginx 配置 ==========
+      - name: Upload nginx config
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          port: ${{ secrets.SERVER_PORT }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          source: "nginx.conf"
+          target: "/www/server/panel/vhost/nginx/denglie.asia.conf"
+
       # ========== 重启 backend Docker ==========
       - name: Restart backend Docker
         uses: appleboy/ssh-action@master
@@ -76,6 +85,8 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
+            nginx -t && nginx -s reload
+
             cd ${{ env.DEPLOY_PATH }}/backend
 
             # 如果容器已存在，先停止并删除
