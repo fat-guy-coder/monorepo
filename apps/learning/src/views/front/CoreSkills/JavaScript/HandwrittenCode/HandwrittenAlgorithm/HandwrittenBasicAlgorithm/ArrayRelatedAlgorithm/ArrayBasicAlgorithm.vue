@@ -130,7 +130,7 @@ const algorithms = ref<Algorithm[]>([])
 const search = ref('')
 
 onMounted(async () => {
-  const res = await import('@/views/CoreSkills/JavaScript/JSON/ArrayBasicAlgorithm.json')
+  const res = await import('@/views/front/CoreSkills/JavaScript/JSON/ArrayBasicAlgorithm.json')
   algorithms.value = res.default as unknown as Algorithm[]
 })
 

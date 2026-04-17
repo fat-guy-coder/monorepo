@@ -93,7 +93,7 @@ const navList = computed(() => {
 })
 
 onMounted(async () => {
-  const res = await import('@/views/FrameworksAndEngineering/JSON/HighFrequencyVue.json')
+  const res = await import('@/views/front/FrameworksAndEngineering/JSON/HighFrequencyVue.json')
   knowledgePoints.value = res.default as unknown as KnowledgePoint[]
 })
 

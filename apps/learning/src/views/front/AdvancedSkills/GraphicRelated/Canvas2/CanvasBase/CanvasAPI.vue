@@ -12,19 +12,10 @@
     </header>
 
     <div class="search-container">
-      <input
-        v-model="searchQuery"
-        placeholder="搜索Canvas API..."
-        type="text"
-        class="search-input"
-      >
+      <input v-model="searchQuery" placeholder="搜索Canvas API..." type="text" class="search-input">
       <div class="filter-tags">
-        <span
-          v-for="category in categories"
-          :key="category.id"
-          :class="{ active: activeCategory === category.id }"
-          @click="toggleCategory(category.id)"
-        >
+        <span v-for="category in categories" :key="category.id" :class="{ active: activeCategory === category.id }"
+          @click="toggleCategory(category.id)">
           {{ category.name }}
         </span>
       </div>
@@ -33,12 +24,8 @@
     <div class="content-wrapper">
       <aside class="sidebar">
         <nav class="category-nav">
-          <div
-            v-for="category in categories"
-            :key="category.id"
-            :class="{ active: activeCategory === category.id }"
-            @click="scrollToCategory(category.id)"
-          >
+          <div v-for="category in categories" :key="category.id" :class="{ active: activeCategory === category.id }"
+            @click="scrollToCategory(category.id)">
             <span class="category-icon">{{ category.icon }}</span>
             <span class="category-name">{{ category.name }}</span>
             <span class="api-count">{{ getApiCount(category.id) }}</span>
@@ -47,12 +34,7 @@
       </aside>
 
       <main class="api-content">
-        <section
-          v-for="category in filteredCategories"
-          :key="category.id"
-          :id="category.id"
-          class="category-section"
-        >
+        <section v-for="category in filteredCategories" :key="category.id" :id="category.id" class="category-section">
           <h2>
             <span class="category-icon">{{ category.icon }}</span>
             {{ category.name }}
@@ -60,11 +42,7 @@
           <p class="category-description">{{ category.description }}</p>
 
           <div class="api-grid">
-            <div
-              v-for="api in category.apis"
-              :key="api.name"
-              class="api-card"
-            >
+            <div v-for="api in category.apis" :key="api.name" class="api-card">
               <div class="api-header">
                 <h3>{{ api.name }}</h3>
                 <span class="api-type">{{ api.type }}</span>
@@ -139,7 +117,7 @@ const searchQuery = ref('');
 const activeCategory = ref('all');
 
 // Canvas API分类数据
-  const categories = ref<ApiCategory[]>([]);
+const categories = ref<ApiCategory[]>([]);
 
 // 计算每个分类的API数量
 const getApiCount = (categoryId: string) => {
@@ -184,15 +162,14 @@ const scrollToCategory = (categoryId: string) => {
   }
 };
 
-onMounted(async() => {
+onMounted(async () => {
   // 初始化
-  const res = await import('@/views/AdvancedSkills/JSON/CanvasBasicAPI.json');
+  const res = await import('@/views/front/AdvancedSkills/JSON/CanvasBasicAPI.json');
   categories.value = res.default;
 });
 </script>
 
 <style scoped lang="less">
-
 :root {
   --primary: #3498db;
   --primary-light: #e1f0fa;
@@ -327,7 +304,7 @@ onMounted(async() => {
       flex-direction: column;
       gap: 8px;
 
-      > div {
+      >div {
         display: flex;
         align-items: center;
         padding: 12px 16px;
@@ -472,7 +449,9 @@ onMounted(async() => {
           }
         }
 
-        .api-parameters, .api-return, .api-example {
+        .api-parameters,
+        .api-return,
+        .api-example {
           padding: 15px;
           border-bottom: 1px solid var(--border);
 

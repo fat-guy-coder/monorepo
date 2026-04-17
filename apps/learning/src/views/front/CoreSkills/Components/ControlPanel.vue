@@ -1,6 +1,7 @@
 <template>
   <!-- 控制区域 -->
-  <div class="controls-container" :style="{ height: showBrowser ? '330px' : '20px' }" :class="{ expandControlsContainer: expand }" ref="ContainerRef">
+  <div class="controls-container" :style="{ height: showBrowser ? '330px' : '20px' }"
+    :class="{ expandControlsContainer: expand }" ref="ContainerRef">
     <button @click="toggleExpand" class="version-btn expand-btn">
       {{ expand ? '收起' : '展开' }}
     </button>
@@ -12,22 +13,12 @@
 
       <div class="browser-container" v-if="browsers && showBrowser">
         <div class="version-btn-title">浏览器支持:</div>
-        <div
-          v-for="(item, index) in browsers"
-          :class="{ browserActive: browserVersion?.b === item.b }"
-          :key="index"
-          class="browser-item"
-          @click="toggleBrowserVersion('', 0)"
-        >
-          <component :is="getBrowserSupportIcon(item.b)" class="browser-icon"></component
-          >{{ item.name }}
+        <div v-for="(item, index) in browsers" :class="{ browserActive: browserVersion?.b === item.b }" :key="index"
+          class="browser-item" @click="toggleBrowserVersion('', 0)">
+          <component :is="getBrowserSupportIcon(item.b)" class="browser-icon"></component>{{ item.name }}
           <div class="browser-version">
-            <div
-              v-for="version in item.version"
-              :key="version"
-              @click.stop="toggleBrowserVersion(item.b, version)"
-              class="browser-version-item"
-            >
+            <div v-for="version in item.version" :key="version" @click.stop="toggleBrowserVersion(item.b, version)"
+              class="browser-version-item">
               {{ version }}
             </div>
           </div>
@@ -44,36 +35,22 @@
         >
           多选
         </button> -->
-        <button
-          class="version-btn"
-          @click="selectedAll"
-          :class="{
-            active: selectedVersions === '' && selectedTypes === '' && browserVersion?.b === '',
-          }"
-        >
+        <button class="version-btn" @click="selectedAll" :class="{
+          active: selectedVersions === '' && selectedTypes === '' && browserVersion?.b === '',
+        }">
           全部
         </button>
         <div class="version-btn-title">版本:</div>
 
-        <button
-          v-for="(version, index) in versions"
-          :key="index"
-          @click="toggleVersion(version)"
-          :class="{ active: selectedVersions?.includes(version) }"
-          class="version-btn"
-        >
+        <button v-for="(version, index) in versions" :key="index" @click="toggleVersion(version)"
+          :class="{ active: selectedVersions?.includes(version) }" class="version-btn">
           {{ version }}
         </button>
       </div>
       <div class="version-filter" v-if="types">
         <div class="version-btn-title">类型:</div>
-        <button
-          v-for="(type, index) in types"
-          :key="index"
-          @click="toggleType(type)"
-          :class="{ active: selectedTypes?.includes(type) }"
-          class="version-btn"
-        >
+        <button v-for="(type, index) in types" :key="index" @click="toggleType(type)"
+          :class="{ active: selectedTypes?.includes(type) }" class="version-btn">
           {{ type }}
         </button>
       </div>
@@ -210,6 +187,7 @@ const getBrowserSupportIcon = (type: string) => {
       width: 50px;
       height: 50px;
     }
+
     &:hover {
       .browser-version {
         transform: scale(1, 1);
@@ -230,12 +208,14 @@ const getBrowserSupportIcon = (type: string) => {
       display: grid;
       grid-template-columns: 1fr;
       gap: 5px;
+
       .browser-version-item {
         padding: 2px 5px;
         border-radius: 5px;
         background: #f0f0f0;
         font-size: 0.85rem;
         color: #666;
+
         &:hover {
           background: #e0e0e0;
           transform: scale(1.2) translate(5px, -5px);
@@ -338,6 +318,7 @@ const getBrowserSupportIcon = (type: string) => {
   height: 0px;
   width: 100%;
   opacity: 1;
+
   .expand-btn {
     position: absolute;
     top: 0px;

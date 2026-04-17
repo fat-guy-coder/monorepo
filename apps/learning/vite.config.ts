@@ -4,8 +4,6 @@ import { defineConfig, type ConfigEnv, type PluginOption, type ESBuildOptions } 
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import tailwindcss from '@tailwindcss/vite'
-// 使用 unplugin-vue-components 插件自动引入 components 目录下的所有组件
-import Components from 'unplugin-vue-components/vite'
 import { compression, defineAlgorithm } from 'vite-plugin-compression2'
 import zlib from 'zlib'
 import VueDevTools from 'vite-plugin-vue-devtools'
@@ -39,9 +37,6 @@ export default defineConfig((env: ConfigEnv) => {
   }
 
   plugins.push(
-    Components({
-      dts: false,
-    }),
     compression({
       algorithms: [
         'gzip',

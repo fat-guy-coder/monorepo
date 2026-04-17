@@ -240,7 +240,7 @@ const currentTransform = ref<TransformOption>({
 })
 
 onMounted(async () => {
-  const list = await import('@/views/CoreSkills/HTML_CSS/JSON/Transfrom.json')
+  const list = await import('@/views/front/CoreSkills/HTML_CSS/JSON/Transfrom.json')
   transformOptions.value = list.default as TransformOption[]
 })
 

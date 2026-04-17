@@ -66,7 +66,7 @@ interface TreeMethod {
 const treeMethods = ref<TreeMethod[]>([])
 
 onMounted(async () => {
-  const res = await import('@/views/CoreSkills/JavaScript/JSON/treeMethods.json')
+  const res = await import('@/views/front/CoreSkills/JavaScript/JSON/treeMethods.json')
   const data = res.default
   treeMethods.value = data
 })
