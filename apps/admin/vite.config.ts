@@ -55,6 +55,7 @@ export default defineConfig((env: ConfigEnv) => {
   )
   // 统一使用 object 形式，保证类型推导完整
   const baseConfig = {
+    base: isBuild ? '/admin/' : '/',
     server: {
       proxy: {
         '/api': {
