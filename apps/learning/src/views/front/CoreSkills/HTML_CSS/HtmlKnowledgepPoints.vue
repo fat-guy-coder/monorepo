@@ -48,7 +48,7 @@ interface KnowledgeCategory {
 const categories = ref<KnowledgeCategory[]>()
 
 onMounted(async () => {
-  const list = await import('./JSON/htmlKnowledgePoints.json')
+  const list = await import('./JSON/HtmlKnowledgePoints.json')
   categories.value = list.default
 })
 
