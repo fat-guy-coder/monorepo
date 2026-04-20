@@ -97,6 +97,7 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           source: "dist/admin.tar"
           target: "${{ env.DEPLOY_PATH }}"
+          strip_components: 1
           overwrite: true
 
       - name: Extract admin
@@ -150,7 +151,8 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           source: "dist/learning.tar"
-          target: "${{ env.DEPLOY_PATH }}/learning.tar"
+          target: "${{ env.DEPLOY_PATH }}"
+          strip_components: 1
           overwrite: true
 
       - name: Extract learning
@@ -190,6 +192,7 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           source: "dist/backend.tar"
           target: "${{ env.DEPLOY_PATH }}"
+          strip_components: 1
           overwrite: true
 
       - name: Extract and restart backend
@@ -222,34 +225,3 @@ jobs:
               -e DATABASE_URL='${{ secrets.DATABASE_URL }}' \
               --restart always \
               backend-app
-
-  deploy-nginx:
-    runs-on: ubuntu-latest
-    if: github.event_name == 'push'
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 1
-
-      - name: Upload nginx config
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ secrets.SERVER_HOST }}
-          port: ${{ secrets.SERVER_PORT }}
-          username: ${{ secrets.SERVER_USER }}
-          key: ${{ secrets.SERVER_SSH_KEY }}
-          source: "nginx.conf"
-          target: "/tmp"
-          overwrite: true
-
-      - name: Replace and reload nginx
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.SERVER_HOST }}
-          port: ${{ secrets.SERVER_PORT }}
-          username: ${{ secrets.SERVER_USER }}
-          key: ${{ secrets.SERVER_SSH_KEY }}
-          script: |
-            mv -f /tmp/nginx.conf /www/server/panel/vhost/nginx/denglie.asia.conf
-            nginx -t && nginx -s reload
