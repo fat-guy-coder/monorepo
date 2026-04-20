@@ -142,6 +142,62 @@ pnpm main:build
 
 子项目的 `package.json` 只保留项目特有的依赖。
 
+## 本地 PostgreSQL 同步到服务器（Docker -> Docker）
+
+> 适用于：本地数据库容器名为 `postgres`，服务器数据库容器名也为 `postgres`。
+
+### 1）本地导出（在本机执行）
+
+```bash
+# 从本地 postgres 容器导出 jason 库到容器内临时文件
+docker exec postgres pg_dump -U jason -d jason -Fc -f /tmp/jason.dump
+
+# 拷贝到本机当前目录
+docker cp postgres:/tmp/jason.dump ./jason.dump
+```
+
+### 2）上传到服务器（在本机执行）
+
+```bash
+# 默认 22 端口
+scp ./jason.dump root@47.108.233.237:/tmp/jason.dump
+
+# 如果是自定义端口（示例 2222）
+# scp -P 2222 ./jason.dump root@47.108.233.237:/tmp/jason.dump
+```
+
+### 3）导入服务器数据库（在服务器执行）
+
+```bash
+# 拷贝到服务器 postgres 容器
+docker cp /tmp/jason.dump postgres:/tmp/jason.dump
+
+# 导入（会清理同名对象再重建）
+docker exec postgres pg_restore -U jason -d jason --clean --if-exists --no-owner --no-privileges /tmp/jason.dump
+```
+
+### 4）验证
+
+```bash
+# 查看表
+docker exec postgres psql -U jason -d jason -c "\dt"
+
+# 查看后端日志（可选）
+docker logs --tail=100 backend-app
+```
+
+### 5）导入后重启后端（建议）
+
+```bash
+docker restart backend-app
+```
+
+## 是否要把“数据同步”放进流水线？
+
+- **建议默认手动同步**：数据库是有状态资源，自动覆盖风险高（误覆盖线上数据、无法回滚）。
+- **推荐流程**：代码走 CI/CD，数据走“手动可控脚本（本文命令）”。
+- **仅在明确需要时自动化**：可单独做一个 `workflow_dispatch` 的“手动触发数据同步”工作流，并加二次确认参数。
+
 ## 开发规范
 
 1. 使用 TypeScript 进行开发
