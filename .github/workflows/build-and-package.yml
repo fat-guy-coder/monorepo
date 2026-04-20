@@ -19,7 +19,6 @@ jobs:
       admin: ${{ steps.changes.outputs.admin }}
       learning: ${{ steps.changes.outputs.learning }}
       backend: ${{ steps.changes.outputs.backend }}
-      nginx: ${{ steps.changes.outputs.nginx }}
       any: ${{ steps.changes.outputs.any }}
     steps:
       - name: Checkout code
@@ -50,8 +49,6 @@ jobs:
               - 'package.json'
               - 'pnpm-lock.yaml'
               - 'pnpm-workspace.yaml'
-            nginx:
-              - 'nginx.conf'
             any:
               - 'apps/admin/**'
               - 'apps/learning/**'
@@ -60,41 +57,9 @@ jobs:
               - 'package.json'
               - 'pnpm-lock.yaml'
               - 'pnpm-workspace.yaml'
-              - 'nginx.conf'
-
-  prepare-pnpm-store:
-    needs: detect-changes
-    if: needs.detect-changes.outputs.admin == 'true' || needs.detect-changes.outputs.learning == 'true' || github.event_name == 'workflow_dispatch'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 1
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'pnpm'
-
-      - name: Prepare pnpm store
-        run: |
-          pnpm config set store-dir .pnpm-store
-          pnpm fetch
-
-      - name: Upload pnpm store artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: pnpm-store
-          path: .pnpm-store
-          retention-days: 1
 
   deploy-admin:
-    needs: [detect-changes, prepare-pnpm-store]
+    needs: detect-changes
     if: needs.detect-changes.outputs.admin == 'true' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
@@ -112,16 +77,8 @@ jobs:
           node-version: '20'
           cache: 'pnpm'
 
-      - name: Download pnpm store artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: pnpm-store
-          path: .pnpm-store
-
       - name: Install dependencies
-        run: |
-          pnpm config set store-dir .pnpm-store
-          pnpm install --frozen-lockfile --offline
+        run: pnpm install --frozen-lockfile --prefer-offline
 
       - name: Build admin
         run: pnpm --filter admin build
@@ -139,7 +96,7 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           source: "dist/admin.tar"
-          target: "${{ env.DEPLOY_PATH }}/admin.tar"
+          target: "${{ env.DEPLOY_PATH }}"
           overwrite: true
 
       - name: Extract admin
@@ -156,7 +113,7 @@ jobs:
             rm admin.tar
 
   deploy-learning:
-    needs: [detect-changes, prepare-pnpm-store]
+    needs: detect-changes
     if: needs.detect-changes.outputs.learning == 'true' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
@@ -174,16 +131,8 @@ jobs:
           node-version: '20'
           cache: 'pnpm'
 
-      - name: Download pnpm store artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: pnpm-store
-          path: .pnpm-store
-
       - name: Install dependencies
-        run: |
-          pnpm config set store-dir .pnpm-store
-          pnpm install --frozen-lockfile --offline
+        run: pnpm install --frozen-lockfile --prefer-offline
 
       - name: Build learning
         run: pnpm --filter learning build
@@ -240,7 +189,7 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           source: "dist/backend.tar"
-          target: "${{ env.DEPLOY_PATH }}/backend.tar"
+          target: "${{ env.DEPLOY_PATH }}"
           overwrite: true
 
       - name: Extract and restart backend
@@ -275,9 +224,8 @@ jobs:
               backend-app
 
   deploy-nginx:
-    needs: detect-changes
     runs-on: ubuntu-latest
-    if: needs.detect-changes.outputs.nginx == 'true' || github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'push'
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -292,10 +240,10 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           source: "nginx.conf"
-          target: "/www/server/panel/vhost/nginx/denglie.asia.conf"
+          target: "/tmp"
           overwrite: true
 
-      - name: Reload nginx
+      - name: Replace and reload nginx
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SERVER_HOST }}
@@ -303,4 +251,5 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
+            mv -f /tmp/nginx.conf /www/server/panel/vhost/nginx/denglie.asia.conf
             nginx -t && nginx -s reload
