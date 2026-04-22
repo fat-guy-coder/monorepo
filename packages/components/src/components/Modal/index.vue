@@ -3,7 +3,7 @@
     <Transition name="modal-fade">
       <div v-if="visible" class="modal-overlay" @click="handleClickOverlay">
         <div class="modal-wrapper" role="dialog" aria-modal="true" :aria-labelledby="title ? 'modal-title' : undefined"
-          :style="componentStyle">
+          :style="componentStyle" @click.stop @mousedown.stop>
           <!-- Header -->
           <div class="modal-header">
             <slot name="header">

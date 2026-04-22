@@ -1,18 +1,18 @@
 <template>
-  <div class="bun-intro">
+  <div class="docker-intro">
     <!-- 头部区域 -->
     <header class="intro-header">
       <div class="header-content">
         <div class="title-wrapper">
-          <span class="bun-icon">🥟</span>
-          <h1>Bun</h1>
+          <span class="docker-icon">🐋</span>
+          <h1>Docker</h1>
         </div>
-        <p class="subtitle">一体化 JavaScript/TypeScript 工具链 · 极速开发体验</p>
+        <p class="subtitle">容器化平台 · 构建、共享、运行</p>
         <div class="header-divider"></div>
         <p class="description">
-          Bun 是一个集运行时、包管理器、打包器、测试运行器于一体的全栈 JavaScript/TypeScript 工具链。
-          由 Jarred Sumner 于 2022 年创建，旨在解决 Node.js 生态的工具碎片化问题，
-          通过 Zig 语言从零构建，以极致性能和开箱即用的体验重塑现代 JavaScript 开发流程。
+          Docker 是一个开源的容器化平台，允许开发者将应用及其依赖打包到一个轻量级、
+          可移植的容器中，实现“一次构建，处处运行”。它简化了开发、部署和运维流程，
+          是现代云原生生态的基石。
         </p>
       </div>
     </header>
@@ -46,7 +46,7 @@
           </div>
           <p class="concept-desc">{{ concept.description }}</p>
           <div class="concept-analogy" v-if="concept.analogy">
-            <span>💡 说明：</span>{{ concept.analogy }}
+            <span>💡 类比：</span>{{ concept.analogy }}
           </div>
         </div>
       </div>
@@ -66,7 +66,7 @@
           </div>
         </div>
         <div class="note-block">
-          <p>Bun 之所以能在启动速度和执行效率上超越 Node.js，根本原因在于其从底层语言到 JS 引擎的全栈优化，而非简单的“换引擎”。</p>
+          <p>Docker 并非虚拟机，它直接运行在宿主操作系统内核之上，共享内核，通过上述技术实现隔离与资源限制。</p>
         </div>
       </section>
 
@@ -108,7 +108,7 @@
 
     <!-- 底部引用 -->
     <footer class="intro-footer">
-      <p>2025 年 12 月，Anthropic（Claude 母公司）正式收购 Bun，标志着其从社区项目迈向企业级 AI 基础设施的关键一步。</p>
+      <p>Docker 改变了软件的交付方式，是 DevOps 和云原生时代的重要基础设施。</p>
     </footer>
   </div>
 </template>
@@ -116,171 +116,160 @@
 <script setup lang="ts">
 // 核心作用
 interface Role {
-  icon: string
-  title: string
-  desc: string
+  icon: string;
+  title: string;
+  desc: string;
 }
 
 const roles: Role[] = [
   {
     icon: '🚀',
-    title: '极致性能',
-    desc: '启动速度比 Node.js 快 4 倍，HTTP 吞吐量达 2-3 倍，内存占用降低约 50%。'
+    title: '环境一致性',
+    desc: '消除“在我机器上能跑”问题，确保开发、测试、生产环境完全相同。'
   },
   {
-    icon: '🧩',
-    title: '一体化工具链',
-    desc: '内置运行时、包管理器（bun install）、打包器（bun build）、测试运行器（bun test），零配置开箱即用。'
+    icon: '📦',
+    title: '快速部署与扩展',
+    desc: '容器启动速度达秒级，支持快速横向扩展，轻松应对流量高峰。'
   },
   {
-    icon: '🔄',
-    title: 'Node.js 兼容',
-    desc: '支持绝大多数 Node.js API 和 npm 包，可渐进式迁移现有项目，无需完全重构。'
+    icon: '🔧',
+    title: '微服务架构支撑',
+    desc: '每个微服务独立打包为容器，技术栈解耦，便于独立开发与部署。'
   },
   {
-    icon: '📝',
-    title: '原生 TypeScript',
-    desc: '直接运行 .ts 和 .tsx 文件，无需 ts-node 或额外编译步骤，开发体验流畅。'
+    icon: '💾',
+    title: '资源高效利用',
+    desc: '共享宿主机内核，比传统虚拟机更轻量，单机可运行成百上千容器。'
   }
-]
+];
 
 // 核心概念
 interface Concept {
-  name: string
-  icon: string
-  description: string
-  analogy?: string
+  name: string;
+  icon: string;
+  description: string;
+  analogy?: string;
 }
 
 const concepts: Concept[] = [
   {
-    name: 'Bun Runtime',
-    icon: '⚡',
-    description: '高性能 JavaScript/TypeScript 运行时，基于 JavaScriptCore 引擎，启动快、内存占用低。',
-    analogy: '替代 Node.js 的核心执行环境，可直接运行大多数 Node.js 项目。'
+    name: '镜像 (Image)',
+    icon: '🖼️',
+    description: '一个只读模板，包含运行应用所需的代码、运行时、库、环境变量和配置文件。',
+    analogy: '类比为面向对象中的“类”，或者一个软件安装包。'
   },
   {
-    name: 'bun install',
-    icon: '📥',
-    description: '极速包管理器，安装依赖比 npm 快 25 倍，支持 package.json 和 lockfile 格式。',
-    analogy: '替代 npm/yarn/pnpm，依赖解析和下载高度并行化。'
-  },
-  {
-    name: 'bun build',
+    name: '容器 (Container)',
     icon: '📦',
-    description: '内置打包器与转译器，支持 TypeScript、JSX、CSS，打包速度比 Webpack 快 100 倍以上。',
-    analogy: '替代 Webpack/Rollup/Vite 的构建功能，原生支持多种格式输出。'
+    description: '镜像的运行实例，在镜像层之上添加可写层，彼此隔离但共享宿主机内核。',
+    analogy: '类比为类的“实例对象”，是真正运行的进程环境。'
   },
   {
-    name: 'bun test',
-    icon: '🧪',
-    description: '内置测试运行器，兼容 Jest 风格的 API，执行速度快，支持 watch 模式和覆盖率报告。',
-    analogy: '替代 Jest/Vitest，无需额外配置即可运行测试。'
+    name: '仓库 (Registry)',
+    icon: '🏛️',
+    description: '存储和分发 Docker 镜像的服务，如 Docker Hub、私有 Harbor 等。',
+    analogy: '类似 GitHub，用于存放和分享镜像。'
   },
   {
-    name: 'Bun.serve()',
-    icon: '🌐',
-    description: '原生高性能 HTTP 服务器，基于 uWebSockets.js，支持 WebSocket 和 Server-Sent Events。',
-    analogy: '替代 Express/Fastify 等框架的基础层，性能远超 Node.js 原生 http 模块。'
+    name: 'Dockerfile',
+    icon: '📄',
+    description: '用于构建镜像的文本文件，包含一系列指令和参数，定义镜像内容与构建步骤。',
+    analogy: '构建镜像的“菜谱”或自动化脚本。'
   },
   {
-    name: 'Bun APIs',
-    icon: '🔧',
-    description: '丰富的内置 API，包括 SQL 客户端（PostgreSQL/MySQL/SQLite）、Redis、S3、密码哈希、文件 I/O 等。',
-    analogy: '替代第三方数据库驱动和工具库，减少外部依赖。'
+    name: 'Docker Compose',
+    icon: '🧩',
+    description: '用于定义和运行多容器应用的工具，通过 YAML 文件配置服务、网络和卷。',
+    analogy: '多容器应用的“编排乐谱”。'
   }
-]
+];
 
 // 底层原理
 interface Principle {
-  name: string
-  desc: string
+  name: string;
+  desc: string;
 }
 
 const principles: Principle[] = [
   {
-    name: 'Zig 语言构建',
-    desc: 'Bun 的底层用 Zig 编写，而非 C++。Zig 是一门注重性能、无运行时开销的系统级语言，可精细控制内存布局和 I/O 操作，实现极致的执行效率。'
+    name: 'Namespace (命名空间)',
+    desc: '实现进程、网络、文件系统等资源的隔离。每个容器拥有独立的 PID、NET、IPC、MNT、UTS 等命名空间，使容器内的进程仿佛独占一台机器。'
   },
   {
-    name: 'JavaScriptCore 引擎',
-    desc: 'Bun 选择 Safari 浏览器同款的 JavaScriptCore（JSC）引擎，而非 V8。JSC 以更快的启动速度和更低的内存占用著称，尤其适合冷启动场景。'
+    name: 'Cgroups (控制组)',
+    desc: '限制、记录和隔离进程组所使用的物理资源（CPU、内存、磁盘 I/O、网络等），防止单个容器耗尽宿主机资源。'
   },
   {
-    name: '一体化架构设计',
-    desc: '运行时、包管理器、打包器和测试运行器深度集成，共享底层解析器、缓存和文件系统抽象层，避免了工具间的重复开销和通信成本。'
-  },
-  {
-    name: 'FFI 与原生绑定',
-    desc: '通过 bun:ffi 模块，JavaScript 可直接调用 C ABI 兼容的动态库，Bun 使用内置的 TinyCC 即时编译 C 胶水代码，实现接近原生的调用性能。'
+    name: 'UnionFS (联合文件系统)',
+    desc: '分层构建镜像的技术基础。支持将多个目录/文件系统挂载到同一目录下，镜像层只读，容器层可写，实现高效存储和快速分发。'
   }
-]
+];
 
 // 优缺点
 const pros: string[] = [
-  '极致性能：启动快、吞吐高、内存占用低',
-  '开箱即用：零配置运行 TypeScript/JSX',
-  '工具链统一：一个工具搞定开发全流程',
-  'Node.js 兼容：可渐进式迁移现有项目',
-  '内置丰富 API：SQL、Redis、S3 等无需第三方库',
-  '开发体验优秀：热重载、内置测试、快速反馈'
-]
+  '轻量级，启动快，资源占用小',
+  '环境一致性，减少部署摩擦',
+  '易于持续集成与持续交付 (CI/CD)',
+  '版本控制和组件复用（镜像分层）',
+  '庞大的官方镜像生态',
+  '支持混合云/多云部署'
+];
 
 const cons: string[] = [
-  '生态成熟度不足：部分 npm 包存在兼容性问题',
-  '生产稳定性有待验证：仍在快速迭代，偶有 bug',
-  '原生扩展支持有限：.node 文件可能无法工作',
-  '社区规模较小：StackOverflow 答案和教程相对较少',
-  '某些框架支持不完善：Next.js 等内部 API 依赖可能有问题',
-  '企业级配套工具不足：APM、监控等体系尚在建设中'
-]
+  '隔离性弱于传统虚拟机（共享内核）',
+  '对 Windows 容器支持仍不完美',
+  '网络和存储管理有一定复杂度',
+  '生产环境编排（如 K8s）有学习曲线',
+  '容器安全性需额外关注（镜像漏洞、逃逸风险）'
+];
 
 // 使用场景
 interface Scenario {
-  title: string
-  desc: string
+  title: string;
+  desc: string;
 }
 
 const scenarios: Scenario[] = [
   {
-    title: '新项目快速启动',
-    desc: '适合创业团队和快速迭代的项目，零配置即可运行 TypeScript 全栈应用，大幅缩短初期搭建时间。'
+    title: '微服务架构',
+    desc: '每个微服务独立容器化，技术栈自由选择，通过容器编排工具管理服务间通信与伸缩。'
   },
   {
-    title: 'Serverless 与边缘计算',
-    desc: '极低的冷启动时间（约 12ms）使 Bun 成为 Vercel Functions、Cloudflare Workers 等场景的理想选择。'
+    title: '持续集成/持续部署 (CI/CD)',
+    desc: '构建、测试、部署全流程容器化，确保环境一致，流水线标准化。'
   },
   {
-    title: 'AI 与工具链开发',
-    desc: 'Anthropic 收购 Bun 后，其单文件可执行特性被广泛用于 AI 编程助手和 CLI 工具的分发。'
+    title: '开发环境快速搭建',
+    desc: '新成员通过一条命令即可拉起完整开发环境（数据库、缓存、消息队列等）。'
   },
   {
-    title: '内部工具与脚本',
-    desc: '快速运行 TypeScript 脚本，无需编译步骤，适合自动化任务、数据批处理和内部运维工具。'
+    title: '应用隔离与多租户',
+    desc: '在同一台物理机上安全运行多个应用实例，互不干扰。'
   },
   {
-    title: '全栈开发原型',
-    desc: '利用 Bun.serve() + SQLite 客户端，几行代码即可搭建带数据库的全栈原型，验证想法效率极高。'
+    title: '批处理与科学计算',
+    desc: '将计算任务打包成镜像，弹性调度到集群中执行，任务结束自动释放资源。'
   },
   {
-    title: '前端开发服务器',
-    desc: '原生支持 HTML 导入、React Fast Refresh、CSS 转译，可作为 Vite 的轻量级替代方案。'
+    title: '传统应用现代化',
+    desc: '将老旧单体应用容器化，便于迁移上云和渐进式改造。'
   }
-]
+];
 </script>
 
 <style lang="less" scoped>
 // ========== Less 变量：简约现代 ==========
-@primary-orange: #fbf0df;
-@primary-dark: #1a1a2e;
-@accent-orange: #e6a020;
-@accent-purple: #7b5cb8;
+@primary-blue: #0db7ed; // Docker 蓝
+@secondary-blue: #1d63ed;
+@accent-blue: #2496ed;
 @bg-page: #f8fafc;
 @card-bg: #ffffff;
 @text-dark: #1e293b;
 @text-soft: #475569;
 @text-light: #64748b;
 @border-light: #e2e8f0;
+@code-bg: #1e293b;
 @shadow-sm: 0 6px 14px rgba(0, 0, 0, 0.02), 0 2px 4px rgba(0, 0, 0, 0.02);
 @shadow-hover: 0 12px 24px rgba(0, 0, 0, 0.05), 0 4px 8px rgba(0, 0, 0, 0.02);
 @border-radius-lg: 24px;
@@ -293,7 +282,7 @@ const scenarios: Scenario[] = [
   box-sizing: border-box;
 }
 
-.bun-intro {
+.docker-intro {
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem 1.5rem;
@@ -307,7 +296,7 @@ const scenarios: Scenario[] = [
 
 // ----- 头部样式 -----
 .intro-header {
-  background: linear-gradient(135deg, #fdf6ee 0%, #ffffff 100%);
+  background: @card-bg;
   border-radius: @border-radius-lg;
   padding: 2.2rem 2.5rem;
   box-shadow: @shadow-sm;
@@ -320,7 +309,7 @@ const scenarios: Scenario[] = [
       gap: 12px;
       margin-bottom: 0.5rem;
 
-      .bun-icon {
+      .docker-icon {
         font-size: 3.2rem;
         line-height: 1;
       }
@@ -329,7 +318,7 @@ const scenarios: Scenario[] = [
         font-size: 3rem;
         font-weight: 700;
         letter-spacing: -0.02em;
-        background: linear-gradient(135deg, @accent-orange 0%, @accent-purple 80%);
+        background: linear-gradient(135deg, @primary-blue 0%, @secondary-blue 80%);
         -webkit-background-clip: text;
         background-clip: text;
         color: transparent;
@@ -339,14 +328,14 @@ const scenarios: Scenario[] = [
     .subtitle {
       font-size: 1.25rem;
       font-weight: 500;
-      color: @accent-orange;
+      color: @primary-blue;
       margin-bottom: 1rem;
     }
 
     .header-divider {
       width: 70px;
       height: 4px;
-      background: linear-gradient(90deg, @accent-orange, @accent-purple);
+      background: @primary-blue;
       border-radius: 4px;
       margin: 1.2rem 0 1.5rem;
     }
@@ -410,7 +399,7 @@ const scenarios: Scenario[] = [
     transition: @transition;
 
     &:hover {
-      border-color: @accent-orange;
+      border-color: @primary-blue;
       transform: translateY(-2px);
     }
 
@@ -448,7 +437,7 @@ const scenarios: Scenario[] = [
     transition: @transition;
 
     &:hover {
-      border-color: @accent-purple;
+      border-color: @primary-blue;
     }
 
     .concept-header {
@@ -520,13 +509,13 @@ const scenarios: Scenario[] = [
 }
 
 .note-block {
-  background: #fef3e7;
-  border-left: 4px solid @accent-orange;
+  background: #e6f7ff;
+  border-left: 4px solid @primary-blue;
   padding: 0.8rem 1.2rem;
   border-radius: 12px;
 
   p {
-    color: #7a4e1a;
+    color: #005a8c;
     font-size: 0.95rem;
   }
 }
@@ -609,7 +598,7 @@ const scenarios: Scenario[] = [
       gap: 6px;
 
       &::before {
-        content: "🥟";
+        content: "🐳";
         font-size: 1.1rem;
       }
     }
@@ -641,7 +630,7 @@ const scenarios: Scenario[] = [
 
 // ----- 响应式调整 -----
 @media (max-width: 640px) {
-  .bun-intro {
+  .docker-intro {
     padding: 1.2rem 1rem;
     gap: 1.5rem;
   }
