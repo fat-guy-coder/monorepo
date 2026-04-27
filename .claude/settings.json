@@ -21,7 +21,10 @@
       "Bash(find apps/learning/src -name \"*.ts.js\" -delete)",
       "Bash(xargs sed *)",
       "Bash(sed -i \"s|SortAlgorithBarCharts|sortAlgorithBarCharts|g\" \"apps/learning/src/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/SortingAlgorithm.vue\")",
-      "Bash(sed -i \"s|SortAlgorithBarCharts|sortAlgorithBarCharts|g\" \"apps/learning/src/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/SortingAlgorithmIntroduction/SortingAlgorithm.vue\")"
+      "Bash(sed -i \"s|SortAlgorithBarCharts|sortAlgorithBarCharts|g\" \"apps/learning/src/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/SortingAlgorithmIntroduction/SortingAlgorithm.vue\")",
+      "WebFetch(domain:en.wikipedia.org)",
+      "WebFetch(domain:tc39.es)",
+      "WebFetch(domain:www.baidu.com)"
     ]
   }
 }
