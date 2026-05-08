@@ -6,3 +6,7 @@ f = c
 
 age = 20
 status = "成年" if age >= 18 else "未成年"
+
+haha = 1 if age >= 18 else 0
+
+print(haha)
