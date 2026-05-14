@@ -1,4 +1,12 @@
 {
+  "env": {
+    "ANTHROPIC_AUTH_TOKEN": "sk-cp-_5_rbW8twmkFiA99AyqBr1m87tx0sXgOvXHrm3E_S3PU70uxxsjQpP5XxZX_S7px2NSS6IKBefjsf7gC6JKYsklyxiVvbhhcRii2Tq9Vqxjdjqqw5TW2Ayk",
+    "ANTHROPIC_BASE_URL": "https://api.minimaxi.com/anthropic",
+    "ANTHROPIC_MODEL": "MiniMax-M2.7",
+    "ANTHROPIC_DEFAULT_SONNET_MODEL": "MiniMax-M2.7",
+    "ANTHROPIC_DEFAULT_HAIKU_MODEL": "MiniMax-M2.7",
+    "API_TIMEOUT_MS": "3000000"
+  },
   "permissions": {
     "allow": [
       "Bash(go version:*)",
@@ -24,7 +32,25 @@
       "Bash(sed -i \"s|SortAlgorithBarCharts|sortAlgorithBarCharts|g\" \"apps/learning/src/views/AlgorithmsAndDataStructures/Algorithms/AlgorithmClassification/SortingAlgorithmIntroduction/SortingAlgorithm.vue\")",
       "WebFetch(domain:en.wikipedia.org)",
       "WebFetch(domain:tc39.es)",
-      "WebFetch(domain:www.baidu.com)"
+      "WebFetch(domain:www.baidu.com)",
+      "Read(//c/Users/Administrator/.claude/**)",
+      "Bash(pip install *)",
+      "Bash(python -c \"import textual; print\\(textual.__version__\\)\")",
+      "Bash(pip --version)",
+      "Bash(echo \"exit: $?\")",
+      "Bash(bun add *)",
+      "Bash(bun remove *)",
+      "Bash(node -e \"const ink = require\\('./node_modules/ink/build/index.js'\\); console.log\\(Object.keys\\(ink\\).filter\\(k => k.toLowerCase\\(\\).includes\\('input'\\) || k.toLowerCase\\(\\).includes\\('text'\\)\\)\\)\")",
+      "Bash(bun pm *)",
+      "Bash(bun --bun run src/index.tsx)",
+      "Bash(jobs)",
+      "Bash(kill %1)",
+      "Bash(wait)",
+      "Bash(bun tsx *)",
+      "Bash(echo \"EXIT:$?\")"
+    ],
+    "additionalDirectories": [
+      "C:\\Users\\Administrator\\.claude"
     ]
   }
 }

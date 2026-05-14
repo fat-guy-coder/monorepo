@@ -12,6 +12,7 @@ export interface MenuItem {
   updatedAt?: string
   hasChildren?: boolean
   isLeaf?: boolean
+  children?: MenuItem[]
   /** 搜索时标记是否匹配搜索条件 */
   match?: boolean
 }

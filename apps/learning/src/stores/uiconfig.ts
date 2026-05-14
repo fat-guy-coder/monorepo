@@ -35,11 +35,6 @@ export const useUIConfigStore = defineStore('uiconfig', () => {
       { value: 'more', label: '更多', icon: '🎨' },],
     navItems: [
       {
-        icon: '⚙️',
-        label: '设置',
-        value: 'setting',
-      },
-      {
         icon: '👤',
         label: '用户',
         value: 'user',
@@ -60,7 +55,7 @@ export const useUIConfigStore = defineStore('uiconfig', () => {
 
   function setTheme(newTheme: Theme) {
     uiConfig.theme = newTheme
-  
+
   }
 
   // Set initial theme on load
@@ -73,8 +68,8 @@ export const useUIConfigStore = defineStore('uiconfig', () => {
   }
 
   onMounted(() => {
-  useUIConfigStore().$subscribe(() => {  localStorage.setItem('uiConfig', JSON.stringify(uiConfig))  },  { flush: 'sync' })
+    useUIConfigStore().$subscribe(() => { localStorage.setItem('uiConfig', JSON.stringify(uiConfig)) }, { flush: 'sync' })
   })
 
-  return { ...toRefs(uiConfig), setTheme, setNavItems,} 
+  return { ...toRefs(uiConfig), setTheme, setNavItems, }
 })
