@@ -221,7 +221,7 @@ jobs:
             docker build -t backend-app .
             docker run -d \
               --name backend-app \
-              --network monorepo_default \
+              --network wwwroot_default \
               -p 3000:3000 \
               -e DATABASE_URL='${{ secrets.DATABASE_URL }}' \
               --restart always \
