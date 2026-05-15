@@ -8,9 +8,11 @@
         </svg>
       </span>
       <span v-else class="tree-arrow-placeholder"></span>
-      <slot name="node" :node="node" :expanded="isExpanded">
-        <span class="tree-label">{{ node.label }}</span>
-      </slot>
+      <div class="tree-node-content">
+        <slot name="node" :node="node" :expanded="isExpanded">
+          <span class="tree-label">{{ node.label }}</span>
+        </slot>
+      </div>
     </div>
     <div v-show="isExpanded && hasChildren" ref="childrenRef" class="tree-children">
       <TreeItem v-for="childNode in node.children" :key="childNode.id" :node="childNode" :level="level + 1"
@@ -103,6 +105,12 @@ watch(isExpanded, async (expanded) => {
 })
 
 const handleClick = (e: MouseEvent) => {
+  // 如果点击的是 checkbox 或其容器，不触发展开（让 checkbox 自己处理）
+  const target = e.target as HTMLElement
+  if (target.closest('.checkbox-label') || target.querySelector('input[type="checkbox"]')) {
+    return
+  }
+
   if (!isLeaf.value) {
     const newExpanded = !isExpanded.value
     emit('toggle', props.node, newExpanded)
@@ -158,6 +166,14 @@ const handleChildToggle = (node: TreeNode, expanded: boolean) => {
   margin-right: 4px;
 }
 
+.tree-node-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 1;
+  min-width: 0;
+}
+
 .tree-label {
   flex: 1;
   overflow: hidden;
@@ -165,6 +181,7 @@ const handleChildToggle = (node: TreeNode, expanded: boolean) => {
   white-space: nowrap;
   font-size: 14px;
   color: var(--color-text, #333);
+  flex-shrink: 0;
 }
 
 .tree-extra {

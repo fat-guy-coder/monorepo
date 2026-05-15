@@ -39,19 +39,41 @@
         </router-view>
       </div>
     </div>
+
+    <!-- 登录/注册模态框 -->
+    <Modal v-model:visible="loginModalVisible" :title="isRegisterMode ? '注册' : '登录'" @confirm="handleLoginSubmit"
+      @cancel="loginModalVisible = false">
+      <div class="modal-form">
+        <div class="form-item">
+          <label>用户名</label>
+          <Input v-model="loginForm.username" placeholder="请输入用户名" />
+        </div>
+        <div class="form-item">
+          <label>密码</label>
+          <Input v-model="loginForm.password" type="password" placeholder="请输入密码" />
+        </div>
+        <div class="form-item toggle-mode">
+          <span @click="isRegisterMode = !isRegisterMode">
+            {{ isRegisterMode ? '已有账号？去登录' : '没有账号？去注册' }}
+          </span>
+        </div>
+      </div>
+    </Modal>
   </div>
 </template>
 
 <script lang="ts" setup>
 //vue编译器会自动引入components目录下的所有组件，但不是异步组件，这一步是为了将所有组件转换为异步组件，以优化初始加载性能
-import { Menu, RouteTab, ThemeChange, Navigation, Input, Button, message, Spin } from 'components'
-import { computed, ref, watch, onMounted, onUnmounted, nextTick, provide } from 'vue'
+import { Menu, RouteTab, ThemeChange, Navigation, Input, Button, Modal, message, Spin } from 'components'
+import { computed, ref, reactive, watch, onMounted, onUnmounted, nextTick, provide } from 'vue'
 import {
   type MenuItem, //菜单项类型
   findFatherKeysListByKey, //查找父级菜单key列表
   findMenuItemByName, //查找菜单项 通过name
 } from '@/menu'
 import { getApiMenus, getApiMenusSearch } from '@/api/menu'
+import { postApiUserLogin, postApiUserRegister } from '@/api/user'
+import { saveTokens, saveUserInfo, getAccessToken } from '@/utils/token'
 import { useTabStore } from '@/stores/tab' //标签列表store
 import { useDeviceStore } from '@/stores/device' //设备信息store
 import { useUIConfigStore, type Theme } from '@/stores/uiconfig' //UI配置store
@@ -61,7 +83,7 @@ import type { NavItem } from 'components' //导航项类型
 import { useGradientAnimation } from '@/hooks/useGradientAnimation' //渐变色动画
 import { useDetectDevice } from '@/hooks/useDetectDevice' //设备信息hook
 import { loadViewByPath, viewExists } from '@/views/views-loader' //动态视图加载器
-// import { request } from '@/request'
+
 
 //获取用户信息store
 // const userStore = useUserStore()
@@ -93,6 +115,13 @@ const handleNavClick = (item: NavItem): void => {
       break
     case 'theme':
       themeMenuShow.value = !themeMenuShow.value
+      break
+    case 'user':
+      if (isLoggedIn.value) {
+        router.push('/DataManagement/AccountManagement')
+      } else {
+        loginModalVisible.value = true
+      }
       break
     default:
       break
@@ -167,6 +196,43 @@ const toggleCollapsed = async () => {
 const loading = ref(false)
 
 const mainViewLoading = ref(false)
+
+// 登录模态框状态
+const loginModalVisible = ref(false)
+const isRegisterMode = ref(false)
+const isLoggedIn = computed(() => !!getAccessToken())
+const loginForm = reactive<{ username: string; password: string }>({
+  username: '',
+  password: '',
+})
+
+const handleLoginSubmit = async () => {
+  if (!loginForm.username || !loginForm.password) {
+    message.error('请输入用户名和密码')
+    return
+  }
+  try {
+    if (isRegisterMode.value) {
+      await postApiUserRegister({ username: loginForm.username, password: loginForm.password })
+      message.success('注册成功，请登录')
+      isRegisterMode.value = false
+    } else {
+      const res = await postApiUserLogin({ username: loginForm.username, password: loginForm.password })
+      if (res.data) {
+        saveTokens(res.data.accessToken, res.data.refreshToken)
+        saveUserInfo(res.data.user)
+        message.success('登录成功')
+        loginModalVisible.value = false
+        loginForm.username = ''
+        loginForm.password = ''
+        await getMenus()
+        router.push('/DataManagement/AccountManagement')
+      }
+    }
+  } catch (e: any) {
+    message.error(e?.message || (isRegisterMode.value ? '注册失败' : '登录失败'))
+  }
+}
 
 useDetectDevice((device) => {
   deviceStore.setDevice(device)
@@ -482,6 +548,7 @@ function goToByName(name: string, isRedirect: boolean = false) {
 
 //提供跳转菜单名称方法
 provide('goToByName', goToByName)
+provide('reloadMenus', getMenus)
 
 //滚动事件
 const handleScroll = debounce((e: Event) => {
@@ -595,5 +662,33 @@ const scrollTo = (id: string) => {
   font-size: var(--font-size-xs);
   font-weight: 500;
   line-height: 1;
+}
+
+/* 登录模态框样式 */
+.modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.modal-form .form-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.modal-form .form-item label {
+  font-size: 14px;
+  color: var(--color-text-secondary);
+}
+
+.modal-form .toggle-mode {
+  align-items: center;
+}
+
+.modal-form .toggle-mode span {
+  color: var(--color-primary);
+  cursor: pointer;
+  font-size: 14px;
 }
 </style>

@@ -1,5 +1,7 @@
 /// <reference types="bun-types" />
 import { routes } from './routes/menu'
+import { userRoutes } from './routes/user'
+import { roleRoutes } from './routes/role'
 
 const port = Number(process.env.PORT || 3000)
 const host = process.env.HOST || '0.0.0.0'
@@ -26,7 +28,8 @@ const server = Bun.serve({
     }
 
     // 匹配路由
-    for (const route of routes) {
+    const allRoutes = [...routes, ...userRoutes, ...roleRoutes]
+    for (const route of allRoutes) {
       if (route.method !== method) continue
 
       const match = pathname.match(route.pattern)
@@ -44,6 +47,7 @@ const server = Bun.serve({
             url,
             params,
             query: Object.fromEntries(url.searchParams),
+            request: req,
             body: method !== 'GET' && method !== 'HEAD' ? await req.text() : undefined,
             async json() {
               if (this.body) {

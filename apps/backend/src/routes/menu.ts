@@ -1,6 +1,9 @@
 import { db, rawQuery } from '../db'
-import { menu } from '../db/schema'
+import { menu, role, userRole } from '../db/schema'
 import { eq, isNull, or, asc, like } from 'drizzle-orm'
+import { createAuthMiddleware } from './auth'
+
+const authMware = createAuthMiddleware()
 
 // 统一响应格式
 const success = (data: any, message = 'success') => ({ code: 200, message, data })
@@ -59,10 +62,35 @@ interface RouteContext {
   params: Record<string, string>
   query: Record<string, string>
   body: any
+  request?: Request
   json: () => Promise<any>
 }
 
 type RouteHandler = (ctx: RouteContext) => Promise<Response>
+
+// Auth middleware: extracts user from Authorization header
+async function getUserFromToken(ctx: RouteContext): Promise<{ userId: string; username: string } | null> {
+  return authMware(ctx)
+}
+
+// Get user's menu permissions based on their role
+async function getUserMenuPermissions(userId: string): Promise<{ menuIds: string[]; menuPaths: string[] } | null> {
+  // Find user role
+  const relation = await db.query.userRole.findFirst({
+    where: (ur, { eq }) => eq(ur.userId, userId),
+  })
+  if (!relation) return null
+
+  const r = await db.query.role.findFirst({
+    where: (rl, { eq }) => eq(rl.id, relation.roleId),
+  })
+  if (!r) return null
+
+  return {
+    menuIds: JSON.parse(r.menuIds as string || '[]'),
+    menuPaths: JSON.parse(r.menuPaths as string || '[]'),
+  }
+}
 
 const routes: Array<{ method: string; pattern: RegExp; handler: RouteHandler }> = []
 
@@ -73,8 +101,22 @@ routes.push({
   handler: async (ctx) => {
     const { project, parentId, root, flat, tree, search } = ctx.query
 
-    // 如果指定了 tree=true，返回完整树结构
+    // 获取用户权限
+    const auth = await getUserFromToken(ctx)
+    let menuPermission: { menuIds: string[]; menuPaths: string[] } | null = null
+    if (auth) {
+      menuPermission = await getUserMenuPermissions(auth.userId)
+    }
+
+    // 未登录时使用 default 角色的菜单作为公开菜单集
+    const defaultRole = await db.query.role.findFirst({ where: (r, { eq }) => eq(r.name, 'default') })
+    const publicMenuIds: string[] = defaultRole ? JSON.parse(defaultRole.menuIds as string || '[]') : []
+
+    // 如果指定了 tree=true，返回完整树结构（需要登录）
     if (tree === 'true') {
+      if (!auth) {
+        return Response.json(error('未授权，请先登录', 401), { status: 401 })
+      }
       try {
         let allMenus = await db.select().from(menu).where(project ? eq(menu.project, project) : undefined).orderBy(asc(menu.order))
 
@@ -98,6 +140,18 @@ routes.push({
       }
     }
 
+    // 辅助函数：根据权限过滤菜单
+    const filterByPermission = (menus: any[]): any[] => {
+      if (menuPermission) {
+        // 已登录且有角色：按角色的 menuIds 过滤（空数组表示全部权限）
+        if (menuPermission.menuIds.length === 0) return menus
+        return menus.filter(m => menuPermission.menuIds.includes(m.id))
+      }
+      // 未登录或无角色：只显示 default 角色的公开菜单
+      if (publicMenuIds.length === 0) return menus
+      return menus.filter(m => publicMenuIds.includes(m.id))
+    }
+
     // 获取顶级菜单（parentId 为 null 或空字符串）
     if (root === 'true') {
       try {
@@ -113,7 +167,8 @@ routes.push({
           const childCount = await db.select().from(menu).where(eq(menu.parentId, m.id)).limit(1).then(r => r.length)
           return { ...m, isLeaf: childCount === 0 }
         }))
-        return Response.json(success(result))
+        // 根据权限过滤
+        return Response.json(success(filterByPermission(result)))
       } catch (err: any) {
         console.error(err)
         return Response.json(error('查询失败: ' + err.message), { status: 500 })

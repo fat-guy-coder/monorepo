@@ -4,7 +4,7 @@
       <slot name="title">
         <h1 class="page-title">{{ title }}</h1>
       </slot>
-      <slot name="subtitle">
+      <slot name="subtitle" v-if="subtitle">
         <p class="page-subtitle">{{ subtitle }}</p>
       </slot>
       <slot name="note">
@@ -18,9 +18,9 @@
 <script setup lang="ts" vapor>
 import { computed, type CSSProperties } from 'vue';
 
-const { title = '核心技能模板页', subtitle = '以主题变量驱动的卡片式信息布局', description = '建议：本模板用于承载知识点/功能模块的分区展示。通过主题变量实现深浅/冷暖主题的无缝切换；布局优先采用栅格，在移动端保持优秀可读性与触达性。', css = {} } = defineProps<{
+const { title = '核心技能模板页', subtitle, description, css = {} } = defineProps<{
   title: string;
-  subtitle: string;
+  subtitle?: string;
   description?: string;
   css?: CSSProperties;
 }>();

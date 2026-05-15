@@ -59,6 +59,7 @@ const {
   loading = false,
   footerAlign = 'right',
   css = {},
+  width,
 } = defineProps<{
   title?: string;
   confirmText?: string | VNode;
@@ -72,6 +73,7 @@ const {
   loading?: boolean;
   footerAlign?: 'left' | 'center' | 'right';
   css?: Record<string, string>;
+  width?: string;
 }>();
 
 const emit = defineEmits<{
@@ -81,7 +83,11 @@ const emit = defineEmits<{
 }>();
 
 const componentStyle = computed(() => {
-  return { ...css } as CSSProperties;
+  const style = { ...css } as CSSProperties;
+  if (width) {
+    style.width = width;
+  }
+  return style;
 });
 
 // --- Computed props for VNode buttons ---

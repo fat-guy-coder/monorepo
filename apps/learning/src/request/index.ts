@@ -399,16 +399,43 @@ const service = new FetchClient({
   timeout: 6000000,
 });
 
+// Import token utilities
+import {
+  getAccessToken,
+  getRefreshToken,
+  saveTokens,
+  clearTokens,
+  isRefreshTokenValid,
+  tokenManager,
+} from '@/utils/token'
+import { postApiUserRefresh } from '@/api/user'
+
+// 是否正在刷新 token，避免并发刷新
+let isRefreshing = false
+// 等待刷新完成的请求队列
+let refreshSubscribers: Array<(token: string) => void> = []
+
+// 添加到订阅队列
+function subscribeTokenRefresh(callback: (token: string) => void) {
+  refreshSubscribers.push(callback)
+}
+
+// 通知所有订阅者 token 已刷新
+function notifyTokenRefresh(newToken: string) {
+  refreshSubscribers.forEach(callback => callback(newToken))
+  refreshSubscribers = []
+}
+
 // 请求拦截器：自动添加 token
 service.addRequestInterceptor((config) => {
-  const token = localStorage.getItem('token');
+  const token = getAccessToken()
   if (token) {
-    const headers = (config.headers || {}) as Record<string, string>;
-    headers['Authorization'] = `Bearer ${token}`;
-    config.headers = headers;
+    const headers = (config.headers || {}) as Record<string, string>
+    headers['Authorization'] = `Bearer ${token}`
+    config.headers = headers
   }
-  return config;
-});
+  return config
+})
 
 // 响应拦截器：处理业务逻辑
 service.addResponseInterceptor(
@@ -423,69 +450,102 @@ service.addResponseInterceptor(
   },
   // 错误拦截器
   (error: any) => {
-    console.error('Response error:', error);
-    const silent = Boolean((error as any)?.config?.silent);
+    console.error('Response error:', error)
+    const silent = Boolean((error as any)?.config?.silent)
 
-    // 处理 401 未授权错误
+    // 处理 401 未授权错误 - 尝试刷新 token
     if (error instanceof RequestError && error.code === 401) {
-      localStorage.removeItem('token');
+      const refreshToken = getRefreshToken()
 
-      // 防止 401 风暴/循环跳转：检查当前路由
-      try {
-        if (router.currentRoute.value.path !== '/login') {
-          router.push({
-            path: '/login',
-            query: { redirect: router.currentRoute.value.fullPath },
-          });
+      // 如果没有 refresh token，直接登出
+      if (!refreshToken || !isRefreshTokenValid()) {
+        clearTokens()
+        tokenManager.saveUserInfo({ id: '', username: '' })
+        try {
+          if (router.currentRoute.value.path !== '/login') {
+            router.push({
+              path: '/login',
+              query: { redirect: router.currentRoute.value.fullPath },
+            })
+          }
+        } catch (routerError) {
+          console.error('Router error:', routerError)
+          window.location.href = '/login'
         }
-      } catch (routerError) {
-        console.error('Router error:', routerError);
-        // 如果路由跳转失败，使用 window.location 作为后备方案
-        window.location.href = '/login';
+        if (!silent) Message.error('登录已过期，请重新登录')
+        return Promise.reject(error)
       }
 
-      if (!silent) Message.error('登录已过期，请重新登录');
-      return Promise.reject(error);
+      // 如果正在刷新，将请求加入队列等待
+      if (isRefreshing) {
+        return new Promise((resolve) => {
+          subscribeTokenRefresh((token: string) => {
+            // 重新设置 Authorization header
+            ;(error as any).config.headers['Authorization'] = `Bearer ${token}`
+            resolve(Promise.reject(error))
+          })
+        })
+      }
+
+      // 开始刷新 token
+      isRefreshing = true
+      return postApiUserRefresh({ refreshToken })
+        .then(res => {
+          if (res.data) {
+            saveTokens(res.data.accessToken, res.data.refreshToken)
+            notifyTokenRefresh(res.data.accessToken)
+            // 重新设置 Authorization header
+            ;(error as any).config.headers['Authorization'] = `Bearer ${res.data.accessToken}`
+            isRefreshing = false
+            // 重试原请求
+            return service.request((error as any).config)
+          }
+          throw error
+        })
+        .catch(() => {
+          isRefreshing = false
+          clearTokens()
+          tokenManager.saveUserInfo({ id: '', username: '' })
+          if (!silent) Message.error('登录已过期，请重新登录')
+          return Promise.reject(error)
+        })
     }
 
     // 处理 500 服务器错误
     if (error instanceof RequestError && error.code === 500) {
-      if (!silent) Message.error('服务器内部错误，请稍后再试');
-      return Promise.reject(error);
+      if (!silent) Message.error('服务器内部错误，请稍后再试')
+      return Promise.reject(error)
     }
 
-    // 处理 504 网关超时：不弹出提示，交给调用方/上层逻辑处理
+    // 处理 504 网关超时
     if (error instanceof RequestError && error.code === 504) {
-      return Promise.reject(error);
+      return Promise.reject(error)
     }
 
-    // 处理 code === -1 的业务错误：给出提示（避免上层出现未处理异常时“静默”）
-    // 仍然保持 reject，让调用方可以继续按需捕获/中断流程
+    // 处理 code === -1 的业务错误
     if (error instanceof RequestError && error.code === -1) {
-      if (!silent) Message.error(error.message || '操作失败');
-      return Promise.reject(error);
+      if (!silent) Message.error(error.message || '操作失败')
+      return Promise.reject(error)
     }
 
-    // 处理超时错误（code === -2）：不弹出提示，让调用方自行处理
+    // 处理超时错误（code === -2）
     if (error instanceof RequestError && error.code === -2) {
-      return Promise.reject(error);
+      return Promise.reject(error)
     }
 
     // 处理其他错误
-    let message = 'Network error';
+    let message = 'Network error'
     if (error instanceof RequestError) {
-      message = error.message;
+      message = error.message
     } else if (error instanceof Error) {
-      message = error.message;
+      message = error.message
     }
 
-    // 业务错误（code !== 0 && code !== 200）已经在响应拦截器中处理并显示消息
-    // 这里只处理网络错误和 HTTP 错误
     if (!(error instanceof RequestError && error.code > 0 && error.code < 500)) {
-      if (!silent) Message.error(message);
+      if (!silent) Message.error(message)
     }
 
-    return Promise.reject(error);
+    return Promise.reject(error)
   }
 );
 

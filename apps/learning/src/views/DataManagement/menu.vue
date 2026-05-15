@@ -67,6 +67,7 @@
 import { ref, reactive, onMounted, computed } from 'vue'
 import { Tree, Select, Input, InputNumber, Button, Modal, Spin, message, confirm } from 'components'
 import type { TreeNode } from 'components'
+import { useRouter } from 'vue-router'
 import {
   getApiMenus,
   postApiMenus,
@@ -76,6 +77,19 @@ import {
   type PostApiMenusRequest,
   type PutApiMenusIdRequest,
 } from '@/api/menu'
+import { getUserInfo } from '@/utils/token'
+
+const router = useRouter()
+
+
+onMounted(() => {
+  const info = getUserInfo()
+  if (!info?.id) {
+    message.warning('请先登录')
+    router.push('/')
+    return
+  }
+})
 
 
 const loading = ref(false)
