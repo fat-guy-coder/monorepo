@@ -1,3 +1,6 @@
+# from dataclasses import dataclass
+
+
 class Cat:
     """示例"""
 
@@ -13,4 +16,37 @@ class Cat:
 
 orange = Cat(10, "male")
 
-print([x**2 for x in range(5)])
+
+class MyCat(Cat):
+    """我的小猫"""
+
+    def __init__(self, age, gender):
+        super().__init__(age, gender)
+
+    def bark(self):
+        return f"{super().bark()},she is my favorbrite pet"
+
+
+huahua = MyCat(2, "female")
+
+print(huahua.bark())
+
+
+# @dataclass
+# class MyDog:
+#     name: str = "aaa"
+#     age: int
+#     finger: float
+#     gender: str
+
+#     def __init__(self, age, finger, gender):
+#         self.age = age
+#         self.finger = finger
+#         self.gender = gender
+
+#     @classmethod
+#     def hi(cls, skin):
+#         cls.skin = skin
+
+
+# print(MyDog(10, 3.2, "female"))
