@@ -118,7 +118,9 @@ routes.push({
         return Response.json(error('未授权，请先登录', 401), { status: 401 })
       }
       try {
-        let allMenus = await db.select().from(menu).where(project ? eq(menu.project, project) : undefined).orderBy(asc(menu.order))
+        let allMenus = await db.select().from(menu).where(
+          project && project !== '' ? eq(menu.project, project) : undefined
+        ).orderBy(asc(menu.order))
 
         let result = buildMenuTree(allMenus)
         // 标记 isLeaf
@@ -157,7 +159,7 @@ routes.push({
       try {
         const menus = await db.select().from(menu).where(
           and(
-            project ? eq(menu.project, project) : undefined,
+            project && project !== '' ? eq(menu.project, project) : undefined,
             or(isNull(menu.parentId), eq(menu.parentId, ''))
           )
         ).orderBy(asc(menu.order))
