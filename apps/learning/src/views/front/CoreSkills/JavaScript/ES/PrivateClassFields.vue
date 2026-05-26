@@ -1,936 +1,740 @@
 <template>
-  <div class="private-fields-container">
-    <!-- 页面标题 -->
-    <header class="page-header">
-      <h1 class="main-title">🔒 Class 私有字段介绍</h1>
-      <p class="subtitle">ES2022 私有类成员与封装机制</p>
+  <div class="private-container">
+    <!-- 头部标题区 -->
+    <header class="private-header">
+      <div class="header-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <rect x="3" y="11" width="18" height="11" rx="2" />
+          <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+          <circle cx="12" cy="16" r="1.2" fill="currentColor" stroke="none" />
+        </svg>
+      </div>
+      <div class="header-text">
+        <h1 class="title">类私有属性</h1>
+        <p class="subtitle">ES2022 Class Private Fields — 真正的硬封装</p>
+      </div>
     </header>
 
-    <!-- 内容主体 -->
-    <main class="content-main">
-      <!-- 概念介绍 -->
-      <section class="concept-section">
-        <div class="section-header">
-          <h2>📖 概念介绍</h2>
-          <div class="title-decoration"></div>
-        </div>
+    <!-- 简介卡片 -->
+    <section class="card intro-card">
+      <h2 class="card-title">
+        <span class="card-title-icon">🔒</span>
+        什么是类私有属性？
+      </h2>
+      <p class="card-desc">
+        类私有属性（Class Private Fields）是 ES2022 引入的<strong>运行时强私有</strong>成员。
+        通过在属性或方法名前添加 <code class="inline-code">#</code> 前缀，就能将其限制在<strong>类体内部</strong>访问，外部完全无法触及。
+      </p>
+      <div class="highlight-box">
+        <span class="highlight-label">核心优势</span>
+        与 TypeScript 的 <code class="inline-code">private</code> 关键字不同，<code class="inline-code">#</code>
+        提供的是<strong>真正的运行时隔离</strong>，编译后依然无法从外部突破，安全性更高。
+      </div>
+    </section>
 
-        <div class="concept-content">
-          <p class="concept-text">
-            私有类字段是 ES2022 引入的新特性，使用 <code>#</code> 符号来声明私有成员。
-            私有字段提供了真正的封装性，确保这些成员无法在类外部被访问或修改。
-          </p>
+    <!-- 语法卡片 -->
+    <section class="card syntax-card">
+      <h2 class="card-title">
+        <span class="card-title-icon">✏️</span>
+        基本语法
+      </h2>
+      <div class="code-block">
+        <pre><code><span class="token-comment">// 声明私有属性</span>
+<span class="token-keyword">class</span> <span class="token-class">User</span> {
+  <span class="token-private">#name</span>;          <span class="token-comment">// 私有实例属性</span>
+  <span class="token-keyword">static</span> <span class="token-private">#count</span> = 0; <span class="token-comment">// 静态私有属性</span>
 
-          <div class="concept-grid">
-            <div class="concept-card">
-              <div class="concept-icon">🔒</div>
-              <h3>真正的私有性</h3>
-              <p>使用 # 声明的字段在运行时真正私有，无法通过反射或其他方式访问</p>
-            </div>
-            <div class="concept-card">
-              <div class="concept-icon">⚡</div>
-              <h3>性能优化</h3>
-              <p>私有字段在引擎层面得到优化，访问性能更好</p>
-            </div>
-            <div class="concept-card">
-              <div class="concept-icon">🛡️</div>
-              <h3>类型安全</h3>
-              <p>TypeScript 提供完整的类型检查和智能提示</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- 基本语法 -->
-      <section class="syntax-section">
-        <div class="section-header">
-          <h2>🔧 基本语法</h2>
-          <div class="title-decoration"></div>
-        </div>
-
-        <div class="syntax-grid">
-          <div class="syntax-card">
-            <h3>私有字段声明</h3>
-            <pre><code>class User {
-  #id: number;
-  #name: string;
-  #email: string;
-
-  constructor(id: number, name: string, email: string) {
-    this.#id = id;
-    this.#name = name;
-    this.#email = email;
+  <span class="token-keyword">constructor</span>(<span class="token-param">name</span>) {
+    <span class="token-keyword">this</span>.<span class="token-private">#name</span> = name;
+    <span class="token-keyword">User</span>.<span class="token-private">#count</span>++;
   }
 
-  getInfo() {
-    return {
-      id: this.#id,
-      name: this.#name,
-      email: this.#email
-    };
-  }
-}</code></pre>
-          </div>
-
-          <div class="syntax-card">
-            <h3>私有方法</h3>
-            <pre><code>class BankAccount {
-  #balance: number = 0;
-
-  #validateAmount(amount: number): boolean {
-    return amount > 0 && Number.isFinite(amount);
+  <span class="token-comment">// 私有方法</span>
+  <span class="token-private">#format</span>() {
+    <span class="token-keyword">return</span> <span class="token-string">`[User: </span><span class="token-interpolation">${this.#name}</span><span class="token-string">]`</span>;
   }
 
-  #updateBalance(amount: number) {
-    if (this.#validateAmount(amount)) {
-      this.#balance += amount;
-    }
+  <span class="token-comment">// 通过公共方法暴露私有数据</span>
+  <span class="token-method">getInfo</span>() {
+    <span class="token-keyword">return</span> <span class="token-keyword">this</span>.<span class="token-private">#format</span>();
   }
-
-  deposit(amount: number) {
-    this.#updateBalance(amount);
-  }
-
-  getBalance(): number {
-    return this.#balance;
-  }
-}</code></pre>
-          </div>
-
-          <div class="syntax-card">
-            <h3>静态私有字段</h3>
-            <pre><code>class Config {
-  static #apiKey: string;
-  static #baseUrl: string;
-
-  static {
-    this.#apiKey = process.env.API_KEY || '';
-    this.#baseUrl = process.env.BASE_URL || 'https://api.example.com';
-  }
-
-  static getApiKey(): string {
-    return this.#apiKey;
-  }
-
-  static getBaseUrl(): string {
-    return this.#baseUrl;
-  }
-}</code></pre>
-          </div>
-        </div>
-      </section>
-
-      <!-- 实现场景 -->
-      <section class="scenarios-section">
-        <div class="section-header">
-          <h2>💡 实现场景</h2>
-          <div class="title-decoration"></div>
-        </div>
-
-        <div class="scenarios-grid">
-          <div class="scenario-card">
-            <div class="scenario-header">
-              <h3>🛒 购物车管理</h3>
-              <span class="scenario-tag">状态封装</span>
-            </div>
-            <pre><code>class ShoppingCart {
-  #items: CartItem[] = [];
-  #total: number = 0;
-
-  #calculateTotal() {
-    this.#total = this.#items.reduce(
-      (sum, item) => sum + item.price * item.quantity,
-      0
-    );
-  }
-
-  addItem(item: CartItem) {
-    this.#items.push(item);
-    this.#calculateTotal();
-  }
-
-  removeItem(itemId: string) {
-    this.#items = this.#items.filter(item => item.id !== itemId);
-    this.#calculateTotal();
-  }
-
-  getTotal(): number {
-    return this.#total;
-  }
-
-  getItems(): CartItem[] {
-    return [...this.#items]; // 返回副本
-  }
-}</code></pre>
-          </div>
-
-          <div class="scenario-card">
-            <div class="scenario-header">
-              <h3>🔐 认证服务</h3>
-              <span class="scenario-tag">安全封装</span>
-            </div>
-            <pre><code>class AuthService {
-  #tokens: Map&lt;string, TokenInfo&gt; = new Map();
-  #refreshToken: string | null = null;
-
-  #validateToken(token: string): boolean {
-    try {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET!);
-      return decoded.exp > Date.now() / 1000;
-    } catch {
-      return false;
-    }
-  }
-
-  #generateToken(userId: string): string {
-    return jwt.sign({ userId }, process.env.JWT_SECRET!, {
-      expiresIn: '1h'
-    });
-  }
-
-  login(credentials: LoginCredentials): Promise&lt;AuthResult&gt; {
-    // 登录逻辑
-    const token = this.#generateToken(credentials.userId);
-    this.#tokens.set(credentials.userId, { token, expiresAt: Date.now() + 3600000 });
-    return Promise.resolve({ token, success: true });
-  }
-
-  isAuthenticated(userId: string): boolean {
-    const tokenInfo = this.#tokens.get(userId);
-    return tokenInfo ? this.#validateToken(tokenInfo.token) : false;
-  }
-}</code></pre>
-          </div>
-
-          <div class="scenario-card">
-            <div class="scenario-header">
-              <h3>📊 缓存管理器</h3>
-              <span class="scenario-tag">性能优化</span>
-            </div>
-            <pre><code>class CacheManager {
-  #cache: Map&lt;string, CacheEntry&gt; = new Map();
-  #maxSize: number;
-  #cleanupInterval: NodeJS.Timeout;
-
-  constructor(maxSize: number = 100) {
-    this.#maxSize = maxSize;
-    this.#cleanupInterval = setInterval(() => {
-      this.#cleanup();
-    }, 60000); // 每分钟清理一次
-  }
-
-  #cleanup() {
-    const now = Date.now();
-    for (const [key, entry] of this.#cache.entries()) {
-      if (entry.expiresAt < now) {
-        this.#cache.delete(key);
-      }
-    }
-
-    // 如果缓存仍然过大，删除最旧的条目
-    if (this.#cache.size > this.#maxSize) {
-      const entries = Array.from(this.#cache.entries());
-      entries.sort((a, b) => a[1].createdAt - b[1].createdAt);
-
-      const toDelete = entries.slice(0, this.#cache.size - this.#maxSize);
-      toDelete.forEach(([key]) => this.#cache.delete(key));
-    }
-  }
-
-  set(key: string, value: any, ttl: number = 300000) {
-    this.#cache.set(key, {
-      value,
-      createdAt: Date.now(),
-      expiresAt: Date.now() + ttl
-    });
-  }
-
-  get(key: string): any | null {
-    const entry = this.#cache.get(key);
-    if (!entry || entry.expiresAt < Date.now()) {
-      this.#cache.delete(key);
-      return null;
-    }
-    return entry.value;
-  }
-}</code></pre>
-          </div>
-
-          <div class="scenario-card">
-            <div class="scenario-header">
-              <h3>🎯 状态机</h3>
-              <span class="scenario-tag">状态管理</span>
-            </div>
-            <pre><code>class StateMachine {
-  #currentState: string;
-  #transitions: Map&lt;string, string[]&gt; = new Map();
-  #stateHandlers: Map&lt;string, Function&gt; = new Map();
-
-  constructor(initialState: string) {
-    this.#currentState = initialState;
-  }
-
-  #validateTransition(from: string, to: string): boolean {
-    const allowedTransitions = this.#transitions.get(from);
-    return allowedTransitions ? allowedTransitions.includes(to) : false;
-  }
-
-  #executeStateHandler(state: string, data?: any) {
-    const handler = this.#stateHandlers.get(state);
-    if (handler) {
-      handler(data);
-    }
-  }
-
-  addTransition(from: string, to: string) {
-    if (!this.#transitions.has(from)) {
-      this.#transitions.set(from, []);
-    }
-    this.#transitions.get(from)!.push(to);
-  }
-
-  setStateHandler(state: string, handler: Function) {
-    this.#stateHandlers.set(state, handler);
-  }
-
-  transitionTo(newState: string, data?: any): boolean {
-    if (this.#validateTransition(this.#currentState, newState)) {
-      this.#currentState = newState;
-      this.#executeStateHandler(newState, data);
-      return true;
-    }
-    return false;
-  }
-
-  getCurrentState(): string {
-    return this.#currentState;
-  }
-}</code></pre>
-          </div>
-
-          <div class="scenario-card">
-            <div class="scenario-header">
-              <h3>📡 事件发射器</h3>
-              <span class="scenario-tag">事件管理</span>
-            </div>
-            <pre><code>class EventEmitter {
-  #listeners: Map&lt;string, Function[]&gt; = new Map();
-  #maxListeners: number = 10;
-
-  #validateEventName(eventName: string): boolean {
-    return typeof eventName === 'string' && eventName.length > 0;
-  }
-
-  #warnMaxListenersExceeded(eventName: string) {
-    const listeners = this.#listeners.get(eventName) || [];
-    if (listeners.length > this.#maxListeners) {
-      console.warn(`Max listeners (${this.#maxListeners}) exceeded for event: ${eventName}`);
-    }
-  }
-
-  on(eventName: string, listener: Function): this {
-    if (!this.#validateEventName(eventName)) {
-      throw new Error('Invalid event name');
-    }
-
-    if (!this.#listeners.has(eventName)) {
-      this.#listeners.set(eventName, []);
-    }
-
-    this.#listeners.get(eventName)!.push(listener);
-    this.#warnMaxListenersExceeded(eventName);
-
-    return this;
-  }
-
-  emit(eventName: string, ...args: any[]): boolean {
-    if (!this.#validateEventName(eventName)) {
-      return false;
-    }
-
-    const listeners = this.#listeners.get(eventName) || [];
-    listeners.forEach(listener => {
-      try {
-        listener(...args);
-      } catch (error) {
-        console.error(`Error in event listener for ${eventName}:`, error);
-      }
-    });
-
-    return listeners.length > 0;
-  }
-
-  removeListener(eventName: string, listener: Function): this {
-    const listeners = this.#listeners.get(eventName);
-    if (listeners) {
-      const index = listeners.indexOf(listener);
-      if (index > -1) {
-        listeners.splice(index, 1);
-      }
-    }
-    return this;
-  }
-}</code></pre>
-          </div>
-
-          <div class="scenario-card">
-            <div class="scenario-header">
-              <h3>🔄 单例模式</h3>
-              <span class="scenario-tag">设计模式</span>
-            </div>
-            <pre><code>class DatabaseConnection {
-  static #instance: DatabaseConnection | null = null;
-  #connection: any = null;
-  #isConnected: boolean = false;
-
-  private constructor() {
-    // 私有构造函数
-  }
-
-  static getInstance(): DatabaseConnection {
-    if (!DatabaseConnection.#instance) {
-      DatabaseConnection.#instance = new DatabaseConnection();
-    }
-    return DatabaseConnection.#instance;
-  }
-
-  async #establishConnection(): Promise&lt;void&gt; {
-    try {
-      this.#connection = await createConnection({
-        host: process.env.DB_HOST,
-        port: parseInt(process.env.DB_PORT!),
-        username: process.env.DB_USER,
-        password: process.env.DB_PASSWORD,
-        database: process.env.DB_NAME
-      });
-      this.#isConnected = true;
-    } catch (error) {
-      this.#isConnected = false;
-      throw error;
-    }
-  }
-
-  async connect(): Promise&lt;void&gt; {
-    if (!this.#isConnected) {
-      await this.#establishConnection();
-    }
-  }
-
-  async query(sql: string, params?: any[]): Promise&lt;any&gt; {
-    if (!this.#isConnected) {
-      throw new Error('Database not connected');
-    }
-    return this.#connection.query(sql, params);
-  }
-
-  async disconnect(): Promise&lt;void&gt; {
-    if (this.#connection) {
-      await this.#connection.end();
-      this.#connection = null;
-      this.#isConnected = false;
-    }
-  }
-}</code></pre>
-          </div>
-        </div>
-      </section>
-
-      <!-- 注意事项 -->
-      <section class="considerations-section">
-        <div class="section-header">
-          <h2>⚠️ 注意事项</h2>
-          <div class="title-decoration"></div>
-        </div>
-
-        <div class="considerations-grid">
-          <div class="consideration-card">
-            <h3>🔧 TypeScript 配置</h3>
-            <p>确保 TypeScript 配置支持私有字段</p>
-            <pre><code>// tsconfig.json
-{
-  "compilerOptions": {
-    "target": "ES2022",
-    "useDefineForClassFields": true,
-    "strict": true
-  }
-}</code></pre>
-          </div>
-
-          <div class="consideration-card">
-            <h3>🚫 访问限制</h3>
-            <p>私有字段无法在类外部访问</p>
-            <pre><code>class Example {
-  #privateField = 'secret';
 }
 
-const example = new Example();
-console.log(example['#privateField']); // undefined
-console.log(example.#privateField);    // 语法错误</code></pre>
-          </div>
+<span class="token-keyword">const</span> u = <span class="token-keyword">new</span> <span class="token-class">User</span>(<span class="token-string">'Alice'</span>);
+<span class="token-comment">// u.#name;   ❌ 语法错误</span>
+<span class="token-comment">// u.#format(); ❌ 外部不可见</span>
+console.<span class="token-method">log</span>(u.<span class="token-method">getInfo</span>()); <span class="token-comment">// ✅ [User: Alice]</span></code></pre>
+      </div>
+      <p class="card-note">
+        <code class="inline-code">#</code>
+        是名称的一部分，因此无法通过<strong>方括号动态访问</strong>或<strong>在子类中覆盖</strong>，每个类都有自己独立的私有作用域。
+      </p>
+    </section>
 
-          <div class="consideration-card">
-            <h3>🧬 继承限制</h3>
-            <p>子类无法访问父类的私有字段</p>
-            <pre><code>class Parent {
-  #parentPrivate = 'parent secret';
-}
-
-class Child extends Parent {
-  #childPrivate = 'child secret';
-
-  showInfo() {
-    // console.log(this.#parentPrivate); // 错误
-    console.log(this.#childPrivate);     // 正确
-  }
-}</code></pre>
-          </div>
-
-          <div class="consideration-card">
-            <h3>🔄 序列化限制</h3>
-            <p>私有字段不会被 JSON.stringify 序列化</p>
-            <pre><code>class User {
-  #password = 'secret123';
-  public name = 'John';
-
-  toJSON() {
-    return {
-      name: this.name
-      // #password 不会被包含
-    };
-  }
-}</code></pre>
-          </div>
+    <!-- 核心特性卡片 -->
+    <section class="card features-card">
+      <h2 class="card-title">
+        <span class="card-title-icon">⚙️</span>
+        支持的成员类型
+      </h2>
+      <div class="features-grid">
+        <div class="feature-item">
+          <div class="feature-badge badge-field">字段</div>
+          <code class="feature-name">#instanceField</code>
+          <p class="feature-desc">实例私有属性，必须在类体顶部声明，或通过赋值自动声明（strict 模式推荐显式声明）。</p>
         </div>
-      </section>
-
-      <!-- 最佳实践 -->
-      <section class="best-practices-section">
-        <div class="section-header">
-          <h2>✅ 最佳实践</h2>
-          <div class="title-decoration"></div>
+        <div class="feature-item">
+          <div class="feature-badge badge-static">静态</div>
+          <code class="feature-name">static #field</code>
+          <p class="feature-desc">静态私有属性，属于类本身，在类的外部同样完全不可访问。</p>
         </div>
-
-        <div class="practices-grid">
-          <div class="practice-card">
-            <div class="practice-icon">🎯</div>
-            <h3>明确封装意图</h3>
-            <p>使用私有字段明确表达哪些成员不应该被外部访问</p>
-          </div>
-
-          <div class="practice-card">
-            <div class="practice-icon">🔧</div>
-            <h3>提供公共接口</h3>
-            <p>通过公共方法提供对私有字段的安全访问</p>
-          </div>
-
-          <div class="practice-card">
-            <div class="practice-icon">🛡️</div>
-            <h3>数据验证</h3>
-            <p>在设置私有字段之前进行数据验证</p>
-          </div>
-
-          <div class="practice-card">
-            <div class="practice-icon">📝</div>
-            <h3>文档化设计</h3>
-            <p>在代码注释中说明私有字段的用途和约束</p>
-          </div>
-
-          <div class="practice-card">
-            <div class="practice-icon">🧪</div>
-            <h3>单元测试</h3>
-            <p>通过公共接口测试私有字段的行为</p>
-          </div>
-
-          <div class="practice-card">
-            <div class="practice-icon">⚡</div>
-            <h3>性能考虑</h3>
-            <p>私有字段访问性能更好，适合频繁访问的数据</p>
-          </div>
+        <div class="feature-item">
+          <div class="feature-badge badge-method">方法</div>
+          <code class="feature-name">#method() {}</code>
+          <p class="feature-desc">私有方法，只能在类内部被调用，外部和子类均无法获取或覆盖。</p>
         </div>
-      </section>
-    </main>
+        <div class="feature-item">
+          <div class="feature-badge badge-accessor">存取器</div>
+          <code class="feature-name">get #prop() {}</code>
+          <p class="feature-desc">私有 getter/setter，提供对私有数据的内部控制逻辑，但入口依然是私有的。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 使用场景卡片 -->
+    <section class="card usage-card">
+      <h2 class="card-title">
+        <span class="card-title-icon">💼</span>
+        典型使用场景
+      </h2>
+      <ul class="usage-list">
+        <li class="usage-item">
+          <span class="usage-marker"></span>
+          <div>
+            <strong>封装内部状态</strong>
+            <p>将敏感数据（如密码哈希、内部计数器）彻底隐藏，仅通过受控方法暴露必要的操作。</p>
+          </div>
+        </li>
+        <li class="usage-item">
+          <span class="usage-marker"></span>
+          <div>
+            <strong>避免属性名冲突</strong>
+            <p><code class="inline-code">#</code> 字段不会与子类或混入（Mixin）中的同名公共属性冲突，每个类的私有空间完全独立。</p>
+          </div>
+        </li>
+        <li class="usage-item">
+          <span class="usage-marker"></span>
+          <div>
+            <strong>实现高安全性的框架 API</strong>
+            <p>框架或库的核心模块可将实现细节标记为私有，防止用户意外依赖内部 API，保证未来重构自由。</p>
+          </div>
+        </li>
+        <li class="usage-item">
+          <span class="usage-marker"></span>
+          <div>
+            <strong>替代 WeakMap 方案</strong>
+            <p>过去为了模拟私有属性，常使用 WeakMap + 闭包，语法繁琐且有性能开销；<code class="inline-code">#</code> 提供了原生且更高效的选择。</p>
+          </div>
+        </li>
+      </ul>
+    </section>
+
+    <!-- 代码示例卡片（带标签切换） -->
+    <section class="card example-card">
+      <h2 class="card-title">
+        <span class="card-title-icon">🧪</span>
+        进阶代码示例
+      </h2>
+      <div class="example-tabs">
+        <div v-for="tab in examples" :key="tab.label" class="example-tab"
+          :class="{ active: activeExample === tab.label }" @click="activeExample = tab.label">
+          {{ tab.label }}
+        </div>
+      </div>
+      <div class="code-block large-code">
+        <pre><code>{{ currentExample.code }}</code></pre>
+      </div>
+    </section>
+
+    <!-- 注意事项卡片 -->
+    <footer class="card warning-card">
+      <h2 class="card-title">
+        <span class="card-title-icon">⚠️</span>
+        注意事项与 TS 对比
+      </h2>
+      <div class="warning-list">
+        <div class="warning-item">
+          <span class="warning-dot"></span>
+          <span>TypeScript 的 <code class="inline-code">private</code> 仅在编译期检查，运行时依然可被访问；<code
+              class="inline-code">#</code> 是 <strong>运行时的强私有</strong>。</span>
+        </div>
+        <div class="warning-item">
+          <span class="warning-dot"></span>
+          <span>不能通过 <code class="inline-code">this['#name']</code> 或 <code class="inline-code">Proxy</code>
+            捕获私有字段，引擎会抛出 <strong>TypeError</strong>。</span>
+        </div>
+        <div class="warning-item">
+          <span class="warning-dot"></span>
+          <span>私有字段无法在子类中直接访问，除非父类提供了暴露它们的内部方法。</span>
+        </div>
+        <div class="warning-item">
+          <span class="warning-dot"></span>
+          <span>目前 <code class="inline-code">#</code> 私有字段无法与 <code class="inline-code">JSON.stringify</code> 或 <code
+              class="inline-code">Object.keys</code> 等序列化方法配合，需手动处理。</span>
+        </div>
+      </div>
+    </footer>
   </div>
 </template>
 
-<script lang="ts" setup>
-// 组件逻辑可以在这里添加
+<script setup lang="ts">
+import { ref, computed } from 'vue'
+
+// 当前选中的代码示例标签
+const activeExample = ref<string>('计数器')
+
+// 代码示例数据
+interface ExampleItem {
+  label: string
+  code: string
+}
+
+const examples: ExampleItem[] = [
+  {
+    label: '计数器',
+    code: `// 🔢 安全的计数器 —— 内部计数不可篡改
+class Counter {
+  #value = 0;
+
+  increment() {
+    return ++this.#value;
+  }
+
+  decrement() {
+    if (this.#value <= 0) return 0;
+    return --this.#value;
+  }
+
+  get current() {
+    return this.#value;
+  }
+}
+
+const counter = new Counter();
+counter.increment();
+counter.increment();
+console.log(counter.current); // 2
+// counter.#value = 100; // ❌ SyntaxError`
+  },
+  {
+    label: '请求封装',
+    code: `// 🌐 API 请求封装 —— 隐藏 token 与内部校验逻辑
+class ApiClient {
+  #token = '';
+
+  constructor(token: string) {
+    this.#token = token;
+  }
+
+  #validateResponse(response: Response) {
+    if (!response.ok) {
+      throw new Error(\`请求失败: \${response.status}\`);
+    }
+    return response.json();
+  }
+
+  async fetchUser(id: string) {
+    const res = await fetch(\`/api/users/\${id}\`, {
+      headers: { Authorization: \`Bearer \${this.#token}\` }
+    });
+    return this.#validateResponse(res);
+  }
+}
+
+// 外部只能调用 fetchUser，无法访问 #token 和 #validateResponse`
+  },
+  {
+    label: '静态工厂',
+    code: `// 🏭 静态工厂 + 私有构造函数技巧
+class Database {
+  static #instance: Database | null = null;
+  #connected = false;
+
+  // 公共静态方法创建单例
+  static connect(uri: string) {
+    if (!Database.#instance) {
+      const db = new Database();
+      db.#connectInternal(uri);
+      Database.#instance = db;
+    }
+    return Database.#instance;
+  }
+
+  #connectInternal(uri: string) {
+    // 模拟连接逻辑
+    this.#connected = true;
+    console.log(\`已连接到 \${uri}\`);
+  }
+
+  get status() {
+    return this.#connected ? '已连接' : '未连接';
+  }
+}
+
+const db = Database.connect('mongodb://localhost');
+console.log(db.status); // 已连接
+// Database.#instance; // ❌ 不可访问`
+  },
+  {
+    label: 'Mixin 安全',
+    code: `// 🧬 使用私有字段避免 Mixin 冲突
+const TimestampMixin = (Base: any) => class extends Base {
+  #createdAt = Date.now();
+
+  getCreatedAt() {
+    return this.#createdAt;
+  }
+};
+
+const LogMixin = (Base: any) => class extends Base {
+  #logLevel = 'info';
+
+  log(message: string) {
+    if (this.#logLevel === 'debug') {
+      console.debug(message);
+    }
+  }
+};
+
+class MyService extends LogMixin(TimestampMixin(Object)) {}
+
+const s = new MyService();
+s.log('服务启动');
+console.log(s.getCreatedAt());
+// 两个 Mixin 的 #createdAt 和 #logLevel 完全隔离，互不干扰`
+  }
+]
+
+// 当前展示的示例
+const currentExample = computed<ExampleItem>(() => {
+  return examples.find((e) => e.label === activeExample.value) ?? examples[0]
+})
 </script>
 
 <style lang="less" scoped>
-// 变量定义
-@primary-color: #2c3e50;
-@secondary-color: #3498db;
-@accent-color: #e74c3c;
-@success-color: #27ae60;
-@warning-color: #f39c12;
-@light-bg: #f8f9fa;
-@border-color: #e9ecef;
-@text-color: #495057;
-@code-bg: #f1f3f4;
+// ========== 变量定义 ==========
+@bg-primary: #fafbfc;
+@bg-card: #ffffff;
+@text-primary: #1a1a2e;
+@text-secondary: #5a6070;
+@text-muted: #8b919e;
+@accent: #e55c5c;
+@accent-light: #fdf2f2;
+@accent-glow: rgba(229, 92, 92, 0.08);
+@border: #e8ecf1;
+@border-light: #f0f2f5;
+@shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.03);
+@shadow-md: 0 4px 16px rgba(0, 0, 0, 0.05), 0 2px 6px rgba(0, 0, 0, 0.03);
+@radius-lg: 16px;
+@radius-md: 12px;
+@radius-sm: 8px;
+@transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 
-.private-fields-container {
-  max-width: 1400px;
+// ========== 全局容器 ==========
+.private-container {
+  max-width: 820px;
   margin: 0 auto;
-  padding: 2rem;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  line-height: 1.6;
-  color: @text-color;
-  background: white;
-}
-
-// 页面标题
-.page-header {
-  text-align: center;
-  margin-bottom: 3rem;
-  padding: 2rem 0;
-  background: linear-gradient(135deg, @light-bg 0%, #ffffff 100%);
-  border-radius: 12px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-
-  .main-title {
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: @primary-color;
-    margin-bottom: 0.5rem;
-    letter-spacing: -0.5px;
-  }
-
-  .subtitle {
-    font-size: 1.1rem;
-    color: #6c757d;
-    font-weight: 400;
-  }
-}
-
-// 内容主体
-.content-main {
-  display: flex;
-  flex-direction: column;
-  gap: 3rem;
-}
-
-// 章节通用样式
-.section-header {
-  margin-bottom: 2rem;
-  text-align: center;
-
-  h2 {
-    font-size: 2rem;
-    font-weight: 600;
-    color: @primary-color;
-    margin-bottom: 0.5rem;
-  }
-
-  .title-decoration {
-    width: 60px;
-    height: 3px;
-    background: linear-gradient(90deg, @secondary-color, @accent-color);
-    margin: 0 auto;
-    border-radius: 2px;
-  }
-}
-
-// 概念部分
-.concept-section {
-  background: white;
-  border-radius: 12px;
-  padding: 2rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  border: 1px solid @border-color;
-}
-
-.concept-text {
-  font-size: 1.1rem;
+  padding: 40px 24px 60px;
+  font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', -apple-system, sans-serif;
+  color: @text-primary;
   line-height: 1.7;
-  color: @text-color;
-  margin-bottom: 2rem;
-  text-align: center;
-  max-width: 800px;
-  margin-left: auto;
-  margin-right: auto;
+  background: @bg-primary;
+  min-height: 100vh;
+}
+
+// ========== 头部 ==========
+.private-header {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 36px;
+  padding: 28px 32px;
+  background: @bg-card;
+  border-radius: @radius-lg;
+  box-shadow: @shadow-md;
+  border: 1px solid @border-light;
+
+  .header-icon {
+    width: 52px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: @accent-light;
+    border-radius: @radius-md;
+    color: @accent;
+    flex-shrink: 0;
+
+    svg {
+      width: 28px;
+      height: 28px;
+    }
+  }
+
+  .header-text {
+    .title {
+      font-size: 2rem;
+      font-weight: 700;
+      margin: 0;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, @accent 0%, #d44f4f 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .subtitle {
+      margin: 4px 0 0;
+      font-size: 0.95rem;
+      color: @text-secondary;
+      font-weight: 400;
+    }
+  }
+}
+
+// ========== 卡片通用 ==========
+.card {
+  background: @bg-card;
+  border-radius: @radius-lg;
+  padding: 28px 30px;
+  margin-bottom: 20px;
+  box-shadow: @shadow-sm;
+  border: 1px solid @border-light;
+  transition: box-shadow @transition;
+
+  &:hover {
+    box-shadow: @shadow-md;
+  }
+}
+
+.card-title {
+  font-size: 1.15rem;
+  font-weight: 650;
+  margin: 0 0 16px;
+  color: @text-primary;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  .card-title-icon {
+    font-size: 1.3rem;
+    line-height: 1;
+  }
+}
+
+.card-desc {
+  margin: 0 0 14px;
+  color: @text-secondary;
+  font-size: 0.95rem;
+}
+
+.card-note {
+  margin: 12px 0 0;
+  font-size: 0.88rem;
+  color: @text-muted;
+}
+
+// ========== 行内代码 ==========
+.inline-code {
+  background: #f4f5f8;
+  color: #c64b4b;
+  padding: 2px 8px;
+  border-radius: 5px;
+  font-size: 0.9em;
+  font-weight: 500;
+  font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', 'Cascadia Code', monospace;
+}
+
+// ========== 高亮提示框 ==========
+.highlight-box {
+  background: @accent-light;
+  border-left: 3px solid @accent;
+  padding: 12px 16px;
+  border-radius: @radius-sm;
+  font-size: 0.9rem;
+  color: @text-primary;
+  line-height: 1.6;
+
+  .highlight-label {
+    display: inline-block;
+    background: @accent;
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 2px 10px;
+    border-radius: 20px;
+    margin-right: 8px;
+    vertical-align: middle;
+  }
+}
+
+// ========== 代码块 ==========
+.code-block {
+  background: #1e1e2e;
+  border-radius: @radius-md;
+  padding: 18px 20px;
+  overflow-x: auto;
+  font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', monospace;
+  font-size: 0.88rem;
+  line-height: 1.75;
+
+  pre {
+    margin: 0;
+  }
 
   code {
-    background: @code-bg;
-    padding: 0.2rem 0.4rem;
-    border-radius: 4px;
-    font-family: 'Fira Code', monospace;
-    color: @accent-color;
+    color: #cdd6f4;
+  }
+
+  .token-comment {
+    color: #6c7086;
+  }
+
+  .token-keyword {
+    color: #cba6f7;
+  }
+
+  .token-class {
+    color: #f9e2af;
+  }
+
+  .token-private {
+    color: #f38ba8;
+    font-weight: 600;
+  }
+
+  .token-method {
+    color: #a6e3a1;
+  }
+
+  .token-string {
+    color: #a6e3a1;
+  }
+
+  .token-interpolation {
+    color: #fab387;
+  }
+
+  .token-param {
+    color: #fab387;
+  }
+
+  &.large-code {
+    min-height: 150px;
+    max-height: 320px;
+    overflow-y: auto;
   }
 }
 
-.concept-grid {
+// ========== 特性网格 ==========
+.features-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+  }
 }
 
-.concept-card {
-  text-align: center;
-  padding: 1.5rem;
-  background: @light-bg;
-  border-radius: 8px;
-  transition: transform 0.2s ease;
+.feature-item {
+  background: #fafbfc;
+  border-radius: @radius-md;
+  padding: 18px 20px;
+  border: 1px solid @border-light;
+  transition: border-color @transition;
 
   &:hover {
-    transform: translateY(-3px);
+    border-color: @accent;
   }
 
-  .concept-icon {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
-  }
-
-  h3 {
-    color: @primary-color;
-    margin-bottom: 0.5rem;
-    font-size: 1.2rem;
+  .feature-badge {
+    display: inline-block;
+    font-size: 0.7rem;
     font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 12px;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+
+    &.badge-field {
+      background: #eef1fe;
+      color: #4f6ef7;
+    }
+
+    &.badge-static {
+      background: #fef7e6;
+      color: #b45f06;
+    }
+
+    &.badge-method {
+      background: #e6f7e6;
+      color: #2e7d32;
+    }
+
+    &.badge-accessor {
+      background: #fce4ec;
+      color: #c62828;
+    }
+  }
+
+  .feature-name {
+    display: block;
+    font-weight: 650;
+    font-size: 0.95rem;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    color: @text-primary;
+    margin-bottom: 6px;
+  }
+
+  .feature-desc {
+    margin: 0;
+    font-size: 0.86rem;
+    color: @text-secondary;
+    line-height: 1.6;
+  }
+}
+
+// ========== 使用场景列表 ==========
+.usage-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.usage-item {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  padding: 14px 16px;
+  background: #fafbfc;
+  border-radius: @radius-sm;
+  border: 1px solid @border-light;
+  transition: border-color @transition;
+
+  &:hover {
+    border-color: @accent;
+  }
+
+  .usage-marker {
+    width: 8px;
+    height: 8px;
+    background: @accent;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 7px;
+  }
+
+  strong {
+    display: block;
+    font-size: 0.93rem;
+    color: @text-primary;
+    margin-bottom: 2px;
   }
 
   p {
-    color: #6c757d;
-    font-size: 0.9rem;
     margin: 0;
-  }
-}
-
-// 语法部分
-.syntax-section {
-  background: white;
-  border-radius: 12px;
-  padding: 2rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  border: 1px solid @border-color;
-}
-
-.syntax-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-  gap: 2rem;
-}
-
-.syntax-card {
-  background: @light-bg;
-  border-radius: 8px;
-  padding: 1.5rem;
-  border-left: 4px solid @secondary-color;
-
-  h3 {
-    color: @primary-color;
-    margin-bottom: 1rem;
-    font-size: 1.2rem;
-    font-weight: 600;
-  }
-
-  pre {
-    background: @code-bg;
-    border-radius: 6px;
-    padding: 1rem;
-    font-family: 'Fira Code', 'Monaco', 'Consolas', monospace;
     font-size: 0.85rem;
-    line-height: 1.5;
-    overflow-x: auto;
-    margin: 0;
-
-    code {
-      color: @primary-color;
-    }
+    color: @text-secondary;
   }
 }
 
-// 场景部分
-.scenarios-section {
-  background: white;
-  border-radius: 12px;
-  padding: 2rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  border: 1px solid @border-color;
+// ========== 示例标签切换 ==========
+.example-tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
 }
 
-.scenarios-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-  gap: 2rem;
-}
-
-.scenario-card {
-  background: @light-bg;
-  border-radius: 8px;
-  padding: 1.5rem;
-  border-left: 4px solid @success-color;
-  transition: transform 0.2s ease;
+.example-tab {
+  padding: 7px 16px;
+  border-radius: 20px;
+  font-size: 0.84rem;
+  font-weight: 500;
+  cursor: pointer;
+  background: #f4f5f8;
+  color: @text-secondary;
+  transition: all @transition;
+  user-select: none;
+  border: 1px solid transparent;
 
   &:hover {
-    transform: translateY(-2px);
+    background: @accent-light;
+    color: @accent;
   }
 
-  .scenario-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-
-    h3 {
-      color: @primary-color;
-      font-size: 1.2rem;
-      font-weight: 600;
-      margin: 0;
-    }
-
-    .scenario-tag {
-      background: @success-color;
-      color: white;
-      padding: 0.2rem 0.6rem;
-      border-radius: 12px;
-      font-size: 0.8rem;
-      font-weight: 500;
-    }
-  }
-
-  pre {
-    background: @code-bg;
-    border-radius: 6px;
-    padding: 1rem;
-    font-family: 'Fira Code', 'Monaco', 'Consolas', monospace;
-    font-size: 0.8rem;
-    line-height: 1.4;
-    overflow-x: auto;
-    margin: 0;
-
-    code {
-      color: @primary-color;
-    }
+  &.active {
+    background: @accent;
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(229, 92, 92, 0.3);
   }
 }
 
-// 注意事项部分
-.considerations-section {
-  background: white;
-  border-radius: 12px;
-  padding: 2rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  border: 1px solid @border-color;
+// ========== 注意事项 ==========
+.warning-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-.considerations-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  gap: 1.5rem;
-}
+.warning-item {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-size: 0.9rem;
+  color: @text-secondary;
+  line-height: 1.6;
+  padding: 10px 14px;
+  background: #fff8f0;
+  border-radius: @radius-sm;
+  border: 1px solid #f5d8a8;
 
-.consideration-card {
-  background: #fff5f5;
-  border-radius: 8px;
-  padding: 1.5rem;
-  border-left: 4px solid @warning-color;
-
-  h3 {
-    color: @primary-color;
-    margin-bottom: 0.5rem;
-    font-size: 1.1rem;
-    font-weight: 600;
-  }
-
-  p {
-    color: #6c757d;
-    margin-bottom: 1rem;
-    font-size: 0.9rem;
-  }
-
-  pre {
-    background: @code-bg;
-    border-radius: 6px;
-    padding: 1rem;
-    font-family: 'Fira Code', 'Monaco', 'Consolas', monospace;
-    font-size: 0.8rem;
-    line-height: 1.4;
-    overflow-x: auto;
-    margin: 0;
-
-    code {
-      color: @primary-color;
-    }
+  .warning-dot {
+    width: 6px;
+    height: 6px;
+    background: #d97706;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 7px;
   }
 }
 
-// 最佳实践部分
-.best-practices-section {
-  background: white;
-  border-radius: 12px;
-  padding: 2rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  border: 1px solid @border-color;
+.warning-card {
+  border-left: 3px solid #f0b040;
 }
 
-.practices-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.5rem;
+// ========== 滚动条美化 ==========
+.code-block.large-code::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
 }
 
-.practice-card {
-  text-align: center;
-  padding: 1.5rem;
-  background: @light-bg;
-  border-radius: 8px;
-  transition: transform 0.2s ease;
-
-  &:hover {
-    transform: translateY(-3px);
-  }
-
-  .practice-icon {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
-  }
-
-  h3 {
-    color: @primary-color;
-    margin-bottom: 0.5rem;
-    font-size: 1.1rem;
-    font-weight: 600;
-  }
-
-  p {
-    color: #6c757d;
-    font-size: 0.9rem;
-    margin: 0;
-  }
+.code-block.large-code::-webkit-scrollbar-track {
+  background: transparent;
 }
 
-// 响应式设计
-@media (max-width: 768px) {
-  .private-fields-container {
-    padding: 1rem;
-  }
-
-  .page-header .main-title {
-    font-size: 2rem;
-  }
-
-  .section-header h2 {
-    font-size: 1.5rem;
-  }
-
-  .syntax-grid,
-  .scenarios-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .concept-grid,
-  .considerations-grid,
-  .practices-grid {
-    grid-template-columns: 1fr;
-  }
+.code-block.large-code::-webkit-scrollbar-thumb {
+  background: #3b3b52;
+  border-radius: 10px;
 }
 
-@media (max-width: 480px) {
-  .page-header .main-title {
-    font-size: 1.5rem;
-  }
-
-  .section-header h2 {
-    font-size: 1.3rem;
-  }
+// ========== 全局 ==========
+* {
+  box-sizing: border-box;
 }
 </style>

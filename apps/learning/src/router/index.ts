@@ -3,7 +3,6 @@ import { useAutoScroll } from '@/hooks/useAutoScroll'
 import HomeView from '@/views/HomeView.vue'
 import type { VNode } from 'vue'
 import notFound from '@/views/Other/notFound.vue'
-import DragLayoutExample from '@/views/LayoutExample.vue'
 
 export type Route = {
   label: VNode | string
@@ -27,11 +26,6 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: HomeView,
-    },
-    {
-      path: '/drag-layout',
-      name: 'drag-layout',
-      component: DragLayoutExample,
     },
     {
       path: '/:pathMatch(.*)*',

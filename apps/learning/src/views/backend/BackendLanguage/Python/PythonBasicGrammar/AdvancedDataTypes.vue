@@ -31,6 +31,7 @@
               <th>有序性</th>
               <th>元素重复</th>
               <th>符号表示</th>
+              <th>方法数量</th>
             </tr>
           </thead>
           <tbody>
@@ -40,6 +41,7 @@
               <td>{{ item.ordered }}</td>
               <td>{{ item.duplicates }}</td>
               <td><code>{{ item.syntax }}</code></td>
+              <td>{{ item.methods }}</td>
             </tr>
           </tbody>
         </table>
@@ -132,14 +134,15 @@ interface OverviewItem {
   ordered: string;
   duplicates: string;
   syntax: string;
+  methods: string;
 }
 
 const overviewData: OverviewItem[] = [
-  { type: '列表 (list)', mutable: '是', ordered: '是', duplicates: '允许', syntax: '[1, 2, 3]' },
-  { type: '元组 (tuple)', mutable: '否', ordered: '是', duplicates: '允许', syntax: '(1, 2, 3)' },
-  { type: '字典 (dict)', mutable: '是', ordered: '是 (3.7+)', duplicates: '键唯一，值可重复', syntax: "{'a':1, 'b':2}" },
-  { type: '集合 (set)', mutable: '是', ordered: '否', duplicates: '不允许', syntax: '{1, 2, 3}' },
-  { type: '冻结集合 (frozenset)', mutable: '否', ordered: '否', duplicates: '不允许', syntax: 'frozenset([1,2,3])' },
+  { type: '列表 (list)', mutable: '是', ordered: '是', duplicates: '允许', syntax: '[1, 2, 3]', methods: '~47 个（含内置函数）' },
+  { type: '元组 (tuple)', mutable: '否', ordered: '是', duplicates: '允许', syntax: '(1, 2, 3)', methods: '~17 个' },
+  { type: '字典 (dict)', mutable: '是', ordered: '是 (3.7+)', duplicates: '键唯一，值可重复', syntax: "{'a':1, 'b':2}", methods: '~21 个' },
+  { type: '集合 (set)', mutable: '是', ordered: '否', duplicates: '不允许', syntax: '{1, 2, 3}', methods: '~23 个' },
+  { type: '冻结集合 (frozenset)', mutable: '否', ordered: '否', duplicates: '不允许', syntax: 'frozenset([1,2,3])', methods: '~11 个' },
 ];
 
 // 方法条目
@@ -166,21 +169,50 @@ const advancedTypes: AdvancedType[] = [
     mutable: true,
     description: '有序的可变序列，元素可重复。是最常用的容器之一，支持索引、切片与丰富的修改操作。',
     methods: [
-      { name: 'append(x)', desc: '在末尾添加元素 x' },
-      { name: 'extend(iter)', desc: '扩展列表，添加可迭代对象中的所有元素' },
-      { name: 'insert(i, x)', desc: '在索引 i 处插入元素 x' },
-      { name: 'remove(x)', desc: '删除第一个值为 x 的元素' },
-      { name: 'pop([i])', desc: '移除并返回索引 i 处的元素，默认最后一个' },
-      { name: 'index(x)', desc: '返回第一个值为 x 的索引' },
+      // ========== 查询类 ==========
+      { name: 'len(s)', desc: '返回列表长度（内置函数）' },
+      { name: 'x in s', desc: '判断元素 x 是否在列表中' },
+      { name: 'index(x)', desc: '返回第一个值为 x 的索引，不存在报 ValueError' },
       { name: 'count(x)', desc: '返回 x 在列表中出现的次数' },
-      { name: 'sort()', desc: '原地排序列表' },
+      { name: 's[i]', desc: '返回索引 i 处的元素' },
+      { name: 's[i:j]', desc: '返回切片，包含索引 i 到 j-1 的元素' },
+      // ========== 添加类 ==========
+      { name: 'append(x)', desc: '在末尾添加单个元素 x（最常用）' },
+      { name: 'extend(iter)', desc: '扩展列表，添加可迭代对象所有元素' },
+      { name: 'insert(i, x)', desc: '在索引 i 处插入元素 x' },
+      { name: 's + t', desc: '返回两个列表的拼接（生成新列表）' },
+      { name: 's * n', desc: '返回列表重复 n 次的拼接' },
+      // ========== 删除类 ==========
+      { name: 'pop([i])', desc: '移除并返回索引 i 处元素，默认最后一个（最常用）' },
+      { name: 'remove(x)', desc: '删除第一个值为 x 的元素，不存在报 ValueError' },
+      { name: 'clear()', desc: '清空列表所有元素' },
+      { name: 'del s[i]', desc: '删除索引 i 处的元素' },
+      { name: 'del s[i:j]', desc: '删除切片 s[i:j]' },
+      // ========== 修改类 ==========
+      { name: 'sort(*, key=None, reverse=False)', desc: '原地排序，可指定排序规则' },
       { name: 'reverse()', desc: '原地反转列表' },
+      { name: 's[i] = x', desc: '修改索引 i 处元素的值为 x' },
+      { name: 's[i:j] = t', desc: '用可迭代对象 t 替换切片 s[i:j]' },
+      // ========== 其他 ==========
       { name: 'copy()', desc: '返回列表的浅拷贝' },
+      { name: 'reversed(s)', desc: '返回反向迭代器（内置函数）' },
+      { name: 'enumerate(s)', desc: '返回索引-值对的枚举对象（内置函数）' },
+      { name: 'sorted(s)', desc: '返回排序后的新列表（内置函数）' },
+      { name: 'any(s)', desc: '判断是否有任意元素为真（内置函数）' },
+      { name: 'all(s)', desc: '判断是否所有元素都为真（内置函数）' },
+      { name: 'sum(s)', desc: '返回所有元素之和（内置函数）' },
+      { name: 'min(s)', desc: '返回最小元素（内置函数）' },
+      { name: 'max(s)', desc: '返回最大元素（内置函数）' },
+      { name: 'zip(s, t)', desc: '将多个可迭代对象并行组合（内置函数）' },
+      { name: 'filter(f, s)', desc: '过滤元素，保留使 f(x) 为真的元素（内置函数）' },
+      { name: 'map(f, s)', desc: '对每个元素应用函数 f（内置函数）' },
+      { name: 'reduce(f, s)', desc: '归约：将函数 f 依次作用于元素（functools）' },
     ],
     useCases: [
       '存储有序的同类或异类数据集合',
       '需要频繁增删改查的场景',
       '作为栈 (append/pop) 或队列 (结合 collections.deque)',
+      '列表推导式 [x for x in range(10)]',
       '保存临时数据、处理循环结果'
     ],
     example: `fruits = ['apple', 'banana']
@@ -194,14 +226,32 @@ print(fruits)  # ['apple', 'orange', 'banana', 'cherry']`
     mutable: false,
     description: '有序的不可变序列，一旦创建就不能修改。由于不可变性，可作为字典的键或集合的元素。',
     methods: [
+      // ========== 查询类 ==========
+      { name: 'len(t)', desc: '返回元组长度（内置函数）' },
+      { name: 'x in t', desc: '判断元素 x 是否在元组中' },
       { name: 'count(x)', desc: '返回 x 在元组中出现的次数' },
       { name: 'index(x)', desc: '返回第一个值为 x 的索引' },
+      { name: 't[i]', desc: '返回索引 i 处的元素' },
+      { name: 't[i:j]', desc: '返回切片' },
+      // ========== 运算类 ==========
+      { name: 't + s', desc: '返回两个元组的拼接（生成新元组）' },
+      { name: 't * n', desc: '返回元组重复 n 次的拼接' },
+      // ========== 其他 ==========
+      { name: 'reversed(t)', desc: '返回反向迭代器（内置函数）' },
+      { name: 'enumerate(t)', desc: '返回索引-值对的枚举对象（内置函数）' },
+      { name: 'sum(t)', desc: '返回所有元素之和（内置函数）' },
+      { name: 'min(t)', desc: '返回最小元素（内置函数）' },
+      { name: 'max(t)', desc: '返回最大元素（内置函数）' },
+      { name: 'tuple(iter)', desc: '将可迭代对象转换为元组（内置函数）' },
+      { name: 'namedtuple', desc: '创建命名元组类型（collections）' },
     ],
     useCases: [
       '函数返回多个值时自动打包为元组',
       '作为字典的键（不可变要求）',
       '存储不希望被修改的常量数据',
-      '解包赋值 (a, b = (1, 2))'
+      '解包赋值 (a, b = (1, 2))',
+      '多变量交换 (a, b = b, a)',
+      '字符串格式化 f"({x}, {y})"'
     ],
     example: `point = (10, 20)
 x, y = point   # 解包
@@ -213,20 +263,40 @@ print(point.count(10))  # 1`
     mutable: true,
     description: '键值对映射集合，键必须为不可变类型，通过键快速访问值。Python 3.7+ 保留插入顺序。',
     methods: [
-      { name: 'get(key[, default])', desc: '返回键对应的值，不存在则返回默认值' },
-      { name: 'keys()', desc: '返回字典所有键的视图' },
-      { name: 'values()', desc: '返回字典所有值的视图' },
-      { name: 'items()', desc: '返回键值对视图' },
-      { name: 'update([other])', desc: '用另一个字典的键值对更新当前字典' },
-      { name: 'pop(key[, default])', desc: '删除键并返回其值' },
-      { name: 'popitem()', desc: '删除并返回最后插入的键值对 (LIFO)' },
-      { name: 'setdefault(key[, default])', desc: '若键不存在则设置默认值并返回' },
+      // ========== 查询类 ==========
+      { name: 'len(d)', desc: '返回字典键值对数量（内置函数）' },
+      { name: 'key in d', desc: '判断键 key 是否存在' },
+      { name: 'd[key]', desc: '获取键对应的值，不存在报 KeyError' },
+      { name: 'get(key[, default])', desc: '获取键对应的值，不存在返回默认值（最常用）' },
+      { name: 'keys()', desc: '返回所有键的视图（可迭代）' },
+      { name: 'values()', desc: '返回所有值的视图（可迭代）' },
+      { name: 'items()', desc: '返回所有键值对的视图（可迭代）' },
+      // ========== 添加/修改类 ==========
+      { name: 'd[key] = value', desc: '设置键值对，存在则覆盖' },
+      { name: 'update([other])', desc: '用另一个字典或键值对更新当前字典（最常用）' },
+      { name: 'setdefault(key[, default])', desc: '若键不存在则设置默认值并返回（最常用）' },
+      { name: 'fromkeys(iter[, value])', desc: '类方法：用可迭代对象创建键全为 value 的字典' },
+      // ========== 删除类 ==========
+      { name: 'pop(key[, default])', desc: '删除键并返回其值，不存在返回默认值（最常用）' },
+      { name: 'popitem()', desc: '删除并返回最后插入的键值对 (LIFO，3.7+)' },
+      { name: 'clear()', desc: '清空字典所有键值对' },
+      { name: 'del d[key]', desc: '删除指定键值对' },
+      // ========== 拷贝类 ==========
+      { name: 'copy()', desc: '返回字典的浅拷贝' },
+      // ========== 其他 ==========
+      { name: 'dict()', desc: '构造函数：创建字典（内置函数）' },
+      { name: 'reversed(d)', desc: '返回反向键迭代器（3.8+）' },
+      { name: 'dict.keys()', desc: '返回键的视图，支持集合运算 (& | -)' },
+      { name: 'dict.values()', desc: '返回值的视图（3.8+ 支持集合运算）' },
+      { name: 'dict.items()', desc: '返回键值对的视图（3.8+ 支持集合运算）' },
+      { name: 'iter(d)', desc: '返回字典键的迭代器（内置函数）' },
     ],
     useCases: [
       '快速查找、映射关系（如用户信息、配置项）',
       '统计频次（键为元素，值为计数）',
       '缓存/记忆化 (memoization)',
-      'JSON 数据的 Python 表示'
+      'JSON 数据的 Python 表示',
+      '字典推导式 {k: v for k, v in items}'
     ],
     example: `user = {'name': 'Alice', 'age': 30}
 user['email'] = 'alice@example.com'
@@ -238,22 +308,41 @@ print(user.get('phone', 'N/A'))  # N/A`
     mutable: true,
     description: '无序、可变的元素集合，元素唯一且必须为不可变类型。支持数学集合运算（交、并、差、对称差）。',
     methods: [
-      { name: 'add(x)', desc: '添加元素 x' },
-      { name: 'remove(x)', desc: '移除元素 x，不存在则报错' },
-      { name: 'discard(x)', desc: '移除元素 x，不存在不报错' },
-      { name: 'pop()', desc: '随机移除并返回一个元素' },
-      { name: 'union(*others)', desc: '返回并集 (也可用 | )' },
-      { name: 'intersection(*others)', desc: '返回交集 (也可用 & )' },
-      { name: 'difference(*others)', desc: '返回差集 (也可用 - )' },
-      { name: 'symmetric_difference(other)', desc: '返回对称差集 (也可用 ^ )' },
-      { name: 'issubset(other)', desc: '判断是否为子集' },
-      { name: 'issuperset(other)', desc: '判断是否为超集' },
+      // ========== 查询类 ==========
+      { name: 'len(s)', desc: '返回集合元素数量（内置函数）' },
+      { name: 'x in s', desc: '判断元素 x 是否在集合中（最常用，哈希查找）' },
+      { name: 'issubset(other)', desc: '判断是否为子集（也可用 <=）' },
+      { name: 'issuperset(other)', desc: '判断是否为超集（也可用 >=）' },
+      { name: 'isdisjoint(other)', desc: '判断两集合是否无交集' },
+      // ========== 添加类 ==========
+      { name: 'add(x)', desc: '添加元素 x（最常用）' },
+      { name: 'update(*others)', desc: '添加多个可迭代对象的元素（最常用）' },
+      // ========== 删除类 ==========
+      { name: 'pop()', desc: '随机移除并返回一个元素，空集报错' },
+      { name: 'remove(x)', desc: '移除元素 x，不存在报 KeyError' },
+      { name: 'discard(x)', desc: '移除元素 x，不存在不报错（最常用）' },
+      { name: 'clear()', desc: '清空集合所有元素' },
+      // ========== 运算类（返回新集合） ==========
+      { name: 'union(*others)', desc: '返回并集（也可用 |）（最常用）' },
+      { name: 'intersection(*others)', desc: '返回交集（也可用 &）（最常用）' },
+      { name: 'difference(*others)', desc: '返回差集（也可用 -）（最常用）' },
+      { name: 'symmetric_difference(other)', desc: '返回对称差集（也可用 ^）' },
+      // ========== 运算类（原地修改） ==========
+      { name: 'intersection_update(*others)', desc: '原地保留交集（也可用 &=）' },
+      { name: 'difference_update(*others)', desc: '原地删除差集（也可用 -=）' },
+      { name: 'symmetric_difference_update(other)', desc: '原地替换为对称差集（也可用 ^=）' },
+      // ========== 拷贝类 ==========
+      { name: 'copy()', desc: '返回集合的浅拷贝' },
+      // ========== 其他 ==========
+      { name: 'set()', desc: '构造函数：创建集合（内置函数）' },
+      { name: 'frozenset()', desc: '创建不可变集合（内置函数）' },
     ],
     useCases: [
       '去重：快速去除列表中的重复元素',
-      '成员关系测试 (比列表更高效)',
+      '成员关系测试 (比列表更高效，O(1) 复杂度)',
       '数学集合运算（共同好友、标签交集等）',
-      '排除特定项 (差集)'
+      '排除特定项 (差集)',
+      '集合推导式 {x for x in range(10)}'
     ],
     example: `a = {1, 2, 3, 4}
 b = {3, 4, 5, 6}
@@ -266,18 +355,27 @@ print(a - b)   # {1, 2}`
     mutable: false,
     description: '不可变的集合，一旦创建不能修改。由于不可变，可以作为字典的键或其他集合的元素。',
     methods: [
-      { name: 'copy()', desc: '返回自身的浅拷贝（本身不可变，意义不大）' },
-      { name: 'union(*others)', desc: '返回并集' },
-      { name: 'intersection(*others)', desc: '返回交集' },
-      { name: 'difference(*others)', desc: '返回差集' },
-      { name: 'symmetric_difference(other)', desc: '返回对称差集' },
-      { name: 'issubset(other)', desc: '判断是否为子集' },
-      { name: 'issuperset(other)', desc: '判断是否为超集' },
+      // ========== 查询类 ==========
+      { name: 'len(fs)', desc: '返回集合元素数量（内置函数）' },
+      { name: 'x in fs', desc: '判断元素 x 是否在集合中' },
+      { name: 'issubset(other)', desc: '判断是否为子集（也可用 <=）' },
+      { name: 'issuperset(other)', desc: '判断是否为超集（也可用 >=）' },
+      { name: 'isdisjoint(other)', desc: '判断两集合是否无交集' },
+      // ========== 运算类（返回新 frozenset） ==========
+      { name: 'union(*others)', desc: '返回并集（也可用 |）' },
+      { name: 'intersection(*others)', desc: '返回交集（也可用 &）' },
+      { name: 'difference(*others)', desc: '返回差集（也可用 -）' },
+      { name: 'symmetric_difference(other)', desc: '返回对称差集（也可用 ^）' },
+      // ========== 拷贝类 ==========
+      { name: 'copy()', desc: '返回自身的浅拷贝' },
+      // ========== 其他 ==========
+      { name: 'frozenset()', desc: '构造函数：创建冻结集合（内置函数）' },
     ],
     useCases: [
       '需要不可变集合的场景（如多线程环境中的常量集）',
       '作为字典的键（例如缓存键为 frozenset）',
-      '作为另一个集合的元素'
+      '作为另一个集合的元素',
+      '多线程共享数据的安全访问'
     ],
     example: `fs = frozenset([1, 2, 3])
 # fs.add(4)  # 报错！不可变

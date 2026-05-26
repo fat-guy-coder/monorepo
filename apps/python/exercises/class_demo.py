@@ -33,6 +33,7 @@ print("=== 类的定义与实例化 ===")
 #   - 静态方法：不依赖类或实例的方法
 # ==============================================================
 
+
 class Person:
     """一个人类（类的文档字符串，描述类的用途）"""
 
@@ -145,6 +146,7 @@ print(f"修改后 p1 的物种: {p1.species}")  # 输出: 修改后 p1 的物种
 
 print("\n=== 访问限制 ===")
 
+
 class Student:
     """学生类，演示访问控制"""
 
@@ -250,6 +252,7 @@ print(f"通过 property 获取等级: {s.grade}")  # 输出: D
 
 print("\n=== 继承 ===")
 
+
 class Animal:
     """动物基类"""
 
@@ -265,6 +268,7 @@ class Animal:
 
 class Dog(Animal):
     """Dog 继承自 Animal（子类）"""
+
     # Dog 会继承 Animal 的所有属性和方法
 
     def speak(self):
@@ -282,6 +286,7 @@ class Cat(Animal):
 
 class BullDog(Dog):
     """斗牛犬 - 多层继承（继承链：BullDog -> Dog -> Animal）"""
+
     # 子类可以继续继承，形成继承链
 
     def speak(self):
@@ -313,6 +318,7 @@ print(f"{bull.name}: {bull.speak()}")  # 输出: 小斗: 哼哼哼
 # ==============================================================
 
 print("\n=== 多继承 ===")
+
 
 class Flyable:
     """会飞的 mixin 类"""
@@ -346,7 +352,7 @@ duck = Duck("唐老鸭")
 # duck 也是 Flyable 的实例，所以有 fly 方法
 # duck 也是 Swimmable 的实例，所以有 swim 方法
 print(f"{duck.name}: {duck.speak()}")  # 输出: 唐老鸭: 嘎嘎嘎
-print(duck.fly())   # 输出: 我可以飞
+print(duck.fly())  # 输出: 我可以飞
 print(duck.swim())  # 输出: 我可以游泳
 
 
@@ -364,6 +370,7 @@ print(duck.swim())  # 输出: 我可以游泳
 
 print("\n=== super() 调用父类 ===")
 
+
 class Teacher(Animal):
     """教师类，继承自动物类"""
 
@@ -371,7 +378,7 @@ class Teacher(Animal):
         # super().__init__(name) 调用父类的 __init__ 方法
         # 这样可以复用父类的初始化逻辑，而不必重复写 self.name = name
         super().__init__(name)  # 调用父类的 __init__
-        self.subject = subject   # 添加教师特有的属性
+        self.subject = subject  # 添加教师特有的属性
 
     def teach(self):
         return f"教{self.subject}"
@@ -403,6 +410,7 @@ print(t.speak())  # 输出: 我是教数学的老师
 # ==============================================================
 
 print("\n=== 类方法与静态方法 ===")
+
 
 class MathUtils:
     """数学工具类"""
@@ -485,6 +493,7 @@ print(f"类属性 PI: {MathUtils.PI}")  # 输出: 3.14159
 
 print("\n=== 特殊方法 ===")
 
+
 class Vector:
     """二维向量类，演示各种特殊方法的用法"""
 
@@ -532,7 +541,7 @@ class Vector:
     def __lt__(self, other):
         """< 运算符：按模长比较（用于排序）"""
         # 计算向量模长的平方（避免开方运算）
-        return (self.x ** 2 + self.y ** 2) < (other.x ** 2 + other.y ** 2)
+        return (self.x**2 + self.y**2) < (other.x**2 + other.y**2)
 
     # ----------------------------------------------------------
     # 一元操作符
@@ -540,7 +549,7 @@ class Vector:
     def __abs__(self):
         """绝对值/模长：计算向量的长度"""
         # 使用勾股定理计算模长
-        return (self.x ** 2 + self.y ** 2) ** 0.5
+        return (self.x**2 + self.y**2) ** 0.5
 
     def __len__(self):
         """长度：返回向量的模（取整）"""
@@ -647,6 +656,7 @@ print("\n=== 抽象类 ===")
 
 from abc import ABC, abstractmethod
 
+
 # ----------------------------------------------------------
 # 抽象类定义
 # ----------------------------------------------------------
@@ -717,7 +727,7 @@ class Circle(Shape):
 
     def area(self):
         """圆面积 = π × 半径²"""
-        return 3.14159 * self.radius ** 2
+        return 3.14159 * self.radius**2
 
     def perimeter(self):
         """圆周长 = 2 × π × 半径"""
@@ -758,6 +768,7 @@ print("\n=== 数据类 dataclass ===")
 
 from dataclasses import dataclass, field
 
+
 # ----------------------------------------------------------
 # 基本 dataclass
 # ----------------------------------------------------------
@@ -773,13 +784,13 @@ class Point:
     #   1. 代码可读性
     #   2. IDE 自动补全
     #   3. 类型检查（如 mypy）
-    x: int          # required positional argument
-    y: int          # required positional argument
+    x: int  # required positional argument
+    y: int  # required positional argument
     name: str = "原点"  # 带默认值，可选参数
 
     def distance_to_origin(self):
         """计算到原点的距离"""
-        return (self.x ** 2 + self.y ** 2) ** 0.5
+        return (self.x**2 + self.y**2) ** 0.5
 
 
 # ----------------------------------------------------------
@@ -789,17 +800,17 @@ class Point:
 # ----------------------------------------------------------
 @dataclass
 class Circle2:
-    center: Point   # dataclass 可以嵌套
+    center: Point  # dataclass 可以嵌套
     radius: int
 
     def area(self):
         """计算圆面积"""
-        return 3.14159 * self.radius ** 2
+        return 3.14159 * self.radius**2
 
 
 # 创建实例（参数顺序即类型注解顺序）
-p1 = Point(3, 4)                    # name 使用默认值 "原点"
-p2 = Point(0, 0, "原点")            # 显式传入 name
+p1 = Point(3, 4)  # name 使用默认值 "原点"
+p2 = Point(0, 0, "原点")  # 显式传入 name
 
 c = Circle2(p1, 5)  # center 是 Point 实例，radius 是 int
 
@@ -829,6 +840,7 @@ print(f"p1 == p2: {p1 == p2}")  # False：Point(3, 4, '原点') != Point(0, 0, '
 
 print("\n=== __slots__ 限制属性 ===")
 
+
 class PointWithSlots:
     """使用 __slots__ 可以限制实例属性，节省内存"""
 
@@ -838,7 +850,7 @@ class PointWithSlots:
     # 限制该类的实例只能有 x 和 y 两个属性
     # 如果尝试添加其他属性会抛出 AttributeError
     # ----------------------------------------------------------
-    __slots__ = ['x', 'y']
+    __slots__ = ["x", "y"]
 
     def __init__(self, x, y):
         # 只能设置 __slots__ 中列出的属性
@@ -874,6 +886,7 @@ print(f"ps: x={ps.x}, y={ps.y}")  # 输出: ps: x=1, y=2
 
 print("\n=== 描述符 ===")
 
+
 class Positive:
     """确保属性值为正数的描述符"""
 
@@ -898,6 +911,7 @@ class Positive:
     # __set__ 方法
     # ----------------------------------------------------------
     # 当设置属性时调用
+    # ..............
     # ----------------------------------------------------------
     def __set__(self, instance, value):
         # 验证值必须为正数
@@ -955,6 +969,7 @@ except ValueError as e:
 
 print("\n=== 元类 ===")
 
+
 # ----------------------------------------------------------
 # 定义元类
 # ----------------------------------------------------------
@@ -977,7 +992,7 @@ class Meta(type):
     # ----------------------------------------------------------
     def __new__(mcs, name, bases, attrs):
         # 在类创建之前，向属性字典中添加一个类属性
-        attrs['created_by'] = 'Meta'
+        attrs["created_by"] = "Meta"
         # 调用父类的 __new__ 完成创建
         return super().__new__(mcs, name, bases, attrs)
 
@@ -989,6 +1004,7 @@ class Meta(type):
 # ----------------------------------------------------------
 class MyClass(metaclass=Meta):
     """使用元类创建"""
+
     # 此类在创建时会自动添加 created_by 属性
     pass
 
@@ -1016,6 +1032,7 @@ print(f"MyClass.created_by: {MyClass.created_by}")  # 输出: Meta
 # ==============================================================
 
 print("\n=== Mixin 混入 ===")
+
 
 # ----------------------------------------------------------
 # LogMixin：日志混入
@@ -1045,7 +1062,7 @@ class SerializableMixin:
         # 遍历对象的 __dict__（实例属性）
         for k, v in self.__dict__.items():
             # 排除以 _ 开头的私有属性
-            if not k.startswith('_'):
+            if not k.startswith("_"):
                 result[k] = v
         return result
 
@@ -1070,7 +1087,9 @@ u = User("Alice", "alice@example.com")
 
 # 调用 Mixin 提供的方法
 u.log("用户已创建")  # 输出: [LOG] 用户已创建
-print(f"用户数据: {u.to_dict()}")  # 输出: {'name': 'Alice', 'email': 'alice@example.com'}
+print(
+    f"用户数据: {u.to_dict()}"
+)  # 输出: {'name': 'Alice', 'email': 'alice@example.com'}
 
 
 # ==============================================================
@@ -1100,6 +1119,7 @@ print("\n=== 组合（优先使用组合）===")
 # ----------------------------------------------------------
 # 这些类是独立的组件，可以被任何类使用
 # ----------------------------------------------------------
+
 
 class Engine:
     """引擎组件"""
@@ -1161,7 +1181,9 @@ print("\n=== 类关系判断 ===")
 
 # issubclass：判断类之间的继承关系
 print(f"Dog 是 Animal 的子类: {issubclass(Dog, Animal)}")  # True
-print(f"Dog 是 object 的子类: {issubclass(Dog, object)}")  # True（所有类都继承自 object）
+print(
+    f"Dog 是 object 的子类: {issubclass(Dog, object)}"
+)  # True（所有类都继承自 object）
 
 # 创建实例
 d = Dog("旺财")
@@ -1204,6 +1226,7 @@ print(f"Dog 的父类: {type(d).__bases__}")  # (<class '__main__.Animal'>,)
 
 print("\n=== 动态添加属性和方法 ===")
 
+
 class Person2:
     """用于演示动态添加的简单类"""
 
@@ -1223,6 +1246,7 @@ p = Person2("小明")
 p.age = 20  # 添加实例属性 age
 print(f"动态添加 age: {p.age}")  # 输出: 20
 
+
 # ----------------------------------------------------------
 # 动态添加方法
 # ----------------------------------------------------------
@@ -1231,6 +1255,7 @@ def say_goodbye(self):
     """动态添加的实例方法"""
     return f"{self.name} 说再见"
 
+
 # 导入 MethodType 用于将函数绑定到实例
 from types import MethodType
 
@@ -1238,6 +1263,7 @@ from types import MethodType
 # 这使得 say_goodbye 可以作为实例方法调用
 p.say_goodbye = MethodType(say_goodbye, p)
 print(p.say_goodbye())  # 输出: 小明 说再见
+
 
 # ----------------------------------------------------------
 # 动态添加类方法
@@ -1248,6 +1274,7 @@ def from_birth_year(cls, name, year):
     """工厂方法：根据出生年份创建实例"""
     age = 2024 - year
     return cls(name, age)
+
 
 # 直接赋值给类（不需要 MethodType）
 Person2.from_birth_year = from_birth_year

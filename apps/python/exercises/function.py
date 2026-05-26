@@ -8,4 +8,10 @@ def ha(name):
     return g
 
 
-print(ha("hihihi"))
+def fun(**arg):
+    for k, v in arg.items():
+        print(f"{k},{v}")
+        # print(type(v))
+
+
+fun({"ccc": {"haha": "aaa"}, "num": 1, "bol": True, "float": 3.25, "set": {1, 3, 4, 5}})
