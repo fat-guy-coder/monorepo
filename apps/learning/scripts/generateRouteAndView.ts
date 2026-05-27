@@ -4,7 +4,10 @@ import path from 'path';
 
 // 从 API 获取菜单数据
 async function fetchMenu() {
-  const API_URL = process.env.API_URL || 'http://localhost:3000';
+  const useLocal = process.argv.includes('--local')
+  const API_URL = useLocal
+    ? 'http://localhost:3000'
+    : 'http://47.108.233.237:3000'
   const response = await fetch(`${API_URL}/api/menus?project=learning`);
   const result = await response.json();
   if (result.code !== 200) {

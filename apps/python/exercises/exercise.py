@@ -20,4 +20,6 @@ def h(x):
 
 list5 = list(map(h, list3))
 
-print(f"list5 is {list5}")
+list2[1:2] = [3, 3]
+
+print(f"list2 is {list2}")

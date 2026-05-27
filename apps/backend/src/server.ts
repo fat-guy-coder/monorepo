@@ -15,7 +15,7 @@ const server = Bun.serve({
     const pathname = url.pathname
     const method = req.method
 
-    // CORS 预检请求
+    // CORS 预检请求 - 仅允许本地开发环境
     if (method === 'OPTIONS') {
       return new Response(null, {
         status: 204,
@@ -57,7 +57,10 @@ const server = Bun.serve({
             }
           }
 
-          return await route.handler(ctx)
+          const response = await route.handler(ctx)
+          // 给响应加上 CORS 头
+          response.headers.set('Access-Control-Allow-Origin', '*')
+          return response
         } catch (err) {
           console.error(err)
           return Response.json({ code: 500, message: 'Internal server error', data: null }, { status: 500 })
@@ -66,7 +69,10 @@ const server = Bun.serve({
     }
 
     // 404
-    return Response.json({ code: 404, message: 'Not found', data: null }, { status: 404 })
+    return Response.json(
+      { code: 404, message: 'Not found', data: null },
+      { status: 404, headers: { 'Access-Control-Allow-Origin': '*' } }
+    )
   },
 })
 

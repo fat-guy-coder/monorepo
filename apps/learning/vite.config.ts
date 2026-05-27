@@ -18,6 +18,12 @@ const __dirname = dirname(__filename);
 const resolvePath = (path: string) => resolve(__dirname, path);
 
 
+// 解析命令行参数，默认使用远程地址
+const useLocal = process.argv.includes('--local')
+const API_BASE_URL = useLocal
+  ? 'http://localhost:3000'
+  : 'http://47.108.233.237:3000'
+
 // https://vite.dev/config/
 export default defineConfig((env: ConfigEnv) => {
   const { command, mode } = env
@@ -53,7 +59,7 @@ export default defineConfig((env: ConfigEnv) => {
     server: {
       proxy: {
         '/api': {
-          target: 'http://localhost:3000',
+          target: API_BASE_URL,
           changeOrigin: true,
         },
       },
