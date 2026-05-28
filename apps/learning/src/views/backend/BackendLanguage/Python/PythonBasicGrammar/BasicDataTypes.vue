@@ -115,42 +115,42 @@ const basicTypes: BasicType[] = [
     name: '整数 (int)',
     icon: '🔹',
     description: '任意精度的整数，支持二进制、八进制、十六进制表示。',
-    example: 'age = 25\nhex_num = 0xFF\nbig = 10**100',
+    example: `# 创建方式\nage = 25\nhex_num = 0xFF        # 255\noct_num = 0o77       # 63\nbin_num = 0b1010     # 10\nbig = 10**100        # 10的100次方\n\n# 常用方法\n(255).bit_length()     # 8 二进制位数\n(-5).abs()             # 5 绝对值\n(10).bit_count()       # 2 二进制中1的个数\n(255).to_bytes(2, 'big')   # b'\\x01\\xff'\nint.from_bytes(b'\\xff', 'big')  # 255\n(3).numerator           # 3\n(3).denominator        # 1\nformat(42, '08b')      # '00101010' 格式化二进制`,
     note: 'Python 3 中整数无上限'
   },
   {
     name: '浮点数 (float)',
     icon: '🔸',
     description: '双精度浮点数，遵循 IEEE 754 标准。',
-    example: 'pi = 3.14159\nsci = 1.2e-5',
+    example: `# 创建方式\npi = 3.14159\nsci = 1.2e-5          # 0.000012\ninf_val = float('inf') # 正无穷\nnan_val = float('nan') # NaN\n\n# 常用方法\n(3.14).as_integer_ratio()  # (157, 50) 转分数\n(2.5).is_integer()         # False 是否整数\n(-3.14).is_integer()       # False\n(3.14).hex()               # '0x1.91eb851eb852p+1'\nfloat.fromhex('0x1.92p+1') # 3.140625\n(10.5).imag                # 0.0\n(10.5).real                # 10.5\nformat(3.14159, '.2f')     # '3.14' 格式化`,
     note: '可能存在精度误差'
   },
   {
     name: '复数 (complex)',
     icon: '🔹🔸',
     description: '实部 + 虚部，虚部用 j 或 J 表示。',
-    example: 'c = 3 + 4j\nc.real  # 3.0\nc.imag  # 4.0',
+    example: `# 创建方式\nc = 3 + 4j\nc2 = complex(3, 4)    # 3+4j\nc3 = 5j               # 0+5j\n\n# 常用属性\nc.real          # 3.0 实部\nc.imag          # 4.0 虚部\nc.conjugate()   # 3-4j 共轭复数\nabs(c)          # 5.0 模长\n\n# 运算\nc + (1+2j)      # (4+6j)\nc * 2           # (6+8j)\nc ** 2          # (-7+24j)`,
     note: '科学计算常用'
   },
   {
     name: '字符串 (str)',
     icon: '📝',
     description: 'Unicode 字符序列，单引号或双引号定义。',
-    example: 'name = "Python"\nmulti = """多行\n文本"""',
+    example: `# 创建方式\ns1 = "hello"\ns2 = 'world'\ns3 = """多行\\n文本"""\ns4 = "Python"\n\n# 大小写转换\ns4.upper()           # 'PYTHON'\ns4.lower()           # 'python'\ns4.capitalize()     # 'Python'\ns4.title()           # 'Python'\ns4.swapcase()       # 'python'\n\n# 查找替换\ns4.find("th")        # 2 返回索引\ns4.count("o")        # 1 计数\ns4.replace("Py", "Py") # 'Python'\n\n# 分割合并\n"a,b,c".split(",")   # ['a','b','c']\n",".join(['a','b'])  # 'a,b'\n\n# 去除空白\n"  hi  ".strip()     # 'hi'\n"  hi  ".lstrip()    # 'hi  '\n"  hi  ".rstrip()    # '  hi'\n\n# 格式化和编码\ns4.encode()          # b'Python'\n"{} {}".format("Hi", 123)  # 'Hi 123'\ns4.startswith("Py") # True\ns4.endswith("on")    # True\ns4.isdigit()         # False\ns4.isalpha()         # True\ns4.center(10, '*')   # '**Python**'`,
     note: '不可变序列'
   },
   {
     name: '布尔 (bool)',
     icon: '✅',
     description: 'True 或 False，继承自 int (True==1, False==0)。',
-    example: 'is_valid = True\nflag = 10 > 5  # True',
+    example: `# 创建方式\nflag = True\nflag2 = bool(1)       # True\nflag3 = bool("")      # False\n\n# 常用方法\nTrue.to_bytes(1, 'big')     # b'\\x01'\nFalse.to_bytes(1, 'big')    # b'\\x00'\nbool.from_bytes(b'\\x01')   # True\n\n# 与 int 的关系\nTrue + 1          # 2\nFalse + 1          # 1\nbool(0), bool([]), bool(()), bool({})  # 均为 False\n\n# 特殊用法\nis_valid = bool(10)   # True\nis_empty = not []     # True\nresult = "yes" if True else "no"  # 'yes'`,
     note: '用于条件判断'
   },
   {
     name: '空值 (None)',
     icon: '⭕',
     description: '表示空或无值，是 NoneType 的唯一实例。',
-    example: 'result = None\nif result is None:\n    print("无数据")',
+    example: `# 创建方式\nresult = None\nx = None\n\n# 判断方法（首选 is）\nresult is None           # True\nresult is not None       # False\n\n# 与其他空值区分\nbool(None)              # False\nNone == 0               # False\nNone == ""              # False\nNone == False           # False\n\n# 常用场景\ndef func(x=None):       # 默认参数\n    if x is None:\n        x = []\n\nd = {"a": 1, "b": 2}.get("c")  # None 键不存在时\n\n# 类型信息\ntype(None)              # <class 'NoneType'>\ntype(None).__repr__()   # 'NoneType'`,
     note: '常用于默认参数'
   }
 ];

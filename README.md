@@ -192,7 +192,57 @@ docker logs --tail=100 backend-app
 docker restart backend-app
 ```
 
-## 是否要把“数据同步”放进流水线？
+## 从服务器同步数据到本地（Docker -> Docker）
+
+> 适用于：本地开发需要使用服务器上的数据。
+
+### 1）从服务器 postgres 容器导出（服务器执行）
+
+```bash
+docker exec postgres pg_dump -U jason -d jason -Fc -f /tmp/jason.dump
+```
+
+### 2）下载到本机（在本机执行）
+
+```bash
+# 默认 22 端口
+scp root@47.108.233.237:/tmp/jason.dump ./jason.dump
+
+# 如果是自定义端口（示例 2222）
+# scp -P 2222 root@47.108.233.237:/tmp/jason.dump ./jason.dump
+```
+
+### 3）导入本地 postgres 容器（在本机执行）
+
+```bash
+# 拷贝到本地 postgres 容器
+docker cp ./jason.dump postgres:/tmp/jason.dump
+
+# 导入（会清理同名对象再重建）
+docker exec postgres pg_restore -U jason -d jason --clean --if-exists --no-owner --no-privileges /tmp/jason.dump
+```
+
+### 4）验证
+
+```bash
+# 查看表
+docker exec postgres psql -U jason -d jason -c “\dt”
+
+# 重启后端使新数据生效
+docker-compose restart backend
+```
+
+### 5）清理临时文件（可选）
+
+```bash
+# 本机
+rm ./jason.dump
+
+# 服务器
+ssh root@47.108.233.237 “docker exec postgres rm /tmp/jason.dump”
+```
+
+## 是否要把”数据同步”放进流水线？
 
 - **建议默认手动同步**：数据库是有状态资源，自动覆盖风险高（误覆盖线上数据、无法回滚）。
 - **推荐流程**：代码走 CI/CD，数据走“手动可控脚本（本文命令）”。
