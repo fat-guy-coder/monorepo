@@ -256,6 +256,22 @@ onUnmounted(() => {
   menus.value.length = 0
 })
 
+// 平面映射：name → { path, label }
+// 解决懒加载菜单树中 findMenuItemByName 找不到未展开菜单项的问题
+const routeInfoMap = new Map<string, { path: string; label: string }>()
+
+// 递归将菜单项添加到 routeInfoMap
+function addToRouteInfoMap(items: MenuItem[]) {
+  for (const item of items) {
+    if (item.name && item.path) {
+      routeInfoMap.set(item.name, { path: item.path, label: item.label })
+    }
+    if (item.children?.length) {
+      addToRouteInfoMap(item.children)
+    }
+  }
+}
+
 //获取菜单（只加载根菜单，按需加载子菜单）
 const getMenus = async () => {
   loading.value = true
@@ -264,6 +280,9 @@ const getMenus = async () => {
   menus.value = (data as MenuItem[]).map(item => ({ ...item, loading: false }))
   loading.value = false
   mainViewLoading.value = false
+
+  // 将菜单项添加到 routeInfoMap，供 goToByName 查找
+  addToRouteInfoMap(menus.value)
 
   // 注册所有叶子路由（包括 tabList 中已存在的标签对应的路由）
   registerLeafRoutes(menus.value)
@@ -309,6 +328,9 @@ const loadChildren = async (parentItem: any): Promise<void> => {
   try {
     const { data } = await getApiMenus({ parentId: parentItem.id })
     parentItem.children = data as MenuItem[]
+    // 将新加载的子菜单同步到 routeInfoMap 并注册叶节点路由
+    addToRouteInfoMap(parentItem.children)
+    registerLeafRoutes(parentItem.children)
   } catch (e) {
     message.error('加载子菜单失败')
   } finally {
@@ -388,24 +410,23 @@ function tabClick(path: string) {
   if (path === store.activeKey) {
     return
   }
-  console.log(path)
-  // mainViewLoading.value = true
-  // router.push({ path }).then(() => {
-  //   mainViewLoading.value = false
-  // })
+  mainViewLoading.value = true
+  router.push({ path }).then(() => {
+    mainViewLoading.value = false
+  })
 
-  // store.activateTabOnlyKey(path, () => {
-  //   if (path !== '/') {
-  //     if (!Menucollapsed.value) {
-  //       openKeys.value = findFatherKeysListByKey(path)
-  //     } else {
-  //       openKeys.value = []
-  //     }
-  //   }
-  //   nextTick(() => {
-  //     scrollTo(path)
-  //   })
-  // })
+  store.activateTabOnlyKey(path, () => {
+    if (path !== '/') {
+      if (!Menucollapsed.value) {
+        openKeys.value = findFatherKeysListByKey(path)
+      } else {
+        openKeys.value = []
+      }
+    }
+    nextTick(() => {
+      scrollTo(path)
+    })
+  })
 }
 
 //展开菜单
@@ -467,7 +488,7 @@ function goto({ path, name, label, redirect, isLeaf }: MenuItem) {
   //手机端并且折叠状态下点击菜单后折叠菜单 这里重复赋值 主要处理弹出来的菜单后收拢
   if (isMobile && Menucollapsed.value) Menucollapsed.value = true
   if (redirect) {
-    goToByName(redirect.name, true)
+    goToByName(redirect.name, true, redirect.path)
     return
   }
 
@@ -504,26 +525,62 @@ function goto({ path, name, label, redirect, isLeaf }: MenuItem) {
 }
 
 //通过菜单名称跳转
-function goToByName(name: string, isRedirect: boolean = false) {
-  let item = findMenuItemByName(menus.value, name)
-  console.log(name)
-  return
+// knownPath / knownLabel: 调用方已知的路径和标签（如 redirect 场景），作为兜底
+function goToByName(name: string, isRedirect: boolean = false, knownPath?: string, knownLabel?: string) {
+  // 辅助类型：至少需要 name + path + label
+  let item: { label: string; name: string; path: string } | undefined
+
+  // 0. 特殊处理 home
   if (name === 'home') {
-    item = {
-      id: 'home',
-      icon: '🏠',
-      label: '首页',
-      name: 'home',
-      path: '/',
+    item = { label: '首页', name: 'home', path: '/' }
+  }
+
+  // 1. 菜单树（已展开的菜单）
+  if (!item) {
+    const found = findMenuItemByName(menus.value, name)
+    if (found) item = { label: found.label, name: found.name, path: found.path }
+  }
+
+  // 2. routeInfoMap（曾加载过但父菜单可能已折叠）
+  if (!item) {
+    const info = routeInfoMap.get(name)
+    if (info) item = { label: info.label, name, path: info.path }
+  }
+
+  // 3. tabList（曾访问过的标签页，持久化在 localStorage）
+  if (!item) {
+    const tab = store.tabList.find(t => t.name === name)
+    if (tab) item = { label: tab.label, name: tab.name, path: tab.path }
+  }
+
+  // 4. 调用方传入的已知路径（如 redirect 场景）
+  if (!item && knownPath) {
+    item = { label: knownLabel || name, name, path: knownPath }
+  }
+
+  // 5. 路由已注册 → 用 router.resolve 反查 path
+  if (!item && router.hasRoute(name)) {
+    const resolved = router.resolve({ name })
+    // resolved.path 可能是 catch-all 兜底值，需验证 name 确实匹配
+    if (resolved && resolved.name === name) {
+      item = { label: name, name, path: resolved.path }
     }
   }
+
   if (!item) {
     message.error('菜单不存在')
     return
   }
+
   const { label, path } = item
+
+  // 动态注册路由（如果尚未注册），确保 router.push({ name }) 能匹配到路由
+  if (name !== 'home' && !router.hasRoute(name)) {
+    registerRouteByPath(path, name)
+  }
+
   mainViewLoading.value = true
-  router.push({ path }).then(() => {
+  router.push({ name }).then(() => {
     mainViewLoading.value = false
   })
   store.activateTab(
