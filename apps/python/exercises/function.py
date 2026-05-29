@@ -21,6 +21,7 @@ fun({"ccc": {"haha": "aaa"}, "num": 1, "bol": True, "float": 3.25, "set": {1, 3,
 # 函数基础
 # ============================================================
 
+
 # 1. 默认参数
 def greet(name, greeting="Hello"):
     """带默认参数的函数"""
@@ -54,7 +55,7 @@ print(sum_all(1, 2, 3, 4, 5))
 print(sum_all(10, 20))
 
 
-# 4. 关键字参数 **kwargs
+# 4. 关键字参数 **kwargs 将参数收集为字典
 def print_info(**kwargs):
     """可变数量的关键字参数"""
     for key, value in kwargs.items():
@@ -87,7 +88,7 @@ formal_func("位置", "可变1", "可变2", default="新值", extra="额外参�
 # ============================================================
 
 # 7. 基本 lambda
-square = lambda x: x ** 2
+square = lambda x: x**2
 print(f"lambda square: {square(5)}")
 
 # 8. 多参数 lambda
@@ -101,7 +102,7 @@ print(f"降序排序: {sorted_nums}")
 
 # 10. lambda 用于 map filter
 nums = [1, 2, 3, 4, 5]
-squared = list(map(lambda x: x ** 2, nums))
+squared = list(map(lambda x: x**2, nums))
 evens = list(filter(lambda x: x % 2 == 0, nums))
 print(f"平方: {squared}")
 print(f"偶数: {evens}")
@@ -111,10 +112,12 @@ print(f"偶数: {evens}")
 # 函数的特殊用法
 # ============================================================
 
+
 # 11. 嵌套函数（闭包）
 def outer(x):
     def inner(y):
         return x + y
+
     return inner
 
 
@@ -139,6 +142,7 @@ print(f"apply_twice: {apply_twice(double, 3)}")  # 12
 def make_multiplier(factor):
     def multiplier(x):
         return x * factor
+
     return multiplier
 
 
@@ -153,6 +157,7 @@ def my_decorator(func):
         result = func(*args, **kwargs)
         print("调用后")
         return result
+
     return wrapper
 
 
@@ -198,6 +203,7 @@ def outer_scope():
         nonlocal count
         count += 1
         return count
+
     return inner_scope
 
 
@@ -270,7 +276,7 @@ from functools import partial
 
 
 def power(base, exponent):
-    return base ** exponent
+    return base**exponent
 
 
 square = partial(power, exponent=2)
