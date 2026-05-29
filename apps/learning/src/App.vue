@@ -90,7 +90,6 @@ import { loadViewByPath, viewExists } from '@/views/views-loader' //动态视图
 const deviceStore = useDeviceStore()
 const uiConfigStore = useUIConfigStore()
 
-
 //是否是手机端
 const isMobile = computed(() => deviceStore.isMobile)
 
@@ -389,23 +388,24 @@ function tabClick(path: string) {
   if (path === store.activeKey) {
     return
   }
-  mainViewLoading.value = true
-  router.push({ path }).then(() => {
-    mainViewLoading.value = false
-  })
+  console.log(path)
+  // mainViewLoading.value = true
+  // router.push({ path }).then(() => {
+  //   mainViewLoading.value = false
+  // })
 
-  store.activateTabOnlyKey(path, () => {
-    if (path !== '/') {
-      if (!Menucollapsed.value) {
-        openKeys.value = findFatherKeysListByKey(path)
-      } else {
-        openKeys.value = []
-      }
-    }
-    nextTick(() => {
-      scrollTo(path)
-    })
-  })
+  // store.activateTabOnlyKey(path, () => {
+  //   if (path !== '/') {
+  //     if (!Menucollapsed.value) {
+  //       openKeys.value = findFatherKeysListByKey(path)
+  //     } else {
+  //       openKeys.value = []
+  //     }
+  //   }
+  //   nextTick(() => {
+  //     scrollTo(path)
+  //   })
+  // })
 }
 
 //展开菜单
@@ -506,6 +506,8 @@ function goto({ path, name, label, redirect, isLeaf }: MenuItem) {
 //通过菜单名称跳转
 function goToByName(name: string, isRedirect: boolean = false) {
   let item = findMenuItemByName(menus.value, name)
+  console.log(name)
+  return
   if (name === 'home') {
     item = {
       id: 'home',

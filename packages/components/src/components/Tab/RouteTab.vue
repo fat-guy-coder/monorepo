@@ -23,18 +23,13 @@
 </template>
 <script lang="ts" setup>
 // 组合式 API 逻辑
-import { ref, onMounted, } from 'vue'
+import { ref, } from 'vue'
 import Tabs from './index.vue'
 import TabPane from './TabPane.vue'
-// import TabPane from './TabPane.vue'
-import type { Tab } from '@/stores/tab'
 
-
-
-onMounted(() => { })
 
 const { showContextMenu, currentDragIndex } = defineProps<{
-  tabList: Tab[]
+  tabList: { path: string; label: string }[]
   activeKey: string
   showContextMenu: boolean
   currentDragIndex: number,
@@ -142,12 +137,14 @@ const endSorting = (path: string) => {
   overflow: hidden;
   transition: all 0.2s ease-in;
   font-size: var(--font-size-small);
+
   div {
     cursor: pointer;
     width: 100%;
     text-align: center;
     transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
     color: var(--color-text);
+
     &:hover {
       background-color: var(--color-background-soft);
       color: var(--color-primary);
