@@ -31,8 +31,10 @@
   import 'prismjs/components/prism-typescript'
   import 'prismjs/components/prism-css'
   import 'prismjs/components/prism-json'
+	import 'prismjs/components/prism-go'
+	import 'prismjs/components/prism-bash'
 
-  type Language = 'js' | 'ts' | 'html' | 'json' | 'css'
+  type Language = 'js' | 'ts' | 'html' | 'json' | 'css' | 'go' | 'bash' | 'shell' | 'text'
 
   const {
     title,
@@ -65,7 +67,11 @@
       ts: 'TypeScript',
       html: 'HTML',
       json: 'JSON',
-      css: 'Css'
+      css: 'CSS',
+      go: 'Go',
+      bash: 'Bash',
+      shell: 'Shell',
+      text: 'Text'
     }
     return langMap[language] || language.toUpperCase()
   })

@@ -1,6 +1,6 @@
 import { db, rawQuery } from '../db'
 import { menu, role, userRole } from '../db/schema'
-import { eq, isNull, or, asc, like } from 'drizzle-orm'
+import { eq, isNull, or, asc, like, and } from 'drizzle-orm'
 import { createAuthMiddleware } from './auth'
 
 const authMware = createAuthMiddleware()
@@ -555,29 +555,202 @@ routes.push({
   }
 })
 
-// DELETE /menus/:id
+// 递归查找所有后代 ID
+async function getAllDescendantIds(id: string): Promise<string[]> {
+  const children = await db
+    .select({ id: menu.id })
+    .from(menu)
+    .where(eq(menu.parentId, id))
+  const ids: string[] = []
+  for (const child of children) {
+    ids.push(child.id)
+    const grandchildIds = await getAllDescendantIds(child.id)
+    ids.push(...grandchildIds)
+  }
+  return ids
+}
+
+// DELETE /menus/batch — 批量删除（按 parentId 清空子树 或 按 ids 批量删除）
+routes.push({
+  method: 'DELETE',
+  pattern: /^\/api\/menus\/batch$/,
+  handler: async (ctx) => {
+    const body = await ctx.json()
+    const { parentId, ids } = body
+
+    try {
+      let deletedCount = 0
+
+      if (parentId) {
+        // 模式 1: 清空 parentId 下的所有子树（保留 parent 自身）
+        const descendantIds = await getAllDescendantIds(parentId)
+        for (const descendantId of descendantIds.reverse()) {
+          await rawQuery`DELETE FROM menu WHERE id = ${descendantId}`
+          deletedCount++
+        }
+        return Response.json(success({ deleted: deletedCount }, `已删除 ${deletedCount} 个子孙菜单`))
+      }
+
+      if (ids && Array.isArray(ids) && ids.length > 0) {
+        // 模式 2: 按 id 列表批量删除（每个 id 连同其所有后代）
+        const allIdsToDelete: string[] = []
+        for (const id of ids) {
+          allIdsToDelete.push(id)
+          const descendantIds = await getAllDescendantIds(id)
+          allIdsToDelete.push(...descendantIds)
+        }
+        // 从叶子到根倒序删除，避免外键/依赖问题
+        const uniqueIds = [...new Set(allIdsToDelete)]
+        for (const id of uniqueIds.reverse()) {
+          await rawQuery`DELETE FROM menu WHERE id = ${id}`
+          deletedCount++
+        }
+        return Response.json(success({ deleted: deletedCount }, `已删除 ${deletedCount} 个菜单`))
+      }
+
+      return Response.json(error('请提供 parentId 或 ids 参数', 400), { status: 400 })
+    } catch (err: any) {
+      console.error(err)
+      return Response.json(error('批量删除失败: ' + err.message), { status: 500 })
+    }
+  },
+})
+
+// POST /menus/batch — 批量创建菜单树
+routes.push({
+  method: 'POST',
+  pattern: /^\/api\/menus\/batch$/,
+  handler: async (ctx) => {
+    const body = await ctx.json()
+    const { project, parentId, items } = body
+
+    if (!project || !parentId || !items || !Array.isArray(items)) {
+      return Response.json(error('请提供 project, parentId, items 参数', 400), { status: 400 })
+    }
+
+    interface TreeItem {
+      name: string
+      label: string
+      icon?: string
+      order?: number
+      children?: TreeItem[]
+    }
+
+    let created = 0
+    let skipped = 0
+    const details: { label: string; path: string; status: 'created' | 'skipped' | 'failed' }[] = []
+
+    // 辅助函数：生成 path
+    const buildPath = (parentPath: string | null, name: string) =>
+      parentPath ? `${parentPath}/${name}` : `/${name}`
+
+    // 递归创建
+    async function createRecursive(
+      itemParentId: string,
+      itemParentPath: string | null,
+      itemList: TreeItem[],
+    ): Promise<void> {
+      for (const item of itemList) {
+        try {
+          // 检查是否已存在同 name 的子菜单（幂等）
+          const existing = await db
+            .select()
+            .from(menu)
+            .where(and(eq(menu.parentId, itemParentId), eq(menu.name, item.name)))
+            .limit(1)
+
+          if (existing.length > 0) {
+            skipped++
+            details.push({ label: item.label, path: existing[0].path || '', status: 'skipped' })
+
+            // 递归处理 children（即使父已存在，子可能新增）
+            if (item.children && item.children.length > 0) {
+              await createRecursive(existing[0].id, existing[0].path, item.children)
+            }
+            continue
+          }
+
+          const itemPath = buildPath(itemParentPath, item.name)
+          const [newMenu] = await db
+            .insert(menu)
+            .values({
+              name: item.name,
+              label: item.label,
+              path: itemPath,
+              icon: item.icon ?? null,
+              order: item.order ?? 0,
+              project,
+              parentId: itemParentId,
+            })
+            .returning()
+
+          created++
+          details.push({ label: item.label, path: itemPath, status: 'created' })
+
+          // 递归创建子节点
+          if (item.children && item.children.length > 0) {
+            await createRecursive(newMenu.id, itemPath, item.children)
+          }
+        } catch (e: any) {
+          details.push({ label: item.label, path: '', status: 'failed' })
+          throw e // 事务回滚
+        }
+      }
+    }
+
+    try {
+      // 获取父菜单 path
+      const [parent] = await db.select().from(menu).where(eq(menu.id, parentId))
+      const parentPath = parent?.path || null
+
+      // 在事务中执行批量创建
+      await rawQuery`BEGIN`
+      await createRecursive(parentId, parentPath, items)
+      await rawQuery`COMMIT`
+
+      return Response.json(
+        success({ created, skipped, failed: details.filter(d => d.status === 'failed').length, details }, '批量创建完成'),
+        { status: 201 },
+      )
+    } catch (e: any) {
+      await rawQuery`ROLLBACK`
+      console.error('批量创建失败，已回滚:', e)
+      return Response.json(
+        error(`批量创建失败，已回滚: ${e.message}`, 500),
+        { status: 500 },
+      )
+    }
+  },
+})
+
+// DELETE /menus/:id — 递归删除菜单及其所有后代
 routes.push({
   method: 'DELETE',
   pattern: /^\/api\/menus\/([^/]+)$/,
   handler: async (ctx) => {
-    const id = ctx.params["1"]
+    const id = ctx.params['1']
 
     try {
-      // 先删除所有子菜单
-      await rawQuery`DELETE FROM menu WHERE parent_id = ${id}`
-      const result = await rawQuery`DELETE FROM menu WHERE id = ${id} RETURNING id`
-      if (!result || (result as any[]).length === 0) {
+      // 先检查菜单是否存在
+      const [existing] = await db.select().from(menu).where(eq(menu.id, id))
+      if (!existing) {
         return Response.json(error('Menu not found', 404), { status: 404 })
       }
-      return Response.json(success(null, '删除成功'))
-    } catch (err) {
+
+      // 递归收集所有后代 ID（含自身）
+      const descendantIds = await getAllDescendantIds(id)
+      // 从最深层倒序删除
+      for (const descendantId of descendantIds.reverse()) {
+        await rawQuery`DELETE FROM menu WHERE id = ${descendantId}`
+      }
+      // 最后删除自身
+      await rawQuery`DELETE FROM menu WHERE id = ${id}`
+
+      return Response.json(success({ deleted: descendantIds.length + 1 }, `已删除菜单及其 ${descendantIds.length} 个后代`))
+    } catch (err: any) {
       console.error(err)
-      return Response.json(error('Menu not found', 404), { status: 404 })
+      return Response.json(error('删除失败: ' + err.message, 500), { status: 500 })
     }
-  }
+  },
 })
-
-// 导入 and 函数
-import { and } from 'drizzle-orm'
-
 export { routes }

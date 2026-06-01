@@ -1,0 +1,97 @@
+package basics
+
+import (
+	"fmt"
+	"strings"
+)
+
+// RunAll 按顺序运行所有基础入门主题。
+func RunAll() {
+	fmt.Println("┌──────────────────────────────────────────┐")
+	fmt.Println("│   🔰 Go 语言基础入门 - 完整演示          │")
+	fmt.Println("└──────────────────────────────────────────┘")
+
+	fmt.Println("\n═══════════════════════════════════════════")
+	fmt.Println("  1/7  变量、类型与常量")
+	fmt.Println("═══════════════════════════════════════════")
+	RunVariables()
+
+	fmt.Println("\n═══════════════════════════════════════════")
+	fmt.Println("  2/7  控制流 (if / for / switch / defer)")
+	fmt.Println("═══════════════════════════════════════════")
+	RunControlFlow()
+
+	fmt.Println("\n═══════════════════════════════════════════")
+	fmt.Println("  3/7  函数 (声明、闭包、高阶函数)")
+	fmt.Println("═══════════════════════════════════════════")
+	RunFunctions()
+
+	fmt.Println("\n═══════════════════════════════════════════")
+	fmt.Println("  4/7  集合类型 (数组、切片、Map)")
+	fmt.Println("═══════════════════════════════════════════")
+	RunCollections()
+
+	fmt.Println("\n═══════════════════════════════════════════")
+	fmt.Println("  5/7  结构体与方法")
+	fmt.Println("═══════════════════════════════════════════")
+	RunStructsMethods()
+
+	fmt.Println("\n═══════════════════════════════════════════")
+	fmt.Println("  6/7  接口")
+	fmt.Println("═══════════════════════════════════════════")
+	RunInterfaces()
+
+	fmt.Println("\n═══════════════════════════════════════════")
+	fmt.Println("  7/7  包管理与测试")
+	fmt.Println("═══════════════════════════════════════════")
+	RunPackages()
+
+	fmt.Println("\n┌──────────────────────────────────────────┐")
+	fmt.Println("│   ✅ 基础入门阶段完成！                   │")
+	fmt.Println("└──────────────────────────────────────────┘")
+}
+
+// RunTopic 根据主题名称运行对应模块。
+// 支持模糊匹配：如 "variable" 匹配 "variables"，"func" 匹配 "functions" 等。
+func RunTopic(topic string) bool {
+	topic = strings.ToLower(strings.TrimSpace(topic))
+
+	switch {
+	case matchTopic(topic, "variable", "variables", "变量"):
+		fmt.Println("\n--- 主题：变量、类型与常量 ---")
+		RunVariables()
+	case matchTopic(topic, "control", "controlflow", "if", "for", "switch", "defer", "控制", "控制流"):
+		fmt.Println("\n--- 主题：控制流 ---")
+		RunControlFlow()
+	case matchTopic(topic, "function", "functions", "func", "函数"):
+		fmt.Println("\n--- 主题：函数 ---")
+		RunFunctions()
+	case matchTopic(topic, "collection", "collections", "array", "slice", "slices", "map", "集合", "数组", "切片"):
+		fmt.Println("\n--- 主题：集合类型 ---")
+		RunCollections()
+	case matchTopic(topic, "struct", "structs", "method", "methods", "结构体", "方法"):
+		fmt.Println("\n--- 主题：结构体与方法 ---")
+		RunStructsMethods()
+	case matchTopic(topic, "interface", "interfaces", "接口"):
+		fmt.Println("\n--- 主题：接口 ---")
+		RunInterfaces()
+	case matchTopic(topic, "package", "packages", "testing", "test", "包", "测试"):
+		fmt.Println("\n--- 主题：包管理与测试 ---")
+		RunPackages()
+	default:
+		fmt.Printf("未知的基础主题: %s\n", topic)
+		fmt.Println("可用主题: variables, controlflow, functions, collections, structs, interfaces, packages")
+		return false
+	}
+	return true
+}
+
+// matchTopic 检查用户输入是否匹配某个主题关键词。
+func matchTopic(input string, keywords ...string) bool {
+	for _, kw := range keywords {
+		if input == kw || strings.Contains(input, kw) || strings.Contains(kw, input) {
+			return true
+		}
+	}
+	return false
+}

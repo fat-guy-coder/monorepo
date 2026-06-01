@@ -1,0 +1,170 @@
+{
+  "project": "learning",
+  "parentId": "48eef805-b727-4430-b7d6-6ae35bb8634b",
+  "items": [
+    {
+      "name": "go-stage-1-basics",
+      "label": "阶段1：基础入门",
+      "icon": "🔰",
+      "order": 10,
+      "children": [
+        { "name": "go-1-1-env-tools", "label": "环境搭建与工具链", "order": 1 },
+        { "name": "go-1-2-variables-types", "label": "变量、常量与数据类型", "order": 2 },
+        { "name": "go-1-3-operators", "label": "运算符与表达式", "order": 3 },
+        { "name": "go-1-4-fmt-io", "label": "fmt 格式化输入输出", "order": 4 },
+        { "name": "go-1-5-control-flow", "label": "控制结构 (if/for/switch/goto)", "order": 5 },
+        { "name": "go-1-6-functions-basic", "label": "函数基础 (声明/参数/多返回值)", "order": 6 },
+        { "name": "go-1-7-functions-advanced", "label": "函数进阶 (闭包/递归/高阶/defer)", "order": 7 },
+        { "name": "go-1-8-arrays-slices", "label": "数组与切片", "order": 8 },
+        { "name": "go-1-9-maps", "label": "Map 与 sync.Map", "order": 9 },
+        { "name": "go-1-10-pointers", "label": "指针 (基础/指针运算限制)", "order": 10 },
+        { "name": "go-1-11-structs", "label": "结构体与自定义类型", "order": 11 },
+        { "name": "go-1-12-new-make", "label": "new 与 make 的区别", "order": 12 },
+        { "name": "go-1-13-methods-interfaces", "label": "方法与接口", "order": 13 },
+        { "name": "go-1-14-packages-modules", "label": "包与模块管理", "order": 14 },
+        { "name": "go-1-15-strings-rune", "label": "字符串与字符编码 (rune/UTF-8)", "order": 15 },
+        { "name": "go-1-16-error-handling", "label": "错误处理 (error/errors.Is/As)", "order": 16 },
+        { "name": "go-1-17-time", "label": "时间与日期处理 (time 包)", "order": 17 },
+        { "name": "go-1-18-file-io", "label": "文件 I/O 基础 (os/io/bufio)", "order": 18 },
+        { "name": "go-1-19-testing", "label": "单元测试与基准测试", "order": 19 }
+      ]
+    },
+    {
+      "name": "go-stage-2-concurrency",
+      "label": "阶段2：并发编程",
+      "icon": "⚡",
+      "order": 11,
+      "children": [
+        { "name": "go-2-1-goroutine-gmp", "label": "goroutine 与 GMP 调度模型", "order": 1 },
+        { "name": "go-2-2-channels", "label": "Channel 通道 (缓冲/非缓冲/nil)", "order": 2 },
+        { "name": "go-2-3-select", "label": "Select 多路复用与超时控制", "order": 3 },
+        { "name": "go-2-4-timer-ticker", "label": "Timer 与 Ticker 定时器", "order": 4 },
+        { "name": "go-2-5-sync-mutex", "label": "Mutex / RWMutex 互斥锁", "order": 5 },
+        { "name": "go-2-6-sync-wg-once", "label": "WaitGroup / Once / Cond", "order": 6 },
+        { "name": "go-2-7-atomic", "label": "atomic 原子操作与无锁编程", "order": 7 },
+        { "name": "go-2-8-context", "label": "Context 上下文", "order": 8 },
+        { "name": "go-2-9-concurrency-patterns", "label": "并发模式 (扇入/扇出/流水线)", "order": 9 },
+        { "name": "go-2-10-race-detection", "label": "竞态检测 (go run -race)", "order": 10 },
+        { "name": "go-2-11-sync-pool", "label": "sync.Pool 对象复用", "order": 11 },
+        { "name": "go-2-12-errgroup", "label": "errgroup 并发错误组", "order": 12 },
+        { "name": "go-2-13-goroutine-leak", "label": "goroutine 泄漏排查与修复", "order": 13 }
+      ]
+    },
+    {
+      "name": "go-stage-3-web",
+      "label": "阶段3：Web 开发",
+      "icon": "🌐",
+      "order": 12,
+      "children": [
+        { "name": "go-3-1-net-http", "label": "net/http 标准库", "order": 1 },
+        { "name": "go-3-2-request-response", "label": "请求解析与响应构造", "order": 2 },
+        { "name": "go-3-3-routing-url", "label": "路由与 URL 参数", "order": 3 },
+        { "name": "go-3-4-middleware", "label": "中间件链 (责任链模式)", "order": 4 },
+        { "name": "go-3-5-gin", "label": "Gin 框架入门", "order": 5 },
+        { "name": "go-3-6-gin-advanced", "label": "Gin 进阶 (参数绑定/验证/分组)", "order": 6 },
+        { "name": "go-3-7-json-serialization", "label": "JSON/XML/Protobuf 序列化", "order": 7 },
+        { "name": "go-3-8-file-upload-download", "label": "文件上传与下载", "order": 8 },
+        { "name": "go-3-9-restful-api", "label": "RESTful API 设计规范", "order": 9 },
+        { "name": "go-3-10-cookie-session", "label": "Cookie 与 Session 管理", "order": 10 },
+        { "name": "go-3-11-jwt-auth", "label": "JWT 鉴权 (access+refresh token)", "order": 11 },
+        { "name": "go-3-12-cors-rate-limit", "label": "CORS 跨域与接口限流", "order": 12 },
+        { "name": "go-3-13-websocket", "label": "WebSocket 实时通信", "order": 13 },
+        { "name": "go-3-14-graceful-shutdown", "label": "优雅关停与信号监听", "order": 14 },
+        { "name": "go-3-15-template-embed", "label": "模板渲染与 embed 静态嵌入", "order": 15 },
+        { "name": "go-3-16-swagger", "label": "Swagger / OpenAPI 文档", "order": 16 }
+      ]
+    },
+    {
+      "name": "go-stage-4-database",
+      "label": "阶段4：数据库与存储",
+      "icon": "🗄️",
+      "order": 13,
+      "children": [
+        { "name": "go-4-1-database-sql", "label": "database/sql 标准接口", "order": 1 },
+        { "name": "go-4-2-connection-pool", "label": "连接池配置与调优", "order": 2 },
+        { "name": "go-4-3-crud-basics", "label": "CRUD 基本操作 (QueryRow/Exec)", "order": 3 },
+        { "name": "go-4-4-sql-security", "label": "SQL 注入防护与参数化查询", "order": 4 },
+        { "name": "go-4-5-gorm-start", "label": "GORM 入门 (模型/AutoMigrate)", "order": 5 },
+        { "name": "go-4-6-gorm-association", "label": "GORM 关联与预加载", "order": 6 },
+        { "name": "go-4-7-sqlx-native", "label": "原生 SQL 与 sqlx", "order": 7 },
+        { "name": "go-4-8-transactions", "label": "事务 (ACID/隔离级别/Savepoint)", "order": 8 },
+        { "name": "go-4-9-redis-basics", "label": "Redis 基础数据结构", "order": 9 },
+        { "name": "go-4-10-cache-strategy", "label": "缓存策略 (穿透/击穿/雪崩)", "order": 10 },
+        { "name": "go-4-11-distributed-lock", "label": "Redis 分布式锁", "order": 11 },
+        { "name": "go-4-12-mongodb", "label": "MongoDB 基本操作", "order": 12 },
+        { "name": "go-4-13-migration", "label": "数据库迁移 (golang-migrate)", "order": 13 },
+        { "name": "go-4-14-pprof-slow-query", "label": "慢查询分析与索引优化", "order": 14 }
+      ]
+    },
+    {
+      "name": "go-stage-5-microservices",
+      "label": "阶段5：微服务与分布式",
+      "icon": "🏗️",
+      "order": 14,
+      "children": [
+        { "name": "go-5-1-rpc-protobuf", "label": "RPC 原理与 Protobuf", "order": 1 },
+        { "name": "go-5-2-grpc-unary", "label": "gRPC Unary RPC", "order": 2 },
+        { "name": "go-5-3-grpc-stream", "label": "gRPC 流式 (Server/Client/Bidi)", "order": 3 },
+        { "name": "go-5-4-grpc-interceptor", "label": "gRPC 拦截器与元数据", "order": 4 },
+        { "name": "go-5-5-grpc-lb-retry", "label": "gRPC 负载均衡与重试", "order": 5 },
+        { "name": "go-5-6-service-discovery", "label": "服务注册与发现 (Consul/etcd)", "order": 6 },
+        { "name": "go-5-7-viper-config", "label": "Viper 配置中心与热更新", "order": 7 },
+        { "name": "go-5-8-mq-rabbitmq", "label": "消息队列 RabbitMQ", "order": 8 },
+        { "name": "go-5-9-mq-kafka", "label": "消息队列 Kafka", "order": 9 },
+        { "name": "go-5-10-event-driven", "label": "事件驱动架构", "order": 10 },
+        { "name": "go-5-11-distributed-tracing", "label": "OpenTelemetry 链路追踪", "order": 11 },
+        { "name": "go-5-12-circuit-breaker", "label": "熔断降级与限流", "order": 12 },
+        { "name": "go-5-13-idempotency", "label": "API 幂等性设计", "order": 13 },
+        { "name": "go-5-14-distributed-transaction", "label": "分布式事务 (Saga/Outbox/TCC)", "order": 14 },
+        { "name": "go-5-15-ddd-architecture", "label": "DDD 分层架构设计", "order": 15 },
+        { "name": "go-5-16-docker", "label": "Docker 多阶段构建", "order": 16 }
+      ]
+    },
+    {
+      "name": "go-stage-6-engineering",
+      "label": "阶段6：工程化实战",
+      "icon": "🚀",
+      "order": 15,
+      "children": [
+        { "name": "go-6-1-code-style", "label": "gofmt / goimports / golangci-lint", "order": 1 },
+        { "name": "go-6-2-project-layout", "label": "标准 Go 项目布局", "order": 2 },
+        { "name": "go-6-3-makefile-taskfile", "label": "Makefile 与 Taskfile", "order": 3 },
+        { "name": "go-6-4-wire-di", "label": "Wire 依赖注入", "order": 4 },
+        { "name": "go-6-5-error-handling", "label": "错误处理策略 (wrap/sentinel/join)", "order": 5 },
+        { "name": "go-6-6-structured-logging", "label": "结构化日志 (slog/zap/zerolog)", "order": 6 },
+        { "name": "go-6-7-pprof-cpu", "label": "pprof CPU 性能分析", "order": 7 },
+        { "name": "go-6-8-pprof-heap", "label": "pprof 堆内存分析", "order": 8 },
+        { "name": "go-6-9-trace", "label": "trace 调度追踪与火焰图", "order": 9 },
+        { "name": "go-6-10-table-driven-test", "label": "表格驱动测试", "order": 10 },
+        { "name": "go-6-11-gomock", "label": "Mock 与 gomock/mockery", "order": 11 },
+        { "name": "go-6-12-integration-test", "label": "集成测试与 testcontainers", "order": 12 },
+        { "name": "go-6-13-go-generate", "label": "go generate 代码生成", "order": 13 },
+        { "name": "go-6-14-cicd", "label": "CI/CD 流水线 (GitHub Actions)", "order": 14 },
+        { "name": "go-6-15-versioning", "label": "版本管理与发布 (semver/CHANGELOG)", "order": 15 }
+      ]
+    },
+    {
+      "name": "go-stage-7-advanced",
+      "label": "阶段7：进阶拓展",
+      "icon": "🧠",
+      "order": 16,
+      "children": [
+        { "name": "go-7-1-generics-basic", "label": "泛型基础 (类型参数/约束)", "order": 1 },
+        { "name": "go-7-2-generics-advanced", "label": "泛型进阶 (泛型容器/类库设计)", "order": 2 },
+        { "name": "go-7-3-reflection", "label": "反射机制 (reflect 包)", "order": 3 },
+        { "name": "go-7-4-unsafe", "label": "unsafe 包 (指针运算/内存布局)", "order": 4 },
+        { "name": "go-7-5-cgo", "label": "CGO 互操作 (调用C/导出Go)", "order": 5 },
+        { "name": "go-7-6-memory-allocation", "label": "内存分配 (栈/堆/逃逸分析)", "order": 6 },
+        { "name": "go-7-7-gc-deep", "label": "GC 原理与调优 (GOGC/GOMEMLIMIT)", "order": 7 },
+        { "name": "go-7-8-gmp-scheduler", "label": "GMP 调度器源码解析", "order": 8 },
+        { "name": "go-7-9-inline-optimization", "label": "编译器优化 (内联/边界检查)", "order": 9 },
+        { "name": "go-7-10-asm", "label": "Go 汇编入门 (Plan9 asm)", "order": 10 },
+        { "name": "go-7-11-wasm", "label": "Go + WebAssembly (WASM)", "order": 11 },
+        { "name": "go-7-12-network-deep", "label": "网络编程进阶 (TCP/UDP/连接池)", "order": 12 },
+        { "name": "go-7-13-performance", "label": "性能优化实战 (benchstat/分配优化)", "order": 13 },
+        { "name": "go-7-14-security", "label": "安全编程 (CSP/密钥管理/输入校验)", "order": 14 },
+        { "name": "go-7-15-plugin", "label": "Plugin 与动态扩展", "order": 15 }
+      ]
+    }
+  ]
+}

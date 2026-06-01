@@ -7,8 +7,14 @@
           Go 语言学习路线图
         </h1>
         <p class="mt-4 text-xl text-gray-500">
-          从入门到全栈，每天 2-3 小时，系统掌握 Go 开发
+          从入门到全栈，每天 2-3 小时，历时约 24 周，系统掌握 Go 开发
         </p>
+        <div class="mt-6 flex flex-wrap justify-center gap-3">
+          <span class="px-4 py-1.5 bg-blue-50 text-blue-700 rounded-full text-sm font-medium border border-blue-200">🐹 Go 1.21+</span>
+          <span class="px-4 py-1.5 bg-purple-50 text-purple-700 rounded-full text-sm font-medium border border-purple-200">📦 Go Modules</span>
+          <span class="px-4 py-1.5 bg-green-50 text-green-700 rounded-full text-sm font-medium border border-green-200">⚡ 高并发</span>
+          <span class="px-4 py-1.5 bg-orange-50 text-orange-700 rounded-full text-sm font-medium border border-orange-200">🌐 微服务</span>
+        </div>
       </div>
 
       <!-- 时间轴 -->
@@ -20,9 +26,9 @@
           <li v-for="stage in stages" :key="stage.id" class="relative pl-12 sm:pl-16">
             <!-- 时间轴圆点 -->
             <div
-              class="absolute left-0 sm:left-2 -translate-x-1/2 w-8 h-8 rounded-full border-4 border-white shadow-sm flex items-center justify-center text-white text-xs font-bold"
+              class="absolute left-0 sm:left-2 -translate-x-1/2 w-10 h-10 rounded-full border-4 border-white shadow-md flex items-center justify-center text-white text-sm font-bold"
               :class="stage.color" aria-hidden="true">
-              {{ stage.id }}
+              {{ stage.icon }}
             </div>
 
             <!-- 阶段卡片 -->
@@ -31,27 +37,90 @@
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4">
                   <h2 class="text-2xl font-bold text-gray-900">{{ stage.title }}</h2>
                   <span class="mt-2 sm:mt-0 text-sm font-medium text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
-                    {{ stage.period }}
+                    ⏱ {{ stage.period }}
                   </span>
                 </div>
 
                 <p class="text-gray-600 mb-5 leading-relaxed">{{ stage.description }}</p>
 
-                <ul class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2">
-                  <li v-for="(item, idx) in stage.items" :key="idx" class="flex items-baseline gap-2 text-gray-700">
-                    <span class="font-bold" :class="stage.color.replace('bg-', 'text-')">✓</span>
-                    <span>{{ item }}</span>
+                <ul class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2 mb-5">
+                  <li v-for="(item, idx) in stage.items" :key="idx" class="flex items-baseline gap-2 text-gray-700 text-sm">
+                    <span class="flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-[10px] text-white font-bold"
+                      :class="stage.color">
+                      {{ idx + 1 }}
+                    </span>
+                    <span class="leading-relaxed">{{ item }}</span>
                   </li>
                 </ul>
+
+                <!-- 实战项目 -->
+                <div class="mt-4 p-4 rounded-xl border-2 border-dashed"
+                  :class="stage.color.replace('bg-', 'border-').replace('-500', '-300') + ' ' + stage.color.replace('bg-', 'bg-').replace('-500', '-50')">
+                  <p class="text-sm font-semibold text-gray-800">{{ stage.project }}</p>
+                </div>
               </div>
             </div>
           </li>
         </ul>
       </div>
 
-      <!-- 底部提示 -->
-      <div class="mt-16 text-center text-sm text-gray-400">
-        建议按照阶段顺序学习，每个阶段完成后动手做一个小项目巩固。
+      <!-- 底部资源区 -->
+      <div class="mt-16 max-w-4xl mx-auto">
+        <div class="bg-white rounded-2xl shadow-lg p-6 sm:p-8">
+          <h3 class="text-xl font-bold text-gray-900 mb-6">📚 推荐学习资源</h3>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- 官方资源 -->
+            <div>
+              <h4 class="text-sm font-semibold text-blue-600 uppercase tracking-wide mb-3">🏛️ 官方</h4>
+              <ul class="space-y-2 text-sm text-gray-600">
+                <li><a href="https://go.dev/doc/" target="_blank" class="hover:text-blue-600 underline">Go 官方文档</a></li>
+                <li><a href="https://go.dev/tour/" target="_blank" class="hover:text-blue-600 underline">A Tour of Go（交互式教程）</a></li>
+                <li><a href="https://go.dev/play/" target="_blank" class="hover:text-blue-600 underline">Go Playground</a></li>
+                <li><a href="https://pkg.go.dev/" target="_blank" class="hover:text-blue-600 underline">Go 包文档索引</a></li>
+                <li><a href="https://go.dev/doc/effective_go" target="_blank" class="hover:text-blue-600 underline">Effective Go</a></li>
+              </ul>
+            </div>
+
+            <!-- 书籍推荐 -->
+            <div>
+              <h4 class="text-sm font-semibold text-green-600 uppercase tracking-wide mb-3">📖 经典书籍</h4>
+              <ul class="space-y-2 text-sm text-gray-600">
+                <li>• 《The Go Programming Language》- Alan Donovan</li>
+                <li>• 《Go 语言设计与实现》- draveness</li>
+                <li>• 《Concurrency in Go》- Katherine Cox-Buday</li>
+                <li>• 《Go Web Programming》- Sau Sheong Chang</li>
+                <li>• 《Cloud Native Go》- Matthew A. Titmus</li>
+              </ul>
+            </div>
+
+            <!-- 实战资源 -->
+            <div>
+              <h4 class="text-sm font-semibold text-purple-600 uppercase tracking-wide mb-3">🛠️ 实战平台</h4>
+              <ul class="space-y-2 text-sm text-gray-600">
+                <li><a href="https://github.com/golang-standards/project-layout" target="_blank" class="hover:text-purple-600 underline">标准项目布局</a></li>
+                <li><a href="https://gobyexample.com/" target="_blank" class="hover:text-purple-600 underline">Go by Example</a></li>
+                <li><a href="https://exercism.org/tracks/go" target="_blank" class="hover:text-purple-600 underline">Exercism Go 练习</a></li>
+                <li><a href="https://github.com/avelino/awesome-go" target="_blank" class="hover:text-purple-600 underline">awesome-go 精选库</a></li>
+                <li><a href="https://quii.gitbook.io/learn-go-with-tests" target="_blank" class="hover:text-purple-600 underline">Learn Go with Tests</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- 本仓库路径提示 -->
+        <div class="mt-6 p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl border border-blue-200">
+          <p class="text-sm text-gray-700 text-center">
+            💡 <span class="font-semibold">本地练习：</span>
+            路线图示例代码位于 <code class="px-1.5 py-0.5 bg-white rounded text-blue-700 text-xs font-mono">apps/go/src/</code>，
+            按阶段分文件夹，进入对应目录运行 <code class="px-1.5 py-0.5 bg-white rounded text-blue-700 text-xs font-mono">go run .</code> 即可查看输出。
+            前端学习页面 + Go 源码项目联动学习！
+          </p>
+        </div>
+
+        <div class="mt-6 text-center text-sm text-gray-400">
+          建议按照阶段顺序学习，每个阶段完成后动手做实战项目巩固。每天 2-3 小时，坚持约 24 周，你将成为合格的 Go 开发者 💪
+        </div>
       </div>
     </div>
   </div>
@@ -66,7 +135,9 @@ interface Stage {
   period: string
   description: string
   items: string[]
+  project: string
   color: string
+  icon: string
 }
 
 const stages = ref<Stage[]>([
@@ -76,107 +147,169 @@ const stages = ref<Stage[]>([
     period: '第1-3周',
     description: '快速掌握 Go 的基本语法和开发环境，建立对静态类型编译型语言的感觉。',
     items: [
-      '安装 Go、配置 GOPATH/GOROOT 与 Go Modules',
-      '变量声明、基本数据类型、零值、类型转换',
-      '控制结构：if、for、switch、defer 的用法',
-      '函数：多返回值、命名返回值、可变参数、闭包',
-      '数组、切片（slice）底层原理与容量增长',
-      'map 与 sync.Map 的使用和性能对比',
-      '指针、结构体与方法，值接收者 vs 指针接收者',
-      '接口（interface）、类型断言与空接口',
-      '包与模块管理：go mod init/tidy/vendor',
-      '单元测试与基准测试：testing 包、表格驱动测试'
+      '✅ 安装 Go、配置 GOPATH/GOROOT 与 Go Modules',
+      '✅ 变量声明（var/:=）、基本数据类型、零值、类型转换',
+      '✅ 控制结构：if/else、for（唯一循环关键字）、switch、defer',
+      '✅ 函数：多返回值、命名返回值、可变参数、匿名函数与闭包',
+      '✅ 数组、切片（slice）底层原理（len/cap）与容量增长机制',
+      '✅ map 的声明、遍历、删除与 sync.Map 的并发安全对比',
+      '✅ 指针（* 和 &）、结构体定义与匿名字段嵌入',
+      '✅ 方法：值接收者 vs 指针接收者的选择原则',
+      '✅ 接口（interface）：隐式实现、类型断言、空接口 any',
+      '✅ 包与模块：go mod init/tidy/vendor、internal 包可见性',
+      '✅ 单元测试与基准测试：testing 包、表格驱动测试、testify',
+      '✅ 字符串操作：strings/strconv 包、rune 与 UTF-8 编码',
+      '✅ 错误处理：error 接口、errors.Is/As、fmt.Errorf 包装'
     ],
+    project: '📌 实战：命令行 TODO 工具 — 支持增删改查、数据持久化到 JSON 文件',
+    icon: '🔰',
     color: 'bg-blue-500'
   },
   {
     id: 2,
     title: '并发编程：goroutine 与 channel',
     period: '第4-6周',
-    description: '深入 Go 最核心的并发模型，这是区别于其他语言的关键能力。',
+    description: '深入 Go 最核心的并发模型 — "不要通过共享内存来通信，而要通过通信来共享内存"。',
     items: [
-      'goroutine 调度模型（GMP）与 runtime 基础',
-      'channel 的声明、缓冲与非缓冲、关闭与遍历',
-      'select 多路复用与超时控制',
-      'sync 包：Mutex、RWMutex、WaitGroup、Once',
-      'context 包：传递取消信号、超时、截止时间与值',
-      '并发模式：生产者-消费者、扇入扇出、流水线',
-      '并发安全：竞态检测（go run -race）与原子操作',
-      'sync.Pool 与对象复用，降低 GC 压力',
-      '并发场景的错误处理与 goroutine 泄漏排查'
+      '✅ goroutine 调度模型（GMP）与 runtime 基础',
+      '✅ channel 声明、缓冲/非缓冲区别、关闭与 range 遍历',
+      '✅ select 多路复用：default 非阻塞、超时控制、心跳',
+      '✅ sync.Mutex / RWMutex：读写锁与竞态条件',
+      '✅ sync.WaitGroup、sync.Once、sync.Cond 使用场景',
+      '✅ context 包：WithCancel/WithTimeout/WithDeadline/WithValue',
+      '✅ 并发模式：生产者-消费者、扇入（fan-in）扇出（fan-out）',
+      '✅ 流水线模式（Pipeline）与错误传播',
+      '✅ 竞态检测：go run -race、go test -race',
+      '✅ sync/atomic 原子操作与无锁编程',
+      '✅ sync.Pool 对象复用池，降低 GC 压力',
+      '✅ goroutine 泄漏排查：pprof goroutine profile、runtime.NumGoroutine',
+      '✅ errgroup 并发错误组：golang.org/x/sync/errgroup'
     ],
+    project: '📌 实战：并发网页爬虫 — 爬取指定网站所有链接，支持并发数控制与结果去重',
+    icon: '⚡',
     color: 'bg-green-500'
   },
   {
     id: 3,
     title: 'Web 开发：从标准库到主流框架',
     period: '第7-10周',
-    description: '使用 Go 构建高性能 HTTP 服务，掌握中间件与路由设计。',
+    description: '使用 Go 构建高性能 HTTP 服务，掌握中间件链与路由设计模式。',
     items: [
-      'net/http 标准库：Server、Handler、ServeMux',
-      '路由分组与中间件链的实现思路',
-      'Gin 框架：路由、参数绑定、验证、中间件',
-      '请求与响应处理：JSON 序列化、文件上传下载',
-      'RESTful API 设计规范与版本控制',
-      'JWT 鉴权、API 限流与 CORS 处理',
-      'WebSocket 简单聊天室实战',
-      '优雅关停与信号监听（signal）',
-      '模板渲染（html/template）与静态资源嵌入'
+      '✅ net/http 标准库：Server、Handler 接口、ServeMux 路由',
+      '✅ 自定义 Handler 与中间件链（责任链模式）的实现',
+      '✅ Gin 框架：路由分组、路径参数、查询参数、表单绑定',
+      '✅ 请求验证：go-playground/validator 与自定义验证器',
+      '✅ JSON/XML/Protobuf 序列化与响应渲染',
+      '✅ 文件上传（单/多文件）、下载、静态文件服务',
+      '✅ RESTful API 设计：资源命名、版本控制、状态码规范',
+      '✅ JWT 鉴权流程：access token + refresh token 双 token 模式',
+      '✅ API 限流：令牌桶（golang.org/x/time/rate）与 IP 白名单',
+      '✅ CORS 跨域处理与安全 Header 中间件',
+      '✅ WebSocket：gorilla/websocket 实时双向通信',
+      '✅ 优雅关停：signal.NotifyContext + http.Server.Shutdown',
+      '✅ html/template 模板渲染、embed 静态资源嵌入（Go 1.16+）',
+      '✅ Swagger/OpenAPI 文档自动生成（swaggo）'
     ],
+    project: '📌 实战：RESTful 博客 API — 文章 CRUD + 分类标签 + JWT 认证 + Swagger 文档',
+    icon: '🌐',
     color: 'bg-purple-500'
   },
   {
     id: 4,
     title: '数据库与存储',
     period: '第11-13周',
-    description: '掌握主流数据库的 Go SDK 使用方法，并学习缓存策略。',
+    description: '掌握主流数据库的 Go SDK 使用方法，学习缓存策略与数据一致性方案。',
     items: [
-      'database/sql 标准接口与连接池管理',
-      'GORM 入门：模型定义、自动迁移、关联查询',
-      '原生 SQL 与 SQLX 的对比使用场景',
-      'MySQL 事务、隔离级别与 GORM 事务处理',
-      'Redis：go-redis 客户端，缓存穿透/击穿/雪崩',
-      'MongoDB 驱动基础操作与聚合查询',
-      '数据库迁移工具（golang-migrate）',
-      '连接池参数调优与 pprof 分析慢查询'
+      '✅ database/sql 标准接口：Open、Ping、QueryRow、Exec',
+      '✅ 连接池参数：SetMaxOpenConns、SetMaxIdleConns、SetConnMaxLifetime',
+      '✅ GORM 快速入门：模型定义、AutoMigrate、CRUD、Hook',
+      '✅ GORM 关联：HasOne/HasMany/BelongsTo/ManyToMany、预加载',
+      '✅ 原生 SQL 与 sqlx：命名参数、结构体映射、批量操作',
+      '✅ MySQL 事务：ACID、隔离级别（读已提交/可重复读/串行化）',
+      '✅ GORM 事务 + 嵌套事务 + SavePoint',
+      '✅ Redis：go-redis v9，String/Hash/List/Set/ZSet 命令',
+      '✅ 缓存策略：缓存穿透（布隆过滤器）、击穿（互斥锁）、雪崩（随机过期）',
+      '✅ Redis 分布式锁：SET NX EX + Lua 脚本解锁',
+      '✅ MongoDB：mongo-driver 连接、BSON、CRUD、聚合管道',
+      '✅ 数据库迁移：golang-migrate 创建/回滚迁移文件',
+      '✅ pprof 分析慢查询 + 执行计划优化 + 索引策略'
     ],
+    project: '📌 实战：电商库存系统 — 商品 SKU + Redis 库存扣减 + MySQL 订单持久化 + 分布式锁防超卖',
+    icon: '🗄️',
     color: 'bg-yellow-500'
   },
   {
     id: 5,
     title: '微服务与分布式系统',
     period: '第14-17周',
-    description: '构建可扩展的微服务架构，掌握服务间通信与治理。',
+    description: '构建可扩展的微服务架构，掌握服务间 RPC 通信、治理与可观测性。',
     items: [
-      'RPC 原理与 gRPC：protobuf 定义、代码生成',
-      'gRPC 拦截器、超时重试与负载均衡',
-      '服务注册与发现：consul/etcd 基础使用',
-      '配置中心：viper 读取本地/远程配置',
-      '消息队列：RabbitMQ/Kafka 的 Go 客户端实践',
-      '分布式链路追踪：OpenTelemetry + Jaeger',
-      'API 网关与限流熔断（如 sentinel-golang）',
-      '微服务拆分原则与 DDD 初步',
-      'Docker 容器化与多阶段构建'
+      '✅ RPC 原理：序列化、传输协议、服务契约',
+      '✅ Protobuf 语法：message、enum、service、oneof、map',
+      '✅ gRPC：Unary RPC、Server Streaming、Client Streaming、Bidirectional',
+      '✅ gRPC 拦截器：UnaryInterceptor、StreamInterceptor（鉴权/日志/重试）',
+      '✅ gRPC 超时控制（Deadline）、重试策略与负载均衡（round_robin）',
+      '✅ 服务注册与发现：Consul 健康检查 + gRPC 服务解析器',
+      '✅ 配置中心：Viper 读取 YAML/ENV/远程配置 + 热更新',
+      '✅ 消息队列：RabbitMQ（amqp091-go）— 发布确认、消费 Ack、死信队列',
+      '✅ Kafka：sarama 生产者/消费者、消费者组、分区策略',
+      '✅ 分布式链路追踪：OpenTelemetry SDK + Jaeger/Grafana Tempo',
+      '✅ 熔断器：sony/gobreaker 或 sentinel-golang 降级策略',
+      '✅ API 网关模式：路由转发、鉴权统一、限流、日志聚合',
+      '✅ DDD 初步：分层架构（interface/app/domain/infra）',
+      '✅ Docker：Dockerfile 多阶段构建、docker-compose 编排服务'
     ],
+    project: '📌 实战：微服务商城 — 用户服务 + 商品服务 + 订单服务，gRPC 通信 + Kafka 异步 + Jaeger 追踪',
+    icon: '🏗️',
     color: 'bg-red-500'
   },
   {
     id: 6,
     title: '工程化与项目实战',
-    period: '第18-24周',
-    description: '从代码规范到 CI/CD，用真实项目锤炼全栈交付能力。',
+    period: '第18-22周',
+    description: '代码规范 → 测试体系 → 性能分析 → CI/CD，用真实项目锤炼交付能力。',
     items: [
-      '代码风格：gofmt、goimports、golangci-lint',
-      'Makefile 与 Taskfile 组织项目命令',
-      '错误处理策略：wrap、sentinel error、error group',
-      '日志规范：zap/zerolog 结构化日志',
-      '性能分析：pprof、trace、火焰图解读',
-      '单元测试、集成测试与 Mock（gomock）',
-      'CI/CD：GitHub Actions 或 GitLab CI 部署 Go 服务',
-      '项目结构布局：标准 Go 项目布局与内部 package 设计',
-      '综合实战：前端 Vue3 + Go 后台管理系统（从零到上线）'
+      '✅ 代码风格：gofmt、goimports、golangci-lint 配置与 Git Hook',
+      '✅ Makefile / Taskfile 统一构建、测试、部署命令',
+      '✅ 错误处理进阶：自定义错误类型、errors.Is/As、%w 包装链',
+      '✅ 结构化日志：zap 高性能日志、zerolog 零分配日志',
+      '✅ 日志切割：lumberjack 按大小/时间轮转',
+      '✅ pprof 性能分析：CPU profile、heap profile、goroutine profile',
+      '✅ trace 工具：追踪 goroutine 调度、GC、网络阻塞',
+      '✅ 火焰图解读与性能瓶颈定位',
+      '✅ 单元测试：表格驱动测试 + testify/suite + 覆盖率',
+      '✅ Mock 与集成测试：gomock/mockery、testcontainers-go',
+      '✅ CI/CD Pipeline：GitHub Actions 自动化测试→构建→部署',
+      '✅ 标准 Go 项目布局：cmd/internal/pkg/api + 依赖注入（wire）',
+      '✅ 配置管理：Viper + 环境变量 + .env + 12-Factor App'
     ],
+    project: '📌 实战：前后端全栈后台管理系统 — Vue3 + Go Gin + GORM + PostgreSQL + Redis + Docker 部署',
+    icon: '🚀',
     color: 'bg-indigo-500'
+  },
+  {
+    id: 7,
+    title: '进阶拓展：生态与底层',
+    period: '第23-26周（持续学习）',
+    description: '探索 Go 生态的深度领域，了解语言底层机制与前沿特性，向高级工程师迈进。',
+    items: [
+      '✅ 泛型（Go 1.18+）：类型参数、约束（constraints）、泛型函数与类型',
+      '✅ 反射机制：reflect 包、Type/Value、结构体标签解析',
+      '✅ unsafe 包：指针转换、内存布局、与 C 语言互操作基础',
+      '✅ CGO：调用 C 库、导出 Go 函数给 C、内存管理边界',
+      '✅ Go 内存管理：栈/堆分配、逃逸分析（-gcflags="-m"）、GC 原理',
+      '✅ 编译器优化：内联、逃逸分析、边界检查消除',
+      '✅ Go Plugin 与 WASM：编译为 WebAssembly 并在浏览器运行',
+      '✅ 网络编程进阶：TCP/UDP 服务器、net.Poller、epoll/kqueue',
+      '✅ 源码阅读：net/http、sync、context 标准库核心实现',
+      '✅ 性能优化实战：benchstat 对比、分配优化、并发模式调优',
+      '✅ 代码生成：go generate、stringer、mockgen',
+      '✅ 安全编程：SQL 注入防护、XSS、CSRF、密钥管理',
+      '✅ Go 版本管理：gvm / goenv 多版本共存与切换'
+    ],
+    project: '📌 实战：高性能代理网关 — TCP/HTTP 代理 + 连接池 + 限流熔断 + 插件热加载 + 可观测性全链路',
+    icon: '🧠',
+    color: 'bg-pink-500'
   }
 ])
 </script>
