@@ -3,6 +3,7 @@ import { request, type ApiResult } from '@/request'
 export interface UserInfo {
   id: string
   username: string
+  roles?: { id: string; name: string }[]
 }
 
 export interface LoginRequest {

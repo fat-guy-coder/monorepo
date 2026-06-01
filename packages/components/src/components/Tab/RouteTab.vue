@@ -2,11 +2,12 @@
   <div class="menu-list" id="context-menu" :style="{
     top: `${position.Y}px`,
     left: `${position.X}px`,
-    height: `${showContextMenu ? 80 : 0}px`,
+    height: showContextMenu ? 'auto' : '0px',
   }">
     <div @click.stop="closeSide(currentIndex, 'left', currentKey)">关闭左侧</div>
     <div @click.stop="closeSide(currentIndex, 'right', currentKey)">关闭右侧</div>
     <div @click.stop="closeAll(currentKey)">关闭其他</div>
+    <slot name="contextMenuItems"></slot>
   </div>
   <Tabs @change="TabClick" :activeKey="activeKey" :type="type" :tabBarStyle="{ margin: '0 5px' }" @close="removeTab">
     <TabPane v-for="(pane, index) in tabList" :key="pane.path" :closable="pane.path !== '/' && pane.path !== '/home'"

@@ -28,6 +28,12 @@
         <RouteTab @tab-click="tabClick" :activeKey="activeKey" :currentDragIndex="currentDragIndex" :tabList="tabList"
           :showContextMenu="showContextMenu" @remove="removeTab" @remove-other="removeOther" @remove-side="removeSide"
           @set-current-drag-index="setCurrentDragIndex" @sort-tab="sortTab" @toggle-show-menu="toggleShowMenu">
+          <template #contextMenuItems>
+            <template v-if="isAdmin">
+              <div class="context-menu-divider"></div>
+              <div @click.stop="gotoMenuManagement">🔗 跳转菜单</div>
+            </template>
+          </template>
         </RouteTab>
       </div>
       <div class="mainView" id="mainView" @scroll="handleScroll">
@@ -72,8 +78,8 @@ import {
   findMenuItemByName, //查找菜单项 通过name
 } from '@/menu'
 import { getApiMenus, getApiMenusSearch } from '@/api/menu'
-import { postApiUserLogin, postApiUserRegister } from '@/api/user'
-import { saveTokens, saveUserInfo, getAccessToken, isAccessTokenValid } from '@/utils/token'
+import { postApiUserLogin, postApiUserRegister, postApiUserRefresh, getApiUserMe } from '@/api/user'
+import { saveTokens, saveUserInfo, getAccessToken, isAccessTokenValid, isRefreshTokenValid, getRefreshToken, clearTokens } from '@/utils/token'
 import { useTabStore } from '@/stores/tab' //标签列表store
 import { useDeviceStore } from '@/stores/device' //设备信息store
 import { useUIConfigStore, type Theme } from '@/stores/uiconfig' //UI配置store
@@ -199,7 +205,10 @@ const mainViewLoading = ref(false)
 // 登录模态框状态
 const loginModalVisible = ref(false)
 const isRegisterMode = ref(false)
-const isLoggedIn = computed(() => isAccessTokenValid())
+// 登录态判断：access token 有效，或者 refresh token 有效（可自动续期）
+const isLoggedIn = computed(() => isAccessTokenValid() || isRefreshTokenValid())
+// admin 角色判断：控制管理功能的可见性
+const isAdmin = ref(false)
 const loginForm = reactive<{ username: string; password: string }>({
   username: '',
   password: '',
@@ -245,17 +254,42 @@ onMounted(async () => {
   if (container.value) {
     container.value.addEventListener('click', closeContextMenu)
   }
+
+  // 如果 access token 过期但 refresh token 有效，主动刷新 token
+  // 实现"只要不主动登出就一直有效"的体验
+  if (!isAccessTokenValid() && isRefreshTokenValid()) {
+    try {
+      const res = await postApiUserRefresh({ refreshToken: getRefreshToken()! })
+      if (res.data) {
+        saveTokens(res.data.accessToken, res.data.refreshToken)
+      }
+    } catch {
+      // 刷新失败，清除登录态
+      clearTokens()
+    }
+  }
+
+  // 检测当前用户是否为 admin
+  if (isAccessTokenValid()) {
+    try {
+      const res = await getApiUserMe()
+      if (res.data?.roles?.some(r => r.name === 'admin')) {
+        isAdmin.value = true
+      }
+    } catch {
+      // 获取角色失败不影响正常使用
+    }
+  }
+
   //获取菜单（先获取菜单再跳转激活的tab，确保路由已注册）
   try {
     await getMenus()
   } catch {
     // 菜单加载失败（如 token 过期被拦截器清空），仍然尝试跳转
-    // tabList 中持久化的路由已在 getMenus 中注册
   }
-  //跳转激活的tab（仅当路由已注册时跳转，避免 404）
-  if (router.hasRoute(activeKey.value) || activeKey.value === '/') {
-    router.push(activeKey.value)
-  }
+  //跳转激活的tab — getMenus() 已遍历 tabList 注册了持久化标签的路由
+  //router.push 用 path 匹配，不会走到 catch-all 的 404 页面
+  router.push(activeKey.value)
 })
 
 //卸载时清空菜单列表
@@ -640,6 +674,37 @@ async function goToByName(name: string, isRedirect: boolean = false, knownPath?:
 //提供跳转菜单名称方法
 provide('goToByName', goToByName)
 provide('reloadMenus', getMenus)
+provide('isAdmin', isAdmin)
+
+// 跳转到菜单管理页面，并展开当前 tab 对应的菜单项
+function gotoMenuManagement() {
+  store.toggleShowMenu(false)
+  const targetPath = activeKey.value
+  if (targetPath === '/' || targetPath === '/home') return
+
+  // 查找菜单管理页面的 name（从 routeInfoMap 或 tabList 中匹配）
+  let menuName = ''
+  let menuPath = '/System/menu'
+  for (const [name, info] of Array.from(routeInfoMap.entries())) {
+    if (info.path.toLowerCase().includes('menu') && name.toLowerCase().includes('menu')) {
+      menuName = name
+      menuPath = info.path
+      break
+    }
+  }
+
+  // 确保路由已注册
+  if (menuName && !router.hasRoute(menuName)) {
+    registerRouteByPath(menuPath, menuName)
+  }
+
+  // 优先用 name 跳转（带 query），fallback 用 path
+  if (menuName && router.hasRoute(menuName)) {
+    router.push({ name: menuName, query: { expandPath: targetPath } })
+  } else {
+    router.push({ path: menuPath, query: { expandPath: targetPath } })
+  }
+}
 
 //滚动事件
 const handleScroll = debounce((e: Event) => {
@@ -781,5 +846,10 @@ const scrollTo = (id: string) => {
   color: var(--color-primary);
   cursor: pointer;
   font-size: 14px;
+}
+
+.context-menu-divider {
+  border-top: 1px solid var(--color-border);
+  margin: 2px 0;
 }
 </style>

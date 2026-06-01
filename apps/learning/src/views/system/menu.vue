@@ -65,6 +65,7 @@
 
 <script setup lang="ts">
 import { ref, reactive, onMounted, computed } from 'vue'
+import { useRoute } from 'vue-router'
 import { Tree, Select, Input, InputNumber, Button, Modal, Spin, message, confirm } from 'components'
 import type { TreeNode } from 'components'
 import {
@@ -443,8 +444,57 @@ const handleSubmit = async () => {
   }
 }
 
-onMounted(() => {
-  fetchMenus()
+const route = useRoute()
+
+onMounted(async () => {
+  await fetchMenus()
+
+  // 如果 URL 带 expandPath query 参数，自动展开对应菜单项所在的父级
+  const expandPath = route.query.expandPath as string | undefined
+  if (expandPath) {
+    try {
+      // 用 flat 方式获取所有菜单（仅 admin 触发，一次性请求）
+      const { data: allMenus } = await getApiMenus({
+        project: searchForm.project || undefined,
+        flat: 'true',
+      })
+      if (!allMenus?.length) return
+
+      // 找到目标菜单项
+      const targetMenu = (allMenus as MenuItem[]).find(m => m.path === expandPath)
+      if (!targetMenu) return
+
+      // 追溯父级链（id 列表，从根到目标）
+      const parentIds: string[] = []
+      let currentId: string | null | undefined = targetMenu.parentId
+      while (currentId) {
+        const parent = (allMenus as MenuItem[]).find(m => m.id === currentId)
+        if (parent) {
+          parentIds.unshift(parent.id!)
+          currentId = parent.parentId
+        } else {
+          break
+        }
+      }
+
+      // 对每个父级节点加载子菜单并展开
+      for (const parentId of parentIds) {
+        const parentNode = findNode(treeData.value, parentId)
+        if (parentNode) {
+          await loadNodeChildren(parentNode)
+        }
+      }
+      defaultExpandedKeys.value = parentIds
+
+      // 延迟滚动到目标项（等 Tree 渲染完）
+      setTimeout(() => {
+        const el = document.getElementById(expandPath)
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      }, 500)
+    } catch {
+      // expandPath 处理失败不阻塞页面
+    }
+  }
 })
 </script>
 

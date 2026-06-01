@@ -176,7 +176,18 @@ userRoutes.push({
     if (!auth) {
       return Response.json(error('未授权，请先登录', 401), { status: 401 })
     }
-    return Response.json(success({ id: auth.userId, username: auth.username }))
+
+    // 查询用户角色
+    const relations = await db.query.userRole.findMany({
+      where: (ur, { eq }) => eq(ur.userId, auth.userId),
+    })
+    const roles: { id: string; name: string }[] = []
+    for (const rel of relations) {
+      const r = await db.query.role.findFirst({ where: (rl, { eq }) => eq(rl.id, rel.roleId) })
+      if (r) roles.push({ id: r.id, name: r.name })
+    }
+
+    return Response.json(success({ id: auth.userId, username: auth.username, roles }))
   },
 })
 

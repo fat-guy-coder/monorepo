@@ -30,7 +30,12 @@
         <div class="table-wrapper">
           <table>
             <thead>
-              <tr><th>顺序</th><th>项目名称</th><th>涉及知识点</th><th>产出</th></tr>
+              <tr>
+                <th>顺序</th>
+                <th>项目名称</th>
+                <th>涉及知识点</th>
+                <th>产出</th>
+              </tr>
             </thead>
             <tbody>
               <tr v-for="proj in phase.projects" :key="proj.order">
@@ -86,15 +91,25 @@
       <div class="resource-lists">
         <div>
           <h3>官方文档</h3>
-          <ul><li><a href="https://docs.python.org/3/tutorial/" target="_blank">Python 官方教程</a></li><li><a href="https://docs.python.org/3/library/" target="_blank">Python 标准库</a></li></ul>
+          <ul>
+            <li><a href="https://docs.python.org/3/tutorial/" target="_blank">Python 官方教程</a></li>
+            <li><a href="https://docs.python.org/3/library/" target="_blank">Python 标准库</a></li>
+          </ul>
         </div>
         <div>
           <h3>在线教程</h3>
-          <ul><li><a href="https://www.w3schools.com/python/" target="_blank">W3Schools Python</a></li><li><a href="https://realpython.com/" target="_blank">Real Python</a></li></ul>
+          <ul>
+            <li><a href="https://www.w3schools.com/python/" target="_blank">W3Schools Python</a></li>
+            <li><a href="https://realpython.com/" target="_blank">Real Python</a></li>
+          </ul>
         </div>
         <div>
           <h3>书籍</h3>
-          <ul><li>《Python 编程：从入门到实践》</li><li>《Effective Python》</li><li>《Python 进阶》</li></ul>
+          <ul>
+            <li>《Python 编程：从入门到实践》</li>
+            <li>《Effective Python》</li>
+            <li>《Python 进阶》</li>
+          </ul>
         </div>
       </div>
     </div>
@@ -262,9 +277,36 @@ const weeks = [
 .hero {
   text-align: center;
   margin-bottom: 2rem;
-  h1 { font-size: 2rem; font-weight: 700; background: linear-gradient(135deg, #1e293b, #3b82f6); background-clip: text; -webkit-background-clip: text; color: transparent; }
-  p { color: #475569; margin-top: 0.25rem; }
-  .badge-group { margin-top: 0.8rem; display: flex; justify-content: center; gap: 0.8rem; span { background: #eef2ff; color: #1e40af; padding: 0.2rem 1rem; border-radius: 2rem; font-size: 0.7rem; font-weight: 500; } }
+
+  h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #1e293b, #3b82f6);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+
+  p {
+    color: #475569;
+    margin-top: 0.25rem;
+  }
+
+  .badge-group {
+    margin-top: 0.8rem;
+    display: flex;
+    justify-content: center;
+    gap: 0.8rem;
+
+    span {
+      background: #eef2ff;
+      color: #1e40af;
+      padding: 0.2rem 1rem;
+      border-radius: 2rem;
+      font-size: 0.7rem;
+      font-weight: 500;
+    }
+  }
 }
 
 .principles {
@@ -273,8 +315,45 @@ const weeks = [
   padding: 1rem 1.5rem;
   margin-bottom: 2rem;
   border: 1px solid #e2e8f0;
-  h2 { font-size: 1.25rem; margin-top: 0; }
-  .principles-grid { display: flex; flex-wrap: wrap; gap: 1rem; .principle { flex: 1; min-width: 200px; display: flex; gap: 0.5rem; align-items: start; .num { background: #3b82f6; color: white; width: 24px; height: 24px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: bold; flex-shrink: 0; } p { margin: 0; font-size: 0.85rem; line-height: 1.4; } } }
+
+  h2 {
+    font-size: 1.25rem;
+    margin-top: 0;
+  }
+
+  .principles-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+
+    .principle {
+      flex: 1;
+      min-width: 200px;
+      display: flex;
+      gap: 0.5rem;
+      align-items: start;
+
+      .num {
+        background: #3b82f6;
+        color: white;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.7rem;
+        font-weight: bold;
+        flex-shrink: 0;
+      }
+
+      p {
+        margin: 0;
+        font-size: 0.85rem;
+        line-height: 1.4;
+      }
+    }
+  }
 }
 
 .phase {
@@ -283,10 +362,118 @@ const weeks = [
   margin-bottom: 1.8rem;
   border: 1px solid #e2e8f0;
   overflow: hidden;
-  .phase-header { background: #f8fafc; padding: 0.8rem 1.5rem; display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid #e2e8f0; h2 { font-size: 1.25rem; margin: 0; } .duration { color: #3b82f6; font-size: 0.8rem; font-weight: 500; } }
-  .goal { padding: 0.5rem 1.5rem; margin: 0; font-size: 0.85rem; background: #fefce8; color: #854d0e; border-bottom: 1px solid #e2e8f0; }
-  .table-wrapper { overflow-x: auto; padding: 0 1rem 1rem 1rem; table { width: 100%; border-collapse: collapse; font-size: 0.8rem; th, td { padding: 0.6rem 0.5rem; text-align: left; border-bottom: 1px solid #eef2f6; } th { font-weight: 600; color: #1e293b; background: #f9fafb; } .order { width: 50px; } .name { font-weight: 500; } .knowledge { color: #475569; } .output { color: #0f172a; } } }
-  .details { padding: 0.5rem 1.5rem 1.2rem; background: #faf9fe; border-top: 1px solid #eef2f6; .detail-card { background: white; border-radius: 0.8rem; padding: 0.8rem; margin-top: 1rem; box-shadow: 0 1px 2px rgba(0,0,0,0.02); h3 { font-size: 0.9rem; margin: 0 0 0.4rem; } .detail-desc { font-size: 0.75rem; color: #334155; } .code-block { background: #1e293b; border-radius: 0.5rem; padding: 0.5rem; font-size: 0.7rem; overflow-x: auto; margin: 0.5rem 0; code { color: #e2e8f0; font-family: monospace; } } .knowledge-tags { font-size: 0.7rem; color: #3b82f6; } } }
+
+  .phase-header {
+    background: #f8fafc;
+    padding: 0.8rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-bottom: 1px solid #e2e8f0;
+
+    h2 {
+      font-size: 1.25rem;
+      margin: 0;
+    }
+
+    .duration {
+      color: #3b82f6;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+  }
+
+  .goal {
+    padding: 0.5rem 1.5rem;
+    margin: 0;
+    font-size: 0.85rem;
+    background: #fefce8;
+    color: #854d0e;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  .table-wrapper {
+    overflow-x: auto;
+    padding: 0 1rem 1rem 1rem;
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8rem;
+
+      th,
+      td {
+        padding: 0.6rem 0.5rem;
+        text-align: left;
+        border-bottom: 1px solid #eef2f6;
+      }
+
+      th {
+        font-weight: 600;
+        color: #1e293b;
+        background: #f9fafb;
+      }
+
+      .order {
+        width: 50px;
+      }
+
+      .name {
+        font-weight: 500;
+      }
+
+      .knowledge {
+        color: #475569;
+      }
+
+      .output {
+        color: #0f172a;
+      }
+    }
+  }
+
+  .details {
+    padding: 0.5rem 1.5rem 1.2rem;
+    background: #faf9fe;
+    border-top: 1px solid #eef2f6;
+
+    .detail-card {
+      background: white;
+      border-radius: 0.8rem;
+      padding: 0.8rem;
+      margin-top: 1rem;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+
+      h3 {
+        font-size: 0.9rem;
+        margin: 0 0 0.4rem;
+      }
+
+      .detail-desc {
+        font-size: 0.75rem;
+        color: #334155;
+      }
+
+      .code-block {
+        background: #1e293b;
+        border-radius: 0.5rem;
+        padding: 0.5rem;
+        font-size: 0.7rem;
+        overflow-x: auto;
+        margin: 0.5rem 0;
+
+        code {
+          color: #e2e8f0;
+          font-family: monospace;
+        }
+      }
+
+      .knowledge-tags {
+        font-size: 0.7rem;
+        color: #3b82f6;
+      }
+    }
+  }
 }
 
 .timeline {
@@ -295,8 +482,35 @@ const weeks = [
   padding: 1rem 1.5rem;
   margin: 1.8rem 0;
   border: 1px solid #e2e8f0;
-  h2 { font-size: 1.2rem; margin-top: 0; }
-  .weeks-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 0.8rem; .week-card { background: #f1f5f9; border-radius: 0.6rem; padding: 0.4rem 0.6rem; text-align: center; .week-range { font-weight: 700; font-size: 0.75rem; color: #0f172a; } .week-content { font-size: 0.7rem; color: #475569; } } }
+
+  h2 {
+    font-size: 1.2rem;
+    margin-top: 0;
+  }
+
+  .weeks-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 0.8rem;
+
+    .week-card {
+      background: #f1f5f9;
+      border-radius: 0.6rem;
+      padding: 0.4rem 0.6rem;
+      text-align: center;
+
+      .week-range {
+        font-weight: 700;
+        font-size: 0.75rem;
+        color: #0f172a;
+      }
+
+      .week-content {
+        font-size: 0.7rem;
+        color: #475569;
+      }
+    }
+  }
 }
 
 .project-structure {
@@ -304,8 +518,20 @@ const weeks = [
   border-radius: 1rem;
   padding: 0.8rem 1.5rem;
   margin: 1.5rem 0;
-  .tree { color: #e2e8f0; font-family: monospace; font-size: 0.7rem; margin: 0; overflow-x: auto; }
-  h2 { color: white; font-size: 1.1rem; margin-top: 0; }
+
+  .tree {
+    color: #e2e8f0;
+    font-family: monospace;
+    font-size: 0.7rem;
+    margin: 0;
+    overflow-x: auto;
+  }
+
+  h2 {
+    color: white;
+    font-size: 1.1rem;
+    margin-top: 0;
+  }
 }
 
 .resources {
@@ -314,8 +540,45 @@ const weeks = [
   padding: 1rem 1.5rem;
   margin: 1.5rem 0;
   border: 1px solid #e2e8f0;
-  h2 { margin-top: 0; font-size: 1.2rem; }
-  .resource-lists { display: flex; flex-wrap: wrap; gap: 1.5rem; > div { flex: 1; } h3 { font-size: 0.9rem; margin: 0 0 0.4rem; } ul { margin: 0; padding-left: 1rem; li { font-size: 0.8rem; margin: 0.2rem 0; } a { color: #3b82f6; text-decoration: none; &:hover { text-decoration: underline; } } } }
+
+  h2 {
+    margin-top: 0;
+    font-size: 1.2rem;
+  }
+
+  .resource-lists {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+
+    >div {
+      flex: 1;
+    }
+
+    h3 {
+      font-size: 0.9rem;
+      margin: 0 0 0.4rem;
+    }
+
+    ul {
+      margin: 0;
+      padding-left: 1rem;
+
+      li {
+        font-size: 0.8rem;
+        margin: 0.2rem 0;
+      }
+
+      a {
+        color: #3b82f6;
+        text-decoration: none;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
 }
 
 .footer {
@@ -328,9 +591,22 @@ const weeks = [
 }
 
 @media (max-width: 720px) {
-  .roadmap-container { padding: 1rem; }
-  .phase .phase-header { flex-direction: column; align-items: start; gap: 0.2rem; }
-  .principles .principles-grid { flex-direction: column; }
-  .resource-lists { flex-direction: column; }
+  .roadmap-container {
+    padding: 1rem;
+  }
+
+  .phase .phase-header {
+    flex-direction: column;
+    align-items: start;
+    gap: 0.2rem;
+  }
+
+  .principles .principles-grid {
+    flex-direction: column;
+  }
+
+  .resource-lists {
+    flex-direction: column;
+  }
 }
 </style>

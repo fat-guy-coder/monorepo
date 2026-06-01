@@ -55,7 +55,13 @@
       "Bash(echo \"EXIT:$?\")",
       "Bash(curl -s \"http://localhost:8080/api/menus?root=true&project=learning\" -w \"\\\\nHTTP_STATUS:%{http_code}\")",
       "Bash(curl -s \"http://localhost:8080/api/menus?root=true&project=learning\")",
-      "Bash(pnpm learning:build)"
+      "Bash(pnpm learning:build)",
+      "Bash(node -e \"console.log\\(JSON.parse\\(require\\('fs'\\).readFileSync\\('c:/Users/Administrator/Desktop/monorepo/node_modules/tailwindcss/package.json','utf8'\\)\\).version\\)\")",
+      "Bash(pnpm --filter learning run build)",
+      "Bash(node -e \"console.log\\(JSON.parse\\(require\\('fs'\\).readFileSync\\('c:/Users/Administrator/Desktop/monorepo/node_modules/@tailwindcss/vite/package.json','utf8'\\)\\).version\\)\")",
+      "Bash(openspec new *)",
+      "Bash(openspec status *)",
+      "Bash(openspec instructions *)"
     ],
     "additionalDirectories": [
       "C:\\Users\\Administrator\\.claude"

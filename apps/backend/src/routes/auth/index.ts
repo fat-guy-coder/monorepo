@@ -1,8 +1,8 @@
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production'
 const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'your-refresh-secret-key-change-in-production'
 
-const ACCESS_TOKEN_EXPIRY = 60 * 15 // 15 分钟
-const REFRESH_TOKEN_EXPIRY = 60 * 60 * 24 * 7 // 7 天
+const ACCESS_TOKEN_EXPIRY = 60 * 15 // 15 分钟（短期，降低泄露风险）
+const REFRESH_TOKEN_EXPIRY = 60 * 60 * 24 * 90 // 90 天（长期，不主动登出就一直有效）
 
 interface RouteContext {
   request?: Request
