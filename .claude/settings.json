@@ -54,7 +54,8 @@
       "Bash(bun tsx *)",
       "Bash(echo \"EXIT:$?\")",
       "Bash(curl -s \"http://localhost:8080/api/menus?root=true&project=learning\" -w \"\\\\nHTTP_STATUS:%{http_code}\")",
-      "Bash(curl -s \"http://localhost:8080/api/menus?root=true&project=learning\")"
+      "Bash(curl -s \"http://localhost:8080/api/menus?root=true&project=learning\")",
+      "Bash(pnpm learning:build)"
     ],
     "additionalDirectories": [
       "C:\\Users\\Administrator\\.claude"

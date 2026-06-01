@@ -84,9 +84,10 @@ onUnmounted(() => {
     }
 }
 .close-tab--btn {
-    width: 1.25rem;
-    height: 1.25rem;
-    line-height: 1.25rem;
+    width: 0.9rem;
+    height: 0.9rem;
+    line-height: 0.9rem;
+    font-size: 10px;
     display: flex;
     align-items: center;
     justify-content: center;

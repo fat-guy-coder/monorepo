@@ -73,7 +73,7 @@ import {
 } from '@/menu'
 import { getApiMenus, getApiMenusSearch } from '@/api/menu'
 import { postApiUserLogin, postApiUserRegister } from '@/api/user'
-import { saveTokens, saveUserInfo, getAccessToken } from '@/utils/token'
+import { saveTokens, saveUserInfo, getAccessToken, isAccessTokenValid } from '@/utils/token'
 import { useTabStore } from '@/stores/tab' //标签列表store
 import { useDeviceStore } from '@/stores/device' //设备信息store
 import { useUIConfigStore, type Theme } from '@/stores/uiconfig' //UI配置store
@@ -117,7 +117,7 @@ const handleNavClick = (item: NavItem): void => {
       break
     case 'user':
       if (isLoggedIn.value) {
-        router.push('/DataManagement/AccountManagement')
+        goToByName('AccountManagement', false, '/DataManagement/AccountManagement')
       } else {
         loginModalVisible.value = true
       }
@@ -199,7 +199,7 @@ const mainViewLoading = ref(false)
 // 登录模态框状态
 const loginModalVisible = ref(false)
 const isRegisterMode = ref(false)
-const isLoggedIn = computed(() => !!getAccessToken())
+const isLoggedIn = computed(() => isAccessTokenValid())
 const loginForm = reactive<{ username: string; password: string }>({
   username: '',
   password: '',
@@ -225,7 +225,7 @@ const handleLoginSubmit = async () => {
         loginForm.username = ''
         loginForm.password = ''
         await getMenus()
-        router.push('/DataManagement/AccountManagement')
+        goToByName('AccountManagement', false, '/DataManagement/AccountManagement')
       }
     }
   } catch (e: any) {
@@ -246,9 +246,16 @@ onMounted(async () => {
     container.value.addEventListener('click', closeContextMenu)
   }
   //获取菜单（先获取菜单再跳转激活的tab，确保路由已注册）
-  await getMenus()
-  //跳转激活的tab
-  router.push(activeKey.value)
+  try {
+    await getMenus()
+  } catch {
+    // 菜单加载失败（如 token 过期被拦截器清空），仍然尝试跳转
+    // tabList 中持久化的路由已在 getMenus 中注册
+  }
+  //跳转激活的tab（仅当路由已注册时跳转，避免 404）
+  if (router.hasRoute(activeKey.value) || activeKey.value === '/') {
+    router.push(activeKey.value)
+  }
 })
 
 //卸载时清空菜单列表
@@ -526,7 +533,7 @@ function goto({ path, name, label, redirect, isLeaf }: MenuItem) {
 
 //通过菜单名称跳转
 // knownPath / knownLabel: 调用方已知的路径和标签（如 redirect 场景），作为兜底
-function goToByName(name: string, isRedirect: boolean = false, knownPath?: string, knownLabel?: string) {
+async function goToByName(name: string, isRedirect: boolean = false, knownPath?: string, knownLabel?: string) {
   // 辅助类型：至少需要 name + path + label
   let item: { label: string; name: string; path: string } | undefined
 
@@ -564,6 +571,31 @@ function goToByName(name: string, isRedirect: boolean = false, knownPath?: strin
     // resolved.path 可能是 catch-all 兜底值，需验证 name 确实匹配
     if (resolved && resolved.name === name) {
       item = { label: name, name, path: resolved.path }
+    }
+  }
+
+  // 6. 懒加载兜底：本地缓存未命中时，通过搜索 API 按需查找
+  //    不预加载全量菜单，只在需要时请求，结果缓存到 routeInfoMap
+  if (!item) {
+    try {
+      const { data } = await getApiMenusSearch({ project: 'learning', search: name })
+      if (data?.selectedKeys?.length) {
+        const matchedPath = data.selectedKeys[0]
+        // 从搜索结果树中提取 label
+        const matchedItem = findMenuItemByName(data.matched as unknown as MenuItem[], name)
+        const label = matchedItem?.label || name
+        item = { label, name, path: matchedPath }
+        // 缓存搜索结果到 routeInfoMap，下次同一菜单无需再请求
+        if (data.matched) {
+          addToRouteInfoMap(data.matched as unknown as MenuItem[])
+        }
+        // 展开父级菜单链
+        if (data.openKeys?.length) {
+          openKeys.value = Array.from(new Set([...openKeys.value, ...data.openKeys]))
+        }
+      }
+    } catch {
+      // 搜索失败，继续走报错逻辑
     }
   }
 
