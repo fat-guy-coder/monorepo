@@ -61,7 +61,9 @@
       "Bash(node -e \"console.log\\(JSON.parse\\(require\\('fs'\\).readFileSync\\('c:/Users/Administrator/Desktop/monorepo/node_modules/@tailwindcss/vite/package.json','utf8'\\)\\).version\\)\")",
       "Bash(openspec new *)",
       "Bash(openspec status *)",
-      "Bash(openspec instructions *)"
+      "Bash(openspec instructions *)",
+      "Bash(git checkout *)",
+      "Bash(npx vue-tsc *)"
     ],
     "additionalDirectories": [
       "C:\\Users\\Administrator\\.claude"
