@@ -74,6 +74,25 @@ monorepo/
 
 详细规范见 [.claude/agent-skills/](.claude/agent-skills/)
 
+## Go 示例代码规范 (apps/go/)
+
+1. 每个输出语句紧接 `// 输出: ...` 注释，标注预期输出结果
+2. 多行输出用多行注释标注，清晰展示格式
+3. 分支逻辑（if/switch）标注走哪个分支及原因
+4. 目的：不运行代码也能直接看懂结果，适合学习场景
+
+示例:
+```go
+fmt.Print("while 风格: ")
+count := 5
+for count > 0 {
+    fmt.Printf("%d ", count)
+    count--
+}
+fmt.Println()
+// 输出: while 风格: 5 4 3 2 1
+```
+
 ## 开发规范
 
 1. 使用 TypeScript 进行开发

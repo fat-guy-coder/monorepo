@@ -3,6 +3,7 @@ package basics
 import "fmt"
 
 // RunControlFlow 演示 Go 中的控制流结构。
+// 每个示例下方以注释形式标注预期输出，无需运行即可查看结果。
 func RunControlFlow() {
 	// --- if / else if / else ---
 	fmt.Println("\n--- if / else if / else ---")
@@ -15,13 +16,16 @@ func RunControlFlow() {
 	} else {
 		fmt.Println("x <= 30")
 	}
+	// 输出: x 在 30~50 之间
 
 	// 语句+条件形式（statement; condition）
+	// Go 允许在 if 条件中声明并初始化变量，该变量作用域仅限于 if 语句块
 	if val := x * 2; val > 80 {
 		fmt.Printf("x*2=%d > 80\n", val)
 	} else {
 		fmt.Printf("x*2=%d <= 80\n", val)
 	}
+	// 输出: x*2=84 > 80
 	// val 在 if 块外不可见
 
 	// --- for 循环 ---
@@ -33,6 +37,7 @@ func RunControlFlow() {
 		fmt.Printf("%d ", i)
 	}
 	fmt.Println()
+	// 输出: 传统 for: 0 1 2 3 4
 
 	// while 风格（只有 condition）
 	fmt.Print("while 风格: ")
@@ -42,6 +47,7 @@ func RunControlFlow() {
 		count--
 	}
 	fmt.Println()
+	// 输出: while 风格: 5 4 3 2 1
 
 	// 无限循环（break 退出）
 	fmt.Print("无限循环+break: ")
@@ -54,6 +60,7 @@ func RunControlFlow() {
 		iter++
 	}
 	fmt.Println()
+	// 输出: 无限循环+break: 0 1 2
 
 	// --- for range ---
 	fmt.Println("\n--- for range ---")
@@ -65,6 +72,7 @@ func RunControlFlow() {
 		fmt.Printf("[%d]=%d ", i, v)
 	}
 	fmt.Println()
+	// 输出: range 数组: [0]=10 [1]=20 [2]=30 [3]=40
 
 	// range over 切片（只有 index）
 	fmt.Print("range 切片(index only): ")
@@ -72,6 +80,7 @@ func RunControlFlow() {
 		fmt.Printf("%d ", i)
 	}
 	fmt.Println()
+	// 输出: range 切片(index only): 0 1 2
 
 	// range over map
 	m := map[string]int{"a": 1, "b": 2, "c": 3}
@@ -80,6 +89,7 @@ func RunControlFlow() {
 		fmt.Printf("%q:%d ", k, v)
 	}
 	fmt.Println()
+	// 输出: range map: (顺序不固定，例如) "a":1 "b":2 "c":3
 
 	// range over 字符串（rune by rune）
 	s := "Go语言"
@@ -88,6 +98,8 @@ func RunControlFlow() {
 		fmt.Printf("(%d:'%c') ", i, r)
 	}
 	fmt.Println()
+	// 输出: range string(runes): (0:'G') (1:'o') (2:'语') (5:'言')
+	// 注意 "语" 占3字节，索引从2直接跳到5 — rune 按 Unicode 码点遍历
 
 	// --- switch ---
 	fmt.Println("\n--- switch ---")
@@ -104,6 +116,7 @@ func RunControlFlow() {
 	default:
 		fmt.Println("工作日")
 	}
+	// 输出: 星期一，新的一周开始！
 
 	// 无表达式（相当于 if-else）
 	score := 85
@@ -117,8 +130,9 @@ func RunControlFlow() {
 	default:
 		fmt.Println("不及格")
 	}
+	// 输出: 良好
 
-	// fallthrough 关键字
+	// fallthrough 关键字 — 强制执行下一个 case（不判断条件）
 	fmt.Print("fallthrough 演示: ")
 	n := 1
 	switch n {
@@ -131,6 +145,7 @@ func RunControlFlow() {
 	case 3:
 		fmt.Println("case 3")
 	}
+	// 输出: fallthrough 演示: case 1 -> case 2 -> case 3
 
 	// --- 类型 switch ---
 	fmt.Println("\n--- 类型 switch（Type Switch）---")
@@ -149,31 +164,41 @@ func RunControlFlow() {
 			fmt.Printf("未知类型: %T\n", t)
 		}
 	}
-	printType(42)
-	printType("hello")
-	printType(true)
-	printType([]int{1, 2, 3})
-	printType(3.14)
+	printType(42)            // 输出: int: 42
+	printType("hello")       // 输出: string: "hello"
+	printType(true)          // 输出: bool: true
+	printType([]int{1, 2, 3}) // 输出: []int: [1 2 3]
+	printType(3.14)          // 输出: 未知类型: float64
 
 	// --- defer ---
 	fmt.Println("\n--- defer（延迟执行）---")
 
-	// 基本 defer
+	// 基本 defer（函数返回前执行，LIFO 栈序）
 	fmt.Println("开始")
 	defer fmt.Println("defer: 最后执行")
 	fmt.Println("结束")
+	// 输出:
+	//   开始
+	//   结束
+	//   defer: 最后执行
 
-	// 参数立即求值
+	// 参数立即求值（defer 注册时参数已冻结）
 	val := 10
 	defer fmt.Printf("defer 参数在声明时求值: val=%d\n", val)
 	val = 20
+	// 输出: defer 参数在声明时求值: val=10 （注意不是 20！）
 
-	// 栈式 defer（LIFO）
+	// 栈式 defer（LIFO: 后进先出）
 	fmt.Println("\n栈式 defer:")
 	for i := 0; i < 3; i++ {
 		defer fmt.Printf("  defer %d\n", i)
 	}
 	fmt.Println("循环体结束")
+	// 输出:
+	//   循环体结束
+	//     defer 2
+	//     defer 1
+	//     defer 0
 
 	// 实用 defer：资源清理模拟
 	defer fmt.Println("--- defer 资源清理示例结束 ---")
@@ -181,6 +206,12 @@ func RunControlFlow() {
 	defer fmt.Println("  关闭文件（defer）")
 	fmt.Println("模拟写入数据...")
 	defer fmt.Println("  刷新缓冲区（defer）")
+	// 输出:
+	//   模拟打开文件...
+	//   模拟写入数据...
+	//     刷新缓冲区（defer）
+	//     关闭文件（defer）
+	//   --- defer 资源清理示例结束 ---
 
 	// --- panic 和 recover ---
 	fmt.Println("\n--- panic 和 recover ---")
@@ -198,14 +229,9 @@ func RunControlFlow() {
 	}
 
 	safeDivide(10, 2)
+	// 输出:   10 / 2 = 5
 	safeDivide(10, 0)
+	// 输出:   捕获到 panic: 除零错误！
 	fmt.Println("程序继续执行（因为有 recover）")
+	// 输出: 程序继续执行（因为有 recover）
 }
-
-// ============================================================
-// 单独运行此文件:
-//   1. 将第 1 行 "package basics" 改为 "package main"
-//   2. 取消下面 main 函数的注释
-//   3. go run FILE_NAME
-// ============================================================
-//func main() { RunControlFlow() }

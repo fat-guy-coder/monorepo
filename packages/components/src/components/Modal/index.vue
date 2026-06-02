@@ -120,6 +120,10 @@ const handleKeydown = (e: KeyboardEvent) => {
   if (e.key === 'Escape' && closeOnEsc) {
     handleClose();
   }
+  if (e.key === 'Enter' && showConfirm && !loading) {
+    e.preventDefault();
+    handleConfirm();
+  }
 };
 
 // --- Lifecycle and Watchers ---

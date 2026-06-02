@@ -21,16 +21,12 @@ const props = defineProps<{
   isAdmin?: boolean
 }>()
 
-/** 获取工作区根目录绝对路径 */
+/** 获取 monorepo 根目录绝对路径（vite.config.ts 从 __dirname 推导并注入） */
 function getWorkspaceRoot(): string {
-  // 优先使用 Vite 环境变量
-  if ((import.meta as any).env?.VITE_WORKSPACE_ROOT) {
+  if ((import.meta as any).env.VITE_WORKSPACE_ROOT) {
     return (import.meta as any).env.VITE_WORKSPACE_ROOT.replace(/[/\\]$/, '')
   }
-  // 开发模式下通过 import.meta.url 推测（仅限本地开发）
-  if ((import.meta as any).env?.DEV) {
-    return 'C:/Users/Administrator/Desktop/monorepo'
-  }
+  console.warn('[EditorLink] 无法获取工作区路径')
   return ''
 }
 

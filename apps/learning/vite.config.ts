@@ -37,6 +37,9 @@ export default defineConfig((env: ConfigEnv) => {
     tailwindcss(),
   ]
 
+  // 动态获取 monorepo 根目录（vite.config.ts 位于 apps/learning/，往上两级即根目录）
+  const workspaceRoot = resolve(__dirname, '../..').replace(/\\/g, '/')
+
   if (isDev) {
 
     plugins.push(VueDevTools({ launchEditor: 'cursor' }))
@@ -75,6 +78,9 @@ export default defineConfig((env: ConfigEnv) => {
       strictPort: true,
     },
     plugins,
+    define: {
+      'import.meta.env.VITE_WORKSPACE_ROOT': JSON.stringify(workspaceRoot),
+    },
     resolve: {
       alias: {
         '@': fileURLToPath(new URL('./src', import.meta.url)),

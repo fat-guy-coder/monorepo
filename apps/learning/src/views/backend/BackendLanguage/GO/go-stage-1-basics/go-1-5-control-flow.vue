@@ -8,7 +8,7 @@
           <p class="text-sm text-slate-500 mt-1">Go 语言的流程控制</p>
         </div>
         <div class="flex items-center gap-3">
-          <EditorLink file-path="apps/go/basics/02_control_flow.go" label="📝 查看源码" :is-admin="userStore.isAdmin" />
+          <EditorLink file-path="apps/go/basics/go-1-5-control-flow.go" label="📝 查看源码" :is-admin="userStore.isAdmin" />
           <span class="text-xs text-slate-400 bg-slate-100 px-3 py-1 rounded-full">阶段 1-5</span>
         </div>
       </div>

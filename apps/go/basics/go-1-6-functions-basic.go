@@ -8,30 +8,38 @@ func RunFunctions() {
 	fmt.Println("\n--- 基本函数声明 ---")
 
 	greet("Go 开发者")
+	// 输出: Hello, Go 开发者!
 
 	// --- 多返回值 ---
 	fmt.Println("\n--- 多返回值 ---")
 
 	quot, rem := divide(10, 3)
 	fmt.Printf("divide(10, 3): 商=%d, 余数=%d\n", quot, rem)
+	// 输出: divide(10, 3): 商=3, 余数=1
 
-	// 忽略某个返回值
+	// 忽略某个返回值（用 _ 占位）
 	quotOnly, _ := divide(20, 7)
 	fmt.Printf("divide(20, 7): 商=%d\n", quotOnly)
+	// 输出: divide(20, 7): 商=2
 
 	// --- 命名返回值 ---
 	fmt.Println("\n--- 命名返回值 ---")
 
 	lower, upper := minMax(5, 10, 3, 8)
 	fmt.Printf("minMax(5,10,3,8): min=%d, max=%d\n", lower, upper)
+	// 输出: minMax(5,10,3,8): min=3, max=10
+	// 注意：使用了命名返回值 + 裸返回（naked return）
 
 	// --- 变长参数 ---
 	fmt.Println("\n--- 变长参数（Variadic）---")
 
 	fmt.Printf("sum(1,2,3): %d\n", sum(1, 2, 3))
+	// 输出: sum(1,2,3): 6
 	fmt.Printf("sum(10,20): %d\n", sum(10, 20))
+	// 输出: sum(10,20): 30
 	nums := []int{1, 2, 3, 4, 5}
 	fmt.Printf("sum(nums...): %d\n", sum(nums...)) // 展开切片
+	// 输出: sum(nums...): 15
 
 	// --- 函数作为值 ---
 	fmt.Println("\n--- 函数作为值 ---")
@@ -43,19 +51,23 @@ func RunFunctions() {
 		return a * b
 	}
 	fmt.Printf("add(3,4)=%d, multiply(3,4)=%d\n", add(3, 4), multiply(3, 4))
+	// 输出: add(3,4)=7, multiply(3,4)=12
 
 	// --- 闭包 ---
 	fmt.Println("\n--- 闭包（Closure）---")
 
 	counter := newCounter()
-	fmt.Printf("counter(): %d\n", counter())
-	fmt.Printf("counter(): %d\n", counter())
-	fmt.Printf("counter(): %d\n", counter())
+	fmt.Printf("counter(): %d\n", counter()) // 输出: counter(): 1
+	fmt.Printf("counter(): %d\n", counter()) // 输出: counter(): 2
+	fmt.Printf("counter(): %d\n", counter()) // 输出: counter(): 3
+	// 闭包捕获了外层的 count 变量，每次调用都在同一个 count 上累加
 
 	// 闭包实用示例：配置函数
 	greeting := makeGreeter("你好")
 	fmt.Printf("greeting(\"小明\"): %s\n", greeting("小明"))
+	// 输出: greeting("小明"): 你好，小明！
 	fmt.Printf("greeting(\"小红\"): %s\n", greeting("小红"))
+	// 输出: greeting("小红"): 你好，小红！
 
 	// --- 高阶函数 ---
 	fmt.Println("\n--- 高阶函数（Higher-Order Functions）---")
@@ -65,16 +77,21 @@ func RunFunctions() {
 		fmt.Printf("f(%d) = %d\n", val, fn(val))
 	}
 	applyAndPrint(double, 5)
+	// 输出: f(5) = 10
 	applyAndPrint(func(x int) int { return x * x }, 5)
+	// 输出: f(5) = 25
 
 	// 返回函数
 	tripleFn := makeMultiplier(3)
 	fmt.Printf("triple(4) = %d\n", tripleFn(4))
+	// 输出: triple(4) = 12
 
 	// 函数组合：chain
 	increment := func(x int) int { return x + 1 }
 	composed := chain(double, increment)
 	fmt.Printf("chain(double, increment)(3) = %d\n", composed(3))
+	// 输出: chain(double, increment)(3) = 7
+	// 执行过程: double(3)=6, increment(6)=7
 
 	// --- init() 说明 ---
 	fmt.Println("\n--- init() 函数说明 ---")

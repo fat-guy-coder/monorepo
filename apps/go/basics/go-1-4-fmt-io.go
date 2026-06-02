@@ -12,9 +12,9 @@ func RunFmtIO() {
 
 	// --- Print 系列：输出到标准输出 ---
 	fmt.Println("\n--- Print 系列 ---")
-	fmt.Print("A")                      // 无换行
-	fmt.Print("B\n")                   // 手动换行
-	fmt.Println("C", "D")              // 空格分隔 + 自动换行
+	fmt.Print("A")        // 无换行
+	fmt.Print("B\n")      // 手动换行
+	fmt.Println("C", "D") // 空格分隔 + 自动换行
 	fmt.Printf("Name: %s, Age: %d\n", name, age)
 
 	// --- Sprint 系列：返回字符串 ---
@@ -28,7 +28,10 @@ func RunFmtIO() {
 
 	// --- 格式化动词 ---
 	fmt.Println("\n--- 格式化动词 ---")
-	type Person struct{ Name string; Age int }
+	type Person struct {
+		Name string
+		Age  int
+	}
 	p := Person{"Alice", 25}
 	fmt.Printf("  %%v  = %v\n", p)    // 默认格式
 	fmt.Printf("  %%+v = %+v\n", p)   // 含字段名
@@ -46,7 +49,7 @@ func RunFmtIO() {
 	fmt.Printf("  |%-8s|\n", "Go")       // 左对齐
 	fmt.Printf("  |%08d|\n", 42)         // 零填充
 	fmt.Printf("  Pi = %.2f\n", 3.14159) // 精度
-	fmt.Printf("  |%8.2f|\n", 3.14)       // 宽度+精度
+	fmt.Printf("  |%8.2f|\n", 3.14)      // 宽度+精度
 
 	// --- 动态宽度（*） ---
 	fmt.Println("\n--- 动态宽度 ---")
