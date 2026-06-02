@@ -10,10 +10,17 @@
           从入门到全栈，每天 2-3 小时，历时约 24 周，系统掌握 Go 开发
         </p>
         <div class="mt-6 flex flex-wrap justify-center gap-3">
-          <span class="px-4 py-1.5 bg-blue-50 text-blue-700 rounded-full text-sm font-medium border border-blue-200">🐹 Go 1.21+</span>
-          <span class="px-4 py-1.5 bg-purple-50 text-purple-700 rounded-full text-sm font-medium border border-purple-200">📦 Go Modules</span>
-          <span class="px-4 py-1.5 bg-green-50 text-green-700 rounded-full text-sm font-medium border border-green-200">⚡ 高并发</span>
-          <span class="px-4 py-1.5 bg-orange-50 text-orange-700 rounded-full text-sm font-medium border border-orange-200">🌐 微服务</span>
+          <span class="px-4 py-1.5 bg-blue-50 text-blue-700 rounded-full text-sm font-medium border border-blue-200">🐹
+            Go 1.21+</span>
+          <span
+            class="px-4 py-1.5 bg-purple-50 text-purple-700 rounded-full text-sm font-medium border border-purple-200">📦
+            Go Modules</span>
+          <span
+            class="px-4 py-1.5 bg-green-50 text-green-700 rounded-full text-sm font-medium border border-green-200">⚡
+            高并发</span>
+          <span
+            class="px-4 py-1.5 bg-orange-50 text-orange-700 rounded-full text-sm font-medium border border-orange-200">🌐
+            微服务</span>
         </div>
       </div>
 
@@ -44,8 +51,10 @@
                 <p class="text-gray-600 mb-5 leading-relaxed">{{ stage.description }}</p>
 
                 <ul class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2 mb-5">
-                  <li v-for="(item, idx) in stage.items" :key="idx" class="flex items-baseline gap-2 text-gray-700 text-sm">
-                    <span class="flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-[10px] text-white font-bold"
+                  <li v-for="(item, idx) in stage.items" :key="idx"
+                    class="flex items-baseline gap-2 text-gray-700 text-sm">
+                    <span
+                      class="shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-[10px] text-white font-bold"
                       :class="stage.color">
                       {{ idx + 1 }}
                     </span>
@@ -75,10 +84,14 @@
               <h4 class="text-sm font-semibold text-blue-600 uppercase tracking-wide mb-3">🏛️ 官方</h4>
               <ul class="space-y-2 text-sm text-gray-600">
                 <li><a href="https://go.dev/doc/" target="_blank" class="hover:text-blue-600 underline">Go 官方文档</a></li>
-                <li><a href="https://go.dev/tour/" target="_blank" class="hover:text-blue-600 underline">A Tour of Go（交互式教程）</a></li>
-                <li><a href="https://go.dev/play/" target="_blank" class="hover:text-blue-600 underline">Go Playground</a></li>
-                <li><a href="https://pkg.go.dev/" target="_blank" class="hover:text-blue-600 underline">Go 包文档索引</a></li>
-                <li><a href="https://go.dev/doc/effective_go" target="_blank" class="hover:text-blue-600 underline">Effective Go</a></li>
+                <li><a href="https://go.dev/tour/" target="_blank" class="hover:text-blue-600 underline">A Tour of
+                    Go（交互式教程）</a></li>
+                <li><a href="https://go.dev/play/" target="_blank" class="hover:text-blue-600 underline">Go
+                    Playground</a></li>
+                <li><a href="https://pkg.go.dev/" target="_blank" class="hover:text-blue-600 underline">Go 包文档索引</a>
+                </li>
+                <li><a href="https://go.dev/doc/effective_go" target="_blank"
+                    class="hover:text-blue-600 underline">Effective Go</a></li>
               </ul>
             </div>
 
@@ -98,22 +111,28 @@
             <div>
               <h4 class="text-sm font-semibold text-purple-600 uppercase tracking-wide mb-3">🛠️ 实战平台</h4>
               <ul class="space-y-2 text-sm text-gray-600">
-                <li><a href="https://github.com/golang-standards/project-layout" target="_blank" class="hover:text-purple-600 underline">标准项目布局</a></li>
-                <li><a href="https://gobyexample.com/" target="_blank" class="hover:text-purple-600 underline">Go by Example</a></li>
-                <li><a href="https://exercism.org/tracks/go" target="_blank" class="hover:text-purple-600 underline">Exercism Go 练习</a></li>
-                <li><a href="https://github.com/avelino/awesome-go" target="_blank" class="hover:text-purple-600 underline">awesome-go 精选库</a></li>
-                <li><a href="https://quii.gitbook.io/learn-go-with-tests" target="_blank" class="hover:text-purple-600 underline">Learn Go with Tests</a></li>
+                <li><a href="https://github.com/golang-standards/project-layout" target="_blank"
+                    class="hover:text-purple-600 underline">标准项目布局</a></li>
+                <li><a href="https://gobyexample.com/" target="_blank" class="hover:text-purple-600 underline">Go by
+                    Example</a></li>
+                <li><a href="https://exercism.org/tracks/go" target="_blank"
+                    class="hover:text-purple-600 underline">Exercism Go 练习</a></li>
+                <li><a href="https://github.com/avelino/awesome-go" target="_blank"
+                    class="hover:text-purple-600 underline">awesome-go 精选库</a></li>
+                <li><a href="https://quii.gitbook.io/learn-go-with-tests" target="_blank"
+                    class="hover:text-purple-600 underline">Learn Go with Tests</a></li>
               </ul>
             </div>
           </div>
         </div>
 
         <!-- 本仓库路径提示 -->
-        <div class="mt-6 p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl border border-blue-200">
+        <div class="mt-6 p-4 bg-linear-to-r from-blue-50 to-purple-50 rounded-xl border border-blue-200">
           <p class="text-sm text-gray-700 text-center">
             💡 <span class="font-semibold">本地练习：</span>
             路线图示例代码位于 <code class="px-1.5 py-0.5 bg-white rounded text-blue-700 text-xs font-mono">apps/go/src/</code>，
-            按阶段分文件夹，进入对应目录运行 <code class="px-1.5 py-0.5 bg-white rounded text-blue-700 text-xs font-mono">go run .</code> 即可查看输出。
+            按阶段分文件夹，进入对应目录运行 <code
+              class="px-1.5 py-0.5 bg-white rounded text-blue-700 text-xs font-mono">go run .</code> 即可查看输出。
             前端学习页面 + Go 源码项目联动学习！
           </p>
         </div>
