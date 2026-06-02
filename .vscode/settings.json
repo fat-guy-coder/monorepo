@@ -1,0 +1,25 @@
+{
+  // ── Go 扩展：减少未打开文件的报错噪音 ──
+  // gopls 默认分析整个 module，runner.go 中未实现的 stub 函数会
+  // 在问题面板刷屏。以下配置限制诊断范围，只对当前 package 做
+  // build/vet，避免未打开的文件报错干扰。
+  "go.buildOnSave": "package",
+  "go.vetOnSave": "package",
+  "go.lintOnSave": "file",
+
+  // gopls：关掉 staticcheck 全量扫 + printf 格式检查（
+  // 示例代码中 fmt.Println 展示格式化字符串是故意的，不是 bug）
+  "gopls": {
+    "ui.diagnostic.staticcheck": false,
+    "analyses": {
+      "printf": false,
+      "unusedwrite": false,
+      "unusedfunc": false,
+      "unusedvariable": false,
+      "bools": false,
+      "simplifycompositelit": false,
+      "simplifyrange": false,
+      "simplifyslice": false
+    }
+  }
+}
