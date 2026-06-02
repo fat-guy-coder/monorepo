@@ -1,22 +1,26 @@
 <template>
-  <div class="go-doc min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+  <div class="go-doc min-h-screen bg-linear-to-br from-slate-50 to-blue-50">
 
     <!-- 页面头部 -->
-    <header class="bg-white border-b border-slate-200 sticky top-0 z-10">
+    <header class="bg-white border-b border-slate-200">
       <div class="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
         <div>
           <h1 class="text-2xl font-bold text-slate-800">环境搭建与工具链</h1>
           <p class="text-sm text-slate-500 mt-1">Go 开发环境安装与配置</p>
         </div>
-        <span class="text-xs text-slate-400 bg-slate-100 px-3 py-1 rounded-full">阶段一 · 第1节</span>
+        <div class="flex items-center gap-3">
+          <EditorLink file-path="apps/go/basics/go-1-1-env-tools.go" label="📝 查看源码" :is-admin="userStore.isAdmin" />
+          <span class="text-xs text-slate-400 bg-slate-100 px-3 py-1 rounded-full">阶段一 · 第1节</span>
+        </div>
       </div>
     </header>
 
     <!-- 主体内容 -->
     <main class="max-w-4xl mx-auto px-6 py-8 space-y-6">
+      <Nav :list="navList" title="目录" position="top-right" :showBackToTop="true" :showChild="false" />
 
       <!-- 概述 -->
-      <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+      <section id="sec-1" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-3 flex items-center gap-2">
           <span class="text-cyan-500 text-xl">🐹</span>
           欢迎来到 Go 语言学习之旅
@@ -32,14 +36,15 @@
       </section>
 
       <!-- 安装步骤 -->
-      <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+      <section id="sec-2" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
           <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">1</span>
           安装 Go
         </h2>
 
         <p class="text-slate-600 mb-4 leading-relaxed">
-          访问 <a href="https://go.dev/dl/" target="_blank" class="text-cyan-600 hover:text-cyan-700 underline">go.dev/dl/</a>
+          访问 <a href="https://go.dev/dl/" target="_blank"
+            class="text-cyan-600 hover:text-cyan-700 underline">go.dev/dl/</a>
           下载适合你操作系统的安装包。Go 支持 Windows、macOS、Linux 三大平台，推荐安装最新的稳定版本（目前为 Go 1.22+）。
         </p>
 
@@ -50,19 +55,25 @@
           </h3>
           <ol class="space-y-2 mb-3">
             <li class="flex gap-3">
-              <span class="flex-shrink-0 w-6 h-6 bg-cyan-500 text-white rounded-full flex items-center justify-center text-xs font-bold">1</span>
-              <span class="text-slate-600">下载 <code class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-xs font-mono">.msi</code> 安装程序</span>
+              <span
+                class="shrink-0 w-6 h-6 bg-cyan-500 text-white rounded-full flex items-center justify-center text-xs font-bold">1</span>
+              <span class="text-slate-600">下载 <code
+                  class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-xs font-mono">.msi</code> 安装程序</span>
             </li>
             <li class="flex gap-3">
-              <span class="flex-shrink-0 w-6 h-6 bg-cyan-500 text-white rounded-full flex items-center justify-center text-xs font-bold">2</span>
-              <span class="text-slate-600">双击运行，按向导完成安装（默认路径 <code class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-xs font-mono">C:\Program Files\Go\</code>）</span>
+              <span
+                class="shrink-0 w-6 h-6 bg-cyan-500 text-white rounded-full flex items-center justify-center text-xs font-bold">2</span>
+              <span class="text-slate-600">双击运行，按向导完成安装（默认路径 <code
+                  class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-xs font-mono">C:\Program Files\Go\</code>）</span>
             </li>
             <li class="flex gap-3">
-              <span class="flex-shrink-0 w-6 h-6 bg-cyan-500 text-white rounded-full flex items-center justify-center text-xs font-bold">3</span>
+              <span
+                class="shrink-0 w-6 h-6 bg-cyan-500 text-white rounded-full flex items-center justify-center text-xs font-bold">3</span>
               <span class="text-slate-600">安装程序会自动将 Go 加入系统 PATH，无需手动配置</span>
             </li>
             <li class="flex gap-3">
-              <span class="flex-shrink-0 w-6 h-6 bg-cyan-500 text-white rounded-full flex items-center justify-center text-xs font-bold">4</span>
+              <span
+                class="shrink-0 w-6 h-6 bg-cyan-500 text-white rounded-full flex items-center justify-center text-xs font-bold">4</span>
               <span class="text-slate-600">重新打开终端（CMD 或 PowerShell），验证安装</span>
             </li>
           </ol>
@@ -89,12 +100,15 @@
         </div>
 
         <aside class="bg-blue-50 border-l-4 border-blue-400 rounded-r-xl p-4">
-          <p class="text-sm text-blue-800"><strong>💡 提示：</strong>Linux 用户记得将环境变量写入 shell 配置文件（<code class="bg-blue-100 px-1 rounded text-xs font-mono">~/.bashrc</code>、<code class="bg-blue-100 px-1 rounded text-xs font-mono">~/.zshrc</code> 或 <code class="bg-blue-100 px-1 rounded text-xs font-mono">~/.profile</code>），否则每次打开新终端都需要重新 export。</p>
+          <p class="text-sm text-blue-800"><strong>💡 提示：</strong>Linux 用户记得将环境变量写入 shell 配置文件（<code
+              class="bg-blue-100 px-1 rounded text-xs font-mono">~/.bashrc</code>、<code
+              class="bg-blue-100 px-1 rounded text-xs font-mono">~/.zshrc</code> 或 <code
+              class="bg-blue-100 px-1 rounded text-xs font-mono">~/.profile</code>），否则每次打开新终端都需要重新 export。</p>
         </aside>
       </section>
 
       <!-- 验证安装 -->
-      <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+      <section id="sec-3" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
           <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">2</span>
           验证安装
@@ -110,7 +124,8 @@
         </div>
 
         <p class="text-slate-600 mb-4 leading-relaxed">
-          使用 <code class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-xs font-mono">go env</code> 查看 Go 的所有环境变量配置，这是排查环境问题的利器。
+          使用 <code class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-xs font-mono">go env</code> 查看 Go
+          的所有环境变量配置，这是排查环境问题的利器。
         </p>
 
         <div class="mb-4">
@@ -118,12 +133,14 @@
         </div>
 
         <aside class="bg-amber-50 border-l-4 border-amber-400 rounded-r-xl p-4">
-          <p class="text-sm text-amber-800"><strong>⚠️ 注意：</strong>如果 <code class="bg-amber-100 px-1 rounded text-xs font-mono">go version</code> 提示"command not found"，说明 Go 没有被加入系统 PATH。请检查安装是否成功，或手动将 Go 的 bin 目录添加到环境变量中。</p>
+          <p class="text-sm text-amber-800"><strong>⚠️ 注意：</strong>如果 <code
+              class="bg-amber-100 px-1 rounded text-xs font-mono">go version</code> 提示"command not found"，说明 Go 没有被加入系统
+            PATH。请检查安装是否成功，或手动将 Go 的 bin 目录添加到环境变量中。</p>
         </aside>
       </section>
 
       <!-- GOROOT / GOPATH -->
-      <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+      <section id="sec-4" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
           <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">3</span>
           GOROOT 与 GOPATH
@@ -164,21 +181,33 @@
         <ul class="space-y-2 text-slate-600 mb-3">
           <li class="flex items-start gap-2">
             <span class="text-cyan-500 mt-1">▸</span>
-            <span><strong>GOROOT</strong> — Go 语言自身的安装位置。编译器、标准库（<code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">fmt</code>、<code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">net/http</code> 等）都在这里。安装程序自动设置，平时不用管它。</span>
+            <span><strong>GOROOT</strong> — Go 语言自身的安装位置。编译器、标准库（<code
+                class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">fmt</code>、<code
+                class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">net/http</code>
+              等）都在这里。安装程序自动设置，平时不用管它。</span>
           </li>
           <li class="flex items-start gap-2">
             <span class="text-cyan-500 mt-1">▸</span>
-            <span><strong>GOPATH</strong> — 在 Go 1.11 之前，所有 Go 代码必须放在 GOPATH 下的 <code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">src/</code> 目录中。Go Modules 出现后，项目可以放在任意位置，GOPATH 主要用于存放模块缓存（<code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">pkg/mod/</code>）和 <code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">go install</code> 安装的二进制文件（<code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">bin/</code>）。</span>
+            <span><strong>GOPATH</strong> — 在 Go 1.11 之前，所有 Go 代码必须放在 GOPATH 下的 <code
+                class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">src/</code> 目录中。Go Modules
+              出现后，项目可以放在任意位置，GOPATH 主要用于存放模块缓存（<code
+                class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">pkg/mod/</code>）和 <code
+                class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">go install</code> 安装的二进制文件（<code
+                class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">bin/</code>）。</span>
           </li>
         </ul>
 
         <aside class="bg-emerald-50 border-l-4 border-emerald-400 rounded-r-xl p-4">
-          <p class="text-sm text-emerald-800"><strong>✅ 最佳实践：</strong>在 Go Modules 时代，你几乎不需要手动配置 GOROOT 和 GOPATH。只需确保 <code class="bg-emerald-100 px-1 rounded text-xs font-mono">$GOPATH/bin</code> 在 PATH 中（以便运行 <code class="bg-emerald-100 px-1 rounded text-xs font-mono">go install</code> 安装的工具）。使用 <code class="bg-emerald-100 px-1 rounded text-xs font-mono">go env GOPATH</code> 查看当前值。</p>
+          <p class="text-sm text-emerald-800"><strong>✅ 最佳实践：</strong>在 Go Modules 时代，你几乎不需要手动配置 GOROOT 和 GOPATH。只需确保
+            <code class="bg-emerald-100 px-1 rounded text-xs font-mono">$GOPATH/bin</code> 在 PATH 中（以便运行 <code
+              class="bg-emerald-100 px-1 rounded text-xs font-mono">go install</code> 安装的工具）。使用 <code
+              class="bg-emerald-100 px-1 rounded text-xs font-mono">go env GOPATH</code> 查看当前值。
+          </p>
         </aside>
       </section>
 
       <!-- Go Modules 基础 -->
-      <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+      <section id="sec-5" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
           <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">4</span>
           Go Modules 基础
@@ -190,7 +219,9 @@
 
         <h3 class="text-md font-semibold text-slate-700 mb-2">初始化模块</h3>
         <p class="text-slate-600 mb-3 leading-relaxed">
-          在项目根目录执行 <code class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-xs font-mono">go mod init</code>，创建一个新模块。模块路径通常是仓库地址（如 GitHub 路径）。
+          在项目根目录执行 <code
+            class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-xs font-mono">go mod init</code>，创建一个新模块。模块路径通常是仓库地址（如
+          GitHub 路径）。
         </p>
 
         <div class="mb-4">
@@ -198,7 +229,8 @@
         </div>
 
         <p class="text-slate-600 mb-3 leading-relaxed">
-          生成的 <code class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-xs font-mono">go.mod</code> 文件记录了模块名和 Go 版本：
+          生成的 <code class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-xs font-mono">go.mod</code> 文件记录了模块名和
+          Go 版本：
         </p>
 
         <div class="mb-4">
@@ -209,25 +241,31 @@
         <ul class="space-y-2 text-slate-600 mb-3">
           <li class="flex items-start gap-2">
             <span class="text-cyan-500 mt-1">▸</span>
-            <span><code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">go mod tidy</code> — 自动添加缺失的依赖，移除未使用的依赖。每次修改 import 后建议运行一次。</span>
+            <span><code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">go mod tidy</code> —
+              自动添加缺失的依赖，移除未使用的依赖。每次修改 import 后建议运行一次。</span>
           </li>
           <li class="flex items-start gap-2">
             <span class="text-cyan-500 mt-1">▸</span>
-            <span><code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">go.sum</code> — 依赖的校验和文件，记录每个依赖版本的哈希值，确保依赖内容未被篡改。<strong>应提交到版本控制。</strong></span>
+            <span><code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">go.sum</code> —
+              依赖的校验和文件，记录每个依赖版本的哈希值，确保依赖内容未被篡改。<strong>应提交到版本控制。</strong></span>
           </li>
           <li class="flex items-start gap-2">
             <span class="text-cyan-500 mt-1">▸</span>
-            <span><code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">go get &lt;package&gt;</code> — 添加或升级某个依赖包。</span>
+            <span><code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">go get &lt;package&gt;</code>
+              — 添加或升级某个依赖包。</span>
           </li>
         </ul>
 
         <aside class="bg-blue-50 border-l-4 border-blue-400 rounded-r-xl p-4">
-          <p class="text-sm text-blue-800"><strong>💡 提示：</strong><code class="bg-blue-100 px-1 rounded text-xs font-mono">go.mod</code> 和 <code class="bg-blue-100 px-1 rounded text-xs font-mono">go.sum</code> 都应该提交到 Git。团队成员拉取代码后只需 <code class="bg-blue-100 px-1 rounded text-xs font-mono">go mod download</code> 即可同步依赖。</p>
+          <p class="text-sm text-blue-800"><strong>💡 提示：</strong><code
+              class="bg-blue-100 px-1 rounded text-xs font-mono">go.mod</code> 和 <code
+              class="bg-blue-100 px-1 rounded text-xs font-mono">go.sum</code> 都应该提交到 Git。团队成员拉取代码后只需 <code
+              class="bg-blue-100 px-1 rounded text-xs font-mono">go mod download</code> 即可同步依赖。</p>
         </aside>
       </section>
 
       <!-- Go CLI 命令概览 -->
-      <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+      <section id="sec-6" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
           <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">5</span>
           Go CLI 命令概览
@@ -248,7 +286,8 @@
             </thead>
             <tbody class="text-slate-600">
               <tr>
-                <td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700 font-semibold text-xs">go version</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700 font-semibold text-xs">go version
+                </td>
                 <td class="px-4 py-2 border border-slate-200">查看当前 Go 版本</td>
                 <td class="px-4 py-2 border border-slate-200 font-mono text-xs">go version</td>
               </tr>
@@ -258,7 +297,8 @@
                 <td class="px-4 py-2 border border-slate-200 font-mono text-xs">go run main.go</td>
               </tr>
               <tr>
-                <td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700 font-semibold text-xs">go build</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700 font-semibold text-xs">go build
+                </td>
                 <td class="px-4 py-2 border border-slate-200">编译生成可执行文件</td>
                 <td class="px-4 py-2 border border-slate-200 font-mono text-xs">go build -o app ./...</td>
               </tr>
@@ -278,17 +318,21 @@
                 <td class="px-4 py-2 border border-slate-200 font-mono text-xs">go get github.com/gin-gonic/gin</td>
               </tr>
               <tr>
-                <td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700 font-semibold text-xs">go install</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700 font-semibold text-xs">go install
+                </td>
                 <td class="px-4 py-2 border border-slate-200">编译并安装工具到 $GOPATH/bin</td>
-                <td class="px-4 py-2 border border-slate-200 font-mono text-xs">go install golang.org/x/tools/cmd/goimports@latest</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono text-xs">go install
+                  golang.org/x/tools/cmd/goimports@latest</td>
               </tr>
               <tr>
-                <td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700 font-semibold text-xs">go mod init</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700 font-semibold text-xs">go mod init
+                </td>
                 <td class="px-4 py-2 border border-slate-200">初始化 Go Module</td>
                 <td class="px-4 py-2 border border-slate-200 font-mono text-xs">go mod init example/app</td>
               </tr>
               <tr>
-                <td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700 font-semibold text-xs">go mod tidy</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700 font-semibold text-xs">go mod tidy
+                </td>
                 <td class="px-4 py-2 border border-slate-200">整理 go.mod，添加缺失/移除多余依赖</td>
                 <td class="px-4 py-2 border border-slate-200 font-mono text-xs">go mod tidy</td>
               </tr>
@@ -312,12 +356,15 @@
         </div>
 
         <aside class="bg-blue-50 border-l-4 border-blue-400 rounded-r-xl p-4">
-          <p class="text-sm text-blue-800"><strong>💡 提示：</strong>日常开发中牢记 <code class="bg-blue-100 px-1 rounded text-xs font-mono">go fmt</code>（格式化）和 <code class="bg-blue-100 px-1 rounded text-xs font-mono">go vet</code>（静态检查）这两个命令。大多数 Go 编辑器都能在保存时自动运行它们，让你的代码始终保持干净。</p>
+          <p class="text-sm text-blue-800"><strong>💡 提示：</strong>日常开发中牢记 <code
+              class="bg-blue-100 px-1 rounded text-xs font-mono">go fmt</code>（格式化）和 <code
+              class="bg-blue-100 px-1 rounded text-xs font-mono">go vet</code>（静态检查）这两个命令。大多数 Go
+            编辑器都能在保存时自动运行它们，让你的代码始终保持干净。</p>
         </aside>
       </section>
 
       <!-- IDE 设置 -->
-      <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+      <section id="sec-7" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
           <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">6</span>
           IDE 与编辑器设置
@@ -330,19 +377,26 @@
         <h3 class="text-md font-semibold text-slate-700 mb-2">VS Code（免费，推荐）</h3>
         <ol class="space-y-2 mb-4">
           <li class="flex gap-3">
-            <span class="flex-shrink-0 w-6 h-6 bg-cyan-500 text-white rounded-full flex items-center justify-center text-xs font-bold">1</span>
-            <span class="text-slate-600">安装 <a href="https://code.visualstudio.com/" target="_blank" class="text-cyan-600 hover:text-cyan-700 underline">VS Code</a></span>
+            <span
+              class="shrink-0 w-6 h-6 bg-cyan-500 text-white rounded-full flex items-center justify-center text-xs font-bold">1</span>
+            <span class="text-slate-600">安装 <a href="https://code.visualstudio.com/" target="_blank"
+                class="text-cyan-600 hover:text-cyan-700 underline">VS Code</a></span>
           </li>
           <li class="flex gap-3">
-            <span class="flex-shrink-0 w-6 h-6 bg-cyan-500 text-white rounded-full flex items-center justify-center text-xs font-bold">2</span>
+            <span
+              class="shrink-0 w-6 h-6 bg-cyan-500 text-white rounded-full flex items-center justify-center text-xs font-bold">2</span>
             <span class="text-slate-600">在扩展市场搜索并安装 <strong>Go</strong>（由 Go Team at Google 发布）</span>
           </li>
           <li class="flex gap-3">
-            <span class="flex-shrink-0 w-6 h-6 bg-cyan-500 text-white rounded-full flex items-center justify-center text-xs font-bold">3</span>
-            <span class="text-slate-600">打开任意 <code class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-xs font-mono">.go</code> 文件，扩展会提示安装 gopls（Go 语言服务器）等工具</span>
+            <span
+              class="shrink-0 w-6 h-6 bg-cyan-500 text-white rounded-full flex items-center justify-center text-xs font-bold">3</span>
+            <span class="text-slate-600">打开任意 <code
+                class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-xs font-mono">.go</code> 文件，扩展会提示安装
+              gopls（Go 语言服务器）等工具</span>
           </li>
           <li class="flex gap-3">
-            <span class="flex-shrink-0 w-6 h-6 bg-cyan-500 text-white rounded-full flex items-center justify-center text-xs font-bold">4</span>
+            <span
+              class="shrink-0 w-6 h-6 bg-cyan-500 text-white rounded-full flex items-center justify-center text-xs font-bold">4</span>
             <span class="text-slate-600">点击"Install All"一键安装所有 Go 工具</span>
           </li>
         </ol>
@@ -360,12 +414,14 @@
         </ul>
 
         <aside class="bg-emerald-50 border-l-4 border-emerald-400 rounded-r-xl p-4">
-          <p class="text-sm text-emerald-800"><strong>✅ 最佳实践：</strong>无论选择哪个编辑器，确保开启了"保存时自动格式化（<code class="bg-emerald-100 px-1 rounded text-xs font-mono">go fmt</code>）"和"保存时自动导入整理（<code class="bg-emerald-100 px-1 rounded text-xs font-mono">goimports</code>）"。这让你不必关心代码格式，专注于逻辑。</p>
+          <p class="text-sm text-emerald-800"><strong>✅ 最佳实践：</strong>无论选择哪个编辑器，确保开启了"保存时自动格式化（<code
+              class="bg-emerald-100 px-1 rounded text-xs font-mono">go fmt</code>）"和"保存时自动导入整理（<code
+              class="bg-emerald-100 px-1 rounded text-xs font-mono">goimports</code>）"。这让你不必关心代码格式，专注于逻辑。</p>
         </aside>
       </section>
 
       <!-- 第一个 Go 程序 -->
-      <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+      <section id="sec-8" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
           <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">7</span>
           第一个 Go 程序：Hello World
@@ -393,19 +449,24 @@
         <ul class="space-y-2 text-slate-600 mb-4">
           <li class="flex items-start gap-2">
             <span class="text-cyan-500 mt-1 font-bold">1.</span>
-            <span><code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">package main</code> — 声明这是一个可执行程序的入口包（main 包是特殊的，必须包含 main() 函数）</span>
+            <span><code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">package main</code> —
+              声明这是一个可执行程序的入口包（main 包是特殊的，必须包含 main() 函数）</span>
           </li>
           <li class="flex items-start gap-2">
             <span class="text-cyan-500 mt-1 font-bold">2.</span>
-            <span><code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">import "fmt"</code> — 导入标准库中的格式化 I/O 包，用于打印输出</span>
+            <span><code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">import "fmt"</code> —
+              导入标准库中的格式化 I/O 包，用于打印输出</span>
           </li>
           <li class="flex items-start gap-2">
             <span class="text-cyan-500 mt-1 font-bold">3.</span>
-            <span><code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">func main()</code> — 程序的入口函数，Go 从这里开始执行</span>
+            <span><code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">func main()</code> —
+              程序的入口函数，Go 从这里开始执行</span>
           </li>
           <li class="flex items-start gap-2">
             <span class="text-cyan-500 mt-1 font-bold">4.</span>
-            <span><code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">fmt.Println("Hello, World!")</code> — 调用 fmt 包的 Println 函数打印一行文字并换行</span>
+            <span><code
+                class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">fmt.Println("Hello, World!")</code> —
+              调用 fmt 包的 Println 函数打印一行文字并换行</span>
           </li>
         </ul>
 
@@ -415,12 +476,14 @@
         </div>
 
         <aside class="bg-blue-50 border-l-4 border-blue-400 rounded-r-xl p-4">
-          <p class="text-sm text-blue-800"><strong>💡 提示：</strong><code class="bg-blue-100 px-1 rounded text-xs font-mono">go run</code> 适合快速测试，实际部署时使用 <code class="bg-blue-100 px-1 rounded text-xs font-mono">go build</code> 生成二进制文件再运行。编译后的程序不依赖 Go 环境，可以直接分发。</p>
+          <p class="text-sm text-blue-800"><strong>💡 提示：</strong><code
+              class="bg-blue-100 px-1 rounded text-xs font-mono">go run</code> 适合快速测试，实际部署时使用 <code
+              class="bg-blue-100 px-1 rounded text-xs font-mono">go build</code> 生成二进制文件再运行。编译后的程序不依赖 Go 环境，可以直接分发。</p>
         </aside>
       </section>
 
       <!-- 项目结构 -->
-      <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+      <section id="sec-9" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
           <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">8</span>
           典型项目结构概览
@@ -437,21 +500,25 @@
         <ul class="space-y-2 text-slate-600">
           <li class="flex items-start gap-2">
             <span class="text-cyan-500 mt-1">▸</span>
-            <span><strong>简单项目</strong>（如学习阶段）：一个 <code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">main.go</code> 就够，所有代码在根目录。</span>
+            <span><strong>简单项目</strong>（如学习阶段）：一个 <code
+                class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">main.go</code> 就够，所有代码在根目录。</span>
           </li>
           <li class="flex items-start gap-2">
             <span class="text-cyan-500 mt-1">▸</span>
-            <span><strong>中等项目</strong>：按功能拆分 <code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">.go</code> 文件（同属 <code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">package main</code>），或拆分为多个包。</span>
+            <span><strong>中等项目</strong>：按功能拆分 <code
+                class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">.go</code> 文件（同属 <code
+                class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">package main</code>），或拆分为多个包。</span>
           </li>
           <li class="flex items-start gap-2">
             <span class="text-cyan-500 mt-1">▸</span>
-            <span><strong>大型项目</strong>：参考 <a href="https://github.com/golang-standards/project-layout" target="_blank" class="text-cyan-600 hover:text-cyan-700 underline">golang-standards/project-layout</a> 的标准布局。</span>
+            <span><strong>大型项目</strong>：参考 <a href="https://github.com/golang-standards/project-layout" target="_blank"
+                class="text-cyan-600 hover:text-cyan-700 underline">golang-standards/project-layout</a> 的标准布局。</span>
           </li>
         </ul>
       </section>
 
       <!-- 新手避坑指南 -->
-      <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+      <section id="sec-10" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
           <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">9</span>
           新手常见问题与避坑指南
@@ -459,23 +526,34 @@
 
         <div class="space-y-4">
           <aside class="bg-amber-50 border-l-4 border-amber-400 rounded-r-xl p-4">
-            <p class="text-sm text-amber-800"><strong>⚠️ 左大括号不能换行：</strong>Go 要求 <code class="bg-amber-100 px-1 rounded text-xs font-mono">{</code> 必须和 <code class="bg-amber-100 px-1 rounded text-xs font-mono">func</code> / <code class="bg-amber-100 px-1 rounded text-xs font-mono">if</code> 等关键字在同一行。这是 Go 编译器强制要求的，不是风格偏好。<br/><code class="bg-amber-100 px-1 rounded text-xs font-mono">func main() {</code> ✅ &nbsp;&nbsp; <code class="bg-amber-100 px-1 rounded text-xs font-mono">func main()\n{</code> ❌</p>
+            <p class="text-sm text-amber-800"><strong>⚠️ 左大括号不能换行：</strong>Go 要求 <code
+                class="bg-amber-100 px-1 rounded text-xs font-mono">{</code> 必须和 <code
+                class="bg-amber-100 px-1 rounded text-xs font-mono">func</code> / <code
+                class="bg-amber-100 px-1 rounded text-xs font-mono">if</code> 等关键字在同一行。这是 Go 编译器强制要求的，不是风格偏好。<br /><code
+                class="bg-amber-100 px-1 rounded text-xs font-mono">func main() {</code> ✅ &nbsp;&nbsp; <code
+                class="bg-amber-100 px-1 rounded text-xs font-mono">func main()\n{</code> ❌</p>
           </aside>
 
           <aside class="bg-amber-50 border-l-4 border-amber-400 rounded-r-xl p-4">
-            <p class="text-sm text-amber-800"><strong>⚠️ 未使用的变量/导入会报错：</strong>Go 编译器非常严格——声明但未使用的变量或导入但未使用的包都会导致<strong>编译失败</strong>。这不是 bug，是 Go 刻意设计来保持代码整洁的。使用 <code class="bg-amber-100 px-1 rounded text-xs font-mono">_</code>（下划线）可以忽略不用的返回值。</p>
+            <p class="text-sm text-amber-800"><strong>⚠️ 未使用的变量/导入会报错：</strong>Go
+              编译器非常严格——声明但未使用的变量或导入但未使用的包都会导致<strong>编译失败</strong>。这不是 bug，是 Go 刻意设计来保持代码整洁的。使用 <code
+                class="bg-amber-100 px-1 rounded text-xs font-mono">_</code>（下划线）可以忽略不用的返回值。</p>
           </aside>
 
           <aside class="bg-amber-50 border-l-4 border-amber-400 rounded-r-xl p-4">
-            <p class="text-sm text-amber-800"><strong>⚠️ 大小写决定可见性：</strong>Go 没有 public/private 关键字。标识符首字母<strong>大写</strong>表示公开（exported），首字母<strong>小写</strong>表示私有（unexported）。这个规则贯穿整个 Go 生态系统。</p>
+            <p class="text-sm text-amber-800"><strong>⚠️ 大小写决定可见性：</strong>Go 没有 public/private
+              关键字。标识符首字母<strong>大写</strong>表示公开（exported），首字母<strong>小写</strong>表示私有（unexported）。这个规则贯穿整个 Go 生态系统。</p>
           </aside>
 
           <aside class="bg-amber-50 border-l-4 border-amber-400 rounded-r-xl p-4">
-            <p class="text-sm text-amber-800"><strong>⚠️ GOPATH 误区：</strong>很多旧教程会要求你把项目放在 <code class="bg-amber-100 px-1 rounded text-xs font-mono">$GOPATH/src</code> 下。在 Go Modules 时代，这是<strong>不需要的</strong>！你的项目可以放在任何目录。</p>
+            <p class="text-sm text-amber-800"><strong>⚠️ GOPATH 误区：</strong>很多旧教程会要求你把项目放在 <code
+                class="bg-amber-100 px-1 rounded text-xs font-mono">$GOPATH/src</code> 下。在 Go Modules
+              时代，这是<strong>不需要的</strong>！你的项目可以放在任何目录。</p>
           </aside>
 
           <aside class="bg-blue-50 border-l-4 border-blue-400 rounded-r-xl p-4">
-            <p class="text-sm text-blue-800"><strong>💡 善用 gofmt：</strong>不用纠结代码格式——保存前运行 <code class="bg-blue-100 px-1 rounded text-xs font-mono">gofmt</code> 或配置编辑器自动格式化。整个 Go 社区的代码风格完全统一。</p>
+            <p class="text-sm text-blue-800"><strong>💡 善用 gofmt：</strong>不用纠结代码格式——保存前运行 <code
+                class="bg-blue-100 px-1 rounded text-xs font-mono">gofmt</code> 或配置编辑器自动格式化。整个 Go 社区的代码风格完全统一。</p>
           </aside>
         </div>
       </section>
@@ -486,10 +564,8 @@
     <footer class="max-w-4xl mx-auto px-6 py-8">
       <nav class="flex justify-between items-center pt-4 border-t border-slate-200">
         <span class="text-sm text-slate-300">已是第一节</span>
-        <RouterLink
-          to="/backend/BackendLanguage/GO/go-stage-1-basics/go-1-2-variables-types"
-          class="inline-flex items-center gap-1 text-sm text-cyan-600 hover:text-cyan-700 font-medium transition-colors"
-        >
+        <RouterLink to="/backend/BackendLanguage/GO/go-stage-1-basics/go-1-2-variables-types"
+          class="inline-flex items-center gap-1 text-sm text-cyan-600 hover:text-cyan-700 font-medium transition-colors">
           下一节：变量、常量与数据类型 →
         </RouterLink>
       </nav>
@@ -499,9 +575,22 @@
 </template>
 
 <script setup lang="ts">
-import { Code } from 'components'
+import { Code, EditorLink, Nav } from 'components'
+import { useUserStore } from '@/stores/userProfle'
+const userStore = useUserStore()
 import { RouterLink } from 'vue-router'
 
+const navList = [
+  { id: "sec-1", name: "安装 Go" },
+  { id: "sec-2", name: "验证安装" },
+  { id: "sec-3", name: "GOROOT 与 GOPATH" },
+  { id: "sec-4", name: "Go Modules 基础" },
+  { id: "sec-5", name: "Go CLI 命令概览" },
+  { id: "sec-6", name: "IDE 与编辑器设置" },
+  { id: "sec-7", name: "第一个 Go 程序：Hello World" },
+  { id: "sec-8", name: "典型项目结构概览" },
+  { id: "sec-9", name: "新手常见问题与避坑指南" }
+]
 // macOS 安装命令
 const macOsInstall = `# 方式一：下载 .pkg 安装包（推荐新手）
 # 访问 https://go.dev/dl/ 下载 macOS 安装包，双击安装

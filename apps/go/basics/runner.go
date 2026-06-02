@@ -7,86 +7,82 @@ import (
 
 // RunAll 按顺序运行所有基础入门主题。
 func RunAll() {
-	fmt.Println("┌──────────────────────────────────────────┐")
-	fmt.Println("│   🔰 Go 语言基础入门 - 完整演示          │")
-	fmt.Println("└──────────────────────────────────────────┘")
+	fmt.Println("🔰 ========== 阶段 1: 基础入门 ==========")
 
-	fmt.Println("\n═══════════════════════════════════════════")
-	fmt.Println("  1/7  变量、类型与常量")
-	fmt.Println("═══════════════════════════════════════════")
+	RunEnvTools()
 	RunVariables()
-
-	fmt.Println("\n═══════════════════════════════════════════")
-	fmt.Println("  2/7  控制流 (if / for / switch / defer)")
-	fmt.Println("═══════════════════════════════════════════")
+	RunOperators()
+	RunFmtIO()
 	RunControlFlow()
-
-	fmt.Println("\n═══════════════════════════════════════════")
-	fmt.Println("  3/7  函数 (声明、闭包、高阶函数)")
-	fmt.Println("═══════════════════════════════════════════")
 	RunFunctions()
+	RunFunctionsAdvanced()
+	RunArraysSlices()
+	RunMaps()
+	RunPointers()
+	RunStructs()
+	RunNewMake()
+	RunMethodsInterfaces()
+	RunPackagesModules()
+	RunStringsRune()
+	RunErrorHandling()
+	RunTime()
+	RunFileIO()
+	RunTesting()
 
-	fmt.Println("\n═══════════════════════════════════════════")
-	fmt.Println("  4/7  集合类型 (数组、切片、Map)")
-	fmt.Println("═══════════════════════════════════════════")
-	RunCollections()
-
-	fmt.Println("\n═══════════════════════════════════════════")
-	fmt.Println("  5/7  结构体与方法")
-	fmt.Println("═══════════════════════════════════════════")
-	RunStructsMethods()
-
-	fmt.Println("\n═══════════════════════════════════════════")
-	fmt.Println("  6/7  接口")
-	fmt.Println("═══════════════════════════════════════════")
-	RunInterfaces()
-
-	fmt.Println("\n═══════════════════════════════════════════")
-	fmt.Println("  7/7  包管理与测试")
-	fmt.Println("═══════════════════════════════════════════")
-	RunPackages()
-
-	fmt.Println("\n┌──────────────────────────────────────────┐")
-	fmt.Println("│   ✅ 基础入门阶段完成！                   │")
-	fmt.Println("└──────────────────────────────────────────┘")
+	fmt.Println("\n✅ 基础入门阶段完成！")
 }
 
 // RunTopic 根据主题名称运行对应模块。
-// 支持模糊匹配：如 "variable" 匹配 "variables"，"func" 匹配 "functions" 等。
 func RunTopic(topic string) bool {
 	topic = strings.ToLower(strings.TrimSpace(topic))
 
 	switch {
-	case matchTopic(topic, "variable", "variables", "变量"):
-		fmt.Println("\n--- 主题：变量、类型与常量 ---")
+	case matchTopic(topic, "env", "tools", "环境", "工具"):
+		RunEnvTools()
+	case matchTopic(topic, "variable", "variables", "变量", "类型"):
 		RunVariables()
-	case matchTopic(topic, "control", "controlflow", "if", "for", "switch", "defer", "控制", "控制流"):
-		fmt.Println("\n--- 主题：控制流 ---")
+	case matchTopic(topic, "operator", "operators", "运算符"):
+		RunOperators()
+	case matchTopic(topic, "fmt", "io", "print", "格式化"):
+		RunFmtIO()
+	case matchTopic(topic, "control", "if", "for", "switch", "控制"):
 		RunControlFlow()
 	case matchTopic(topic, "function", "functions", "func", "函数"):
-		fmt.Println("\n--- 主题：函数 ---")
 		RunFunctions()
-	case matchTopic(topic, "collection", "collections", "array", "slice", "slices", "map", "集合", "数组", "切片"):
-		fmt.Println("\n--- 主题：集合类型 ---")
-		RunCollections()
-	case matchTopic(topic, "struct", "structs", "method", "methods", "结构体", "方法"):
-		fmt.Println("\n--- 主题：结构体与方法 ---")
-		RunStructsMethods()
-	case matchTopic(topic, "interface", "interfaces", "接口"):
-		fmt.Println("\n--- 主题：接口 ---")
-		RunInterfaces()
-	case matchTopic(topic, "package", "packages", "testing", "test", "包", "测试"):
-		fmt.Println("\n--- 主题：包管理与测试 ---")
-		RunPackages()
+	case matchTopic(topic, "defer", "closure", "panic", "闭包", "延迟"):
+		RunFunctionsAdvanced()
+	case matchTopic(topic, "array", "slice", "数组", "切片"):
+		RunArraysSlices()
+	case matchTopic(topic, "map", "映射"):
+		RunMaps()
+	case matchTopic(topic, "pointer", "指针"):
+		RunPointers()
+	case matchTopic(topic, "struct", "结构体"):
+		RunStructs()
+	case matchTopic(topic, "new", "make"):
+		RunNewMake()
+	case matchTopic(topic, "method", "interface", "方法", "接口"):
+		RunMethodsInterfaces()
+	case matchTopic(topic, "package", "module", "包", "模块"):
+		RunPackagesModules()
+	case matchTopic(topic, "string", "rune", "字符串"):
+		RunStringsRune()
+	case matchTopic(topic, "error", "错误"):
+		RunErrorHandling()
+	case matchTopic(topic, "time", "时间"):
+		RunTime()
+	case matchTopic(topic, "file", "io", "文件"):
+		RunFileIO()
+	case matchTopic(topic, "test", "测试"):
+		RunTesting()
 	default:
 		fmt.Printf("未知的基础主题: %s\n", topic)
-		fmt.Println("可用主题: variables, controlflow, functions, collections, structs, interfaces, packages")
+		fmt.Println("可用: env, variables, operators, fmt, control, functions, defer, arrays, maps, pointers, structs, new, methods, packages, strings, errors, time, file, testing")
 		return false
 	}
 	return true
 }
 
-// matchTopic 检查用户输入是否匹配某个主题关键词。
 func matchTopic(input string, keywords ...string) bool {
 	for _, kw := range keywords {
 		if input == kw || strings.Contains(input, kw) || strings.Contains(kw, input) {

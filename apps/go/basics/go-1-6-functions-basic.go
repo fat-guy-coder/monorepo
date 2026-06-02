@@ -154,3 +154,11 @@ func chain(f, g func(int) int) func(int) int {
 		return g(f(x))
 	}
 }
+
+// ============================================================
+// 单独运行此文件:
+//   1. 将第 1 行 "package basics" 改为 "package main"
+//   2. 取消下面 main 函数的注释
+//   3. go run FILE_NAME
+// ============================================================
+//func main() { RunFunctions() }

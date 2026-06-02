@@ -151,7 +151,7 @@ features:
 func viperEnv() {
 	fmt.Println("环境变量映射")
 	fmt.Println()
-	fmt.Println("映射规则（使用 SetEnvKeyReplacer(".", "_")）：")
+	fmt.Println("映射规则（使用 SetEnvKeyReplacer(\".\", \"_\")）：")
 	fmt.Println("  server.port             → APP_SERVER_PORT")
 	fmt.Println("  database.host           → APP_DATABASE_HOST")
 	fmt.Println("  redis.pool_size         → APP_REDIS_POOL_SIZE")

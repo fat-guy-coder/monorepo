@@ -1,32 +1,38 @@
 <template>
-  <div class="go-doc min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+  <div class="go-doc min-h-screen bg-linear-to-br from-slate-50 to-blue-50">
     <!-- 页面头部 -->
-    <header class="bg-white border-b border-slate-200 sticky top-0 z-10">
+    <header class="bg-white border-b border-slate-200">
       <div class="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
         <div>
           <h1 class="text-2xl font-bold text-slate-800">函数基础 (声明/参数/多返回值)</h1>
           <p class="text-sm text-slate-500 mt-1">Go 语言函数的核心概念</p>
         </div>
-        <span class="text-xs text-slate-400 bg-slate-100 px-3 py-1 rounded-full">阶段 1-6</span>
+        <div class="flex items-center gap-3">
+          <EditorLink file-path="apps/go/basics/go-1-6-functions-basic.go" label="📝 查看源码" :is-admin="userStore.isAdmin" />
+          <span class="text-xs text-slate-400 bg-slate-100 px-3 py-1 rounded-full">阶段 1-6</span>
+        </div>
       </div>
     </header>
 
     <!-- 主体内容 -->
     <main class="max-w-4xl mx-auto px-6 py-8 space-y-6">
+      <Nav :list="navList" title="目录" position="top-right" :showBackToTop="true" />
 
       <!-- 1. 函数声明 -->
-      <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+      <section id="sec-1" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
           <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">1</span>
           函数声明（Function Declaration）
         </h2>
         <p class="text-slate-600 mb-4 leading-relaxed">
-          Go 使用 <code class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-sm font-mono">func</code> 关键字声明函数。函数是 Go 程序的基本组织单元，也是实现代码复用的核心机制。
+          Go 使用 <code class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-sm font-mono">func</code> 关键字声明函数。函数是
+          Go 程序的基本组织单元，也是实现代码复用的核心机制。
         </p>
 
         <h3 class="text-base font-semibold text-slate-700 mb-3">基本语法结构</h3>
         <p class="text-slate-600 mb-4 leading-relaxed">
-          一个完整的函数声明包含：关键字 <code class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-sm font-mono">func</code>、函数名、参数列表、返回值列表和函数体。
+          一个完整的函数声明包含：关键字 <code
+            class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-sm font-mono">func</code>、函数名、参数列表、返回值列表和函数体。
         </p>
         <div class="mb-4">
           <Code language="go" :code="declarationCode" title="function_declaration.go" />
@@ -36,11 +42,15 @@
         <ul class="space-y-2 text-slate-600 mb-4">
           <li class="flex items-start gap-2">
             <span class="text-cyan-500 mt-1">▸</span>
-            <span><strong>导出函数：</strong>首字母大写，包外可访问。例如 <code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">fmt.Println()</code>、<code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">strings.Contains()</code></span>
+            <span><strong>导出函数：</strong>首字母大写，包外可访问。例如 <code
+                class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">fmt.Println()</code>、<code
+                class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">strings.Contains()</code></span>
           </li>
           <li class="flex items-start gap-2">
             <span class="text-cyan-500 mt-1">▸</span>
-            <span><strong>内部函数：</strong>首字母小写，仅包内可访问。例如 <code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">helper()</code>、<code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">validate()</code></span>
+            <span><strong>内部函数：</strong>首字母小写，仅包内可访问。例如 <code
+                class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">helper()</code>、<code
+                class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">validate()</code></span>
           </li>
           <li class="flex items-start gap-2">
             <span class="text-cyan-500 mt-1">▸</span>
@@ -48,17 +58,21 @@
           </li>
           <li class="flex items-start gap-2">
             <span class="text-cyan-500 mt-1">▸</span>
-            <span>函数名应当简短且具备描述性，通常以<strong>动词</strong>开头：<code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">ProcessData</code>、<code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">getUser</code>、<code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">closeFile</code></span>
+            <span>函数名应当简短且具备描述性，通常以<strong>动词</strong>开头：<code
+                class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">ProcessData</code>、<code
+                class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">getUser</code>、<code
+                class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">closeFile</code></span>
           </li>
         </ul>
 
         <aside class="bg-blue-50 border-l-4 border-blue-400 rounded-r-xl p-4">
-          <p class="text-sm text-blue-800"><strong>💡 提示：</strong>Go 的函数可以返回多个值，这是它与 C/Java 等语言最显著的差异之一。多返回值使得错误处理模式变得非常自然。</p>
+          <p class="text-sm text-blue-800"><strong>💡 提示：</strong>Go 的函数可以返回多个值，这是它与 C/Java
+            等语言最显著的差异之一。多返回值使得错误处理模式变得非常自然。</p>
         </aside>
       </section>
 
       <!-- 2. 参数 -->
-      <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+      <section id="sec-2" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
           <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">2</span>
           函数参数（Function Parameters）
@@ -108,12 +122,14 @@
         </div>
 
         <aside class="bg-amber-50 border-l-4 border-amber-400 rounded-r-xl p-4">
-          <p class="text-sm text-amber-800"><strong>⚠️ 注意：</strong>类型简写只适用于<strong>连续</strong>的同类型参数。<code class="bg-amber-100 text-amber-800 px-1 rounded text-xs font-mono">a, b int, c string</code> 中，<code class="bg-amber-100 text-amber-800 px-1 rounded text-xs font-mono">c</code> 必须单独声明类型。</p>
+          <p class="text-sm text-amber-800"><strong>⚠️ 注意：</strong>类型简写只适用于<strong>连续</strong>的同类型参数。<code
+              class="bg-amber-100 text-amber-800 px-1 rounded text-xs font-mono">a, b int, c string</code> 中，<code
+              class="bg-amber-100 text-amber-800 px-1 rounded text-xs font-mono">c</code> 必须单独声明类型。</p>
         </aside>
       </section>
 
       <!-- 3. 返回值 -->
-      <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+      <section id="sec-3" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
           <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">3</span>
           返回值（Return Values）
@@ -140,7 +156,9 @@
 
         <h3 class="text-base font-semibold text-slate-700 mb-3">命名返回值（Named Return Values）</h3>
         <p class="text-slate-600 mb-4 leading-relaxed">
-          可以在函数签名中为返回值命名，它们会被自动初始化为零值。命名返回值在配合 <code class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-sm font-mono">defer</code> 使用时特别有用（defer 可以访问并修改这些返回值）。
+          可以在函数签名中为返回值命名，它们会被自动初始化为零值。命名返回值在配合 <code
+            class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-sm font-mono">defer</code> 使用时特别有用（defer
+          可以访问并修改这些返回值）。
         </p>
         <div class="mb-4">
           <Code language="go" :code="returnNamedCode" title="return_named.go" />
@@ -148,23 +166,27 @@
 
         <h3 class="text-base font-semibold text-slate-700 mb-3">裸返回（Naked Return）</h3>
         <p class="text-slate-600 mb-4 leading-relaxed">
-          当使用命名返回值时，可以只写 <code class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-sm font-mono">return</code> 而不指定返回的变量，Go 会自动返回当前命名返回值的值。<strong>只推荐在非常短的函数中使用</strong>，长函数中裸返回会严重降低可读性。
+          当使用命名返回值时，可以只写 <code class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-sm font-mono">return</code>
+          而不指定返回的变量，Go 会自动返回当前命名返回值的值。<strong>只推荐在非常短的函数中使用</strong>，长函数中裸返回会严重降低可读性。
         </p>
         <div class="mb-4">
           <Code language="go" :code="returnNakedCode" title="return_naked.go" />
         </div>
 
         <aside class="bg-amber-50 border-l-4 border-amber-400 rounded-r-xl p-4 mb-4">
-          <p class="text-sm text-amber-800"><strong>⚠️ 谨慎使用裸返回：</strong>当函数超过 5-10 行时，裸返回会使读者难以追踪"到底 return 了什么"。Go 官方也建议仅在非常短的函数中使用裸返回。长函数中<strong>显式返回</strong>更清晰。</p>
+          <p class="text-sm text-amber-800"><strong>⚠️ 谨慎使用裸返回：</strong>当函数超过 5-10 行时，裸返回会使读者难以追踪"到底 return 了什么"。Go
+            官方也建议仅在非常短的函数中使用裸返回。长函数中<strong>显式返回</strong>更清晰。</p>
         </aside>
 
         <aside class="bg-emerald-50 border-l-4 border-emerald-400 rounded-r-xl p-4">
-          <p class="text-sm text-emerald-800"><strong>✅ 最佳实践：</strong>命名返回值的最佳使用场景是配合 <code class="bg-emerald-100 text-emerald-800 px-1 rounded text-xs font-mono">defer</code> 在函数退出前修改返回值。如果不需要在 defer 中访问返回值，普通的非命名返回值更清晰。</p>
+          <p class="text-sm text-emerald-800"><strong>✅ 最佳实践：</strong>命名返回值的最佳使用场景是配合 <code
+              class="bg-emerald-100 text-emerald-800 px-1 rounded text-xs font-mono">defer</code> 在函数退出前修改返回值。如果不需要在
+            defer 中访问返回值，普通的非命名返回值更清晰。</p>
         </aside>
       </section>
 
       <!-- 4. 多返回值与错误处理 -->
-      <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+      <section id="sec-4" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
           <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">4</span>
           多返回值与错误处理模式
@@ -179,25 +201,30 @@
 
         <h3 class="text-base font-semibold text-slate-700 mb-3">用 _ 忽略不需要的返回值</h3>
         <p class="text-slate-600 mb-4 leading-relaxed">
-          如果某个返回值不需要，可以用空白标识符 <code class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-sm font-mono">_</code> 来显式忽略它。Go 编译器不允许声明了但未使用的局部变量（或返回值），所以 <code class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-sm font-mono">_</code> 是必要的。
+          如果某个返回值不需要，可以用空白标识符 <code class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-sm font-mono">_</code>
+          来显式忽略它。Go 编译器不允许声明了但未使用的局部变量（或返回值），所以 <code
+            class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-sm font-mono">_</code> 是必要的。
         </p>
         <div class="mb-4">
           <Code language="go" :code="blankIdCode" title="blank_identifier.go" />
         </div>
 
         <aside class="bg-amber-50 border-l-4 border-amber-400 rounded-r-xl p-4">
-          <p class="text-sm text-amber-800"><strong>⚠️ 注意：</strong>忽略错误（用 <code class="bg-amber-100 text-amber-800 px-1 rounded text-xs font-mono">_</code> 丢弃 error）在生产代码中通常是<strong>坏习惯</strong>。除非你确定错误不可能发生，否则应该始终检查 error。</p>
+          <p class="text-sm text-amber-800"><strong>⚠️ 注意：</strong>忽略错误（用 <code
+              class="bg-amber-100 text-amber-800 px-1 rounded text-xs font-mono">_</code> 丢弃
+            error）在生产代码中通常是<strong>坏习惯</strong>。除非你确定错误不可能发生，否则应该始终检查 error。</p>
         </aside>
       </section>
 
       <!-- 5. 可变参数 -->
-      <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+      <section id="sec-5" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
           <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">5</span>
           可变参数（Variadic Parameters）
         </h2>
         <p class="text-slate-600 mb-4 leading-relaxed">
-          使用 <code class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-sm font-mono">...</code> 语法可以让函数接受<strong>任意数量</strong>的同类型参数。在函数内部，可变参数被当作一个<strong>切片</strong>（slice）来使用。
+          使用 <code class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-sm font-mono">...</code>
+          语法可以让函数接受<strong>任意数量</strong>的同类型参数。在函数内部，可变参数被当作一个<strong>切片</strong>（slice）来使用。
         </p>
 
         <div class="mb-4">
@@ -206,25 +233,32 @@
 
         <h3 class="text-base font-semibold text-slate-700 mb-3">将切片传递给可变参数</h3>
         <p class="text-slate-600 mb-4 leading-relaxed">
-          如果已经有一个切片，想要把它作为可变参数传入，需要使用 <code class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-sm font-mono">slice...</code> 语法来展开它。
+          如果已经有一个切片，想要把它作为可变参数传入，需要使用 <code
+            class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-sm font-mono">slice...</code> 语法来展开它。
         </p>
         <div class="mb-4">
           <Code language="go" :code="variadicSliceCode" title="variadic_slice.go" />
         </div>
 
         <aside class="bg-blue-50 border-l-4 border-blue-400 rounded-r-xl p-4">
-          <p class="text-sm text-blue-800"><strong>💡 提示：</strong>一个函数只能有一个可变参数，且它必须是参数列表中的<strong>最后一个</strong>参数。例如 <code class="bg-blue-100 text-blue-800 px-1 rounded text-xs font-mono">func f(a int, b string, nums ...int)</code> 是合法的，但 <code class="bg-blue-100 text-blue-800 px-1 rounded text-xs font-mono">func f(nums ...int, a int)</code> 不合法。</p>
+          <p class="text-sm text-blue-800"><strong>💡 提示：</strong>一个函数只能有一个可变参数，且它必须是参数列表中的<strong>最后一个</strong>参数。例如
+            <code
+              class="bg-blue-100 text-blue-800 px-1 rounded text-xs font-mono">func f(a int, b string, nums ...int)</code>
+            是合法的，但 <code
+              class="bg-blue-100 text-blue-800 px-1 rounded text-xs font-mono">func f(nums ...int, a int)</code> 不合法。
+          </p>
         </aside>
       </section>
 
       <!-- 6. 值传递 -->
-      <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+      <section id="sec-6" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
           <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">6</span>
           值传递（Pass by Value）
         </h2>
         <p class="text-slate-600 mb-4 leading-relaxed">
-          Go 中<strong>所有参数都是按值传递的</strong>——函数接收到的是实参的一个<strong>副本</strong>。这意味着函数内部对参数的修改不会影响原始变量。对于切片、map 和 channel 等引用类型，理解它们的"值"是什么尤为关键。
+          Go 中<strong>所有参数都是按值传递的</strong>——函数接收到的是实参的一个<strong>副本</strong>。这意味着函数内部对参数的修改不会影响原始变量。对于切片、map 和 channel
+          等引用类型，理解它们的"值"是什么尤为关键。
         </p>
 
         <h3 class="text-base font-semibold text-slate-700 mb-3">基本类型：修改无效</h3>
@@ -266,7 +300,8 @@
               <tr>
                 <td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700">切片 (slice)</td>
                 <td class="px-4 py-2 border border-slate-200">头部结构（ptr + len + cap）的副本</td>
-                <td class="px-4 py-2 border border-slate-200"><span class="text-emerald-600">修改元素：影响</span><br /><span class="text-amber-600">追加元素：不影响（除非触发扩容或返回值重新赋值）</span></td>
+                <td class="px-4 py-2 border border-slate-200"><span class="text-emerald-600">修改元素：影响</span><br /><span
+                    class="text-amber-600">追加元素：不影响（除非触发扩容或返回值重新赋值）</span></td>
               </tr>
               <tr>
                 <td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700">map</td>
@@ -283,12 +318,14 @@
         </div>
 
         <aside class="bg-amber-50 border-l-4 border-amber-400 rounded-r-xl p-4">
-          <p class="text-sm text-amber-800"><strong>⚠️ 常见陷阱：</strong>在函数内使用 <code class="bg-amber-100 text-amber-800 px-1 rounded text-xs font-mono">append</code> 修改切片时，<strong>必须将新的切片返回</strong>给调用者，或者传切片的指针。因为 append 可能创建新的底层数组，而调用者的切片头部仍然指向旧数组。</p>
+          <p class="text-sm text-amber-800"><strong>⚠️ 常见陷阱：</strong>在函数内使用 <code
+              class="bg-amber-100 text-amber-800 px-1 rounded text-xs font-mono">append</code>
+            修改切片时，<strong>必须将新的切片返回</strong>给调用者，或者传切片的指针。因为 append 可能创建新的底层数组，而调用者的切片头部仍然指向旧数组。</p>
         </aside>
       </section>
 
       <!-- 7. 函数签名 -->
-      <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+      <section id="sec-7" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
           <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">7</span>
           函数类型与签名（Function Type）
@@ -303,7 +340,8 @@
 
         <h3 class="text-base font-semibold text-slate-700 mb-3">函数作为参数</h3>
         <p class="text-slate-600 mb-4 leading-relaxed">
-          将函数作为参数传递是 Go 中实现回调、中间件、高阶函数等模式的基础。使用 <code class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-sm font-mono">type</code> 关键字定义函数类型可以提高可读性。
+          将函数作为参数传递是 Go 中实现回调、中间件、高阶函数等模式的基础。使用 <code
+            class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-sm font-mono">type</code> 关键字定义函数类型可以提高可读性。
         </p>
         <div class="mb-4">
           <Code language="go" :code="funcAsParamCode" title="func_as_param.go" />
@@ -311,13 +349,14 @@
       </section>
 
       <!-- 8. init 函数 -->
-      <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+      <section id="sec-8" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
           <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">8</span>
           init 函数
         </h2>
         <p class="text-slate-600 mb-4 leading-relaxed">
-          <code class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-sm font-mono">init()</code> 是 Go 中的特殊函数，在程序启动时<strong>自动执行</strong>，不能手动调用。每个包可以有多个 init 函数，它们按声明顺序执行。
+          <code class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-sm font-mono">init()</code> 是 Go
+          中的特殊函数，在程序启动时<strong>自动执行</strong>，不能手动调用。每个包可以有多个 init 函数，它们按声明顺序执行。
         </p>
 
         <h3 class="text-base font-semibold text-slate-700 mb-3">init 的特性</h3>
@@ -354,12 +393,14 @@
         </div>
 
         <aside class="bg-amber-50 border-l-4 border-amber-400 rounded-r-xl p-4">
-          <p class="text-sm text-amber-800"><strong>⚠️ 注意：</strong>init 函数的执行顺序在复杂项目中可能难以追踪。如果初始化逻辑有依赖关系，建议使用显式的初始化函数（如 <code class="bg-amber-100 text-amber-800 px-1 rounded text-xs font-mono">NewService(...)</code>）代替 init，以获得更清晰的控制流。</p>
+          <p class="text-sm text-amber-800"><strong>⚠️ 注意：</strong>init 函数的执行顺序在复杂项目中可能难以追踪。如果初始化逻辑有依赖关系，建议使用显式的初始化函数（如
+            <code class="bg-amber-100 text-amber-800 px-1 rounded text-xs font-mono">NewService(...)</code>）代替
+            init，以获得更清晰的控制流。</p>
         </aside>
       </section>
 
       <!-- 9. 常见错误 -->
-      <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+      <section id="sec-9" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
           <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">9</span>
           常见错误（Common Mistakes）
@@ -368,7 +409,8 @@
         <!-- 错误1：未使用的返回值 -->
         <h3 class="text-base font-semibold text-slate-700 mb-3">未使用的返回值</h3>
         <p class="text-slate-600 mb-4 leading-relaxed">
-          Go 不允许存在未使用的局部变量——这包括未使用的函数返回值。如果某个返回值确实不需要，必须用 <code class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-sm font-mono">_</code> 显式忽略。
+          Go 不允许存在未使用的局部变量——这包括未使用的函数返回值。如果某个返回值确实不需要，必须用 <code
+            class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-sm font-mono">_</code> 显式忽略。
         </p>
         <div class="mb-4">
           <Code language="go" :code="unusedReturnCode" title="unused_return.go" />
@@ -377,7 +419,8 @@
         <!-- 错误2：返回值遮蔽 -->
         <h3 class="text-base font-semibold text-slate-700 mb-3">返回值遮蔽（Return Value Shadowing）</h3>
         <p class="text-slate-600 mb-4 leading-relaxed">
-          在函数内部使用 <code class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-sm font-mono">:=</code> 声明与命名返回值同名的变量时，会创建一个<strong>新的局部变量</strong>遮蔽命名返回值，导致 return 时返回的是零值而非预期值。
+          在函数内部使用 <code class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-sm font-mono">:=</code>
+          声明与命名返回值同名的变量时，会创建一个<strong>新的局部变量</strong>遮蔽命名返回值，导致 return 时返回的是零值而非预期值。
         </p>
         <div class="mb-4">
           <Code language="go" :code="shadowingReturnCode" title="shadowing_return.go" />
@@ -386,29 +429,28 @@
         <!-- 错误3：混淆切片头部和底层数组 -->
         <h3 class="text-base font-semibold text-slate-700 mb-3">混淆切片头部与底层数组</h3>
         <p class="text-slate-600 mb-4 leading-relaxed">
-          在函数内对切片执行 <code class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-sm font-mono">append</code> 后，如果未将新切片返回给调用者，调用者持有的切片可能不会反映出变化。
+          在函数内对切片执行 <code class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-sm font-mono">append</code>
+          后，如果未将新切片返回给调用者，调用者持有的切片可能不会反映出变化。
         </p>
         <div class="mb-4">
           <Code language="go" :code="appendTrapCode" title="append_trap.go" />
         </div>
 
         <aside class="bg-emerald-50 border-l-4 border-emerald-400 rounded-r-xl p-4 mt-4">
-          <p class="text-sm text-emerald-800"><strong>✅ 最佳实践：</strong>如果函数需要修改切片的长度或容量，应该<strong>返回修改后的切片</strong>，而不是依赖"引用传递"的假象。标准库中的 <code class="bg-emerald-100 text-emerald-800 px-1 rounded text-xs font-mono">append</code> 正是这样设计的。</p>
+          <p class="text-sm text-emerald-800"><strong>✅
+              最佳实践：</strong>如果函数需要修改切片的长度或容量，应该<strong>返回修改后的切片</strong>，而不是依赖"引用传递"的假象。标准库中的 <code
+              class="bg-emerald-100 text-emerald-800 px-1 rounded text-xs font-mono">append</code> 正是这样设计的。</p>
         </aside>
       </section>
 
       <!-- 底部导航 -->
       <nav class="flex justify-between items-center pt-4 border-t border-slate-200">
-        <RouterLink
-          to="/backend/BackendLanguage/GO/go-stage-1-basics/go-1-5-control-flow"
-          class="text-slate-500 hover:text-cyan-600 transition-colors text-sm flex items-center gap-1"
-        >
+        <RouterLink to="/backend/BackendLanguage/GO/go-stage-1-basics/go-1-5-control-flow"
+          class="text-slate-500 hover:text-cyan-600 transition-colors text-sm flex items-center gap-1">
           ← 上一节：控制结构
         </RouterLink>
-        <RouterLink
-          to="/backend/BackendLanguage/GO/go-stage-1-basics/go-1-7-functions-advanced"
-          class="text-cyan-600 hover:text-cyan-700 font-medium transition-colors text-sm flex items-center gap-1"
-        >
+        <RouterLink to="/backend/BackendLanguage/GO/go-stage-1-basics/go-1-7-functions-advanced"
+          class="text-cyan-600 hover:text-cyan-700 font-medium transition-colors text-sm flex items-center gap-1">
           下一节：函数进阶 →
         </RouterLink>
       </nav>
@@ -418,9 +460,22 @@
 </template>
 
 <script setup lang="ts">
-import { Code } from 'components'
+import { Code, EditorLink, Nav } from 'components'
+import { useUserStore } from '@/stores/userProfle'
+const userStore = useUserStore()
 import { RouterLink } from 'vue-router'
 
+const navList = [
+    { id: "sec-1", name: "函数声明（Function Declaration）" },
+    { id: "sec-2", name: "函数参数（Function Parameters）" },
+    { id: "sec-3", name: "返回值（Return Values）" },
+    { id: "sec-4", name: "多返回值与错误处理模式" },
+    { id: "sec-5", name: "可变参数（Variadic Parameters）" },
+    { id: "sec-6", name: "值传递（Pass by Value）" },
+    { id: "sec-7", name: "函数类型与签名（Function Type）" },
+    { id: "sec-8", name: "init 函数" },
+    { id: "sec-9", name: "常见错误（Common Mistakes）" }
+  ]
 const declarationCode = `package main
 
 import "fmt"

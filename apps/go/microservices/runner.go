@@ -4,27 +4,28 @@ import "fmt"
 
 // RunAll 运行阶段 5 所有的微服务主题。
 func RunAll() {
-	fmt.Println("\n╔══════════════════════════════════════════════╗")
-	fmt.Println("║       阶段 5：微服务与分布式系统            ║")
-	fmt.Println("╚══════════════════════════════════════════════╝")
+	fmt.Println("\n🏗️ ========== 阶段 5: 微服务与分布式系统 ==========")
 
 	RunGRPC()
+	// TODO: RunGrpcUnary()
+	// TODO: RunGrpcStream()
+	// TODO: RunGrpcInterceptor()
+	// TODO: RunGrpcLbRetry()
 	RunRegistry()
 	RunConfig()
-	RunMQ()
-	RunTracing()
-	RunDocker()
+	// TODO: RunMqRabbitmq()
+	// TODO: RunMqKafka()
+	// TODO: RunEventDriven()
+	// TODO: RunDistributedTracing()
+	// TODO: RunCircuitBreaker()
+	// TODO: RunIdempotency()
+	// TODO: RunDistributedTransaction()
+	// TODO: RunDddArchitecture()
+	// TODO: RunDocker()
+
+	fmt.Println("\n✅ 微服务阶段完成！")
 }
 
-// RunTopic 根据关键字运行阶段 5 的某个主题。返回 true 表示匹配成功。
-//
-// 支持的关键字：
-//   - "grpc", "protobuf"    → gRPC 与 Protobuf
-//   - "registry"            → 服务注册发现
-//   - "config", "viper"     → 配置中心
-//   - "mq", "message", "queue" → 消息队列
-//   - "tracing"             → 链路追踪
-//   - "docker"              → 容器化部署
 func RunTopic(topic string) bool {
 	switch topic {
 	case "grpc", "protobuf":
@@ -33,13 +34,9 @@ func RunTopic(topic string) bool {
 		RunRegistry()
 	case "config", "viper":
 		RunConfig()
-	case "mq", "message", "queue":
-		RunMQ()
-	case "tracing":
-		RunTracing()
-	case "docker":
-		RunDocker()
 	default:
+		fmt.Printf("未知的微服务主题: %s\n", topic)
+		fmt.Println("可用: grpc, registry, config")
 		return false
 	}
 	return true

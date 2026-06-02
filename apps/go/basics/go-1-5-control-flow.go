@@ -201,3 +201,11 @@ func RunControlFlow() {
 	safeDivide(10, 0)
 	fmt.Println("程序继续执行（因为有 recover）")
 }
+
+// ============================================================
+// 单独运行此文件:
+//   1. 将第 1 行 "package basics" 改为 "package main"
+//   2. 取消下面 main 函数的注释
+//   3. go run FILE_NAME
+// ============================================================
+//func main() { RunControlFlow() }

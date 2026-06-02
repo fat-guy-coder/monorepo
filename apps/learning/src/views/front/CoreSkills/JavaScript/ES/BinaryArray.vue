@@ -1,810 +1,558 @@
 <template>
-  <div class="binary-arrays">
-    <h1>ECMAScript 二进制数组介绍</h1>
-
-    <!-- 概览 -->
-    <div class="overview">
-      <div class="overview-card">
-        <div class="overview-icon">🔢</div>
-        <div>
-          <h2>什么是二进制数组？</h2>
-          <p>处理原始二进制数据的JavaScript API</p>
-        </div>
+  <div class="go-doc min-h-screen bg-linear-to-br from-slate-50 to-blue-50">
+    <header class="bg-white border-b border-slate-200">
+      <div class="max-w-4xl mx-auto px-6 py-4">
+        <h1 class="text-2xl font-bold text-slate-800">JavaScript 二进制数据处理</h1>
+        <p class="text-sm text-slate-500 mt-1">ArrayBuffer · TypedArray · DataView · SharedArrayBuffer</p>
       </div>
-      <div class="overview-card">
-        <div class="overview-icon">📊</div>
-        <div>
-          <h2>核心组件</h2>
-          <p>ArrayBuffer, TypedArray, DataView</p>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-6 py-8 space-y-6">
+
+      <!-- 为什么需要二进制 -->
+      <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">1</span>
+          为什么需要二进制数组？
+        </h2>
+        <p class="text-slate-600 mb-3 leading-relaxed">
+          JavaScript 最初设计用于处理文本，没有原生的二进制数据类型。这在与 WebGL、Canvas、WebSocket、音视频 API 等需要高性能二进制处理的场景交互时，成为瓶颈。
+          <strong>ES6 引入的二进制数组</strong>填补了这个空白——直接操作内存中的原始二进制数据，无需序列化/反序列化。
+        </p>
+        <div class="overflow-x-auto mb-4">
+          <table class="w-full text-sm border-collapse">
+            <thead><tr class="bg-slate-100 text-left"><th class="px-4 py-2 border font-semibold text-slate-700">场景</th><th class="px-4 py-2 border font-semibold text-slate-700">旧方案</th><th class="px-4 py-2 border font-semibold text-slate-700">二进制数组方案</th></tr></thead>
+            <tbody class="text-slate-600">
+              <tr><td class="px-4 py-2 border">Canvas 像素</td><td class="px-4 py-2 border">逐个像素读写 RGBA</td><td class="px-4 py-2 border"><code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">Uint8ClampedArray</code> 批量操作</td></tr>
+              <tr><td class="px-4 py-2 border">WebSocket 消息</td><td class="px-4 py-2 border">Base64 编码/解码</td><td class="px-4 py-2 border"><code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">blob.arrayBuffer()</code> 直接读取</td></tr>
+              <tr><td class="px-4 py-2 border">文件分片</td><td class="px-4 py-2 border">逐字节读取 FileReader</td><td class="px-4 py-2 border"><code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">file.slice().arrayBuffer()</code> 高效切片</td></tr>
+              <tr><td class="px-4 py-2 border">Web Audio</td><td class="px-4 py-2 border">JS 数组逐个样本</td><td class="px-4 py-2 border"><code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">Float32Array</code> 直传缓冲区</td></tr>
+            </tbody>
+          </table>
         </div>
-      </div>
-      <div class="overview-card">
-        <div class="overview-icon">🚀</div>
-        <div>
-          <h2>主要优势</h2>
-          <p>高性能、内存高效、直接操作二进制</p>
-        </div>
-      </div>
-    </div>
+      </section>
 
-    <!-- 核心概念 -->
-    <div class="section">
-      <h2>二进制数组核心概念</h2>
-      <div class="concepts">
-        <div class="concept-card" v-for="(concept, index) in coreConcepts" :key="index">
-          <div class="concept-icon">{{ concept.icon }}</div>
-          <h3>{{ concept.name }}</h3>
-          <p>{{ concept.description }}</p>
-          <div class="concept-meta">
-            <span>字节大小: {{ concept.byteSize }}</span>
-            <span>元素范围: {{ concept.range }}</span>
-          </div>
-        </div>
-      </div>
-    </div>
+      <!-- 三大核心组件 -->
+      <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">2</span>
+          三大核心组件
+        </h2>
+        <p class="text-slate-600 mb-4 leading-relaxed">二进制数组 API 由三个独立的组件构成，各有分工：</p>
 
-    <!-- 使用示例 -->
-    <div class="section">
-      <h2>二进制数组使用示例</h2>
-      <div class="usage-examples">
-        <div class="example">
-          <h3>1. 创建与操作ArrayBuffer</h3>
-          <pre class="code-block">
-// 创建8字节的缓冲区
-const buffer = new ArrayBuffer(8);
-
-// 创建Int32Array视图（每个元素4字节）
-const int32View = new Int32Array(buffer);
-
-// 设置值
-int32View[0] = 42;
-int32View[1] = 1024;
-
-// 创建Uint8Array视图（每个元素1字节）
-const uint8View = new Uint8Array(buffer);
-
-// 读取第一个32位整数的字节
-console.log(uint8View[0]); // 42
-console.log(uint8View[1]); // 0
-console.log(uint8View[2]); // 0
-console.log(uint8View[3]); // 0</pre
-          >
+        <div class="overflow-x-auto mb-4">
+          <table class="w-full text-sm border-collapse">
+            <thead><tr class="bg-slate-100 text-left"><th class="px-4 py-2 border font-semibold text-slate-700">组件</th><th class="px-4 py-2 border font-semibold text-slate-700">角色</th><th class="px-4 py-2 border font-semibold text-slate-700">关键方法/属性</th></tr></thead>
+            <tbody class="text-slate-600">
+              <tr>
+                <td class="px-4 py-2 border font-mono text-cyan-700 font-semibold">ArrayBuffer</td>
+                <td class="px-4 py-2 border"><strong>内存容器</strong>——分配一块原始二进制内存。不可直接读写，只能通过视图操作。</td>
+                <td class="px-4 py-2 border font-mono text-xs">new ArrayBuffer(n)、.byteLength、.slice()</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-2 border font-mono text-cyan-700 font-semibold">TypedArray</td>
+                <td class="px-4 py-2 border"><strong>类型化视图</strong>——以特定数值类型（Int8、Float32 等）读写缓冲区。</td>
+                <td class="px-4 py-2 border font-mono text-xs">.length、.set()、.subarray()、.buffer</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-2 border font-mono text-cyan-700 font-semibold">DataView</td>
+                <td class="px-4 py-2 border"><strong>灵活视图</strong>——在任意偏移位置读写任意类型，可指定字节序。</td>
+                <td class="px-4 py-2 border font-mono text-xs">.getInt32()、.setFloat64()、可指定 endian</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
 
-        <div class="example">
-          <h3>2. 使用DataView处理混合数据类型</h3>
-          <pre class="code-block">
-// 创建12字节缓冲区（3个32位整数）
-const buffer = new ArrayBuffer(12);
-const view = new DataView(buffer);
+        <div class="mb-4"><Code language="js" :code="threePillarsCode" title="three_pillars.js" /></div>
+      </section>
 
-// 设置不同位置的值（使用不同字节长度）
-view.setInt32(0, 65535);    // 位置0，4字节
-view.setUint16(4, 0xABCD);  // 位置4，2字节
-view.setFloat32(8, Math.PI);// 位置8，4字节
+      <!-- ArrayBuffer 详解 -->
+      <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">3</span>
+          ArrayBuffer —— 二进制内存容器
+        </h2>
+        <p class="text-slate-600 mb-3 leading-relaxed">
+          ArrayBuffer 分配一块<strong>固定大小</strong>的连续内存，所有字节初始化为 0。它本身不提供读写接口——必须通过 TypedArray 或 DataView 操作。
+        </p>
+        <div class="mb-4"><Code language="js" :code="arrayBufferCode" title="arraybuffer.js" /></div>
 
-// 读取值
-console.log(view.getInt32(0));   // 65535
-console.log(view.getUint16(4).toString(16)); // 'abcd'
-console.log(view.getFloat32(8)); // 3.1415927410125732</pre
-          >
+        <aside class="bg-amber-50 border-l-4 border-amber-400 rounded-r-xl p-4">
+          <p class="text-sm text-amber-800"><strong>⚠️ 关键：</strong>ArrayBuffer 是<strong>固定长度</strong>的——不能动态扩容。需要更大空间时必须创建新 Buffer 并拷贝。与 JS 数组不同，<code class="bg-amber-100 px-1 rounded text-xs font-mono">buffer[0]</code> 是 <code class="bg-amber-100 px-1 rounded text-xs font-mono">undefined</code>，不能直接索引。</p>
+        </aside>
+      </section>
+
+      <!-- TypedArray 完整参考 -->
+      <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">4</span>
+          TypedArray —— 11 种类型化视图
+        </h2>
+        <p class="text-slate-600 mb-4 leading-relaxed">
+          TypedArray 是 11 种类型化数组构造函数的统称。它们共享同一个原型链，提供一致的 API。
+          选择正确的类型至关重要——它决定了<strong>内存布局、值范围和性能</strong>。
+        </p>
+        <div class="overflow-x-auto mb-4">
+          <table class="w-full text-sm border-collapse">
+            <thead><tr class="bg-slate-100 text-left"><th class="px-4 py-2 border font-semibold text-slate-700">构造函数</th><th class="px-4 py-2 border font-semibold text-slate-700">元素大小</th><th class="px-4 py-2 border font-semibold text-slate-700">取值范围</th><th class="px-4 py-2 border font-semibold text-slate-700">典型用途</th></tr></thead>
+            <tbody class="text-slate-600">
+              <tr><td class="px-4 py-2 border font-mono text-cyan-700 text-xs">Int8Array</td><td class="px-4 py-2 border">1 字节</td><td class="px-4 py-2 border">-128 ~ 127</td><td class="px-4 py-2 border">有符号字节数据</td></tr>
+              <tr><td class="px-4 py-2 border font-mono text-cyan-700 text-xs">Uint8Array</td><td class="px-4 py-2 border">1 字节</td><td class="px-4 py-2 border">0 ~ 255</td><td class="px-4 py-2 border">原始字节、二进制协议</td></tr>
+              <tr><td class="px-4 py-2 border font-mono text-cyan-700 text-xs">Uint8ClampedArray</td><td class="px-4 py-2 border">1 字节</td><td class="px-4 py-2 border">0 ~ 255（钳位）</td><td class="px-4 py-2 border"><strong>Canvas ImageData 像素</strong></td></tr>
+              <tr><td class="px-4 py-2 border font-mono text-cyan-700 text-xs">Int16Array</td><td class="px-4 py-2 border">2 字节</td><td class="px-4 py-2 border">-32,768 ~ 32,767</td><td class="px-4 py-2 border">16 位音频采样</td></tr>
+              <tr><td class="px-4 py-2 border font-mono text-cyan-700 text-xs">Uint16Array</td><td class="px-4 py-2 border">2 字节</td><td class="px-4 py-2 border">0 ~ 65,535</td><td class="px-4 py-2 border">UTF-16 码点</td></tr>
+              <tr><td class="px-4 py-2 border font-mono text-cyan-700 text-xs">Int32Array</td><td class="px-4 py-2 border">4 字节</td><td class="px-4 py-2 border">-2³¹ ~ 2³¹-1</td><td class="px-4 py-2 border">有符号索引/坐标</td></tr>
+              <tr><td class="px-4 py-2 border font-mono text-cyan-700 text-xs">Uint32Array</td><td class="px-4 py-2 border">4 字节</td><td class="px-4 py-2 border">0 ~ 4,294,967,295</td><td class="px-4 py-2 border">哈希值、大序号</td></tr>
+              <tr><td class="px-4 py-2 border font-mono text-cyan-700 text-xs">Float32Array</td><td class="px-4 py-2 border">4 字节</td><td class="px-4 py-2 border">IEEE 754 单精度</td><td class="px-4 py-2 border"><strong>WebGL 顶点/矩阵</strong></td></tr>
+              <tr><td class="px-4 py-2 border font-mono text-cyan-700 text-xs">Float64Array</td><td class="px-4 py-2 border">8 字节</td><td class="px-4 py-2 border">IEEE 754 双精度</td><td class="px-4 py-2 border">高精度科学计算</td></tr>
+              <tr><td class="px-4 py-2 border font-mono text-cyan-700 text-xs">BigInt64Array</td><td class="px-4 py-2 border">8 字节</td><td class="px-4 py-2 border">-2⁶³ ~ 2⁶³-1</td><td class="px-4 py-2 border">大整数时间戳/ID</td></tr>
+              <tr><td class="px-4 py-2 border font-mono text-cyan-700 text-xs">BigUint64Array</td><td class="px-4 py-2 border">8 字节</td><td class="px-4 py-2 border">0 ~ 2⁶⁴-1</td><td class="px-4 py-2 border">无符号大整数</td></tr>
+            </tbody>
+          </table>
         </div>
 
-        <div class="example">
-          <h3>3. 类型数组之间的转换</h3>
-          <pre class="code-block">
-// 创建Uint8Array（原始数据）
-const uint8Array = new Uint8Array([72, 101, 108, 108, 111]);
+        <h3 class="text-base font-semibold text-slate-700 mb-3">创建 TypedArray 的 4 种方式</h3>
+        <div class="mb-4"><Code language="js" :code="typedCreateCode" title="typed_create.js" /></div>
 
-// 转换为普通数组
-const normalArray = Array.from(uint8Array);
-console.log(normalArray); // [72, 101, 108, 108, 111]
+        <h3 class="text-base font-semibold text-slate-700 mb-3">TypedArray 核心方法</h3>
+        <div class="mb-4"><Code language="js" :code="typedMethodsCode" title="typed_methods.js" /></div>
 
-// 从字符串创建
-const encoder = new TextEncoder();
-const strArray = encoder.encode("Hello Binary");
+        <aside class="bg-blue-50 border-l-4 border-blue-400 rounded-r-xl p-4">
+          <p class="text-sm text-blue-800"><strong>💡 Uint8ClampedArray 的特殊行为：</strong>赋值超出 0-255 时<strong>钳位</strong>到边界，而非截断或溢出。例如 <code class="bg-blue-100 px-1 rounded text-xs font-mono">arr[0] = 300</code> 结果 <code class="bg-blue-100 px-1 rounded text-xs font-mono">255</code>，<code class="bg-blue-100 px-1 rounded text-xs font-mono">arr[0] = -10</code> 结果 <code class="bg-blue-100 px-1 rounded text-xs font-mono">0</code>。Canvas 像素操作用它最佳。</p>
+        </aside>
+      </section>
 
-// 转换为字符串
-const decoder = new TextDecoder();
-const str = decoder.decode(strArray);
-console.log(str); // "Hello Binary"
+      <!-- DataView 详解 -->
+      <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">5</span>
+          DataView —— 灵活的任意类型读写
+        </h2>
+        <p class="text-slate-600 mb-3 leading-relaxed">
+          DataView 可以在同一缓冲区上<strong>任意偏移位置</strong>读写任意类型，并且可以<strong>指定字节序</strong>（大端/小端）。这是 TypedArray 做不到的——TypedArray 只能读写其声明的类型，且字节序固定为平台原生序。
+        </p>
 
-// 不同视图共享缓冲区
-const buffer = uint8Array.buffer;
-const floatArray = new Float32Array(buffer);
-console.log(floatArray.length); // 原始长度/4</pre
-          >
-        </div>
-      </div>
-    </div>
+        <h3 class="text-base font-semibold text-slate-700 mb-3">字节序（Endianness）——大端 vs 小端</h3>
+        <p class="text-slate-600 mb-3 leading-relaxed">
+          当一个值占用多个字节时，字节的排列顺序有两种：
+          <strong>小端（LE）</strong>——低字节在前（x86/ARM 默认）；<strong>大端（BE）</strong>——高字节在前（网络协议标准）。
+        </p>
+        <div class="mb-4"><Code language="js" :code="endianCode" title="endian.js" /></div>
 
-    <!-- SharedArrayBuffer -->
-    <div class="section">
-      <h2>SharedArrayBuffer</h2>
-      <div class="section-content">
-        <div class="card">
-          <h3>什么是SharedArrayBuffer？</h3>
-          <p>
-            <strong>SharedArrayBuffer</strong>
-            是一种特殊的二进制缓冲区对象，允许在多个线程（如主线程和Web
-            Worker）之间共享内存。与普通的 <code>ArrayBuffer</code> 不同，<code
-              >SharedArrayBuffer</code
-            >
-            可以被多个线程同时读写，实现高效的数据交换和并发处理。
-          </p>
-        </div>
-        <div class="card">
-          <h3>主要特性</h3>
-          <ul>
-            <li>允许多个线程共享同一块内存</li>
-            <li>支持原子操作，保证多线程数据安全</li>
-            <li>适合高性能并发场景，如多线程计算、音视频处理等</li>
-          </ul>
-        </div>
-        <div class="card">
-          <h3>简单示例</h3>
-          <pre class="code-block">
-// 创建一个可共享的缓冲区
-const sab = new SharedArrayBuffer(1024); // 1KB
-// 在主线程和Worker中都可以通过TypedArray视图访问
-const uint8 = new Uint8Array(sab);
-uint8[0] = 42; // 主线程写入
-// Worker线程也能读取到相同的数据
-          </pre>
-        </div>
-        <div class="card">
-          <h3>注意事项</h3>
-          <ul>
-            <li>
-              出于安全考虑，只有在启用跨域隔离（Cross-Origin Isolation）时才能使用
-              <code>SharedArrayBuffer</code>。
-            </li>
-            <li>需要配合 <code>Atomics</code> 对象进行线程安全的数据操作。</li>
-          </ul>
-        </div>
-      </div>
-    </div>
+        <h3 class="text-base font-semibold text-slate-700 mb-3">DataView API</h3>
+        <p class="text-slate-600 mb-3 leading-relaxed">全部读写方法格式为 <code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">get/set + 类型(offset, [littleEndian])</code>，支持 <code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">Int8/16/32, Uint8/16/32, Float32/64, BigInt64, BigUint64</code>。</p>
+        <div class="mb-4"><Code language="js" :code="dataViewCode" title="dataview.js" /></div>
+      </section>
 
-    <!-- 使用场景 -->
-    <div class="section">
-      <h2>二进制数组使用场景</h2>
-      <div class="use-cases">
-        <div class="case-card" v-for="(caseItem, index) in useCases" :key="index">
-          <div class="case-icon">{{ caseItem.icon }}</div>
-          <h3>{{ caseItem.title }}</h3>
-          <p>{{ caseItem.description }}</p>
-          <div class="case-technologies">
-            <span v-for="(tech, i) in caseItem.technologies" :key="i">{{ tech }}</span>
-          </div>
-        </div>
-      </div>
-    </div>
+      <!-- TextEncoder / TextDecoder -->
+      <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">6</span>
+          字符串 ↔ 二进制：TextEncoder / TextDecoder
+        </h2>
+        <p class="text-slate-600 mb-3 leading-relaxed">
+          <code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">TextEncoder</code> 将字符串编码为 UTF-8 字节数组（<code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">Uint8Array</code>）；<code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">TextDecoder</code> 将字节数组解码为字符串。这是二进制 ↔ 文本的标准桥梁。
+        </p>
+        <div class="mb-4"><Code language="js" :code="textCodecCode" title="text_codec.js" /></div>
+      </section>
 
-    <!-- 性能对比 -->
-    <div class="section">
-      <h2>性能对比：普通数组 vs 类型数组</h2>
-      <div class="performance">
-        <div class="test" v-for="(test, index) in performanceTests" :key="index">
-          <div class="test-name">{{ test.name }}</div>
-          <div class="test-results">
-            <div class="result">
-              <div class="result-label">普通数组</div>
-              <div class="result-bar" :style="{ width: test.regular + '%' }">
-                <span>{{ test.regular }}ms</span>
-              </div>
-            </div>
-            <div class="result">
-              <div class="result-label">类型数组</div>
-              <div class="result-bar" :style="{ width: test.typed + '%' }">
-                <span>{{ test.typed }}ms</span>
-              </div>
-            </div>
-          </div>
-          <div class="test-improvement">性能提升: {{ test.improvement }}倍</div>
-        </div>
-      </div>
-    </div>
+      <!-- SharedArrayBuffer -->
+      <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">7</span>
+          SharedArrayBuffer —— 跨线程共享内存
+        </h2>
+        <p class="text-slate-600 mb-3 leading-relaxed">
+          普通 ArrayBuffer 遵循 JS 单线程模型——被转移（transfer）后原线程失去访问权。<code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">SharedArrayBuffer</code> 允许<strong>多线程同时访问</strong>同一块内存（主线程 + Worker），配合 <code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">Atomics</code> 实现无锁同步。这是 Web 多线程编程的基石。
+        </p>
+        <div class="mb-4"><Code language="js" :code="sharedBufferCode" title="shared_buffer.js" /></div>
+        <aside class="bg-amber-50 border-l-4 border-amber-400 rounded-r-xl p-4">
+          <p class="text-sm text-amber-800"><strong>⚠️ 安全限制：</strong>SharedArrayBuffer 需要<a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cross-Origin-Opener-Policy" target="_blank" class="underline">跨域隔离</a>（COOP + COEP 响应头）才能使用，防止 Spectre 类型的时间侧信道攻击。本地开发需要配置服务器响应头。</p>
+        </aside>
+      </section>
 
-    <!-- 优缺点 -->
-    <div class="section">
-      <h2>二进制数组的优缺点</h2>
-      <div class="pros-cons">
-        <div class="pros">
-          <h3>优点 ✅</h3>
-          <ul>
-            <li v-for="(pro, index) in advantages" :key="index">{{ pro }}</li>
-          </ul>
-        </div>
-        <div class="cons">
-          <h3>缺点 ❌</h3>
-          <ul>
-            <li v-for="(con, index) in disadvantages" :key="index">{{ con }}</li>
-          </ul>
-        </div>
-      </div>
-    </div>
+      <!-- Blob / File 与二进制数组 -->
+      <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">8</span>
+          Blob / File ↔ ArrayBuffer 互转
+        </h2>
+        <p class="text-slate-600 mb-3 leading-relaxed">
+          实际开发中经常需要在 Blob（文件/网络响应）和 ArrayBuffer 之间转换。以下是最常用的转换路径：
+        </p>
+        <div class="mb-4"><Code language="js" :code="blobConvertCode" title="blob_convert.js" /></div>
+      </section>
 
-    <!-- 最佳实践 -->
-    <div class="section">
-      <h2>二进制数组最佳实践</h2>
-      <div class="best-practices">
-        <div class="practice" v-for="(practice, index) in bestPractices" :key="index">
-          <div class="practice-number">{{ index + 1 }}</div>
-          <div class="practice-content">
-            <h3>{{ practice.title }}</h3>
-            <p>{{ practice.description }}</p>
-            <div v-if="practice.example" class="practice-example">
-              <pre>{{ practice.example }}</pre>
-            </div>
-          </div>
+      <!-- 实战：解析二进制协议 -->
+      <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">9</span>
+          实战：解析一个自定义二进制协议
+        </h2>
+        <p class="text-slate-600 mb-3 leading-relaxed">
+          假设有一个二进制消息格式：<strong>1 字节版本 | 1 字节类型 | 4 字节时间戳 | 4 字节长度 | N 字节载荷</strong>。用 DataView 解析：
+        </p>
+        <div class="mb-4"><Code language="js" :code="protocolCode" title="protocol_parser.js" /></div>
+      </section>
+
+      <!-- 性能 -->
+      <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">10</span>
+          性能对比与内存分析
+        </h2>
+        <p class="text-slate-600 mb-3 leading-relaxed">
+          二进制数组的性能优势来自<strong>内存布局紧凑</strong>——JS 普通数组是对象的集合，每个元素有类型标记、引用指针等开销；TypedArray 是一块连续的原生内存，CPU 缓存友好。
+        </p>
+        <div class="overflow-x-auto mb-4">
+          <table class="w-full text-sm border-collapse">
+            <thead><tr class="bg-slate-100 text-left"><th class="px-4 py-2 border font-semibold text-slate-700">对比维度</th><th class="px-4 py-2 border font-semibold text-slate-700">普通 JS 数组</th><th class="px-4 py-2 border font-semibold text-slate-700">TypedArray</th></tr></thead>
+            <tbody class="text-slate-600">
+              <tr><td class="px-4 py-2 border">100 万个数字的内存</td><td class="px-4 py-2 border">~32 MB（每个元素 ~32 字节）</td><td class="px-4 py-2 border">~8 MB（Float64Array，每个 8 字节）</td></tr>
+              <tr><td class="px-4 py-2 border">遍历求和速度</td><td class="px-4 py-2 border">~50ms</td><td class="px-4 py-2 border">~5ms（约 10 倍快）</td></tr>
+              <tr><td class="px-4 py-2 border">元素类型</td><td class="px-4 py-2 border">任意混合类型（松散）</td><td class="px-4 py-2 border">单一类型（严格）</td></tr>
+              <tr><td class="px-4 py-2 border">可 resize</td><td class="px-4 py-2 border">✅ 动态增长</td><td class="px-4 py-2 border">❌ 固定大小</td></tr>
+              <tr><td class="px-4 py-2 border">传递给 Web APIs</td><td class="px-4 py-2 border">需要转换/序列化</td><td class="px-4 py-2 border">直接传递零拷贝</td></tr>
+            </tbody>
+          </table>
         </div>
-      </div>
-    </div>
+        <aside class="bg-emerald-50 border-l-4 border-emerald-400 rounded-r-xl p-4">
+          <p class="text-sm text-emerald-800"><strong>✅ 经验法则：</strong>如果你在处理 1000 个以上的数字，或者需要和 WebGL/Canvas/Audio 等 API 交互，就用 TypedArray。大多数 Web API（fetch、File、WebSocket）都原生支持 ArrayBuffer。</p>
+        </aside>
+      </section>
+
+      <!-- 最佳实践 -->
+      <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">📋</span>
+          最佳实践总结
+        </h2>
+        <ul class="space-y-2 text-slate-600">
+          <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span><strong>选择合适的视图类型：</strong>网络包用 Uint8Array，WebGL 用 Float32Array，Canvas 像素用 Uint8ClampedArray，通用场景用 DataView</span></li>
+          <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span><strong>预分配 Buffer，避免频繁创建：</strong>创建 ArrayBuffer 有内存分配开销。高频场景（游戏/音视频）预分配+重用</span></li>
+          <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span><strong>用 set() 批量拷贝，不用逐元素赋值：</strong><code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">target.set(source, offset)</code> 是原生 memcpy，远快于循环</span></li>
+          <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span><strong>处理网络数据时显式指定字节序：</strong>网络字节序是大端（Big Endian），x86 平台是小端——用 DataView 的 endian 参数控制</span></li>
+          <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span><strong>大文件用流式 + TypedArray 分片：</strong>避免一次性将整个文件读入内存，用 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">file.slice()</code> + <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">.arrayBuffer()</code></span></li>
+          <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span><strong>TextEncoder/TextDecoder 是字符串 ↔ 二进制的标准桥梁：</strong>不要用 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">String.fromCharCode()</code> 逐字节构建字符串</span></li>
+          <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span><strong>SharedArrayBuffer 内存模型需要 Atomics 保护：</strong>多线程同时写入时，用 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">Atomics.store/load/add/sub</code> 保证原子性，避免数据竞争</span></li>
+        </ul>
+      </section>
+
+    </main>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { Code } from 'components'
 
-// 核心概念
-const coreConcepts = ref([
-  {
-    name: 'ArrayBuffer',
-    icon: '📦',
-    description: '表示通用的、固定长度的原始二进制数据缓冲区',
-    byteSize: '可变',
-    range: 'N/A',
-  },
-  {
-    name: 'Int8Array',
-    icon: '🔢',
-    description: '8位有符号整数数组（-128 到 127）',
-    byteSize: '1字节/元素',
-    range: '-128 到 127',
-  },
-  {
-    name: 'Uint8Array',
-    icon: '🔢',
-    description: '8位无符号整数数组（0 到 255）',
-    byteSize: '1字节/元素',
-    range: '0 到 255',
-  },
-  {
-    name: 'Uint8ClampedArray',
-    icon: '🎨',
-    description: '8位无符号整数数组（0-255），超出范围的值将被截断',
-    byteSize: '1字节/元素',
-    range: '0 到 255',
-  },
-  {
-    name: 'Int16Array',
-    icon: '🔢',
-    description: '16位有符号整数数组（-32,768 到 32,767）',
-    byteSize: '2字节/元素',
-    range: '-32,768 到 32,767',
-  },
-  {
-    name: 'Uint16Array',
-    icon: '🔢',
-    description: '16位无符号整数数组（0 到 65,535）',
-    byteSize: '2字节/元素',
-    range: '0 到 65,535',
-  },
-  {
-    name: 'Int32Array',
-    icon: '🔢',
-    description: '32位有符号整数数组（-2^31 到 2^31-1）',
-    byteSize: '4字节/元素',
-    range: '-2,147,483,648 到 2,147,483,647',
-  },
-  {
-    name: 'Uint32Array',
-    icon: '🔢',
-    description: '32位无符号整数数组（0 到 4,294,967,295）',
-    byteSize: '4字节/元素',
-    range: '0 到 4,294,967,295',
-  },
-  {
-    name: 'Float32Array',
-    icon: '🔢',
-    description: '32位IEEE浮点数数组',
-    byteSize: '4字节/元素',
-    range: '±3.4e38 (7位有效数字)',
-  },
-  {
-    name: 'Float64Array',
-    icon: '🔢',
-    description: '64位IEEE浮点数数组',
-    byteSize: '8字节/元素',
-    range: '±1.8e308 (15位有效数字)',
-  },
-  {
-    name: 'BigInt64Array',
-    icon: '🔢',
-    description: '64位有符号整数数组（用于大整数）',
-    byteSize: '8字节/元素',
-    range: '-2^63 到 2^63-1',
-  },
-  {
-    name: 'BigUint64Array',
-    icon: '🔢',
-    description: '64位无符号整数数组（用于大整数）',
-    byteSize: '8字节/元素',
-    range: '0 到 2^64-1',
-  },
-  {
-    name: 'DataView',
-    icon: '🔍',
-    description: '底层缓冲区读写多种数值类型的视图',
-    byteSize: 'N/A',
-    range: '支持所有数值类型',
-  },
-])
+const threePillarsCode = `// 1. ArrayBuffer — 分配 16 字节内存（容器）
+const buf = new ArrayBuffer(16)
+console.log(buf.byteLength) // 16
 
-// 使用场景
-const useCases = ref([
-  {
-    icon: '🖼️',
-    title: '图像处理',
-    description: '操作像素数据、图像解码/编码、Canvas图像处理',
-    technologies: ['Canvas API', 'WebGL', 'ImageData'],
-  },
-  {
-    icon: '📡',
-    title: '网络通信',
-    description: '处理WebSocket二进制数据、解析网络协议、优化AJAX传输',
-    technologies: ['WebSocket', 'Fetch API', 'XMLHttpRequest'],
-  },
-  {
-    icon: '🔊',
-    title: '音频处理',
-    description: 'Web Audio API操作、音频解码、实时音频处理',
-    technologies: ['Web Audio API', 'MediaStream', 'AudioBuffer'],
-  },
-  {
-    icon: '📁',
-    title: '文件操作',
-    description: '读取/处理文件内容、实现文件切片上传/下载',
-    technologies: ['File API', 'Blob', 'FileReader'],
-  },
-  {
-    icon: '🎮',
-    title: '游戏开发',
-    description: '高效存储游戏状态、网格数据、物理引擎计算',
-    technologies: ['WebGL', 'WebGPU', 'Game Engines'],
-  },
-  {
-    icon: '🔐',
-    title: '加密操作',
-    description: '实现加密算法、处理密钥、哈希计算',
-    technologies: ['Web Crypto API', 'SubtleCrypto'],
-  },
-])
+// 2. TypedArray — 以 32 位整数的视角读写（视图 A）
+const int32s = new Int32Array(buf)
+int32s[0] = 42
+int32s[1] = -7
+// buf 的前 8 字节现在存储了 42 和 -7
 
-// 性能对比
-const performanceTests = ref([
-  {
-    name: '创建100万元素数组',
-    regular: 120,
-    typed: 8,
-    improvement: '15',
-  },
-  {
-    name: '数值求和计算',
-    regular: 95,
-    typed: 12,
-    improvement: '8',
-  },
-  {
-    name: '内存占用',
-    regular: 8,
-    typed: 1,
-    improvement: '8',
-  },
-  {
-    name: '排序操作',
-    regular: 320,
-    typed: 150,
-    improvement: '2.1',
-  },
-])
+// 3. DataView — 在任意偏移读写任意类型（视图 B）
+const view = new DataView(buf)
+view.setFloat64(8, Math.PI)  // 在偏移 8 字节处写入 float64
+console.log(view.getFloat64(8)) // 3.141592653589793
 
-// 优缺点
-const advantages = ref([
-  '高性能：直接操作内存，比普通数组快5-10倍',
-  '内存高效：精确控制内存分配，无额外开销',
-  '类型安全：明确指定数据类型，避免隐式转换',
-  '二进制兼容：与Web API（WebGL、Web Audio等）无缝集成',
-  '大文件处理：可处理大于内存的文件（流式处理）',
-  '数据精确：避免JavaScript数字精度问题',
-])
+// 所有视图共享同一个 buf!
+console.log([...new Uint8Array(buf)]) // 原始字节`
 
-const disadvantages = ref([
-  '学习曲线：概念较复杂，需要理解底层内存模型',
-  '灵活性低：固定大小和类型，无法动态调整',
-  '浏览器兼容：旧版浏览器（如IE10以下）支持有限',
-  '调试困难：二进制数据不易阅读和调试',
-  'API较底层：需要手动管理字节顺序和数据对齐',
-  'GC管理：大缓冲区可能影响垃圾回收效率',
-])
+const arrayBufferCode = `// ── 创建 ArrayBuffer ──
+const buf = new ArrayBuffer(8)     // 8 字节，全为 0
 
-// 最佳实践
-const bestPractices = ref([
-  {
-    title: '选择合适的类型数组',
-    description: '根据数据特性选择最合适的类型数组，平衡精度和内存使用',
-    example:
-      '// 颜色处理使用Uint8ClampedArray\nconst imageData = new Uint8ClampedArray(width * height * 4);',
-  },
-  {
-    title: '重用ArrayBuffer',
-    description: '避免频繁创建缓冲区，重用ArrayBuffer减少内存分配开销',
-    example:
-      'const buffer = new ArrayBuffer(1024);\n// 重用同一个buffer\nconst view1 = new Int32Array(buffer);\nconst view2 = new Uint8Array(buffer);',
-  },
-  {
-    title: '使用DataView处理混合数据',
-    description: '当需要处理多种数据类型时，使用DataView更高效',
-    example:
-      'const view = new DataView(buffer);\nview.setInt32(0, 100);\nview.setFloat32(4, 3.14159);',
-  },
-  {
-    title: '批量操作数据',
-    description: '使用set()方法批量复制数据，减少单独操作的开销',
-    example:
-      'const source = new Uint8Array(1024);\nconst target = new Uint8Array(2048);\ntarget.set(source, 512); // 批量复制',
-  },
-  {
-    title: '使用TextEncoder/TextDecoder',
-    description: '高效处理字符串与二进制数据的转换',
-    example:
-      "const encoder = new TextEncoder();\nconst data = encoder.encode('Hello');\nconst decoder = new TextDecoder();\nconst text = decoder.decode(data);",
-  },
-  {
-    title: '避免不必要的转换',
-    description: '尽量减少二进制数据与普通数组之间的转换操作',
-    example:
-      '// 直接在类型数组上操作，避免转换为普通数组\nfor (let i = 0; i < typedArray.length; i++) {\n  // 处理操作\n}',
-  },
-])
-</script>
+// 属性
+console.log(buf.byteLength)        // 8
 
-<style lang="less" scoped>
-.binary-arrays {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  color: #333;
-  background: linear-gradient(to bottom, #f8f9fa, #e9ecef);
+// 切片（创建新 buffer，共享底层数据？不——ArrayBuffer.slice 是拷贝）
+const sliced = buf.slice(0, 4)
+console.log(sliced.byteLength)     // 4
 
-  h1 {
-    text-align: center;
-    font-size: 2.2rem;
-    margin-bottom: 30px;
-    padding-bottom: 15px;
-    border-bottom: 2px solid #3498db;
-    color: #2c3e50;
-  }
+// ── ArrayBuffer 转移（零拷贝所有权转移）──
+const buf2 = new ArrayBuffer(16)
+const transferred = buf2.transfer() // buf2 被"分离"（detached）
+console.log(buf2.byteLength)        // 0  ← 已分离
+console.log(transferred.byteLength) // 16 ← 新所有者
 
-  h2 {
-    font-size: 1.7rem;
-    padding-left: 10px;
-    border-left: 4px solid #3498db;
-    color: #2c3e50;
-    margin-top: 40px;
-    margin-bottom: 20px;
-  }
+// ── 检查是否已分离 ──
+// ArrayBuffer.prototype.detached (新提案)
+// 或 try { buf2.slice(0) } catch { /* detached */ }
 
-  h3 {
-    font-size: 1.3rem;
-    color: #2980b9;
-    margin-top: 0;
-    margin-bottom: 15px;
-  }
+// ── 调整大小（ES2024，需 new ArrayBuffer(n, { maxByteLength })）──
+const growable = new ArrayBuffer(4, { maxByteLength: 16 })
+growable.resize(8)
+console.log(growable.byteLength) // 8`
 
-  .overview {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
-    margin-bottom: 30px;
+const typedCreateCode = `// 方式 1：从长度创建（字节全 0）
+const a = new Uint8Array(4)
+console.log(a) // Uint8Array(4) [0, 0, 0, 0]
 
-    .overview-card {
-      display: flex;
-      background: white;
-      border-radius: 8px;
-      padding: 20px;
-      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
-      align-items: center;
+// 方式 2：从普通数组创建
+const b = new Float32Array([1.5, 2.7, Math.PI])
+console.log(b) // Float32Array(3) [1.5, 2.7, 3.1415...]
 
-      .overview-icon {
-        font-size: 2.5rem;
-        margin-right: 20px;
-      }
+// 方式 3：从现有 ArrayBuffer 创建（共享内存！）
+const buf = new ArrayBuffer(8)
+const c = new Int32Array(buf)       // 2 个 int32（8/4=2）
+c[0] = 100; c[1] = 200
+const d = new Uint8Array(buf)       // 8 个 uint8（同一内存！）
+console.log(d[0], d[1], d[2], d[3]) // 100, 0, 0, 0（小端）
 
-      p {
-        margin: 10px 0 0;
-        color: #555;
-        line-height: 1.5;
-      }
-    }
-  }
+// 方式 4：从 TypedArray 创建（拷贝数据）
+const source = new Int16Array([10, 20, 30])
+const copy = new Int32Array(source) // 值拷贝，类型转换
+console.log(copy) // Int32Array(3) [10, 20, 30]
 
-  .section {
-    background: white;
-    border-radius: 8px;
-    padding: 20px;
-    margin-bottom: 30px;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
-  }
+// 方式 5：指定 offset 和 length 的视图
+const buf2 = new ArrayBuffer(16)
+const sub = new Int32Array(buf2, 4, 2) // 偏移4字节，取2个int32
+sub[0] = 999
+console.log(new Int32Array(buf2)[1])    // 999`
 
-  // 核心概念
-  .concepts {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 15px;
+const typedMethodsCode = `const arr = new Int32Array([3, 1, 4, 1, 5, 9])
 
-    .concept-card {
-      padding: 15px;
-      border-radius: 8px;
-      border: 1px solid #e0e0e0;
-      background: #f8f9fa;
+// ── 属性 ──
+arr.length      // 6（元素个数，非字节数）
+arr.byteLength  // 24（6 × 4 字节）
+arr.byteOffset  // 0
+arr.buffer      // 底层 ArrayBuffer
+arr.BYTES_PER_ELEMENT // 4（每个元素字节数）
 
-      .concept-icon {
-        font-size: 2rem;
-        margin-bottom: 10px;
-      }
+// ── 遍历（与普通数组相同）──
+arr.forEach(v => console.log(v))
+for (const v of arr) { /*...*/ }        // for-of 支持
+const doubled = arr.map(v => v * 2)     // map 返回同类型 TypedArray
+const filtered = arr.filter(v => v > 3) // filter 也返回 TypedArray
 
-      p {
-        color: #555;
-        line-height: 1.5;
-        margin: 10px 0;
-        min-height: 60px;
-      }
+// ── set() —— 批量复制（原生 memcpy）──
+const dest = new Int32Array(10)
+dest.set(arr, 2)  // 从 dest[2] 开始写入 arr 的全部数据
+console.log(dest) // [0,0,3,1,4,1,5,9,0,0]
 
-      .concept-meta {
-        display: flex;
-        justify-content: space-between;
-        font-size: 0.85rem;
-        color: #7f8c8d;
-        margin-top: 10px;
-        border-top: 1px dashed #ddd;
-        padding-top: 10px;
-      }
-    }
-  }
+// ── subarray() —— 创建子视图（共享底层！）──
+const sub = arr.subarray(1, 4)
+console.log(sub)    // Int32Array(3) [1, 4, 1]
+sub[0] = 999
+console.log(arr[1]) // 999（共享底层，改了原数组！）
 
-  // 使用示例
-  .usage-examples {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-    gap: 20px;
+// ── slice() —— 拷贝新数组 ──
+const cloned = arr.slice()
+cloned[0] = 777
+console.log(arr[0]) // 3（不受影响）
 
-    .example {
-      margin-bottom: 20px;
-    }
-  }
+// ── 转换 ──
+Array.from(arr)    // 普通数组：[3, 1, 4, ...]
+[...arr]           // 同上（展开运算符）
+Array.from(arr, v => v.toString(16)) // ['3', '1', '4', ...]`
 
-  // 代码块样式
-  .code-block {
-    background: #2c3e50;
-    color: #f1f2f6;
-    padding: 15px;
-    border-radius: 6px;
-    overflow-x: auto;
-    font-family: 'Fira Code', monospace;
-    font-size: 0.9rem;
-    line-height: 1.5;
-    margin: 15px 0;
-    tab-size: 2;
-  }
+const endianCode = `const buf = new ArrayBuffer(4)
+const view = new DataView(buf)
 
-  // 使用场景
-  .use-cases {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
+// 写入同一个值，不同字节序
+view.setInt32(0, 0x01020304, false) // 大端（BE, Big Endian）
+console.log(new Uint8Array(buf))
+// → [1, 2, 3, 4]  高字节在前
 
-    .case-card {
-      padding: 20px;
-      border-radius: 8px;
-      border: 1px solid #e0e0e0;
-      background: #f8f9fa;
+view.setInt32(0, 0x01020304, true)  // 小端（LE, Little Endian）
+console.log(new Uint8Array(buf))
+// → [4, 3, 2, 1]  低字节在前
 
-      .case-icon {
-        font-size: 2rem;
-        margin-bottom: 15px;
-      }
+// ── 检测平台字节序 ──
+const isLittleEndian = new Uint8Array(
+  new Uint32Array([1]).buffer
+)[0] === 1
+console.log(isLittleEndian) // x86 上为 true
 
-      p {
-        color: #555;
-        line-height: 1.5;
-        margin: 10px 0 15px;
-        min-height: 60px;
-      }
+// ── 经验 ──
+// 网络包/文件格式 → 通常大端 → DataView setXxx(offset, val, false)
+// 内存内计算     → 平台相关 → TypedArray（自动用平台序）
+// 跨平台交换     → 显式指定 → DataView + 固定字节序`
 
-      .case-technologies {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        margin-top: 10px;
+const dataViewCode = `const buf = new ArrayBuffer(12)
+const v = new DataView(buf)
 
-        span {
-          background: #3498db;
-          color: white;
-          padding: 3px 10px;
-          border-radius: 20px;
-          font-size: 0.85rem;
-        }
-      }
-    }
-  }
+// ── 写入 ──
+v.setInt32(0, 0xDEADBEEF)   // 偏移 0，4 字节（默认大端）
+v.setUint16(4, 0xABCD, true) // 偏移 4，2 字节（小端）
+v.setFloat32(6, Math.PI)      // 偏移 6，4 字节
 
-  // 性能对比
-  .performance {
-    .test {
-      margin-bottom: 25px;
+// ── 读取 ──
+console.log(v.getInt32(0))      // 0xDEADBEEF → -559038737
+console.log(v.getUint32(0))     // 0xDEADBEEF → 3735928559
+console.log(v.getUint16(4, true)) // 0xABCD（小端读取）
+console.log(v.getFloat32(6).toFixed(5)) // 3.14159
 
-      .test-name {
-        font-weight: bold;
-        margin-bottom: 10px;
-        color: #2c3e50;
-      }
+// ── 完整 API 列表 ──
+// getInt8 / setInt8(offset, val)
+// getUint8 / setUint8(offset, val)
+// getInt16 / setInt16(offset, val, [littleEndian])
+// getUint16 / setUint16(offset, val, [littleEndian])
+// getInt32 / setInt32(offset, val, [littleEndian])
+// getUint32 / setUint32(offset, val, [littleEndian])
+// getFloat32 / setFloat32(offset, val, [littleEndian])
+// getFloat64 / setFloat64(offset, val, [littleEndian])
+// getBigInt64 / setBigInt64(offset, val, [littleEndian])
+// getBigUint64 / setBigUint64(offset, val, [littleEndian])
 
-      .test-results {
-        margin-bottom: 10px;
+// ── DataView vs TypedArray 选择 ──
+// DataView: 同一 buffer 上混合类型 + 指定字节序 + 任意偏移
+// TypedArray: 单一类型的批量操作（遍历、map、filter 等）`
 
-        .result {
-          display: flex;
-          align-items: center;
-          margin-bottom: 8px;
+const textCodecCode = `// ── TextEncoder：字符串 → UTF-8 字节 ──
+const encoder = new TextEncoder()
+const bytes = encoder.encode('你好, Go!')
+console.log(bytes)  // Uint8Array(12)
+// 中文字符各占 3 字节（UTF-8）
+console.log(bytes.length) // 12（'你好,'=9 + ' Go!'=3）
 
-          .result-label {
-            width: 100px;
-            font-size: 0.9rem;
-            color: #7f8c8d;
-          }
+// encodeInto：写入已有 buffer（不分配新内存）
+const buf = new Uint8Array(20)
+const result = encoder.encodeInto('Hello 世界', buf)
+console.log(result) // { read: 8, written: 11 }
+// read 8 个码点，写入 11 个 UTF-8 字节
 
-          .result-bar {
-            height: 30px;
-            background: linear-gradient(to right, #3498db, #2ecc71);
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            padding-left: 10px;
-            transition: width 0.5s ease;
+// ── TextDecoder：UTF-8 字节 → 字符串 ──
+const decoder = new TextDecoder()
+console.log(decoder.decode(bytes)) // '你好, Go!'
 
-            span {
-              color: white;
-              font-weight: bold;
-              text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-            }
-          }
-        }
-      }
+// 指定编码
+const sjisDecoder = new TextDecoder('shift-jis')
+// 常用编码: utf-8(默认), gbk, big5, shift-jis, iso-8859-1
 
-      .test-improvement {
-        font-weight: bold;
-        color: #2ecc71;
-        text-align: right;
-      }
-    }
-  }
+// 流式解码（数据分块到达时）
+const streamDecoder = new TextDecoder('utf-8', { fatal: false })
+const chunk1 = new Uint8Array([228, 189]) // '你' 的前 2 字节
+const chunk2 = new Uint8Array([160])       // '你' 的最后 1 字节
+console.log(streamDecoder.decode(chunk1, { stream: true })) // ''（不完整，缓存）
+console.log(streamDecoder.decode(chunk2, { stream: true })) // '你'（完成）`
 
-  // 优缺点
-  .pros-cons {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
-    gap: 30px;
+const sharedBufferCode = `// ── 主线程 ──
+const sab = new SharedArrayBuffer(4096) // 4KB 共享内存
+const worker = new Worker('worker.js')
+worker.postMessage(sab)                 // 传递引用（不是拷贝！）
 
-    .pros,
-    .cons {
-      padding: 20px;
-      border-radius: 8px;
-    }
+// 主线程侧操作
+const sharedInts = new Int32Array(sab)
+sharedInts[0] = 1
+Atomics.add(sharedInts, 0, 5)  // 原子加法：1 + 5 = 6
+console.log(sharedInts[0])     // 6
 
-    .pros {
-      background: #e8f5e9;
-      border: 1px solid #c8e6c9;
+// ── worker.js ──
+// self.onmessage = (e) => {
+//   const sab = e.data
+//   const view = new Int32Array(sab)
+//   Atomics.add(view, 0, 10)  // 原子加法：6 + 10 = 16
+// }
 
-      h3 {
-        color: #2ecc71;
-      }
-    }
+// ── Atomics 核心 API ──
+// Atomics.add(typedArray, index, value)      // 原子 +=
+// Atomics.sub(typedArray, index, value)      // 原子 -=
+// Atomics.store(typedArray, index, value)    // 原子存
+// Atomics.load(typedArray, index)            // 原子取
+// Atomics.compareExchange(arr, i, old, new)  // CAS（比较并交换）
+// Atomics.wait(arr, i, value[, timeout])     // 等待值变化（阻塞）
+// Atomics.notify(arr, i[, count])            // 唤醒等待者
 
-    .cons {
-      background: #ffebee;
-      border: 1px solid #ffcdd2;
+// ── 配置 COOP/COEP 响应头（需要 HTTPS 或 localhost）──
+// Cross-Origin-Opener-Policy: same-origin
+// Cross-Origin-Embedder-Policy: require-corp`
 
-      h3 {
-        color: #e74c3c;
-      }
-    }
+const blobConvertCode = `// ── Blob → ArrayBuffer ──
+const blob = new Blob(['hello binary'], { type: 'text/plain' })
+const ab1 = await blob.arrayBuffer()
 
-    ul {
-      padding-left: 20px;
+// ── File（Blob 子类）→ ArrayBuffer ──
+// <input type="file"> 或拖拽获取
+const file = event.target.files[0]
+const chunk = file.slice(0, 1024)         // 只读前 1KB
+const ab2 = await chunk.arrayBuffer()
 
-      li {
-        margin-bottom: 10px;
-        line-height: 1.5;
-      }
-    }
-  }
+// ── ArrayBuffer → Blob ──
+const ab = new Uint8Array([72, 73]).buffer
+const newBlob = new Blob([ab], { type: 'application/octet-stream' })
 
-  // 最佳实践
-  .best-practices {
-    .practice {
-      display: flex;
-      margin-bottom: 20px;
-      padding-bottom: 20px;
-      border-bottom: 1px dashed #ddd;
+// ── fetch → ArrayBuffer ──
+const response = await fetch('/api/data')
+const ab3 = await response.arrayBuffer()
 
-      &:last-child {
-        border-bottom: none;
-      }
+// ── WebSocket 二进制消息 ──
+// ws.binaryType = 'arraybuffer'
+// ws.onmessage = (e) => {
+//   const data = new Uint8Array(e.data)  // 直接是 ArrayBuffer
+// }
 
-      .practice-number {
-        min-width: 40px;
-        height: 40px;
-        background: #3498db;
-        color: white;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: bold;
-        font-size: 1.2rem;
-        margin-right: 15px;
-      }
-
-      .practice-content {
-        flex: 1;
-
-        p {
-          color: #555;
-          line-height: 1.6;
-          margin: 10px 0;
-        }
-
-        .practice-example {
-          background: #2c3e50;
-          color: #f1f2f6;
-          padding: 15px;
-          border-radius: 6px;
-          font-family: 'Fira Code', monospace;
-          font-size: 0.9rem;
-          margin-top: 10px;
-          overflow-x: auto;
-        }
-      }
-    }
-  }
-
-  @media (max-width: 768px) {
-    padding: 10px;
-
-    h1 {
-      font-size: 1.8rem;
-    }
-
-    h2 {
-      font-size: 1.5rem;
-    }
-
-    .overview,
-    .concepts,
-    .use-cases,
-    .pros-cons {
-      grid-template-columns: 1fr;
-    }
-
-    .usage-examples {
-      grid-template-columns: 1fr;
-    }
-
-    .code-block {
-      font-size: 0.8rem;
-    }
-  }
+// ── ArrayBuffer → Base64 ──
+function arrayBufferToBase64(buffer: ArrayBuffer): string {
+  const bytes = new Uint8Array(buffer)
+  let binary = ''
+  for (let i = 0; i < bytes.length; i++)
+    binary += String.fromCharCode(bytes[i])
+  return btoa(binary)
 }
-</style>
+// 注意：大文件用流式分块，避免 call stack 溢出
+
+// ── Base64 → ArrayBuffer ──
+function base64ToArrayBuffer(base64: string): ArrayBuffer {
+  const binary = atob(base64)
+  const bytes = new Uint8Array(binary.length)
+  for (let i = 0; i < binary.length; i++)
+    bytes[i] = binary.charCodeAt(i)
+  return bytes.buffer
+}`
+
+const protocolCode = `// 二进制协议：解析 MIDI 文件头
+// MIDI 头格式: "MThd" + 4字节长度 + 2字节格式 + 2字节轨道数 + 2字节时间刻度
+
+function parseMidiHeader(buffer: ArrayBuffer) {
+  const v = new DataView(buffer)
+
+  // 读取 4 字节标识符（ASCII）
+  const type = String.fromCharCode(
+    v.getUint8(0), v.getUint8(1), v.getUint8(2), v.getUint8(3)
+  )
+  if (type !== 'MThd') throw new Error('不是有效的 MIDI 文件')
+
+  const length   = v.getUint32(4)   // 头部长度（大端）
+  const format   = v.getUint16(8)   // 格式 0/1/2
+  const tracks   = v.getUint16(10)  // 轨道数
+  const division = v.getUint16(12)  // 时间刻度
+
+  console.log(\`格式: \${format}, 轨道: \${tracks}, 刻度: \${division}\`)
+  console.log(\`前 16 个原始字节: \${[...new Uint8Array(buffer, 0, 16)]}\`)
+
+  return { type, format, tracks, division, headerLength: 8 + length }
+}
+
+// ── 通用二进制消息解析器（生产级模板）──
+class BinaryParser {
+  private view: DataView
+  private offset = 0
+
+  constructor(buffer: ArrayBuffer) { this.view = new DataView(buffer) }
+
+  readUint8()  { return this.view.getUint8(this.offset++) }
+  readUint16() { const v = this.view.getUint16(this.offset); this.offset += 2; return v }
+  readUint32() { const v = this.view.getUint32(this.offset); this.offset += 4; return v }
+  readString(len: number) {
+    let s = ''
+    for (let i = 0; i < len; i++) s += String.fromCharCode(this.readUint8())
+    return s
+  }
+  get remaining() { return this.view.byteLength - this.offset }
+}
+
+// 使用
+const parser = new BinaryParser(buffer)
+const header = {
+  version: parser.readUint8(),
+  msgType: parser.readUint8(),
+  timestamp: parser.readUint32(),
+}
+console.log(header)
+// 注意: 生产环境用 ts-proto/protobuf-ts 等专业库，此处仅为原理演示`
+</script>

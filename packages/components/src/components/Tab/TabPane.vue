@@ -1,5 +1,5 @@
 <template>
-    <div ref="tabPaneRef" class="tab-pane gradient-animation-linear-hover" @click="change" :class="{
+    <div ref="tabPaneRef" class="tab-pane gradient-animation-linear-hover" :data-path="path" @click="change" :class="{
         'is-active': activeKey === path,
         'is-disabled': disabled
     }">
@@ -102,5 +102,11 @@ onUnmounted(() => {
 
 .close-tab-btn:hover {
     color: var(--color-primary);
+}
+
+.tab-pane.is-dragging-source {
+    opacity: 0.4;
+    transform: scale(0.95);
+    transition: opacity 0.15s ease, transform 0.15s ease;
 }
 </style>

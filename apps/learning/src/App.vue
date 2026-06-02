@@ -72,11 +72,12 @@ import {
   findMenuItemByName, //查找菜单项 通过name
 } from '@/menu'
 import { getApiMenus, getApiMenusSearch } from '@/api/menu'
-import { postApiUserLogin, postApiUserRegister, postApiUserRefresh } from '@/api/user'
-import { saveTokens, saveUserInfo, getAccessToken, isAccessTokenValid, isRefreshTokenValid, getRefreshToken, clearTokens } from '@/utils/token'
+import { postApiUserLogin, postApiUserRegister, postApiUserRefresh, getApiUserMe } from '@/api/user'
+import { saveTokens, saveUserInfo, getAccessToken, isAccessTokenValid, isRefreshTokenValid, getRefreshToken, clearTokens, getUserInfo } from '@/utils/token'
 import { useTabStore } from '@/stores/tab' //标签列表store
 import { useDeviceStore } from '@/stores/device' //设备信息store
 import { useUIConfigStore, type Theme } from '@/stores/uiconfig' //UI配置store
+import { useUserStore } from '@/stores/userProfle'
 import { useRouter } from 'vue-router'
 import { debounce, scrollIntoViewById } from '@/function/common' //常用函数
 import type { NavItem } from 'components' //导航项类型
@@ -86,7 +87,7 @@ import { loadViewByPath, viewExists } from '@/views/views-loader' //动态视图
 
 
 //获取用户信息store
-// const userStore = useUserStore()
+const userStore = useUserStore()
 const deviceStore = useDeviceStore()
 const uiConfigStore = useUIConfigStore()
 
@@ -153,30 +154,6 @@ const menus = ref<MenuItem[]>([])
 //容器
 const container = ref<HTMLElement | null>(null)
 
-//右键菜单node
-let contextMenu: HTMLElement | null = null
-
-function closeContextMenu(e: MouseEvent) {
-  if (contextMenu && !contextMenu.contains(e.target as Node)) {
-    store.toggleShowMenu(false)
-  }
-}
-
-function cancelContextMenu() {
-  if (contextMenu) {
-    container.value?.removeEventListener('click', (e) => {
-      if (contextMenu && !contextMenu.contains(e.target as Node)) {
-        store.toggleShowMenu(false)
-      }
-    })
-    contextMenu = null
-  }
-}
-
-onUnmounted(() => {
-  cancelContextMenu()
-})
-
 //是初始加载菜单吗？
 // const initMenu = ref(true)
 
@@ -221,6 +198,7 @@ const handleLoginSubmit = async () => {
       if (res.data) {
         saveTokens(res.data.accessToken, res.data.refreshToken)
         saveUserInfo(res.data.user)
+        userStore.setUser({ id: res.data.user.id, username: res.data.user.username })
         message.success('登录成功')
         loginModalVisible.value = false
         loginForm.username = ''
@@ -241,11 +219,6 @@ useDetectDevice((device) => {
 onMounted(async () => {
   //设置主题
   themeChange(theme.value)
-  //右键菜单
-  contextMenu = document.getElementById('context-menu')
-  if (container.value) {
-    container.value.addEventListener('click', closeContextMenu)
-  }
 
   // 如果 access token 过期但 refresh token 有效，主动刷新 token
   // 实现"只要不主动登出就一直有效"的体验
@@ -267,7 +240,21 @@ onMounted(async () => {
   } catch {
     // 菜单加载失败（如 token 过期被拦截器清空），仍然尝试跳转
   }
-    //跳转激活的tab — getMenus() 已遍历 tabList 注册了持久化标签的路由
+
+  // 获取当前用户信息（用于 admin 权限判断等）
+  if (isAccessTokenValid()) {
+    try {
+      const res = await getApiUserMe()
+      if (res?.data) {
+        userStore.setUser({ id: res.data.id, username: res.data.username })
+      }
+    } catch {
+      // API 获取失败，从 localStorage 恢复
+      const local = getUserInfo()
+      if (local) userStore.setUser(local)
+    }
+  }
+  //跳转激活的tab — getMenus() 已遍历 tabList 注册了持久化标签的路由
   //router.push 用 path 匹配，不会走到 catch-all 的 404 页面
   router.push(activeKey.value)
 })

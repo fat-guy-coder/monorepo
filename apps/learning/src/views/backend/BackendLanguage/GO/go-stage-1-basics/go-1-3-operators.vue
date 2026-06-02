@@ -1,21 +1,25 @@
 <template>
-  <div class="go-doc min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+  <div class="go-doc min-h-screen bg-linear-to-br from-slate-50 to-blue-50">
     <!-- 页面头部 -->
-    <header class="bg-white border-b border-slate-200 sticky top-0 z-10">
+    <header class="bg-white border-b border-slate-200">
       <div class="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
         <div>
           <h1 class="text-2xl font-bold text-slate-800">运算符与表达式</h1>
           <p class="text-sm text-slate-500 mt-1">Go 语言的运算操作</p>
         </div>
-        <span class="text-xs text-slate-400 bg-slate-100 px-3 py-1 rounded-full">阶段1 · 基础</span>
+        <div class="flex items-center gap-3">
+          <EditorLink file-path="apps/go/basics/go-1-3-operators.go" label="📝 查看源码" :is-admin="userStore.isAdmin" />
+          <span class="text-xs text-slate-400 bg-slate-100 px-3 py-1 rounded-full">阶段1 · 基础</span>
+        </div>
       </div>
     </header>
 
     <!-- 主体内容 -->
     <main class="max-w-4xl mx-auto px-6 py-8 space-y-6">
+      <Nav :list="navList" title="目录" position="top-right" :showBackToTop="true" />
 
       <!-- 概述 -->
-      <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+      <section id="sec-1" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
           <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">📐</span>
           概述
@@ -27,11 +31,13 @@
         <ul class="space-y-2 text-slate-600">
           <li class="flex items-start gap-2">
             <span class="text-cyan-500 mt-1">▸</span>
-            <span>Go 没有前置自增/自减（<code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">++i</code>），只有后置形式且作为<b>语句</b>而非表达式</span>
+            <span>Go 没有前置自增/自减（<code
+                class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">++i</code>），只有后置形式且作为<b>语句</b>而非表达式</span>
           </li>
           <li class="flex items-start gap-2">
             <span class="text-cyan-500 mt-1">▸</span>
-            <span>Go 没有三元运算符（<code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">? :</code>），需使用 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">if-else</code> 替代</span>
+            <span>Go 没有三元运算符（<code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">? :</code>），需使用 <code
+                class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">if-else</code> 替代</span>
           </li>
           <li class="flex items-start gap-2">
             <span class="text-cyan-500 mt-1">▸</span>
@@ -41,7 +47,7 @@
       </section>
 
       <!-- 1. 算术运算符 -->
-      <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+      <section id="sec-2" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
           <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">1</span>
           算术运算符
@@ -62,13 +68,48 @@
               </tr>
             </thead>
             <tbody class="text-slate-600">
-              <tr><td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700">+</td><td class="px-4 py-2 border border-slate-200">加法</td><td class="px-4 py-2 border border-slate-200 font-mono">5 + 3</td><td class="px-4 py-2 border border-slate-200 font-mono">8</td></tr>
-              <tr class="bg-slate-50"><td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700">-</td><td class="px-4 py-2 border border-slate-200">减法</td><td class="px-4 py-2 border border-slate-200 font-mono">5 - 3</td><td class="px-4 py-2 border border-slate-200 font-mono">2</td></tr>
-              <tr><td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700">*</td><td class="px-4 py-2 border border-slate-200">乘法</td><td class="px-4 py-2 border border-slate-200 font-mono">5 * 3</td><td class="px-4 py-2 border border-slate-200 font-mono">15</td></tr>
-              <tr class="bg-slate-50"><td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700">/</td><td class="px-4 py-2 border border-slate-200">除法</td><td class="px-4 py-2 border border-slate-200 font-mono">5 / 2</td><td class="px-4 py-2 border border-slate-200 font-mono">2</td></tr>
-              <tr><td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700">%</td><td class="px-4 py-2 border border-slate-200">取余</td><td class="px-4 py-2 border border-slate-200 font-mono">5 % 2</td><td class="px-4 py-2 border border-slate-200 font-mono">1</td></tr>
-              <tr class="bg-slate-50"><td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700">++</td><td class="px-4 py-2 border border-slate-200">自增（后置）</td><td class="px-4 py-2 border border-slate-200 font-mono">a++</td><td class="px-4 py-2 border border-slate-200">a 的值增加 1</td></tr>
-              <tr><td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700">--</td><td class="px-4 py-2 border border-slate-200">自减（后置）</td><td class="px-4 py-2 border border-slate-200 font-mono">a--</td><td class="px-4 py-2 border border-slate-200">a 的值减少 1</td></tr>
+              <tr>
+                <td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700">+</td>
+                <td class="px-4 py-2 border border-slate-200">加法</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono">5 + 3</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono">8</td>
+              </tr>
+              <tr class="bg-slate-50">
+                <td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700">-</td>
+                <td class="px-4 py-2 border border-slate-200">减法</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono">5 - 3</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono">2</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700">*</td>
+                <td class="px-4 py-2 border border-slate-200">乘法</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono">5 * 3</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono">15</td>
+              </tr>
+              <tr class="bg-slate-50">
+                <td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700">/</td>
+                <td class="px-4 py-2 border border-slate-200">除法</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono">5 / 2</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono">2</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700">%</td>
+                <td class="px-4 py-2 border border-slate-200">取余</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono">5 % 2</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono">1</td>
+              </tr>
+              <tr class="bg-slate-50">
+                <td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700">++</td>
+                <td class="px-4 py-2 border border-slate-200">自增（后置）</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono">a++</td>
+                <td class="px-4 py-2 border border-slate-200">a 的值增加 1</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700">--</td>
+                <td class="px-4 py-2 border border-slate-200">自减（后置）</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono">a--</td>
+                <td class="px-4 py-2 border border-slate-200">a 的值减少 1</td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -86,22 +127,35 @@
 
       <!-- ⚠️ 整数除法警告 -->
       <aside class="bg-amber-50 border-l-4 border-amber-400 rounded-r-xl p-4">
-        <p class="text-sm text-amber-800"><strong>⚠️ 注意：</strong>Go 中整数除法会<b>截断</b>小数部分，不会四舍五入。<code class="bg-amber-100 px-1 rounded text-amber-900 text-xs">5 / 2</code> 结果是 <code class="bg-amber-100 px-1 rounded text-amber-900 text-xs">2</code> 而非 <code class="bg-amber-100 px-1 rounded text-amber-900 text-xs">2.5</code>。如需浮点结果，至少有一个操作数必须是浮点类型：<code class="bg-amber-100 px-1 rounded text-amber-900 text-xs">5.0 / 2</code> 或 <code class="bg-amber-100 px-1 rounded text-amber-900 text-xs">float64(5) / 2</code>。</p>
+        <p class="text-sm text-amber-800"><strong>⚠️ 注意：</strong>Go 中整数除法会<b>截断</b>小数部分，不会四舍五入。<code
+            class="bg-amber-100 px-1 rounded text-amber-900 text-xs">5 / 2</code> 结果是 <code
+            class="bg-amber-100 px-1 rounded text-amber-900 text-xs">2</code> 而非 <code
+            class="bg-amber-100 px-1 rounded text-amber-900 text-xs">2.5</code>。如需浮点结果，至少有一个操作数必须是浮点类型：<code
+            class="bg-amber-100 px-1 rounded text-amber-900 text-xs">5.0 / 2</code> 或 <code
+            class="bg-amber-100 px-1 rounded text-amber-900 text-xs">float64(5) / 2</code>。</p>
       </aside>
 
       <!-- 💡 ++/-- 是语句不是表达式 -->
       <aside class="bg-blue-50 border-l-4 border-blue-400 rounded-r-xl p-4">
-        <p class="text-sm text-blue-800"><strong>💡 Go 特色：</strong><code class="bg-blue-100 px-1 rounded text-blue-900 text-xs">++</code> 和 <code class="bg-blue-100 px-1 rounded text-blue-900 text-xs">--</code> 在 Go 中是<b>语句（statement）</b>而非表达式（expression），这意味着它们不能嵌套在其他表达式中使用。例如 <code class="bg-blue-100 px-1 rounded text-blue-900 text-xs">x = a++</code> 或 <code class="bg-blue-100 px-1 rounded text-blue-900 text-xs">arr[i++]</code> 在 Go 中都是<b>编译错误</b>。这消除了 "i++ + ++i" 这种未定义行为的歧义。</p>
+        <p class="text-sm text-blue-800"><strong>💡 Go 特色：</strong><code
+            class="bg-blue-100 px-1 rounded text-blue-900 text-xs">++</code> 和 <code
+            class="bg-blue-100 px-1 rounded text-blue-900 text-xs">--</code> 在 Go
+          中是<b>语句（statement）</b>而非表达式（expression），这意味着它们不能嵌套在其他表达式中使用。例如 <code
+            class="bg-blue-100 px-1 rounded text-blue-900 text-xs">x = a++</code> 或 <code
+            class="bg-blue-100 px-1 rounded text-blue-900 text-xs">arr[i++]</code> 在 Go 中都是<b>编译错误</b>。这消除了 "i++ + ++i"
+          这种未定义行为的歧义。</p>
       </aside>
 
       <!-- 2. 比较运算符 -->
-      <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+      <section id="sec-3" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
           <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">2</span>
           比较运算符
         </h2>
         <p class="text-slate-600 mb-4 leading-relaxed">
-          比较运算符用于比较两个值，结果为 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">bool</code> 类型（<code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">true</code> 或 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">false</code>）。Go 要求比较的两个操作数<b>类型必须相同</b>。
+          比较运算符用于比较两个值，结果为 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">bool</code> 类型（<code
+            class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">true</code> 或 <code
+            class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">false</code>）。Go 要求比较的两个操作数<b>类型必须相同</b>。
         </p>
 
         <div class="overflow-x-auto mb-4">
@@ -115,12 +169,42 @@
               </tr>
             </thead>
             <tbody class="text-slate-600">
-              <tr><td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700">==</td><td class="px-4 py-2 border border-slate-200">等于</td><td class="px-4 py-2 border border-slate-200 font-mono">5 == 5</td><td class="px-4 py-2 border border-slate-200 font-mono">true</td></tr>
-              <tr class="bg-slate-50"><td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700">!=</td><td class="px-4 py-2 border border-slate-200">不等于</td><td class="px-4 py-2 border border-slate-200 font-mono">5 != 3</td><td class="px-4 py-2 border border-slate-200 font-mono">true</td></tr>
-              <tr><td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700">&gt;</td><td class="px-4 py-2 border border-slate-200">大于</td><td class="px-4 py-2 border border-slate-200 font-mono">5 &gt; 3</td><td class="px-4 py-2 border border-slate-200 font-mono">true</td></tr>
-              <tr class="bg-slate-50"><td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700">&lt;</td><td class="px-4 py-2 border border-slate-200">小于</td><td class="px-4 py-2 border border-slate-200 font-mono">3 &lt; 5</td><td class="px-4 py-2 border border-slate-200 font-mono">true</td></tr>
-              <tr><td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700">&gt;=</td><td class="px-4 py-2 border border-slate-200">大于等于</td><td class="px-4 py-2 border border-slate-200 font-mono">5 &gt;= 5</td><td class="px-4 py-2 border border-slate-200 font-mono">true</td></tr>
-              <tr class="bg-slate-50"><td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700">&lt;=</td><td class="px-4 py-2 border border-slate-200">小于等于</td><td class="px-4 py-2 border border-slate-200 font-mono">3 &lt;= 5</td><td class="px-4 py-2 border border-slate-200 font-mono">true</td></tr>
+              <tr>
+                <td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700">==</td>
+                <td class="px-4 py-2 border border-slate-200">等于</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono">5 == 5</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono">true</td>
+              </tr>
+              <tr class="bg-slate-50">
+                <td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700">!=</td>
+                <td class="px-4 py-2 border border-slate-200">不等于</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono">5 != 3</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono">true</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700">&gt;</td>
+                <td class="px-4 py-2 border border-slate-200">大于</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono">5 &gt; 3</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono">true</td>
+              </tr>
+              <tr class="bg-slate-50">
+                <td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700">&lt;</td>
+                <td class="px-4 py-2 border border-slate-200">小于</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono">3 &lt; 5</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono">true</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700">&gt;=</td>
+                <td class="px-4 py-2 border border-slate-200">大于等于</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono">5 &gt;= 5</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono">true</td>
+              </tr>
+              <tr class="bg-slate-50">
+                <td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700">&lt;=</td>
+                <td class="px-4 py-2 border border-slate-200">小于等于</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono">3 &lt;= 5</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono">true</td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -133,11 +217,14 @@
 
       <!-- 💡 类型比较规则 -->
       <aside class="bg-blue-50 border-l-4 border-blue-400 rounded-r-xl p-4">
-        <p class="text-sm text-blue-800"><strong>💡 类型比较规则：</strong>Go 只能比较<b>相同类型</b>的值。以下类型可以使用 <code class="bg-blue-100 px-1 rounded text-blue-900 text-xs">==</code> 比较：布尔型、数值型、字符串、指针、通道、接口（值均为 nil 或动态类型相同且值相等）。<b>结构体</b>若所有字段可比较则结构体也可比较。<b>切片、map、函数</b>只能与 <code class="bg-blue-100 px-1 rounded text-blue-900 text-xs">nil</code> 比较，不可相互比较。</p>
+        <p class="text-sm text-blue-800"><strong>💡 类型比较规则：</strong>Go 只能比较<b>相同类型</b>的值。以下类型可以使用 <code
+            class="bg-blue-100 px-1 rounded text-blue-900 text-xs">==</code> 比较：布尔型、数值型、字符串、指针、通道、接口（值均为 nil
+          或动态类型相同且值相等）。<b>结构体</b>若所有字段可比较则结构体也可比较。<b>切片、map、函数</b>只能与 <code
+            class="bg-blue-100 px-1 rounded text-blue-900 text-xs">nil</code> 比较，不可相互比较。</p>
       </aside>
 
       <!-- 3. 逻辑运算符 -->
-      <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+      <section id="sec-4" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
           <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">3</span>
           逻辑运算符
@@ -157,9 +244,24 @@
               </tr>
             </thead>
             <tbody class="text-slate-600">
-              <tr><td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700">&amp;&amp;</td><td class="px-4 py-2 border border-slate-200">逻辑与</td><td class="px-4 py-2 border border-slate-200 font-mono">true &amp;&amp; false</td><td class="px-4 py-2 border border-slate-200 font-mono">false</td></tr>
-              <tr class="bg-slate-50"><td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700">||</td><td class="px-4 py-2 border border-slate-200">逻辑或</td><td class="px-4 py-2 border border-slate-200 font-mono">true || false</td><td class="px-4 py-2 border border-slate-200 font-mono">true</td></tr>
-              <tr><td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700">!</td><td class="px-4 py-2 border border-slate-200">逻辑非</td><td class="px-4 py-2 border border-slate-200 font-mono">!true</td><td class="px-4 py-2 border border-slate-200 font-mono">false</td></tr>
+              <tr>
+                <td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700">&amp;&amp;</td>
+                <td class="px-4 py-2 border border-slate-200">逻辑与</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono">true &amp;&amp; false</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono">false</td>
+              </tr>
+              <tr class="bg-slate-50">
+                <td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700">||</td>
+                <td class="px-4 py-2 border border-slate-200">逻辑或</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono">true || false</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono">true</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700">!</td>
+                <td class="px-4 py-2 border border-slate-200">逻辑非</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono">!true</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono">false</td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -176,11 +278,15 @@
 
       <!-- ✅ 短路求值最佳实践 -->
       <aside class="bg-emerald-50 border-l-4 border-emerald-400 rounded-r-xl p-4">
-        <p class="text-sm text-emerald-800"><strong>✅ 最佳实践：</strong>利用短路特性可以写出更安全的代码。例如先检查指针是否为 <code class="bg-emerald-100 px-1 rounded text-emerald-900 text-xs">nil</code> 再访问其字段：<code class="bg-emerald-100 px-1 rounded text-emerald-900 text-xs">if p != nil && p.Name == "hello"</code>，当 <code class="bg-emerald-100 px-1 rounded text-emerald-900 text-xs">p</code> 为 <code class="bg-emerald-100 px-1 rounded text-emerald-900 text-xs">nil</code> 时不会触发空指针异常。</p>
+        <p class="text-sm text-emerald-800"><strong>✅ 最佳实践：</strong>利用短路特性可以写出更安全的代码。例如先检查指针是否为 <code
+            class="bg-emerald-100 px-1 rounded text-emerald-900 text-xs">nil</code> 再访问其字段：<code
+            class="bg-emerald-100 px-1 rounded text-emerald-900 text-xs">if p != nil && p.Name == "hello"</code>，当 <code
+            class="bg-emerald-100 px-1 rounded text-emerald-900 text-xs">p</code> 为 <code
+            class="bg-emerald-100 px-1 rounded text-emerald-900 text-xs">nil</code> 时不会触发空指针异常。</p>
       </aside>
 
       <!-- 4. 位运算符 -->
-      <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+      <section id="sec-5" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
           <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">4</span>
           位运算符
@@ -200,12 +306,42 @@
               </tr>
             </thead>
             <tbody class="text-slate-600">
-              <tr><td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700">&amp;</td><td class="px-4 py-2 border border-slate-200">按位与</td><td class="px-4 py-2 border border-slate-200 font-mono">5 &amp; 3</td><td class="px-4 py-2 border border-slate-200">对应位都为 1 则结果为 1</td></tr>
-              <tr class="bg-slate-50"><td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700">|</td><td class="px-4 py-2 border border-slate-200">按位或</td><td class="px-4 py-2 border border-slate-200 font-mono">5 | 3</td><td class="px-4 py-2 border border-slate-200">对应位有一个为 1 则结果为 1</td></tr>
-              <tr><td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700">^</td><td class="px-4 py-2 border border-slate-200">按位异或</td><td class="px-4 py-2 border border-slate-200 font-mono">5 ^ 3</td><td class="px-4 py-2 border border-slate-200">对应位不同则结果为 1</td></tr>
-              <tr class="bg-slate-50"><td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700">&amp;^</td><td class="px-4 py-2 border border-slate-200">位清空</td><td class="px-4 py-2 border border-slate-200 font-mono">5 &amp;^ 3</td><td class="px-4 py-2 border border-slate-200">将右边为 1 的位在左边清 0</td></tr>
-              <tr><td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700">&lt;&lt;</td><td class="px-4 py-2 border border-slate-200">左移</td><td class="px-4 py-2 border border-slate-200 font-mono">1 &lt;&lt; 3</td><td class="px-4 py-2 border border-slate-200">左移 3 位，相当于乘以 2³ = 8</td></tr>
-              <tr class="bg-slate-50"><td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700">&gt;&gt;</td><td class="px-4 py-2 border border-slate-200">右移</td><td class="px-4 py-2 border border-slate-200 font-mono">8 &gt;&gt; 2</td><td class="px-4 py-2 border border-slate-200">右移 2 位，相当于除以 2² = 2</td></tr>
+              <tr>
+                <td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700">&amp;</td>
+                <td class="px-4 py-2 border border-slate-200">按位与</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono">5 &amp; 3</td>
+                <td class="px-4 py-2 border border-slate-200">对应位都为 1 则结果为 1</td>
+              </tr>
+              <tr class="bg-slate-50">
+                <td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700">|</td>
+                <td class="px-4 py-2 border border-slate-200">按位或</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono">5 | 3</td>
+                <td class="px-4 py-2 border border-slate-200">对应位有一个为 1 则结果为 1</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700">^</td>
+                <td class="px-4 py-2 border border-slate-200">按位异或</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono">5 ^ 3</td>
+                <td class="px-4 py-2 border border-slate-200">对应位不同则结果为 1</td>
+              </tr>
+              <tr class="bg-slate-50">
+                <td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700">&amp;^</td>
+                <td class="px-4 py-2 border border-slate-200">位清空</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono">5 &amp;^ 3</td>
+                <td class="px-4 py-2 border border-slate-200">将右边为 1 的位在左边清 0</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700">&lt;&lt;</td>
+                <td class="px-4 py-2 border border-slate-200">左移</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono">1 &lt;&lt; 3</td>
+                <td class="px-4 py-2 border border-slate-200">左移 3 位，相当于乘以 2³ = 8</td>
+              </tr>
+              <tr class="bg-slate-50">
+                <td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700">&gt;&gt;</td>
+                <td class="px-4 py-2 border border-slate-200">右移</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono">8 &gt;&gt; 2</td>
+                <td class="px-4 py-2 border border-slate-200">右移 2 位，相当于除以 2² = 2</td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -225,7 +361,7 @@
       </section>
 
       <!-- 5. 赋值运算符 -->
-      <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+      <section id="sec-6" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
           <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">5</span>
           赋值运算符
@@ -245,17 +381,72 @@
               </tr>
             </thead>
             <tbody class="text-slate-600">
-              <tr><td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700">=</td><td class="px-4 py-2 border border-slate-200">基本赋值</td><td class="px-4 py-2 border border-slate-200 font-mono">a = 10</td><td class="px-4 py-2 border border-slate-200">—</td></tr>
-              <tr class="bg-slate-50"><td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700">+=</td><td class="px-4 py-2 border border-slate-200">加后赋值</td><td class="px-4 py-2 border border-slate-200 font-mono">a += 3</td><td class="px-4 py-2 border border-slate-200 font-mono">a = a + 3</td></tr>
-              <tr><td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700">-=</td><td class="px-4 py-2 border border-slate-200">减后赋值</td><td class="px-4 py-2 border border-slate-200 font-mono">a -= 3</td><td class="px-4 py-2 border border-slate-200 font-mono">a = a - 3</td></tr>
-              <tr class="bg-slate-50"><td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700">*=</td><td class="px-4 py-2 border border-slate-200">乘后赋值</td><td class="px-4 py-2 border border-slate-200 font-mono">a *= 3</td><td class="px-4 py-2 border border-slate-200 font-mono">a = a * 3</td></tr>
-              <tr><td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700">/=</td><td class="px-4 py-2 border border-slate-200">除后赋值</td><td class="px-4 py-2 border border-slate-200 font-mono">a /= 3</td><td class="px-4 py-2 border border-slate-200 font-mono">a = a / 3</td></tr>
-              <tr class="bg-slate-50"><td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700">%=</td><td class="px-4 py-2 border border-slate-200">取余后赋值</td><td class="px-4 py-2 border border-slate-200 font-mono">a %= 3</td><td class="px-4 py-2 border border-slate-200 font-mono">a = a % 3</td></tr>
-              <tr><td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700">&amp;=</td><td class="px-4 py-2 border border-slate-200">位与后赋值</td><td class="px-4 py-2 border border-slate-200 font-mono">a &amp;= 3</td><td class="px-4 py-2 border border-slate-200 font-mono">a = a &amp; 3</td></tr>
-              <tr class="bg-slate-50"><td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700">|=</td><td class="px-4 py-2 border border-slate-200">位或后赋值</td><td class="px-4 py-2 border border-slate-200 font-mono">a |= 3</td><td class="px-4 py-2 border border-slate-200 font-mono">a = a | 3</td></tr>
-              <tr><td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700">^=</td><td class="px-4 py-2 border border-slate-200">异或后赋值</td><td class="px-4 py-2 border border-slate-200 font-mono">a ^= 3</td><td class="px-4 py-2 border border-slate-200 font-mono">a = a ^ 3</td></tr>
-              <tr class="bg-slate-50"><td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700">&lt;&lt;=</td><td class="px-4 py-2 border border-slate-200">左移后赋值</td><td class="px-4 py-2 border border-slate-200 font-mono">a &lt;&lt;= 2</td><td class="px-4 py-2 border border-slate-200 font-mono">a = a &lt;&lt; 2</td></tr>
-              <tr><td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700">&gt;&gt;=</td><td class="px-4 py-2 border border-slate-200">右移后赋值</td><td class="px-4 py-2 border border-slate-200 font-mono">a &gt;&gt;= 2</td><td class="px-4 py-2 border border-slate-200 font-mono">a = a &gt;&gt; 2</td></tr>
+              <tr>
+                <td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700">=</td>
+                <td class="px-4 py-2 border border-slate-200">基本赋值</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono">a = 10</td>
+                <td class="px-4 py-2 border border-slate-200">—</td>
+              </tr>
+              <tr class="bg-slate-50">
+                <td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700">+=</td>
+                <td class="px-4 py-2 border border-slate-200">加后赋值</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono">a += 3</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono">a = a + 3</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700">-=</td>
+                <td class="px-4 py-2 border border-slate-200">减后赋值</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono">a -= 3</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono">a = a - 3</td>
+              </tr>
+              <tr class="bg-slate-50">
+                <td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700">*=</td>
+                <td class="px-4 py-2 border border-slate-200">乘后赋值</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono">a *= 3</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono">a = a * 3</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700">/=</td>
+                <td class="px-4 py-2 border border-slate-200">除后赋值</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono">a /= 3</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono">a = a / 3</td>
+              </tr>
+              <tr class="bg-slate-50">
+                <td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700">%=</td>
+                <td class="px-4 py-2 border border-slate-200">取余后赋值</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono">a %= 3</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono">a = a % 3</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700">&amp;=</td>
+                <td class="px-4 py-2 border border-slate-200">位与后赋值</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono">a &amp;= 3</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono">a = a &amp; 3</td>
+              </tr>
+              <tr class="bg-slate-50">
+                <td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700">|=</td>
+                <td class="px-4 py-2 border border-slate-200">位或后赋值</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono">a |= 3</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono">a = a | 3</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700">^=</td>
+                <td class="px-4 py-2 border border-slate-200">异或后赋值</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono">a ^= 3</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono">a = a ^ 3</td>
+              </tr>
+              <tr class="bg-slate-50">
+                <td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700">&lt;&lt;=</td>
+                <td class="px-4 py-2 border border-slate-200">左移后赋值</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono">a &lt;&lt;= 2</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono">a = a &lt;&lt; 2</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700">&gt;&gt;=</td>
+                <td class="px-4 py-2 border border-slate-200">右移后赋值</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono">a &gt;&gt;= 2</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono">a = a &gt;&gt; 2</td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -266,7 +457,7 @@
       </section>
 
       <!-- 6. 运算符优先级 -->
-      <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+      <section id="sec-7" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
           <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">6</span>
           运算符优先级
@@ -286,14 +477,46 @@
               </tr>
             </thead>
             <tbody class="text-slate-600">
-              <tr><td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700 text-center">1（最高）</td><td class="px-4 py-2 border border-slate-200 font-mono">()  []  .</td><td class="px-4 py-2 border border-slate-200">左到右</td></tr>
-              <tr class="bg-slate-50"><td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700 text-center">2</td><td class="px-4 py-2 border border-slate-200 font-mono">!  ^（一元）  -（负号）  +（正号）  &amp;（取地址）  *（解引用）</td><td class="px-4 py-2 border border-slate-200">右到左</td></tr>
-              <tr><td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700 text-center">3</td><td class="px-4 py-2 border border-slate-200 font-mono">*  /  %  &lt;&lt;  &gt;&gt;  &amp;  &amp;^</td><td class="px-4 py-2 border border-slate-200">左到右</td></tr>
-              <tr class="bg-slate-50"><td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700 text-center">4</td><td class="px-4 py-2 border border-slate-200 font-mono">+  -  |  ^（二元）</td><td class="px-4 py-2 border border-slate-200">左到右</td></tr>
-              <tr><td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700 text-center">5</td><td class="px-4 py-2 border border-slate-200 font-mono">==  !=  &lt;  &lt;=  &gt;  &gt;=</td><td class="px-4 py-2 border border-slate-200">左到右</td></tr>
-              <tr class="bg-slate-50"><td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700 text-center">6</td><td class="px-4 py-2 border border-slate-200 font-mono">&lt;-（通道发送/接收）</td><td class="px-4 py-2 border border-slate-200">左到右</td></tr>
-              <tr><td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700 text-center">7</td><td class="px-4 py-2 border border-slate-200 font-mono">&amp;&amp;</td><td class="px-4 py-2 border border-slate-200">左到右</td></tr>
-              <tr class="bg-slate-50"><td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700 text-center">8（最低）</td><td class="px-4 py-2 border border-slate-200 font-mono">||</td><td class="px-4 py-2 border border-slate-200">左到右</td></tr>
+              <tr>
+                <td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700 text-center">1（最高）</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono">() [] .</td>
+                <td class="px-4 py-2 border border-slate-200">左到右</td>
+              </tr>
+              <tr class="bg-slate-50">
+                <td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700 text-center">2</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono">! ^（一元） -（负号） +（正号） &amp;（取地址） *（解引用）</td>
+                <td class="px-4 py-2 border border-slate-200">右到左</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700 text-center">3</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono">* / % &lt;&lt; &gt;&gt; &amp; &amp;^</td>
+                <td class="px-4 py-2 border border-slate-200">左到右</td>
+              </tr>
+              <tr class="bg-slate-50">
+                <td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700 text-center">4</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono">+ - | ^（二元）</td>
+                <td class="px-4 py-2 border border-slate-200">左到右</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700 text-center">5</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono">== != &lt; &lt;= &gt; &gt;=</td>
+                <td class="px-4 py-2 border border-slate-200">左到右</td>
+              </tr>
+              <tr class="bg-slate-50">
+                <td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700 text-center">6</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono">&lt;-（通道发送/接收）</td>
+                <td class="px-4 py-2 border border-slate-200">左到右</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700 text-center">7</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono">&amp;&amp;</td>
+                <td class="px-4 py-2 border border-slate-200">左到右</td>
+              </tr>
+              <tr class="bg-slate-50">
+                <td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700 text-center">8（最低）</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono">||</td>
+                <td class="px-4 py-2 border border-slate-200">左到右</td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -309,7 +532,7 @@
       </section>
 
       <!-- 7. Go 特殊行为 -->
-      <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+      <section id="sec-8" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
           <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">7</span>
           Go 特殊行为详解
@@ -318,7 +541,9 @@
         <!-- ++/-- 是语句不是表达式 -->
         <h3 class="text-md font-semibold text-slate-700 mb-3">① ++ 和 -- 是语句，不是表达式</h3>
         <p class="text-slate-600 mb-3 leading-relaxed">
-          这是 Go 与其他语言（C/C++/Java/JavaScript）最显著的区别之一。Go 中 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">++</code> 和 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">--</code> 只能作为独立的<b>语句</b>使用，不能嵌套在表达式中。
+          这是 Go 与其他语言（C/C++/Java/JavaScript）最显著的区别之一。Go 中 <code
+            class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">++</code> 和 <code
+            class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">--</code> 只能作为独立的<b>语句</b>使用，不能嵌套在表达式中。
         </p>
 
         <div class="mb-4">
@@ -328,7 +553,8 @@
         <!-- 没有三元运算符 -->
         <h3 class="text-md font-semibold text-slate-700 mb-3 mt-5">② 没有三元运算符，使用 if-else 替代</h3>
         <p class="text-slate-600 mb-3 leading-relaxed">
-          Go 语言设计者认为三元运算符会让代码难以阅读，因此刻意没有加入。需要用 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">if-else</code> 来实现等价逻辑。
+          Go 语言设计者认为三元运算符会让代码难以阅读，因此刻意没有加入。需要用 <code
+            class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">if-else</code> 来实现等价逻辑。
         </p>
 
         <div class="mb-4">
@@ -337,7 +563,7 @@
       </section>
 
       <!-- 8. 类型比较规则 -->
-      <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+      <section id="sec-9" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
           <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">8</span>
           类型比较规则详解
@@ -349,23 +575,32 @@
         <ul class="space-y-3 text-slate-600 mb-4">
           <li class="flex items-start gap-2">
             <span class="text-cyan-500 mt-1">▸</span>
-            <span><strong>数值类型：</strong>只能同类型比较（<code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">int</code> 和 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">int64</code> 不能直接比较），需要显式类型转换</span>
+            <span><strong>数值类型：</strong>只能同类型比较（<code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">int</code>
+              和 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">int64</code> 不能直接比较），需要显式类型转换</span>
           </li>
           <li class="flex items-start gap-2">
             <span class="text-cyan-500 mt-1">▸</span>
-            <span><strong>字符串：</strong>按字节逐位比较（字典序），支持 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">==</code>、<code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">!=</code>、<code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">&lt;</code>、<code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">&gt;</code> 等所有比较运算符</span>
+            <span><strong>字符串：</strong>按字节逐位比较（字典序），支持 <code
+                class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">==</code>、<code
+                class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">!=</code>、<code
+                class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">&lt;</code>、<code
+                class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">&gt;</code> 等所有比较运算符</span>
           </li>
           <li class="flex items-start gap-2">
             <span class="text-cyan-500 mt-1">▸</span>
-            <span><strong>结构体：</strong>如果所有字段都是可比较类型，则结构体可比较（<code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">==</code> 逐字段比较）</span>
+            <span><strong>结构体：</strong>如果所有字段都是可比较类型，则结构体可比较（<code
+                class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">==</code> 逐字段比较）</span>
           </li>
           <li class="flex items-start gap-2">
             <span class="text-cyan-500 mt-1">▸</span>
-            <span><strong>切片、map、函数：</strong>只能与 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">nil</code> 比较，<b>不能</b>使用 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">==</code> 比较两个切片/map</span>
+            <span><strong>切片、map、函数：</strong>只能与 <code
+                class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">nil</code> 比较，<b>不能</b>使用 <code
+                class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">==</code> 比较两个切片/map</span>
           </li>
           <li class="flex items-start gap-2">
             <span class="text-cyan-500 mt-1">▸</span>
-            <span><strong>接口：</strong>两个接口值相等当且仅当两者都为 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">nil</code> 或动态类型相同且动态值相等</span>
+            <span><strong>接口：</strong>两个接口值相等当且仅当两者都为 <code
+                class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">nil</code> 或动态类型相同且动态值相等</span>
           </li>
         </ul>
 
@@ -375,7 +610,7 @@
       </section>
 
       <!-- 9. 常见陷阱 -->
-      <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+      <section id="sec-10" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
           <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">⚠️</span>
           常见陷阱与注意事项
@@ -385,44 +620,61 @@
           <div>
             <h3 class="text-sm font-semibold text-slate-700 mb-1">1. 整数除法截断</h3>
             <p class="text-slate-600 text-sm leading-relaxed">
-              <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">3 / 2</code> 结果为 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">1</code> 而非 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">1.5</code>。需要浮点运算时，使用 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">float64(3) / 2</code>。
+              <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">3 / 2</code> 结果为 <code
+                class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">1</code> 而非 <code
+                class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">1.5</code>。需要浮点运算时，使用 <code
+                class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">float64(3) / 2</code>。
             </p>
           </div>
           <div>
             <h3 class="text-sm font-semibold text-slate-700 mb-1">2. 整数溢出</h3>
             <p class="text-slate-600 text-sm leading-relaxed">
-              Go 的整数有固定范围，溢出会静默回绕（wrap around）。例如 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">int8(127) + 1</code> 结果为 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">-128</code>。Go 1.22+ 没有内置溢出检测，需自行注意。
+              Go 的整数有固定范围，溢出会静默回绕（wrap around）。例如 <code
+                class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">int8(127) + 1</code> 结果为 <code
+                class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">-128</code>。Go 1.22+ 没有内置溢出检测，需自行注意。
             </p>
           </div>
           <div>
             <h3 class="text-sm font-semibold text-slate-700 mb-1">3. 字符串比较的时间攻击风险</h3>
             <p class="text-slate-600 text-sm leading-relaxed">
-              用 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">==</code> 比较敏感字符串（如密码哈希）可能受到计时攻击。应使用 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">subtle.ConstantTimeCompare</code> 进行常量时间比较。
+              用 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">==</code> 比较敏感字符串（如密码哈希）可能受到计时攻击。应使用 <code
+                class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">subtle.ConstantTimeCompare</code> 进行常量时间比较。
             </p>
           </div>
           <div>
             <h3 class="text-sm font-semibold text-slate-700 mb-1">4. 浮点数比较</h3>
             <p class="text-slate-600 text-sm leading-relaxed">
-              不要用 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">==</code> 直接比较浮点数。由于精度问题，应比较差值是否在极小范围内：<code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">math.Abs(a - b) &lt; 1e-9</code>。
+              不要用 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">==</code>
+              直接比较浮点数。由于精度问题，应比较差值是否在极小范围内：<code
+                class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">math.Abs(a - b) &lt; 1e-9</code>。
             </p>
           </div>
           <div>
             <h3 class="text-sm font-semibold text-slate-700 mb-1">5. 取余运算符的符号</h3>
             <p class="text-slate-600 text-sm leading-relaxed">
-              Go 中取余结果的符号<b>与被除数相同</b>：<code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">-5 % 3</code> 结果为 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">-2</code>，<code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">5 % -3</code> 结果为 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">2</code>。
+              Go 中取余结果的符号<b>与被除数相同</b>：<code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">-5 % 3</code> 结果为
+              <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">-2</code>，<code
+                class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">5 % -3</code> 结果为 <code
+                class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">2</code>。
             </p>
           </div>
           <div>
             <h3 class="text-sm font-semibold text-slate-700 mb-1">6. 位运算符优先级陷阱</h3>
             <p class="text-slate-600 text-sm leading-relaxed">
-              位运算符 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">&lt;&lt;</code> 和 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">&gt;&gt;</code> 的优先级<b>低于</b> <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">+</code> 和 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">-</code>。例如 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">1 &lt;&lt; 2 + 3</code> 等同于 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">1 &lt;&lt; 5</code> 而非 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">(1 &lt;&lt; 2) + 3</code>。建议始终加括号。
+              位运算符 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">&lt;&lt;</code> 和 <code
+                class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">&gt;&gt;</code> 的优先级<b>低于</b> <code
+                class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">+</code> 和 <code
+                class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">-</code>。例如 <code
+                class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">1 &lt;&lt; 2 + 3</code> 等同于 <code
+                class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">1 &lt;&lt; 5</code> 而非 <code
+                class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">(1 &lt;&lt; 2) + 3</code>。建议始终加括号。
             </p>
           </div>
         </div>
       </section>
 
       <!-- 总结 -->
-      <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+      <section id="sec-11" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
           <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">📋</span>
           小结
@@ -430,7 +682,8 @@
         <ul class="space-y-2 text-slate-600">
           <li class="flex items-start gap-2">
             <span class="text-cyan-500 mt-1">▸</span>
-            <span>Go 的运算符设计简洁严格，没有前置 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">++</code>/<code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">--</code>，没有三元运算符</span>
+            <span>Go 的运算符设计简洁严格，没有前置 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">++</code>/<code
+                class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">--</code>，没有三元运算符</span>
           </li>
           <li class="flex items-start gap-2">
             <span class="text-cyan-500 mt-1">▸</span>
@@ -456,16 +709,12 @@
     <!-- 底部导航 -->
     <footer class="max-w-4xl mx-auto px-6 py-8">
       <nav class="flex justify-between items-center pt-4 border-t border-slate-200 text-sm">
-        <RouterLink
-          to="/backend/BackendLanguage/GO/go-stage-1-basics/go-1-2-variables-types"
-          class="text-slate-500 hover:text-cyan-600 transition-colors flex items-center gap-1"
-        >
+        <RouterLink to="/backend/BackendLanguage/GO/go-stage-1-basics/go-1-2-variables-types"
+          class="text-slate-500 hover:text-cyan-600 transition-colors flex items-center gap-1">
           ← 上一节：变量、常量与数据类型
         </RouterLink>
-        <RouterLink
-          to="/backend/BackendLanguage/GO/go-stage-1-basics/go-1-4-fmt-io"
-          class="text-cyan-600 hover:text-cyan-700 font-medium transition-colors flex items-center gap-1"
-        >
+        <RouterLink to="/backend/BackendLanguage/GO/go-stage-1-basics/go-1-4-fmt-io"
+          class="text-cyan-600 hover:text-cyan-700 font-medium transition-colors flex items-center gap-1">
           下一节：fmt 格式化输入输出 →
         </RouterLink>
       </nav>
@@ -474,9 +723,24 @@
 </template>
 
 <script setup lang="ts">
-import { Code } from 'components'
+import { Code, EditorLink, Nav } from 'components'
+import { useUserStore } from '@/stores/userProfle'
+const userStore = useUserStore()
 import { RouterLink } from 'vue-router'
 
+const navList = [
+    { id: "sec-1", name: "概述" },
+    { id: "sec-2", name: "算术运算符" },
+    { id: "sec-3", name: "比较运算符" },
+    { id: "sec-4", name: "逻辑运算符" },
+    { id: "sec-5", name: "位运算符" },
+    { id: "sec-6", name: "赋值运算符" },
+    { id: "sec-7", name: "运算符优先级" },
+    { id: "sec-8", name: "Go 特殊行为详解" },
+    { id: "sec-9", name: "类型比较规则详解" },
+    { id: "sec-10", name: "常见陷阱与注意事项" },
+    { id: "sec-11", name: "小结" }
+  ]
 // ── 算术运算符 ──
 const arithmeticCode = `package main
 

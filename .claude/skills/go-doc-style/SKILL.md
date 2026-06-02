@@ -62,22 +62,26 @@ metadata:
 ```vue
 <template>
   <div class="go-doc min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
-    <!-- 页面头部 -->
-    <header class="bg-white border-b border-slate-200 sticky top-0 z-10">
+    <!-- 页面头部（不再 sticky，不占视口） -->
+    <header class="bg-white border-b border-slate-200">
       <div class="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
         <div>
           <h1 class="text-2xl font-bold text-slate-800">📦 页面标题</h1>
           <p class="text-sm text-slate-500 mt-1">简短描述</p>
         </div>
-        <span class="text-xs text-slate-400 bg-slate-100 px-3 py-1 rounded-full">阶段X</span>
+        <div class="flex items-center gap-3">
+          <EditorLink file-path="apps/go/basics/go-X-Y-xxx.go" label="📝 查看源码" :is-admin="userStore.isAdmin" />
+          <span class="text-xs text-slate-400 bg-slate-100 px-3 py-1 rounded-full">阶段X</span>
+        </div>
       </div>
     </header>
 
     <!-- 主体内容 -->
     <main class="max-w-4xl mx-auto px-6 py-8 space-y-6">
+      <Nav :list="navList" title="目录" position="top-right" :showBackToTop="true" />
 
-      <!-- 知识点卡片 -->
-      <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+      <!-- 知识点卡片（id 用于 Nav 锚点跳转） -->
+      <section id="sec-N" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
           <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">1</span>
           标题
@@ -106,8 +110,19 @@ metadata:
 </template>
 
 <script setup lang="ts">
-import { Code } from 'components'
+import { Code, EditorLink, Nav } from 'components'
 import { RouterLink } from 'vue-router'
+import { useUserStore } from '@/stores/userProfle'
+
+const userStore = useUserStore()
+
+// Nav 目录（id 对应 section 的 id 属性，name 为显示文字）
+const navList = [
+  { id: "sec-1", name: "概述" },
+  { id: "sec-2", name: "知识点A" },
+  { id: "sec-3", name: "常见错误" },
+  { id: "sec-4", name: "小结" },
+]
 
 const codeExample = `package main
 
@@ -214,7 +229,47 @@ import { Code } from 'components'
 </ul>
 ```
 
-### 6. 步骤编号
+### 6. 目录导航（Nav 组件）
+
+每个文档添加 `Nav` 组件实现页面内章节跳转：
+
+```html
+<Nav :list="navList" title="目录" position="top-right" :showBackToTop="true" />
+```
+
+**navList 格式：** 使用 `name` 字段（Nav 默认 keyMap 读 `name`）：
+```ts
+const navList = [
+  { id: "sec-1", name: "概述" },
+  { id: "sec-2", name: "知识点A" },
+  { id: "sec-3", name: "常见错误" },
+  { id: "sec-4", name: "小结" },
+]
+```
+
+**section 需要 id：** `<section id="sec-1" class="...">`
+
+### 7. 编辑器跳转（EditorLink 组件）
+
+仅 admin 可见，通过 props 传 `isAdmin`（避免 provide/inject 链路问题）：
+
+```html
+<EditorLink file-path="apps/go/basics/go-X-Y-xxx.go" label="📝 查看源码" :is-admin="userStore.isAdmin" />
+```
+
+导入：`import { useUserStore } from '@/stores/userProfle'`
+
+### 8. 路线图跳转（Link 组件）
+
+GOLearningRoadmap.vue 中用 `Link` 实现点击跳转：
+```html
+<Link :route="item.name" :text="item.text" animation="none" size="small"
+  class="p-0! text-sm! font-normal! ..." />
+```
+
+`item.name` 即 .vue 文件名（不含后缀），Link 内部通过 `inject('goToByName')` 调用 App.vue 的导航方法。
+
+### 9. 步骤编号
 
 ```html
 <ol class="space-y-4 mb-4">

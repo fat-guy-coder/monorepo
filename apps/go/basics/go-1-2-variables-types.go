@@ -65,13 +65,13 @@ func RunVariables() {
 	// --- 零值 ---
 	fmt.Println("\n--- 零值（Zero Values）---")
 
-	var zInt int          // 0
-	var zFloat float64    // 0.0
-	var zBool bool        // false
-	var zString string    // ""
-	var zPtr *int         // nil
-	var zSlice []int      // nil
-	var zMap map[int]int  // nil
+	var zInt int         // 0
+	var zFloat float64   // 0.0
+	var zBool bool       // false
+	var zString string   // ""
+	var zPtr *int        // nil
+	var zSlice []int     // nil
+	var zMap map[int]int // nil
 
 	fmt.Printf("int 零值: %d\n", zInt)
 	fmt.Printf("float64 零值: %f\n", zFloat)
@@ -123,11 +123,11 @@ func RunVariables() {
 	fmt.Println("\n--- iota 枚举 ---")
 
 	const (
-		Monday = iota + 1 // 1
-		Tuesday             // 2
-		Wednesday           // 3
-		Thursday            // 4
-		Friday              // 5
+		Monday    = iota + 1 // 1
+		Tuesday              // 2
+		Wednesday            // 3
+		Thursday             // 4
+		Friday               // 5
 	)
 	fmt.Printf("工作日: %d, %d, %d, %d, %d\n", Monday, Tuesday, Wednesday, Thursday, Friday)
 
@@ -141,10 +141,25 @@ func RunVariables() {
 
 	// 跳过值
 	const (
-		_ = iota         // 跳过 0
+		_  = iota             // 跳过 0
 		KB = 1 << (10 * iota) // 1 << 10 = 1024
-		MB                      // 1 << 20
-		GB                      // 1 << 30
+		MB                    // 1 << 20
+		GB                    // 1 << 30
 	)
 	fmt.Printf("存储单位: KB=%d, MB=%d, GB=%d\n", KB, MB, GB)
+
+	var str string = "Hello, World!"
+	name := "John"
+
+	var i1 uint16
+	i1 = 2556
+	fmt.Println(str, name, i1)
 }
+
+// ============================================================
+// 单独运行此文件:
+//   1. 将第 1 行 "package basics" 改为 "package main"
+//   2. 取消下面 main 函数的注释
+//   3. go run FILE_NAME
+// ============================================================
+//func main() { RunVariables() }

@@ -248,6 +248,77 @@ ssh root@47.108.233.237 “docker exec postgres rm /tmp/jason.dump”
 - **推荐流程**：代码走 CI/CD，数据走“手动可控脚本（本文命令）”。
 - **仅在明确需要时自动化**：可单独做一个 `workflow_dispatch` 的“手动触发数据同步”工作流，并加二次确认参数。
 
+## Go 学习路线图
+
+### 目录结构
+
+```
+apps/learning/src/views/backend/BackendLanguage/GO/   ← 前端文档 (.vue)
+apps/go/                                               ← Go 示例代码 (.go)
+```
+
+一一对应：`go-stage-1-basics/go-1-5-control-flow.vue` ↔ `basics/go-1-5-control-flow.go`
+
+### 快速开始
+
+```bash
+# 启动学习网站
+pnpm learning:dev
+```
+
+### 运行 Go 示例
+
+**方式一：通过 runner 运行（推荐）**
+
+```bash
+cd apps/go
+
+# 运行整个阶段
+go run . 1          # 阶段1 基础
+go run . 2          # 阶段2 并发
+go run . all        # 全部阶段
+
+# 阶段1 基础 — 按主题运行
+go run . 1 operators     # 运算符
+go run . 1 control       # 控制流
+go run . 1 variables     # 变量
+go run . 1 functions     # 函数
+go run . 1 defer         # defer/闭包/panic
+go run . 1 arrays        # 数组/切片
+go run . 1 maps          # map
+go run . 1 pointers      # 指针
+go run . 1 structs       # 结构体
+go run . 1 new           # new/make
+go run . 1 methods       # 方法/接口
+go run . 1 packages      # 包/模块
+go run . 1 strings       # 字符串/rune
+go run . 1 errors        # 错误处理
+go run . 1 time          # 时间
+go run . 1 file          # 文件IO
+go run . 1 test          # 测试
+go run . 1 env           # 环境/工具
+go run . 1 fmt           # fmt 格式化
+
+# 其他阶段
+go run . 2 goroutine     # goroutine
+go run . 3 gin           # Gin 框架
+```
+
+**方式二：单独运行某个 .go 文件（不推荐，直接用 runner）**
+
+不折腾单文件运行。runner 已支持按主题跑：`go run . 1 operators`。
+
+> 每个 .go 文件末尾有详细的单独运行说明。
+
+### EditorLink（admin 专属）
+
+学习文档右上角的「📝 查看源码」按钮，点击直接在 Cursor 中打开对应的 .go 文件。
+仅 `username === 'admin'` 可见，配置见 `.vscode/settings.json`。
+
+### 进度
+
+详见 [PROGRESS.md](PROGRESS.md)，阶段 1（基础）已完成 19/19 个文档 + Go 示例。
+
 ## 开发规范
 
 1. 使用 TypeScript 进行开发

@@ -63,7 +63,23 @@
       "Bash(openspec status *)",
       "Bash(openspec instructions *)",
       "Bash(git checkout *)",
-      "Bash(npx vue-tsc *)"
+      "Bash(npx vue-tsc *)",
+      "Bash(sed -i \"s/      '✅ /      { text: '/g\" GOLearningRoadmap.vue)",
+      "Bash(sed -i \"s/      '📌 /      { text: '/g\" GOLearningRoadmap.vue)",
+      "Bash(sed -i \"s/      '⚠️ /      { text: '/g\" GOLearningRoadmap.vue)",
+      "Bash(sed -i \"s/      '💡 /      { text: '/g\" GOLearningRoadmap.vue)",
+      "Bash(sed -i \"s/      '📝 /      { text: '/g\" GOLearningRoadmap.vue)",
+      "Bash(sed -i \"s/^      '✅ /      { text: '/g\" GOLearningRoadmap.vue)",
+      "Bash(sed -i \"s/^      '📌 /      { text: '/g\" GOLearningRoadmap.vue)",
+      "Bash(sed -i \"s/^      '⚠️ /      { text: '/g\" GOLearningRoadmap.vue)",
+      "Bash(sed -i \"s/^      '💡 /      { text: '/g\" GOLearningRoadmap.vue)",
+      "Bash(sed -i \"s/^      '📝 /      { text: '/g\" GOLearningRoadmap.vue)",
+      "Bash(node -e ' *)",
+      "Bash(sed -i 's/title: \"/name: \"/g' go-1-*.vue)",
+      "Bash(sed -i 's/sticky top-0 z-10 //g' go-1-*.vue)",
+      "Bash(sed -i 's/sticky top-0 z-10//g' go-1-*.vue)",
+      "Bash(sed -i 's/class=\"bg-white border-b border-slate-200 \"/class=\"bg-white border-b border-slate-200\"/g' go-1-*.vue)",
+      "Edit(/.claude/skills/go-doc-style/**)"
     ],
     "additionalDirectories": [
       "C:\\Users\\Administrator\\.claude"

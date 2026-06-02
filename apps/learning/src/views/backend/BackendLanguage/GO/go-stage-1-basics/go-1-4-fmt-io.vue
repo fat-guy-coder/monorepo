@@ -1,27 +1,33 @@
 <template>
-  <div class="go-doc min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+  <div class="go-doc min-h-screen bg-linear-to-brrom-slate-50 to-blue-50">
     <!-- 页面头部 -->
-    <header class="bg-white border-b border-slate-200 sticky top-0 z-10">
+    <header class="bg-white border-b border-slate-200">
       <div class="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
         <div>
           <h1 class="text-2xl font-bold text-slate-800">fmt 格式化输入输出</h1>
           <p class="text-sm text-slate-500 mt-1">Go 标准库的格式化与 I/O 操作</p>
         </div>
-        <span class="text-xs text-slate-400 bg-slate-100 px-3 py-1 rounded-full">阶段1 · 基础</span>
+        <div class="flex items-center gap-3">
+          <EditorLink file-path="apps/go/basics/go-1-4-fmt-io.go" label="📝 查看源码" :is-admin="userStore.isAdmin" />
+          <span class="text-xs text-slate-400 bg-slate-100 px-3 py-1 rounded-full">阶段1 · 基础</span>
+        </div>
       </div>
     </header>
 
     <!-- 主体内容 -->
     <main class="max-w-4xl mx-auto px-6 py-8 space-y-6">
+      <Nav :list="navList" title="目录" position="top-right" :showBackToTop="true" />
 
       <!-- 概述 -->
-      <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+      <section id="sec-1" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
           <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">📦</span>
           概述
         </h2>
         <p class="text-slate-600 mb-3 leading-relaxed">
-          <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">fmt</code> 包是 Go 标准库中最常用的包之一，实现了格式化 I/O 功能，类似于 C 语言的 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">printf</code> 和 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">scanf</code>。它提供了向控制台输出、从控制台读取、格式化字符串以及错误格式化等丰富的功能。
+          <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">fmt</code> 包是 Go 标准库中最常用的包之一，实现了格式化 I/O 功能，类似于 C
+          语言的 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">printf</code> 和 <code
+            class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">scanf</code>。它提供了向控制台输出、从控制台读取、格式化字符串以及错误格式化等丰富的功能。
         </p>
         <ul class="space-y-2 text-slate-600">
           <li class="flex items-start gap-2">
@@ -38,19 +44,23 @@
           </li>
           <li class="flex items-start gap-2">
             <span class="text-cyan-500 mt-1">▸</span>
-            <span><strong>Errorf</strong>：格式化并返回一个 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">error</code> 类型的值</span>
+            <span><strong>Errorf</strong>：格式化并返回一个 <code
+                class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">error</code> 类型的值</span>
           </li>
         </ul>
       </section>
 
       <!-- 1. Print 系列 -->
-      <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+      <section id="sec-2" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
           <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">1</span>
           Print 系列 — 标准输出
         </h2>
         <p class="text-slate-600 mb-4 leading-relaxed">
-          <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">Print</code>、<code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">Println</code> 和 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">Printf</code> 是三个最基础的控制台输出函数。它们的核心区别在于<b>分隔符处理、换行行为</b>和<b>是否支持格式化</b>。
+          <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">Print</code>、<code
+            class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">Println</code> 和 <code
+            class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">Printf</code>
+          是三个最基础的控制台输出函数。它们的核心区别在于<b>分隔符处理、换行行为</b>和<b>是否支持格式化</b>。
         </p>
 
         <div class="overflow-x-auto mb-4">
@@ -82,7 +92,8 @@
               <tr>
                 <td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700">Printf</td>
                 <td class="px-4 py-2 border border-slate-200">无（由格式化字符串控制）</td>
-                <td class="px-4 py-2 border border-slate-200">否（需手动加 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">\n</code>）</td>
+                <td class="px-4 py-2 border border-slate-200">否（需手动加 <code
+                    class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">\n</code>）</td>
                 <td class="px-4 py-2 border border-slate-200">是</td>
                 <td class="px-4 py-2 border border-slate-200">需要精确控制格式时</td>
               </tr>
@@ -103,18 +114,25 @@
       <!-- 💡 Print vs Println 分隔符差异 -->
       <aside class="bg-blue-50 border-l-4 border-blue-400 rounded-r-xl p-4">
         <p class="text-sm text-blue-800">
-          <strong>💡 Print 分隔符细节：</strong><code class="bg-blue-100 px-1 rounded text-blue-900 text-xs">fmt.Print("a", "b")</code> 输出 <code class="bg-blue-100 px-1 rounded text-blue-900 text-xs">ab</code>（无空格，因为都是字符串），而 <code class="bg-blue-100 px-1 rounded text-blue-900 text-xs">fmt.Print(1, 2)</code> 输出 <code class="bg-blue-100 px-1 rounded text-blue-900 text-xs">1 2</code>（有空格，因为操作数是数值）。<code class="bg-blue-100 px-1 rounded text-blue-900 text-xs">Println</code> 则始终在操作数之间加空格，行为完全一致。
+          <strong>💡 Print 分隔符细节：</strong><code
+            class="bg-blue-100 px-1 rounded text-blue-900 text-xs">fmt.Print("a", "b")</code> 输出 <code
+            class="bg-blue-100 px-1 rounded text-blue-900 text-xs">ab</code>（无空格，因为都是字符串），而 <code
+            class="bg-blue-100 px-1 rounded text-blue-900 text-xs">fmt.Print(1, 2)</code> 输出 <code
+            class="bg-blue-100 px-1 rounded text-blue-900 text-xs">1 2</code>（有空格，因为操作数是数值）。<code
+            class="bg-blue-100 px-1 rounded text-blue-900 text-xs">Println</code> 则始终在操作数之间加空格，行为完全一致。
         </p>
       </aside>
 
       <!-- 2. 格式化动词表 -->
-      <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+      <section id="sec-3" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
           <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">2</span>
           格式化动词（Verbs）完整参考
         </h2>
         <p class="text-slate-600 mb-4 leading-relaxed">
-          格式化动词以 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">%</code> 开头，用于指定如何格式化对应的参数。掌握常用动词是使用 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">Printf</code> / <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">Sprintf</code> 的基础。
+          格式化动词以 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">%</code> 开头，用于指定如何格式化对应的参数。掌握常用动词是使用
+          <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">Printf</code> / <code
+            class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">Sprintf</code> 的基础。
         </p>
 
         <!-- 通用动词 -->
@@ -261,13 +279,17 @@
       </section>
 
       <!-- 3. Sprint 系列 -->
-      <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+      <section id="sec-4" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
           <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">3</span>
           Sprint 系列 — 格式化为字符串
         </h2>
         <p class="text-slate-600 mb-4 leading-relaxed">
-          <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">Sprint</code>、<code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">Sprintf</code> 和 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">Sprintln</code> 与 Print 系列行为完全一致，区别在于它们<b>不输出到控制台</b>，而是将结果作为 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">string</code> 返回。这在构建日志消息、错误信息、API 响应时非常有用。
+          <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">Sprint</code>、<code
+            class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">Sprintf</code> 和 <code
+            class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">Sprintln</code> 与 Print
+          系列行为完全一致，区别在于它们<b>不输出到控制台</b>，而是将结果作为 <code
+            class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">string</code> 返回。这在构建日志消息、错误信息、API 响应时非常有用。
         </p>
 
         <div class="overflow-x-auto mb-4">
@@ -313,13 +335,15 @@
       </section>
 
       <!-- 4. Scan 系列 -->
-      <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+      <section id="sec-5" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
           <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">4</span>
           Scan 系列 — 读取用户输入
         </h2>
         <p class="text-slate-600 mb-4 leading-relaxed">
-          <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">Scan</code>、<code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">Scanf</code> 和 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">Scanln</code> 用于从标准输入读取数据，并将值存入传入的指针参数中。
+          <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">Scan</code>、<code
+            class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">Scanf</code> 和 <code
+            class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">Scanln</code> 用于从标准输入读取数据，并将值存入传入的指针参数中。
         </p>
 
         <div class="overflow-x-auto mb-4">
@@ -367,18 +391,26 @@
       <!-- ⚠️ Scan 注意事项 -->
       <aside class="bg-amber-50 border-l-4 border-amber-400 rounded-r-xl p-4">
         <p class="text-sm text-amber-800">
-          <strong>⚠️ 注意：</strong><code class="bg-amber-100 px-1 rounded text-amber-900 text-xs">Scan</code> 系列必须传入<b>指针</b>（<code class="bg-amber-100 px-1 rounded text-amber-900 text-xs">&var</code>），因为需要修改传入的变量值。如果忘记 <code class="bg-amber-100 px-1 rounded text-amber-900 text-xs">&</code>，编译器会报错，因为类型不匹配。
+          <strong>⚠️ 注意：</strong><code class="bg-amber-100 px-1 rounded text-amber-900 text-xs">Scan</code>
+          系列必须传入<b>指针</b>（<code class="bg-amber-100 px-1 rounded text-amber-900 text-xs">&var</code>），因为需要修改传入的变量值。如果忘记
+          <code class="bg-amber-100 px-1 rounded text-amber-900 text-xs">&</code>，编译器会报错，因为类型不匹配。
         </p>
       </aside>
 
       <!-- 5. Error 格式化 -->
-      <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+      <section id="sec-6" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
           <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">5</span>
           Error 格式化 — fmt.Errorf 与 %w 包装
         </h2>
         <p class="text-slate-600 mb-4 leading-relaxed">
-          <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">fmt.Errorf</code> 用法与 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">fmt.Sprintf</code> 类似，但它返回 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">error</code> 类型而非 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">string</code>。Go 1.13 引入了 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">%w</code> 动词，用于<b>包装（wrap）</b>另一个 error，使 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">errors.Is</code> 和 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">errors.As</code> 可以穿越错误链进行匹配。
+          <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">fmt.Errorf</code> 用法与 <code
+            class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">fmt.Sprintf</code> 类似，但它返回 <code
+            class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">error</code> 类型而非 <code
+            class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">string</code>。Go 1.13 引入了 <code
+            class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">%w</code> 动词，用于<b>包装（wrap）</b>另一个 error，使 <code
+            class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">errors.Is</code> 和 <code
+            class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">errors.As</code> 可以穿越错误链进行匹配。
         </p>
 
         <div class="overflow-x-auto mb-4">
@@ -417,18 +449,23 @@
       <!-- ✅ %w 最佳实践 -->
       <aside class="bg-emerald-50 border-l-4 border-emerald-400 rounded-r-xl p-4">
         <p class="text-sm text-emerald-800">
-          <strong>✅ 最佳实践：</strong>每个 <code class="bg-emerald-100 px-1 rounded text-emerald-900 text-xs">fmt.Errorf</code> 调用中最多使用<b>一个</b> <code class="bg-emerald-100 px-1 rounded text-emerald-900 text-xs">%w</code>，且用它包装最底层/最相关的错误。如果需要包装多个错误，使用 <code class="bg-emerald-100 px-1 rounded text-emerald-900 text-xs">errors.Join</code>（Go 1.20+）。
+          <strong>✅ 最佳实践：</strong>每个 <code
+            class="bg-emerald-100 px-1 rounded text-emerald-900 text-xs">fmt.Errorf</code> 调用中最多使用<b>一个</b> <code
+            class="bg-emerald-100 px-1 rounded text-emerald-900 text-xs">%w</code>，且用它包装最底层/最相关的错误。如果需要包装多个错误，使用 <code
+            class="bg-emerald-100 px-1 rounded text-emerald-900 text-xs">errors.Join</code>（Go 1.20+）。
         </p>
       </aside>
 
       <!-- 6. 宽度与精度 -->
-      <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+      <section id="sec-7" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
           <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">6</span>
           宽度与精度控制
         </h2>
         <p class="text-slate-600 mb-4 leading-relaxed">
-          在 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">Printf</code> / <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">Sprintf</code> 中，可以在 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">%</code> 和动词之间插入宽度和精度来控制对齐方式和显示格式。
+          在 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">Printf</code> / <code
+            class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">Sprintf</code> 中，可以在 <code
+            class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">%</code> 和动词之间插入宽度和精度来控制对齐方式和显示格式。
         </p>
 
         <div class="overflow-x-auto mb-4">
@@ -476,13 +513,15 @@
                 <td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700 text-xs">%10s</td>
                 <td class="px-4 py-2 border border-slate-200">字符串最小宽度 10，右对齐</td>
                 <td class="px-4 py-2 border border-slate-200 font-mono text-xs">fmt.Printf("%10s", "Go")</td>
-                <td class="px-4 py-2 border border-slate-200 font-mono text-xs">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Go</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono text-xs">
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Go</td>
               </tr>
               <tr>
                 <td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700 text-xs">%-10s</td>
                 <td class="px-4 py-2 border border-slate-200">字符串宽度 10，左对齐</td>
                 <td class="px-4 py-2 border border-slate-200 font-mono text-xs">fmt.Printf("%-10s", "Go")</td>
-                <td class="px-4 py-2 border border-slate-200 font-mono text-xs">Go&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono text-xs">
+                  Go&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
               </tr>
               <tr class="bg-slate-50">
                 <td class="px-4 py-2 border border-slate-200 font-mono text-cyan-700 text-xs">%.5s</td>
@@ -504,7 +543,7 @@
       </section>
 
       <!-- 7. 实际用例 -->
-      <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+      <section id="sec-8" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
           <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">7</span>
           实际用例
@@ -525,7 +564,8 @@
         <!-- 7.2 调试输出 -->
         <h3 class="text-sm font-semibold text-slate-700 mb-3">🔹 调试利器 %+v 与 %#v</h3>
         <p class="text-slate-600 mb-4 leading-relaxed">
-          在调试时，<code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">%+v</code> 可以打印结构体字段名，<code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">%#v</code> 输出完整 Go 语法格式，是快速排查问题的利器。
+          在调试时，<code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">%+v</code> 可以打印结构体字段名，<code
+            class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">%#v</code> 输出完整 Go 语法格式，是快速排查问题的利器。
         </p>
         <div class="mb-4">
           <Code language="go" :code="debugCode" title="debug.go" />
@@ -537,7 +577,8 @@
         <!-- 7.3 日志模式 -->
         <h3 class="text-sm font-semibold text-slate-700 mb-3">🔹 结构化日志模式</h3>
         <p class="text-slate-600 mb-4 leading-relaxed">
-          使用 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">fmt.Printf</code> 或 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">fmt.Sprintf</code> 构建带时间戳和级别的日志消息是 Go 中常见的简单日志实践。
+          使用 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">fmt.Printf</code> 或 <code
+            class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">fmt.Sprintf</code> 构建带时间戳和级别的日志消息是 Go 中常见的简单日志实践。
         </p>
         <div class="mb-4">
           <Code language="go" :code="loggerCode" title="logger.go" />
@@ -548,7 +589,7 @@
       </section>
 
       <!-- 8. 常见错误 -->
-      <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+      <section id="sec-9" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
           <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">⚠️</span>
           常见错误与排坑指南
@@ -558,44 +599,61 @@
           <div>
             <h3 class="text-sm font-semibold text-slate-700 mb-1">1. 动词与参数类型不匹配</h3>
             <p class="text-slate-600 text-sm leading-relaxed">
-              使用 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">%d</code> 格式化字符串会输出 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">%!d(string=hello)</code> 而非 panic。Go 不会崩溃，但会输出乱码提示。编译时使用 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">go vet</code> 可以检测此类问题。
+              使用 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">%d</code> 格式化字符串会输出 <code
+                class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">%!d(string=hello)</code> 而非 panic。Go
+              不会崩溃，但会输出乱码提示。编译时使用 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">go vet</code> 可以检测此类问题。
             </p>
           </div>
           <div>
             <h3 class="text-sm font-semibold text-slate-700 mb-1">2. Printf 忘记加 \n</h3>
             <p class="text-slate-600 text-sm leading-relaxed">
-              <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">Printf</code> 不会自动换行，如果多行 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">Printf</code> 输出会挤在同一行。使用 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">Println</code> 或手动在格式字符串末尾添加 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">\n</code>。
+              <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">Printf</code> 不会自动换行，如果多行 <code
+                class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">Printf</code> 输出会挤在同一行。使用 <code
+                class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">Println</code> 或手动在格式字符串末尾添加 <code
+                class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">\n</code>。
             </p>
           </div>
           <div>
             <h3 class="text-sm font-semibold text-slate-700 mb-1">3. Scan 忘记传指针</h3>
             <p class="text-slate-600 text-sm leading-relaxed">
-              <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">fmt.Scan(x)</code> 传入值而非 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">&x</code> 会导致编译错误：<code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">cannot use x (variable of type int) as type any</code> 在有具体类型时无法通过。但如果 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">x</code> 本身已经是指针类型则可直接传入。
+              <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">fmt.Scan(x)</code> 传入值而非 <code
+                class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">&x</code> 会导致编译错误：<code
+                class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">cannot use x (variable of type int) as type any</code>
+              在有具体类型时无法通过。但如果 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">x</code> 本身已经是指针类型则可直接传入。
             </p>
           </div>
           <div>
             <h3 class="text-sm font-semibold text-slate-700 mb-1">4. Scanf 格式字符串中多余的换行</h3>
             <p class="text-slate-600 text-sm leading-relaxed">
-              <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">fmt.Scanf("%d\n", &n)</code> 会等待两个换行符（格式中的 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">\n</code> 匹配任意空白）。推荐用 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">Scanf("%d", &n)</code> 或改用 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">Scan</code>。
+              <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">fmt.Scanf("%d\n", &n)</code> 会等待两个换行符（格式中的
+              <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">\n</code> 匹配任意空白）。推荐用 <code
+                class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">Scanf("%d", &n)</code> 或改用 <code
+                class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">Scan</code>。
             </p>
           </div>
           <div>
             <h3 class="text-sm font-semibold text-slate-700 mb-1">5. %w 与 %v 在 Errorf 中混淆</h3>
             <p class="text-slate-600 text-sm leading-relaxed">
-              使用 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">%v</code> 格式化 error 时，错误信息被嵌入为字符串，切断了错误链。<code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">errors.Is(err, targetErr)</code> 将返回 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">false</code>。需要保留错误链时务必使用 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">%w</code>。
+              使用 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">%v</code> 格式化 error
+              时，错误信息被嵌入为字符串，切断了错误链。<code
+                class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">errors.Is(err, targetErr)</code> 将返回 <code
+                class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">false</code>。需要保留错误链时务必使用 <code
+                class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">%w</code>。
             </p>
           </div>
           <div>
             <h3 class="text-sm font-semibold text-slate-700 mb-1">6. 格式化参数数量不匹配</h3>
             <p class="text-slate-600 text-sm leading-relaxed">
-              参数少于占位符时输出 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">%!s(MISSING)</code>；参数多于占位符时多余参数被丢弃且静默。使用 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">go vet</code> 或 IDE 的静态检查来提前发现。
+              参数少于占位符时输出 <code
+                class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">%!s(MISSING)</code>；参数多于占位符时多余参数被丢弃且静默。使用 <code
+                class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">go vet</code> 或 IDE 的静态检查来提前发现。
             </p>
           </div>
         </div>
       </section>
 
       <!-- 小结 -->
-      <section class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+      <section id="sec-10" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
           <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">📋</span>
           小结
@@ -603,7 +661,8 @@
         <ul class="space-y-2 text-slate-600">
           <li class="flex items-start gap-2">
             <span class="text-cyan-500 mt-1">▸</span>
-            <span><strong>Print</strong> 直接输出，<strong>Println</strong> 加空格换行，<strong>Printf</strong> 格式化输出——三者适用于不同场景</span>
+            <span><strong>Print</strong> 直接输出，<strong>Println</strong> 加空格换行，<strong>Printf</strong>
+              格式化输出——三者适用于不同场景</span>
           </li>
           <li class="flex items-start gap-2">
             <span class="text-cyan-500 mt-1">▸</span>
@@ -611,11 +670,13 @@
           </li>
           <li class="flex items-start gap-2">
             <span class="text-cyan-500 mt-1">▸</span>
-            <span><strong>Scan 系列</strong> 读取用户输入，牢记传入指针 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">&var</code></span>
+            <span><strong>Scan 系列</strong> 读取用户输入，牢记传入指针 <code
+                class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">&var</code></span>
           </li>
           <li class="flex items-start gap-2">
             <span class="text-cyan-500 mt-1">▸</span>
-            <span><strong>fmt.Errorf + %w</strong> 是错误包装的标准方式，保留错误链供 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">errors.Is</code> 穿透</span>
+            <span><strong>fmt.Errorf + %w</strong> 是错误包装的标准方式，保留错误链供 <code
+                class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">errors.Is</code> 穿透</span>
           </li>
           <li class="flex items-start gap-2">
             <span class="text-cyan-500 mt-1">▸</span>
@@ -623,7 +684,8 @@
           </li>
           <li class="flex items-start gap-2">
             <span class="text-cyan-500 mt-1">▸</span>
-            <span>养成使用 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">go vet</code> 检查格式化参数匹配的习惯，避免运行时意外</span>
+            <span>养成使用 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">go vet</code>
+              检查格式化参数匹配的习惯，避免运行时意外</span>
           </li>
         </ul>
       </section>
@@ -633,16 +695,12 @@
     <!-- 底部导航 -->
     <footer class="max-w-4xl mx-auto px-6 py-8">
       <nav class="flex justify-between items-center pt-4 border-t border-slate-200 text-sm">
-        <RouterLink
-          to="/backend/BackendLanguage/GO/go-stage-1-basics/go-1-3-operators"
-          class="text-slate-500 hover:text-cyan-600 transition-colors flex items-center gap-1"
-        >
+        <RouterLink to="/backend/BackendLanguage/GO/go-stage-1-basics/go-1-3-operators"
+          class="text-slate-500 hover:text-cyan-600 transition-colors flex items-center gap-1">
           ← 上一节：运算符与表达式
         </RouterLink>
-        <RouterLink
-          to="/backend/BackendLanguage/GO/go-stage-1-basics/go-1-5-control-flow"
-          class="text-cyan-600 hover:text-cyan-700 font-medium transition-colors flex items-center gap-1"
-        >
+        <RouterLink to="/backend/BackendLanguage/GO/go-stage-1-basics/go-1-5-control-flow"
+          class="text-cyan-600 hover:text-cyan-700 font-medium transition-colors flex items-center gap-1">
           下一节：控制结构 (if/for/switch/goto) →
         </RouterLink>
       </nav>
@@ -651,9 +709,23 @@
 </template>
 
 <script setup lang="ts">
-import { Code } from 'components'
+import { Code, EditorLink, Nav } from 'components'
+import { useUserStore } from '@/stores/userProfle'
+const userStore = useUserStore()
 import { RouterLink } from 'vue-router'
 
+const navList = [
+    { id: "sec-1", name: "概述" },
+    { id: "sec-2", name: "Print 系列 — 标准输出" },
+    { id: "sec-3", name: "格式化动词（Verbs）完整参考" },
+    { id: "sec-4", name: "Sprint 系列 — 格式化为字符串" },
+    { id: "sec-5", name: "Scan 系列 — 读取用户输入" },
+    { id: "sec-6", name: "Error 格式化 — fmt.Errorf 与 %w 包装" },
+    { id: "sec-7", name: "宽度与精度控制" },
+    { id: "sec-8", name: "实际用例" },
+    { id: "sec-9", name: "常见错误与排坑指南" },
+    { id: "sec-10", name: "小结" }
+  ]
 // ── Print 系列演示 ──
 const printDemoCode = `package main
 

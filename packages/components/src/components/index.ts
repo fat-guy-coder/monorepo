@@ -41,6 +41,7 @@ const Transfer = defineAsyncComponent(() => import('./Transfer/index.vue'))
 const Tooltip = defineAsyncComponent(() => import('./Tooltip/index.vue'))
 const TreeSelect = defineAsyncComponent(() => import('./TreeSelect/index.vue'))
 const Tree = defineAsyncComponent(() => import('./Tree/index.vue'))
+const EditorLink = defineAsyncComponent(() => import('./EditorLink/index.vue'))
 // const Form = defineAsyncComponent(() => import('./Form/Form.vue'))
 // const FormItem = defineAsyncComponent(() => import('./Form/FormItem.vue'))
 
@@ -104,5 +105,6 @@ export {
   Tooltip,
   Tree,
   TreeSelect,
+  EditorLink,
   confirm,
 }

@@ -1,17 +1,12 @@
 <template>
   <transition :name="animation.name" :style="{ '--nav-animation-duration': animation.duration }">
-    <nav
-      v-if="show"
-      class="scroll-nav"
-      :class="[
-        `scroll-nav--${position.replace('-', '_')}`,
-        `scroll-nav--variant-${variant}`,
-        `scroll-nav--rounded-${rounded}`,
-        `scroll-nav--shadow-${shadow}`,
-        { 'scroll-nav--borderless': !bordered, 'scroll-nav--clip': clip },
-      ]"
-      :style="componentStyle"
-    >
+    <nav v-if="show" class="scroll-nav" :class="[
+      `scroll-nav--${position.replace('-', '_')}`,
+      `scroll-nav--variant-${variant}`,
+      `scroll-nav--rounded-${rounded}`,
+      `scroll-nav--shadow-${shadow}`,
+      { 'scroll-nav--borderless': !bordered, 'scroll-nav--clip': clip },
+    ]" :style="componentStyle">
       <header class="scroll-nav__header">
         <div class="scroll-nav__title">
           <slot name="title">
@@ -28,50 +23,28 @@
 
       <ul :class="['scroll-nav__list']" ref="scrollNavList" role="menu">
         <li v-if="showBackToTop" class="scroll-nav__item" role="menuitem" @click="scrollToTop">
-          <button
-            class="scroll-nav__item-btn"
-            :class="[
-              currentItem?.id === 'back-to-top' ? 'scroll-nav__item--active' : '',
-              'gradient-animation-hover',
-            ]"
-          >
+          <button class="scroll-nav__item-btn" :class="[
+            currentItem?.id === 'back-to-top' ? 'scroll-nav__item--active' : '',
+            'gradient-animation-hover',
+          ]">
             回到顶部
           </button>
         </li>
 
         <li v-for="item in mappedList" :key="item.id" class="scroll-nav__item" role="presentation">
-          <button
-            class="scroll-nav__item-btn"
-            :class="[
-              currentItem?.id === item.id ? 'scroll-nav__item--active' : '',
-              'gradient-animation-linear-hover',
-            ]"
-            type="button"
-            role="menuitem"
-            :title="item.title"
-            @click="handleScroll($event, item.id)"
-          >
+          <button class="scroll-nav__item-btn" :class="[
+            currentItem?.id === item.id ? 'scroll-nav__item--active' : '',
+            'gradient-animation-linear-hover',
+          ]" type="button" role="menuitem" :title="item.title" @click="handleScroll($event, item.id)">
             <span class="scroll-nav__item-text">{{ item.title }}</span>
           </button>
 
-          <ul
-            v-if="showChild && item.children && item.children.length"
-            class="scroll-nav__children"
-          >
-            <li
-              v-for="child in item.children"
-              :key="child.id"
-              class="scroll-nav__item scroll-nav__item--child"
-              role="presentation"
-            >
-              <button
-                class="scroll-nav__item-btn gradient-animation-linear-hover"
-                :class="[currentItem?.id === child.id ? 'scroll-nav__item--active' : '']"
-                type="button"
-                role="menuitem"
-                :title="child.title"
-                @click="handleScroll($event, child.id)"
-              >
+          <ul v-if="showChild && item.children && item.children.length" class="scroll-nav__children">
+            <li v-for="child in item.children" :key="child.id" class="scroll-nav__item scroll-nav__item--child"
+              role="presentation">
+              <button class="scroll-nav__item-btn gradient-animation-linear-hover"
+                :class="[currentItem?.id === child.id ? 'scroll-nav__item--active' : '']" type="button" role="menuitem"
+                :title="child.title" @click="handleScroll($event, child.id)">
                 <span class="scroll-nav__item-text">{{ child.title }}</span>
               </button>
             </li>
@@ -411,6 +384,7 @@ const getCurrentItem = (list: Item[], id: string): Item | null => {
   cursor: pointer;
   font-size: var(--nav-toggle-font-size);
   transition: background 0.2s ease;
+
   svg {
     width: 14px;
     height: 14px;
@@ -469,6 +443,7 @@ const getCurrentItem = (list: Item[], id: string): Item | null => {
   padding: var(--nav-item-padding);
   border-radius: var(--nav-item-radius);
   transition: box-shadow var(--nav-transition-duration) ease;
+
   &:hover {
     box-shadow: var(--nav-item-box-shadow-hover);
   }
