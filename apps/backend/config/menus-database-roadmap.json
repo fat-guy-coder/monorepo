@@ -1,0 +1,396 @@
+{
+  "project": "learning",
+  "parentId": "ac65a72c-cc5b-40ff-a346-5ad6f31cf7f3",
+  "items": [
+    {
+      "name": "db-learning-path",
+      "label": "数据库学习路线图",
+      "icon": "🗺️",
+      "order": 1,
+      "isLeaf": true
+    },
+    {
+      "name": "db-module-1-sql",
+      "label": "SQL 精通",
+      "icon": "📝",
+      "order": 10,
+      "children": [
+        {
+          "name": "db-1-1-sql-foundation", "label": "SQL 基础巩固", "order": 1,
+          "children": [
+            { "name": "db-1-1-1-ddl", "label": "DDL：CREATE/ALTER/DROP 与约束", "order": 1 },
+            { "name": "db-1-1-2-dml", "label": "DML：INSERT/UPDATE/DELETE 与 RETURNING", "order": 2 },
+            { "name": "db-1-1-3-select", "label": "SELECT：DISTINCT/LIMIT/OFFSET/ORDER BY", "order": 3 },
+            { "name": "db-1-1-4-where", "label": "WHERE：AND/OR/IN/BETWEEN/LIKE/NULL 陷阱", "order": 4 }
+          ]
+        },
+        {
+          "name": "db-1-2-join", "label": "JOIN 深入", "order": 2,
+          "children": [
+            { "name": "db-1-2-1-inner", "label": "INNER JOIN 与 JOIN 条件优化", "order": 1 },
+            { "name": "db-1-2-2-outer", "label": "LEFT/RIGHT/FULL OUTER JOIN", "order": 2 },
+            { "name": "db-1-2-3-cross", "label": "CROSS JOIN 与生成序列", "order": 3 },
+            { "name": "db-1-2-4-self", "label": "SELF JOIN 与层级查询", "order": 4 },
+            { "name": "db-1-2-5-anti", "label": "半连接/反连接：EXISTS/NOT EXISTS", "order": 5 }
+          ]
+        },
+        {
+          "name": "db-1-3-agg", "label": "聚合与分组", "order": 3,
+          "children": [
+            { "name": "db-1-3-1-group", "label": "GROUP BY 与聚合函数", "order": 1 },
+            { "name": "db-1-3-2-having", "label": "HAVING vs WHERE 执行顺序", "order": 2 },
+            { "name": "db-1-3-3-rollup", "label": "ROLLUP/CUBE/GROUPING SETS", "order": 3 },
+            { "name": "db-1-3-4-filter", "label": "FILTER 子句与条件聚合", "order": 4 }
+          ]
+        },
+        {
+          "name": "db-1-4-window", "label": "窗口函数", "order": 4,
+          "children": [
+            { "name": "db-1-4-1-rank", "label": "ROW_NUMBER/RANK/DENSE_RANK/NTILE", "order": 1 },
+            { "name": "db-1-4-2-lag", "label": "LAG/LEAD/FIRST_VALUE/LAST_VALUE", "order": 2 },
+            { "name": "db-1-4-3-cumulative", "label": "累计窗口：SUM/AVG OVER (ORDER BY)", "order": 3 },
+            { "name": "db-1-4-4-partition", "label": "PARTITION BY 与窗口帧 (ROWS/RANGE)", "order": 4 }
+          ]
+        },
+        {
+          "name": "db-1-5-cte", "label": "CTE 与递归查询", "order": 5,
+          "children": [
+            { "name": "db-1-5-1-basic-cte", "label": "CTE 基础：WITH 子句与可读性", "order": 1 },
+            { "name": "db-1-5-2-recursive", "label": "递归 CTE：树形/图遍历", "order": 2 },
+            { "name": "db-1-5-3-cte-vs-sub", "label": "CTE vs 子查询 vs 临时表选择", "order": 3 }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "db-module-2-internals",
+      "label": "数据库内核",
+      "icon": "⚙️",
+      "order": 20,
+      "children": [
+        {
+          "name": "db-2-1-storage", "label": "存储引擎", "order": 1,
+          "children": [
+            { "name": "db-2-1-1-page", "label": "数据页结构：Page/Extent/Segment", "order": 1 },
+            { "name": "db-2-1-2-btree", "label": "B+ 树深度解析：分裂/合并/填充因子", "order": 2 },
+            { "name": "db-2-1-3-lsm", "label": "LSM-Tree：MemTable/SSTable/Compaction 策略", "order": 3 },
+            { "name": "db-2-1-4-row-col", "label": "行存 vs 列存 vs 混合存储", "order": 4 },
+            { "name": "db-2-1-5-compress", "label": "数据压缩：字典/前缀/增量编码", "order": 5 }
+          ]
+        },
+        {
+          "name": "db-2-2-index", "label": "索引原理", "order": 2,
+          "children": [
+            { "name": "db-2-2-1-clustered", "label": "聚簇索引 vs 二级索引", "order": 1 },
+            { "name": "db-2-2-2-covering", "label": "覆盖索引与索引下推(ICP)", "order": 2 },
+            { "name": "db-2-2-3-prefix", "label": "联合索引与最左前缀原则", "order": 3 },
+            { "name": "db-2-2-4-hash", "label": "哈希索引与自适应哈希(AHI)", "order": 4 },
+            { "name": "db-2-2-5-fulltext", "label": "全文索引：倒排索引与 n-gram", "order": 5 },
+            { "name": "db-2-2-6-gist-gin", "label": "GiST/GIN/SP-GiST/BRIN(PostgreSQL)", "order": 6 },
+            { "name": "db-2-2-7-partial", "label": "部分索引/表达式索引/函数索引", "order": 7 }
+          ]
+        },
+        {
+          "name": "db-2-3-optimizer", "label": "查询优化器", "order": 3,
+          "children": [
+            { "name": "db-2-3-1-explain", "label": "EXPLAIN 输出解读：类型/行数/代价", "order": 1 },
+            { "name": "db-2-3-2-scan", "label": "扫描方式：Seq Scan/Index Scan/Bitmap Scan", "order": 2 },
+            { "name": "db-2-3-3-join-algo", "label": "JOIN 算法：Nested Loop/Hash/Merge Join", "order": 3 },
+            { "name": "db-2-3-4-stats", "label": "统计信息：pg_statistic/直方图/NDV", "order": 4 },
+            { "name": "db-2-3-5-hint", "label": "Hint 与执行计划固定", "order": 5 }
+          ]
+        },
+        {
+          "name": "db-2-4-query-tuning", "label": "SQL 调优实战", "order": 4,
+          "children": [
+            { "name": "db-2-4-1-slow-query", "label": "慢查询定位：slow_log/pg_stat_statements", "order": 1 },
+            { "name": "db-2-4-2-index-opt", "label": "索引优化案例：多列索引顺序/冗余索引", "order": 2 },
+            { "name": "db-2-4-3-rewrite", "label": "SQL 重写：子查询→JOIN/UNION→UNION ALL", "order": 3 },
+            { "name": "db-2-4-4-pagination", "label": "深分页优化：游标/延迟关联/ES", "order": 4 },
+            { "name": "db-2-4-5-count", "label": "大表 COUNT 加速：估算/物化视图/Redis 计数", "order": 5 }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "db-module-3-transactions",
+      "label": "事务与并发控制",
+      "icon": "🔒",
+      "order": 30,
+      "children": [
+        {
+          "name": "db-3-1-acid", "label": "ACID 深入", "order": 1,
+          "children": [
+            { "name": "db-3-1-1-atomicity", "label": "原子性：undo log/WAL/rollback 实现", "order": 1 },
+            { "name": "db-3-1-2-consistency", "label": "一致性：约束/触发器/外键检查", "order": 2 },
+            { "name": "db-3-1-3-isolation", "label": "隔离性：快照隔离/可串行化实现", "order": 3 },
+            { "name": "db-3-1-4-durability", "label": "持久性：WAL/checkpoint/fsync 策略", "order": 4 }
+          ]
+        },
+        {
+          "name": "db-3-2-mvcc", "label": "MVCC 深度解析", "order": 2,
+          "children": [
+            { "name": "db-3-2-1-version-chain", "label": "版本链：xmin/xmax/ctid/tuple header", "order": 1 },
+            { "name": "db-3-2-2-snapshot", "label": "快照读 vs 当前读", "order": 2 },
+            { "name": "db-3-2-3-vacuum", "label": "VACUUM/AUTOVACUUM 与膨胀治理", "order": 3 },
+            { "name": "db-3-2-4-freeze", "label": "事务 ID 回卷与 FREEZE 机制", "order": 4 }
+          ]
+        },
+        {
+          "name": "db-3-3-locks", "label": "锁机制", "order": 3,
+          "children": [
+            { "name": "db-3-3-1-row-lock", "label": "行锁：Record/Gap/Next-Key Lock", "order": 1 },
+            { "name": "db-3-3-2-table-lock", "label": "表锁：MDL 元数据锁/意向锁(IS/IX)", "order": 2 },
+            { "name": "db-3-3-3-deadlock", "label": "死锁分析：等待图/检测算法/解决策略", "order": 3 },
+            { "name": "db-3-3-4-opt-pessi", "label": "乐观锁(CAS)vs 悲观锁(SELECT FOR UPDATE)", "order": 4 }
+          ]
+        },
+        {
+          "name": "db-3-4-isolation", "label": "隔离级别实战", "order": 4,
+          "children": [
+            { "name": "db-3-4-1-ru", "label": "读未提交：脏读与禁止场景", "order": 1 },
+            { "name": "db-3-4-2-rc", "label": "读已提交：不可重复读与业务影响", "order": 2 },
+            { "name": "db-3-4-3-rr", "label": "可重复读：幻读与 MySQL RR 的 Gap Lock", "order": 3 },
+            { "name": "db-3-4-4-serial", "label": "可串行化：SSI(PG) vs 2PL(MySQL)", "order": 4 }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "db-module-4-mysql",
+      "label": "MySQL 实战",
+      "icon": "🐬",
+      "order": 40,
+      "children": [
+        {
+          "name": "db-4-1-arch", "label": "MySQL 架构", "order": 1,
+          "children": [
+            { "name": "db-4-1-1-arch", "label": "连接器/分析器/优化器/执行器", "order": 1 },
+            { "name": "db-4-1-2-innodb", "label": "InnoDB：缓冲池/change buffer/redo log", "order": 2 },
+            { "name": "db-4-1-3-myisam", "label": "MyISAM vs InnoDB 选型", "order": 3 },
+            { "name": "db-4-1-4-thread", "label": "MySQL 线程模型与连接管理", "order": 4 }
+          ]
+        },
+        {
+          "name": "db-4-2-config", "label": "配置与运维", "order": 2,
+          "children": [
+            { "name": "db-4-2-1-my-cnf", "label": "关键参数调优：buffer_pool/innodb_log/query_cache", "order": 1 },
+            { "name": "db-4-2-2-backup", "label": "备份：mysqldump/XtraBackup/快照", "order": 2 },
+            { "name": "db-4-2-3-recovery", "label": "恢复：PITR 基于时间点恢复", "order": 3 },
+            { "name": "db-4-2-4-monitor", "label": "监控：QPS/TPS/连接数/复制延迟", "order": 4 }
+          ]
+        },
+        {
+          "name": "db-4-3-replication", "label": "主从复制与高可用", "order": 3,
+          "children": [
+            { "name": "db-4-3-1-binlog", "label": "binlog 格式：ROW/STATEMENT/MIXED", "order": 1 },
+            { "name": "db-4-3-2-master-slave", "label": "异步/半同步复制原理", "order": 2 },
+            { "name": "db-4-3-3-gtid", "label": "GTID 复制与故障切换", "order": 3 },
+            { "name": "db-4-3-4-mgr", "label": "MGR 组复制 vs Orchestrator vs MHA", "order": 4 }
+          ]
+        },
+        {
+          "name": "db-4-4-optimization", "label": "MySQL 优化实战", "order": 4,
+          "children": [
+            { "name": "db-4-4-1-schema", "label": "Schema 优化：数据类型选择/范式vs反范式", "order": 1 },
+            { "name": "db-4-4-2-query", "label": "查询优化：索引设计/分页/大表 JOIN", "order": 2 },
+            { "name": "db-4-4-3-locking", "label": "锁优化：减少锁范围/避免死锁", "order": 3 },
+            { "name": "db-4-4-4-partition", "label": "分区表：RANGE/LIST/HASH/KEY 分区", "order": 4 }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "db-module-5-postgresql",
+      "label": "PostgreSQL 实战",
+      "icon": "🐘",
+      "order": 50,
+      "children": [
+        {
+          "name": "db-5-1-arch", "label": "PG 架构", "order": 1,
+          "children": [
+            { "name": "db-5-1-1-process", "label": "进程模型 vs 线程模型", "order": 1 },
+            { "name": "db-5-1-2-wal", "label": "WAL：LSN/checkpoint/WAL 级别调优", "order": 2 },
+            { "name": "db-5-1-3-extensions", "label": "扩展生态：pg_stat_statements/postgis/pgvector", "order": 3 }
+          ]
+        },
+        {
+          "name": "db-5-2-advanced", "label": "PG 高级特性", "order": 2,
+          "children": [
+            { "name": "db-5-2-1-json", "label": "JSON/JSONB 与 GIN 索引", "order": 1 },
+            { "name": "db-5-2-2-array", "label": "数组类型与 GIN/GiST 索引", "order": 2 },
+            { "name": "db-5-2-3-fulltext", "label": "全文搜索：tsvector/tsquery/排名", "order": 3 },
+            { "name": "db-5-2-4-partition", "label": "表分区：声明式分区/继承分区", "order": 4 },
+            { "name": "db-5-2-5-fdw", "label": "FDW 外部数据包装器", "order": 5 }
+          ]
+        },
+        {
+          "name": "db-5-3-ha", "label": "PG 高可用", "order": 3,
+          "children": [
+            { "name": "db-5-3-1-streaming", "label": "流复制：WAL sender/receiver", "order": 1 },
+            { "name": "db-5-3-2-logical", "label": "逻辑复制与逻辑解码", "order": 2 },
+            { "name": "db-5-3-3-patroni", "label": "Patroni/etcd 自动故障切换", "order": 3 },
+            { "name": "db-5-3-4-citus", "label": "Citus 分布式扩展", "order": 4 }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "db-module-6-redis",
+      "label": "Redis 深入",
+      "icon": "🔴",
+      "order": 60,
+      "children": [
+        {
+          "name": "db-6-1-data-structures", "label": "数据结构实现", "order": 1,
+          "children": [
+            { "name": "db-6-1-1-sds", "label": "SDS 动态字符串与 embstr/raw 编码", "order": 1 },
+            { "name": "db-6-1-2-ziplist", "label": "ziplist/listpack/quicklist 演进", "order": 2 },
+            { "name": "db-6-1-3-dict", "label": "dict 哈希表与渐进式 rehash", "order": 3 },
+            { "name": "db-6-1-4-skiplist", "label": "zskiplist 跳表实现(ZSet 核心)", "order": 4 },
+            { "name": "db-6-1-5-intset", "label": "intset 整数集合优化", "order": 5 }
+          ]
+        },
+        {
+          "name": "db-6-2-core-mechanisms", "label": "核心机制", "order": 2,
+          "children": [
+            { "name": "db-6-2-1-io-model", "label": "单线程 IO 多路复用：epoll/事件循环", "order": 1 },
+            { "name": "db-6-2-2-persistence", "label": "RDB vs AOF vs 混合持久化对比", "order": 2 },
+            { "name": "db-6-2-3-expire", "label": "过期策略：惰性删除+定期删除+LRU/LFU", "order": 3 },
+            { "name": "db-6-2-4-pubsub", "label": "Pub/Sub/Stream 消息队列模式", "order": 4 }
+          ]
+        },
+        {
+          "name": "db-6-3-cluster", "label": "集群与高可用", "order": 3,
+          "children": [
+            { "name": "db-6-3-1-sentinel", "label": "Sentinel 哨兵：故障检测/自动切换/SDOWN", "order": 1 },
+            { "name": "db-6-3-2-cluster", "label": "Cluster 集群：hash slot/重定向(moved/ask)", "order": 2 },
+            { "name": "db-6-3-3-scale", "label": "水平扩展：predixy/twemproxy 代理方案", "order": 3 }
+          ]
+        },
+        {
+          "name": "db-6-4-cache-patterns", "label": "缓存模式实战", "order": 4,
+          "children": [
+            { "name": "db-6-4-1-cache-aside", "label": "Cache Aside：读穿/写穿/写回", "order": 1 },
+            { "name": "db-6-4-2-consistency", "label": "缓存一致性：延迟双删/Canal 订阅 binlog", "order": 2 },
+            { "name": "db-6-4-3-hotspot", "label": "热点 Key 发现与多级缓存(mem+redis)", "order": 3 },
+            { "name": "db-6-4-4-bigkey", "label": "Big Key 检测与拆分策略", "order": 4 },
+            { "name": "db-6-4-5-bloom", "label": "布隆过滤器防缓存穿透", "order": 5 }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "db-module-7-mongodb",
+      "label": "MongoDB 实战",
+      "icon": "🍃",
+      "order": 70,
+      "children": [
+        {
+          "name": "db-7-1-basics", "label": "核心概念", "order": 1,
+          "children": [
+            { "name": "db-7-1-1-document", "label": "文档模型 vs 关系模型", "order": 1 },
+            { "name": "db-7-1-2-bson", "label": "BSON 类型与 ObjectId 结构", "order": 2 },
+            { "name": "db-7-1-3-crud", "label": "CRUD：find/insert/update/delete", "order": 3 }
+          ]
+        },
+        {
+          "name": "db-7-2-query", "label": "查询与聚合", "order": 2,
+          "children": [
+            { "name": "db-7-2-1-query-ops", "label": "查询操作符：$eq/$gt/$in/$regex/$exists", "order": 1 },
+            { "name": "db-7-2-2-pipeline", "label": "聚合管道：$match/$group/$project/$lookup", "order": 2 },
+            { "name": "db-7-2-3-unwind", "label": "$unwind/$bucket/$facet 高级聚合", "order": 3 },
+            { "name": "db-7-2-4-index-mongo", "label": "MongoDB 索引：单字段/复合/文本/地理空间", "order": 4 }
+          ]
+        },
+        {
+          "name": "db-7-3-replica", "label": "副本集与分片", "order": 3,
+          "children": [
+            { "name": "db-7-3-1-replica-set", "label": "副本集：选举/oplog/读写关注(writeConcern)", "order": 1 },
+            { "name": "db-7-3-2-sharding", "label": "分片：shard key 选择/chunk 分裂/balancer", "order": 2 },
+            { "name": "db-7-3-3-transactions", "label": "多文档事务与分布式事务限制", "order": 3 }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "db-module-8-newsql",
+      "label": "分布式数据库与 NewSQL",
+      "icon": "🌍",
+      "order": 80,
+      "children": [
+        {
+          "name": "db-8-1-tidb", "label": "TiDB 分布式数据库", "order": 1,
+          "children": [
+            { "name": "db-8-1-1-arch", "label": "TiDB 架构：TiDB/TiKV/PD 三层", "order": 1 },
+            { "name": "db-8-1-2-raft", "label": "TiKV 中的 Raft 共识与 Region 分裂", "order": 2 },
+            { "name": "db-8-1-3-sql-layer", "label": "SQL 层：优化器/协处理器/MPP 引擎", "order": 3 }
+          ]
+        },
+        {
+          "name": "db-8-2-cockroachdb", "label": "CockroachDB", "order": 2,
+          "children": [
+            { "name": "db-8-2-1-arch", "label": "CRDB 架构：Range/Leaseholder/Follower Read", "order": 1 },
+            { "name": "db-8-2-2-serializable", "label": "可串行化隔离与时钟同步(HLC)", "order": 2 }
+          ]
+        },
+        {
+          "name": "db-8-3-vitess", "label": "Vitess/ShardingSphere", "order": 3,
+          "children": [
+            { "name": "db-8-3-1-vitess", "label": "Vitess：VTgate/Vttablet/分片路由", "order": 1 },
+            { "name": "db-8-3-2-shardingsphere", "label": "ShardingSphere：分库分表/读写分离/数据加密", "order": 2 }
+          ]
+        },
+        {
+          "name": "db-8-4-clickhouse", "label": "OLAP 引擎", "order": 4,
+          "children": [
+            { "name": "db-8-4-1-arch", "label": "ClickHouse：MergeTree 引擎与向量化执行", "order": 1 },
+            { "name": "db-8-4-2-datalake", "label": "数据湖：Iceberg/Hudi/Delta Lake 概念", "order": 2 }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "db-module-9-data-engineering",
+      "label": "数据工程与治理",
+      "icon": "📐",
+      "order": 90,
+      "children": [
+        {
+          "name": "db-9-1-modeling", "label": "数据建模", "order": 1,
+          "children": [
+            { "name": "db-9-1-1-er", "label": "ER 建模：实体识别/关系类型/继承策略", "order": 1 },
+            { "name": "db-9-1-2-dimensional", "label": "维度建模：星型/雪花/星座模型", "order": 2 },
+            { "name": "db-9-1-3-scd", "label": "缓慢变化维(SCD)处理策略", "order": 3 },
+            { "name": "db-9-1-4-nosql-design", "label": "文档/图/时序数据库建模方法", "order": 4 }
+          ]
+        },
+        {
+          "name": "db-9-2-migration", "label": "数据库迁移与版本控制", "order": 2,
+          "children": [
+            { "name": "db-9-2-1-golang-migrate", "label": "golang-migrate/flyway 迁移工具", "order": 1 },
+            { "name": "db-9-2-2-zero-downtime", "label": "零停机迁移：在线 DDL/gh-ost/pt-osc", "order": 2 },
+            { "name": "db-9-2-3-rollback", "label": "回滚策略与向后兼容设计", "order": 3 }
+          ]
+        },
+        {
+          "name": "db-9-3-security", "label": "数据库安全", "order": 3,
+          "children": [
+            { "name": "db-9-3-1-sql-injection", "label": "SQL 注入防御：参数化查询/ORM/输入校验", "order": 1 },
+            { "name": "db-9-3-2-auth", "label": "认证与授权：RBAC/RLS 行级安全", "order": 2 },
+            { "name": "db-9-3-3-encrypt", "label": "数据加密：传输加密(TLS)/静态加密(TDE)", "order": 3 },
+            { "name": "db-9-3-4-audit", "label": "审计日志与合规(pgaudit/MySQL Enterprise Audit)", "order": 4 }
+          ]
+        },
+        {
+          "name": "db-9-4-benchmark", "label": "压测与容量规划", "order": 4,
+          "children": [
+            { "name": "db-9-4-1-sysbench", "label": "sysbench/pgbench 基准测试", "order": 1 },
+            { "name": "db-9-4-2-capacity", "label": "容量估算：QPS/存储/连接数规划", "order": 2 },
+            { "name": "db-9-4-3-stress", "label": "全链路压测与数据库瓶颈定位", "order": 3 }
+          ]
+        }
+      ]
+    }
+  ]
+}

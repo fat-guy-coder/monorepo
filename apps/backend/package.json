@@ -11,7 +11,9 @@
     "db:push": "drizzle-kit push",
     "db:seed:go-menus": "bun run scripts/seedGoRoadmapMenus.ts",
     "db:seed": "bun run scripts/seed-menus.ts",
-    "db:seed:go": "bun run scripts/seed-menus.ts --config config/menus-go-roadmap.json"
+    "db:seed:go": "bun run scripts/seed-menus.ts --config config/menus-go-roadmap.json",
+    "db:seed:cs": "bun run scripts/seed-menus.ts --config config/menus-cs-roadmap.json",
+    "db:seed:db": "bun run scripts/seed-menus.ts --config config/menus-database-roadmap.json"
   },
   "dependencies": {
     "drizzle-orm": "^0.36.0",

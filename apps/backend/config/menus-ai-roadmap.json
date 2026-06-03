@@ -1,0 +1,376 @@
+{
+  "project": "learning",
+  "parentId": "bfe187f4-07ee-49c8-8d2d-5b0e0b8ad9e4",
+  "items": [
+    { "name": "ai-learning-path", "label": "AI 学习路线图", "icon": "🗺️", "order": 1, "isLeaf": true },
+    {
+      "name": "ai-module-1-overview",
+      "label": "AI 概览与数学基础",
+      "icon": "🧮",
+      "order": 10,
+      "children": [
+        { "name": "ai-1-1-intro", "label": "AI 全景概述", "order": 1,
+          "children": [
+            { "name": "ai-1-1-1-what-is-ai", "label": "什么是 AI：机器学习/深度学习/AGI", "order": 1 },
+            { "name": "ai-1-1-2-history", "label": "AI 简史：三次浪潮与关键突破", "order": 2 },
+            { "name": "ai-1-1-3-taxonomy", "label": "AI 分类：监督/无监督/强化/生成", "order": 3 },
+            { "name": "ai-1-1-4-stack", "label": "AI 技术栈概览：Python/PyTorch/LangChain", "order": 4 }
+          ]
+        },
+        { "name": "ai-1-2-linear-algebra", "label": "线性代数", "order": 2,
+          "children": [
+            { "name": "ai-1-2-1-vector", "label": "向量与向量空间：点积/范数/余弦相似度", "order": 1 },
+            { "name": "ai-1-2-2-matrix", "label": "矩阵运算：乘法/转置/逆/迹/行列式", "order": 2 },
+            { "name": "ai-1-2-3-eigen", "label": "特征值与特征向量：PCA 的数学基础", "order": 3 },
+            { "name": "ai-1-2-4-svd", "label": "SVD 奇异值分解与矩阵近似", "order": 4 }
+          ]
+        },
+        { "name": "ai-1-3-probability", "label": "概率与统计", "order": 3,
+          "children": [
+            { "name": "ai-1-3-1-basic", "label": "概率基础：条件概率/贝叶斯定理/独立", "order": 1 },
+            { "name": "ai-1-3-2-distribution", "label": "常见分布：高斯/伯努利/多项/指数", "order": 2 },
+            { "name": "ai-1-3-3-mle-map", "label": "最大似然估计(MLE)与最大后验(MAP)", "order": 3 },
+            { "name": "ai-1-3-4-info-theory", "label": "信息论：熵/交叉熵/KL散度/互信息", "order": 4 }
+          ]
+        },
+        { "name": "ai-1-4-calculus", "label": "微积分与优化", "order": 4,
+          "children": [
+            { "name": "ai-1-4-1-derivative", "label": "导数与偏导数：梯度/方向导数", "order": 1 },
+            { "name": "ai-1-4-2-chain-rule", "label": "链式法则与反向传播的数学", "order": 2 },
+            { "name": "ai-1-4-3-gradient-descent", "label": "梯度下降：BGD/SGD/Mini-batch", "order": 3 },
+            { "name": "ai-1-4-4-optimizers", "label": "优化器：Momentum/AdaGrad/RMSprop/Adam", "order": 4 }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ai-module-2-ml-basics",
+      "label": "机器学习基础",
+      "icon": "🤖",
+      "order": 20,
+      "children": [
+        { "name": "ai-2-1-concepts", "label": "核心概念", "order": 1,
+          "children": [
+            { "name": "ai-2-1-1-data", "label": "数据集：训练/验证/测试、特征与标签", "order": 1 },
+            { "name": "ai-2-1-2-overfit", "label": "过拟合与欠拟合：偏差-方差权衡", "order": 2 },
+            { "name": "ai-2-1-3-regularization", "label": "正则化：L1/L2/ElasticNet/Dropout", "order": 3 },
+            { "name": "ai-2-1-4-metrics", "label": "评估指标：准确率/精确率/召回率/F1/AUC/ROC", "order": 4 }
+          ]
+        },
+        { "name": "ai-2-2-feature", "label": "特征工程", "order": 2,
+          "children": [
+            { "name": "ai-2-2-1-preprocessing", "label": "数据预处理：标准化/归一化/缺失值/编码", "order": 1 },
+            { "name": "ai-2-2-2-selection", "label": "特征选择：过滤法/包装法/嵌入法", "order": 2 },
+            { "name": "ai-2-2-3-extraction", "label": "特征提取：PCA/LDA/t-SNE 降维", "order": 3 }
+          ]
+        },
+        { "name": "ai-2-3-cross-validation", "label": "模型验证", "order": 3,
+          "children": [
+            { "name": "ai-2-3-1-kfold", "label": "K-Fold/Stratified K-Fold 交叉验证", "order": 1 },
+            { "name": "ai-2-3-2-hyperparam", "label": "超参数调优：Grid/Random/Bayesian Search", "order": 2 },
+            { "name": "ai-2-3-3-ensemble-intro", "label": "集成学习思想：Bagging/Boosting/Stacking", "order": 3 }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ai-module-3-classic-ml",
+      "label": "经典机器学习算法",
+      "icon": "📈",
+      "order": 30,
+      "children": [
+        { "name": "ai-3-1-linear", "label": "线性模型", "order": 1,
+          "children": [
+            { "name": "ai-3-1-1-linear-reg", "label": "线性回归：最小二乘法/梯度下降/正则化", "order": 1 },
+            { "name": "ai-3-1-2-logistic", "label": "逻辑回归：sigmoid/交叉熵损失/决策边界", "order": 2 },
+            { "name": "ai-3-1-3-softmax", "label": "Softmax 回归与多分类", "order": 3 }
+          ]
+        },
+        { "name": "ai-3-2-tree", "label": "树模型", "order": 2,
+          "children": [
+            { "name": "ai-3-2-1-decision-tree", "label": "决策树：ID3/C4.5/CART/剪枝", "order": 1 },
+            { "name": "ai-3-2-2-random-forest", "label": "随机森林：Bagging+随机特征选择", "order": 2 },
+            { "name": "ai-3-2-3-gbdt", "label": "GBDT：梯度提升/残差拟合/学习率", "order": 3 },
+            { "name": "ai-3-2-4-xgboost", "label": "XGBoost：二阶泰勒/正则化/分裂增益", "order": 4 },
+            { "name": "ai-3-2-5-lightgbm", "label": "LightGBM：GOSS/EFB/Leaf-wise生长", "order": 5 },
+            { "name": "ai-3-2-6-catboost", "label": "CatBoost：有序提升/类别特征处理", "order": 6 }
+          ]
+        },
+        { "name": "ai-3-3-svm", "label": "支持向量机", "order": 3,
+          "children": [
+            { "name": "ai-3-3-1-hard-margin", "label": "硬间隔 SVM：最大间隔分类器", "order": 1 },
+            { "name": "ai-3-3-2-soft-margin", "label": "软间隔与松弛变量", "order": 2 },
+            { "name": "ai-3-3-3-kernel", "label": "核技巧：RBF/多项式/高斯核", "order": 3 },
+            { "name": "ai-3-3-4-smo", "label": "SMO 序列最小优化算法", "order": 4 }
+          ]
+        },
+        { "name": "ai-3-4-bayesian", "label": "贝叶斯方法", "order": 4,
+          "children": [
+            { "name": "ai-3-4-1-naive-bayes", "label": "朴素贝叶斯：高斯/多项/伯努利变体", "order": 1 },
+            { "name": "ai-3-4-2-bayesian-net", "label": "贝叶斯网络：有向图/条件独立/d-分离", "order": 2 },
+            { "name": "ai-3-4-3-gaussian-process", "label": "高斯过程：核函数/不确定性量化", "order": 3 }
+          ]
+        },
+        { "name": "ai-3-5-clustering", "label": "聚类与降维", "order": 5,
+          "children": [
+            { "name": "ai-3-5-1-kmeans", "label": "K-Means：Lloyd算法/肘部法则/K-Means++", "order": 1 },
+            { "name": "ai-3-5-2-dbscan", "label": "DBSCAN：密度聚类/核心点/噪声", "order": 2 },
+            { "name": "ai-3-5-3-hierarchical", "label": "层次聚类：凝聚/分裂/树状图", "order": 3 },
+            { "name": "ai-3-5-4-gmm", "label": "高斯混合模型(GMM)与EM算法", "order": 4 }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ai-module-4-deep-learning",
+      "label": "深度学习",
+      "icon": "🧠",
+      "order": 40,
+      "children": [
+        { "name": "ai-4-1-neural-basics", "label": "神经网络基础", "order": 1,
+          "children": [
+            { "name": "ai-4-1-1-perceptron", "label": "感知机与多层感知机(MLP)", "order": 1 },
+            { "name": "ai-4-1-2-activation", "label": "激活函数：ReLU/GELU/Swish/Sigmoid/Tanh", "order": 2 },
+            { "name": "ai-4-1-3-backprop", "label": "反向传播：链式法则/计算图/自动微分", "order": 3 },
+            { "name": "ai-4-1-4-initialization", "label": "权重初始化：Xavier/He/正交初始化", "order": 4 }
+          ]
+        },
+        { "name": "ai-4-2-training", "label": "训练技巧", "order": 2,
+          "children": [
+            { "name": "ai-4-2-1-batchnorm", "label": "Batch/Layer/Group/Instance Normalization", "order": 1 },
+            { "name": "ai-4-2-2-dropout", "label": "Dropout 与 DropConnect", "order": 2 },
+            { "name": "ai-4-2-3-lr-schedule", "label": "学习率调度：Step/Cosine/Warmup/Cyclic", "order": 3 },
+            { "name": "ai-4-2-4-gradient-clip", "label": "梯度裁剪与混合精度训练(AMP)", "order": 4 }
+          ]
+        },
+        { "name": "ai-4-3-cnn", "label": "卷积神经网络", "order": 3,
+          "children": [
+            { "name": "ai-4-3-1-conv", "label": "卷积层：kernel/stride/padding/感受野", "order": 1 },
+            { "name": "ai-4-3-2-pooling", "label": "池化层：Max/Average/Global/Adaptive", "order": 2 },
+            { "name": "ai-4-3-3-classic-cnn", "label": "经典架构：LeNet/AlexNet/VGG/Inception", "order": 3 },
+            { "name": "ai-4-3-4-resnet", "label": "ResNet 残差网络与跳跃连接", "order": 4 }
+          ]
+        },
+        { "name": "ai-4-4-rnn", "label": "循环神经网络", "order": 4,
+          "children": [
+            { "name": "ai-4-4-1-vanilla-rnn", "label": "RNN：隐藏状态/时间步/梯度消失", "order": 1 },
+            { "name": "ai-4-4-2-lstm", "label": "LSTM：遗忘门/输入门/输出门/细胞状态", "order": 2 },
+            { "name": "ai-4-4-3-gru", "label": "GRU：更新门/重置门", "order": 3 },
+            { "name": "ai-4-4-4-seq2seq", "label": "Seq2Seq：Encoder-Decoder/Teacher Forcing", "order": 4 }
+          ]
+        },
+        { "name": "ai-4-5-regularization", "label": "正则化与泛化", "order": 5,
+          "children": [
+            { "name": "ai-4-5-1-data-augment", "label": "数据增强：图像/文本/音频增强策略", "order": 1 },
+            { "name": "ai-4-5-2-early-stopping", "label": "早停法与模型检查点", "order": 2 },
+            { "name": "ai-4-5-3-label-smoothing", "label": "标签平滑与 Mixup/CutMix", "order": 3 }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ai-module-5-cv",
+      "label": "计算机视觉 (CV)",
+      "icon": "👁️",
+      "order": 50,
+      "children": [
+        { "name": "ai-5-1-image-basics", "label": "图像处理基础", "order": 1,
+          "children": [
+            { "name": "ai-5-1-1-color-space", "label": "色彩空间：RGB/HSV/Lab", "order": 1 },
+            { "name": "ai-5-1-2-filter", "label": "滤波：高斯/中值/Sobel/Canny边缘检测", "order": 2 },
+            { "name": "ai-5-1-3-morphology", "label": "形态学操作：腐蚀/膨胀/开闭运算", "order": 3 }
+          ]
+        },
+        { "name": "ai-5-2-detection", "label": "目标检测", "order": 2,
+          "children": [
+            { "name": "ai-5-2-1-rcnn", "label": "R-CNN 家族：Fast/Faster/Mask R-CNN", "order": 1 },
+            { "name": "ai-5-2-2-yolo", "label": "YOLO 系列：v1→v8 演进", "order": 2 },
+            { "name": "ai-5-2-3-anchor-free", "label": "Anchor-Free：CenterNet/FCOS/CornerNet", "order": 3 }
+          ]
+        },
+        { "name": "ai-5-3-segmentation", "label": "图像分割", "order": 3,
+          "children": [
+            { "name": "ai-5-3-1-semantic", "label": "语义分割：FCN/U-Net/DeepLab", "order": 1 },
+            { "name": "ai-5-3-2-instance", "label": "实例分割：Mask R-CNN/SOLO/YOLACT", "order": 2 },
+            { "name": "ai-5-3-3-panoptic", "label": "全景分割：语义+实例统一", "order": 3 }
+          ]
+        },
+        { "name": "ai-5-4-generation", "label": "图像生成", "order": 4,
+          "children": [
+            { "name": "ai-5-4-1-gan", "label": "GAN：生成器/判别器/对抗训练", "order": 1 },
+            { "name": "ai-5-4-2-dcgan-stylegan", "label": "DCGAN/StyleGAN/CycleGAN", "order": 2 },
+            { "name": "ai-5-4-3-nerf", "label": "NeRF 神经辐射场与 3D 重建", "order": 3 }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ai-module-6-nlp",
+      "label": "自然语言处理 (NLP)",
+      "icon": "💬",
+      "order": 60,
+      "children": [
+        { "name": "ai-6-1-text-basics", "label": "文本处理基础", "order": 1,
+          "children": [
+            { "name": "ai-6-1-1-tokenization", "label": "分词：BPE/WordPiece/SentencePiece", "order": 1 },
+            { "name": "ai-6-1-2-embedding-intro", "label": "词嵌入：Word2Vec/GloVe/FastText", "order": 2 },
+            { "name": "ai-6-1-3-tfidf", "label": "TF-IDF 与 BM25 检索模型", "order": 3 }
+          ]
+        },
+        { "name": "ai-6-2-transformer", "label": "Transformer 架构", "order": 2,
+          "children": [
+            { "name": "ai-6-2-1-self-attention", "label": "Self-Attention：Q/K/V 与缩放点积", "order": 1 },
+            { "name": "ai-6-2-2-multi-head", "label": "多头注意力与位置编码", "order": 2 },
+            { "name": "ai-6-2-3-encoder-decoder", "label": "Encoder-Decoder 与 Cross-Attention", "order": 3 }
+          ]
+        },
+        { "name": "ai-6-3-pretrained", "label": "预训练语言模型", "order": 3,
+          "children": [
+            { "name": "ai-6-3-1-bert", "label": "BERT：MLM/NSP/微调范式", "order": 1 },
+            { "name": "ai-6-3-2-gpt-series", "label": "GPT 系列：GPT-1→2→3→4 技术演进", "order": 2 },
+            { "name": "ai-6-3-3-t5-bart", "label": "T5/BART：统一的 Seq2Seq 预训练", "order": 3 }
+          ]
+        },
+        { "name": "ai-6-4-tasks", "label": "NLP 任务", "order": 4,
+          "children": [
+            { "name": "ai-6-4-1-classification", "label": "文本分类与情感分析", "order": 1 },
+            { "name": "ai-6-4-2-ner", "label": "命名实体识别(NER)与关系抽取", "order": 2 },
+            { "name": "ai-6-4-3-qa", "label": "问答系统(QA)与阅读理解(MRC)", "order": 3 },
+            { "name": "ai-6-4-4-summarization", "label": "文本摘要：抽取式 vs 生成式", "order": 4 }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ai-module-7-rl",
+      "label": "强化学习 (RL)",
+      "icon": "🎮",
+      "order": 70,
+      "children": [
+        { "name": "ai-7-1-mdp", "label": "马尔可夫决策过程", "order": 1,
+          "children": [
+            { "name": "ai-7-1-1-mdp", "label": "MDP：状态/动作/奖励/转移概率", "order": 1 },
+            { "name": "ai-7-1-2-bellman", "label": "Bellman 方程：价值函数与最优策略", "order": 2 }
+          ]
+        },
+        { "name": "ai-7-2-model-free", "label": "无模型方法", "order": 2,
+          "children": [
+            { "name": "ai-7-2-1-monte-carlo", "label": "蒙特卡洛方法：首次/每次访问 MC", "order": 1 },
+            { "name": "ai-7-2-2-td", "label": "时序差分(TD)：SARSA/Q-Learning", "order": 2 },
+            { "name": "ai-7-2-3-dqn", "label": "DQN：经验回放/目标网络/Double DQN/Dueling", "order": 3 }
+          ]
+        },
+        { "name": "ai-7-3-policy", "label": "策略梯度", "order": 3,
+          "children": [
+            { "name": "ai-7-3-1-reinforce", "label": "REINFORCE：蒙特卡洛策略梯度", "order": 1 },
+            { "name": "ai-7-3-2-actor-critic", "label": "Actor-Critic：A2C/A3C/GAE", "order": 2 },
+            { "name": "ai-7-3-3-ppo", "label": "PPO：近端策略优化/Clipping目标", "order": 3 }
+          ]
+        },
+        { "name": "ai-7-4-advanced-rl", "label": "进阶 RL", "order": 4,
+          "children": [
+            { "name": "ai-7-4-1-model-based", "label": "Model-Based RL：世界模型/Dyna/MCTS", "order": 1 },
+            { "name": "ai-7-4-2-rlhf", "label": "RLHF：从人类反馈中强化学习(LLM对齐)", "order": 2 },
+            { "name": "ai-7-4-3-multi-agent", "label": "多智能体 RL：合作/竞争/混合博弈", "order": 3 }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ai-module-8-generative",
+      "label": "生成式 AI 与大模型",
+      "icon": "✨",
+      "order": 80,
+      "children": [
+        { "name": "ai-8-1-llm", "label": "大语言模型 (LLM)", "order": 1,
+          "children": [
+            { "name": "ai-8-1-1-scaling-law", "label": "Scaling Law：参数/数据/算力的关系", "order": 1 },
+            { "name": "ai-8-1-2-pretraining", "label": "预训练：数据清洗/分词器/并行策略", "order": 2 },
+            { "name": "ai-8-1-3-sft", "label": "SFT 监督微调与指令遵循", "order": 3 },
+            { "name": "ai-8-1-4-alignment", "label": "对齐：RLHF/DPO/宪法AI", "order": 4 }
+          ]
+        },
+        { "name": "ai-8-2-diffusion", "label": "扩散模型", "order": 2,
+          "children": [
+            { "name": "ai-8-2-1-ddpm", "label": "DDPM：前向/反向扩散/噪声调度", "order": 1 },
+            { "name": "ai-8-2-2-stable-diffusion", "label": "Stable Diffusion：潜空间扩散/条件生成", "order": 2 },
+            { "name": "ai-8-2-3-flow-matching", "label": "Flow Matching 与 Rectified Flow", "order": 3 }
+          ]
+        },
+        { "name": "ai-8-3-multimodal", "label": "多模态模型", "order": 3,
+          "children": [
+            { "name": "ai-8-3-1-clip", "label": "CLIP：图文对比学习/零样本分类", "order": 1 },
+            { "name": "ai-8-3-2-llava", "label": "LLaVA/GPT-4V：视觉-语言对话", "order": 2 },
+            { "name": "ai-8-3-3-sora", "label": "视频生成：DiT/Sora 架构原理", "order": 3 }
+          ]
+        },
+        { "name": "ai-8-4-rag", "label": "RAG 与知识增强", "order": 4,
+          "children": [
+            { "name": "ai-8-4-1-rag-basics", "label": "RAG 基础：检索增强生成流程", "order": 1 },
+            { "name": "ai-8-4-2-vector-db", "label": "向量数据库：Milvus/Pinecone/Chroma", "order": 2 },
+            { "name": "ai-8-4-3-advanced-rag", "label": "进阶 RAG：HyDE/Re-ranking/图谱RAG", "order": 3 }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ai-module-9-mlops",
+      "label": "MLOps 与工程化",
+      "icon": "🔧",
+      "order": 90,
+      "children": [
+        { "name": "ai-9-1-pipeline", "label": "ML 流水线", "order": 1,
+          "children": [
+            { "name": "ai-9-1-1-data-pipeline", "label": "数据管道：ETL/特征存储/数据版本", "order": 1 },
+            { "name": "ai-9-1-2-experiment", "label": "实验管理：MLflow/Weights&Biases/Neptune", "order": 2 },
+            { "name": "ai-9-1-3-orchestration", "label": "流水线编排：Kubeflow/Airflow/Prefect", "order": 3 }
+          ]
+        },
+        { "name": "ai-9-2-deployment", "label": "模型部署", "order": 2,
+          "children": [
+            { "name": "ai-9-2-1-serving", "label": "模型服务：TorchServe/Triton/vLLM/TGI", "order": 1 },
+            { "name": "ai-9-2-2-quantization", "label": "模型量化：INT8/INT4/GPTQ/AWQ/GGUF", "order": 2 },
+            { "name": "ai-9-2-3-distillation", "label": "知识蒸馏：Teacher-Student 架构", "order": 3 }
+          ]
+        },
+        { "name": "ai-9-3-monitoring", "label": "监控与维护", "order": 3,
+          "children": [
+            { "name": "ai-9-3-1-drift", "label": "数据漂移与模型漂移检测", "order": 1 },
+            { "name": "ai-9-3-2-ab-test", "label": "A/B 测试与金丝雀部署", "order": 2 },
+            { "name": "ai-9-3-3-retrain", "label": "持续训练(CT)与反馈闭环", "order": 3 }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ai-module-10-applications",
+      "label": "AI 应用开发",
+      "icon": "🚀",
+      "order": 100,
+      "children": [
+        { "name": "ai-10-1-llm-app", "label": "LLM 应用开发", "order": 1,
+          "children": [
+            { "name": "ai-10-1-1-prompt-eng", "label": "提示词工程：Few-shot/Chain-of-Thought/Tree-of-Thought", "order": 1 },
+            { "name": "ai-10-1-2-langchain", "label": "LangChain：Chain/Agent/Tool/Memory 模式", "order": 2 },
+            { "name": "ai-10-1-3-agent", "label": "AI Agent：ReAct/Plan-Execute/多Agent协作", "order": 3 },
+            { "name": "ai-10-1-4-function-calling", "label": "Function Calling 与 MCP 协议", "order": 4 }
+          ]
+        },
+        { "name": "ai-10-2-fine-tuning", "label": "模型微调实战", "order": 2,
+          "children": [
+            { "name": "ai-10-2-1-lora", "label": "LoRA/QLoRA：低秩适配微调", "order": 1 },
+            { "name": "ai-10-2-2-full-ft", "label": "全参数微调与 DeepSpeed/FSDP", "order": 2 },
+            { "name": "ai-10-2-3-dataset", "label": "微调数据集构建与清洗", "order": 3 }
+          ]
+        },
+        { "name": "ai-10-3-domain", "label": "领域应用", "order": 3,
+          "children": [
+            { "name": "ai-10-3-1-code-ai", "label": "AI 编程：Copilot/Cursor/Code Interpreter", "order": 1 },
+            { "name": "ai-10-3-2-ai-search", "label": "AI 搜索：向量检索/混合搜索/重排序", "order": 2 },
+            { "name": "ai-10-3-3-autonomous", "label": "自主Agent：AutoGPT/BabyAGI/CrewAI", "order": 3 }
+          ]
+        }
+      ]
+    }
+  ]
+}

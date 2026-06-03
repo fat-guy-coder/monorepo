@@ -1,9 +1,9 @@
 import { onMounted, reactive, toRefs } from 'vue'
 import { defineStore } from 'pinia'
 
-export type Theme = 'light' | 'dark' | 'warm' | 'cool' | 'eye-friendly' | 'more'
-export type ThemeLabel = '亮色' | '暗色' | '暖色' | '冷色' | '护眼' | '更多'
-export type ThemeIcon = '☀️' | '🌙' | '🔥' | '❄️' | '👀' | '🎨'
+export type Theme = 'light' | 'dark' | 'warm' | 'cool' | 'eye-friendly'
+export type ThemeLabel = '亮色' | '暗色' | '暖色' | '冷色' | '护眼'
+export type ThemeIcon = '☀️' | '🌙' | '🔥' | '❄️' | '👀'
 
 export interface ThemeConfig {
   value: Theme
@@ -31,8 +31,7 @@ export const useUIConfigStore = defineStore('uiconfig', () => {
       { value: 'dark', label: '暗色', icon: '🌙' },
       { value: 'warm', label: '暖色', icon: '🔥' },
       { value: 'cool', label: '冷色', icon: '❄️' },
-      { value: 'eye-friendly', label: '护眼', icon: '👀' },
-      { value: 'more', label: '更多', icon: '🎨' },],
+      { value: 'eye-friendly', label: '护眼', icon: '👀' },],
     navItems: [
       {
         icon: '👤',
@@ -43,12 +42,7 @@ export const useUIConfigStore = defineStore('uiconfig', () => {
         icon: '☀☽',
         label: '主题',
         value: 'theme',
-      },
-      {
-        icon: '🏠',
-        label: '首页',
-        value: 'home',
-      },
+      }
     ],
   })
 

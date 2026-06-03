@@ -1,6 +1,6 @@
 // 使用 import.meta.glob 自动导入所有 views 下的组件
 // 这样可以动态根据路径加载组件，支持懒加载
-const viewModules = import.meta.glob('./**/*.vue', { eager: false })
+const viewModules = (import.meta as any).glob('./**/*.vue', { eager: false })
 
 /**
  * 根据路径动态加载视图组件

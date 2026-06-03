@@ -28,6 +28,7 @@ metadata:
 | 提示框(信息) | `bg-blue-50 border-blue-400 text-blue-800` | 蓝色信息提示 |
 | 提示框(警告) | `bg-amber-50 border-amber-400 text-amber-800` | 警告/注意事项 |
 | 提示框(成功) | `bg-emerald-50 border-emerald-400 text-emerald-800` | 正面/最佳实践 |
+| 提示框(类比) | `bg-purple-50 border-l-4 border-purple-400 rounded-r-xl p-4` | 🔗 前端类比桥梁 |
 | 标题文字 | `text-slate-800` / `text-slate-700` | 深灰色层级 |
 | 正文文字 | `text-slate-600` | 可读性好的灰色 |
 
@@ -197,6 +198,13 @@ import { Code } from 'components'
 <aside class="bg-emerald-50 border-l-4 border-emerald-400 rounded-r-xl p-4 mb-4">
   <p class="text-sm text-emerald-800"><strong>✅ 最佳实践：</strong>{{ bestPractice }}</p>
 </aside>
+
+<!-- 前端类比（紫色）— 复杂概念必加 -->
+<aside class="bg-purple-50 border-l-4 border-purple-400 rounded-r-xl p-4 mb-4">
+  <p class="text-sm text-purple-800"><strong>🔗 前端类比：</strong><br/>
+  {{ Go 概念 }} 就像 {{ JS/前端概念 }}—— {{ 相似之处 }}。
+  </p>
+</aside>
 ```
 
 ### 4. 对比表格
@@ -259,15 +267,43 @@ const navList = [
 
 导入：`import { useUserStore } from '@/stores/userProfle'`
 
-### 8. 路线图跳转（Link 组件）
+### 8. 页面跳转：goToByName 与 Link 组件
 
-GOLearningRoadmap.vue 中用 `Link` 实现点击跳转：
-```html
-<Link :route="item.name" :text="item.text" animation="none" size="small"
-  class="p-0! text-sm! font-normal! ..." />
+学习网站的所有页面跳转都使用集成导航——<strong>自动打开 tab、展开菜单、跳转路由</strong>。不要用 `<RouterLink>` 做页面跳转。
+
+**goToByName(name)** — 通过菜单 name 跳转，App.vue 提供：
+
+```ts
+// App.vue 通过 provide 暴露
+provide('goToByName', goToByName)
+
+// 任何子组件通过 inject 获取
+const goToByName = inject<Function>('goToByName')
+goToByName('go-1-3-operators')  // 跳转到运算符页面
 ```
 
-`item.name` 即 .vue 文件名（不含后缀），Link 内部通过 `inject('goToByName')` 调用 App.vue 的导航方法。
+`name` 参数即菜单的 `name` 字段（也是 .vue 文件名不含后缀）。`goToByName` 会：
+1. 在菜单树/tabList/routeInfoMap 中查找对应路径
+2. 若路由未注册则动态注册
+3. `router.push({ name })` 跳转
+4. `store.activateTab()` 激活/新建标签
+5. 展开父级菜单链
+
+**Link 组件**（推荐）— 封装了 `goToByName`，直接用 `route` 传 name：
+
+```html
+<Link :route="item.name" :text="item.text" animation="none" size="small"
+  class="p-0! text-sm! font-normal! text-gray-700! hover:text-cyan-600! bg-transparent! border-none! inline!" />
+```
+
+```ts
+import { Link } from 'components'
+```
+
+**使用场景：**
+- 路线图页面中的知识点跳转
+- 任意需要在侧边栏展现完整导航路径的页面间跳转
+- 不用 `<RouterLink to="...">`——那个只能跳路由，不会打开 tab/展开菜单
 
 ### 9. 步骤编号
 
@@ -288,6 +324,35 @@ GOLearningRoadmap.vue 中用 `Link` 实现点击跳转：
 4. **实用导向**: 解释"为什么需要这个"而不是只讲语法
 5. **陷阱标注**: 使用 ⚠️ 警告框标注常见错误
 6. **中文解释**: 概念用中文，代码关键字保留英文
+
+### 复杂知识点深度要求
+
+对于 Go 的核心/独特概念（defer、panic/recover、goroutine/channel、interface、reflect、Functional Options 等），<strong>不能只讲"是什么"</strong>，必须讲透：
+
+**必须有：**
+- **前端/JS 类比** — 用 `🔗 前端类比` 提示框（紫色），拿 JS/TS/React/Node 里的概念做桥梁。例如：defer ≈ finally 块 + useEffect cleanup；panic/recover ≈ throw + 全局 error middleware；goroutine ≈ 比 Promise 更轻量的并发单元
+- **执行流程拆解** — 把运行时行为拆成步骤列表（1→2→3→4），让读者在脑子里能"跑"一遍
+- **"为什么"而不是"只讲怎么用"** — 解释设计决策：Go 为什么没有 try-catch？为什么 recover 只能在 defer 里？为什么 LIFO 是合理的？
+- **至少 2-3 个代码示例** — 从简单到复杂，最后一个贴近生产实战
+- **反模式 + 经验法则** — 用 ⚠️ / ✅ 提示框总结什么时候用、什么时候不用
+
+**前端类比模板：**
+```html
+<aside class="bg-purple-50 border-l-4 border-purple-400 rounded-r-xl p-4 mb-5">
+  <p class="text-sm text-purple-800"><strong>🔗 前端类比：</strong><br/>
+  {{ Go 概念 }} 就像 {{ JS/前端概念 }}—— {{ 相似之处的解释 }}。<br/>
+  </p>
+</aside>
+```
+
+**执行流程模板：**
+```html
+<ol class="list-decimal list-inside space-y-1 text-slate-600 mb-4 text-sm leading-relaxed">
+  <li>第一步：xxx</li>
+  <li>第二步：xxx</li>
+  <li>第三步：xxx</li>
+</ol>
+```
 
 ## 文件命名
 

@@ -19,10 +19,22 @@
         <Spin :spinning="loading" class="loading" />
         <Menu @select="goto" :isMobile="isMobile" :collapsed="Menucollapsed" v-show="!loading"
           :mode="Menucollapsed ? 'vertical' : 'inline'" :items="menus as any" :selectedKeys="selectedKeys"
-          v-model:openKeys="openKeys" :onLoadData="loadChildren">
+          v-model:openKeys="openKeys" :onLoadData="loadChildren" :showContextMenu="userStore.isAdmin"
+          @contextmenu="handleMenuContextMenu">
         </Menu>
+        <Teleport to="body">
+          <div v-if="menuCtxVisible" class="menu-ctx-overlay" @click="closeMenuCtx"></div>
+          <div v-if="menuCtxVisible" class="menu-ctx-menu"
+            :style="{ top: menuCtxPosition.y + 'px', left: menuCtxPosition.x + 'px' }">
+            <div @click.stop="handleMenuEdit">✏️ 编辑</div>
+            <div @click.stop="handleMenuAddChild">➕ 新增子菜单</div>
+            <div @click.stop="handleMenuDelete">🗑️ 删除</div>
+          </div>
+        </Teleport>
       </div>
     </div>
+    <MenuFormModal :key="menuFormKey" v-model:visible="menuFormVisible" :mode="menuFormMode" :node="menuFormNode"
+      :parentMenuOptions="parentMenuOptions" project="learning" @submit="handleMenuFormSubmit" />
     <div class="content">
       <div class="tabs">
         <RouteTab @tab-click="tabClick" :activeKey="activeKey" :currentDragIndex="currentDragIndex" :tabList="tabList"
@@ -43,35 +55,38 @@
     <!-- 登录/注册模态框 -->
     <Modal v-model:visible="loginModalVisible" :title="isRegisterMode ? '注册' : '登录'" @confirm="handleLoginSubmit"
       @cancel="loginModalVisible = false">
-      <div class="modal-form">
+      <form class="modal-form" @submit.prevent="handleLoginSubmit">
         <div class="form-item">
           <label>用户名</label>
-          <Input v-model="loginForm.username" placeholder="请输入用户名" />
+          <input v-model="loginForm.username" name="username" type="text" autocomplete="username" placeholder="请输入用户名"
+            class="native-input" />
         </div>
         <div class="form-item">
           <label>密码</label>
-          <Input v-model="loginForm.password" type="password" placeholder="请输入密码" />
+          <input v-model="loginForm.password" name="password" type="password" autocomplete="current-password"
+            placeholder="请输入密码" class="native-input" />
         </div>
         <div class="form-item toggle-mode">
           <span @click="isRegisterMode = !isRegisterMode">
             {{ isRegisterMode ? '已有账号？去登录' : '没有账号？去注册' }}
           </span>
         </div>
-      </div>
+        <button type="submit" style="display:none"></button>
+      </form>
     </Modal>
   </div>
 </template>
 
 <script lang="ts" setup>
 //vue编译器会自动引入components目录下的所有组件，但不是异步组件，这一步是为了将所有组件转换为异步组件，以优化初始加载性能
-import { Menu, RouteTab, ThemeChange, Navigation, Input, Button, Modal, message, Spin } from 'components'
+import { Menu, RouteTab, ThemeChange, Navigation, Input, Button, Modal, message, Spin, MenuFormModal, confirm } from 'components'
 import { computed, ref, reactive, watch, onMounted, onUnmounted, nextTick, provide } from 'vue'
 import {
   type MenuItem, //菜单项类型
   findFatherKeysListByKey, //查找父级菜单key列表
   findMenuItemByName, //查找菜单项 通过name
 } from '@/menu'
-import { getApiMenus, getApiMenusSearch } from '@/api/menu'
+import { getApiMenus, getApiMenusSearch, postApiMenus, putApiMenusId, deleteApiMenusId, type PostApiMenusRequest, type PutApiMenusIdRequest } from '@/api/menu'
 import { postApiUserLogin, postApiUserRegister, postApiUserRefresh, getApiUserMe } from '@/api/user'
 import { saveTokens, saveUserInfo, getAccessToken, isAccessTokenValid, isRefreshTokenValid, getRefreshToken, clearTokens, getUserInfo } from '@/utils/token'
 import { useTabStore } from '@/stores/tab' //标签列表store
@@ -97,7 +112,14 @@ const isMobile = computed(() => deviceStore.isMobile)
 //主题
 const theme = computed(() => uiConfigStore.theme)
 const themes = computed(() => uiConfigStore.themes)
-const navItems = computed(() => uiConfigStore.navItems)
+// navItems 动态追加"跳转"项（仅 admin）
+const navItems = computed(() => {
+  const items = [...uiConfigStore.navItems]
+  if (userStore.isAdmin) {
+    items.push({ icon: '↗️', label: '跳转', value: 'jumpToEditor' })
+  }
+  return items
+})
 
 //当前主题图标
 const currentThemeIcon = computed(() => {
@@ -123,6 +145,9 @@ const handleNavClick = (item: NavItem): void => {
         loginModalVisible.value = true
       }
       break
+    case 'jumpToEditor':
+      openInCursor()
+      break
     default:
       break
   }
@@ -130,10 +155,6 @@ const handleNavClick = (item: NavItem): void => {
 
 //主题切换
 const themeChange = (theme1: Theme) => {
-  if (theme1 === 'more') {
-    goToByName('MyTheme')
-    return
-  }
   //设置用户主题
   uiConfigStore.setTheme(theme1)
   document.documentElement.setAttribute('data-theme', theme1)
@@ -362,6 +383,60 @@ const showContextMenu = computed(() => store.showContextMenu)
 const toggleShowMenu = (value: boolean) => {
   store.toggleShowMenu(value)
 }
+
+// --- 侧边栏菜单右键编辑 ---
+const menuCtxVisible = ref(false)
+const menuCtxPosition = ref({ x: 0, y: 0 })
+const menuCtxItem = ref<MenuItem | null>(null)
+const menuFormVisible = ref(false)
+const menuFormKey = ref(0)
+const menuFormMode = ref<'add' | 'addChild' | 'edit'>('edit')
+const menuFormNode = ref<MenuItem | null>(null)
+
+function handleMenuContextMenu({ item, event }: { item: MenuItem; event: MouseEvent }) {
+  menuCtxItem.value = item; menuCtxPosition.value = { x: event.clientX, y: event.clientY }; menuCtxVisible.value = true
+}
+function closeMenuCtx() { menuCtxVisible.value = false }
+function handleMenuEdit() {
+  closeMenuCtx(); const item = menuCtxItem.value; if (!item) return
+  menuFormKey.value++; menuFormMode.value = 'edit'; menuFormNode.value = item; menuFormVisible.value = true
+}
+function handleMenuAddChild() {
+  closeMenuCtx(); const item = menuCtxItem.value; if (!item) return
+  menuFormKey.value++; menuFormMode.value = 'addChild'; menuFormNode.value = item; menuFormVisible.value = true
+}
+async function handleMenuDelete() {
+  closeMenuCtx(); const item = menuCtxItem.value; if (!item) return
+  const ok = await confirm({ title: '删除确认', message: `确定要删除菜单"${item.label}"吗？`, confirmText: '删除', cancelText: '取消', confirmType: 'danger' })
+  if (!ok) return
+  try { await deleteApiMenusId(item.id); message.success('删除成功'); await getMenus() } catch { message.error('删除失败') }
+}
+interface MenuFormSubmitData { id?: string; name: string; label: string; order: number; project: string; parentId: string }
+async function handleMenuFormSubmit(data: MenuFormSubmitData) {
+  if (!data.label) { message.error('请输入菜单名称'); return }
+  if (!data.name) { message.error('请输入英文名称'); return }
+  try {
+    if (menuFormMode.value === 'edit' && data.id) {
+      await putApiMenusId(data.id, { name: data.name, label: data.label, order: data.order, project: data.project, parentId: data.parentId })
+      message.success('更新成功')
+    } else {
+      await postApiMenus({ name: data.name, label: data.label, order: data.order, project: data.project, parentId: data.parentId })
+      message.success('创建成功')
+    }
+    menuFormVisible.value = false; await getMenus()
+  } catch { message.error('操作失败') }
+}
+const parentMenuOptions = computed(() => {
+  const flatten = (nodes: MenuItem[], level = 0): { label: string; value: string; path?: string }[] => {
+    const result: { label: string; value: string; path?: string }[] = []
+    for (const node of nodes) {
+      result.push({ label: '　'.repeat(level) + node.label, value: node.id, path: node.path })
+      if (node.children?.length) result.push(...flatten(node.children, level + 1))
+    }
+    return result
+  }
+  return [{ label: '根目录', value: '', path: '' }, ...flatten(menus.value)]
+})
 
 //当前选中的标签key列表
 const selectedKeys = computed<string[]>(() => {
@@ -638,6 +713,17 @@ async function goToByName(name: string, isRedirect: boolean = false, knownPath?:
   )
 }
 
+// 打开当前页面对应的 .vue 文件到 Cursor 编辑器
+function openInCursor() {
+  const routePath = router.currentRoute.value.path
+  if (routePath === '/') return
+  const vuePath = routePath.replace(/^\//, '')
+  const filePath = `apps/learning/src/views/${vuePath}.vue`
+  const root = (import.meta as any).env.VITE_WORKSPACE_ROOT || ''
+  const fullPath = root ? `${root.replace(/[/\\]$/, '')}/${filePath}` : filePath
+  location.href = `cursor://file/${fullPath.replace(/\\/g, '/')}`
+}
+
 //提供跳转菜单名称方法
 provide('goToByName', goToByName)
 provide('reloadMenus', getMenus)
@@ -782,5 +868,56 @@ const scrollTo = (id: string) => {
   color: var(--color-primary);
   cursor: pointer;
   font-size: 14px;
+}
+
+.native-input {
+  width: 100%;
+  height: 2rem;
+  padding: 0 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--element-border-radius, 6px);
+  background: var(--color-bg-container);
+  color: var(--color-text);
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  box-sizing: border-box;
+}
+
+.native-input:focus {
+  border-color: var(--color-primary);
+  box-shadow: var(--box-shadow-hover);
+}
+
+.native-input::placeholder {
+  color: var(--color-text-quaternary);
+}
+
+.menu-ctx-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+}
+
+.menu-ctx-menu {
+  position: fixed;
+  z-index: 1000;
+  background: var(--color-background);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: 0.5rem;
+  box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.15);
+  min-width: 8rem;
+  overflow: hidden;
+
+  div {
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    font-size: var(--font-size-xs);
+
+    &:hover {
+      background: var(--color-background-soft);
+      color: var(--color-primary);
+    }
+  }
 }
 </style>

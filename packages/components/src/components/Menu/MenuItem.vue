@@ -1,6 +1,7 @@
 <template>
   <li class="menu-item" :style="{ '--level': level }" @click.stop.prevent="handleClick"
-    @mouseenter.stop.prevent="handleMouseEnter" @mouseleave="handleMouseLeave">
+    @mouseenter.stop.prevent="handleMouseEnter" @mouseleave="handleMouseLeave"
+    @contextmenu.prevent.stop="showCtxMenu && emit('contextmenu', { item: props.item, event: $event })">
     <div class="menu-item__title" :class="titleClasses" :id="item.path">
       <span :class="['menu-item__label']" :title="item.label || item.name">
         {{ item.label || item.name }}
@@ -20,7 +21,7 @@
         <ul class="menu-item__children-list">
           <MenuItem v-for="child in localChildren" :key="child.path" :item="child" :level="level + 1"
             :is-open="openKeys.includes(child.path)" @toggle="$emit('toggle', $event)" @select="$emit('select', $event)"
-            @close="$emit('close', $event)" />
+            @close="$emit('close', $event)" @contextmenu="$emit('contextmenu', $event)" />
         </ul>
       </div>
     </Teleport>
@@ -29,7 +30,7 @@
         <ul class="menu-item__children-list">
           <MenuItem v-for="child in localChildren" :key="child.path" :item="child" :level="level + 1"
             :is-open="openKeys.includes(child.path)" @toggle="$emit('toggle', $event)"
-            @select="$emit('select', $event)" />
+            @select="$emit('select', $event)" @contextmenu="$emit('contextmenu', $event)" />
         </ul>
       </div>
     </template>
@@ -73,7 +74,7 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits(['toggle', 'select', 'close'])
+const emit = defineEmits(['toggle', 'select', 'close', 'contextmenu'])
 
 const openKeys = inject('openKeys', ref([])) as Ref<string[]>
 const selectedKeys = inject('selectedKeys', ref([])) as Ref<string[]>
@@ -89,6 +90,7 @@ const menuLoader = inject<((item: MenuItemType) => Promise<MenuItemType[] | void
 )
 
 const isMobile = inject('isMobile')
+const showCtxMenu = inject('showContextMenu', false)
 
 const mode = inject('mode') as Ref<'inline' | 'vertical'>
 

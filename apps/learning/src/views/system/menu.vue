@@ -35,38 +35,15 @@
     </div>
 
     <!-- Add/Edit Modal -->
-    <Modal v-model:visible="modalVisible" :title="modalMode === 'edit' ? '编辑菜单' : '新增菜单'" @confirm="handleSubmit"
-      @cancel="modalVisible = false">
-      <div class="modal-form">
-        <div class="form-item">
-          <label>菜单名称 <span class="required">*</span></label>
-          <Input v-model="formData.label" placeholder="请输入菜单名称" />
-        </div>
-        <div class="form-item">
-          <label>英文名称 <span class="required">*</span></label>
-          <Input v-model="formData.name" placeholder="请输入英文名称" />
-        </div>
-        <div class="form-item">
-          <label>路由路径</label>
-          <span class="display-text path-text">{{ formData.path || '-' }}</span>
-        </div>
-        <div class="form-item">
-          <label>排序</label>
-          <InputNumber v-model="formData.order" placeholder="数值越小越靠前" />
-        </div>
-        <div class="form-item">
-          <label>父级菜单</label>
-          <Select v-model="formData.parentId" :options="parentMenuOptions" :filterable="true" placeholder="搜索或选择父级菜单" />
-        </div>
-      </div>
-    </Modal>
+    <MenuFormModal :key="menuFormKey" v-model:visible="menuFormVisible" :mode="menuFormMode" :node="menuFormNode"
+      :parentMenuOptions="parentMenuOptions" :project="searchForm.project" @submit="handleMenuFormSubmit" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, reactive, onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
-import { Tree, Select, Input, InputNumber, Button, Modal, Spin, message, confirm } from 'components'
+import { Tree, Select, Button, Spin, message, confirm, MenuFormModal } from 'components'
 import type { TreeNode } from 'components'
 import {
   getApiMenus,
@@ -98,12 +75,13 @@ const projectOptions = [
 
 // Flatten tree data for parent menu options
 const parentMenuOptions = computed(() => {
-  const flatten = (nodes: TreeNode[], level = 0): { label: string; value: string }[] => {
-    const result: { label: string; value: string }[] = []
+  const flatten = (nodes: TreeNode[], level = 0): { label: string; value: string; path?: string }[] => {
+    const result: { label: string; value: string; path?: string }[] = []
     for (const node of nodes) {
       result.push({
         label: '　'.repeat(level) + node.label,
         value: node.id as string,
+        path: node.path as string | undefined,
       })
       if (node.children?.length) {
         result.push(...flatten(node.children, level + 1))
@@ -112,7 +90,7 @@ const parentMenuOptions = computed(() => {
     return result
   }
   // 添加"根目录"选项，value 为空字符串表示顶级菜单
-  return [{ label: '根目录', value: '' }, ...flatten(treeData.value)]
+  return [{ label: '根目录', value: '', path: '' }, ...flatten(treeData.value)]
 })
 
 // Find node in tree by id
@@ -189,38 +167,12 @@ const addChildToNode = (nodes: TreeNode[], parentId: string, newChild: TreeNode)
   return false
 }
 
-// Compute full path based on parent path + name
-const computedPath = computed(() => {
-  if (!formData.name) return ''
-  // Find parent node
-  const findNode = (nodes: TreeNode[], id: string): TreeNode | null => {
-    for (const node of nodes) {
-      if (node.id === id) return node
-      if (node.children) {
-        const found = findNode(node.children, id)
-        if (found) return found
-      }
-    }
-    return null
-  }
-  const parentNode = formData.parentId ? findNode(treeData.value, formData.parentId) : null
-  const parentPath = parentNode ? ((parentNode.path as string) || '') : ''
-  const name = formData.name || ''
-  if (!parentPath) return '/' + name
-  return parentPath.replace(/\/$/, '') + '/' + name
-})
+const menuFormVisible = ref(false)
+const menuFormKey = ref(0)
+const menuFormMode = ref<'add' | 'addChild' | 'edit'>('add')
+const menuFormNode = ref<TreeNode | null>(null)
 
-const modalVisible = ref(false)
-const modalMode = ref<'add' | 'addChild' | 'edit'>('add')
-const formData = reactive<PostApiMenusRequest & { id?: string }>({
-  name: '',
-  label: '',
-  path: '',
-  icon: '',
-  order: 0,
-  project: '',
-  parentId: '',
-})
+// 表单状态已由 MenuFormModal 组件管理，这里只保留打开/关闭控制
 
 // Convert MenuItem to TreeNode (preserve all properties)
 const menuToTreeNode = (menu: MenuItem): TreeNode => {
@@ -301,44 +253,27 @@ const handleNodeCollapse = (node: TreeNode) => {
   )
 }
 
-const resetForm = () => {
-  formData.name = ''
-  formData.label = ''
-  formData.icon = ''
-  formData.order = 0
-  formData.project = searchForm.project || ''
-  formData.parentId = ''
-  formData.id = ''
-  formData.path = ''
-}
-
 const handleAddRoot = () => {
-  resetForm()
-  modalMode.value = 'add'
-  modalVisible.value = true
+  menuFormNode.value = null
+  menuFormKey.value++
+  menuFormMode.value = 'add'
+  menuFormVisible.value = true
 }
 
 const handleAddChildOf = (node: TreeNode) => {
   selectedNode.value = node
-  resetForm()
-  formData.parentId = node.id as string
-  modalMode.value = 'addChild'
-  modalVisible.value = true
+  menuFormNode.value = node
+  menuFormKey.value++
+  menuFormMode.value = 'addChild'
+  menuFormVisible.value = true
 }
 
 const handleEditOf = (node: TreeNode) => {
   selectedNode.value = node
-  modalMode.value = 'edit'
-  // Use node data directly since it's already populated from API
-  formData.id = node.id as string
-  formData.label = node.label || (node.name as string) || ''
-  formData.name = (node.name as string) || ''
-  formData.path = (node.path as string) || ''
-  formData.icon = (node.icon as string) || ''
-  formData.order = (node.order as number) || 0
-  formData.project = (node.project as string) || ''
-  formData.parentId = (node.parentId as string) || ''
-  modalVisible.value = true
+  menuFormNode.value = node
+  menuFormKey.value++
+  menuFormMode.value = 'edit'
+  menuFormVisible.value = true
 }
 
 const handleDeleteOf = async (node: TreeNode) => {
@@ -363,81 +298,64 @@ const handleDeleteOf = async (node: TreeNode) => {
   }
 }
 
-const handleSubmit = async () => {
-  if (!formData.label) {
-    message.error('请输入菜单名称')
-    return
-  }
-  if (!formData.name) {
-    message.error('请输入英文名称')
-    return
+interface MenuFormSubmitData {
+  id?: string
+  name: string
+  label: string
+  order: number
+  project: string
+  parentId: string
+}
+
+const handleMenuFormSubmit = async (data: MenuFormSubmitData) => {
+  if (!data.label) { message.error('请输入菜单名称'); return }
+  if (!data.name) { message.error('请输入英文名称'); return }
+
+  // 用 treeData 计算完整路径
+  let fullPath = ''
+  if (!data.parentId) {
+    fullPath = '/' + data.name
+  } else {
+    const parentNode = findNode(treeData.value, data.parentId)
+    const parentPath = parentNode ? ((parentNode.path as string) || '') : ''
+    fullPath = parentPath ? parentPath.replace(/\/$/, '') + '/' + data.name : '/' + data.name
   }
 
   try {
-    // Generate full path from parent path + "/" + name
-    const fullPath = computedPath.value
-
-    if (modalMode.value === 'edit' && formData.id) {
-      // Update existing menu
+    if (menuFormMode.value === 'edit' && data.id) {
       const updateData: PutApiMenusIdRequest = {
-        name: formData.name,
-        label: formData.label,
-        path: fullPath,
-        icon: formData.icon,
-        order: formData.order,
-        project: formData.project,
-        parentId: formData.parentId,
+        name: data.name, label: data.label, path: fullPath,
+        order: data.order, project: data.project, parentId: data.parentId,
       }
-      await putApiMenusId(formData.id, updateData)
+      await putApiMenusId(data.id, updateData)
       message.success('更新成功')
-      // 直接更新树中对应节点
-      updateNodeInTree(treeData.value, formData.id, {
-        label: formData.label,
-        name: formData.name,
-        path: fullPath,
-        icon: formData.icon,
-        order: formData.order,
-        project: formData.project,
-        parentId: formData.parentId,
+      updateNodeInTree(treeData.value, data.id, {
+        label: data.label, name: data.name, path: fullPath,
+        order: data.order, project: data.project, parentId: data.parentId,
       })
     } else {
-      // Create new menu
       const createData: PostApiMenusRequest = {
-        name: formData.name,
-        label: formData.label,
-        path: fullPath,
-        icon: formData.icon,
-        order: formData.order,
-        project: formData.project,
-        parentId: formData.parentId,
+        name: data.name, label: data.label, path: fullPath,
+        order: data.order, project: data.project, parentId: data.parentId,
       }
       const res = await postApiMenus(createData)
       message.success('创建成功')
-      // 构建新节点
       const newNode: TreeNode = {
         id: res.data?.id ?? `temp-${Date.now()}`,
-        label: formData.label,
-        name: formData.name,
-        path: fullPath,
-        icon: formData.icon,
-        order: formData.order,
-        project: formData.project,
-        parentId: formData.parentId,
+        label: data.label, name: data.name, path: fullPath,
+        order: data.order, project: data.project, parentId: data.parentId,
         children: [],
       }
-      // 如果有父节点，添加到父节点的 children 中
-      if (formData.parentId) {
-        addChildToNode(treeData.value, formData.parentId, newNode)
-        // 确保父节点是展开的
-        if (!defaultExpandedKeys.value.includes(formData.parentId)) {
-          defaultExpandedKeys.value.push(formData.parentId)
+      if (data.parentId) {
+        addChildToNode(treeData.value, data.parentId, newNode)
+        if (!defaultExpandedKeys.value.includes(data.parentId)) {
+          defaultExpandedKeys.value.push(data.parentId)
         }
       } else {
-        // 根节点直接添加
         treeData.value.push(newNode)
       }
     }
-    modalVisible.value = false
+    menuFormVisible.value = false
   } catch (error) {
     console.error('Failed to submit:', error)
     message.error('操作失败')

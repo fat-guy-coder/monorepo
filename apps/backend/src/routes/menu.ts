@@ -703,20 +703,17 @@ routes.push({
       const [parent] = await db.select().from(menu).where(eq(menu.id, parentId))
       const parentPath = parent?.path || null
 
-      // 在事务中执行批量创建
-      await rawQuery`BEGIN`
+      // 幂等创建：已有同名菜单跳过，失败可重试
       await createRecursive(parentId, parentPath, items)
-      await rawQuery`COMMIT`
 
       return Response.json(
         success({ created, skipped, failed: details.filter(d => d.status === 'failed').length, details }, '批量创建完成'),
         { status: 201 },
       )
     } catch (e: any) {
-      await rawQuery`ROLLBACK`
-      console.error('批量创建失败，已回滚:', e)
+      console.error('批量创建失败:', e)
       return Response.json(
-        error(`批量创建失败，已回滚: ${e.message}`, 500),
+        error(`批量创建失败: ${e.message}`, 500),
         { status: 500 },
       )
     }

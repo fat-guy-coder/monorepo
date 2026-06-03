@@ -1,0 +1,599 @@
+{
+  "project": "learning",
+  "parentId": "0325a777-cf7e-4b87-9465-2aa33be061ee",
+  "items": [
+    {
+      "name": "cs-learning-path",
+      "label": "计算机科学学习路线图",
+      "icon": "🧭",
+      "order": 1,
+      "isLeaf": true
+    },
+    {
+      "name": "cs-phase-1-programming",
+      "label": "编程基础与计算思维",
+      "icon": "💻",
+      "order": 10,
+      "children": [
+        {
+          "name": "cs-1-module-a-syntax", "label": "基础语法与概念", "order": 1,
+          "children": [
+            { "name": "cs-1-a-1-vars", "label": "变量、常量与类型系统", "order": 1 },
+            { "name": "cs-1-a-2-control", "label": "条件判断与循环", "order": 2 },
+            { "name": "cs-1-a-3-functions", "label": "函数定义、参数与返回值", "order": 3 },
+            { "name": "cs-1-a-4-scope", "label": "作用域与生命周期", "order": 4 }
+          ]
+        },
+        {
+          "name": "cs-1-module-b-data", "label": "基本数据结构", "order": 2,
+          "children": [
+            { "name": "cs-1-b-1-arrays", "label": "数组与动态数组", "order": 1 },
+            { "name": "cs-1-b-2-map-set", "label": "字典（Map）与集合（Set）", "order": 2 },
+            { "name": "cs-1-b-3-string", "label": "字符串操作与编码基础", "order": 3 }
+          ]
+        },
+        {
+          "name": "cs-1-module-c-thinking", "label": "计算思维训练", "order": 3,
+          "children": [
+            { "name": "cs-1-c-1-recursion", "label": "递归思想与分治策略", "order": 1 },
+            { "name": "cs-1-c-2-file", "label": "文件读写与数据持久化", "order": 2 },
+            { "name": "cs-1-c-3-cli", "label": "命令行工具编写", "order": 3 },
+            { "name": "cs-1-c-4-debug", "label": "调试技巧：断点、日志、打印追踪", "order": 4 }
+          ]
+        },
+        {
+          "name": "cs-1-module-d-git", "label": "版本控制与协作", "order": 4,
+          "children": [
+            { "name": "cs-1-d-1-git-init", "label": "Git 基础：init/add/commit/log", "order": 1 },
+            { "name": "cs-1-d-2-branch", "label": "分支管理：branch/merge/rebase", "order": 2 },
+            { "name": "cs-1-d-3-remote", "label": "远程协作：remote/push/pull/PR", "order": 3 },
+            { "name": "cs-1-d-4-undo", "label": "撤销操作：reset/restore/revert/stash", "order": 4 }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "cs-phase-2-discrete-math",
+      "label": "离散数学与计算理论",
+      "icon": "🧮",
+      "order": 20,
+      "children": [
+        {
+          "name": "cs-2-module-a-logic", "label": "逻辑与证明", "order": 1,
+          "children": [
+            { "name": "cs-2-a-1-prop-logic", "label": "命题逻辑：与或非、条件、双条件", "order": 1 },
+            { "name": "cs-2-a-2-pred-logic", "label": "谓词逻辑：全称量词与存在量词", "order": 2 },
+            { "name": "cs-2-a-3-proof", "label": "证明方法：直接/反证/归纳/构造", "order": 3 }
+          ]
+        },
+        {
+          "name": "cs-2-module-b-sets", "label": "集合、关系与函数", "order": 2,
+          "children": [
+            { "name": "cs-2-b-1-set-ops", "label": "集合运算：交/并/差/补/笛卡尔积", "order": 1 },
+            { "name": "cs-2-b-2-relation", "label": "关系：自反/对称/传递、等价关系", "order": 2 },
+            { "name": "cs-2-b-3-function", "label": "函数：单射/满射/双射、复合函数", "order": 3 }
+          ]
+        },
+        {
+          "name": "cs-2-module-c-graph", "label": "图论与组合", "order": 3,
+          "children": [
+            { "name": "cs-2-c-1-graph-basic", "label": "图：顶点、边、度、连通性", "order": 1 },
+            { "name": "cs-2-c-2-tree", "label": "树：生成树、最小生成树", "order": 2 },
+            { "name": "cs-2-c-3-combo", "label": "组合数学：排列、组合、鸽巢原理", "order": 3 }
+          ]
+        },
+        {
+          "name": "cs-2-module-d-theory", "label": "计算理论入门", "order": 4,
+          "children": [
+            { "name": "cs-2-d-1-induction", "label": "数学归纳法与递归关系", "order": 1 },
+            { "name": "cs-2-d-2-automata", "label": "自动机：DFA/NFA/正则表达式", "order": 2 },
+            { "name": "cs-2-d-3-complexity", "label": "计算复杂度：P/NP/NPC/可计算性", "order": 3 }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "cs-phase-3-dsa",
+      "label": "数据结构与算法",
+      "icon": "📊",
+      "order": 30,
+      "children": [
+        {
+          "name": "cs-3-module-a-analysis", "label": "算法分析基础", "order": 1,
+          "children": [
+            { "name": "cs-3-a-1-big-o", "label": "渐近分析：大O/Ω/Θ 记号", "order": 1 },
+            { "name": "cs-3-a-2-amortized", "label": "均摊分析与递归式求解", "order": 2 },
+            { "name": "cs-3-a-3-tradeoff", "label": "时间-空间权衡策略", "order": 3 }
+          ]
+        },
+        {
+          "name": "cs-3-module-b-linear", "label": "线性数据结构", "order": 2,
+          "children": [
+            { "name": "cs-3-b-1-array", "label": "数组：静态/动态、缓存友好性", "order": 1 },
+            { "name": "cs-3-b-2-linkedlist", "label": "链表：单向/双向/循环、哨兵节点", "order": 2 },
+            { "name": "cs-3-b-3-stack-queue", "label": "栈与队列：单调栈、双端队列", "order": 3 },
+            { "name": "cs-3-b-4-skiplist", "label": "跳表：原理与实现", "order": 4 }
+          ]
+        },
+        {
+          "name": "cs-3-module-c-hash", "label": "哈希与索引", "order": 3,
+          "children": [
+            { "name": "cs-3-c-1-hash-func", "label": "哈希函数设计：模运算/乘法/加密", "order": 1 },
+            { "name": "cs-3-c-2-collision", "label": "冲突解决：链地址/开放寻址/双重哈希", "order": 2 },
+            { "name": "cs-3-c-3-bloom", "label": "布隆过滤器与计数布隆", "order": 3 }
+          ]
+        },
+        {
+          "name": "cs-3-module-d-tree", "label": "树结构", "order": 4,
+          "children": [
+            { "name": "cs-3-d-1-bst", "label": "二叉搜索树：插入/删除/遍历", "order": 1 },
+            { "name": "cs-3-d-2-avl-rb", "label": "平衡树：AVL 树与红黑树", "order": 2 },
+            { "name": "cs-3-d-3-btree", "label": "B 树与 B+ 树（数据库核心）", "order": 3 },
+            { "name": "cs-3-d-4-trie", "label": "Trie 字典树与前缀匹配", "order": 4 }
+          ]
+        },
+        {
+          "name": "cs-3-module-e-heap", "label": "堆与优先队列", "order": 5,
+          "children": [
+            { "name": "cs-3-e-1-binary-heap", "label": "二叉堆实现与堆排序", "order": 1 },
+            { "name": "cs-3-e-2-fib-heap", "label": "斐波那契堆（理论）与应用", "order": 2 },
+            { "name": "cs-3-e-3-topk", "label": "Top-K 问题与流式数据", "order": 3 }
+          ]
+        },
+        {
+          "name": "cs-3-module-f-graph", "label": "图算法", "order": 6,
+          "children": [
+            { "name": "cs-3-f-1-repr", "label": "图的表示：邻接表/矩阵/边列表", "order": 1 },
+            { "name": "cs-3-f-2-traversal", "label": "DFS/BFS 与连通分量", "order": 2 },
+            { "name": "cs-3-f-3-shortest", "label": "最短路径：Dijkstra/Bellman-Ford/Floyd", "order": 3 },
+            { "name": "cs-3-f-4-topo-mst", "label": "拓扑排序与最小生成树", "order": 4 }
+          ]
+        },
+        {
+          "name": "cs-3-module-g-sort", "label": "排序与搜索", "order": 7,
+          "children": [
+            { "name": "cs-3-g-1-nlogn", "label": "比较排序：快排/归并/堆排", "order": 1 },
+            { "name": "cs-3-g-2-linear", "label": "线性排序：计数/桶/基数排序", "order": 2 },
+            { "name": "cs-3-g-3-binary", "label": "二分搜索与变体", "order": 3 }
+          ]
+        },
+        {
+          "name": "cs-3-module-h-dp", "label": "动态规划与回溯", "order": 8,
+          "children": [
+            { "name": "cs-3-h-1-basic-dp", "label": "DP 基础：重叠子问题/最优子结构", "order": 1 },
+            { "name": "cs-3-h-2-classic", "label": "经典 DP：背包/LCS/LIS/编辑距离", "order": 2 },
+            { "name": "cs-3-h-3-backtrack", "label": "回溯：N皇后/排列组合/子集", "order": 3 }
+          ]
+        },
+        {
+          "name": "cs-3-module-i-string", "label": "字符串算法", "order": 9,
+          "children": [
+            { "name": "cs-3-i-1-kmp", "label": "字符串匹配：KMP/Boyer-Moore", "order": 1 },
+            { "name": "cs-3-i-2-suffix", "label": "后缀数组与LCP（了解）", "order": 2 },
+            { "name": "cs-3-i-3-aho", "label": "AC 自动机（多模式匹配）", "order": 3 }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "cs-phase-4-computer-org",
+      "label": "计算机组成原理",
+      "icon": "🖥️",
+      "order": 40,
+      "children": [
+        {
+          "name": "cs-4-module-a-digital", "label": "数字逻辑与数据表示", "order": 1,
+          "children": [
+            { "name": "cs-4-a-1-gates", "label": "布尔代数、逻辑门、组合电路", "order": 1 },
+            { "name": "cs-4-a-2-sequential", "label": "时序逻辑：触发器、寄存器、计数器", "order": 2 },
+            { "name": "cs-4-a-3-alu", "label": "算术逻辑单元 ALU 设计", "order": 3 },
+            { "name": "cs-4-a-4-integer", "label": "整数表示：原码/反码/补码、溢出", "order": 4 },
+            { "name": "cs-4-a-5-float", "label": "IEEE 754 浮点数与精度陷阱", "order": 5 }
+          ]
+        },
+        {
+          "name": "cs-4-module-b-isa", "label": "指令集与CPU微架构", "order": 2,
+          "children": [
+            { "name": "cs-4-b-1-isa", "label": "指令集架构：RISC vs CISC", "order": 1 },
+            { "name": "cs-4-b-2-pipeline", "label": "流水线：五级流水与流水线冲突", "order": 2 },
+            { "name": "cs-4-b-3-branch", "label": "分支预测与乱序执行", "order": 3 },
+            { "name": "cs-4-b-4-superscalar", "label": "超标量与多发射处理器", "order": 4 }
+          ]
+        },
+        {
+          "name": "cs-4-module-c-memory", "label": "存储器体系", "order": 3,
+          "children": [
+            { "name": "cs-4-c-1-hierarchy", "label": "层次结构：寄存器→Cache→内存→磁盘", "order": 1 },
+            { "name": "cs-4-c-2-cache", "label": "Cache：映射策略、替换算法、一致性", "order": 2 },
+            { "name": "cs-4-c-3-vm", "label": "虚拟内存概述：页表/MMU/TLB", "order": 3 }
+          ]
+        },
+        {
+          "name": "cs-4-module-d-asm", "label": "汇编与底层编程", "order": 4,
+          "children": [
+            { "name": "cs-4-d-1-registers", "label": "x86-64 寄存器与调用约定", "order": 1 },
+            { "name": "cs-4-d-2-mov-alu", "label": "mov/add/call/ret 指令与栈帧", "order": 2 },
+            { "name": "cs-4-d-3-c-to-asm", "label": "C 代码到汇编对照分析", "order": 3 }
+          ]
+        },
+        {
+          "name": "cs-4-module-e-physics", "label": "半导体物理与存储技术", "order": 5,
+          "children": [
+            { "name": "cs-4-e-1-transistor", "label": "晶体管原理：MOSFET/FinFET/GAA 演进", "order": 1 },
+            { "name": "cs-4-e-2-dram", "label": "DRAM：电容存储/刷新机制/Row Hammer 攻击", "order": 2 },
+            { "name": "cs-4-e-3-sram", "label": "SRAM：双稳态触发器/6T单元/Cache 为何快", "order": 3 },
+            { "name": "cs-4-e-4-nand", "label": "NAND Flash：浮栅晶体管/量子隧穿写入/SLC-MLC-TLC-QLC", "order": 4 },
+            { "name": "cs-4-e-5-hdd", "label": "机械硬盘：磁头飞行高度/垂直磁记录/叠瓦式(SMR)", "order": 5 },
+            { "name": "cs-4-e-6-nvme", "label": "NVMe 协议：队列/Submission-Completion 机制", "order": 6 },
+            { "name": "cs-4-e-7-optane", "label": "傲腾(3D XPoint)与存储级内存(SCM)", "order": 7 }
+          ]
+        },
+        {
+          "name": "cs-4-module-f-io", "label": "外设总线与I/O体系", "order": 6,
+          "children": [
+            { "name": "cs-4-f-1-pcie", "label": "PCIe：通道(Lane)/Gen3-4-5-6速率/枚举过程", "order": 1 },
+            { "name": "cs-4-f-2-dma", "label": "DMA：直接内存访问/Scatter-Gather/IOMMU", "order": 2 },
+            { "name": "cs-4-f-3-usb", "label": "USB 协议栈：Host/Device/OTG/枚举描述符", "order": 3 },
+            { "name": "cs-4-f-4-interrupt", "label": "中断控制器：APIC/MSI/MSI-X/中断亲和性", "order": 4 },
+            { "name": "cs-4-f-5-gpu-arch", "label": "GPU 架构：SIMT/Warp/Tensor Core/CUDA 编程模型", "order": 5 },
+            { "name": "cs-4-f-6-npu", "label": "NPU 神经网络加速器： systolic array/脉动阵列", "order": 6 },
+            { "name": "cs-4-f-7-cpu-fabrication", "label": "芯片制造：光刻/7nm-3nm工艺/芯粒(Chiplet)技术", "order": 7 }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "cs-phase-5-os",
+      "label": "操作系统",
+      "icon": "⚙️",
+      "order": 50,
+      "children": [
+        {
+          "name": "cs-5-module-a-basics", "label": "OS 核心概念", "order": 1,
+          "children": [
+            { "name": "cs-5-a-1-kernel", "label": "内核态 vs 用户态、系统调用机制", "order": 1 },
+            { "name": "cs-5-a-2-interrupt", "label": "中断与异常处理", "order": 2 },
+            { "name": "cs-5-a-3-boot", "label": "引导过程：BIOS→Bootloader→内核", "order": 3 }
+          ]
+        },
+        {
+          "name": "cs-5-module-b-process", "label": "进程与线程管理", "order": 2,
+          "children": [
+            { "name": "cs-5-b-1-pcb", "label": "进程控制块PCB与上下文切换", "order": 1 },
+            { "name": "cs-5-b-2-fork", "label": "进程创建：fork/exec/wait", "order": 2 },
+            { "name": "cs-5-b-3-thread", "label": "线程：用户态/内核态/轻量级进程", "order": 3 },
+            { "name": "cs-5-b-4-scheduling", "label": "CPU调度：FCFS/SJF/RR/CFS", "order": 4 }
+          ]
+        },
+        {
+          "name": "cs-5-module-c-sync", "label": "同步与并发控制", "order": 3,
+          "children": [
+            { "name": "cs-5-c-1-race", "label": "竞态条件与临界区问题", "order": 1 },
+            { "name": "cs-5-c-2-locks", "label": "互斥锁、自旋锁、读写锁", "order": 2 },
+            { "name": "cs-5-c-3-semaphore", "label": "信号量与条件变量", "order": 3 },
+            { "name": "cs-5-c-4-deadlock", "label": "死锁：四条件、银行家算法、检测恢复", "order": 4 }
+          ]
+        },
+        {
+          "name": "cs-5-module-d-memory", "label": "内存管理", "order": 4,
+          "children": [
+            { "name": "cs-5-d-1-paging", "label": "分页机制：页表、多级页表、TLB", "order": 1 },
+            { "name": "cs-5-d-2-virtual", "label": "虚拟内存：需求分页、写时复制", "order": 2 },
+            { "name": "cs-5-d-3-replacement", "label": "页面置换算法：LRU/Clock/工作集", "order": 3 },
+            { "name": "cs-5-d-4-segmentation", "label": "分段与段页式管理", "order": 4 }
+          ]
+        },
+        {
+          "name": "cs-5-module-e-filesystem", "label": "文件与I/O系统", "order": 5,
+          "children": [
+            { "name": "cs-5-e-1-inode", "label": "文件系统：inode、目录、路径解析", "order": 1 },
+            { "name": "cs-5-e-2-journal", "label": "日志文件系统(ext4)与写时复制(ZFS)", "order": 2 },
+            { "name": "cs-5-e-3-io-model", "label": "I/O模型：阻塞/非阻塞/异步/多路复用", "order": 3 }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "cs-phase-6-network",
+      "label": "计算机网络",
+      "icon": "🌐",
+      "order": 60,
+      "children": [
+        {
+          "name": "cs-6-module-a-foundation", "label": "网络基础", "order": 1,
+          "children": [
+            { "name": "cs-6-a-1-osi", "label": "OSI 七层与 TCP/IP 四层模型", "order": 1 },
+            { "name": "cs-6-a-2-encap", "label": "封装与解封装全过程", "order": 2 },
+            { "name": "cs-6-a-3-tools", "label": "网络工具：ping/traceroute/tcpdump", "order": 3 }
+          ]
+        },
+        {
+          "name": "cs-6-module-b-application", "label": "应用层协议", "order": 2,
+          "children": [
+            { "name": "cs-6-b-1-http1", "label": "HTTP/1.1：持久连接/管线化/缓存", "order": 1 },
+            { "name": "cs-6-b-2-http2", "label": "HTTP/2：多路复用/Server Push/HPACK", "order": 2 },
+            { "name": "cs-6-b-3-http3", "label": "HTTP/3 (QUIC)：0-RTT/无队头阻塞", "order": 3 },
+            { "name": "cs-6-b-4-dns", "label": "DNS：递归/迭代查询、记录类型、DNSSEC", "order": 4 },
+            { "name": "cs-6-b-5-cdn", "label": "CDN 原理与边缘计算", "order": 5 }
+          ]
+        },
+        {
+          "name": "cs-6-module-c-transport", "label": "传输层", "order": 3,
+          "children": [
+            { "name": "cs-6-c-1-tcp-handshake", "label": "TCP：三次握手与四次挥手", "order": 1 },
+            { "name": "cs-6-c-2-tcp-congestion", "label": "TCP 拥塞控制：慢启动/拥塞避免/快速恢复", "order": 2 },
+            { "name": "cs-6-c-3-tcp-flow", "label": "TCP 流量控制：滑动窗口与零窗口", "order": 3 },
+            { "name": "cs-6-c-4-udp", "label": "UDP：无连接、低延迟、QUIC基础", "order": 4 }
+          ]
+        },
+        {
+          "name": "cs-6-module-d-network", "label": "网络层与安全", "order": 4,
+          "children": [
+            { "name": "cs-6-d-1-ip", "label": "IP 协议：分片、TTL、IP选项", "order": 1 },
+            { "name": "cs-6-d-2-subnet", "label": "子网划分、CIDR、NAT穿透", "order": 2 },
+            { "name": "cs-6-d-3-routing", "label": "路由协议：OSPF(内网)/BGP(互联网)", "order": 3 },
+            { "name": "cs-6-d-4-tls", "label": "TLS 1.3：证书链、前向安全、ALPN", "order": 4 },
+            { "name": "cs-6-d-5-security", "label": "Web安全：CORS/CSP/XSS/CSRF/SQLi", "order": 5 }
+          ]
+        },
+        {
+          "name": "cs-6-module-e-programming", "label": "网络编程", "order": 5,
+          "children": [
+            { "name": "cs-6-e-1-socket", "label": "Socket API：TCP/UDP 服务器-客户端", "order": 1 },
+            { "name": "cs-6-e-2-epoll", "label": "I/O多路复用：select/poll/epoll/kqueue", "order": 2 },
+            { "name": "cs-6-e-3-proxy", "label": "代理与隧道：正向/反向/HTTP代理", "order": 3 }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "cs-phase-7-database",
+      "label": "数据库系统",
+      "icon": "🗄️",
+      "order": 70,
+      "children": [
+        {
+          "name": "cs-7-module-a-sql", "label": "SQL 与关系模型", "order": 1,
+          "children": [
+            { "name": "cs-7-a-1-crud", "label": "CRUD 操作与数据过滤", "order": 1 },
+            { "name": "cs-7-a-2-join", "label": "JOIN：内/外/交叉/自连接", "order": 2 },
+            { "name": "cs-7-a-3-agg", "label": "聚合函数、GROUP BY、HAVING", "order": 3 },
+            { "name": "cs-7-a-4-window", "label": "窗口函数：ROW_NUMBER/RANK/LAG/LEAD", "order": 4 },
+            { "name": "cs-7-a-5-cte", "label": "CTE 与递归查询", "order": 5 }
+          ]
+        },
+        {
+          "name": "cs-7-module-b-storage", "label": "存储引擎与索引", "order": 2,
+          "children": [
+            { "name": "cs-7-b-1-btree-idx", "label": "B+ 树索引与聚簇索引", "order": 1 },
+            { "name": "cs-7-b-2-lsm", "label": "LSM-Tree：写优化与Compaction", "order": 2 },
+            { "name": "cs-7-b-3-row-col", "label": "行存 vs 列存：OLTP vs OLAP", "order": 3 },
+            { "name": "cs-7-b-4-explain", "label": "EXPLAIN 执行计划解读与优化", "order": 4 }
+          ]
+        },
+        {
+          "name": "cs-7-module-c-transactions", "label": "事务与并发", "order": 3,
+          "children": [
+            { "name": "cs-7-c-1-acid", "label": "ACID 与隔离级别（RU→Serializable）", "order": 1 },
+            { "name": "cs-7-c-2-mvcc", "label": "MVCC：版本链、快照读、回滚段", "order": 2 },
+            { "name": "cs-7-c-3-locks", "label": "锁：行锁/间隙锁/意向锁/死锁检测", "order": 3 },
+            { "name": "cs-7-c-4-opt-lock", "label": "乐观锁(CAS)与悲观锁选型", "order": 4 }
+          ]
+        },
+        {
+          "name": "cs-7-module-d-design", "label": "数据库设计", "order": 4,
+          "children": [
+            { "name": "cs-7-d-1-er", "label": "ER 模型与关系映射", "order": 1 },
+            { "name": "cs-7-d-2-normal", "label": "范式：1NF→2NF→3NF→BCNF", "order": 2 },
+            { "name": "cs-7-d-3-deno", "label": "反范式化：冗余/预计算/物化视图", "order": 3 }
+          ]
+        },
+        {
+          "name": "cs-7-module-e-redis", "label": "Redis 与缓存", "order": 5,
+          "children": [
+            { "name": "cs-7-e-1-structs", "label": "五种数据结构：String/Hash/List/Set/ZSet", "order": 1 },
+            { "name": "cs-7-e-2-persistence", "label": "持久化：RDB快照与AOF日志", "order": 2 },
+            { "name": "cs-7-e-3-cache", "label": "缓存策略：穿透/击穿/雪崩/一致性", "order": 3 },
+            { "name": "cs-7-e-4-lock", "label": "分布式锁：Redlock/Lua脚本原子性", "order": 4 }
+          ]
+        },
+        {
+          "name": "cs-7-module-f-nosql", "label": "NoSQL 与大数据", "order": 6,
+          "children": [
+            { "name": "cs-7-f-1-mongo", "label": "MongoDB：文档模型、聚合管道", "order": 1 },
+            { "name": "cs-7-f-2-es", "label": "Elasticsearch：倒排索引、全文搜索", "order": 2 },
+            { "name": "cs-7-f-3-timeseries", "label": "时序数据库：InfluxDB/Prometheus TSDB", "order": 3 }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "cs-phase-8-languages",
+      "label": "编程语言与编译原理",
+      "icon": "📝",
+      "order": 80,
+      "children": [
+        {
+          "name": "cs-8-module-a-go", "label": "Go 语言深入", "order": 1,
+          "children": [
+            { "name": "cs-8-a-1-goroutine", "label": "并发模型：goroutine/GMP/channel/select", "order": 1 },
+            { "name": "cs-8-a-2-interface", "label": "接口：隐式实现、类型断言、反射", "order": 2 },
+            { "name": "cs-8-a-3-escape", "label": "内存：逃逸分析与GC调优", "order": 3 }
+          ]
+        },
+        {
+          "name": "cs-8-module-b-rust", "label": "Rust 语言深入", "order": 2,
+          "children": [
+            { "name": "cs-8-b-1-ownership", "label": "所有权、借用与生命周期", "order": 1 },
+            { "name": "cs-8-b-2-trait", "label": "Trait 系统与泛型约束", "order": 2 },
+            { "name": "cs-8-b-3-unsafe", "label": "unsafe 边界与FFI", "order": 3 }
+          ]
+        },
+        {
+          "name": "cs-8-module-c-memory", "label": "内存模型", "order": 3,
+          "children": [
+            { "name": "cs-8-c-1-stack-heap", "label": "栈vs堆分配：逃逸分析与性能", "order": 1 },
+            { "name": "cs-8-c-2-gc", "label": "GC：标记-清扫/分代/并发/STW", "order": 2 },
+            { "name": "cs-8-c-3-raii", "label": "RAII：确定性析构 vs GC", "order": 3 }
+          ]
+        },
+        {
+          "name": "cs-8-module-d-compiler", "label": "编译原理", "order": 4,
+          "children": [
+            { "name": "cs-8-d-1-lex-parse", "label": "词法分析(Lexer)与语法分析(Parser)", "order": 1 },
+            { "name": "cs-8-d-2-ir-opt", "label": "中间表示IR与优化遍(Pass)", "order": 2 },
+            { "name": "cs-8-d-3-codegen", "label": "代码生成与寄存器分配", "order": 3 }
+          ]
+        },
+        {
+          "name": "cs-8-module-e-types", "label": "类型系统", "order": 5,
+          "children": [
+            { "name": "cs-8-e-1-static-dyn", "label": "静态vs动态类型、强类型vs弱类型", "order": 1 },
+            { "name": "cs-8-e-2-polymorphism", "label": "多态：参数化/特设/子类型/行多态", "order": 2 },
+            { "name": "cs-8-e-3-inference", "label": "类型推断：Hindley-Milner算法", "order": 3 }
+          ]
+        },
+        {
+          "name": "cs-8-module-f-runtime", "label": "运行时与虚拟机", "order": 6,
+          "children": [
+            { "name": "cs-8-f-1-bytecode", "label": "字节码与栈式/寄存器式VM", "order": 1 },
+            { "name": "cs-8-f-2-jit", "label": "JIT编译：热点探测/内联缓存/去优化", "order": 2 },
+            { "name": "cs-8-f-3-fp", "label": "函数式编程：纯函数/不可变性/Monad", "order": 3 }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "cs-phase-9-software-eng",
+      "label": "软件工程与系统设计",
+      "icon": "🏛️",
+      "order": 90,
+      "children": [
+        {
+          "name": "cs-9-module-a-principles", "label": "设计原则与模式", "order": 1,
+          "children": [
+            { "name": "cs-9-a-1-solid", "label": "SOLID原则与DRY/KISS/YAGNI", "order": 1 },
+            { "name": "cs-9-a-2-creational", "label": "创建型模式：工厂/单例/建造者/原型", "order": 2 },
+            { "name": "cs-9-a-3-behavioral", "label": "行为型模式：策略/观察者/命令/模板", "order": 3 },
+            { "name": "cs-9-a-4-structural", "label": "结构型模式：适配器/装饰器/代理/组合", "order": 4 }
+          ]
+        },
+        {
+          "name": "cs-9-module-b-architecture", "label": "架构模式", "order": 2,
+          "children": [
+            { "name": "cs-9-b-1-layered", "label": "分层架构与六边形架构", "order": 1 },
+            { "name": "cs-9-b-2-event", "label": "事件驱动架构与CQRS", "order": 2 },
+            { "name": "cs-9-b-3-ddd", "label": "领域驱动设计：实体/值对象/聚合", "order": 3 }
+          ]
+        },
+        {
+          "name": "cs-9-module-c-api", "label": "API与接口设计", "order": 3,
+          "children": [
+            { "name": "cs-9-c-1-restful", "label": "RESTful：资源建模、状态码、版本控制", "order": 1 },
+            { "name": "cs-9-c-2-grpc", "label": "gRPC：Protobuf、流式、拦截器", "order": 2 },
+            { "name": "cs-9-c-3-graphql", "label": "GraphQL：Schema/Resolver/N+1问题", "order": 3 }
+          ]
+        },
+        {
+          "name": "cs-9-module-d-quality", "label": "代码质量与测试", "order": 4,
+          "children": [
+            { "name": "cs-9-d-1-unit-test", "label": "单元测试：FIRST原则、TDD节奏", "order": 1 },
+            { "name": "cs-9-d-2-pyramid", "label": "测试金字塔：单元/集成/E2E比例", "order": 2 },
+            { "name": "cs-9-d-3-refactor", "label": "重构：坏味道识别与安全重构步骤", "order": 3 },
+            { "name": "cs-9-d-4-review", "label": "代码审查：清单、工具、文化", "order": 4 }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "cs-phase-10-distributed",
+      "label": "分布式系统基础",
+      "icon": "🔀",
+      "order": 100,
+      "children": [
+        {
+          "name": "cs-10-module-a-theory", "label": "分布式理论", "order": 1,
+          "children": [
+            { "name": "cs-10-a-1-cap", "label": "CAP定理与PACELC扩展", "order": 1 },
+            { "name": "cs-10-a-2-base", "label": "BASE与最终一致性", "order": 2 },
+            { "name": "cs-10-a-3-consistency", "label": "一致性模型：线性/顺序/因果/最终", "order": 3 }
+          ]
+        },
+        {
+          "name": "cs-10-module-b-consensus", "label": "共识与复制", "order": 2,
+          "children": [
+            { "name": "cs-10-b-1-raft", "label": "Raft：Leader选举、日志复制、安全性", "order": 1 },
+            { "name": "cs-10-b-2-paxos", "label": "Paxos与Multi-Paxos（历史）", "order": 2 },
+            { "name": "cs-10-b-3-replication", "label": "数据复制：主从/多主/无主、一致性哈希", "order": 3 }
+          ]
+        },
+        {
+          "name": "cs-10-module-c-transaction", "label": "分布式事务", "order": 3,
+          "children": [
+            { "name": "cs-10-c-1-2pc", "label": "2PC/3PC与XA协议", "order": 1 },
+            { "name": "cs-10-c-2-saga", "label": "Saga模式与TCC补偿事务", "order": 2 },
+            { "name": "cs-10-c-3-msg-table", "label": "本地消息表与事务性发件箱", "order": 3 }
+          ]
+        },
+        {
+          "name": "cs-10-module-d-infra", "label": "基础设施", "order": 4,
+          "children": [
+            { "name": "cs-10-d-1-discovery", "label": "服务发现：Consul/etcd/DNS-based", "order": 1 },
+            { "name": "cs-10-d-2-lb", "label": "负载均衡：L4/L7、一致性哈希、最小连接", "order": 2 },
+            { "name": "cs-10-d-3-mq", "label": "消息队列：Kafka分区/消费组、RabbitMQ路由", "order": 3 }
+          ]
+        },
+        {
+          "name": "cs-10-module-e-observability", "label": "可观测性", "order": 5,
+          "children": [
+            { "name": "cs-10-e-1-traces", "label": "分布式追踪：OpenTelemetry、Jaeger", "order": 1 },
+            { "name": "cs-10-e-2-metrics", "label": "指标监控：Prometheus、Grafana", "order": 2 },
+            { "name": "cs-10-e-3-logs", "label": "日志聚合：ELK/Loki、结构化日志", "order": 3 }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "cs-phase-11-engineering",
+      "label": "工程实践与持续成长",
+      "icon": "🚀",
+      "order": 110,
+      "children": [
+        {
+          "name": "cs-11-module-a-devops", "label": "DevOps 与 CI/CD", "order": 1,
+          "children": [
+            { "name": "cs-11-a-1-cicd", "label": "CI/CD流水线设计与最佳实践", "order": 1 },
+            { "name": "cs-11-a-2-docker", "label": "Docker：多阶段构建、网络、卷", "order": 2 },
+            { "name": "cs-11-a-3-k8s", "label": "Kubernetes：Pod/Service/Deployment/Ingress", "order": 3 },
+            { "name": "cs-11-a-4-deploy", "label": "部署策略：蓝绿/金丝雀/滚动更新", "order": 4 }
+          ]
+        },
+        {
+          "name": "cs-11-module-b-performance", "label": "性能分析与优化", "order": 2,
+          "children": [
+            { "name": "cs-11-b-1-profile", "label": "CPU分析：pprof/perf/火焰图", "order": 1 },
+            { "name": "cs-11-b-2-memory", "label": "内存分析：堆快照、泄漏排查", "order": 2 },
+            { "name": "cs-11-b-3-bench", "label": "基准测试与优化案例", "order": 3 }
+          ]
+        },
+        {
+          "name": "cs-11-module-c-security", "label": "安全工程", "order": 3,
+          "children": [
+            { "name": "cs-11-c-1-owasp", "label": "OWASP Top 10 与防御措施", "order": 1 },
+            { "name": "cs-11-c-2-crypto", "label": "密码学基础：哈希/对称/非对称/数字签名", "order": 2 },
+            { "name": "cs-11-c-3-secrets", "label": "密钥管理：Vault/环境变量/SealedSecrets", "order": 3 }
+          ]
+        },
+        {
+          "name": "cs-11-module-d-growth", "label": "职业成长", "order": 4,
+          "children": [
+            { "name": "cs-11-d-1-git-workflow", "label": "Git高级工作流：GitHub Flow/Trunk-based", "order": 1 },
+            { "name": "cs-11-d-2-tech-writing", "label": "技术写作：RFC/ADR/API文档/技术博客", "order": 2 },
+            { "name": "cs-11-d-3-english", "label": "技术英语：阅读论文、Stack Overflow", "order": 3 },
+            { "name": "cs-11-d-4-career", "label": "职业规划：技术路线/管理路线/独立开发者", "order": 4 }
+          ]
+        }
+      ]
+    }
+  ]
+}

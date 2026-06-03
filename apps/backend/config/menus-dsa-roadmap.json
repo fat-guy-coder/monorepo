@@ -1,0 +1,505 @@
+{
+  "project": "learning",
+  "parentId": "d1ff0e93-e469-46bc-85fa-a0f7853d357a",
+  "items": [
+    {
+      "name": "dsa-learning-path",
+      "label": "算法与数据结构学习路线图",
+      "icon": "🗺️",
+      "order": 1,
+      "isLeaf": true
+    },
+    {
+      "name": "dsa-module-1-complexity",
+      "label": "复杂度分析基础",
+      "icon": "📐",
+      "order": 10,
+      "children": [
+        {
+          "name": "dsa-1-1-big-o", "label": "渐近分析", "order": 1,
+          "children": [
+            { "name": "dsa-1-1-1-big-o", "label": "大O记号：定义与直观理解", "order": 1 },
+            { "name": "dsa-1-1-2-omega-theta", "label": "大Ω与大Θ记号", "order": 2 },
+            { "name": "dsa-1-1-3-rules", "label": "复杂度计算规则：加/乘/忽略常数", "order": 3 },
+            { "name": "dsa-1-1-4-common", "label": "常见复杂度：O(1)/O(logn)/O(n)/O(nlogn)/O(n²)", "order": 4 }
+          ]
+        },
+        {
+          "name": "dsa-1-2-analysis", "label": "复杂度分析实战", "order": 2,
+          "children": [
+            { "name": "dsa-1-2-1-loop", "label": "循环分析：单层/嵌套/对数循环", "order": 1 },
+            { "name": "dsa-1-2-2-recursive", "label": "递归分析：递推式与主定理", "order": 2 },
+            { "name": "dsa-1-2-3-amortized", "label": "均摊分析：聚合/记账/势能法", "order": 3 },
+            { "name": "dsa-1-2-4-space", "label": "空间复杂度与原地算法", "order": 4 }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "dsa-module-2-linear",
+      "label": "线性数据结构",
+      "icon": "📏",
+      "order": 20,
+      "children": [
+        {
+          "name": "dsa-2-1-array", "label": "数组", "order": 1,
+          "children": [
+            { "name": "dsa-2-1-1-static", "label": "静态数组：寻址公式与缓存友好性", "order": 1 },
+            { "name": "dsa-2-1-2-dynamic", "label": "动态数组：扩容策略与均摊分析", "order": 2 },
+            { "name": "dsa-2-1-3-two-pointer", "label": "双指针技巧：快慢/对撞/滑动窗口", "order": 3 },
+            { "name": "dsa-2-1-4-prefix-sum", "label": "前缀和与差分数组", "order": 4 }
+          ]
+        },
+        {
+          "name": "dsa-2-2-linkedlist", "label": "链表", "order": 2,
+          "children": [
+            { "name": "dsa-2-2-1-singly", "label": "单向链表：插入/删除/反转/环检测", "order": 1 },
+            { "name": "dsa-2-2-2-doubly", "label": "双向链表与哨兵节点", "order": 2 },
+            { "name": "dsa-2-2-3-dummy", "label": "哑节点技巧与边界处理", "order": 3 },
+            { "name": "dsa-2-2-4-lru", "label": "LRU Cache：哈希表+双向链表", "order": 4 }
+          ]
+        },
+        {
+          "name": "dsa-2-3-stack", "label": "栈", "order": 3,
+          "children": [
+            { "name": "dsa-2-3-1-mono-stack", "label": "单调栈：下一个更大元素/接雨水/柱状图", "order": 1 },
+            { "name": "dsa-2-3-2-expression", "label": "表达式求值：中缀转后缀/括号匹配", "order": 2 },
+            { "name": "dsa-2-3-3-dfs-stack", "label": "栈模拟递归与 DFS 迭代实现", "order": 3 }
+          ]
+        },
+        {
+          "name": "dsa-2-4-queue", "label": "队列与变体", "order": 4,
+          "children": [
+            { "name": "dsa-2-4-1-deque", "label": "双端队列：滑动窗口最大值", "order": 1 },
+            { "name": "dsa-2-4-2-mono-queue", "label": "单调队列：最短子数组/数据流", "order": 2 },
+            { "name": "dsa-2-4-3-circular", "label": "循环队列与环形缓冲区", "order": 3 }
+          ]
+        },
+        {
+          "name": "dsa-2-5-skiplist", "label": "跳表", "order": 5,
+          "children": [
+            { "name": "dsa-2-5-1-principle", "label": "跳表原理：多层索引与概率平衡", "order": 1 },
+            { "name": "dsa-2-5-2-implement", "label": "跳表实现：插入/删除/查找", "order": 2 },
+            { "name": "dsa-2-5-3-redis-zset", "label": "Redis ZSet 中的跳表应用", "order": 3 }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "dsa-module-3-hash",
+      "label": "哈希表",
+      "icon": "🔑",
+      "order": 30,
+      "children": [
+        {
+          "name": "dsa-3-1-hash-func", "label": "哈希函数设计", "order": 1,
+          "children": [
+            { "name": "dsa-3-1-1-principle", "label": "哈希函数要求：确定性/均匀性/高效性", "order": 1 },
+            { "name": "dsa-3-1-2-methods", "label": "常见方法：取模/乘法/MD5/SHA", "order": 2 },
+            { "name": "dsa-3-1-3-string-hash", "label": "字符串哈希：多项式/Rabin指纹", "order": 3 }
+          ]
+        },
+        {
+          "name": "dsa-3-2-collision", "label": "冲突解决", "order": 2,
+          "children": [
+            { "name": "dsa-3-2-1-chaining", "label": "链地址法：链表/红黑树(Java8+)", "order": 1 },
+            { "name": "dsa-3-2-2-open", "label": "开放寻址：线性探测/二次探测/双重哈希", "order": 2 },
+            { "name": "dsa-3-2-3-robin-hood", "label": "Robin Hood 哈希与 Swiss Table", "order": 3 }
+          ]
+        },
+        {
+          "name": "dsa-3-3-applications", "label": "哈希表应用", "order": 3,
+          "children": [
+            { "name": "dsa-3-3-1-two-sum", "label": "两数之和到 n 数之和的演变", "order": 1 },
+            { "name": "dsa-3-3-2-dedup", "label": "去重、计数、分组映射", "order": 2 },
+            { "name": "dsa-3-3-3-consistent", "label": "一致性哈希与虚拟节点", "order": 3 },
+            { "name": "dsa-3-3-4-bloom", "label": "布隆过滤器：原理/误判率/Redis实战", "order": 4 }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "dsa-module-4-tree",
+      "label": "树结构",
+      "icon": "🌳",
+      "order": 40,
+      "children": [
+        {
+          "name": "dsa-4-1-binary-tree", "label": "二叉树基础", "order": 1,
+          "children": [
+            { "name": "dsa-4-1-1-traversal", "label": "遍历：前序/中序/后序/层序(递归+迭代)", "order": 1 },
+            { "name": "dsa-4-1-2-properties", "label": "性质：高度/满二叉树/完全二叉树", "order": 2 },
+            { "name": "dsa-4-1-3-construct", "label": "从遍历序列构造二叉树", "order": 3 },
+            { "name": "dsa-4-1-4-lca", "label": "最近公共祖先(LCA)问题", "order": 4 }
+          ]
+        },
+        {
+          "name": "dsa-4-2-bst", "label": "二叉搜索树", "order": 2,
+          "children": [
+            { "name": "dsa-4-2-1-basic", "label": "BST：查找/插入/删除/验证", "order": 1 },
+            { "name": "dsa-4-2-2-successor", "label": "前驱与后继节点", "order": 2 },
+            { "name": "dsa-4-2-3-kth", "label": "第K小/大的元素与BST统计", "order": 3 }
+          ]
+        },
+        {
+          "name": "dsa-4-3-balanced", "label": "平衡二叉树", "order": 3,
+          "children": [
+            { "name": "dsa-4-3-1-avl", "label": "AVL树：旋转操作(LL/RR/LR/RL)", "order": 1 },
+            { "name": "dsa-4-3-2-rb-tree", "label": "红黑树：5条性质/插入修复/删除修复", "order": 2 },
+            { "name": "dsa-4-3-3-treap", "label": "Treap与随机化平衡", "order": 3 }
+          ]
+        },
+        {
+          "name": "dsa-4-4-btree", "label": "B树家族", "order": 4,
+          "children": [
+            { "name": "dsa-4-4-1-b-tree", "label": "B树：分裂/合并/删除", "order": 1 },
+            { "name": "dsa-4-4-2-b-plus", "label": "B+树与数据库索引", "order": 2 },
+            { "name": "dsa-4-4-3-lsm", "label": "LSM-Tree：写优化存储引擎", "order": 3 }
+          ]
+        },
+        {
+          "name": "dsa-4-5-advanced-tree", "label": "高级树结构", "order": 5,
+          "children": [
+            { "name": "dsa-4-5-1-trie", "label": "Trie前缀树：插入/搜索/前缀匹配", "order": 1 },
+            { "name": "dsa-4-5-2-segment", "label": "线段树：区间查询/懒标记/动态开点", "order": 2 },
+            { "name": "dsa-4-5-3-fenwick", "label": "树状数组(BIT)：单点更新/区间查询", "order": 3 },
+            { "name": "dsa-4-5-4-union-find", "label": "并查集：路径压缩/按秩合并/带权", "order": 4 }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "dsa-module-5-heap",
+      "label": "堆与优先队列",
+      "icon": "⛰️",
+      "order": 50,
+      "children": [
+        {
+          "name": "dsa-5-1-binary-heap", "label": "二叉堆", "order": 1,
+          "children": [
+            { "name": "dsa-5-1-1-structure", "label": "完全二叉树与数组表示", "order": 1 },
+            { "name": "dsa-5-1-2-sift", "label": "上浮(siftUp)与下沉(siftDown)", "order": 2 },
+            { "name": "dsa-5-1-3-heapify", "label": "建堆 O(n) 算法与堆排序", "order": 3 }
+          ]
+        },
+        {
+          "name": "dsa-5-2-priority-queue", "label": "优先队列应用", "order": 2,
+          "children": [
+            { "name": "dsa-5-2-1-topk", "label": "Top-K问题：堆 vs 快速选择", "order": 1 },
+            { "name": "dsa-5-2-2-kth-stream", "label": "数据流中第K大/中位数", "order": 2 },
+            { "name": "dsa-5-2-3-merge-k", "label": "合并K个有序链表/数组", "order": 3 },
+            { "name": "dsa-5-2-4-schedule", "label": "任务调度与Dijkstra优先队列优化", "order": 4 }
+          ]
+        },
+        {
+          "name": "dsa-5-3-advanced-heap", "label": "高级堆结构", "order": 3,
+          "children": [
+            { "name": "dsa-5-3-1-leftist", "label": "左偏树(Leftist Heap)与可并堆", "order": 1 },
+            { "name": "dsa-5-3-2-fib-heap", "label": "斐波那契堆：理论分析", "order": 2 },
+            { "name": "dsa-5-3-3-pairing", "label": "配对堆：实用高效的可并堆", "order": 3 }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "dsa-module-6-graph",
+      "label": "图算法",
+      "icon": "🕸️",
+      "order": 60,
+      "children": [
+        {
+          "name": "dsa-6-1-foundation", "label": "图论基础", "order": 1,
+          "children": [
+            { "name": "dsa-6-1-1-repr", "label": "图的表示：邻接表/邻接矩阵/边列表", "order": 1 },
+            { "name": "dsa-6-1-2-types", "label": "图分类：有向/无向/加权/二分/DAG", "order": 2 },
+            { "name": "dsa-6-1-3-degree", "label": "度/入度/出度与握手定理", "order": 3 }
+          ]
+        },
+        {
+          "name": "dsa-6-2-traversal", "label": "图的遍历", "order": 2,
+          "children": [
+            { "name": "dsa-6-2-1-dfs", "label": "DFS：递归/迭代、连通分量、环检测", "order": 1 },
+            { "name": "dsa-6-2-2-bfs", "label": "BFS：最短路径(无权)、层序遍历", "order": 2 },
+            { "name": "dsa-6-2-3-bipartite", "label": "二分图判定与最大匹配(匈牙利算法)", "order": 3 },
+            { "name": "dsa-6-2-4-topo-sort", "label": "拓扑排序：Kahn算法/DFS后序, AOV网", "order": 4 }
+          ]
+        },
+        {
+          "name": "dsa-6-3-shortest-path", "label": "最短路径", "order": 3,
+          "children": [
+            { "name": "dsa-6-3-1-dijkstra", "label": "Dijkstra：贪心+优先队列O(ElogV)", "order": 1 },
+            { "name": "dsa-6-3-2-bellman-ford", "label": "Bellman-Ford：负权边与负环检测", "order": 2 },
+            { "name": "dsa-6-3-3-floyd", "label": "Floyd-Warshall：全源最短路径DP", "order": 3 },
+            { "name": "dsa-6-3-4-spfa", "label": "SPFA：队列优化的Bellman-Ford", "order": 4 },
+            { "name": "dsa-6-3-5-a-star", "label": "A*搜索与启发式函数", "order": 5 }
+          ]
+        },
+        {
+          "name": "dsa-6-4-mst", "label": "最小生成树", "order": 4,
+          "children": [
+            { "name": "dsa-6-4-1-prim", "label": "Prim算法：基于顶点的贪心", "order": 1 },
+            { "name": "dsa-6-4-2-kruskal", "label": "Kruskal算法：基于边的贪心+并查集", "order": 2 }
+          ]
+        },
+        {
+          "name": "dsa-6-5-network-flow", "label": "网络流", "order": 5,
+          "children": [
+            { "name": "dsa-6-5-1-max-flow", "label": "最大流：Ford-Fulkerson/Edmonds-Karp/Dinic", "order": 1 },
+            { "name": "dsa-6-5-2-min-cut", "label": "最小割与最大流-最小割定理", "order": 2 },
+            { "name": "dsa-6-5-3-bipartite-match", "label": "二分图最大匹配与最大流归约", "order": 3 }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "dsa-module-7-sort",
+      "label": "排序算法",
+      "icon": "📊",
+      "order": 70,
+      "children": [
+        {
+          "name": "dsa-7-1-compare", "label": "比较排序", "order": 1,
+          "children": [
+            { "name": "dsa-7-1-1-quick", "label": "快速排序：分区策略/随机化/三路快排", "order": 1 },
+            { "name": "dsa-7-1-2-merge", "label": "归并排序：分治/原地归并/外排序", "order": 2 },
+            { "name": "dsa-7-1-3-heap-sort", "label": "堆排序：建堆/排序/性能对比", "order": 3 },
+            { "name": "dsa-7-1-4-insert-shell", "label": "插入排序与希尔排序", "order": 4 }
+          ]
+        },
+        {
+          "name": "dsa-7-2-linear-sort", "label": "线性时间排序", "order": 2,
+          "children": [
+            { "name": "dsa-7-2-1-counting", "label": "计数排序：稳定排序与适用范围", "order": 1 },
+            { "name": "dsa-7-2-2-radix", "label": "基数排序：LSD/MSD与字符串排序", "order": 2 },
+            { "name": "dsa-7-2-3-bucket", "label": "桶排序：均匀分布假设与期望复杂度", "order": 3 }
+          ]
+        },
+        {
+          "name": "dsa-7-3-select", "label": "选择算法", "order": 3,
+          "children": [
+            { "name": "dsa-7-3-1-quick-select", "label": "快速选择：O(n)期望第K小", "order": 1 },
+            { "name": "dsa-7-3-2-median-of-medians", "label": "中位数之中位数：O(n)确定性选择", "order": 2 }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "dsa-module-8-search",
+      "label": "搜索算法",
+      "icon": "🔍",
+      "order": 80,
+      "children": [
+        {
+          "name": "dsa-8-1-binary", "label": "二分搜索", "order": 1,
+          "children": [
+            { "name": "dsa-8-1-1-classic", "label": "标准二分：精确查找/左边界/右边界", "order": 1 },
+            { "name": "dsa-8-1-2-answer", "label": "二分答案：单调性判断与可行解验证", "order": 2 },
+            { "name": "dsa-8-1-3-rotated", "label": "旋转数组搜索与变体", "order": 3 }
+          ]
+        },
+        {
+          "name": "dsa-8-2-backtracking", "label": "回溯算法", "order": 2,
+          "children": [
+            { "name": "dsa-8-2-1-template", "label": "回溯模板：选择/递归/撤销", "order": 1 },
+            { "name": "dsa-8-2-2-permutation", "label": "排列组合问题：全排列/子集/组合总和", "order": 2 },
+            { "name": "dsa-8-2-3-n-queens", "label": "N皇后/数独/括号生成", "order": 3 },
+            { "name": "dsa-8-2-4-pruning", "label": "剪枝策略：可行性/最优性/对称性剪枝", "order": 4 }
+          ]
+        },
+        {
+          "name": "dsa-8-3-branch-bound", "label": "分支限界", "order": 3,
+          "children": [
+            { "name": "dsa-8-3-1-principle", "label": "分支限界原理：活结点/扩展/限界函数", "order": 1 },
+            { "name": "dsa-8-3-2-tsp", "label": "TSP与背包问题的分支限界解法", "order": 2 }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "dsa-module-9-dp",
+      "label": "动态规划",
+      "icon": "🧩",
+      "order": 90,
+      "children": [
+        {
+          "name": "dsa-9-1-fundamentals", "label": "DP基础", "order": 1,
+          "children": [
+            { "name": "dsa-9-1-1-principle", "label": "DP原理：最优子结构/无后效性/重叠子问题", "order": 1 },
+            { "name": "dsa-9-1-2-memo", "label": "记忆化搜索(Top-down) vs 递推(Bottom-up)", "order": 2 },
+            { "name": "dsa-9-1-3-state", "label": "状态定义与状态转移方程设计方法论", "order": 3 }
+          ]
+        },
+        {
+          "name": "dsa-9-2-classic", "label": "经典DP问题", "order": 2,
+          "children": [
+            { "name": "dsa-9-2-1-knapsack", "label": "背包九讲：01/完全/多重/分组/二维费用", "order": 1 },
+            { "name": "dsa-9-2-2-lcs-lis", "label": "LCS最长公共子序列与LIS最长上升子序列", "order": 2 },
+            { "name": "dsa-9-2-3-edit-dist", "label": "编辑距离与字符串对齐", "order": 3 },
+            { "name": "dsa-9-2-4-matrix-chain", "label": "矩阵链乘与最优BST", "order": 4 }
+          ]
+        },
+        {
+          "name": "dsa-9-3-linear-dp", "label": "线性DP与区间DP", "order": 3,
+          "children": [
+            { "name": "dsa-9-3-1-house-robber", "label": "打家劫舍到股票买卖系列", "order": 1 },
+            { "name": "dsa-9-3-2-interval-dp", "label": "区间DP：石子合并/戳气球/回文串", "order": 2 },
+            { "name": "dsa-9-3-3-bit-dp", "label": "状态压缩DP(TSP/覆盖问题)", "order": 3 }
+          ]
+        },
+        {
+          "name": "dsa-9-4-tree-dp", "label": "树形DP与图上DP", "order": 4,
+          "children": [
+            { "name": "dsa-9-4-1-tree-dp", "label": "树形DP：最大独立集/树的重心/直径", "order": 1 },
+            { "name": "dsa-9-4-2-dag-dp", "label": "DAG上的DP：最长路/关键路径", "order": 2 },
+            { "name": "dsa-9-4-3-digit-dp", "label": "数位DP：计数问题/不要62", "order": 3 }
+          ]
+        },
+        {
+          "name": "dsa-9-5-optimization", "label": "DP优化", "order": 5,
+          "children": [
+            { "name": "dsa-9-5-1-mono-queue", "label": "单调队列优化DP", "order": 1 },
+            { "name": "dsa-9-5-2-slope", "label": "斜率优化(Convex Hull Trick)", "order": 2 },
+            { "name": "dsa-9-5-3-quadrangle", "label": "四边形不等式优化", "order": 3 }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "dsa-module-10-greedy",
+      "label": "贪心算法",
+      "icon": "🎯",
+      "order": 100,
+      "children": [
+        {
+          "name": "dsa-10-1-principle", "label": "贪心基础", "order": 1,
+          "children": [
+            { "name": "dsa-10-1-1-strategy", "label": "贪心选择性质与最优子结构", "order": 1 },
+            { "name": "dsa-10-1-2-vs-dp", "label": "贪心 vs DP：何时贪心有效", "order": 2 },
+            { "name": "dsa-10-1-3-proof", "label": "贪心正确性证明：交换论证/归纳法", "order": 3 }
+          ]
+        },
+        {
+          "name": "dsa-10-2-classic", "label": "经典贪心问题", "order": 2,
+          "children": [
+            { "name": "dsa-10-2-1-activity", "label": "活动选择与区间调度", "order": 1 },
+            { "name": "dsa-10-2-2-huffman", "label": "Huffman编码：最优前缀码", "order": 2 },
+            { "name": "dsa-10-2-3-fractional-knapsack", "label": "分数背包与兑换硬币", "order": 3 },
+            { "name": "dsa-10-2-4-job-scheduling", "label": "任务调度：最小化延迟/最大化利润", "order": 4 }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "dsa-module-11-string",
+      "label": "字符串算法",
+      "icon": "📝",
+      "order": 110,
+      "children": [
+        {
+          "name": "dsa-11-1-match", "label": "字符串匹配", "order": 1,
+          "children": [
+            { "name": "dsa-11-1-1-bf", "label": "暴力匹配与Rabin-Karp指纹算法", "order": 1 },
+            { "name": "dsa-11-1-2-kmp", "label": "KMP：前缀函数与next数组推导", "order": 2 },
+            { "name": "dsa-11-1-3-boyer-moore", "label": "Boyer-Moore与Sunday算法", "order": 3 },
+            { "name": "dsa-11-1-4-z-algo", "label": "Z算法与扩展KMP", "order": 4 }
+          ]
+        },
+        {
+          "name": "dsa-11-2-aho", "label": "多模式匹配", "order": 2,
+          "children": [
+            { "name": "dsa-11-2-1-trie-match", "label": "Trie树上的字符串匹配", "order": 1 },
+            { "name": "dsa-11-2-2-aho", "label": "AC自动机：fail指针与输出链", "order": 2 },
+            { "name": "dsa-11-2-3-application", "label": "敏感词过滤/搜索引擎提示", "order": 3 }
+          ]
+        },
+        {
+          "name": "dsa-11-3-suffix", "label": "后缀结构", "order": 3,
+          "children": [
+            { "name": "dsa-11-3-1-suffix-array", "label": "后缀数组：倍增算法与rank/height数组", "order": 1 },
+            { "name": "dsa-11-3-2-lcp", "label": "最长公共前缀(LCP)与RMQ", "order": 2 },
+            { "name": "dsa-11-3-3-suffix-tree", "label": "后缀树概念与Ukkonen算法概述", "order": 3 }
+          ]
+        },
+        {
+          "name": "dsa-11-4-palindrome", "label": "回文串问题", "order": 4,
+          "children": [
+            { "name": "dsa-11-4-1-manacher", "label": "Manacher算法：O(n)最长回文子串", "order": 1 },
+            { "name": "dsa-11-4-2-palindromic-dp", "label": "回文DP：分割/删除/插入", "order": 2 }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "dsa-module-12-advanced",
+      "label": "高级数据结构",
+      "icon": "🏗️",
+      "order": 120,
+      "children": [
+        {
+          "name": "dsa-12-1-balanced", "label": "平衡树进阶", "order": 1,
+          "children": [
+            { "name": "dsa-12-1-1-splay", "label": "Splay伸展树与Link-Cut Tree入门", "order": 1 },
+            { "name": "dsa-12-1-2-scapegoat", "label": "替罪羊树：均摊与势能分析", "order": 2 }
+          ]
+        },
+        {
+          "name": "dsa-12-2-persistent", "label": "持久化数据结构", "order": 2,
+          "children": [
+            { "name": "dsa-12-2-1-persistent-seg", "label": "主席树：持久化线段树与区间第K小", "order": 1 },
+            { "name": "dsa-12-2-2-persistent-trie", "label": "持久化Trie与最大异或", "order": 2 }
+          ]
+        },
+        {
+          "name": "dsa-12-3-cuckoo", "label": "高级哈希与概率结构", "order": 3,
+          "children": [
+            { "name": "dsa-12-3-1-cuckoo", "label": "布谷鸟哈希：最坏O(1)查找", "order": 1 },
+            { "name": "dsa-12-3-2-hyperloglog", "label": "HyperLogLog：基数估计", "order": 2 },
+            { "name": "dsa-12-3-3-count-min", "label": "Count-Min Sketch：频率估计", "order": 3 }
+          ]
+        },
+        {
+          "name": "dsa-12-4-concurrent", "label": "并发数据结构", "order": 4,
+          "children": [
+            { "name": "dsa-12-4-1-lock-free", "label": "无锁编程：CAS/ABA问题", "order": 1 },
+            { "name": "dsa-12-4-2-concurrent-map", "label": "并发散列表：分段锁/无锁哈希", "order": 2 },
+            { "name": "dsa-12-4-3-ring-buffer", "label": "无锁队列：环形缓冲区(Disruptor)", "order": 3 }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "dsa-module-13-methodology",
+      "label": "算法设计方法论",
+      "icon": "🧠",
+      "order": 130,
+      "children": [
+        {
+          "name": "dsa-13-1-paradigms", "label": "算法范式总览", "order": 1,
+          "children": [
+            { "name": "dsa-13-1-1-brute-force", "label": "暴力枚举与搜索空间分析", "order": 1 },
+            { "name": "dsa-13-1-2-divide-conquer", "label": "分治法：归并思想与快速幂", "order": 2 },
+            { "name": "dsa-13-1-3-randomized", "label": "随机化算法与期望分析", "order": 3 },
+            { "name": "dsa-13-1-4-approx", "label": "近似算法：TSP/顶点覆盖/集合覆盖", "order": 4 }
+          ]
+        },
+        {
+          "name": "dsa-13-2-patterns", "label": "解题模式与技巧", "order": 2,
+          "children": [
+            { "name": "dsa-13-2-1-sliding-window", "label": "滑动窗口模式总结", "order": 1 },
+            { "name": "dsa-13-2-2-two-heap", "label": "双堆模式(中位数/延迟删除)", "order": 2 },
+            { "name": "dsa-13-2-3-cycle-sort", "label": "循环排序与原地哈希", "order": 3 },
+            { "name": "dsa-13-2-4-meet-in-middle", "label": "折半搜索与Meet-in-the-Middle", "order": 4 }
+          ]
+        },
+        {
+          "name": "dsa-13-3-competition", "label": "竞赛与面试", "order": 3,
+          "children": [
+            { "name": "dsa-13-3-1-leetcode", "label": "LeetCode刷题策略：专题→混合→限时", "order": 1 },
+            { "name": "dsa-13-3-2-system-design", "label": "系统设计中的数据结构选型", "order": 2 },
+            { "name": "dsa-13-3-3-interview", "label": "算法面试：澄清→暴力→优化→代码→测试", "order": 3 }
+          ]
+        }
+      ]
+    }
+  ]
+}

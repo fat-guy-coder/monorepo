@@ -144,6 +144,18 @@
     }
 }
 
+//route-fade 路由页面切换（带位移的渐入渐出）
+.route-fade-enter-active,
+.route-fade-leave-active {
+  transition:
+    transform 0.2s ease-in-out,
+    opacity 0.2s ease-in-out;
+}
+.route-fade-leave-from { transform: translate(0, 0); opacity: 1; }
+.route-fade-enter-from { transform: translate(-5px, 5px); opacity: 0; }
+.route-fade-enter-to   { transform: translate(0, 0); opacity: 1; }
+.route-fade-leave-to   { transform: translate(5px, 5px); opacity: 0; }
+
 //pulse 脉冲
 .pulse-enter-active {
     transition: all var(--transition-duration, 0.3s) ease;

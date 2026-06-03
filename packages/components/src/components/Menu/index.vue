@@ -2,13 +2,13 @@
   <nav class="main-menu" :style="menuStyle">
     <ul class="menu__list">
       <MenuItem v-for="item in items" :key="item.path" :item="item" :level="0" :is-open="openKeys.includes(item.path)"
-        :mode="mode" @toggle="handleToggle" @select="handleSelect" @close="closeKeys" />
+        :mode="mode" @toggle="handleToggle" @select="handleSelect" @close="closeKeys" @contextmenu="(payload: any) => emit('contextmenu', payload)" />
     </ul>
   </nav>
 </template>
 
 <script setup lang="ts">
-import { computed, provide, onMounted, type PropType, ref } from 'vue'
+import { computed, provide, onMounted, type PropType, ref, toRef } from 'vue'
 import MenuItem from './MenuItem.vue'
 import type { MenuItem as MenuItemType, MenuMode } from './index'
 
@@ -37,6 +37,11 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  /** 是否允许右键菜单（admin 专用） */
+  showContextMenu: {
+    type: Boolean,
+    default: false,
+  },
   menuConfig: {
     type: Object as PropType<{
       labelSize: number
@@ -61,7 +66,7 @@ const selectedKeys = defineModel<string[]>('selectedKeys', {
   type: Array as PropType<string[]>,
 })
 
-const emit = defineEmits(['select'])
+const emit = defineEmits(['select', 'contextmenu'])
 
 const menuStyle = computed(() => ({
   '--menu-label-size': `${props.menuConfig.labelSize}px`,
@@ -148,6 +153,7 @@ provide('mode', mode)
 provide('collapsed', collapsed)
 provide('viewportWidth', viewportWidth)
 provide('isMobile', props.isMobile)
+provide('showContextMenu', toRef(props, 'showContextMenu'))
 </script>
 
 <style lang="less" scoped>
