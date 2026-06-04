@@ -6,7 +6,7 @@ import vueJsx from '@vitejs/plugin-vue-jsx'
 import tailwindcss from '@tailwindcss/vite'
 import { compression, defineAlgorithm } from 'vite-plugin-compression2'
 import zlib from 'zlib'
-import VueDevTools from 'vite-plugin-vue-devtools'
+// import VueDevTools from 'vite-plugin-vue-devtools'
 
 const outDir = 'dist'
 
@@ -42,7 +42,7 @@ export default defineConfig((env: ConfigEnv) => {
 
   if (isDev) {
 
-    plugins.push(VueDevTools({ launchEditor: 'cursor' }))
+    // plugins.push(VueDevTools({ launchEditor: 'cursor' }))
   }
 
   plugins.push(
