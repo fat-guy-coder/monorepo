@@ -1,15 +1,15 @@
 {
   "env": {
-    "ANTHROPIC_AUTH_TOKEN": "sk-a6815886e867430a807050836e0d5d03",
-    "ANTHROPIC_BASE_URL": "https://api.deepseek.com/anthropic",
-    "ANTHROPIC_MODEL": "deepseek-v4-pro",
-    "ANTHROPIC_DEFAULT_SONNET_MODEL": "deepseek-v4-pro",
-    "ANTHROPIC_DEFAULT_HAIKU_MODEL": "deepseek-v4-pro",
-    "_ANTHROPIC_AUTH_TOKEN": "sk-cp-_5_rbW8twmkFiA99AyqBr1m87tx0sXgOvXHrm3E_S3PU70uxxsjQpP5XxZX_S7px2NSS6IKBefjsf7gC6JKYsklyxiVvbhhcRii2Tq9Vqxjdjqqw5TW2Ayk",
-    "_ANTHROPIC_BASE_URL": "https://api.minimaxi.com/anthropic",
-    "_ANTHROPIC_MODEL": "MiniMax-M2.7",
-    "_ANTHROPIC_DEFAULT_SONNET_MODEL": "MiniMax-M2.7",
-    "_ANTHROPIC_DEFAULT_HAIKU_MODEL": "MiniMax-M2.7",
+    "_ANTHROPIC_AUTH_TOKEN": "sk-a6815886e867430a807050836e0d5d03",
+    "_ANTHROPIC_BASE_URL": "https://api.deepseek.com/anthropic",
+    "_ANTHROPIC_MODEL": "deepseek-v4-pro",
+    "_ANTHROPIC_DEFAULT_SONNET_MODEL": "deepseek-v4-pro",
+    "_ANTHROPIC_DEFAULT_HAIKU_MODEL": "deepseek-v4-pro",
+    "ANTHROPIC_AUTH_TOKEN": "sk-cp-_5_rbW8twmkFiA99AyqBr1m87tx0sXgOvXHrm3E_S3PU70uxxsjQpP5XxZX_S7px2NSS6IKBefjsf7gC6JKYsklyxiVvbhhcRii2Tq9Vqxjdjqqw5TW2Ayk",
+    "ANTHROPIC_BASE_URL": "https://api.minimaxi.com/anthropic",
+    "ANTHROPIC_MODEL": "MiniMax-M2.7",
+    "ANTHROPIC_DEFAULT_SONNET_MODEL": "MiniMax-M2.7",
+    "ANTHROPIC_DEFAULT_HAIKU_MODEL": "MiniMax-M2.7",
     "API_TIMEOUT_MS": "3000000"
   },
   "permissions": {
