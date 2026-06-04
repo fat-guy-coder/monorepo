@@ -177,67 +177,134 @@
     },
     {
       "name": "cs-phase-4-computer-org",
-      "label": "计算机组成原理",
+      "label": "计算机组成原理与硬件",
       "icon": "🖥️",
       "order": 40,
       "children": [
         {
-          "name": "cs-4-module-a-digital", "label": "数字逻辑与数据表示", "order": 1,
+          "name": "cs-4-module-a-logic", "label": "数字逻辑与电路基础", "order": 1,
           "children": [
-            { "name": "cs-4-a-1-gates", "label": "布尔代数、逻辑门、组合电路", "order": 1 },
-            { "name": "cs-4-a-2-sequential", "label": "时序逻辑：触发器、寄存器、计数器", "order": 2 },
-            { "name": "cs-4-a-3-alu", "label": "算术逻辑单元 ALU 设计", "order": 3 },
-            { "name": "cs-4-a-4-integer", "label": "整数表示：原码/反码/补码、溢出", "order": 4 },
-            { "name": "cs-4-a-5-float", "label": "IEEE 754 浮点数与精度陷阱", "order": 5 }
+            { "name": "cs-4-a-1-bool", "label": "布尔代数：与或非/真值表/卡诺图化简", "order": 1 },
+            { "name": "cs-4-a-2-gates", "label": "基本逻辑门：CMOS NAND/NOR 晶体管级实现", "order": 2 },
+            { "name": "cs-4-a-3-combinational", "label": "组合逻辑电路：加法器(半加/全加/超前进位)/译码器/多路复用器", "order": 3 },
+            { "name": "cs-4-a-4-sequential", "label": "时序逻辑电路：SR/D/JK/T 触发器、时钟信号", "order": 4 },
+            { "name": "cs-4-a-5-register-counter", "label": "寄存器与计数器：移位寄存器/纹波计数器/同步计数器", "order": 5 },
+            { "name": "cs-4-a-6-fsm", "label": "有限状态机(FSM)：Moore/Mealy 机与控制器设计", "order": 6 }
           ]
         },
         {
-          "name": "cs-4-module-b-isa", "label": "指令集与CPU微架构", "order": 2,
+          "name": "cs-4-module-b-number", "label": "数据表示与运算", "order": 2,
           "children": [
-            { "name": "cs-4-b-1-isa", "label": "指令集架构：RISC vs CISC", "order": 1 },
-            { "name": "cs-4-b-2-pipeline", "label": "流水线：五级流水与流水线冲突", "order": 2 },
-            { "name": "cs-4-b-3-branch", "label": "分支预测与乱序执行", "order": 3 },
-            { "name": "cs-4-b-4-superscalar", "label": "超标量与多发射处理器", "order": 4 }
+            { "name": "cs-4-b-1-integer", "label": "整数：原码/反码/补码、有符号/无符号溢出", "order": 1 },
+            { "name": "cs-4-b-2-float", "label": "IEEE 754 浮点数：符号/阶码/尾数、精度损失、特殊值(NaN/Inf)", "order": 2 },
+            { "name": "cs-4-b-3-alu", "label": "ALU 算术逻辑单元：加法器前缀树/桶形移位器/乘法器(Booth算法)", "order": 3 },
+            { "name": "cs-4-b-4-barrel", "label": "桶形移位器与硬件除法器", "order": 4 }
           ]
         },
         {
-          "name": "cs-4-module-c-memory", "label": "存储器体系", "order": 3,
+          "name": "cs-4-module-c-cpu", "label": "CPU 计算原理深度", "order": 3,
           "children": [
-            { "name": "cs-4-c-1-hierarchy", "label": "层次结构：寄存器→Cache→内存→磁盘", "order": 1 },
-            { "name": "cs-4-c-2-cache", "label": "Cache：映射策略、替换算法、一致性", "order": 2 },
-            { "name": "cs-4-c-3-vm", "label": "虚拟内存概述：页表/MMU/TLB", "order": 3 }
+            { "name": "cs-4-c-1-isa", "label": "指令集架构(ISA)：RISC vs CISC/ARM vs x86/RISC-V 开源", "order": 1 },
+            { "name": "cs-4-c-2-fetch-cycle", "label": "取指-译码-执行-访存-写回(FDEMW)五级流水", "order": 2 },
+            { "name": "cs-4-c-3-control-unit", "label": "控制器：硬连线控制 vs 微程序控制(微指令/微操作序列)", "order": 3 },
+            { "name": "cs-4-c-4-register-file", "label": "寄存器堆：多端口读写/重命名/重排序缓冲(ROB)", "order": 4 },
+            { "name": "cs-4-c-5-pipeline-hazard", "label": "流水线冲突：数据冒险(转发/旁路)/控制冒险(分支预测)/结构冒险", "order": 5 },
+            { "name": "cs-4-c-6-ooo", "label": "乱序执行：Tomasulo算法/保留站/发射队列/提交", "order": 6 },
+            { "name": "cs-4-c-7-branch-predict", "label": "分支预测器：BTB/全局历史/感知器/TAGE 预测器", "order": 7 },
+            { "name": "cs-4-c-8-superscalar", "label": "超标量与多发射：指令级并行(ILP)/VLIW/EPIC", "order": 8 },
+            { "name": "cs-4-c-9-smt", "label": "同时多线程(SMT/Hyper-Threading)：资源共享与调度", "order": 9 }
           ]
         },
         {
-          "name": "cs-4-module-d-asm", "label": "汇编与底层编程", "order": 4,
+          "name": "cs-4-module-d-gpu", "label": "GPU 并行计算架构", "order": 4,
           "children": [
-            { "name": "cs-4-d-1-registers", "label": "x86-64 寄存器与调用约定", "order": 1 },
-            { "name": "cs-4-d-2-mov-alu", "label": "mov/add/call/ret 指令与栈帧", "order": 2 },
-            { "name": "cs-4-d-3-c-to-asm", "label": "C 代码到汇编对照分析", "order": 3 }
+            { "name": "cs-4-d-1-simd-vs-simt", "label": "SIMD vs SIMT：向量处理器到 GPU 的演进", "order": 1 },
+            { "name": "cs-4-d-2-gpu-core", "label": "NVIDIA SM 架构：CUDA Core/Warp Scheduler/Dispatch Unit", "order": 2 },
+            { "name": "cs-4-d-3-warp", "label": "Warp 调度：线程束/分支发散/占用率(Occupancy)", "order": 3 },
+            { "name": "cs-4-d-4-memory-hierarchy-gpu", "label": "GPU 内存体系：Global/Shared/L1/L2/Register File", "order": 4 },
+            { "name": "cs-4-d-5-tensor-core", "label": "Tensor Core：混合精度矩阵乘法/MMA 指令/sparsity 加速", "order": 5 },
+            { "name": "cs-4-d-6-ray-tracing-core", "label": "RT Core：BVH 遍历/光线-三角形求交硬件加速", "order": 6 },
+            { "name": "cs-4-d-7-cuda-model", "label": "CUDA 编程模型：Grid/Block/Thread/共享内存/同步/原子操作", "order": 7 }
           ]
         },
         {
-          "name": "cs-4-module-e-physics", "label": "半导体物理与存储技术", "order": 5,
+          "name": "cs-4-module-e-dram", "label": "内存：DRAM 物理原理", "order": 5,
           "children": [
-            { "name": "cs-4-e-1-transistor", "label": "晶体管原理：MOSFET/FinFET/GAA 演进", "order": 1 },
-            { "name": "cs-4-e-2-dram", "label": "DRAM：电容存储/刷新机制/Row Hammer 攻击", "order": 2 },
-            { "name": "cs-4-e-3-sram", "label": "SRAM：双稳态触发器/6T单元/Cache 为何快", "order": 3 },
-            { "name": "cs-4-e-4-nand", "label": "NAND Flash：浮栅晶体管/量子隧穿写入/SLC-MLC-TLC-QLC", "order": 4 },
-            { "name": "cs-4-e-5-hdd", "label": "机械硬盘：磁头飞行高度/垂直磁记录/叠瓦式(SMR)", "order": 5 },
-            { "name": "cs-4-e-6-nvme", "label": "NVMe 协议：队列/Submission-Completion 机制", "order": 6 },
-            { "name": "cs-4-e-7-optane", "label": "傲腾(3D XPoint)与存储级内存(SCM)", "order": 7 }
+            { "name": "cs-4-e-1-capacitor", "label": "1T1C 单元：电容存储二进制信息/充放电原理", "order": 1 },
+            { "name": "cs-4-e-2-word-bit-line", "label": "字线(Word Line)与位线(Bit Line)：行列寻址与读写操作", "order": 2 },
+            { "name": "cs-4-e-3-sense-amp", "label": "读出放大器(Sense Amplifier)：检测微弱电位变化", "order": 3 },
+            { "name": "cs-4-e-4-refresh", "label": "刷新机制：电容漏电/RAS-only Refresh/自刷新(Self-Refresh)", "order": 4 },
+            { "name": "cs-4-e-5-bank-rank", "label": "Bank/Rank/Channel 组织：并行访问与交错(Interleaving)", "order": 5 },
+            { "name": "cs-4-e-6-ddr", "label": "DDR4/DDR5：Prefetch/突发传输/BL8/时序参数(tCL-tRCD-tRP-tRAS)", "order": 6 },
+            { "name": "cs-4-e-7-row-hammer", "label": "Row Hammer：相邻行电容耦合与防御(TRR/pTRR)", "order": 7 }
           ]
         },
         {
-          "name": "cs-4-module-f-io", "label": "外设总线与I/O体系", "order": 6,
+          "name": "cs-4-module-f-sram-cache", "label": "SRAM 与 Cache 设计", "order": 6,
           "children": [
-            { "name": "cs-4-f-1-pcie", "label": "PCIe：通道(Lane)/Gen3-4-5-6速率/枚举过程", "order": 1 },
-            { "name": "cs-4-f-2-dma", "label": "DMA：直接内存访问/Scatter-Gather/IOMMU", "order": 2 },
-            { "name": "cs-4-f-3-usb", "label": "USB 协议栈：Host/Device/OTG/枚举描述符", "order": 3 },
-            { "name": "cs-4-f-4-interrupt", "label": "中断控制器：APIC/MSI/MSI-X/中断亲和性", "order": 4 },
-            { "name": "cs-4-f-5-gpu-arch", "label": "GPU 架构：SIMT/Warp/Tensor Core/CUDA 编程模型", "order": 5 },
-            { "name": "cs-4-f-6-npu", "label": "NPU 神经网络加速器： systolic array/脉动阵列", "order": 6 },
-            { "name": "cs-4-f-7-cpu-fabrication", "label": "芯片制造：光刻/7nm-3nm工艺/芯粒(Chiplet)技术", "order": 7 }
+            { "name": "cs-4-f-1-sram-cell", "label": "SRAM 6T 单元：交叉耦合反相器/双稳态/静态保持", "order": 1 },
+            { "name": "cs-4-f-2-cache-mapping", "label": "Cache 映射：直接映射/全相联/组相联/伪相联", "order": 2 },
+            { "name": "cs-4-f-3-cache-replace", "label": "替换策略：LRU/PLRU/RRIP/SHiP/SR-LRU 硬件实现", "order": 3 },
+            { "name": "cs-4-f-4-coherence", "label": "Cache 一致性：MESI/MOESI/MESIF 协议/嗅探与目录", "order": 4 },
+            { "name": "cs-4-f-5-prefetch", "label": "预取器：步长/流/Markov/不规则预取", "order": 5 },
+            { "name": "cs-4-f-6-victim-cache", "label": "Victim Cache/Write Buffer/Store Queue/Write Combining", "order": 6 }
+          ]
+        },
+        {
+          "name": "cs-4-module-g-storage", "label": "持久化存储技术", "order": 7,
+          "children": [
+            { "name": "cs-4-g-1-hdd-magnetic", "label": "HDD：磁介质记录/写头/读头(GMR/TMR)/伺服定位", "order": 1 },
+            { "name": "cs-4-g-2-hdd-pmr-smr", "label": "垂直磁记录(PMR)与叠瓦式记录(SMR)：面密度与写入放大", "order": 2 },
+            { "name": "cs-4-g-3-nand-cell", "label": "NAND 单元物理：浮栅晶体管(Floating Gate)/F-N隧穿写入/擦除", "order": 3 },
+            { "name": "cs-4-g-4-slc-mlc-tlc", "label": "SLC/MLC/TLC/QLC/PLC：多比特存储/阈值电压分布/寿命", "order": 4 },
+            { "name": "cs-4-g-5-3d-nand", "label": "3D NAND：垂直堆叠/电荷陷阱闪存(CTF)/层数演进(128→232层)", "order": 5 },
+            { "name": "cs-4-g-6-ftl", "label": "FTL 闪存转换层：逻辑-物理地址映射/垃圾回收/磨损均衡", "order": 6 },
+            { "name": "cs-4-g-7-nvme", "label": "NVMe 协议：Submission Queue/Completion Queue/MSI-X/多队列并行", "order": 7 },
+            { "name": "cs-4-g-8-optane", "label": "傲腾(3D XPoint)：相变存储/位可寻址/SCM 持久内存", "order": 8 }
+          ]
+        },
+        {
+          "name": "cs-4-module-h-motherboard", "label": "主板与芯片组", "order": 8,
+          "children": [
+            { "name": "cs-4-h-1-chipset", "label": "芯片组(Chipset)架构：北桥/南桥→PCH 演进", "order": 1 },
+            { "name": "cs-4-h-2-cpu-socket", "label": "CPU 插槽：LGA/PGA/BGA 封装/触点/供电VRM模块", "order": 2 },
+            { "name": "cs-4-h-3-memory-slot", "label": "内存插槽：DIMM/SO-DIMM/SPD芯片/双通道/四通道配置", "order": 3 },
+            { "name": "cs-4-h-4-bios-uefi", "label": "BIOS/UEFI 固件：POST自检/ACPI 电源管理/安全启动", "order": 4 },
+            { "name": "cs-4-h-5-clock-generator", "label": "时钟发生器：晶振/PLL 锁相环/BCLK/各组件时钟域", "order": 5 },
+            { "name": "cs-4-h-6-power-delivery", "label": "供电系统：VRM 多相供电/MOSFET/电容/电感/纹波与瞬态响应", "order": 6 },
+            { "name": "cs-4-h-7-expansion-slots", "label": "扩展槽：PCIe 物理连接器/通道拆分/信号完整性", "order": 7 }
+          ]
+        },
+        {
+          "name": "cs-4-module-i-bus", "label": "总线与数据通路", "order": 9,
+          "children": [
+            { "name": "cs-4-i-1-bus-types", "label": "总线分类：数据总线/地址总线/控制总线/系统总线", "order": 1 },
+            { "name": "cs-4-i-2-pcie-arch", "label": "PCIe 体系：Root Complex/Switch/Endpoint/事务层-数据链路层-物理层", "order": 2 },
+            { "name": "cs-4-i-3-dma-controller", "label": "DMA 控制器：8237 经典架构/Scatter-Gather/中断聚合", "order": 3 },
+            { "name": "cs-4-i-4-qpi-upi", "label": "QPI/UPI/Infinity Fabric：CPU 间互联协议", "order": 4 },
+            { "name": "cs-4-i-5-memory-bus", "label": "内存总线：SDRAM 信号组/CMD-ADDR-DQ 总线/ODT 终端电阻", "order": 5 },
+            { "name": "cs-4-i-6-usb", "label": "USB：Host/Device/OTG 角色/枚举与描述符/PHY 物理层", "order": 6 },
+            { "name": "cs-4-i-7-interrupt-system", "label": "中断系统：8259 PIC→APIC→LAPIC+I/O APIC→MSI/MSI-X", "order": 7 }
+          ]
+        },
+        {
+          "name": "cs-4-module-j-asm", "label": "汇编与底层编程", "order": 10,
+          "children": [
+            { "name": "cs-4-j-1-x86-regs", "label": "x86-64 寄存器组：GPR/段寄存器/EFLAGS/控制寄存器(CR0-CR4)", "order": 1 },
+            { "name": "cs-4-j-2-stack-frame", "label": "栈帧与调用约定：System V AMD64 ABI/Red Zone/Shadow Space", "order": 2 },
+            { "name": "cs-4-j-3-instructions", "label": "核心指令详解：mov/lea/add/sub/cmp/jmp/call/ret/syscall", "order": 3 },
+            { "name": "cs-4-j-4-c-to-asm", "label": "C 代码→汇编对照：函数调用/循环/条件/数组访问", "order": 4 },
+            { "name": "cs-4-j-5-inline-asm", "label": "内联汇编：GCC __asm__/MSVC __asm/约束与clobber", "order": 5 }
+          ]
+        },
+        {
+          "name": "cs-4-module-k-fabrication", "label": "芯片制造工艺", "order": 11,
+          "children": [
+            { "name": "cs-4-k-1-lithography", "label": "光刻：DUV(193nm浸没式)/EUV(13.5nm)/多重曝光", "order": 1 },
+            { "name": "cs-4-k-2-finfet-gaa", "label": "晶体管演进：Planar→FinFET→GAA(Nanosheet/Forksheet)→CFET", "order": 2 },
+            { "name": "cs-4-k-3-backside-power", "label": "背面供电(BSPDN)与埋入式电源轨(BPR)", "order": 3 },
+            { "name": "cs-4-k-4-3d-packaging", "label": "3D 封装：Chiplet/UCIe/HBM/Hybrid Bonding/TSV硅通孔", "order": 4 },
+            { "name": "cs-4-k-5-yield", "label": "良率与DFM：工艺角/冗余设计/芯片分级(Die Harvesting)", "order": 5 }
           ]
         }
       ]

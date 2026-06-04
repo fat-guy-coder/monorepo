@@ -124,29 +124,68 @@ const phases: Phase[] = [
     ]
   },
   {
-    id: 4, icon: '🖥️', title: '计算机组成原理', period: '8-10 周',
-    desc: '"软件运行在硬件上"——理解 CPU 如何执行代码、内存如何存储数据、缓存为什么快。',
+    id: 4, icon: '🖥️', title: '计算机组成原理与硬件', period: '10-14 周',
+    desc: '"软件运行在硬件上"——从门电路到 CPU 微架构，从 DRAM 电容到 NAND 量子隧穿，透彻理解计算机硬件的物理实现。',
     color: 'bg-yellow-500',
-    practice: '📌 实战：用汇编或 C 写一个简单程序，读懂编译后的汇编输出；用 perf 观察 Cache Miss',
+    practice: '📌 实战：读懂汇编输出；用 perf 观察 Cache Miss；拆解一块旧主板识别芯片组和总线',
     modules: [
-      { name: 'cs-4-a', label: '数字逻辑', topics: [
-        { name: 'cs-4-a-1-gates', label: '逻辑门与组合电路' },
-        { name: 'cs-4-a-2-sequential', label: '时序逻辑' },
-        { name: 'cs-4-a-4-integer', label: '整数：补码/溢出' },
-        { name: 'cs-4-a-5-float', label: 'IEEE 754 浮点' },
+      { name: 'cs-4-a', label: '数字逻辑与电路', topics: [
+        { name: 'cs-4-a-1-bool', label: '布尔代数与真值表' },
+        { name: 'cs-4-a-3-combinational', label: '组合逻辑：加法器/译码器' },
+        { name: 'cs-4-a-4-sequential', label: '时序逻辑：触发器/时钟' },
       ]},
-      { name: 'cs-4-b', label: 'CPU 微架构', topics: [
-        { name: 'cs-4-b-1-isa', label: 'RISC vs CISC' },
-        { name: 'cs-4-b-2-pipeline', label: '流水线' },
-        { name: 'cs-4-b-3-branch', label: '分支预测' },
+      { name: 'cs-4-b', label: '数据表示', topics: [
+        { name: 'cs-4-b-1-integer', label: '整数：补码与溢出' },
+        { name: 'cs-4-b-2-float', label: 'IEEE 754 浮点数深度' },
+        { name: 'cs-4-b-3-alu', label: 'ALU 内部：Booth乘法器' },
       ]},
-      { name: 'cs-4-c', label: '存储器', topics: [
-        { name: 'cs-4-c-1-hierarchy', label: '层次结构' },
-        { name: 'cs-4-c-2-cache', label: 'Cache 原理' },
+      { name: 'cs-4-c', label: 'CPU 计算原理深度', topics: [
+        { name: 'cs-4-c-1-isa', label: 'ISA：ARM vs x86 vs RISC-V' },
+        { name: 'cs-4-c-2-fetch-cycle', label: '五级流水 FDEMW' },
+        { name: 'cs-4-c-5-pipeline-hazard', label: '流水线冲突与旁路' },
+        { name: 'cs-4-c-6-ooo', label: '乱序执行：Tomasulo算法' },
+        { name: 'cs-4-c-7-branch-predict', label: 'TAGE 分支预测器' },
+        { name: 'cs-4-c-9-smt', label: 'SMT 超线程' },
       ]},
-      { name: 'cs-4-d', label: '汇编', topics: [
-        { name: 'cs-4-d-1-registers', label: '寄存器与调用约定' },
-        { name: 'cs-4-d-2-mov-alu', label: '指令与栈帧' },
+      { name: 'cs-4-d', label: 'GPU 并行架构', topics: [
+        { name: 'cs-4-d-1-simd-vs-simt', label: 'SIMD→SIMT 演进' },
+        { name: 'cs-4-d-2-gpu-core', label: 'NVIDIA SM 架构' },
+        { name: 'cs-4-d-5-tensor-core', label: 'Tensor Core 矩阵加速' },
+        { name: 'cs-4-d-7-cuda-model', label: 'CUDA 编程模型' },
+      ]},
+      { name: 'cs-4-e', label: 'DRAM 内存物理', topics: [
+        { name: 'cs-4-e-1-capacitor', label: '1T1C 电容存储原理' },
+        { name: 'cs-4-e-2-word-bit-line', label: '字线与位线寻址' },
+        { name: 'cs-4-e-4-refresh', label: '刷新：电容漏电与周期' },
+        { name: 'cs-4-e-6-ddr', label: 'DDR4/DDR5 时序参数' },
+      ]},
+      { name: 'cs-4-f', label: 'SRAM 与 Cache', topics: [
+        { name: 'cs-4-f-1-sram-cell', label: '6T SRAM 单元' },
+        { name: 'cs-4-f-2-cache-mapping', label: '直接/组相联映射' },
+        { name: 'cs-4-f-4-coherence', label: 'MESI 一致性协议' },
+      ]},
+      { name: 'cs-4-g', label: '持久化存储', topics: [
+        { name: 'cs-4-g-1-hdd-magnetic', label: 'HDD：磁记录与GMR读头' },
+        { name: 'cs-4-g-3-nand-cell', label: 'NAND：浮栅/F-N隧穿' },
+        { name: 'cs-4-g-4-slc-mlc-tlc', label: 'SLC→QLC 多比特存储' },
+        { name: 'cs-4-g-5-3d-nand', label: '3D NAND 垂直堆叠' },
+        { name: 'cs-4-g-7-nvme', label: 'NVMe 协议队列机制' },
+      ]},
+      { name: 'cs-4-h', label: '主板与芯片组', topics: [
+        { name: 'cs-4-h-1-chipset', label: '芯片组：北桥→PCH 演进' },
+        { name: 'cs-4-h-4-bios-uefi', label: 'BIOS/UEFI 固件' },
+        { name: 'cs-4-h-5-clock-generator', label: '时钟：晶振/PLL/时钟域' },
+        { name: 'cs-4-h-6-power-delivery', label: 'VRM 多相供电' },
+      ]},
+      { name: 'cs-4-i', label: '总线与数据通路', topics: [
+        { name: 'cs-4-i-2-pcie-arch', label: 'PCIe 三层协议体系' },
+        { name: 'cs-4-i-3-dma-controller', label: 'DMA 控制器原理' },
+        { name: 'cs-4-i-7-interrupt-system', label: '中断：PIC→APIC→MSI-X' },
+      ]},
+      { name: 'cs-4-j', label: '汇编编程', topics: [
+        { name: 'cs-4-j-1-x86-regs', label: 'x86-64 寄存器组' },
+        { name: 'cs-4-j-3-instructions', label: '核心指令详解' },
+        { name: 'cs-4-j-4-c-to-asm', label: 'C→汇编对照' },
       ]},
     ]
   },
