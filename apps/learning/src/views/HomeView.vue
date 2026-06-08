@@ -1,282 +1,426 @@
 <template>
-  <div v-if="userStore.isAdmin"
-    class="min-h-screen bg-linear-to-br from-slate-50 to-blue-50 py-12 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-4xl mx-auto">
+  <div>
+    <div v-if="userStore.isAdmin"
+      class="min-h-screen bg-linear-to-br from-slate-50 to-blue-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div class="max-w-4xl mx-auto">
 
-      <!-- 核心公式 -->
-      <header class="text-center mb-16">
-        <h1 class="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight">行动纲领</h1>
-        <p class="mt-3 text-lg text-slate-500">用理性拆解目标 · 用时间复利积累 · 用冗余抵抗风险</p>
-        <div class="mt-8 bg-white rounded-2xl shadow-md border border-slate-100 p-6 inline-block text-left max-w-2xl">
-          <p class="text-sm text-slate-400 mb-2">财富自由的定义</p>
-          <p class="text-lg text-slate-800 leading-relaxed">
-            <strong class="text-cyan-600">被动收入 &gt; 生活支出</strong>，且无需出卖时间维持。
-            对当前阶段，更现实的目标是：<strong class="text-cyan-600">高薪技能 × 持续储蓄 × 投资收益 = 10 年内可选择的自由</strong>。
-          </p>
-        </div>
-      </header>
-
-      <!-- 核心策略 -->
-      <section class="bg-white rounded-2xl shadow-md p-6 sm:p-8 border border-slate-100 mb-10">
-        <h2 class="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
-          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">1</span>
-          核心策略：三条收入曲线
-        </h2>
-        <div class="grid sm:grid-cols-3 gap-5">
-          <div class="bg-slate-50 rounded-xl p-5 border border-slate-100">
-            <div class="text-2xl mb-2">💰</div>
-            <h3 class="font-semibold text-slate-800 mb-2">主线：薪资跃迁</h3>
-            <p class="text-sm text-slate-600 leading-relaxed">
-              Go 全栈 → 高级工程师 → 架构师。<br />
-              每 2-3 年一次跃迁，目标 30-50k。<br />
-              <span class="text-cyan-600 font-medium">确定性最高，是根基。</span>
+        <!-- 核心公式 -->
+        <header class="text-center mb-16">
+          <h1 class="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight">行动纲领</h1>
+          <p class="mt-3 text-lg text-slate-500">用理性拆解目标 · 用时间复利积累 · 用冗余抵抗风险</p>
+          <div class="mt-8 bg-white rounded-2xl shadow-md border border-slate-100 p-6 inline-block text-left max-w-2xl">
+            <p class="text-sm text-slate-400 mb-2">财富自由的定义</p>
+            <p class="text-lg text-slate-800 leading-relaxed">
+              <strong class="text-cyan-600">被动收入 &gt; 生活支出</strong>，且无需出卖时间维持。
+              对当前阶段，更现实的目标是：<strong class="text-cyan-600">高薪技能 × 持续储蓄 × 投资收益 = 10 年内可选择的自由</strong>。
             </p>
           </div>
-          <div class="bg-slate-50 rounded-xl p-5 border border-slate-100">
-            <div class="text-2xl mb-2">🎮</div>
-            <h3 class="font-semibold text-slate-800 mb-2">副线：独立产品</h3>
-            <p class="text-sm text-slate-600 leading-relaxed">
-              卡牌游戏 / SaaS 工具 / 开源项目。<br />
-              低概率高回报，但边际成本趋零。<br />
-              <span class="text-amber-600 font-medium">10 个作品中 1 个成功即可。</span>
-            </p>
-          </div>
-          <div class="bg-slate-50 rounded-xl p-5 border border-slate-100">
-            <div class="text-2xl mb-2">📈</div>
-            <h3 class="font-semibold text-slate-800 mb-2">暗线：资产积累</h3>
-            <p class="text-sm text-slate-600 leading-relaxed">
-              指数基金定投 + 应急现金 6 个月。<br />
-              年化 7-10%，时间复利 10 年+ 。<br />
-              <span class="text-emerald-600 font-medium">最容易被忽视，最重要。</span>
-            </p>
-          </div>
-        </div>
-      </section>
+        </header>
 
-      <!-- 阶段拆解 -->
-      <section class="mb-10">
-        <h2 class="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
-          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">2</span>
-          分阶段执行计划
-        </h2>
-        <div class="relative">
-          <div class="absolute left-5 sm:left-7 top-0 bottom-0 w-0.5 bg-slate-200"></div>
-          <ul class="flex flex-col gap-8">
-            <li v-for="(m, idx) in milestones" :key="m.id" class="relative pl-14 sm:pl-16">
-              <div
-                class="absolute left-0 sm:left-2 -translate-x-1/2 w-10 h-10 rounded-full border-4 border-white shadow-sm flex items-center justify-center text-white text-sm font-bold z-10"
-                :class="m.color">{{ idx + 1 }}</div>
-              <div class="bg-white rounded-2xl shadow-md border border-slate-100 hover:shadow-lg transition-shadow">
-                <div class="p-5 sm:p-6">
-                  <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-3 gap-2">
-                    <h3 class="text-lg font-bold text-slate-800">{{ m.title }}</h3>
-                    <span class="text-xs text-slate-400 bg-slate-100 px-3 py-1 rounded-full whitespace-nowrap w-fit">{{
-                      m.period }}</span>
-                  </div>
-                  <p class="text-slate-500 text-sm mb-4 italic">🎯 {{ m.goal }}</p>
-                  <ul class="grid sm:grid-cols-2 gap-x-6 gap-y-1.5">
-                    <li v-for="t in m.tasks" :key="t" class="flex items-baseline gap-2 text-slate-600 text-sm">
-                      <span class="text-cyan-500 shrink-0">▸</span>
-                      <span>{{ t }}</span>
-                    </li>
-                  </ul>
-                  <div v-if="m.metric" class="mt-4 pt-3 border-t border-slate-100 text-xs text-slate-400">
-                    📏 验收标准：{{ m.metric }}
+        <!-- 核心策略 -->
+        <section class="bg-white rounded-2xl shadow-md p-6 sm:p-8 border border-slate-100 mb-10">
+          <h2 class="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
+            <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">1</span>
+            核心策略：三条收入曲线
+          </h2>
+          <div class="grid sm:grid-cols-3 gap-5">
+            <div class="bg-slate-50 rounded-xl p-5 border border-slate-100">
+              <div class="text-2xl mb-2">💰</div>
+              <h3 class="font-semibold text-slate-800 mb-2">主线：薪资跃迁</h3>
+              <p class="text-sm text-slate-600 leading-relaxed">
+                Go 全栈 → 高级工程师 → 架构师。<br />
+                每 2-3 年一次跃迁，目标 30-50k。<br />
+                <span class="text-cyan-600 font-medium">确定性最高，是根基。</span>
+              </p>
+            </div>
+            <div class="bg-slate-50 rounded-xl p-5 border border-slate-100">
+              <div class="text-2xl mb-2">🎮</div>
+              <h3 class="font-semibold text-slate-800 mb-2">副线：独立产品</h3>
+              <p class="text-sm text-slate-600 leading-relaxed">
+                卡牌游戏 / SaaS 工具 / 开源项目。<br />
+                低概率高回报，但边际成本趋零。<br />
+                <span class="text-amber-600 font-medium">10 个作品中 1 个成功即可。</span>
+              </p>
+            </div>
+            <div class="bg-slate-50 rounded-xl p-5 border border-slate-100">
+              <div class="text-2xl mb-2">📈</div>
+              <h3 class="font-semibold text-slate-800 mb-2">暗线：资产积累</h3>
+              <p class="text-sm text-slate-600 leading-relaxed">
+                指数基金定投 + 应急现金 6 个月。<br />
+                年化 7-10%，时间复利 10 年+ 。<br />
+                <span class="text-emerald-600 font-medium">最容易被忽视，最重要。</span>
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 阶段拆解 -->
+        <section class="mb-10">
+          <h2 class="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
+            <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">2</span>
+            分阶段执行计划
+          </h2>
+          <div class="relative">
+            <div class="absolute left-5 sm:left-7 top-0 bottom-0 w-0.5 bg-slate-200"></div>
+            <ul class="flex flex-col gap-8">
+              <li v-for="(m, idx) in milestones" :key="m.id" class="relative pl-14 sm:pl-16">
+                <div
+                  class="absolute left-0 sm:left-2 -translate-x-1/2 w-10 h-10 rounded-full border-4 border-white shadow-sm flex items-center justify-center text-white text-sm font-bold z-10"
+                  :class="m.color">{{ idx + 1 }}</div>
+                <div class="bg-white rounded-2xl shadow-md border border-slate-100 hover:shadow-lg transition-shadow">
+                  <div class="p-5 sm:p-6">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-3 gap-2">
+                      <h3 class="text-lg font-bold text-slate-800">{{ m.title }}</h3>
+                      <span
+                        class="text-xs text-slate-400 bg-slate-100 px-3 py-1 rounded-full whitespace-nowrap w-fit">{{
+                          m.period }}</span>
+                    </div>
+                    <p class="text-slate-500 text-sm mb-4 italic">🎯 {{ m.goal }}</p>
+                    <ul class="grid sm:grid-cols-2 gap-x-6 gap-y-1.5">
+                      <li v-for="t in m.tasks" :key="t" class="flex items-baseline gap-2 text-slate-600 text-sm">
+                        <span class="text-cyan-500 shrink-0">▸</span>
+                        <span>{{ t }}</span>
+                      </li>
+                    </ul>
+                    <div v-if="m.metric" class="mt-4 pt-3 border-t border-slate-100 text-xs text-slate-400">
+                      📏 验收标准：{{ m.metric }}
+                    </div>
                   </div>
                 </div>
-              </div>
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- 时间分配 -->
+        <section class="bg-white rounded-2xl shadow-md p-6 sm:p-8 border border-slate-100 mb-10">
+          <h2 class="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
+            <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">3</span>
+            时间与精力分配
+          </h2>
+          <p class="text-sm text-slate-500 mb-4">假设每天可投入 <strong class="text-slate-700">3-4 小时</strong>（工作日 2-3h + 周末
+            6-8h），每周约 20-25 小时。</p>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="bg-slate-50 text-slate-600 font-semibold">
+                  <th class="px-4 py-3 text-left rounded-l-lg">阶段</th>
+                  <th class="px-4 py-3 text-center">技术学习</th>
+                  <th class="px-4 py-3 text-center">项目实战</th>
+                  <th class="px-4 py-3 text-center">游戏/副业</th>
+                  <th class="px-4 py-3 text-center">复盘/休息</th>
+                  <th class="px-4 py-3 text-left rounded-r-lg">核心产出</th>
+                </tr>
+              </thead>
+              <tbody class="text-slate-600">
+                <tr class="border-b border-slate-100">
+                  <td class="px-4 py-3 font-medium">0-6 月</td>
+                  <td class="px-4 py-3 text-center"><span
+                      class="bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full text-xs font-bold">50%</span></td>
+                  <td class="px-4 py-3 text-center"><span
+                      class="bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full text-xs font-bold">30%</span></td>
+                  <td class="px-4 py-3 text-center"><span
+                      class="bg-amber-50 text-amber-700 px-2 py-0.5 rounded-full text-xs font-bold">10%</span></td>
+                  <td class="px-4 py-3 text-center">10%</td>
+                  <td class="px-4 py-3 text-xs">Go 全栈能力 + 1 个上线项目</td>
+                </tr>
+                <tr class="border-b border-slate-100">
+                  <td class="px-4 py-3 font-medium">6-12 月</td>
+                  <td class="px-4 py-3 text-center"><span
+                      class="bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full text-xs font-bold">30%</span></td>
+                  <td class="px-4 py-3 text-center"><span
+                      class="bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full text-xs font-bold">30%</span></td>
+                  <td class="px-4 py-3 text-center"><span
+                      class="bg-amber-50 text-amber-700 px-2 py-0.5 rounded-full text-xs font-bold">30%</span></td>
+                  <td class="px-4 py-3 text-center">10%</td>
+                  <td class="px-4 py-3 text-xs">游戏 MVP + 跳槽涨薪 30%+</td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-3 font-medium">12-24 月</td>
+                  <td class="px-4 py-3 text-center"><span
+                      class="bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full text-xs font-bold">20%</span></td>
+                  <td class="px-4 py-3 text-center"><span
+                      class="bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full text-xs font-bold">40%</span></td>
+                  <td class="px-4 py-3 text-center"><span
+                      class="bg-amber-50 text-amber-700 px-2 py-0.5 rounded-full text-xs font-bold">30%</span></td>
+                  <td class="px-4 py-3 text-center">10%</td>
+                  <td class="px-4 py-3 text-xs">稳定高薪 + 产品发布</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- 财务路线图 -->
+        <section class="bg-white rounded-2xl shadow-md p-6 sm:p-8 border border-slate-100 mb-10">
+          <h2 class="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
+            <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">4</span>
+            财务路线图（保守估计）
+          </h2>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="bg-slate-50 text-slate-600 font-semibold">
+                  <th class="px-4 py-3 text-left rounded-l-lg">年份</th>
+                  <th class="px-4 py-3 text-right">月收入</th>
+                  <th class="px-4 py-3 text-right">月储蓄</th>
+                  <th class="px-4 py-3 text-right">年储蓄</th>
+                  <th class="px-4 py-3 text-right">累计资产</th>
+                  <th class="px-4 py-3 text-left rounded-r-lg">里程碑</th>
+                </tr>
+              </thead>
+              <tbody class="text-slate-600">
+                <tr class="border-b border-slate-100">
+                  <td class="px-4 py-3 font-medium">第 1 年</td>
+                  <td class="px-4 py-3 text-right">15-20k</td>
+                  <td class="px-4 py-3 text-right">6-8k</td>
+                  <td class="px-4 py-3 text-right">7-10w</td>
+                  <td class="px-4 py-3 text-right font-mono">~9w</td>
+                  <td class="px-4 py-3 text-xs">建立储蓄习惯，还清高息债务</td>
+                </tr>
+                <tr class="border-b border-slate-100">
+                  <td class="px-4 py-3 font-medium">第 2 年</td>
+                  <td class="px-4 py-3 text-right">20-30k</td>
+                  <td class="px-4 py-3 text-right">10-15k</td>
+                  <td class="px-4 py-3 text-right">12-18w</td>
+                  <td class="px-4 py-3 text-right font-mono">~25w</td>
+                  <td class="px-4 py-3 text-xs">跳槽涨薪 + 投资组合建立</td>
+                </tr>
+                <tr class="border-b border-slate-100">
+                  <td class="px-4 py-3 font-medium">第 3 年</td>
+                  <td class="px-4 py-3 text-right">25-35k</td>
+                  <td class="px-4 py-3 text-right">12-18k</td>
+                  <td class="px-4 py-3 text-right">15-22w</td>
+                  <td class="px-4 py-3 text-right font-mono">~45w</td>
+                  <td class="px-4 py-3 text-xs">资产利息覆盖基本餐饮</td>
+                </tr>
+                <tr class="border-b border-slate-100">
+                  <td class="px-4 py-3 font-medium">第 5 年</td>
+                  <td class="px-4 py-3 text-right">30-45k</td>
+                  <td class="px-4 py-3 text-right">15-25k</td>
+                  <td class="px-4 py-3 text-right">18-30w</td>
+                  <td class="px-4 py-3 text-right font-mono">~100w</td>
+                  <td class="px-4 py-3 text-xs">第一桶金，月被动收入 ~5k</td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-3 font-medium">第 10 年</td>
+                  <td class="px-4 py-3 text-right">40-60k+</td>
+                  <td class="px-4 py-3 text-right">—</td>
+                  <td class="px-4 py-3 text-right">—</td>
+                  <td class="px-4 py-3 text-right font-mono">300w+</td>
+                  <td class="px-4 py-3 text-xs">被动收入 &gt; 月支出 → 自由</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="text-xs text-slate-400 mt-4">假设：年化收益 7%（指数基金历史均值），储蓄率 50%，薪资年增长 10-20%。数字为税前估算，实际因城市/行业/行情浮动。</p>
+        </section>
+
+        <!-- 风险与兜底 -->
+        <section class="bg-white rounded-2xl shadow-md p-6 sm:p-8 border border-slate-100 mb-10">
+          <h2 class="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
+            <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">5</span>
+            风险管理
+          </h2>
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div v-for="r in risks" :key="r.title" class="bg-slate-50 rounded-xl p-4 border border-slate-100">
+              <h3 class="font-semibold text-slate-800 text-sm mb-1">{{ r.title }}</h3>
+              <p class="text-sm text-slate-600">{{ r.desc }}</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 内心守则 -->
+        <section class="bg-white rounded-2xl shadow-md p-6 sm:p-8 border border-slate-100 mb-10">
+          <h2 class="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
+            <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">6</span>
+            内心守则
+          </h2>
+          <ul class="space-y-3">
+            <li v-for="(p, idx) in principles" :key="idx" class="flex items-start gap-3">
+              <span
+                class="w-6 h-6 rounded-full bg-cyan-50 text-cyan-600 flex items-center justify-center text-xs font-bold mt-0.5 shrink-0">{{
+                  idx + 1 }}</span>
+              <p class="text-slate-700 text-sm">{{ p }}</p>
             </li>
           </ul>
-        </div>
-      </section>
+        </section>
 
-      <!-- 时间分配 -->
-      <section class="bg-white rounded-2xl shadow-md p-6 sm:p-8 border border-slate-100 mb-10">
-        <h2 class="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
-          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">3</span>
-          时间与精力分配
-        </h2>
-        <p class="text-sm text-slate-500 mb-4">假设每天可投入 <strong class="text-slate-700">3-4 小时</strong>（工作日 2-3h + 周末
-          6-8h），每周约 20-25 小时。</p>
-        <div class="overflow-x-auto">
-          <table class="w-full text-sm">
-            <thead>
-              <tr class="bg-slate-50 text-slate-600 font-semibold">
-                <th class="px-4 py-3 text-left rounded-l-lg">阶段</th>
-                <th class="px-4 py-3 text-center">技术学习</th>
-                <th class="px-4 py-3 text-center">项目实战</th>
-                <th class="px-4 py-3 text-center">游戏/副业</th>
-                <th class="px-4 py-3 text-center">复盘/休息</th>
-                <th class="px-4 py-3 text-left rounded-r-lg">核心产出</th>
-              </tr>
-            </thead>
-            <tbody class="text-slate-600">
-              <tr class="border-b border-slate-100">
-                <td class="px-4 py-3 font-medium">0-6 月</td>
-                <td class="px-4 py-3 text-center"><span
-                    class="bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full text-xs font-bold">50%</span></td>
-                <td class="px-4 py-3 text-center"><span
-                    class="bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full text-xs font-bold">30%</span></td>
-                <td class="px-4 py-3 text-center"><span
-                    class="bg-amber-50 text-amber-700 px-2 py-0.5 rounded-full text-xs font-bold">10%</span></td>
-                <td class="px-4 py-3 text-center">10%</td>
-                <td class="px-4 py-3 text-xs">Go 全栈能力 + 1 个上线项目</td>
-              </tr>
-              <tr class="border-b border-slate-100">
-                <td class="px-4 py-3 font-medium">6-12 月</td>
-                <td class="px-4 py-3 text-center"><span
-                    class="bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full text-xs font-bold">30%</span></td>
-                <td class="px-4 py-3 text-center"><span
-                    class="bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full text-xs font-bold">30%</span></td>
-                <td class="px-4 py-3 text-center"><span
-                    class="bg-amber-50 text-amber-700 px-2 py-0.5 rounded-full text-xs font-bold">30%</span></td>
-                <td class="px-4 py-3 text-center">10%</td>
-                <td class="px-4 py-3 text-xs">游戏 MVP + 跳槽涨薪 30%+</td>
-              </tr>
-              <tr>
-                <td class="px-4 py-3 font-medium">12-24 月</td>
-                <td class="px-4 py-3 text-center"><span
-                    class="bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full text-xs font-bold">20%</span></td>
-                <td class="px-4 py-3 text-center"><span
-                    class="bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full text-xs font-bold">40%</span></td>
-                <td class="px-4 py-3 text-center"><span
-                    class="bg-amber-50 text-amber-700 px-2 py-0.5 rounded-full text-xs font-bold">30%</span></td>
-                <td class="px-4 py-3 text-center">10%</td>
-                <td class="px-4 py-3 text-xs">稳定高薪 + 产品发布</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
+        <!-- 本周行动 -->
+        <section
+          class="bg-linear-to-r from-cyan-50 to-blue-50 rounded-2xl shadow-md p-6 sm:p-8 border border-cyan-200 mb-10">
+          <h2 class="text-xl font-bold text-slate-800 mb-4">⚡ 本周即可开始</h2>
+          <ul class="space-y-2 text-sm text-slate-700">
+            <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">1.</span><span>打开 <strong>Go
+                  学习路线图</strong>，完成 go-1-1 环境搭建，跑通 Hello World</span></li>
+            <li class="flex items-start gap-2"><span
+                class="text-cyan-500 mt-1">2.</span><span>在笔记本上写下你的<strong>卡牌游戏核心机制一句话描述</strong></span></li>
+            <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">3.</span><span>打开支付宝/银行
+                APP，设置<strong>每月自动定投</strong>一只宽基指数基金（如沪深 300），金额无论大小</span></li>
+            <li class="flex items-start gap-2"><span
+                class="text-cyan-500 mt-1">4.</span><span>记录本周时间花销，找到可以"偷"出来学习的时段</span></li>
+          </ul>
+        </section>
 
-      <!-- 财务路线图 -->
-      <section class="bg-white rounded-2xl shadow-md p-6 sm:p-8 border border-slate-100 mb-10">
-        <h2 class="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
-          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">4</span>
-          财务路线图（保守估计）
-        </h2>
-        <div class="overflow-x-auto">
-          <table class="w-full text-sm">
-            <thead>
-              <tr class="bg-slate-50 text-slate-600 font-semibold">
-                <th class="px-4 py-3 text-left rounded-l-lg">年份</th>
-                <th class="px-4 py-3 text-right">月收入</th>
-                <th class="px-4 py-3 text-right">月储蓄</th>
-                <th class="px-4 py-3 text-right">年储蓄</th>
-                <th class="px-4 py-3 text-right">累计资产</th>
-                <th class="px-4 py-3 text-left rounded-r-lg">里程碑</th>
-              </tr>
-            </thead>
-            <tbody class="text-slate-600">
-              <tr class="border-b border-slate-100">
-                <td class="px-4 py-3 font-medium">第 1 年</td>
-                <td class="px-4 py-3 text-right">15-20k</td>
-                <td class="px-4 py-3 text-right">6-8k</td>
-                <td class="px-4 py-3 text-right">7-10w</td>
-                <td class="px-4 py-3 text-right font-mono">~9w</td>
-                <td class="px-4 py-3 text-xs">建立储蓄习惯，还清高息债务</td>
-              </tr>
-              <tr class="border-b border-slate-100">
-                <td class="px-4 py-3 font-medium">第 2 年</td>
-                <td class="px-4 py-3 text-right">20-30k</td>
-                <td class="px-4 py-3 text-right">10-15k</td>
-                <td class="px-4 py-3 text-right">12-18w</td>
-                <td class="px-4 py-3 text-right font-mono">~25w</td>
-                <td class="px-4 py-3 text-xs">跳槽涨薪 + 投资组合建立</td>
-              </tr>
-              <tr class="border-b border-slate-100">
-                <td class="px-4 py-3 font-medium">第 3 年</td>
-                <td class="px-4 py-3 text-right">25-35k</td>
-                <td class="px-4 py-3 text-right">12-18k</td>
-                <td class="px-4 py-3 text-right">15-22w</td>
-                <td class="px-4 py-3 text-right font-mono">~45w</td>
-                <td class="px-4 py-3 text-xs">资产利息覆盖基本餐饮</td>
-              </tr>
-              <tr class="border-b border-slate-100">
-                <td class="px-4 py-3 font-medium">第 5 年</td>
-                <td class="px-4 py-3 text-right">30-45k</td>
-                <td class="px-4 py-3 text-right">15-25k</td>
-                <td class="px-4 py-3 text-right">18-30w</td>
-                <td class="px-4 py-3 text-right font-mono">~100w</td>
-                <td class="px-4 py-3 text-xs">第一桶金，月被动收入 ~5k</td>
-              </tr>
-              <tr>
-                <td class="px-4 py-3 font-medium">第 10 年</td>
-                <td class="px-4 py-3 text-right">40-60k+</td>
-                <td class="px-4 py-3 text-right">—</td>
-                <td class="px-4 py-3 text-right">—</td>
-                <td class="px-4 py-3 text-right font-mono">300w+</td>
-                <td class="px-4 py-3 text-xs">被动收入 &gt; 月支出 → 自由</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <p class="text-xs text-slate-400 mt-4">假设：年化收益 7%（指数基金历史均值），储蓄率 50%，薪资年增长 10-20%。数字为税前估算，实际因城市/行业/行情浮动。</p>
-      </section>
+        <footer class="text-center text-slate-400 text-sm pb-8">
+          <p>最后更新：2026-06-02</p>
+          <p class="mt-1">先穿上铠甲，再冲向战场。让理性成为你最锋利的武器。</p>
+        </footer>
 
-      <!-- 风险与兜底 -->
-      <section class="bg-white rounded-2xl shadow-md p-6 sm:p-8 border border-slate-100 mb-10">
-        <h2 class="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
-          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">5</span>
-          风险管理
-        </h2>
-        <div class="grid sm:grid-cols-2 gap-4">
-          <div v-for="r in risks" :key="r.title" class="bg-slate-50 rounded-xl p-4 border border-slate-100">
-            <h3 class="font-semibold text-slate-800 text-sm mb-1">{{ r.title }}</h3>
-            <p class="text-sm text-slate-600">{{ r.desc }}</p>
-          </div>
-        </div>
-      </section>
-
-      <!-- 内心守则 -->
-      <section class="bg-white rounded-2xl shadow-md p-6 sm:p-8 border border-slate-100 mb-10">
-        <h2 class="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
-          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">6</span>
-          内心守则
-        </h2>
-        <ul class="space-y-3">
-          <li v-for="(p, idx) in principles" :key="idx" class="flex items-start gap-3">
-            <span
-              class="w-6 h-6 rounded-full bg-cyan-50 text-cyan-600 flex items-center justify-center text-xs font-bold mt-0.5 shrink-0">{{
-                idx + 1 }}</span>
-            <p class="text-slate-700 text-sm">{{ p }}</p>
-          </li>
-        </ul>
-      </section>
-
-      <!-- 本周行动 -->
-      <section
-        class="bg-linear-to-r from-cyan-50 to-blue-50 rounded-2xl shadow-md p-6 sm:p-8 border border-cyan-200 mb-10">
-        <h2 class="text-xl font-bold text-slate-800 mb-4">⚡ 本周即可开始</h2>
-        <ul class="space-y-2 text-sm text-slate-700">
-          <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">1.</span><span>打开 <strong>Go
-                学习路线图</strong>，完成 go-1-1 环境搭建，跑通 Hello World</span></li>
-          <li class="flex items-start gap-2"><span
-              class="text-cyan-500 mt-1">2.</span><span>在笔记本上写下你的<strong>卡牌游戏核心机制一句话描述</strong></span></li>
-          <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">3.</span><span>打开支付宝/银行
-              APP，设置<strong>每月自动定投</strong>一只宽基指数基金（如沪深 300），金额无论大小</span></li>
-          <li class="flex items-start gap-2"><span
-              class="text-cyan-500 mt-1">4.</span><span>记录本周时间花销，找到可以"偷"出来学习的时段</span></li>
-        </ul>
-      </section>
-
-      <footer class="text-center text-slate-400 text-sm pb-8">
-        <p>最后更新：2026-06-02</p>
-        <p class="mt-1">先穿上铠甲，再冲向战场。让理性成为你最锋利的武器。</p>
-      </footer>
-
+      </div>
     </div>
-  </div>
-  <div v-else class="flex items-center justify-center bg-linear-to-br">
-    <div class="text-center">
-      <h1 class="text-4xl font-extrabold text-slate-900">主页</h1>
+    <!-- 公开首页：go-doc-style 风格平台介绍 -->
+    <div v-else class="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
+        <!-- Hero -->
+        <section class="text-center mb-20">
+          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight mb-6">
+            <span class="text-slate-800">全栈开发者</span>
+            <span class="text-cyan-600">学习文档</span>
+          </h1>
+          <p class="text-lg sm:text-xl text-slate-500 text-center leading-relaxed">
+            从计算机基础到 AI 开发，从团队协作到独立游戏制作——一套覆盖<strong class="text-slate-700">全技术栈</strong>的系统化学习资料库。
+          </p>
+          <!-- 统计数字 -->
+          <div class="flex flex-wrap justify-center gap-8 sm:gap-12 mt-10">
+            <div v-for="s in statList" :key="s.label" class="text-center">
+              <div class="text-3xl sm:text-4xl font-bold text-slate-800">{{ s.value }}</div>
+              <div class="text-sm text-slate-400 mt-1">{{ s.label }}</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 学习模块列表 -->
+        <section class="max-w-3xl mx-auto">
+          <h2 class="text-2xl sm:text-3xl font-bold text-slate-800 text-center mb-10">
+            探索<span class="text-cyan-600">学习模块</span>
+          </h2>
+          <div class="flex flex-col gap-4">
+            <Link v-for="mod in modules" :key="mod.name" :route="mod.routeName" type="card" block animation="lift"
+              rounded="lg"
+              class="group bg-white! text-left! flex-row! items-center! p-5! gap-4! border-slate-100! hover:border-cyan-200! hover:shadow-lg! hover:bg-white!">
+              <!-- 图标 -->
+              <div class="w-14 h-14 rounded-xl flex items-center justify-center text-2xl shrink-0" :class="mod.iconBg">
+                {{ mod.icon }}
+              </div>
+              <!-- 内容 -->
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-2 mb-1">
+                  <h3 class="text-base font-semibold text-slate-800 group-hover:text-cyan-700 transition-colors">
+                    {{ mod.label }}
+                  </h3>
+                  <span class="text-slate-300 group-hover:text-cyan-500 group-hover:translate-x-1 transition-all duration-300 text-sm">→</span>
+                </div>
+                <p class="text-sm text-slate-500 leading-relaxed line-clamp-2">{{ mod.desc }}</p>
+                <div class="flex flex-wrap gap-1.5 mt-2">
+                  <span v-for="tag in mod.tags" :key="tag"
+                    class="text-xs px-2 py-0.5 rounded-md bg-slate-100 text-slate-500 border border-slate-200 group-hover:border-cyan-100 transition-colors">
+                    {{ tag }}
+                  </span>
+                </div>
+              </div>
+            </Link>
+          </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="mt-16 text-center text-slate-400 text-sm">
+          <p>Learning Platform · 用时间复利积累知识财富</p>
+          <p class="mt-1">最后更新：2026-06-03</p>
+        </footer>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { Link } from 'components'
 import { useUserStore } from '@/stores/userProfle'
 const userStore = useUserStore()
+
+// --- 公开首页数据 ---
+const statList = [
+  { label: '学习模块', value: 7 },
+  { label: '技术文档', value: 80 },
+  { label: '知识点', value: '200+' },
+]
+
+interface ModuleInfo {
+  name: string
+  label: string
+  routeName: string
+  icon: string
+  iconBg: string
+  desc: string
+  tags: string[]
+}
+
+const modules: ModuleInfo[] = [
+  {
+    name: 'ComputerBasicKnowledge',
+    label: '计算机知识',
+    routeName: 'cs-learning-path',
+    icon: '💻',
+    iconBg: 'bg-blue-50 border border-blue-200',
+    desc: '操作系统、计算机网络、编译原理等计算机科学核心基础，构建扎实的底层知识体系。',
+    tags: ['OS', '网络', '组成原理', '编译'],
+  },
+  {
+    name: 'TeamCollaboration',
+    label: '团队协作 GIT',
+    routeName: 'git-learning-path',
+    icon: '🔀',
+    iconBg: 'bg-orange-50 border border-orange-200',
+    desc: 'Git 全命令详解、分支策略、工作流规范、Code Review 实践，从入门到团队协作专家。',
+    tags: ['Git', '分支策略', 'CI/CD', 'Husky'],
+  },
+  {
+    name: 'front',
+    label: '前端开发',
+    routeName: 'front-learning-path',
+    icon: '🎨',
+    iconBg: 'bg-sky-50 border border-sky-200',
+    desc: 'HTML/CSS/JavaScript 基础到 Vue 3/React 工程化。从组件设计到性能优化，构建现代 Web 应用。',
+    tags: ['HTML', 'CSS', 'JS', 'Vue 3', 'React'],
+  },
+  {
+    name: 'backend',
+    label: '后端开发',
+    routeName: 'backend-learning-path',
+    icon: '⚙️',
+    iconBg: 'bg-emerald-50 border border-emerald-200',
+    desc: 'Go、Node.js、数据库设计、微服务架构、消息队列。构建高性能、可扩展的服务端应用。',
+    tags: ['Go', 'Node.js', 'SQL', 'Redis', 'gRPC'],
+  },
+  {
+    name: 'AlgorithmsAndDataStructures',
+    label: '算法与数据结构',
+    routeName: 'dsa-learning-path',
+    icon: '🔢',
+    iconBg: 'bg-purple-50 border border-purple-200',
+    desc: '排序、搜索、动态规划、树与图。深入理解算法思维，攻克技术面试与性能优化。',
+    tags: ['排序', '搜索', 'DP', '树', '图'],
+  },
+  {
+    name: 'AI',
+    label: 'AI 人工智能',
+    routeName: 'ai-learning-path',
+    icon: '🤖',
+    iconBg: 'bg-fuchsia-50 border border-fuchsia-200',
+    desc: '大模型、Prompt 工程、RAG、Agent 开发、MCP 协议。成为 AI 原生开发者，驾驭新一代工具。',
+    tags: ['LLM', 'Prompt', 'RAG', 'Agent', 'MCP'],
+  },
+  {
+    name: 'GameProduction',
+    label: '游戏制作',
+    routeName: 'game-learning-path',
+    icon: '🎮',
+    iconBg: 'bg-rose-50 border border-rose-200',
+    desc: 'Godot 引擎、GDScript、建模与美术、游戏设计方法论。从创意到上线的完整游戏开发流程。',
+    tags: ['Godot', 'GDScript', '建模', '设计'],
+  },
+]
+
 interface Milestone {
   id: number; title: string; period: string; goal: string; tasks: string[]; color: string; metric?: string
 }
