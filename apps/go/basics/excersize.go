@@ -45,6 +45,11 @@ func RunExcersize() {
 		fmt.Println(g)
 	}
 
+	m1 := make(map[string]int)
+
+	m1["haha"] = 0
+
+	fmt.Println(m1)
 }
 
 func H(arg int) int {
