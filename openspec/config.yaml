@@ -1,20 +1,77 @@
 schema: spec-driven
 
-# Project context (optional)
-# This is shown to AI when creating artifacts.
-# Add your tech stack, conventions, style guides, domain knowledge, etc.
-# Example:
-#   context: |
-#     Tech stack: TypeScript, React, Node.js
-#     We use conventional commits
-#     Domain: e-commerce platform
+# ============================================================
+# Project Context — shown to AI when creating artifacts
+# ============================================================
+context: |
+  ## 项目定位
+  这是一个独立游戏开发者的知识库 + 学习系统。用户用 Godot 做游戏，Go 写后端，Python 写工具，
+  所有学习成果沉淀为结构化文档，托管在 apps/learning（Vue 3 学习网站）中。
 
-# Per-artifact rules (optional)
-# Add custom rules for specific artifacts.
-# Example:
-#   rules:
-#     proposal:
-#       - Keep proposals under 500 words
-#       - Always include a "Non-goals" section
-#     tasks:
-#       - Break tasks into chunks of max 2 hours
+  ## 核心循环
+  做游戏 → 需要某技术 → 学 → 写文档沉淀到 learning 网站 → 文档反哺开发效率
+
+  ## 技术栈
+  - 前端: Vue 3 + TypeScript + Tailwind CSS v4 + Pinia + Vite
+  - 后端: Bun + Drizzle ORM + PostgreSQL (Docker)
+  - 共享组件: packages/components (Code, EditorLink, Nav, Tree, Modal, Menu, Link 等)
+  - 构建: Turborepo + pnpm workspace
+  - 部署: Docker Compose (服务器 47.108.233.237)
+
+  ## 项目结构
+  - apps/go/ — Go 学习代码，7 阶段 108 文件，用 go run . <stage> 运行
+  - apps/python/ — Python 学习代码，5 阶段 20 项目
+  - apps/learning/ — Vue 3 学习网站，承载所有文档页面
+  - apps/backend/ — Bun HTTP 服务器, /api/menus CRUD, /api/user/me
+  - apps/admin/ — Vue 3 管理后台 (Element Plus), 端口 8848
+  - apps/main/ — 个人主页 (赛博朋克风, GSAP 动画)
+  - packages/components/ — 共享 Vue 组件库
+  - openspec/ — AI 辅助规范开发工作流
+
+  ## 关键设计约束
+  - 学习文档 .vue 文件使用 go-doc-style skill 统一样式（白底浅色主题，Tailwind CSS，Code 组件）
+  - 学习网站页面跳转用 goToByName() 或 Link 组件，不用 <RouterLink>（需自动打开 tab + 展开菜单）
+  - Go 代码每个输出语句紧接 // 输出: ... 注释
+  - EditorLink 组件仅 admin 可见，通过 props 传 isAdmin（不用 provide/inject）
+  - 菜单系统基于 name 字段做路由匹配，菜单数据在 apps/backend/config/ 下 JSON 文件
+  - 种子脚本用 apps/backend/scripts/seed-menus.ts --config <json路径>
+
+  ## 设计系统
+  主色 #00ffff (cyan), 辅色 #ff00ff (fuchsia), 背景 #0a0a0f, 强调 #ff3333, 成功 #00ff88
+  赛博朋克风 — 深色渐变 + 发光边框 + 网格叠加 + GSAP 动画
+  学习文档用独立浅色主题（见 go-doc-style skill）
+
+  ## 用户角色
+  - admin: 可看到 EditorLink、右键菜单"跳转菜单"等管理功能
+  - 普通用户: 只读学习文档
+
+# ============================================================
+# Per-artifact rules
+# ============================================================
+rules:
+  proposal:
+    - 提案前先检查是否影响学习网站的菜单/路由/权限系统
+    - 新功能需说明对现有用户（admin/普通用户）的影响
+    - 涉及后端 API 变更需标注部署顺序（先后端后前端，或可同时）
+    - Keep proposals under 500 words
+    - Always include a "Non-goals" section
+
+  design:
+    - 技术决策需与现有技术栈一致（Vue 3/Bun/Drizzle/pnpm workspace）
+    - 优先使用 packages/components 已有组件，避免重复造轮子
+    - 前端样式优先用 Tailwind CSS，避免新增 Less/SCSS
+    - 数据库变更需考虑向后兼容，现有数据不受影响
+    - API 设计遵循现有 /api/* 路径模式，返回格式 { code, data, message }
+    - 所有设计决策需附带备选方案和选择理由
+
+  tasks:
+    - Break tasks into chunks of max 2 hours
+    - 按依赖顺序排列：先基础设施，再功能实现，最后验证
+    - 涉及部署的任务标注"需先部署后端"或"前后端可同时部署"
+    - 每个 task 用 checkbox 格式: `- [ ] 描述`
+    - 最后一项始终是验证/测试
+
+  specs:
+    - Spec 名称用 kebab-case
+    - 每个 spec 描述单一能力/功能
+    - 包含该能力的用途、输入、输出、边界条件
