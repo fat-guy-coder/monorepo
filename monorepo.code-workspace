@@ -1,0 +1,15 @@
+{
+	"folders": [
+		{
+			"name": "Monorepo (Root)",
+			"path": "."
+		},
+		{
+			"name": "🎴 德州扑克 (Godot)",
+			"path": "apps/game/card"
+		}
+	],
+	"settings": {
+		"godotTools.editorPath.godot4": "D:/Godot/Godot_v4.6.3-stable_win64.exe"
+	}
+}

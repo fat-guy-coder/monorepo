@@ -1,0 +1,182 @@
+{
+  "project": "learning",
+  "parentId": "b7c3a3f5-831d-4014-a358-6d4237afa972",
+  "items": [
+    {
+      "name": "godot-stage-0-overview",
+      "label": "阶段0：Godot 引擎概览",
+      "icon": "🎮",
+      "order": 10,
+      "children": [
+        { "name": "godot-0-1-what-is-godot", "label": "什么是 Godot 引擎", "order": 1 },
+        { "name": "godot-0-2-editor-tour", "label": "编辑器界面与工作流", "order": 2 },
+        { "name": "godot-0-3-scene-node-concept", "label": "场景（Scene）与节点（Node）核心概念", "order": 3 },
+        { "name": "godot-0-4-project-structure", "label": "项目结构与文件管理", "order": 4 },
+        { "name": "godot-0-5-first-project", "label": "第一个项目：Hello Godot", "order": 5 },
+        { "name": "godot-0-6-vs-unity-unreal", "label": "Godot vs Unity vs Unreal 对比", "order": 6 }
+      ]
+    },
+    {
+      "name": "godot-stage-1-gdscript-basics",
+      "label": "阶段1：GDScript 语言基础",
+      "icon": "📝",
+      "order": 11,
+      "children": [
+        { "name": "godot-1-1-gdscript-intro", "label": "GDScript 简介与设计哲学", "order": 1 },
+        { "name": "godot-1-2-variables-types", "label": "变量、常量与数据类型（int/float/String/bool）", "order": 2 },
+        { "name": "godot-1-3-operators", "label": "运算符与表达式", "order": 3 },
+        { "name": "godot-1-4-arrays-dicts", "label": "数组（Array）与字典（Dictionary）", "order": 4 },
+        { "name": "godot-1-5-control-flow", "label": "控制流（if/match/for/while）", "order": 5 },
+        { "name": "godot-1-6-functions", "label": "函数（声明/参数/返回值/lambda）", "order": 6 },
+        { "name": "godot-1-7-classes-oop", "label": "类与面向对象（class/extends/inner class）", "order": 7 },
+        { "name": "godot-1-8-signals-basics", "label": "信号（Signal）基础：声明/连接/发射", "order": 8 },
+        { "name": "godot-1-9-enums-constants", "label": "枚举（enum）与常量（const）", "order": 9 },
+        { "name": "godot-1-10-setget-properties", "label": "属性 getter/setter", "order": 10 },
+        { "name": "godot-1-11-static-typing", "label": "静态类型注解（Type Hints）", "order": 11 },
+        { "name": "godot-1-12-null-safety", "label": "null 安全与 ? 操作符", "order": 12 },
+        { "name": "godot-1-13-string-formatting", "label": "字符串格式化与正则表达式（RegEx）", "order": 13 }
+      ]
+    },
+    {
+      "name": "godot-stage-2-node-system",
+      "label": "阶段2：节点系统详解",
+      "icon": "🌲",
+      "order": 12,
+      "children": [
+        { "name": "godot-2-1-node-lifecycle", "label": "Node 生命周期（_ready/_process/_physics_process/_enter_tree）", "order": 1 },
+        { "name": "godot-2-2-node-communication", "label": "节点间通信（get_node/$/%、信号/call）", "order": 2 },
+        { "name": "godot-2-3-node2d-basics", "label": "Node2D：2D 节点基类", "order": 3 },
+        { "name": "godot-2-4-sprite2d-animated", "label": "Sprite2D 与 AnimatedSprite2D：精灵与帧动画", "order": 4 },
+        { "name": "godot-2-5-collision2d", "label": "碰撞体（CollisionShape2D/Area2D/StaticBody2D）", "order": 5 },
+        { "name": "godot-2-6-characterbody2d", "label": "CharacterBody2D：2D 角色控制器", "order": 6 },
+        { "name": "godot-2-7-rigidbody2d", "label": "RigidBody2D：2D 刚体物理", "order": 7 },
+        { "name": "godot-2-8-tilemap", "label": "TileMap：瓦片地图系统", "order": 8 },
+        { "name": "godot-2-9-camera2d", "label": "Camera2D：2D 相机与视口控制", "order": 9 },
+        { "name": "godot-2-10-parallax2d", "label": "Parallax2D：视差滚动背景", "order": 10 },
+        { "name": "godot-2-11-audiostream", "label": "AudioStreamPlayer：2D 音效播放", "order": 11 },
+        { "name": "godot-2-12-particle2d", "label": "GPUParticles2D / CPUParticles2D：粒子效果", "order": 12 }
+      ]
+    },
+    {
+      "name": "godot-stage-3-controls-ui",
+      "label": "阶段3：UI 系统（Control 节点）",
+      "icon": "🖼️",
+      "order": 13,
+      "children": [
+        { "name": "godot-3-1-control-basics", "label": "Control 基类：锚点（Anchor）与边距（Margin）", "order": 1 },
+        { "name": "godot-3-2-theme-system", "label": "Theme 主题系统与 StyleBox", "order": 2 },
+        { "name": "godot-3-3-container-nodes", "label": "容器布局（VBox/HBox/Grid/Flow/Margin/Center）", "order": 3 },
+        { "name": "godot-3-4-label-richtext", "label": "Label 与 RichTextLabel：文本渲染", "order": 4 },
+        { "name": "godot-3-5-button-family", "label": "Button 家族（Button/CheckBox/CheckButton/TextureButton）", "order": 5 },
+        { "name": "godot-3-6-lineedit-textedit", "label": "LineEdit 与 TextEdit：文本输入", "order": 6 },
+        { "name": "godot-3-7-slider-scroll-progress", "label": "Slider / ScrollBar / ProgressBar", "order": 7 },
+        { "name": "godot-3-8-popup-dialogs", "label": "Popup / PopupMenu / 对话框（AcceptDialog/FileDialog）", "order": 8 },
+        { "name": "godot-3-9-panel-tab-graph", "label": "Panel / TabContainer / GraphEdit", "order": 9 },
+        { "name": "godot-3-10-itemlist-tree", "label": "ItemList 与 Tree 控件", "order": 10 },
+        { "name": "godot-3-11-colorpicker", "label": "ColorPicker 与 ColorPickerButton", "order": 11 },
+        { "name": "godot-3-12-ninepatchrect", "label": "NinePatchRect 九宫格缩放", "order": 12 }
+      ]
+    },
+    {
+      "name": "godot-stage-4-scenes-management",
+      "label": "阶段4：场景管理与资源系统",
+      "icon": "📂",
+      "order": 14,
+      "children": [
+        { "name": "godot-4-1-scene-tree", "label": "SceneTree：场景树架构与根节点", "order": 1 },
+        { "name": "godot-4-2-scene-instantiation", "label": "场景实例化（PackedScene/instantiate）", "order": 2 },
+        { "name": "godot-4-3-scene-change", "label": "场景切换（change_scene_to_file/change_scene_to_packed）", "order": 3 },
+        { "name": "godot-4-4-autoload-singletons", "label": "Autoload 单例：全局管理与配置", "order": 4 },
+        { "name": "godot-4-5-group-system", "label": "Group 分组系统：批量管理节点", "order": 5 },
+        { "name": "godot-4-6-resource-system", "label": "Resource 资源系统（load/preload/ResourceLoader）", "order": 6 },
+        { "name": "godot-4-7-custom-resources", "label": "自定义 Resource 类", "order": 7 },
+        { "name": "godot-4-8-importing-assets", "label": "资产导入流程（纹理/音频/3D模型/字体）", "order": 8 },
+        { "name": "godot-4-9-file-access", "label": "文件读写（FileAccess/ConfigFile/JSON）", "order": 9 },
+        { "name": "godot-4-10-save-load", "label": "存档系统设计：Save/Load 最佳实践", "order": 10 }
+      ]
+    },
+    {
+      "name": "godot-stage-5-input-animation",
+      "label": "阶段5：输入系统与动画",
+      "icon": "🎯",
+      "order": 15,
+      "children": [
+        { "name": "godot-5-1-input-map", "label": "InputMap：输入映射配置", "order": 1 },
+        { "name": "godot-5-2-input-handling", "label": "输入处理（_input/_unhandled_input/Input 单例）", "order": 2 },
+        { "name": "godot-5-3-mouse-touch", "label": "鼠标事件与触屏手势", "order": 3 },
+        { "name": "godot-5-4-keyboard-shortcuts", "label": "键盘事件与快捷键系统", "order": 4 },
+        { "name": "godot-5-5-controller-joystick", "label": "手柄/摇杆输入", "order": 5 },
+        { "name": "godot-5-6-animationplayer", "label": "AnimationPlayer：关键帧动画系统", "order": 6 },
+        { "name": "godot-5-7-animationtree", "label": "AnimationTree：动画状态机与混合", "order": 7 },
+        { "name": "godot-5-8-tween", "label": "Tween：代码驱动的补间动画", "order": 8 },
+        { "name": "godot-5-9-shader-intro", "label": "Shader 入门：CanvasItem 着色器", "order": 9 },
+        { "name": "godot-5-10-particle-systems", "label": "粒子系统进阶：自定义粒子材质", "order": 10 }
+      ]
+    },
+    {
+      "name": "godot-stage-6-physics",
+      "label": "阶段6：物理与碰撞系统",
+      "icon": "⚛️",
+      "order": 16,
+      "children": [
+        { "name": "godot-6-1-physics-intro", "label": "物理引擎概述（GodotPhysics / Jolt）", "order": 1 },
+        { "name": "godot-6-2-area2d-deep", "label": "Area2D 深入：检测区域与重叠", "order": 2 },
+        { "name": "godot-6-3-raycast2d", "label": "RayCast2D：射线检测", "order": 3 },
+        { "name": "godot-6-4-collision-layers", "label": "碰撞层（Layer）与遮罩（Mask）详解", "order": 4 },
+        { "name": "godot-6-5-characterbody-deep", "label": "CharacterBody2D 深入：move_and_slide/is_on_floor", "order": 5 },
+        { "name": "godot-6-6-platformer-physics", "label": "平台游戏物理：重力和跳跃的实现", "order": 6 },
+        { "name": "godot-6-7-rigidbody-deep", "label": "RigidBody2D 深入：力与冲量", "order": 7 },
+        { "name": "godot-6-8-joints-constraints", "label": "Joint2D：关节与物理约束", "order": 8 }
+      ]
+    },
+    {
+      "name": "godot-stage-7-gdscript-advanced",
+      "label": "阶段7：GDScript 进阶",
+      "icon": "🚀",
+      "order": 17,
+      "children": [
+        { "name": "godot-7-1-coroutines-await", "label": "协程（await/yield）与异步编程", "order": 1 },
+        { "name": "godot-7-2-callables-lambdas", "label": "Callable 与 Lambda：函数是一等公民", "order": 2 },
+        { "name": "godot-7-3-tweens-code", "label": "代码中创建与组合 Tween 动画", "order": 3 },
+        { "name": "godot-7-4-signals-advanced", "label": "信号进阶：自定义信号/bus 模式/解耦设计", "order": 4 },
+        { "name": "godot-7-5-timers-delays", "label": "Timer 与延迟执行（SceneTreeTimer）", "order": 5 },
+        { "name": "godot-7-6-rng-noise", "label": "随机数生成与 FastNoiseLite 噪声", "order": 6 },
+        { "name": "godot-7-7-object-pooling", "label": "对象池（Object Pool）模式：子弹/敌人管理", "order": 7 },
+        { "name": "godot-7-8-state-machines", "label": "状态机模式：角色/敌人/UI 状态管理", "order": 8 },
+        { "name": "godot-7-9-event-bus", "label": "Event Bus 事件总线架构", "order": 9 },
+        { "name": "godot-7-10-composition-pattern", "label": "组件化设计 vs 继承：Composition 模式", "order": 10 },
+        { "name": "godot-7-11-gdscript-vs-csharp", "label": "GDScript vs C# 选择指南", "order": 11 },
+        { "name": "godot-7-12-performance-optimization", "label": "GDScript 性能优化：Profiler/静态类型/预加载", "order": 12 }
+      ]
+    },
+    {
+      "name": "godot-stage-8-editor-tooling",
+      "label": "阶段8：编辑器工具与插件开发",
+      "icon": "🔧",
+      "order": 18,
+      "children": [
+        { "name": "godot-8-1-debugging", "label": "调试技巧：断点/远程调试/Print Rich", "order": 1 },
+        { "name": "godot-8-2-profiler-monitor", "label": "Profiler 与 Monitor：性能诊断面板", "order": 2 },
+        { "name": "godot-8-3-editor-scripting", "label": "EditorScript 编辑器自动化", "order": 3 },
+        { "name": "godot-8-4-tool-scripts", "label": "@tool 脚本：在编辑器中运行代码", "order": 4 },
+        { "name": "godot-8-5-plugin-development", "label": "插件开发入门：EditorPlugin API", "order": 5 },
+        { "name": "godot-8-6-export-systems", "label": "导出系统：平台预设与自定义导出", "order": 6 },
+        { "name": "godot-8-7-inspector-plugins", "label": "自定义 Inspector 面板", "order": 7 },
+        { "name": "godot-8-8-import-plugins", "label": "自定义导入器（EditorImportPlugin）", "order": 8 }
+      ]
+    },
+    {
+      "name": "godot-stage-9-practical-projects",
+      "label": "阶段9：实战项目",
+      "icon": "🏆",
+      "order": 19,
+      "children": [
+        { "name": "godot-9-1-2d-platformer", "label": "项目：2D 平台跳跃游戏", "order": 1 },
+        { "name": "godot-9-2-topdown-shooter", "label": "项目：俯视角射击游戏", "order": 2 },
+        { "name": "godot-9-3-ui-heavy-app", "label": "项目：工具类应用（UI 为主）", "order": 3 },
+        { "name": "godot-9-4-card-game", "label": "项目：卡牌/回合制游戏", "order": 4 },
+        { "name": "godot-9-5-network-game", "label": "项目：联网多人游戏入门", "order": 5 }
+      ]
+    }
+  ]
+}

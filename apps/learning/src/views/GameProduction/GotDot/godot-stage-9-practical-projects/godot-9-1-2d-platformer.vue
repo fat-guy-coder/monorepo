@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3>GotDot</h3>
+    <h3>项目：2D 平台跳跃游戏</h3>
   </div>
 </template>
 

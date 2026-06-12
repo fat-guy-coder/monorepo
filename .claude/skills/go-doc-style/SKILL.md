@@ -3,7 +3,7 @@ name: go-doc-style
 description: GO 学习文档 .vue 文件的统一样式规范。当需要创建或编辑 GO 路线图下的学习文档时使用，确保所有文档风格一致。
 metadata:
   version: "1.0"
-  appliesTo: "apps/learning/src/views/backend/BackendLanguage/GO/**/*.vue"
+  appliesTo: "apps/learning/src/views/backend/BackendLanguage/GO/**/*.vue, apps/learning/src/views/GameProduction/**/*.vue"
 ---
 
 # Go 学习文档样式规范
@@ -353,6 +353,49 @@ import { Link } from 'components'
   <li>第三步：xxx</li>
 </ol>
 ```
+
+## GDScript / Godot 文档额外规范
+
+Godot 学习文档同样使用本 skill 的布局和配色（将 `blue` 替代 `cyan` 作为主色调）。以下为 GDScript 特有规则：
+
+### 代码风格：始终使用强类型（Static Typing）
+
+所有 GDScript 代码示例 <strong>必须写类型注解</strong>。用户有 TypeScript 和 Python 经验，强类型代码对其更直观、更安全：
+
+```gdscript
+# ✅ 正确：带类型注解
+var speed: float = 200.0
+var player_name: String = "Godot"
+func take_damage(amount: int) -> void:
+    health -= amount
+
+# ❌ 错误：无类型（文档中不使用）
+var speed = 200.0
+func take_damage(amount):
+```
+
+### 语法类比：TS + Python 双参照
+
+每个新语法点需要同时标注 TypeScript 和 Python 的对应写法。用户两种语言都会，双重参照加深理解：
+
+```html
+<aside class="bg-purple-50 border-l-4 border-purple-400 rounded-r-xl p-4 mb-4">
+  <p class="text-sm text-purple-800"><strong>🔗 语法类比：</strong><br/>
+  <strong>TS:</strong> <code>function foo(x: number): void {"{"}</code><br/>
+  <strong>Python:</strong> <code>def foo(x: int) -> None:</code><br/>
+  <strong>GDScript:</strong> <code>func foo(x: int) -> void:</code><br/>
+  关键差异：GDScript 没有 <code>:</code> 冒号在参数类型前（不同于 Python），返回值写在 <code>-></code> 后面。
+  </p>
+</aside>
+```
+
+### 编码习惯：前端开发者视角
+
+- GDScript 的 `var foo: Array[int] = []` ≈ TS 的 `const foo: number[] = []`
+- GDScript 的 `@export var speed: float` ≈ Vue 的 `defineProps<{ speed: number }>()`
+- GDScript 的 `signal health_changed(new_health: int)` ≈ TS 的 `EventEmitter.emit('healthChanged', newHealth)`
+- GDScript 的 `$Sprite2D` ≈ JS 的 `document.querySelector('#Sprite2D')` 或 Vue 的 `$refs`
+- GDScript 的 `preload("res://x.tscn")` ≈ TS 的 `import X from './X.vue'`（编译时导入）
 
 ## 文件命名
 

@@ -1,4 +1,7 @@
 {
+  // ── Godot 扩展：指向 Godot 4.6.3 可执行文件 ──
+  "godotTools.editorPath.godot4": "D:/Godot/Godot_v4.6.3-stable_win64.exe",
+
   // ── Go 扩展：减少未打开文件的报错噪音 ──
   // gopls 默认分析整个 module，runner.go 中未实现的 stub 函数会
   // 在问题面板刷屏。以下配置限制诊断范围，只对当前 package 做
