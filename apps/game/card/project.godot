@@ -10,17 +10,14 @@ config_version=5
 
 [application]
 
-config/name="德州扑克"
-run/main_scene="res://scenes/table.tscn"
+config/name="自走棋"
+run/main_scene="res://scenes/auto_chess_main.tscn"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
 
 [autoload]
 
-CardDeck="*res://scripts/card_deck.gd"
-HandEvaluator="*res://scripts/hand_evaluator.gd"
-BotAI="*res://scripts/bot_ai.gd"
-GameController="*res://scripts/game_controller.gd"
+PieceDB="*res://scripts/piece_db.gd"
 
 [physics]
 

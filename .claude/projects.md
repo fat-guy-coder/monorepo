@@ -1,5 +1,31 @@
 # 项目技术栈
 
+## Godot 学习内容进度
+
+> 文档路径: `apps/learning/src/views/GameProduction/GotDot/`
+> 样式规范: go-doc-style skill（Godot 用 blue 主色调，TS+Python 双类比，强类型 GDScript）
+
+| 阶段 | 状态 | 篇数 | 备注 |
+|------|------|------|------|
+| 阶段0: 引擎概览 | ✅ 完成 | 6 | 概览→编辑器→场景/节点→项目结构→Hello→vs对比 |
+| 阶段1: GDScript | ✅ 完成 | 13 | 语法全覆盖，signals 和 functions 已扩展（2024-06） |
+| 阶段2: Node系统 | ✅ 完成 | 12 | CharacterBody2D 已扩展为完整平台角色教程 |
+| 阶段3: UI系统 | ⏳ 待写 | 12 | — |
+| 阶段4: 场景管理 | ⏳ 待写 | 10 | — |
+| 阶段5: 输入+动画 | ⏳ 待写 | 10 | — |
+| 阶段6: 物理 | ⏳ 待写 | 8 | — |
+| 阶段7: GDScript进阶 | ⏳ 待写 | 12 | — |
+| 阶段8: 编辑器工具 | ⏳ 待写 | 8 | — |
+| 阶段9: 实战项目 | ⏳ 待写 | 5 | — |
+
+> 已完成: 31篇 | 总计: 96+篇 | 进度: ~32%
+
+### 已扩展的核心文档（含实战案例）
+
+- `godot-1-8-signals-basics.vue` — 健康系统+信号总线+Callable传递+常见错误
+- `godot-1-6-functions.vue` — Callable深入+static+lambda陷阱+回调实战
+- `godot-2-6-characterbody2d.vue` — 完整平台脚本(coyote time+jump buffer)+move_and_slide原理+FAQ
+
 ## apps/learning
 
 ### Dependencies (package.json)
