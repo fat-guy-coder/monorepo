@@ -34,7 +34,7 @@
 	import 'prismjs/components/prism-go'
 	import 'prismjs/components/prism-bash'
 
-  type Language = 'js' | 'ts' | 'html' | 'json' | 'css' | 'go' | 'bash' | 'shell' | 'text'
+  type Language = 'js' | 'ts' | 'html' | 'json' | 'css' | 'go' | 'bash' | 'shell' | 'text' | 'gdscript'
 
   const {
     title,
@@ -71,7 +71,8 @@
       go: 'Go',
       bash: 'Bash',
       shell: 'Shell',
-      text: 'Text'
+      text: 'Text',
+      gdscript: 'GDScript'
     }
     return langMap[language] || language.toUpperCase()
   })

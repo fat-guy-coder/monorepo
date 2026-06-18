@@ -1,0 +1,16 @@
+{
+  "project": "learning",
+  "parentId": "ae0801f1-b649-4484-a358-7279d1e9c541",
+  "items": [
+    {
+      "name": "godot-0-7-debugging-basics",
+      "label": "调试基础：print / push_error / breakpoint / 断言",
+      "order": 7
+    },
+    {
+      "name": "godot-0-8-project-settings",
+      "label": "项目设置详解：窗口 / 物理 / 输入 / Autoload / 渲染器",
+      "order": 8
+    }
+  ]
+}

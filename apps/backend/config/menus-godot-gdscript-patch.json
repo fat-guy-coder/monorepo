@@ -1,0 +1,30 @@
+{
+  "project": "learning",
+  "parentId": "b7c3a3f5-831d-4014-a358-6d4237afa972",
+  "items": [
+    {
+      "name": "godot-stage-0-overview",
+      "label": "阶段0：Godot 引擎概览（已存在，补子项）",
+      "order": 10,
+      "children": [
+        { "name": "godot-0-7-debugging-basics", "label": "调试基础：print / push_error / breakpoint / 断言", "order": 7 }
+      ]
+    },
+    {
+      "name": "godot-stage-1-gdscript-basics",
+      "label": "阶段1：GDScript 语言基础（已存在，补子项）",
+      "order": 11,
+      "children": [
+        { "name": "godot-1-14-builtin-math-types", "label": "内置数学类型：Vector2 / Vector3 / Color / Transform2D / Rect2", "order": 14 }
+      ]
+    },
+    {
+      "name": "godot-stage-0-overview",
+      "label": "阶段0（补第二项）",
+      "order": 10,
+      "children": [
+        { "name": "godot-0-8-project-settings", "label": "项目设置详解：窗口 / 物理 / 输入 / Autoload / 渲染器", "order": 8 }
+      ]
+    }
+  ]
+}
