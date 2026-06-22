@@ -39,6 +39,13 @@
       </section>
 
       <section id="sec-5" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4"><span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">5</span>嵌入 + 接口 = 隐式满足</h2>
+        <p class="text-slate-600 mb-3 leading-relaxed">Go 的强大在于：<strong>嵌入的类型如果有方法，外层自动实现了这些方法对应的接口。</strong>这比 TS 的 <code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">implements</code> 更灵活——不需要显式声明。</p>
+        <div class="mb-4"><Code language="go" :code="embedInterfaceCode" title="embed_interface.go" /></div>
+        <aside class="bg-purple-50 border-l-4 border-purple-400 rounded-r-xl p-4"><p class="text-sm text-purple-800"><strong>🔗 TS 类比：</strong>Go 的嵌入+接口 ≈ TS 的 <code class="bg-purple-100 px-1 rounded text-xs font-mono">class Foo extends Bar implements ISomething</code>——但 Go 不需要显式 <code class="bg-purple-100 px-1 rounded text-xs font-mono">implements</code>，有方法就自动满足接口。</p></aside>
+      </section>
+
+      <section id="sec-6" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4"><span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">📋</span>关键点</h2>
         <ul class="space-y-2 text-slate-600">
           <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span>结构体是<strong>值类型</strong>——赋值和传参会复制整个结构体</span></li>
@@ -63,11 +70,8 @@ const userStore = useUserStore()
 import { RouterLink } from 'vue-router'
 
 const navList = [
-    { id: "sec-1", name: "定义与初始化" },
-    { id: "sec-2", name: "嵌入（Composition）" },
-    { id: "sec-3", name: "结构体标签（Tags）" },
-    { id: "sec-4", name: "空结构体 struct{} — 0 字节" },
-    { id: "sec-5", name: "关键点" }
+    { id: "sec-1", name: "定义与初始化" },{ id: "sec-2", name: "嵌入" },{ id: "sec-3", name: "标签" },
+    { id: "sec-4", name: "空结构体" },{ id: "sec-5", name: "嵌入+接口" },{ id: "sec-6", name: "关键点" }
   ]
 const defineCode = `type Person struct {
     Name string
@@ -98,9 +102,6 @@ const tagCode = 'type User struct {\n' +
 '}\n' +
 '// json.Marshal(user) -> {"id":1,"name":"testuser"}'
 
-const emptyCode = `// 信号通知（0 字节）
-done := make(chan struct{})
-go func() { /* work */; done <- struct{}{} }()
 <-done
 
 // 集合 Set
@@ -108,3 +109,8 @@ set := make(map[string]struct{})
 set["Go"] = struct{}{}
 if _, ok := set["Go"]; ok { /* ... */ }`
 </script>
+const embedInterfaceCode = `type Speaker interface { Speak() string }
+type Animal struct { Name string }
+func (a Animal) Speak() string { return a.Name + " says ..." }
+type Dog struct { Animal; Breed string }
+d := Dog{Animal: Animal{Name: "Buddy"}, Breed: "Lab"}

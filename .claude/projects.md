@@ -26,6 +26,20 @@
 - `godot-1-6-functions.vue` — Callable深入+static+lambda陷阱+回调实战
 - `godot-2-6-characterbody2d.vue` — 完整平台脚本(coyote time+jump buffer)+move_and_slide原理+FAQ
 
+### Godot Demo 文件（可运行的实战练习）
+
+> 路径: `apps/game/demos/`
+> 用法: 打开 `demo_runner.tscn` → 附加对应 demo .gd → F6 → Output 面板看结果
+> 原则: 一个文件只讲一个概念，20-50行，注释标注 TS/Python 对应写法
+
+| 阶段 | Demo 文件 | 对应文档 | 状态 |
+|------|----------|---------|------|
+| 1-GDScript | demo_variables_types.gd | godot-1-2 | ✅ |
+| 1-GDScript | demo_arrays_dicts.gd | godot-1-4 | ✅ |
+| 1-GDScript | demo_signals.gd | godot-1-8 | ✅ |
+| 2-Nodes | demo_lifecycle.gd | godot-2-1 | ✅ |
+| 1-GDScript | demo_operators.gd ~ demo_setget.gd | godot-1-3~1-13 | ⏳ 待写 |
+
 ## apps/learning
 
 ### Dependencies (package.json)

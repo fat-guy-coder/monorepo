@@ -20,11 +20,32 @@
       </section>
 
       <section id="sec-2" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
-        <h2 class="text-lg font-semibold text-slate-800 mb-4"><span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">1</span>示例与常见错误</h2>
+        <h2 class="text-lg font-semibold text-slate-800 mb-4"><span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">1</span>为什么 Go 有两种分配函数？</h2>
+        <p class="text-slate-600 mb-3 leading-relaxed">这是历史原因。Go 的三个内置引用类型——<strong>slice、map、chan</strong>——底层都是结构体指针，需要 Go runtime 初始化内部字段（如 slice 的底层数组指针、map 的哈希桶）。<code class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-sm font-mono">new</code> 只能填零值，不知道 slice 需要配底层数组、map 需要初始化桶——所以需要 <code class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-sm font-mono">make</code> 来完成这些"幕后工作"。</p>
+        <aside class="bg-purple-50 border-l-4 border-purple-400 rounded-r-xl p-4 mb-4"><p class="text-sm text-purple-800"><strong>🔗 前端类比：</strong><code class="bg-purple-100 px-1 rounded text-xs font-mono">new(T)</code> ≈ <code class="bg-purple-100 px-1 rounded text-xs font-mono">Object.create(T.prototype)</code>——只分配内存。<code class="bg-purple-100 px-1 rounded text-xs font-mono">make(T)</code> ≈ <code class="bg-purple-100 px-1 rounded text-xs font-mono">new Array(3)</code> 或 <code class="bg-purple-100 px-1 rounded text-xs font-mono">new Map()</code>——分配内存<strong>并初始化内部结构</strong>使其可用。</p></aside>
+      </section>
+
+      <section id="sec-3" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4"><span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">2</span>深入理解 nil map panic</h2>
+        <p class="text-slate-600 mb-3 leading-relaxed"><strong>这是面试最高频考点之一。</strong>理解它需要知道 Go 的 map 内部是一个指向 <code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">hmap</code> 结构体的指针。</p>
+        <div class="mb-4"><Code language="go" :code="nilMapCode" title="nil_map.go" /></div>
+        <p class="text-slate-600 mb-3 text-sm leading-relaxed">关键点：<strong>nil map 可以读</strong>（返回零值），但<strong>不能写</strong>（panic）。这和 JS 的 <code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">undefined.key = val</code> 不一样——JS 静默失败，Go 直接 panic 让你发现问题。</p>
+      </section>
+
+      <section id="sec-4" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4"><span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">3</span>new 基本没用——用 &amp;T{} 代替</h2>
+        <p class="text-slate-600 mb-3 leading-relaxed">在实践中 <code class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-sm font-mono">new</code> 极少使用。原因是 <code class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-sm font-mono">&amp;T{}</code> 不仅分配了内存，还能<strong>同时初始化字段</strong>：</p>
+        <div class="mb-4"><Code language="go" :code="ampersandCode" title="ampersand_vs_new.go" /></div>
+      </section>
+
+      <section id="sec-5" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4"><span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">4</span>make 的三个参数</h2>
         <div class="mb-4"><Code language="go" :code="code" title="new_vs_make.go" /></div>
-        <aside class="bg-amber-50 border-l-4 border-amber-400 rounded-r-xl p-4">
-          <p class="text-sm text-amber-800"><strong>⚠️ 最高频错误：</strong><code class="bg-amber-100 px-1 rounded text-xs font-mono">new(map[...])</code> 返回 <code class="bg-amber-100 px-1 rounded text-xs font-mono">*map[...]</code> 指向 nil map，写入直接 panic。map 只能用 <code class="bg-amber-100 px-1 rounded text-xs font-mono">make</code> 或字面量。</p>
-        </aside>
+      </section>
+
+      <section id="sec-6" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4"><span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">📋</span>小结</h2>
+        <ul class="space-y-2 text-slate-600"><li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span><strong>new 很少用</strong>——用 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">&amp;T{}</code> 代替，可以同时赋初值</span></li><li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span><strong>make 仅用于 slice/map/chan</strong>——初始化内部结构使其可用</span></li><li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span><strong>nil map 可读不可写</strong>——写入 nil map 直接 panic</span></li><li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span>make slice 可指定 len 和 cap 两个参数</span></li></ul>
       </section>
     </main>
     <footer class="max-w-4xl mx-auto px-6 py-8">
@@ -43,23 +64,43 @@ import { RouterLink } from 'vue-router'
 
 const navList = [
     { id: "sec-1", name: "核心区别" },
-    { id: "sec-2", name: "示例与常见错误" }
+    { id: "sec-2", name: "为什么两种分配" },
+    { id: "sec-3", name: "nil map panic" },
+    { id: "sec-4", name: "&T{} 替代 new" },
+    { id: "sec-5", name: "make 详解" },
+    { id: "sec-6", name: "小结" },
   ]
-const code = `// new — 零值指针
-p1 := new(int)       // *int，*p1 = 0
-p2 := new(string)    // *string，*p2 = ""
-p3 := new([3]int)    // *[3]int
+const nilMapCode = `// nil map 的行为
+var m1 map[string]int        // nil map
+_ = m1["key"]                 // ✅ 返回 0（零值）——可以读！
+// m1["key"] = 1              // ❌ panic! nil map 不能写
 
-// ❌ new(map) — nil map，不可写！
-m1 := new(map[string]int)
-// (*m1)["k"] = 1    // panic!
+m2 := make(map[string]int)   // 空但已初始化的 map
+m2["key"] = 1                 // ✅ 可以写
 
-// make — 仅 slice/map/chan，返回已初始化的 T
-s := make([]int, 3, 5)        // len=3, cap=5
-m := make(map[string]int)     // 可写空 map
-ch := make(chan int, 10)      // 缓冲 channel
+// nil map 的 len 为 0
+fmt.Println(len(m1))          // 0`
 
-// 实践中 new 极少使用，更常用:
-//   &T{}     替代 new(T) — 可以同时赋初值
-//   make     仅用于 slice/map/chan`
+const ampersandCode = `// &T{} vs new(T)——都是指针，但 &T{} 更灵活
+type Point struct { X, Y int }
+
+p1 := new(Point)          // *Point，p1.X=0, p1.Y=0
+p2 := &Point{}            // *Point，p2.X=0, p2.Y=0——等价
+p3 := &Point{X: 10, Y: 20} // *Point，可以直接赋初值！
+// new(Point{X: 10})       // ❌ 编译错误——new 不能带初值
+
+// 结论：永远用 &T{} 代替 new(T)`
+const code = `// make ——仅 slice/map/chan，返回已初始化的 T
+// make([]T, len, cap)
+s1 := make([]int, 3)      // len=3, cap=3
+s2 := make([]int, 3, 5)   // len=3, cap=5——可 append 2 个不扩容
+s3 := make([]int, 0, 10)  // len=0, cap=10——空切片，预分配容量
+
+// make(map[T]U) ——不需要大小参数
+m := make(map[string]int)
+m["a"] = 1
+
+// make(chan T, bufSize) ——0 或无 = 无缓冲
+ch1 := make(chan int)     // 无缓冲 channel
+ch2 := make(chan int, 10) // 缓冲 10 个`
 </script>

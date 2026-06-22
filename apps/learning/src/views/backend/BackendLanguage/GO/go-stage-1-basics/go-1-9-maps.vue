@@ -34,7 +34,12 @@
       </section>
 
       <section id="sec-4" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
-        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">3</span>引用特性 · 遍历 · sync.Map</h2>
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">3</span>实战模式：Set / 计数 / 分组</h2>
+        <p class="text-slate-600 mb-3 leading-relaxed">Go 没有内置 Set，用 <code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">map[T]bool</code> 或 <code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">map[T]struct{}</code> 代替。</p>
+        <div class="mb-4"><Code language="go" :code="patternsCode" title="map_patterns.go" /></div></section>
+
+<section id="sec-5" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">4</span>引用特性 · 遍历 · sync.Map</h2>
         <h3 class="text-base font-semibold text-slate-700 mb-2">Map 是引用类型</h3>
         <div class="mb-4"><Code language="go" :code="refCode" title="map_ref.go" /></div>
         <h3 class="text-base font-semibold text-slate-700 mb-2">遍历（顺序随机！）</h3>
@@ -47,7 +52,7 @@
         </aside>
       </section>
 
-      <section id="sec-5" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+      <section id="sec-6" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">📋</span>小结</h2>
         <ul class="space-y-2 text-slate-600">
           <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span><strong>nil map 不可写</strong>——总是 make 或字面量初始化</span></li>
@@ -74,12 +79,24 @@ const userStore = useUserStore()
 import { RouterLink } from 'vue-router'
 
 const navList = [
-    { id: "sec-1", name: "概述" },
-    { id: "sec-2", name: "基本操作" },
-    { id: "sec-3", name: "comma ok 惯用法" },
-    { id: "sec-4", name: "引用特性 · 遍历 · sync.Map" },
-    { id: "sec-5", name: "小结" }
+    { id: "sec-1", name: "概述" },{ id: "sec-2", name: "基本操作" },{ id: "sec-3", name: "comma ok" },
+    { id: "sec-4", name: "Set/计数/分组" },{ id: "sec-5", name: "引用/遍历/sync.Map" },{ id: "sec-6", name: "小结" }
   ]
+const patternsCode = `// 用 map 实现 Set（Go 没有内置 Set）
+set := make(map[string]struct{})      // struct{} 占 0 字节内存
+set["apple"] = struct{}{}
+if _, ok := set["apple"]; ok { /* 存在 */ }
+
+// 计数（≈ Python collections.Counter）
+words := []string{"a","b","a","c","b","a"}
+counts := make(map[string]int)
+for _, w := range words { counts[w]++ }
+// counts = map[a:3 b:2 c:1]
+
+// 分组（≈ JS groupBy / SQL GROUP BY）
+users := []struct{ Name, Role string }{{"A","admin"},{"B","user"},{"C","admin"}}
+byRole := make(map[string][]string)
+for _, u := range users { byRole[u.Role] = append(byRole[u.Role], u.Name) }`
 const basicCode = `// 声明（nil map，不可写！）
 var m1 map[string]int  // m1 == nil
 
