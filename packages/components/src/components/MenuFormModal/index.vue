@@ -9,6 +9,10 @@
         <label>英文名称 <span class="required">*</span></label>
         <Input v-model="formData.name" placeholder="请输入英文名称" />
       </div>
+      <div v-if="mode === 'edit' && formData.id" class="form-item">
+        <label>菜单 ID</label>
+        <span class="display-text path-text">{{ formData.id }}</span>
+      </div>
       <div class="form-item">
         <label>路由路径</label>
         <span class="display-text path-text">{{ computedPath || '-' }}</span>

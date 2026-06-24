@@ -402,6 +402,59 @@ routes.push({
   }
 })
 
+// GET /menus/:id/tree — 获取完整子树（所有后代节点，递归嵌套）
+// 算法：一次 DB 查询获取全部菜单 → Map 索引 O(n) 构建树，不需要 N 次递归查询
+routes.push({
+  method: 'GET',
+  pattern: /^\/api\/menus\/([^/]+)\/tree$/,
+  handler: async (ctx) => {
+    const rootId = ctx.params['1']
+    const { project } = ctx.query
+
+    try {
+      // 1. 一次查询拿到所有菜单（按 project 过滤）
+      const allMenus = await db.select().from(menu)
+        .where(project ? eq(menu.project, project) : undefined)
+        .orderBy(asc(menu.order))
+
+      // 2. 构建 id → menu 的 Map（O(n)）
+      const menuMap = new Map<string, any>()
+      for (const m of allMenus) {
+        menuMap.set(m.id, { ...m, children: [] })
+      }
+
+      // 3. 检查根节点是否存在
+      const root = menuMap.get(rootId)
+      if (!root) {
+        return Response.json(error('Menu not found', 404), { status: 404 })
+      }
+
+      // 4. 构建父子关系（O(n)）——只连接 parentId 在 Map 中存在的
+      for (const m of allMenus) {
+        if (m.parentId && menuMap.has(m.parentId)) {
+          const parent = menuMap.get(m.parentId)!
+          parent.children.push(menuMap.get(m.id)!)
+        }
+      }
+
+      // 5. 递归标记 isLeaf
+      const markLeaf = (node: any) => {
+        const hasChildren = node.children && node.children.length > 0
+        return {
+          ...node,
+          isLeaf: !hasChildren,
+          children: node.children?.map(markLeaf),
+        }
+      }
+
+      return Response.json(success(markLeaf(root)))
+    } catch (err: any) {
+      console.error(err)
+      return Response.json(error('查询失败: ' + err.message), { status: 500 })
+    }
+  },
+})
+
 // POST /menus
 routes.push({
   method: 'POST',

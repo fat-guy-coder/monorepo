@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3>前端学习路线图</h3>
+    <h3>数字逻辑与数据表示</h3>
   </div>
 </template>
 
