@@ -402,10 +402,61 @@ func take_damage(amount):
 - GDScript 的 `$Sprite2D` ≈ JS 的 `document.querySelector('#Sprite2D')` 或 Vue 的 `$refs`
 - GDScript 的 `preload("res://x.tscn")` ≈ TS 的 `import X from './X.vue'`（编译时导入）
 
+## Blitz 项目关联规范（Godot 学习文档专属）
+
+> **每个学习文档必须与 `apps/game/blitz/` 项目代码双向关联。**
+
+### 文档 → 代码 (在 .vue 中)
+
+1. 每个 .vue 文档的 header 区域必须包含 `<EditorLink>` 指向对应的 Blitz 源码文件
+2. 必须有至少一个 "🕹️ 实战：Blitz" 章节，展示概念在真实游戏中的用法
+3. 代码示例优先从 Blitz 源码中精简提取（保持可读性的前提下尽量真实）
+
+```html
+<header>
+  <EditorLink file-path="apps/game/blitz/scripts/player.gd" label="📝 player.gd" :is-admin="userStore.isAdmin" />
+</header>
+```
+
+### 代码 → 文档 (在 .gd 中)
+
+1. 每个 .gd 脚本顶部必须有 `## 📚 涉及学习文档:` 块，列出关联的 godot-X-Y-name
+2. 关键代码行上方用 `# → godot-X-Y-name: 说明` 格式标注对应的文档
+3. 标注粒度：每个重要概念至少一处标注
+
+```gdscript
+## 📚 涉及学习文档:
+##   godot-2-6-characterbody2d  — move_and_slide/velocity/重力
+##   godot-6-6-platformer-physics — coyote time/jump buffer/可变跳跃高度
+##   godot-7-8-state-machines      — enum State 四状态机
+
+func _physics_process(delta: float) -> void:
+    # → godot-6-6-platformer-physics: 着地时持续刷新 coyote time
+    if is_on_floor():
+        _coyote_timer = coyote_time
+
+    # → godot-2-6-characterbody2d: CharacterBody2D 的核心方法
+    move_and_slide()
+```
+
+### 文档编写优先级
+
+1. **先写有 Blitz 代码对应的** — 文档里的代码示例直接从 Blitz 精简
+2. **空壳优先填** — 扫描 `apps/learning/src/views/GameProduction/GotDot/` 下 < 200 字节的 .vue
+3. **还没用到的概念可以延后** — 等 Blitz 里用到了再补文档
+
+### 菜单命名规范
+
+- Godot 阶段文档的 `name` 字段 = 文件名去掉 .vue 后缀
+- 格式: `godot-{阶段}-{序号}-{英文名}`, 如 `godot-6-4-collision-layers`
+- 菜单数据在 `apps/backend/config/` 下对应的 JSON 文件
+
 ## 文件命名
 
 - 文件名与菜单 `name` 字段一致: `go-1-1-env-tools.vue`
 - 路径: `apps/learning/src/views/backend/BackendLanguage/GO/<阶段文件夹>/<文件名>.vue`
+- Godot 文档: `godot-{阶段}-{序号}-{英文名}.vue`
+- 路径: `apps/learning/src/views/GameProduction/GotDot/<阶段文件夹>/<文件名>.vue`
 
 ## 底部导航
 

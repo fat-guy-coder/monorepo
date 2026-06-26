@@ -48,6 +48,7 @@ func RunGoroutineLeak() {
 	time.Sleep(20 * time.Millisecond)
 
 	fmt.Printf("\nfinal goroutines: %d\n", runtime.NumGoroutine())
+	// 输出示例: "\nfinal goroutines: 3" (依赖当前 goroutine 数)
 	fmt.Println("\n检测方法:")
 	fmt.Println("  - runtime.NumGoroutine() 比较前后 goroutine 数")
 	fmt.Println("  - pprof: http://localhost:6060/debug/pprof/goroutine?debug=1")

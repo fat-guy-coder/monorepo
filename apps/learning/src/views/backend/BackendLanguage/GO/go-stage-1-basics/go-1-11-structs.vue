@@ -100,17 +100,27 @@ const tagCode = 'type User struct {\n' +
 '    Name     string `json:"name" validate:"required"`\n' +
 '    Password string `json:"-"`\n' +
 '}\n' +
-'// json.Marshal(user) -> {"id":1,"name":"testuser"}'
+'// json.Marshal(user) -&#62; {"id":1,"name":"testuser"}'
 
-<-done
+const emptyCode = `// 用作 channel 信号（阻塞等待）
+done := make(chan struct{})
+go func() {
+    // do work
+    done &#60;- struct{}{}  // 发送信号
+}()
+&#60;-done  // 阻塞直到收到信号
 
-// 集合 Set
+// 集合 Set（用 struct{} 零内存特点）
 set := make(map[string]struct{})
 set["Go"] = struct{}{}
-if _, ok := set["Go"]; ok { /* ... */ }`
-</script>
+if _, ok := set["Go"]; ok { /* Go 在集合中 */ }`
+
 const embedInterfaceCode = `type Speaker interface { Speak() string }
 type Animal struct { Name string }
 func (a Animal) Speak() string { return a.Name + " says ..." }
 type Dog struct { Animal; Breed string }
 d := Dog{Animal: Animal{Name: "Buddy"}, Breed: "Lab"}
+
+fmt.Println(d.Name)  // 输出: Buddy, Speak() 继承自 Animal
+// 输出: Buddy says ...`
+</script>

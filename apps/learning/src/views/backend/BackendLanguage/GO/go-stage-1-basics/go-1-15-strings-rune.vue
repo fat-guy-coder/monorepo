@@ -181,5 +181,5 @@ for i, r := range text {
 // 修改字符串 — 必须转为可写切片
 b := []rune("你好世界")
 b[2] = '新'
-fmt.Println(string(b))  // "你好新世界"`
+fmt.Println(string(b))  // "你好新界"`
 </script>

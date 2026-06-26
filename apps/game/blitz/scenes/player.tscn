@@ -1,0 +1,29 @@
+[gd_scene load_steps=5 format=3 uid="uid://cuphead_player"]
+
+[ext_resource type="Script" path="res://scripts/player.gd" id="1_player"]
+
+[sub_resource type="CircleShape2D" id="player_col"]
+radius = 15.0
+
+[sub_resource type="CircleShape2D" id="parry_col"]
+radius = 42.0
+
+[sub_resource type="CircleShape2D" id="hurtbox_col"]
+radius = 17.0
+
+[node name="Player" type="CharacterBody2D"]
+z_index = 10
+script = ExtResource("1_player")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("player_col")
+
+[node name="ParryDetector" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ParryDetector"]
+shape = SubResource("parry_col")
+
+[node name="Hurtbox" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
+shape = SubResource("hurtbox_col")
