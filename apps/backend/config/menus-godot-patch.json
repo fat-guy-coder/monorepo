@@ -11,6 +11,11 @@
       "name": "godot-0-8-project-settings",
       "label": "项目设置详解：窗口 / 物理 / 输入 / Autoload / 渲染器",
       "order": 8
+    },
+    {
+      "name": "godot-0-9-tscn-format",
+      "label": ".tscn 场景文件格式：读懂 Godot 的「HTML」",
+      "order": 9
     }
   ]
 }
