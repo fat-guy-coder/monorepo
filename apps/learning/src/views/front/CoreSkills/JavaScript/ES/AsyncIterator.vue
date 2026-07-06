@@ -1,885 +1,743 @@
 <template>
-  <div class="async-iterator-container">
-    <header class="header">
-      <h1 class="title">JavaScript 异步迭代器介绍</h1>
-      <div class="subtitle">处理异步数据流的现代解决方案</div>
+  <div class="async-iter-doc min-h-screen bg-linear-to-br from-slate-50 to-blue-50">
+    <!-- 页面头部 -->
+    <header class="bg-white border-b border-slate-200">
+      <div class="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
+        <div>
+          <h1 class="text-2xl font-bold text-slate-800">🔄 异步迭代器（Async Iterator）</h1>
+          <p class="text-sm text-slate-500 mt-1">处理异步数据流的现代解决方案 — for await...of 让你优雅地遍历异步序列</p>
+        </div>
+        <div class="flex items-center gap-3">
+          <EditorLink file-path="apps/learning/src/views/front/CoreSkills/JavaScript/ES/AsyncIterator.vue" label="📝 编辑"
+            :is-admin="userStore.isAdmin" />
+          <span class="text-xs text-slate-400 bg-slate-100 px-3 py-1 rounded-full">ES2018</span>
+        </div>
+      </div>
     </header>
 
-    <div class="intro-section">
-      <div class="intro-card">
-        <div class="intro-icon">🔄</div>
-        <div class="intro-content">
-          <h3>异步迭代器是什么？</h3>
-          <p>
-            异步迭代器允许我们遍历异步数据源，每次迭代返回一个 Promise，解决为迭代序列的下一个值。
+    <!-- 主体内容 -->
+    <main class="max-w-4xl mx-auto px-6 py-8 space-y-6">
+      <Nav :list="navList" title="📑 目录" position="top-right" :showBackToTop="true" />
+
+      <!-- 1. 概述 -->
+      <section id="sec-1" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">1</span>
+          什么是异步迭代器？
+        </h2>
+        <p class="text-slate-600 mb-4 leading-relaxed">
+          <strong>异步迭代器（Async Iterator）</strong>是 ES2018 引入的协议，它扩展了同步迭代器的概念到异步世界。
+          每次调用 <code class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-xs font-mono">next()</code> 返回一个
+          <strong>Promise</strong>，resolve 为 <code
+            class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-xs font-mono">{ value, done }</code> 对象。
+          配合 <code class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-xs font-mono">for await...of</code>
+          循环使用。
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+          <div class="bg-slate-50 rounded-xl p-4 border border-slate-200">
+            <div class="text-2xl mb-2">🏷️</div>
+            <h4 class="font-semibold text-slate-700 mb-1">Symbol.asyncIterator</h4>
+            <p class="text-sm text-slate-600">知名符号，用于定义对象的异步迭代器方法。类似 Symbol.iterator 的异步版本。</p>
+          </div>
+          <div class="bg-slate-50 rounded-xl p-4 border border-slate-200">
+            <div class="text-2xl mb-2">📋</div>
+            <h4 class="font-semibold text-slate-700 mb-1">异步迭代器协议</h4>
+            <p class="text-sm text-slate-600">对象必须实现 <code
+                class="bg-slate-200 text-cyan-700 px-1 py-0.5 rounded text-xs">next()</code> 方法，返回 <code
+                class="bg-slate-200 text-cyan-700 px-1 py-0.5 rounded text-xs">Promise&lt;{value, done}&gt;</code>。</p>
+          </div>
+          <div class="bg-slate-50 rounded-xl p-4 border border-slate-200">
+            <div class="text-2xl mb-2">🔁</div>
+            <h4 class="font-semibold text-slate-700 mb-1">for await...of</h4>
+            <p class="text-sm text-slate-600">遍历异步可迭代对象的专用循环语法，自动等待每个 Promise resolve。</p>
+          </div>
+        </div>
+
+        <aside class="bg-purple-50 border-l-4 border-purple-400 rounded-r-xl p-4 mb-4">
+          <p class="text-sm text-purple-800"><strong>🔗 前端类比：</strong><br />
+            <strong>异步迭代器</strong> ≈ <strong>Node.js Readable Stream</strong> 的 <code
+              class="bg-purple-100 text-purple-700 px-1 py-0.5 rounded text-xs">for await (const chunk of stream)</code><br />
+            ≈ <strong>RxJS Observable</strong> 的订阅模型（但迭代器是"拉"模式，Observable 是"推"模式）<br />
+            ≈ <strong>Python 的 async for</strong>（<code
+              class="bg-purple-100 text-purple-700 px-1 py-0.5 rounded text-xs">async for item in async_iterable</code>）<br />
+            <strong>关键区别：</strong>同步迭代器立即拿到值；异步迭代器每次迭代返回一个 Promise，需要 await 才能拿到值。
           </p>
+        </aside>
+
+        <div class="overflow-x-auto mb-4">
+          <table class="w-full text-sm border-collapse">
+            <thead>
+              <tr class="bg-slate-100 text-left">
+                <th class="px-4 py-2 border border-slate-200 font-semibold text-slate-700">特性</th>
+                <th class="px-4 py-2 border border-slate-200 font-semibold text-slate-700">同步迭代器</th>
+                <th class="px-4 py-2 border border-slate-200 font-semibold text-slate-700">异步迭代器</th>
+              </tr>
+            </thead>
+            <tbody class="text-slate-600">
+              <tr>
+                <td class="px-4 py-2 border border-slate-200 font-medium">知名符号</td>
+                <td class="px-4 py-2 border border-slate-200"><code
+                    class="bg-slate-100 text-cyan-700 px-1 py-0.5 rounded text-xs">Symbol.iterator</code></td>
+                <td class="px-4 py-2 border border-slate-200"><code
+                    class="bg-slate-100 text-cyan-700 px-1 py-0.5 rounded text-xs">Symbol.asyncIterator</code></td>
+              </tr>
+              <tr>
+                <td class="px-4 py-2 border border-slate-200 font-medium">next() 返回</td>
+                <td class="px-4 py-2 border border-slate-200"><code
+                    class="bg-slate-100 text-cyan-700 px-1 py-0.5 rounded text-xs">{ value, done }</code></td>
+                <td class="px-4 py-2 border border-slate-200"><code
+                    class="bg-slate-100 text-cyan-700 px-1 py-0.5 rounded text-xs">Promise&lt;{ value, done }&gt;</code>
+                </td>
+              </tr>
+              <tr>
+                <td class="px-4 py-2 border border-slate-200 font-medium">遍历语法</td>
+                <td class="px-4 py-2 border border-slate-200"><code
+                    class="bg-slate-100 text-cyan-700 px-1 py-0.5 rounded text-xs">for...of</code></td>
+                <td class="px-4 py-2 border border-slate-200"><code
+                    class="bg-slate-100 text-cyan-700 px-1 py-0.5 rounded text-xs">for await...of</code></td>
+              </tr>
+              <tr>
+                <td class="px-4 py-2 border border-slate-200 font-medium">适用场景</td>
+                <td class="px-4 py-2 border border-slate-200">同步数据源（数组、Set、Map 等）</td>
+                <td class="px-4 py-2 border border-slate-200">异步数据流（分页API、文件流、WebSocket等）</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-2 border border-slate-200 font-medium">规范版本</td>
+                <td class="px-4 py-2 border border-slate-200">ES6 (2015)</td>
+                <td class="px-4 py-2 border border-slate-200">ES2018</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-      </div>
-      <div class="intro-card">
-        <div class="intro-icon">⚡️</div>
-        <div class="intro-content">
-          <h3>关键特性</h3>
-          <p>使用 Symbol.asyncIterator 定义异步迭代器，通过 for await...of 循环遍历</p>
-        </div>
-      </div>
-      <div class="intro-card">
-        <div class="intro-icon">🚀</div>
-        <div class="intro-content">
-          <h3>主要用途</h3>
-          <p>处理流式数据、分页API、实时数据源等异步数据序列</p>
-        </div>
-      </div>
-    </div>
+      </section>
 
-    <div class="content-grid">
-      <!-- 左侧内容区域 -->
-      <main class="main-content">
-        <section class="section">
-          <h2 class="section-title">异步迭代器核心概念</h2>
+      <!-- 2. 基本使用 -->
+      <section id="sec-2" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">2</span>
+          创建与使用异步迭代器
+        </h2>
 
-          <div class="concept-grid">
-            <div class="concept-card">
-              <h3>Symbol.asyncIterator</h3>
-              <p>异步可迭代对象必须实现的方法，返回一个异步迭代器</p>
-            </div>
-            <div class="concept-card">
-              <h3>异步迭代器协议</h3>
-              <p>对象必须实现 next() 方法，返回 Promise，解决为 {value, done} 对象</p>
-            </div>
-            <div class="concept-card">
-              <h3>for await...of</h3>
-              <p>用于遍历异步可迭代对象的循环语法</p>
-            </div>
-          </div>
-
-          <div class="comparison">
-            <h3>同步迭代 vs 异步迭代</h3>
-            <div class="comparison-table">
-              <div class="table-row header">
-                <div class="table-cell">特性</div>
-                <div class="table-cell">同步迭代器</div>
-                <div class="table-cell">异步迭代器</div>
-              </div>
-              <div class="table-row">
-                <div class="table-cell">迭代方法</div>
-                <div class="table-cell">[Symbol.iterator]</div>
-                <div class="table-cell">[Symbol.asyncIterator]</div>
-              </div>
-              <div class="table-row">
-                <div class="table-cell">next() 返回</div>
-                <div class="table-cell">{value, done}</div>
-                <div class="table-cell">Promise<{value, done}></div>
-              </div>
-              <div class="table-row">
-                <div class="table-cell">遍历语法</div>
-                <div class="table-cell">for...of</div>
-                <div class="table-cell">for await...of</div>
-              </div>
-              <div class="table-row">
-                <div class="table-cell">适用场景</div>
-                <div class="table-cell">同步数据源</div>
-                <div class="table-cell">异步数据流</div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section class="section">
-          <h2 class="section-title">创建与使用异步迭代器</h2>
-
-          <div class="usage-tabs">
-            <div class="tab-buttons">
-              <button
-                v-for="(tab, index) in tabs"
-                :key="index"
-                :class="['tab-button', { active: activeTab === index }]"
-                @click="activeTab = index"
-              >
-                {{ tab.label }}
-              </button>
-            </div>
-
-            <div class="tab-content">
-              <div v-show="activeTab === 0">
-                <h3>基本异步迭代器</h3>
-                <pre>
-// 创建异步迭代器
-const asyncIterator = {
-  data: [1, 2, 3],
-  async next() {
-    if (this.data.length === 0) {
-      return { done: true };
-    }
-
-    // 模拟异步操作
-    await new Promise(resolve => setTimeout(resolve, 500));
-
-    return {
-      value: this.data.shift(),
-      done: false
-    };
-  },
-  [Symbol.asyncIterator]() {
-    return this;
-  }
-};
-
-// 使用异步迭代器
-(async function() {
-  for await (const value of asyncIterator) {
-    console.log(value); // 1 (延迟500ms), 2 (延迟500ms), 3 (延迟500ms)
-  }
-})();</pre
-                >
-              </div>
-
-              <div v-show="activeTab === 1">
-                <h3>生成器函数实现异步迭代器</h3>
-                <pre>
-// 异步生成器函数
-async function* asyncGenerator() {
-  const urls = [
-    'https://api.example.com/page1',
-    'https://api.example.com/page2',
-    'https://api.example.com/page3'
-  ];
-
-  for (const url of urls) {
-    // 获取数据
-    const response = await fetch(url);
-
-    // 解析JSON
-    const data = await response.json();
-
-    // 产生数据
-    yield data;
-  }
-}
-
-// 使用异步生成器
-(async function() {
-  for await (const pageData of asyncGenerator()) {
-    console.log(pageData);
-    // 每页数据
-  }
-})();</pre
-                >
-              </div>
-
-              <div v-show="activeTab === 2">
-                <h3>处理Node.js文件流</h3>
-                <pre>
-import fs from 'fs';
-import readline from 'readline';
-
-async function processLargeFile(filePath) {
-  const fileStream = fs.createReadStream(filePath);
-  const rl = readline.createInterface({
-    input: fileStream,
-    crlfDelay: Infinity
-  });
-
-  // 逐行处理大文件
-  for await (const line of rl) {
-    // 处理每一行数据
-    console.log('Line:', line);
-  }
-}
-
-processLargeFile('large-data.txt');</pre
-                >
-              </div>
-            </div>
-          </div>
-        </section>
-      </main>
-
-      <!-- 右侧信息区域 -->
-      <aside class="sidebar">
-        <section class="section">
-          <h2 class="section-title">主要使用场景</h2>
-          <div class="scenario-cards">
-            <div class="scenario-card">
-              <div class="scenario-icon">📡</div>
-              <div class="scenario-content">
-                <h3>API分页数据</h3>
-                <p>遍历分页API的所有结果页</p>
-              </div>
-            </div>
-            <div class="scenario-card">
-              <div class="scenario-icon">📂</div>
-              <div class="scenario-content">
-                <h3>大文件处理</h3>
-                <p>逐行或分块读取大文件</p>
-              </div>
-            </div>
-            <div class="scenario-card">
-              <div class="scenario-icon">🔄</div>
-              <div class="scenario-content">
-                <h3>实时数据流</h3>
-                <p>处理WebSocket或SSE实时数据</p>
-              </div>
-            </div>
-            <div class="scenario-card">
-              <div class="scenario-icon">🧩</div>
-              <div class="scenario-content">
-                <h3>数据库查询</h3>
-                <p>迭代大型数据库查询结果</p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section class="section">
-          <h2 class="section-title">异步迭代器优点</h2>
-          <ul class="benefit-list">
-            <li>统一处理异步数据序列</li>
-            <li>简化复杂异步流程控制</li>
-            <li>内存高效，适合大数据集</li>
-            <li>代码可读性好，更易于维护</li>
-            <li>避免回调地狱和深层Promise链</li>
-          </ul>
-        </section>
-
-        <section class="section">
-          <h2 class="section-title">注意事项</h2>
-          <div class="warning-cards">
-            <div class="warning-card">
-              <h3>错误处理</h3>
-              <p>使用try/catch包裹for await...of循环捕获错误</p>
-            </div>
-            <div class="warning-card">
-              <h3>浏览器支持</h3>
-              <p>现代浏览器支持良好，但旧浏览器需要polyfill</p>
-            </div>
-            <div class="warning-card">
-              <h3>性能考虑</h3>
-              <p>避免在热代码路径中频繁创建迭代器实例</p>
-            </div>
-          </div>
-        </section>
-
-        <section class="section">
-          <h2 class="section-title">兼容性解决方案</h2>
-          <div class="polyfill">
-            <pre>
-// 为不支持的环境添加异步迭代支持
-if (!Symbol.asyncIterator) {
-  Symbol.asyncIterator = Symbol.for("Symbol.asyncIterator");
-}
-
-// 异步迭代器的polyfill
-function asyncIteratorPolyfill(iterable) {
-  const method = iterable[Symbol.asyncIterator];
-  if (method) return method.call(iterable);
-
-  return {
-    next() {
-      return Promise.resolve(iterable.next());
-    }
-  };
-}</pre
-            >
-          </div>
-        </section>
-      </aside>
-    </div>
-
-    <section class="section advanced-section">
-      <h2 class="section-title">高级用法</h2>
-
-      <div class="advanced-grid">
-        <div class="advanced-card">
-          <h3>组合异步迭代器</h3>
-          <pre>
-async function* mergeAsyncIterators(...iterators) {
-  for (const iterator of iterators) {
-    for await (const value of iterator) {
-      yield value;
-    }
-  }
-}
-
-// 合并多个数据流
-const combined = mergeAsyncIterators(
-  fetchDataStream('source1'),
-  fetchDataStream('source2')
-);
-
-for await (const value of combined) {
-  processValue(value);
-}</pre
-          >
+        <h3 class="text-md font-semibold text-slate-700 mb-3">方式一：手动实现 Symbol.asyncIterator</h3>
+        <p class="text-slate-600 mb-2 leading-relaxed">手动控制每个 next() 的返回值，适合需要<strong>精确控制</strong>迭代逻辑的场景：</p>
+        <div class="mb-4">
+          <Code language="js" :code="codeManualIterator" title="手动实现异步迭代器" />
         </div>
 
-        <div class="advanced-card">
-          <h3>异步迭代器转换</h3>
-          <pre>
-async function* transformAsyncIterator(iterator, transformFn) {
-  for await (const value of iterator) {
-    yield transformFn(value);
-  }
-}
-
-// 使用转换管道
-const dataStream = fetchDataStream('source');
-const transformedStream = transformAsyncIterator(
-  dataStream,
-  value => ({ ...value, processed: true })
-);
-
-for await (const item of transformedStream) {
-  console.log(item);
-}</pre
-          >
+        <h3 class="text-md font-semibold text-slate-700 mb-3 mt-6">方式二：async generator 函数（推荐）</h3>
+        <p class="text-slate-600 mb-2 leading-relaxed">使用 <code
+            class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-xs font-mono">async function*</code>
+          声明异步生成器，自动实现异步迭代器协议，代码更简洁：</p>
+        <div class="mb-4">
+          <Code language="js" :code="codeAsyncGenerator" title="async generator 函数" />
         </div>
-      </div>
-    </section>
 
-    <footer class="footer">
-      <div class="adoption">
-        <h3>异步迭代器采用情况</h3>
-        <div class="adoption-stats">
-          <div class="stat">
-            <div class="stat-value">92%</div>
-            <div class="stat-label">现代浏览器支持</div>
+        <aside class="bg-emerald-50 border-l-4 border-emerald-400 rounded-r-xl p-4">
+          <p class="text-sm text-emerald-800"><strong>✅ 最佳实践：</strong>优先使用 <code
+              class="bg-emerald-100 text-emerald-700 px-1 py-0.5 rounded text-xs">async function*</code> 而非手动实现
+            Symbol.asyncIterator。
+            自动生成器代码更少、更不易出错，且支持在函数内使用 <code
+              class="bg-emerald-100 text-emerald-700 px-1 py-0.5 rounded text-xs">await</code> 和
+            <code class="bg-emerald-100 text-emerald-700 px-1 py-0.5 rounded text-xs">try/catch</code>。
+          </p>
+        </aside>
+      </section>
+
+      <!-- 3. 实际应用场景 -->
+      <section id="sec-3" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">3</span>
+          实际应用场景
+        </h2>
+
+        <h3 class="text-md font-semibold text-slate-700 mb-3">3.1 API 分页数据遍历</h3>
+        <p class="text-slate-600 mb-2 leading-relaxed">对调用者来说，分页 API 变成了一个"无限流"，不用关心翻页逻辑：</p>
+        <div class="mb-4">
+          <Code language="js" :code="codePagination" title="分页 API 迭代" />
+        </div>
+
+        <h3 class="text-md font-semibold text-slate-700 mb-3 mt-6">3.2 Node.js 流式文件读取</h3>
+        <p class="text-slate-600 mb-2 leading-relaxed">Node.js 的 Readable Stream 和 readline 本身就实现了异步迭代器协议：</p>
+        <div class="mb-4">
+          <Code language="js" :code="codeFileStream" title="流式文件处理" />
+        </div>
+
+        <h3 class="text-md font-semibold text-slate-700 mb-3 mt-6">3.3 WebSocket / SSE 实时数据</h3>
+        <p class="text-slate-600 mb-2 leading-relaxed">将推送式的事件流包装为拉取式的异步迭代器：</p>
+        <div class="mb-4">
+          <Code language="js" :code="codeWebSocket" title="事件流转异步迭代器" />
+        </div>
+
+        <h3 class="text-md font-semibold text-slate-700 mb-3 mt-6">3.4 数据库游标遍历</h3>
+        <p class="text-slate-600 mb-2 leading-relaxed">大量数据查询时，用游标 + 异步迭代器实现逐批读取，避免内存溢出：</p>
+        <div class="mb-4">
+          <Code language="js" :code="codeDbCursor" title="数据库游标遍历" />
+        </div>
+      </section>
+
+      <!-- 4. 高级模式 -->
+      <section id="sec-4" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">4</span>
+          高级组合模式
+        </h2>
+
+        <h3 class="text-md font-semibold text-slate-700 mb-3">4.1 合并多个异步迭代器</h3>
+        <p class="text-slate-600 mb-2 leading-relaxed">将多个异步数据流串联为一个连续的流：</p>
+        <div class="mb-4">
+          <Code language="js" :code="codeMerge" title="合并异步迭代器" />
+        </div>
+
+        <h3 class="text-md font-semibold text-slate-700 mb-3 mt-6">4.2 异步迭代器转换（map/filter）</h3>
+        <p class="text-slate-600 mb-2 leading-relaxed">像数组一样对异步迭代器做 map、filter、take 等操作（类似 RxJS operators）：</p>
+        <div class="mb-4">
+          <Code language="js" :code="codeTransform" title="转换管道" />
+        </div>
+
+        <h3 class="text-md font-semibold text-slate-700 mb-3 mt-6">4.3 带并发限制的异步迭代</h3>
+        <p class="text-slate-600 mb-2 leading-relaxed">在遍历的同时控制并发数，实现流水线处理：</p>
+        <div class="mb-4">
+          <Code language="js" :code="codeConcurrent" title="并发处理" />
+        </div>
+      </section>
+
+      <!-- 5. 常见陷阱 -->
+      <section id="sec-5" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">5</span>
+          常见陷阱与注意事项
+        </h2>
+
+        <div class="space-y-4">
+          <aside class="bg-amber-50 border-l-4 border-amber-400 rounded-r-xl p-4">
+            <p class="text-sm text-amber-800"><strong>⚠️ 陷阱一：忘记 for await...of 只能在 async 函数中使用</strong><br />
+              和 await 一样，<code class="bg-amber-100 text-amber-700 px-1 py-0.5 rounded text-xs">for await...of</code> 必须在
+              async 函数内（或 ES 模块顶层）使用，否则会报语法错误。
+            </p>
+          </aside>
+
+          <aside class="bg-amber-50 border-l-4 border-amber-400 rounded-r-xl p-4">
+            <p class="text-sm text-amber-800"><strong>⚠️ 陷阱二：async generator 中的 await 是串行的</strong><br />
+              <code class="bg-amber-100 text-amber-700 px-1 py-0.5 rounded text-xs">for await (const x of source)</code>
+              每次迭代都会等待当前 Promise resolve 后再请求下一个，天然串行。
+              如果需要并行处理，需要自己实现并发逻辑（见高级模式）。
+            </p>
+          </aside>
+
+          <aside class="bg-amber-50 border-l-4 border-amber-400 rounded-r-xl p-4">
+            <p class="text-sm text-amber-800"><strong>⚠️ 陷阱三：异步迭代器不能被展开运算符使用</strong><br />
+              <code class="bg-amber-100 text-amber-700 px-1 py-0.5 rounded text-xs">[...asyncIterable]</code> 和
+              <code class="bg-amber-100 text-amber-700 px-1 py-0.5 rounded text-xs">Array.from(asyncIterable)</code>
+              都<strong>不工作</strong>。
+              必须用 <code class="bg-amber-100 text-amber-700 px-1 py-0.5 rounded text-xs">for await...of</code> 手动收集。
+            </p>
+          </aside>
+
+          <aside class="bg-amber-50 border-l-4 border-amber-400 rounded-r-xl p-4">
+            <p class="text-sm text-amber-800"><strong>⚠️ 陷阱四：提前退出需要手动处理清理逻辑</strong><br />
+              在 <code class="bg-amber-100 text-amber-700 px-1 py-0.5 rounded text-xs">for await...of</code> 中使用 <code
+                class="bg-amber-100 text-amber-700 px-1 py-0.5 rounded text-xs">break</code> 或 <code
+                class="bg-amber-100 text-amber-700 px-1 py-0.5 rounded text-xs">return</code> 时，
+              JS 引擎会调用迭代器的 <code class="bg-amber-100 text-amber-700 px-1 py-0.5 rounded text-xs">return()</code>
+              方法（如果实现了的话）。记得在 return() 中清理资源（关闭连接、删除监听器等）。
+            </p>
+          </aside>
+        </div>
+
+        <div class="mb-4 mt-4">
+          <Code language="js" :code="codeCleanup" title="正确的清理逻辑" />
+        </div>
+      </section>
+
+      <!-- 6. 兼容性与 Polyfill -->
+      <section id="sec-6" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">6</span>
+          兼容性与浏览器支持
+        </h2>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 text-center">
+          <div class="bg-emerald-50 rounded-xl p-4 border border-emerald-200">
+            <div class="text-xl font-bold text-emerald-700">Chrome 63+</div>
+            <div class="text-xs text-emerald-600 mt-1">✅ 支持</div>
           </div>
-          <div class="stat">
-            <div class="stat-value">Node.js 10+</div>
-            <div class="stat-label">原生支持</div>
+          <div class="bg-emerald-50 rounded-xl p-4 border border-emerald-200">
+            <div class="text-xl font-bold text-emerald-700">Firefox 57+</div>
+            <div class="text-xs text-emerald-600 mt-1">✅ 支持</div>
           </div>
-          <div class="stat">
-            <div class="stat-value">ES2018</div>
-            <div class="stat-label">正式规范</div>
+          <div class="bg-emerald-50 rounded-xl p-4 border border-emerald-200">
+            <div class="text-xl font-bold text-emerald-700">Safari 11.1+</div>
+            <div class="text-xs text-emerald-600 mt-1">✅ 支持</div>
+          </div>
+          <div class="bg-emerald-50 rounded-xl p-4 border border-emerald-200">
+            <div class="text-xl font-bold text-emerald-700">Node.js 10+</div>
+            <div class="text-xs text-emerald-600 mt-1">✅ 原生支持</div>
           </div>
         </div>
-      </div>
 
-      <p class="summary">
-        异步迭代器提供了一种优雅的方式来处理异步数据序列，是现代JavaScript应用中处理流式数据、分页API和大文件处理的强大工具。结合async/await语法，可以编写出简洁高效的异步代码。
-      </p>
+        <p class="text-slate-600 mb-4 leading-relaxed">
+          现代浏览器和 Node.js 都已经原生支持异步迭代器。对于需要兼容旧环境的场景，可以使用 Babel 转译或手动 Polyfill：
+        </p>
+
+        <div class="mb-4">
+          <Code language="js" :code="codePolyfill" title="Symbol.asyncIterator Polyfill" />
+        </div>
+
+        <aside class="bg-blue-50 border-l-4 border-blue-400 rounded-r-xl p-4">
+          <p class="text-sm text-blue-800"><strong>💡 提示：</strong>Babel 的 <code
+              class="bg-blue-100 text-blue-700 px-1 py-0.5 rounded text-xs">@babel/plugin-transform-async-generator-functions</code>
+            和 <code
+              class="bg-blue-100 text-blue-700 px-1 py-0.5 rounded text-xs">@babel/plugin-transform-for-of</code>（开启
+            async 模式）可以转译异步迭代器到 ES5。
+            TypeScript 从 2.3 开始支持，target 设为 ES2018 即可。</p>
+        </aside>
+      </section>
+
+      <!-- 7. 总结 -->
+      <section id="sec-7" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">7</span>
+          总结与使用建议
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+          <div class="bg-emerald-50 rounded-xl p-4 border border-emerald-200">
+            <h4 class="font-semibold text-emerald-800 mb-3">✅ 适合使用异步迭代器的场景</h4>
+            <ul class="space-y-2 text-sm text-emerald-700">
+              <li class="flex items-start gap-2"><span class="text-emerald-500 mt-1">▸</span><span>分页 API 数据的逐页遍历</span>
+              </li>
+              <li class="flex items-start gap-2"><span class="text-emerald-500 mt-1">▸</span><span>逐行/分块读取大文件</span>
+              </li>
+              <li class="flex items-start gap-2"><span class="text-emerald-500 mt-1">▸</span><span>WebSocket / SSE
+                  实时事件流</span></li>
+              <li class="flex items-start gap-2"><span class="text-emerald-500 mt-1">▸</span><span>数据库游标 /
+                  大量查询结果遍历</span></li>
+              <li class="flex items-start gap-2"><span
+                  class="text-emerald-500 mt-1">▸</span><span>需要统一接口消费多种异步数据源</span></li>
+            </ul>
+          </div>
+          <div class="bg-blue-50 rounded-xl p-4 border border-blue-200">
+            <h4 class="font-semibold text-blue-800 mb-3">🔑 核心要点</h4>
+            <ul class="space-y-2 text-sm text-blue-700">
+              <li class="flex items-start gap-2"><span class="text-blue-500 mt-1">▸</span><span><strong>优先用 async
+                    function*</strong> 而非手动实现协议</span></li>
+              <li class="flex items-start gap-2"><span class="text-blue-500 mt-1">▸</span><span>异步迭代器是
+                  <strong>拉取（pull）模式</strong>，由消费者控制节奏</span></li>
+              <li class="flex items-start gap-2"><span
+                  class="text-blue-500 mt-1">▸</span><span>天然支持<strong>背压（backpressure）</strong>——消费者慢时生产者也慢</span></li>
+              <li class="flex items-start gap-2"><span class="text-blue-500 mt-1">▸</span><span>实现 <code
+                    class="bg-blue-100 text-blue-700 px-1 py-0.5 rounded text-xs">return()</code>
+                  方法以支持<strong>资源清理</strong></span></li>
+              <li class="flex items-start gap-2"><span class="text-blue-500 mt-1">▸</span><span>和 RxJS Observable
+                  互补：迭代器是"拉"，Observable 是"推"</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <aside class="bg-purple-50 border-l-4 border-purple-400 rounded-r-xl p-4">
+          <p class="text-sm text-purple-800"><strong>🔗 学习路径延伸：</strong><br />
+            异步迭代器是现代 JavaScript 异步编程体系的重要一环。建议按以下顺序学习：<br />
+            <strong>Promise</strong> → <strong>Generator</strong> → <strong>Async/Await</strong> →
+            <strong>异步迭代器（当前）</strong> → <strong>Node.js Streams</strong> →
+            <strong>RxJS / Observable 模式</strong><br />
+            掌握了异步迭代器，你就拥有了一种统一的、可组合的异步数据处理范式。
+          </p>
+        </aside>
+      </section>
+    </main>
+
+    <!-- 底部导航 -->
+    <footer class="max-w-4xl mx-auto px-6 py-8">
+      <nav class="flex justify-between items-center pt-4 border-t border-slate-200">
+        <RouterLink to="/front/CoreSkills/JavaScript/ES/AsyncAwait"
+          class="text-slate-500 hover:text-cyan-600 text-sm flex items-center gap-1 transition-colors">← 上一节：Async/Await
+          深度解析</RouterLink>
+        <RouterLink to="/front/CoreSkills/JavaScript/ES/Iterator1"
+          class="text-cyan-600 hover:text-cyan-700 font-medium text-sm flex items-center gap-1 transition-colors">
+          下一节：迭代器 Iterator →</RouterLink>
+      </nav>
     </footer>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { Code, EditorLink, Nav } from 'components'
+import { RouterLink } from 'vue-router'
+import { useUserStore } from '@/stores/userProfle'
 
-// 标签页状态
-const tabs = ref([{ label: '基础示例' }, { label: 'API分页' }, { label: '文件处理' }])
-const activeTab = ref(0)
+const userStore = useUserStore()
 
-// 浏览器支持数据
-const browserSupport = ref({
-  chrome: { version: 63, support: true },
-  firefox: { version: 57, support: true },
-  safari: { version: 11, support: true },
-  edge: { version: 79, support: true },
-  node: { version: '10.0.0', support: true },
-})
+const navList = [
+  { id: "sec-1", name: "什么是异步迭代器" },
+  { id: "sec-2", name: "创建与使用" },
+  { id: "sec-3", name: "实际应用场景" },
+  { id: "sec-4", name: "高级组合模式" },
+  { id: "sec-5", name: "常见陷阱" },
+  { id: "sec-6", name: "兼容性与浏览器支持" },
+  { id: "sec-7", name: "总结与使用建议" },
+]
+
+// ==================== 代码示例 ====================
+
+const codeManualIterator = `// 手动实现异步可迭代对象
+const asyncIterable = {
+  data: ['Alice', 'Bob', 'Charlie'],
+  index: 0,
+
+  // 实现异步迭代器协议
+  [Symbol.asyncIterator]() {
+    return {
+      next: async () => {
+        // 模拟异步延迟
+        await new Promise(resolve => setTimeout(resolve, 500))
+
+        if (this.index < this.data.length) {
+          return { value: this.data[this.index++], done: false }
+        }
+        return { value: undefined, done: true }
+      }
+    }
+  }
+}
+
+// 使用 for await...of 遍历
+;(async () => {
+  for await (const name of asyncIterable) {
+    console.log(name)
+    // 输出（每次间隔 500ms）:
+    // Alice
+    // Bob
+    // Charlie
+  }
+})()`
+
+const codeAsyncGenerator = `// async function* — 定义异步生成器的最简方式
+async function* fetchAllPages(baseUrl) {
+  let page = 1
+  let hasMore = true
+
+  while (hasMore) {
+    // 在生成器内部使用 await
+    const response = await fetch(\`\${baseUrl}?page=\${page}&size=10\`)
+    const data = await response.json()
+
+    if (data.items.length === 0) {
+      hasMore = false
+    } else {
+      yield data.items  // yield 产出当前页数据
+      page++
+    }
+  }
+}
+
+// 消费异步生成器
+;(async () => {
+  for await (const items of fetchAllPages('/api/products')) {
+    for (const item of items) {
+      console.log(item.name)  // 输出: 每页的每个产品名
+    }
+  }
+  console.log('所有页面已处理完毕')  // 输出: 所有页面已处理完毕
+})()`
+
+const codePagination = `// 🏗️ 通用分页迭代器工厂 — 封装所有翻页逻辑
+async function* paginate(fetchPage, { startPage = 1, pageSize = 20 } = {}) {
+  let page = startPage
+  let hasMore = true
+
+  while (hasMore) {
+    const result = await fetchPage(page, pageSize)
+
+    // yield 元数据 + 数据，让调用者知道上下文
+    yield {
+      items: result.items,
+      page,
+      total: result.total,
+      hasMore: result.items.length === pageSize
+    }
+
+    hasMore = result.items.length === pageSize
+    page++
+  }
+}
+
+// 使用：Github Issues API 分页
+async function* fetchGithubIssues(repo) {
+  yield* paginate(async (page, size) => {
+    const res = await fetch(
+      \`https://api.github.com/repos/\${repo}/issues?page=\${page}&per_page=\${size}\`
+    )
+    const items = await res.json()
+    return { items, total: null }  // GitHub API 不返回 total
+  })
+}
+
+// 调用方完全不用关心分页细节
+for await (const page of fetchGithubIssues('facebook/react')) {
+  console.log(\`第 \${page.page} 页，共 \${page.items.length} 条\`)
+  // 输出（每次迭代）: 第 1 页，共 20 条
+  // 输出（每次迭代）: 第 2 页，共 20 条
+  // ...
+}`
+
+const codeFileStream = `// Node.js: 逐行读取大文件（内存友好）
+import { createReadStream } from 'fs'
+import { createInterface } from 'readline'
+
+async function* readLines(filePath) {
+  const stream = createReadStream(filePath, { encoding: 'utf-8' })
+  const rl = createInterface({ input: stream, crlfDelay: Infinity })
+
+  try {
+    // readline.Interface 实现了 Symbol.asyncIterator！
+    for await (const line of rl) {
+      yield line
+    }
+  } finally {
+    stream.destroy()  // 确保流被关闭
+  }
+}
+
+// 使用：处理 10GB 日志文件，内存占用始终很低
+for await (const line of readLines('/var/log/huge-app.log')) {
+  if (line.includes('ERROR')) {
+    console.log('发现错误行:', line)
+  }
+}`
+
+const codeWebSocket = `// 🛰️ 将 WebSocket 消息流包装为异步迭代器
+function createWebSocketStream(url) {
+  let ws
+  let messageQueue = []
+  let resolveNext = null
+
+  return {
+    [Symbol.asyncIterator]() {
+      // 连接 WebSocket
+      ws = new WebSocket(url)
+
+      ws.onmessage = (event) => {
+        const data = JSON.parse(event.data)
+        if (resolveNext) {
+          // 有等待中的消费者，立即交付
+          resolveNext({ value: data, done: false })
+          resolveNext = null
+        } else {
+          // 消费者还没准备好，先缓存
+          messageQueue.push(data)
+        }
+      }
+
+      return {
+        next: () => {
+          if (messageQueue.length > 0) {
+            const value = messageQueue.shift()
+            return Promise.resolve({ value, done: false })
+          }
+          // 没有缓存的消息，返回一个 Promise 等待下一条消息
+          return new Promise(resolve => {
+            resolveNext = resolve
+          })
+        },
+
+        // 支持清理：break / return 退出循环时调用
+        return: () => {
+          ws?.close()
+          return Promise.resolve({ done: true })
+        }
+      }
+    }
+  }
+}
+
+// 使用 WebSocket 流
+const stream = createWebSocketStream('wss://api.example.com/realtime')
+for await (const event of stream) {
+  console.log('收到实时事件:', event.type)
+
+  if (event.type === 'GAME_OVER') {
+    break  // 退出循环 → 自动调用 return() → 关闭 WebSocket
+  }
+}`
+
+const codeDbCursor = `// 🗄️ 用异步迭代器封装数据库游标（避免一次加载全部数据）
+async function* queryLargeDataset(db, sql, batchSize = 1000) {
+  // 使用游标逐批读取
+  const cursor = await db.query(sql).cursor({ batchSize })
+
+  try {
+    while (true) {
+      const batch = await cursor.read(batchSize)
+      if (batch.length === 0) break
+
+      yield batch  // 逐批产出，不一次加载所有数据
+    }
+  } finally {
+    await cursor.close()  // 无论是否 break，都确保释放游标
+  }
+}
+
+// 使用：处理 1000 万条记录，内存占用始终很低
+for await (const batch of queryLargeDataset(db, 'SELECT * FROM orders')) {
+  // 每次只处理 1000 条
+  await processOrderBatch(batch)
+}`
+
+const codeMerge = `// 串联多个异步迭代器
+async function* mergeAsyncIterators(...iterables) {
+  for (const iterable of iterables) {
+    // yield* 也可以用于异步迭代器
+    yield* iterable
+  }
+}
+
+// 合并多个数据源
+const allData = mergeAsyncIterators(
+  fetchDataFromSource1(),
+  fetchDataFromSource2(),
+  fetchDataFromSource3(),
+)
+
+for await (const item of allData) {
+  console.log(item)  // 输出: source1 数据 → source2 数据 → source3 数据
+}`
+
+const codeTransform = `// 🔧 异步迭代器的函数式转换管道
+
+// 异步 map — 对每个元素做异步转换
+async function* asyncMap(iterable, fn) {
+  for await (const item of iterable) {
+    yield await fn(item)
+  }
+}
+
+// 异步 filter — 过滤满足条件的元素
+async function* asyncFilter(iterable, predicate) {
+  for await (const item of iterable) {
+    if (await predicate(item)) {
+      yield item
+    }
+  }
+}
+
+// take — 只取前 N 个（之后自动触发清理）
+async function* asyncTake(iterable, n) {
+  let count = 0
+  for await (const item of iterable) {
+    if (count++ >= n) return  // return 触发迭代器的 return() 清理
+    yield item
+  }
+}
+
+// 组合使用 — 函数式管道
+const pipeline = asyncTake(
+  asyncFilter(
+    asyncMap(fetchAllPages('/api/products'), async (item) => ({
+      ...item,
+      priceInCNY: item.price * 7.2  // 异步汇率转换
+    })),
+    item => item.priceInCNY > 100    // 只保留 > 100 元
+  ),
+  50  // 只取前 50 个
+)
+
+for await (const product of pipeline) {
+  console.log(\`\${product.name}: ¥\${product.priceInCNY}\`)  // 输出: xxx: ¥xxx
+}`
+
+const codeConcurrent = `// ⚡ 在异步迭代中保持并发处理能力
+async function* asyncMapConcurrent(iterable, fn, concurrency = 3) {
+  const pending = new Set()
+
+  for await (const item of iterable) {
+    const promise = (async () => {
+      try {
+        return { status: 'ok', value: await fn(item) }
+      } catch (err) {
+        return { status: 'error', error: err }
+      }
+    })()
+
+    pending.add(promise)
+    promise.then(() => pending.delete(promise))
+
+    // 达到并发上限时，等待任意一个完成
+    if (pending.size >= concurrency) {
+      const result = await Promise.race(
+        [...pending].map(async (p) => {
+          const r = await p
+          return { promise: p, result: r }
+        })
+      )
+      pending.delete(result.promise)
+      yield result.result
+    }
+  }
+
+  // 等待剩余的完成
+  for (const result of await Promise.all([...pending])) {
+    yield result
+  }
+}
+
+// 使用：同时处理 3 个，而非串行
+for await (const result of asyncMapConcurrent(
+  fetchAllPages('/api/products'),
+  async (item) => {
+    const enriched = await enrichProductWithExternalData(item)
+    return enriched  // 最多同时跑 3 个 enrich 请求
+  },
+  3  // 并发数
+)) {
+  if (result.status === 'ok') {
+    console.log('处理完成:', result.value.name)
+  } else {
+    console.error('处理失败:', result.error)
+  }
+}`
+
+const codeCleanup = `// ✅ 正确实现资源清理的异步迭代器
+async function* managedStream(url) {
+  const controller = new AbortController()
+
+  try {
+    const response = await fetch(url, { signal: controller.signal })
+    const reader = response.body.getReader()
+
+    try {
+      while (true) {
+        const { done, value } = await reader.read()
+        if (done) break
+        yield value
+      }
+    } finally {
+      reader.releaseLock()  // 内层清理：释放 reader
+    }
+  } finally {
+    controller.abort()  // 外层清理：取消请求
+    console.log('资源已清理')  // 输出: 资源已清理
+  }
+}
+
+// 正常结束 → finally 执行
+for await (const chunk of managedStream('/api/stream')) {
+  console.log(chunk)
+}
+// finally → "资源已清理"
+
+// 提前退出 → finally 也会执行
+for await (const chunk of managedStream('/api/stream')) {
+  if (someCondition) break
+}
+// finally → "资源已清理"  ✅ 即使 break 也会清理`
+
+const codePolyfill = `// Symbol.asyncIterator Polyfill
+if (!Symbol.asyncIterator) {
+  ;(Symbol as any).asyncIterator = Symbol.for('Symbol.asyncIterator')
+}
+
+// 为不支持的环境提供基础支持
+// 注意：这只是 Symbol 的 polyfill，实际 for await...of 需要 Babel 转译
+`
 </script>
-
-<style lang="less" scoped>
-// 颜色变量
-@primary-color: #6e45e2;
-@secondary-color: #4a6cf7;
-@accent-color: #ff6b6b;
-@light-bg: #f8f9ff;
-@border-color: #e0e7ff;
-@text-color: #2c3e50;
-@text-light: #7e8a9a;
-@card-shadow: 0 4px 12px rgba(110, 69, 226, 0.08);
-@code-bg: #f1f5ff;
-
-// 基础样式
-.async-iterator-container {
-  font-family:
-    'Inter',
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    Roboto,
-    sans-serif;
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  color: @text-color;
-  background-color: white;
-  line-height: 1.6;
-}
-
-.header {
-  text-align: center;
-  margin-bottom: 2rem;
-
-  .title {
-    font-size: 2.5rem;
-    font-weight: 700;
-    margin-bottom: 0.5rem;
-    background: linear-gradient(135deg, @primary-color, @secondary-color);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-  }
-
-  .subtitle {
-    font-size: 1.2rem;
-    color: @text-light;
-    font-weight: 400;
-  }
-}
-
-.intro-section {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 1.5rem;
-  margin-bottom: 2.5rem;
-
-  .intro-card {
-    display: flex;
-    gap: 1.2rem;
-    padding: 1.5rem;
-    background: @light-bg;
-    border-radius: 12px;
-    box-shadow: @card-shadow;
-    transition: transform 0.3s ease;
-
-    &:hover {
-      transform: translateY(-5px);
-    }
-
-    .intro-icon {
-      font-size: 2.5rem;
-      min-width: 60px;
-      height: 60px;
-      background: linear-gradient(135deg, @primary-color, @secondary-color);
-      color: white;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .intro-content {
-      h3 {
-        margin-top: 0;
-        margin-bottom: 0.75rem;
-        color: @primary-color;
-      }
-
-      p {
-        margin: 0;
-        color: @text-light;
-        font-size: 0.98rem;
-      }
-    }
-  }
-}
-
-.content-grid {
-  display: grid;
-  grid-template-columns: 1fr 350px;
-  gap: 2rem;
-
-  @media (max-width: 1024px) {
-    grid-template-columns: 1fr;
-  }
-}
-
-.section {
-  margin-bottom: 2.5rem;
-  background: @light-bg;
-  border-radius: 12px;
-  padding: 1.5rem;
-  box-shadow: @card-shadow;
-
-  .section-title {
-    font-size: 1.5rem;
-    font-weight: 600;
-    margin-top: 0;
-    margin-bottom: 1.5rem;
-    padding-bottom: 0.75rem;
-    border-bottom: 2px solid @primary-color;
-    color: darken(@primary-color, 10%);
-  }
-}
-
-.concept-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.2rem;
-  margin-bottom: 2rem;
-
-  .concept-card {
-    padding: 1.25rem;
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(110, 69, 226, 0.1);
-    border-left: 4px solid @secondary-color;
-
-    h3 {
-      margin-top: 0;
-      margin-bottom: 0.75rem;
-      color: @primary-color;
-    }
-
-    p {
-      margin: 0;
-      color: @text-light;
-      font-size: 0.95rem;
-    }
-  }
-}
-
-.comparison {
-  background: white;
-  border-radius: 8px;
-  padding: 1.25rem;
-  box-shadow: 0 2px 8px rgba(110, 69, 226, 0.08);
-
-  h3 {
-    margin-top: 0;
-    margin-bottom: 1rem;
-    color: @primary-color;
-    text-align: center;
-  }
-}
-
-.comparison-table {
-  display: table;
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.95rem;
-
-  .table-row {
-    display: table-row;
-
-    &.header {
-      font-weight: 600;
-      background: rgba(110, 69, 226, 0.06);
-    }
-
-    &:not(.header):hover {
-      background: rgba(110, 69, 226, 0.03);
-    }
-  }
-
-  .table-cell {
-    display: table-cell;
-    padding: 0.75rem;
-    border-bottom: 1px solid @border-color;
-
-    &:first-child {
-      font-weight: 500;
-      width: 30%;
-    }
-  }
-}
-
-.usage-tabs {
-  background: white;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 4px 16px rgba(110, 69, 226, 0.1);
-
-  .tab-buttons {
-    display: flex;
-    background: linear-gradient(135deg, @primary-color, @secondary-color);
-
-    .tab-button {
-      flex: 1;
-      padding: 1rem;
-      background: none;
-      border: none;
-      color: rgba(255, 255, 255, 0.8);
-      font-family: inherit;
-      font-size: 1rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.3s ease;
-
-      &.active {
-        background: rgba(255, 255, 255, 0.15);
-        color: white;
-        border-bottom: 3px solid white;
-      }
-
-      &:hover:not(.active) {
-        background: rgba(255, 255, 255, 0.1);
-      }
-    }
-  }
-
-  .tab-content {
-    padding: 1.5rem;
-
-    h3 {
-      margin-top: 0;
-      margin-bottom: 1rem;
-      color: @primary-color;
-    }
-
-    pre {
-      background: @code-bg;
-      padding: 1.5rem;
-      border-radius: 8px;
-      font-size: 0.95rem;
-      overflow-x: auto;
-      margin: 0;
-    }
-  }
-}
-
-.sidebar {
-  .scenario-cards {
-    display: grid;
-    gap: 1.2rem;
-
-    .scenario-card {
-      display: flex;
-      gap: 1rem;
-      padding: 1.25rem;
-      background: white;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(110, 69, 226, 0.1);
-      transition: transform 0.3s ease;
-
-      &:hover {
-        transform: translateX(5px);
-        box-shadow: 0 4px 12px rgba(110, 69, 226, 0.15);
-      }
-
-      .scenario-icon {
-        font-size: 1.8rem;
-        min-width: 50px;
-        height: 50px;
-        background: linear-gradient(135deg, @primary-color, @secondary-color);
-        color: white;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-      }
-
-      .scenario-content {
-        h3 {
-          margin-top: 0;
-          margin-bottom: 0.5rem;
-          color: @primary-color;
-        }
-
-        p {
-          margin: 0;
-          color: @text-light;
-          font-size: 0.95rem;
-        }
-      }
-    }
-  }
-
-  .benefit-list {
-    padding-left: 1.5rem;
-    margin: 0;
-
-    li {
-      margin-bottom: 0.8rem;
-      position: relative;
-      padding-left: 1.8rem;
-
-      &::before {
-        content: '✓';
-        position: absolute;
-        left: 0;
-        color: @primary-color;
-        font-weight: bold;
-        width: 24px;
-        height: 24px;
-        background: rgba(110, 69, 226, 0.1);
-        border-radius: 50%;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-      }
-    }
-  }
-
-  .warning-cards {
-    display: grid;
-    gap: 1rem;
-
-    .warning-card {
-      padding: 1.25rem;
-      background: rgba(255, 107, 107, 0.05);
-      border-left: 4px solid @accent-color;
-      border-radius: 0 8px 8px 0;
-
-      h3 {
-        margin-top: 0;
-        margin-bottom: 0.5rem;
-        color: darken(@accent-color, 15%);
-      }
-
-      p {
-        margin: 0;
-        color: @text-light;
-        font-size: 0.95rem;
-      }
-    }
-  }
-
-  .polyfill {
-    pre {
-      background: @code-bg;
-      padding: 1.25rem;
-      border-radius: 8px;
-      font-size: 0.9rem;
-      overflow-x: auto;
-      margin: 0;
-    }
-  }
-}
-
-.advanced-section {
-  background: linear-gradient(135deg, @light-bg, rgba(110, 69, 226, 0.03));
-  border: 2px dashed rgba(110, 69, 226, 0.15);
-
-  .section-title {
-    text-align: center;
-    border-bottom: none;
-    position: relative;
-
-    &::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 100px;
-      height: 3px;
-      background: linear-gradient(to right, @primary-color, @secondary-color);
-      border-radius: 3px;
-    }
-  }
-}
-
-.advanced-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-  gap: 2rem;
-
-  @media (max-width: 768px) {
-    grid-template-columns: 1fr;
-  }
-
-  .advanced-card {
-    background: white;
-    border-radius: 12px;
-    padding: 1.5rem;
-    box-shadow: 0 4px 16px rgba(110, 69, 226, 0.1);
-
-    h3 {
-      margin-top: 0;
-      margin-bottom: 1rem;
-      color: @primary-color;
-      padding-bottom: 0.5rem;
-      border-bottom: 1px solid @border-color;
-    }
-
-    pre {
-      background: @code-bg;
-      padding: 1.25rem;
-      border-radius: 8px;
-      font-size: 0.9rem;
-      overflow-x: auto;
-    }
-  }
-}
-
-.footer {
-  padding-top: 2rem;
-  margin-top: 2rem;
-  border-top: 1px solid @border-color;
-
-  .adoption {
-    text-align: center;
-    margin-bottom: 1.5rem;
-
-    h3 {
-      font-size: 1.3rem;
-      color: @primary-color;
-      margin-bottom: 1.5rem;
-    }
-
-    .adoption-stats {
-      display: flex;
-      justify-content: center;
-      gap: 2rem;
-      flex-wrap: wrap;
-
-      .stat {
-        .stat-value {
-          font-size: 1.8rem;
-          font-weight: 700;
-          color: @primary-color;
-          margin-bottom: 0.5rem;
-        }
-
-        .stat-label {
-          color: @text-light;
-          font-size: 0.95rem;
-        }
-      }
-    }
-  }
-
-  .summary {
-    text-align: center;
-    font-size: 1.05rem;
-    max-width: 800px;
-    margin: 1.5rem auto 0;
-    padding: 1.5rem;
-    background: rgba(110, 69, 226, 0.03);
-    border-radius: 12px;
-    font-weight: 500;
-  }
-}
-
-// 代码样式
-code,
-pre {
-  font-family: 'Fira Code', Consolas, Monaco, 'Andale Mono', monospace;
-}
-
-pre {
-  position: relative;
-  padding-left: 1.5rem !important;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 4px;
-    height: 100%;
-    background: linear-gradient(to bottom, @primary-color, @secondary-color);
-    border-radius: 4px;
-  }
-}
-
-// 响应式设计
-@media (max-width: 768px) {
-  .async-iterator-container {
-    padding: 1rem;
-  }
-
-  .header .title {
-    font-size: 2rem;
-  }
-
-  .intro-section {
-    grid-template-columns: 1fr;
-  }
-}
-</style>

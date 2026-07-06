@@ -1,32 +1,101 @@
 <template>
-  <div class="es-features-guide">
-    <header class="guide-header">
-      <h1 class="title">ECMAScript 新特性演进</h1>
-      <p class="subtitle">从 ES5 到 ES2025 的核心特性解析</p>
-      <p><a @click="handleClick('ESKnowledgepPoints')">跳转总结</a></p>
-    </header>
-    <ScrollNav :list="versions" :keyMap="{ children: 'features' }" :showChild="true" />
-
-    <div class="version-timeline">
-      <div v-for="version in versions" :key="version.year" class="version-card" :class="'version-' + version.year"
-        :id="version.id">
-        <h2 class="version-title">ES{{ version.year }}</h2>
-        <div class="features-list">
-          <div v-for="feature in version.features" :key="feature.name" class="feature-item" :id="feature.id">
-            <h3 class="feature-name">
-              <a @click="handleClick(feature.route)">{{ feature.name }}</a>
-            </h3>
-            <p class="feature-desc">{{ feature.description }}</p>
-            <pre class="feature-code"><code>{{ feature.code }}</code></pre>
-          </div>
-        </div>
+  <div class="es-overview min-h-screen bg-linear-to-br from-slate-50 to-blue-50">
+    <!-- 页面头部 -->
+    <header class="bg-white border-b border-slate-200">
+      <div class="max-w-5xl mx-auto px-6 py-6 text-center">
+        <h1 class="text-2xl font-bold text-slate-800 mb-2">📜 ECMAScript 新特性演进</h1>
+        <p class="text-sm text-slate-500">从 ES5 到 ES2025 — 一张图看尽 JavaScript 进化史</p>
+        <p class="text-xs text-slate-400 mt-1">点击特性名称可跳转到对应的详细文档</p>
       </div>
-    </div>
+    </header>
+
+    <!-- 主体内容 -->
+    <main class="max-w-5xl mx-auto px-6 py-8 space-y-6">
+      <ScrollNav :list="versions" :keyMap="{ children: 'features' }" :showChild="true" />
+
+      <div class="space-y-5">
+        <section
+          v-for="version in versions"
+          :key="version.year"
+          :id="version.id"
+          class="bg-white rounded-2xl shadow-md border border-slate-100 overflow-hidden"
+        >
+          <!-- 版本标题栏 -->
+          <div class="px-6 py-4 border-b border-slate-100 flex items-center gap-3"
+            :class="[
+              version.year === '5' ? 'bg-blue-50' :
+              version.year === '2015 (ES6)' ? 'bg-pink-50' :
+              version.year === '2016' ? 'bg-emerald-50' :
+              version.year === '2017' ? 'bg-amber-50' :
+              version.year === '2018' ? 'bg-violet-50' :
+              version.year === '2019' ? 'bg-rose-50' :
+              version.year === '2020' ? 'bg-teal-50' :
+              version.year === '2021' ? 'bg-yellow-50' :
+              version.year === '2022' ? 'bg-indigo-50' :
+              version.year === '2023' ? 'bg-pink-50' :
+              version.year === '2024' ? 'bg-emerald-50' :
+              'bg-purple-50'
+            ]"
+          >
+            <span class="shrink-0 w-3 h-3 rounded-full"
+              :class="[
+                version.year === '5' ? 'bg-blue-500' :
+                version.year === '2015 (ES6)' ? 'bg-pink-500' :
+                version.year === '2016' ? 'bg-emerald-500' :
+                version.year === '2017' ? 'bg-amber-500' :
+                version.year === '2018' ? 'bg-violet-500' :
+                version.year === '2019' ? 'bg-rose-500' :
+                version.year === '2020' ? 'bg-teal-500' :
+                version.year === '2021' ? 'bg-yellow-500' :
+                version.year === '2022' ? 'bg-indigo-500' :
+                version.year === '2023' ? 'bg-pink-500' :
+                version.year === '2024' ? 'bg-emerald-500' :
+                'bg-purple-500'
+              ]"
+            ></span>
+            <h2 class="text-lg font-bold text-slate-800">
+              {{ version.name }}
+              <span class="text-sm font-normal text-slate-500 ml-2">{{ version.year }}</span>
+            </h2>
+          </div>
+
+          <!-- 特性网格 -->
+          <div class="p-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div
+                v-for="feature in version.features"
+                :key="feature.id"
+                :id="feature.id"
+                class="bg-slate-50 rounded-xl p-4 border border-slate-200 hover:border-cyan-300 hover:shadow-sm transition-all group"
+              >
+                <h3 class="text-sm font-semibold text-slate-700 mb-2">
+                  <a
+                    @click="handleClick(feature.route)"
+                    class="text-cyan-700 hover:text-cyan-500 hover:underline cursor-pointer transition-colors"
+                  >
+                    {{ feature.name }}
+                  </a>
+                </h3>
+                <p class="text-xs text-slate-500 mb-3 leading-relaxed">{{ feature.description }}</p>
+                <div class="bg-slate-900 rounded-lg p-3 overflow-x-auto">
+                  <pre class="text-xs text-green-400 font-mono leading-relaxed m-0">{{ feature.code }}</pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <!-- 底部 -->
+    <footer class="max-w-5xl mx-auto px-6 py-8 text-center">
+      <p class="text-xs text-slate-400">JavaScript 持续进化中 — TC39 每年发布一个新版本</p>
+    </footer>
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, defineEmits } from 'vue'
+import { onMounted, ref } from 'vue'
 import ScrollNav from 'components/Nav/ScrollNav.vue'
 
 const versions = ref<ESVersion[]>([])
@@ -57,290 +126,3 @@ interface ESVersion {
   features: ESFeature[]
 }
 </script>
-
-<style lang="less" scoped>
-.es-features-guide {
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 2rem;
-  font-family: 'Inter', system-ui, sans-serif;
-  color: #2d3748;
-}
-
-.guide-header {
-  text-align: center;
-  margin-bottom: 3rem;
-
-  .title {
-    font-size: 2.5rem;
-    margin-bottom: 0.5rem;
-    color: #2d3748;
-    font-weight: 800;
-    background: linear-gradient(90deg, #3b82f6, #8b5cf6);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-
-  .subtitle {
-    font-size: 1.2rem;
-    color: #64748b;
-    font-weight: 400;
-  }
-}
-
-.version-timeline {
-  display: grid;
-  gap: 2rem;
-}
-
-.version-card {
-  background: white;
-  border-radius: 0.75rem;
-  padding: 1.5rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  position: relative;
-  overflow: hidden;
-
-  &::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 4px;
-    background: linear-gradient(to bottom, #3b82f6, #8b5cf6);
-  }
-}
-
-.version-title {
-  font-size: 1.5rem;
-  margin-top: 0;
-  margin-bottom: 1rem;
-  color: #1e40af;
-  display: flex;
-  align-items: center;
-
-  &::before {
-    content: '';
-    display: inline-block;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background: #3b82f6;
-    margin-right: 0.5rem;
-  }
-}
-
-.features-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1.5rem;
-}
-
-.feature-item {
-  background: #f8fafc;
-  border-radius: 0.5rem;
-  padding: 1rem;
-  border: 1px solid #e2e8f0;
-}
-
-.feature-name {
-  font-size: 1.1rem;
-  margin-top: 0;
-  margin-bottom: 0.5rem;
-  color: #1e40af;
-}
-
-.feature-desc {
-  color: #475569;
-  font-size: 0.9rem;
-  margin-top: 0;
-  margin-bottom: 0.8rem;
-  line-height: 1.5;
-}
-
-.feature-code {
-  background: #1e293b;
-  border-radius: 0.375rem;
-  padding: 0.8rem;
-  margin: 0;
-  overflow-x: auto;
-
-  code {
-    font-family: 'Fira Code', monospace;
-    font-size: 0.85rem;
-    color: #f8fafc;
-    line-height: 1.4;
-    white-space: pre;
-  }
-}
-
-// 不同版本的颜色主题
-.version-5 {
-  .version-title {
-    color: #1e40af;
-  }
-
-  .feature-name {
-    color: #1e40af;
-  }
-
-  &::before {
-    background: #3b82f6;
-  }
-}
-
-.version-2015 {
-  .version-title {
-    color: #9d174d;
-  }
-
-  .feature-name {
-    color: #9d174d;
-  }
-
-  &::before {
-    background: #db2777;
-  }
-}
-
-.version-2016 {
-  .version-title {
-    color: #065f46;
-  }
-
-  .feature-name {
-    color: #065f46;
-  }
-
-  &::before {
-    background: #059669;
-  }
-}
-
-.version-2017 {
-  .version-title {
-    color: #92400e;
-  }
-
-  .feature-name {
-    color: #92400e;
-  }
-
-  &::before {
-    background: #d97706;
-  }
-}
-
-.version-2018 {
-  .version-title {
-    color: #5b21b6;
-  }
-
-  .feature-name {
-    color: #5b21b6;
-  }
-
-  &::before {
-    background: #7c3aed;
-  }
-}
-
-.version-2019 {
-  .version-title {
-    color: #9f1239;
-  }
-
-  .feature-name {
-    color: #9f1239;
-  }
-
-  &::before {
-    background: #be123c;
-  }
-}
-
-.version-2020 {
-  .version-title {
-    color: #0f766e;
-  }
-
-  .feature-name {
-    color: #0f766e;
-  }
-
-  &::before {
-    background: #0d9488;
-  }
-}
-
-.version-2021 {
-  .version-title {
-    color: #713f12;
-  }
-
-  .feature-name {
-    color: #713f12;
-  }
-
-  &::before {
-    background: #854d0e;
-  }
-}
-
-.version-2022 {
-  .version-title {
-    color: #3730a3;
-  }
-
-  .feature-name {
-    color: #3730a3;
-  }
-
-  &::before {
-    background: #4f46e5;
-  }
-}
-
-.version-2023 {
-  .version-title {
-    color: #831843;
-  }
-
-  .feature-name {
-    color: #831843;
-  }
-
-  &::before {
-    background: #9d174d;
-  }
-}
-
-.version-2024 {
-  .version-title {
-    color: #064e3b;
-  }
-
-  .feature-name {
-    color: #064e3b;
-  }
-
-  &::before {
-    background: #047857;
-  }
-}
-
-.version-2025 {
-  .version-title {
-    color: #701a75;
-  }
-
-  .feature-name {
-    color: #701a75;
-  }
-
-  &::before {
-    background: #86198f;
-  }
-}
-</style>
