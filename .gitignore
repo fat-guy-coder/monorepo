@@ -17,6 +17,7 @@ apps/admin/node_modules/
 apps/admin/dist/
 static/
 .DS_Store
+.claude/
 coverage/
 *.local* 
 
