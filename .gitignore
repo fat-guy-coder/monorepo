@@ -16,8 +16,7 @@ apps/backend/dist/
 apps/admin/node_modules/
 apps/admin/dist/
 static/
-.DS_Store
-.claude/
+.DS_Stor
 coverage/
 *.local* 
 
@@ -37,5 +36,9 @@ coverage/
 *.7z
 .env
 .turbo
+
+# Claude Code 本地配置（含 API 密钥，切勿上传）
+.claude/settings.json
+.claude/settings.local.json
 
 *.tsbuildinfo
