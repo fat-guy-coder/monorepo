@@ -30,7 +30,7 @@ func RunNewMake() {
 	m2["k"] = 1 // OK
 	fmt.Printf("make 创建的 map 可写: %v\n", m2)
 
-	// new 创建的 map 也是 nil，不可写
+	// new 创建的 map 也是 nil，不 写
 	// m3 := new(map[string]int)
 	// (*m3)["k"] = 1           // panic: nil map！
 }
