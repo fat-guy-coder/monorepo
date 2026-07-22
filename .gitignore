@@ -19,6 +19,7 @@ static/
 .DS_Stor
 coverage/
 *.local* 
+.claude/settings.json
 
 
 
