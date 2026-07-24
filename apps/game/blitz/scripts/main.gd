@@ -14,10 +14,11 @@ extends Node2D
 ##   godot-1-8-signals-basics   — 信号: Button.pressed.connect()
 ##
 ## 🏗️ 碰撞层 Bit 分配 (全局统一):
-##   Bit 0 = 玩家身体     Bit 3 = (预留)
+##   Bit 0 = 玩家身体     Bit 3 = 敌人攻击 (预留)
 ##   Bit 1 = 敌人身体     Bit 4 = 墙壁/平台
-##   Bit 2 = 玩家子弹     Bit 5 = 格挡对象
+##   Bit 2 = 玩家攻击     Bit 5 = 格挡对象
 ##                        Bit 6 = 终点
+##                        Bit 7 = (预留)
 
 # ============================================================
 # 关卡尺寸常量
@@ -32,7 +33,7 @@ const GROUND_THICKNESS: float = 40.0
 # ============================================================
 var PlayerScene: PackedScene = preload("res://scenes/player.tscn")
 var EnemyScene: PackedScene  = preload("res://scenes/enemy.tscn")
-var BulletScene: PackedScene = preload("res://scenes/bullet.tscn")
+var AttackHitboxScene: PackedScene = preload("res://scenes/attack_hitbox.tscn")
 var DrawableRect: Script     = preload("res://scripts/drawable_rect.gd")
 
 # ============================================================
@@ -79,8 +80,9 @@ func _setup_input_map() -> void:
 		"move_left":  [KEY_A, KEY_LEFT],
 		"move_right": [KEY_D, KEY_RIGHT],
 		"jump":       [KEY_SPACE, KEY_W, KEY_UP],
-		"dash":       [KEY_SHIFT, KEY_K],
-		"shoot":      [KEY_J, KEY_Z],
+		"dash":       [KEY_SHIFT],
+		"attack_light": [KEY_J],
+		"attack_heavy": [KEY_K],
 		"restart":    [KEY_R, KEY_ENTER],
 	}
 	for action_name: String in actions:
@@ -91,11 +93,6 @@ func _setup_input_map() -> void:
 				ev.physical_keycode = key
 				InputMap.action_add_event(action_name, ev)
 
-	# 射击也支持鼠标左键
-	if InputMap.has_action("shoot"):
-		var mev: InputEventMouseButton = InputEventMouseButton.new()
-		mev.button_index = MOUSE_BUTTON_LEFT
-		InputMap.action_add_event("shoot", mev)
 
 
 # ============================================================
@@ -227,8 +224,8 @@ func _create_player() -> void:
 	player = PlayerScene.instantiate()
 	player.name = "Player"
 	player.position = Vector2(120, GROUND_Y - 40)
-	# 注入子弹场景引用 (player 需要它来生成子弹)
-	player.bullet_scene = BulletScene
+	# 注入攻击判定框引用 (player 需要它来生成近战攻击)
+	player.attack_hitbox_scene = AttackHitboxScene
 	add_child(player)
 
 	# 摄像机跟随 — 作为 player 的子节点自动跟随
@@ -300,7 +297,7 @@ func _create_instructions() -> void:
 
 	var text: Label = Label.new()
 	text.position = Vector2(36, LEVEL_HEIGHT - 64)
-	text.text = "A/D 移动 | W/空格 跳跃 | Shift 冲刺 | J/鼠标左键 射击 | 空中靠近🩷按跳 = 格挡"
+	text.text = "A/D 移动 | W/空格 跳跃 | Shift 闪避 | J 轻击 | K 重击 | 空中靠近🩷按跳 = 格挡"
 	text.add_theme_font_size_override("font_size", 12)
 	text.add_theme_color_override("font_color", Color(0.8, 0.8, 0.8))
 	ui.add_child(text)

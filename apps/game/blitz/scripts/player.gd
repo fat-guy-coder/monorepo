@@ -1,32 +1,34 @@
 extends CharacterBody2D
-class_name CupheadPlayer
-## 茶杯头风格玩家控制器 — 状态机 + 物理 + 输入 综合实战
+class_name BlitzPlayer
+## 武侠角色控制器 — 状态机 + 物理 + 近战战斗
 ##
 ## 📚 涉及学习文档 (按阅读顺序):
-##   godot-2-6-characterbody2d  — CharacterBody2D 基础: move_and_slide/velocity/重力
+##   godot-2-6-characterbody2d   — CharacterBody2D 基础: move_and_slide/velocity/重力
 ##   godot-6-5-characterbody-deep — 深入: is_on_floor/coyote time/jump buffer
 ##   godot-6-6-platformer-physics  — 平台跳跃物理: 可变跳跃高度/冲刺
-##   godot-7-8-state-machines      — 状态机模式: NORMAL/DASHING/HIT/DEAD
+##   godot-7-8-state-machines      — 状态机模式: NORMAL/ATTACKING/DASHING/HIT/DEAD
 ##   godot-5-2-input-handling      — Input 单例: get_axis/is_action_just_pressed
 ##   godot-5-1-input-map           — InputMap: 在代码中注册按键动作
+##   godot-6-2-area2d-deep         — Area2D: 攻击判定框碰撞检测
 ##   godot-2-5-collision2d         — 碰撞形状: CircleShape2D/碰撞层位掩码
 ##   godot-6-4-collision-layers    — 位掩码详解: layer vs mask 的区别
 ##   godot-2-3-node2d-basics       — _draw() 绘制圆形外观
 ##   godot-1-8-signals-basics      — 信号连接: body_entered/area_entered
-##   godot-1-13-string-formatting  — 字符串格式化(日志/调试)
+##   godot-4-2-scene-instantiation — PackedScene.instantiate() 场景实例化
 ##
-## 🎮 核心机制一览 (茶杯头风格):
+## 🎮 核心机制 (武侠动作):
 ##   - 移动: A/D 或 ←→  水平加减速,有惯性
 ##   - 跳跃: Space/W/↑  可变高度(松键削减) + coyote time + jump buffer
-##   - 冲刺: Shift/K    短暂无敌 + 水平爆发速度
-##   - 射击: J/Z/鼠标左键  按住连发,子弹直线飞行
+##   - 闪避: Shift/K    短暂无敌 + 水平爆发速度
+##   - 轻击: J          近战攻击,前方生成攻击判定框
 ##   - 格挡: 空中靠近粉色物体按跳 → 高弹跳 + 150分 + 无敌
 ##
-## 🏗️ 碰撞层设计 (必须与 enemy.gd / bullet.gd / main.gd 一致):
-##   Bit 0 = 玩家身体     Bit 3 = (预留)
+## 🏗️ 碰撞层设计 (必须与 attack_hitbox.gd / enemy.gd / main.gd 一致):
+##   Bit 0 = 玩家身体     Bit 3 = 敌人攻击 (预留)
 ##   Bit 1 = 敌人身体     Bit 4 = 墙壁/平台
-##   Bit 2 = 玩家子弹     Bit 5 = 格挡对象
+##   Bit 2 = 玩家攻击     Bit 5 = 格挡对象
 ##                        Bit 6 = 终点
+##                        Bit 7 = (预留)
 
 # ============================================================
 # 节点引用 — @onready 在 _ready() 之前初始化,保证节点存在
@@ -57,18 +59,19 @@ class_name CupheadPlayer
 @export var jump_buffer_time: float = 0.08  ## 落地前提前按跳的缓冲(秒)
 
 # ============================================================
-# 冲刺参数
+# 闪避(冲刺)参数
 # ============================================================
-@export var dash_speed: float = 900.0       ## 冲刺速度 px/s
-@export var dash_duration: float = 0.15     ## 冲刺持续时间(秒)
-@export var dash_cooldown: float = 0.5      ## 冲刺冷却时间(秒)
+@export var dash_speed: float = 900.0       ## 闪避速度 px/s
+@export var dash_duration: float = 0.15     ## 闪避持续时间(秒)
+@export var dash_cooldown: float = 0.5      ## 闪避冷却时间(秒)
 
 # ============================================================
-# 射击参数
+# 攻击参数 (近战武侠战斗)
 # ============================================================
-@export var fire_rate: float = 0.13         ## 射击间隔(秒),≈7.7发/秒
-@export var bullet_speed: float = 700.0     ## 子弹速度 px/s
-var bullet_scene: PackedScene = null        ## 子弹场景(由 main.gd 注入)
+@export var attack_light_damage: int = 1         ## 轻击伤害
+@export var attack_light_duration: float = 0.15  ## 攻击判定持续(秒)
+@export var attack_light_cooldown: float = 0.25  ## 轻击冷却(秒)
+var attack_hitbox_scene: PackedScene = null       ## 攻击判定场景(由 main.gd 注入)
 
 # ============================================================
 # 生命值
@@ -84,7 +87,7 @@ var invincible_timer: float = 0.0
 # 每个状态的逻辑在对应的 _process_xxx 函数中
 # 详见 godot-7-8-state-machines
 # ============================================================
-enum State { NORMAL, DASHING, HIT, DEAD }
+enum State { NORMAL, ATTACKING, DASHING, HIT, DEAD }
 var state: State = State.NORMAL
 var facing_right: bool = true   ## 朝向: true=右,false=左
 
@@ -93,7 +96,8 @@ var _coyote_timer: float = 0.0
 var _jump_buffer_timer: float = 0.0
 var _dash_timer: float = 0.0
 var _dash_cooldown_timer: float = 0.0
-var _fire_timer: float = 0.0
+var _attack_timer: float = 0.0
+var _attack_cooldown_timer: float = 0.0
 var _hit_stun_timer: float = 0.0
 
 # ── 格挡状态 ──
@@ -111,8 +115,6 @@ func _ready() -> void:
 	health = max_health
 
 	# ── 碰撞层配置 ──
-	# CharacterBody2D 用 collision_mask 筛选"我能站在什么上面"
-	# 这里只跟墙壁/平台碰撞(layer bit4)
 	collision_layer = 1 << 0   # bit0: "我是玩家"
 	collision_mask  = 1 << 4   # bit4: "我只跟墙壁碰撞"
 
@@ -139,10 +141,12 @@ func _physics_process(delta: float) -> void:
 	_update_timers(delta)
 
 	# 2. 根据状态执行不同逻辑
-	# → godot-7-8-state-machines: enum State + match 四状态机
+	# → godot-7-8-state-machines: enum State + match 五状态机
 	match state:
 		State.NORMAL:
 			_process_normal(delta)
+		State.ATTACKING:
+			_process_attacking(delta)
 		State.DASHING:
 			_process_dash(delta)
 		State.HIT:
@@ -157,7 +161,6 @@ func _physics_process(delta: float) -> void:
 
 	# 4. 执行物理移动
 	# → godot-2-6-characterbody2d: CharacterBody2D 的核心方法
-	# → godot-6-5-characterbody-deep: 之后 is_on_floor/wall/ceiling 才更新
 	move_and_slide()
 
 	# 5. 重绘 (闪白/朝向变化需要)
@@ -165,16 +168,17 @@ func _physics_process(delta: float) -> void:
 
 
 func _update_timers(delta: float) -> void:
-	_coyote_timer        = max(0.0, _coyote_timer - delta)
-	_jump_buffer_timer   = max(0.0, _jump_buffer_timer - delta)
-	_dash_cooldown_timer = max(0.0, _dash_cooldown_timer - delta)
-	_fire_timer          = max(0.0, _fire_timer - delta)
-	invincible_timer     = max(0.0, invincible_timer - delta)
-	_hit_stun_timer      = max(0.0, _hit_stun_timer - delta)
+	_coyote_timer         = max(0.0, _coyote_timer - delta)
+	_jump_buffer_timer    = max(0.0, _jump_buffer_timer - delta)
+	_dash_cooldown_timer  = max(0.0, _dash_cooldown_timer - delta)
+	_attack_timer         = max(0.0, _attack_timer - delta)
+	_attack_cooldown_timer = max(0.0, _attack_cooldown_timer - delta)
+	invincible_timer      = max(0.0, invincible_timer - delta)
+	_hit_stun_timer       = max(0.0, _hit_stun_timer - delta)
 
 
 # ============================================================
-# NORMAL 状态 — 移动 + 跳跃 + 冲刺 + 射击 + 格挡
+# NORMAL 状态 — 移动 + 跳跃 + 闪避 + 轻击 + 格挡
 # ============================================================
 func _process_normal(delta: float) -> void:
 	# ── 水平移动 ──
@@ -182,7 +186,6 @@ func _process_normal(delta: float) -> void:
 	var input_dir: float = Input.get_axis("move_left", "move_right")
 	if input_dir != 0.0:
 		facing_right = input_dir > 0.0
-		# move_toward: 从当前速度平滑过渡到目标速度,帧率无关
 		velocity.x = move_toward(velocity.x, input_dir * move_speed, move_accel * delta)
 	else:
 		velocity.x = move_toward(velocity.x, 0.0, move_decel * delta)
@@ -190,7 +193,7 @@ func _process_normal(delta: float) -> void:
 	# ── 重力 (只有空中才加速下落) ──
 	if not is_on_floor():
 		velocity.y += gravity * delta
-		velocity.y = min(velocity.y, max_fall_speed)  # 限制最大下落速度
+		velocity.y = min(velocity.y, max_fall_speed)
 
 	# ── 跳跃缓冲 (在按跳时记录,稍后检查是否可以跳) ──
 	if Input.is_action_just_pressed("jump"):
@@ -211,22 +214,33 @@ func _process_normal(delta: float) -> void:
 		if velocity.y < 0.0:
 			velocity.y *= 1.0 - (1.0 - jump_cut_multiplier) * delta * 10.0
 
-	# ── 冲刺 ──
+	# ── 闪避 ──
 	if Input.is_action_just_pressed("dash") and _dash_cooldown_timer <= 0.0:
 		_start_dash()
 
-	# ── 射击 (按住连发,fire_rate 控制频率) ──
-	if Input.is_action_pressed("shoot") and _fire_timer <= 0.0:
-		_shoot()
-		_fire_timer = fire_rate
+	# ── 轻击 (J键, 近战攻击) ──
+	if Input.is_action_just_pressed("attack_light") and _attack_cooldown_timer <= 0.0:
+		_start_attack_light()
 
 
-# ── DASHING 状态 ──
+# ── ATTACKING 状态 (出刀硬直) ──
+func _process_attacking(delta: float) -> void:
+	_attack_timer -= delta
+	if _attack_timer <= 0.0:
+		_end_attack()
+	# 攻击期间允许移动但减速, 空中重力减弱
+	if not is_on_floor():
+		velocity.y += gravity * delta * 0.25
+		velocity.y = min(velocity.y, max_fall_speed)
+	velocity.x = move_toward(velocity.x, 0.0, 1200.0 * delta)
+
+
+# ── DASHING 状态 (闪避无敌) ──
 func _process_dash(delta: float) -> void:
 	_dash_timer -= delta
 	if _dash_timer <= 0.0:
 		_end_dash()
-	velocity.y = 0.0  # 冲刺期间不受重力
+	velocity.y = 0.0  # 闪避期间不受重力
 
 
 # ── HIT 状态 (受击硬直) ──
@@ -246,41 +260,49 @@ func _perform_jump() -> void:
 	velocity.y = jump_velocity
 
 
+# ── 闪避 ──
 func _start_dash() -> void:
 	state = State.DASHING
 	_dash_timer = dash_duration
 	_dash_cooldown_timer = dash_cooldown
-	invincible_timer = dash_duration + 0.05   # 冲刺无敌帧略长于冲刺本身
+	invincible_timer = dash_duration + 0.05
 	var d: float = 1.0 if facing_right else -1.0
 	velocity = Vector2(d * dash_speed, 0.0)
 
 
 func _end_dash() -> void:
 	state = State.NORMAL
-	# 冲刺结束后恢复速度(y=0 不容易卡在空中)
 
 
-func _shoot() -> void:
-	if bullet_scene == null:
+# ── 轻击 (近战) ──
+func _start_attack_light() -> void:
+	if attack_hitbox_scene == null:
 		return
+	state = State.ATTACKING
+	_attack_timer = attack_light_duration
+	_attack_cooldown_timer = attack_light_cooldown
+	_spawn_attack_hitbox()
 
-	# 从 .tscn 实例化子弹 (而不是 script.new())
-	# 这样子弹就有预建的 CollisionShape2D,Godot 编辑器可见
+
+func _end_attack() -> void:
+	state = State.NORMAL
+
+
+func _spawn_attack_hitbox() -> void:
+	# 从 attack_hitbox.tscn 实例化近战判定框
+	# 在玩家面前生成一个 Area2D, 持续 ~0.15s 后自动消失
 	# 详见 godot-4-2-scene-instantiation
-	var bullet: Area2D = bullet_scene.instantiate()
+	var hitbox: Area2D = attack_hitbox_scene.instantiate()
 	var d: float = 1.0 if facing_right else -1.0
-	bullet.position = position + Vector2(20.0 * d, -4.0)
-	bullet.direction = Vector2(d, 0.0)
-	bullet.speed = bullet_speed
-	get_tree().current_scene.add_child(bullet)
+	hitbox.position = position + Vector2(28.0 * d, -6.0)
+	hitbox.damage = attack_light_damage
+	get_tree().current_scene.add_child(hitbox)
 
 
 # ── 格挡 ──
 func _perform_parry() -> void:
-	# 格挡 = 高弹跳 + 短暂无敌
 	velocity.y = jump_velocity * 1.35
 	invincible_timer = 0.6
-	# 通知主场景: 销毁格挡对象 + 加分
 	var root: Node = get_tree().current_scene
 	if root and root.has_method("on_player_parry"):
 		root.on_player_parry(_parry_target)
@@ -293,7 +315,7 @@ func _perform_parry() -> void:
 # ============================================================
 func take_damage(amount: int = 1) -> void:
 	if invincible_timer > 0.0 or state == State.DEAD:
-		return  # 无敌或已死亡,忽略伤害
+		return
 
 	health -= amount
 	if health <= 0:
@@ -309,7 +331,7 @@ func take_damage(amount: int = 1) -> void:
 
 func _die() -> void:
 	state = State.DEAD
-	collision_layer = 0   # 死后不参与碰撞
+	collision_layer = 0
 	var root: Node = get_tree().current_scene
 	if root and root.has_method("on_player_died"):
 		root.on_player_died()
@@ -336,7 +358,7 @@ func _on_hurtbox_body_entered(body: Node2D) -> void:
 
 
 # ============================================================
-# 外观 (_draw 绘制圆形角色)
+# 外观 (_draw 绘制角色)
 # ============================================================
 func _draw() -> void:
 	if state == State.DEAD:
@@ -352,9 +374,10 @@ func _draw() -> void:
 	# 身体颜色随状态变化
 	var body_color: Color
 	match state:
-		State.DASHING: body_color = Color.CYAN          # 青色冲刺
-		State.HIT:     body_color = Color.RED           # 红色受伤
-		_:             body_color = Color(0.2, 0.55, 0.95)  # 蓝色正常
+		State.DASHING:   body_color = Color.CYAN              # 青色闪避
+		State.ATTACKING: body_color = Color.WHITE             # 白色出刀
+		State.HIT:       body_color = Color.RED               # 红色受伤
+		_:               body_color = Color(0.2, 0.55, 0.95)  # 蓝色正常
 
 	# 绘制主体 (圆形,半径 15)
 	if invincible_timer > 0.0:
@@ -364,12 +387,21 @@ func _draw() -> void:
 		draw_circle(Vector2.ZERO, 15, body_color)
 		draw_arc(Vector2.ZERO, 15, 0, TAU, 32, body_color.darkened(0.3), 1.5)
 
-	# 眼睛 (只画白+瞳,方向指示)
+	# 眼睛 (方向指示)
 	var ed: float = 1.0 if facing_right else -1.0
 	draw_circle(Vector2(5.0 * ed, -5.0), 3.5, Color.WHITE)
 	draw_circle(Vector2(7.0 * ed, -5.0), 2.0, Color.BLACK)
 
-	# 冲刺拖尾效果
+	# 攻击刀光 (白色弧线,模拟横扫)
+	if state == State.ATTACKING:
+		for i in range(3):
+			var angle: float = lerp(-PI * 0.35, PI * 0.35, float(i) / 2.0)
+			var rx: float = cos(angle) * 28.0 * ed
+			var ry: float = sin(angle) * 28.0 - 5.0
+			var alpha: float = 0.8 - abs(float(i - 1)) * 0.3
+			draw_line(Vector2(3.0 * ed, -5.0), Vector2(rx, ry), Color(1.0, 1.0, 1.0, alpha), 3.0 - i * 0.5)
+
+	# 闪避拖尾效果
 	if state == State.DASHING:
 		for i in range(3):
 			var tx: float = -i * 10.0 * ed

@@ -57,13 +57,13 @@ var _stun_timer: float = 0.0         ## 受击硬直计时
 func _ready() -> void:
 	# ── 碰撞层配置 ──
 	# 与玩家/bullet/main.gd 中的注释对照看,必须保持一致!
-	# Bit 布局: 0=玩家 1=敌人 2=玩家子弹 3=预留 4=墙壁 5=格挡 6=终点
+	# Bit 布局: 0=玩家 1=敌人 2=玩家攻击 3=敌人攻击 4=墙壁 5=格挡 6=终点
 	collision_layer = 1 << 1   # bit1: "我是敌人身体"
 	collision_mask  = 1 << 4   # bit4: "我只跟墙壁碰撞"(不跟玩家物理碰撞)
 
 	# ── Hitbox 碰撞层 ──
 	# Hitbox 的 layer 也设为 bit1,这样子弹的 mask(含 bit1)能检测到它
-	# Hitbox 的 mask  设为 bit2,这样它能检测到玩家子弹
+	# Hitbox 的 mask  设为 bit2,这样它能检测到玩家攻击
 	hitbox.collision_layer = 1 << 1    # bit1: 让子弹能检测到
 	hitbox.collision_mask  = 1 << 2    # bit2: 检测玩家子弹
 	# 注意: hitbox 的 area_entered 回调只做日志,实际伤害由 bullet.gd 处理

@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3 uid="uid://blitz_attack_hitbox"]
+
+[ext_resource type="Script" path="res://scripts/attack_hitbox.gd" id="1_atk"]
+
+[sub_resource type="RectangleShape2D" id="atk_shape"]
+size = Vector2(50, 40)
+
+[node name="AttackHitbox" type="Area2D"]
+script = ExtResource("1_atk")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("atk_shape")
