@@ -1,43 +1,51 @@
 <template>
   <div class="go-doc min-h-screen bg-linear-to-br from-slate-50 to-blue-50">
-    <header class="bg-white border-b border-slate-200"><div class="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between"><div><h1 class="text-2xl font-bold text-slate-800">🏗️ Go 并发模式</h1><p class="text-sm text-slate-500 mt-1">Pipeline · Fan-out/in · Worker Pool · Or-Done · Generator — channel 组合的六种范式</p></div><div class="flex items-center gap-3"><EditorLink file-path="apps/go/concurrency/go-2-9-concurrency-patterns.go" label="📝 查看源码" :is-admin="userStore.isAdmin" /><span class="text-xs text-slate-400 bg-slate-100 px-3 py-1 rounded-full">阶段 2-9</span></div></div></header>
+    <header class="bg-white border-b border-slate-200"><div class="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between"><div><h1 class="text-2xl font-bold text-slate-800">🏗️ Go 并发模式</h1><p class="text-sm text-slate-500 mt-1">Pipeline · Fan-out/in · Worker Pool · Or-Done · Generator — 拿 channel 搭积木的五种范式</p></div><div class="flex items-center gap-3"><EditorLink file-path="apps/go/concurrency/go-2-9-concurrency-patterns.go" label="📝 查看源码" :is-admin="userStore.isAdmin" /><span class="text-xs text-slate-400 bg-slate-100 px-3 py-1 rounded-full">阶段 2-9</span></div></div></header>
     <main class="max-w-4xl mx-auto px-6 py-8 space-y-6"><Nav :list="navList" title="📑 目录" position="top-right" :showBackToTop="true" />
 
+      <section id="sec-0" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">📌</span>五种模式速览——哪个解决什么问题？</h2>
+        <p class="text-slate-600 mb-4 leading-relaxed text-sm">这些模式不是"学来炫技的"——<strong>每个都对应一个真实的生产场景</strong>。理解了"为什么需要它"，自然就知道怎么用了。</p>
+        <div class="overflow-x-auto mb-3"><table class="w-full text-sm border-collapse"><thead><tr class="bg-slate-100 text-left"><th class="px-4 py-2 border font-semibold">模式</th><th class="px-4 py-2 border font-semibold">解决什么问题</th><th class="px-4 py-2 border font-semibold">一句话</th></tr></thead><tbody class="text-slate-600"><tr><td class="px-4 py-2 border font-mono text-xs">Pipeline</td><td class="px-4 py-2 border">一个数据需要<strong>多步处理</strong>，每步慢且独立</td><td class="px-4 py-2 border">"流水线——上一步的输出是下一步的输入"</td></tr><tr><td class="px-4 py-2 border font-mono text-xs">Fan-out/in</td><td class="px-4 py-2 border">同一个处理逻辑要<strong>并行跑</strong>很多份</td><td class="px-4 py-2 border">"一个进，多个并行干，结果合一起"</td></tr><tr><td class="px-4 py-2 border font-mono text-xs">Worker Pool</td><td class="px-4 py-2 border"><strong>控制并发数</strong>——别把下游打爆了</td><td class="px-4 py-2 border">"只有 N 个工人，任务排队"</td></tr><tr><td class="px-4 py-2 border font-mono text-xs">Or-Done</td><td class="px-4 py-2 border">消费者<strong>随时可能不想要了</strong>，生产者别泄漏</td><td class="px-4 py-2 border">"不想要了就说，大家都安全退出"</td></tr><tr><td class="px-4 py-2 border font-mono text-xs">Generator</td><td class="px-4 py-2 border">数据量大/无限，<strong>按需生成</strong>不占内存</td><td class="px-4 py-2 border">"要一个才给你算一个"</td></tr></tbody></table></div>
+      </section>
+
       <section id="sec-1" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
-        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">1</span>Pipeline — channel 串联多阶段处理</h2>
-        <p class="text-slate-600 mb-4 leading-relaxed">通过 channel 把多个处理阶段串联。每个阶段是独立 goroutine，上游输出是下游输入。≈ RxJS pipe / Stream.pipe。</p>
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">1</span>Pipeline — 流水线多步处理</h2>
+        <p class="text-slate-600 mb-3 leading-relaxed text-sm">每个阶段是一个 goroutine，通过 channel 串联——上阶段的输出 channel 是下阶段的输入。关键是<strong>每步都是并发的</strong>：gen 在生成第 3 个数时，sq 可能在处理第 2 个。≈ RxJS pipe / Unix <code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs">|</code> 管道。</p>
         <div class="mb-4"><Code language="go" :code="pipelineCode" title="pipeline.go" /></div>
       </section>
 
       <section id="sec-2" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">2</span>Fan-out / Fan-in — 并行分发 + 合并结果</h2>
-        <p class="text-slate-600 mb-3 leading-relaxed"><strong>Fan-out：</strong>一个 channel 分给多个 worker 并行。<strong>Fan-in：</strong>多 channel 合并到一个输出。</p>
+        <p class="text-slate-600 mb-3 leading-relaxed text-sm"><strong>Fan-out：</strong>多个 goroutine 从同一个 channel 读——任务自动瓜分（channel 的 FIFO 保证公平）。<strong>Fan-in：</strong>多个 channel 合并到一个输出 channel——用 merge 函数。</p>
         <div class="mb-4"><Code language="go" :code="fanCode" title="fan_out_in.go" /></div>
       </section>
 
       <section id="sec-3" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
-        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">3</span>Worker Pool — 固定并发数的任务队列</h2>
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">3</span>Worker Pool — 控制并发数</h2>
+        <p class="text-slate-600 mb-3 leading-relaxed text-sm">你有 1000 个 URL 要爬，但不想同时爬太多把对方 IP 封了。Worker Pool 用固定数量的 goroutine 从同一个 jobs channel 取任务——<strong>并发数 = worker 数</strong>。close(jobs) 后 worker 的 range 自动退出。</p>
         <div class="mb-4"><Code language="go" :code="workerPoolCode" title="worker_pool.go" /></div>
       </section>
 
       <section id="sec-4" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
-        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">4</span>Or-Done — 优雅取消 channel 消费</h2>
-        <p class="text-slate-600 mb-3 leading-relaxed text-sm">当外部不再需要 channel 的数据时，消费者需要安全退出——否则生产者 goroutine 会<strong>永远阻塞在 send 上</strong>（泄漏）。Or-Done 模式给消费者一个退出路径。</p>
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">4</span>Or-Done — "我不想要了，大家都停"</h2>
+        <p class="text-slate-600 mb-3 leading-relaxed text-sm">消费者读到第 3 个数据后发现不需要了——但如果直接 break，生产者还在阻塞着往 channel 里塞数据——泄漏。Or-Done 给了一个 done channel 作为<strong>退出信号</strong>，消费者 close(done) 后，orDone 内部 goroutine 退出→上游的 send 没人接收→上游也能检测到并退出。</p>
         <div class="mb-4"><Code language="go" :code="orDoneCode" title="or_done.go" /></div>
       </section>
 
       <section id="sec-5" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">5</span>Generator — 惰性生成无限序列</h2>
+        <p class="text-slate-600 mb-3 leading-relaxed text-sm">返回 channel 的函数就是 Generator。内部 goroutine 只在有人读时才计算下一个值（惰性求值）——无限序列也不会占满内存。</p>
         <div class="mb-4"><Code language="go" :code="generatorCode" title="generator.go" /></div>
       </section>
 
-      <section id="sec-6" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100"><h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">📋</span>小结</h2><ul class="space-y-2 text-slate-600"><li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span><strong>Pipeline</strong> = channel 串联阶段；<strong>Fan-out/in</strong> = 并行+合并</span></li><li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span><strong>Worker Pool</strong> = 固定 worker，jobs chan；<strong>Or-Done</strong> = 取消时安全退出防泄漏</span></li><li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span><strong>Generator</strong> = 返回 channel 的函数——惰性求值，按需生成</span></li></ul></section>
+      <section id="sec-6" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100"><h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">📋</span>小结</h2><ul class="space-y-2 text-slate-600"><li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span><strong>Pipeline</strong>=多步处理串联；<strong>Fan-out/in</strong>=并行+合并；<strong>Worker Pool</strong>=控并发数</span></li><li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span><strong>Or-Done</strong>=取消时安全退出防泄漏；<strong>Generator</strong>=惰性求值按需生成</span></li><li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span>这些模式组合使用——Pipeline 的某阶段可以 Fan-out，Worker Pool + Or-Done 更安全</span></li></ul></section>
     </main>
     <footer class="max-w-4xl mx-auto px-6 py-8"><nav class="flex justify-between items-center pt-4 border-t border-slate-200 text-sm"><RouterLink to="/backend/BackendLanguage/GO/go-stage-2-concurrency/go-2-8-context" class="text-slate-500 hover:text-cyan-600 flex items-center gap-1">← 上一节：Context</RouterLink><RouterLink to="/backend/BackendLanguage/GO/go-stage-2-concurrency/go-2-10-race-detection" class="text-cyan-600 hover:text-cyan-700 font-medium flex items-center gap-1">下一节：竞态检测 →</RouterLink></nav></footer>
   </div></template>
 <script setup lang="ts">import { Code, EditorLink, Nav } from 'components'; import { RouterLink } from 'vue-router'; import { useUserStore } from '@/stores/userProfle'; const userStore = useUserStore()
-const navList = [{id:"sec-1",name:"Pipeline"},{id:"sec-2",name:"Fan-out/in"},{id:"sec-3",name:"Worker Pool"},{id:"sec-4",name:"Or-Done"},{id:"sec-5",name:"Generator"},{id:"sec-6",name:"小结"}]
-const pipelineCode = `// Pipeline: gen → sq → print
+const navList = [{id:"sec-0",name:"五种模式速览"},{id:"sec-1",name:"Pipeline"},{id:"sec-2",name:"Fan-out/in"},{id:"sec-3",name:"Worker Pool"},{id:"sec-4",name:"Or-Done"},{id:"sec-5",name:"Generator"},{id:"sec-6",name:"小结"}]
+const pipelineCode = `// Pipeline: gen → sq → print，每个阶段并发执行
 gen := func(nums ...int) <-chan int {
     out := make(chan int)
     go func() { for _, n := range nums { out <- n }; close(out) }()
@@ -48,7 +56,11 @@ sq := func(in <-chan int) <-chan int {
     go func() { for n := range in { out <- n * n }; close(out) }()
     return out
 }
-for v := range sq(gen(2, 3, 4)) { fmt.Println(v) }  // 4, 9, 16`
+// 串联：gen(2,3,4) 的输出 → sq 的输入 → print
+for v := range sq(gen(2, 3, 4)) {
+    fmt.Println(v)  // 4, 9, 16
+}
+// 关键：gen 在生成 3 时，sq 可能正在处理 2——两阶段并发运行！`
 const fanCode = `// Fan-in: 合并多个 channel
 func merge(cs ...<-chan int) <-chan int {
     var wg sync.WaitGroup
@@ -60,56 +72,62 @@ func merge(cs ...<-chan int) <-chan int {
     go func() { wg.Wait(); close(out) }()
     return out
 }
-// Fan-out + Fan-in: 多个 sq 并行
+// 使用：多个 sq worker 从同一个 in 读（Fan-out），结果合并（Fan-in）
 in := gen(2,3,4,5,6,7,8)
-c1, c2 := sq(in), sq(in)  // Fan-out: 两个 sq 并行处理
+c1, c2 := sq(in), sq(in)  // Fan-out: channel 多读——任务自动瓜分
 for n := range merge(c1, c2) { fmt.Println(n) }  // Fan-in`
-const workerPoolCode = `const numWorkers = 3
-jobs := make(chan int, 100)
+const workerPoolCode = `// 固定 3 个 worker——并发数严格 ≤ 3
+const numWorkers = 3
+jobs := make(chan int, 100)  // 缓冲队列，平滑突发流量
 var wg sync.WaitGroup
 
 for w := 1; w <= numWorkers; w++ {
     wg.Add(1)
     go func(id int) {
         defer wg.Done()
-        for job := range jobs {  // close(jobs) 后自动退出
+        for job := range jobs {  // close(jobs) → 循环自动退出
             fmt.Printf("worker %d: job %d\\n", id, job)
         }
     }(w)
 }
 for j := 1; j <= 10; j++ { jobs <- j }
-close(jobs); wg.Wait()  // worker 1..3 瓜分 10 个 job`
-const orDoneCode = `// Or-Done: 消费者想退出时通知生产者
+close(jobs); wg.Wait()
+// 输出: worker 1..3 瓜分 10 个 job（每次运行顺序不同）`
+const orDoneCode = `// Or-Done: "不想等了，安全退出"
 func orDone(done <-chan struct{}, in <-chan int) <-chan int {
     out := make(chan int)
     go func() {
         defer close(out)
         for {
             select {
-            case <-done: return                           // 退出信号
+            case <-done: return                           // 退出
             case v, ok := <-in:
-                if !ok { return }                         // 上游关闭
+                if !ok { return }
                 select {
-                case out <- v:                            // 成功发送
-                case <-done: return                       // 发送过程中收到退出
+                case out <- v:                            // 转发给消费者
+                case <-done: return                       // 转发中收到退出
                 }
             }
         }
     }()
     return out
 }
-// 使用：
+// 使用：消费者读到 stopValue 后主动关闭 done
 done := make(chan struct{})
 for v := range orDone(done, dataSource()) {
     if v == stopValue { close(done); break }
+    fmt.Println(v)
 }
-// close(done) → orDone 的 goroutine 退出 → dataSource 的 goroutine 不会被泄漏`
-const generatorCode = `// Generator: 惰性生成无限序列
+// close(done) → orDone goroutine 退出 → dataSource 不再被阻塞 → 不回泄漏`
+const generatorCode = `// Generator: 惰性生成无限序列——"要一个才算一个"
 fib := func() <-chan int {
     ch := make(chan int)
     go func() { a, b := 0, 1; for { ch <- a; a, b = b, a+b } }()
     return ch
 }
 f := fib()
-for i := 0; i < 6; i++ { fmt.Print(<-f, " ") }  // 0 1 1 2 3 5`
+fmt.Println(<-f)  // 0  ← 只计算了 1 个值
+fmt.Println(<-f)  // 1  ← 又计算了 1 个值
+// 只取需要的——不会一次性算完 100 万个存内存
+// 真正"无限——但不占内存"`
 </script>

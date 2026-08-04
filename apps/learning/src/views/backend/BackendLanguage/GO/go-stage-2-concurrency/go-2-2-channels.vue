@@ -20,7 +20,10 @@
         </p>
 
         <div class="bg-blue-50 border-l-4 border-blue-400 rounded-r-xl p-4 mb-4">
-          <p class="text-sm text-blue-800"><strong>💡 一句话理解：</strong>Channel 不需要你显式加锁就能安全地在 goroutine 间传递数据。Go 的哲学是 <strong>"不要通过共享内存来通信，而要通过通信来共享内存"</strong>——channel 就是这句话的具体实现。你不需要 mutex，不需要 volatile，不需要 atomic——channel 把这些都封装好了。</p>
+          <p class="text-sm text-blue-800"><strong>💡 新手心智模型——"水管"：</strong>想象两根水管，goroutine A 从一头倒水（ch &lt;- v），goroutine B 在另一头接水（v := &lt;-ch）。<br/>
+          如果水管里已经有对象堵着（非缓冲），你倒水时必须有人同时在另一头接——这就是<strong>同步</strong>。<br/>
+          如果水管中间有个水池（缓冲），你可以先倒几桶水进去，B 慢慢接——这就是<strong>异步</strong>。<br/>
+          <strong>无需锁</strong>——水不会同时出现在两个地方，channel 内部帮你保证了这一点。</p>
         </div>
 
         <aside class="bg-purple-50 border-l-4 border-purple-400 rounded-r-xl p-4 mb-4">
@@ -138,8 +141,38 @@
         <div class="mb-4"><Code language="go" :code="patternCode" title="producer_consumer.go" /></div>
       </section>
 
-      <!-- 6. 小结 -->
+      <!-- 6. 新手常见错误 -->
       <section id="sec-6" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">6</span>新手最容易犯的 5 个错误</h2>
+        <div class="space-y-3 text-sm">
+          <div class="bg-amber-50 rounded-xl p-4 border border-amber-200">
+            <h4 class="font-semibold text-amber-700 mb-1">① 无缓冲 channel：send 和 recv 必须"同时"存在</h4>
+            <p class="text-amber-600">非缓冲 channel（make(chan int)）的 send 必须有 recv 同时就绪，否则<strong>永久阻塞</strong>。主 goroutine 直接 <code class="bg-amber-100 px-1 rounded text-xs">ch &lt;- 42</code> 而没有 goroutine 在接收 → 死锁！要么用缓冲 channel，要么确保有 goroutine 在另一端。</p>
+          </div>
+          <div class="bg-amber-50 rounded-xl p-4 border border-amber-200">
+            <h4 class="font-semibold text-amber-700 mb-1">② 向已关闭的 channel 发送 → panic</h4>
+            <p class="text-amber-600">这是最常见的 panic。解决方案：<strong>发送方关闭 channel</strong>，且确保关闭后不再有任何 goroutine 向它发送。用 sync.Once 或 done channel 协调。</p>
+          </div>
+          <div class="bg-amber-50 rounded-xl p-4 border border-amber-200">
+            <h4 class="font-semibold text-amber-700 mb-1">③ for-range channel 没有 close → goroutine 永不退出</h4>
+            <p class="text-amber-600"><code class="bg-amber-100 px-1 rounded text-xs">for v := range ch</code> 会一直循环直到 ch 被 close。如果你忘了 close → goroutine 泄漏。接收多个 goroutine 的完成信号时尤其要注意。</p>
+          </div>
+          <div class="bg-amber-50 rounded-xl p-4 border border-amber-200">
+            <h4 class="font-semibold text-amber-700 mb-1">④ 从空 channel 读和向满 channel 写都会阻塞</h4>
+            <p class="text-amber-600">这是设计行为——不是 bug！阻塞 = 自动背压——消费慢时生产自动暂停。但如果你在主 goroutine 中操作而不希望阻塞，用 <code class="bg-amber-100 px-1 rounded text-xs">select + default</code> 做非阻塞读写。</p>
+          </div>
+          <div class="bg-amber-50 rounded-xl p-4 border border-amber-200">
+            <h4 class="font-semibold text-amber-700 mb-1">⑤ 接收方关闭 channel</h4>
+            <p class="text-amber-600">接收方不知道发送方是否还要用这个 channel。接收方关闭后发送方再 send → panic。<strong>永远由发送方关闭。</strong>如果多个发送方→用 sync.Once 或专门的"关门 goroutine"来协调。</p>
+          </div>
+        </div>
+
+        <h3 class="text-md font-semibold text-slate-700 mb-3 mt-6">一张图决定：用哪种 channel？</h3>
+        <div class="overflow-x-auto mb-3"><table class="w-full text-sm border-collapse"><thead><tr class="bg-slate-100 text-left"><th class="px-4 py-2 border font-semibold">场景</th><th class="px-4 py-2 border font-semibold">用什么</th><th class="px-4 py-2 border font-semibold">原因</th></tr></thead><tbody class="text-slate-600"><tr><td class="px-4 py-2 border">发信号"我完成了"</td><td class="px-4 py-2 border font-mono text-xs">make(chan struct{})</td><td class="px-4 py-2 border">非缓冲，同步等待。struct{} 零内存</td></tr><tr><td class="px-4 py-2 border">多 goroutine 同时退出</td><td class="px-4 py-2 border">close(channel)</td><td class="px-4 py-2 border">close 是广播——所有等待者同时被唤醒</td></tr><tr><td class="px-4 py-2 border">生产者-消费者解耦</td><td class="px-4 py-2 border font-mono text-xs">make(chan T, N)</td><td class="px-4 py-2 border">缓冲管道，生产快消费慢时有缓冲</td></tr><tr><td class="px-4 py-2 border">限流/并发控制</td><td class="px-4 py-2 border font-mono text-xs">make(chan struct{}, N)</td><td class="px-4 py-2 border">缓冲 channel 就是信号量——容量=最大并发数</td></tr></tbody></table></div>
+      </section>
+
+      <!-- 7. 小结 -->
+      <section id="sec-7" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">📋</span>小结 &amp; 面试要点</h2>
         <ul class="space-y-2 text-slate-600">
           <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span><strong>Channel = 带锁的环形队列 + goroutine 感知</strong>——hchan 结构体，make 返回指针</span></li>
@@ -168,7 +201,8 @@ const navList = [
   { id: "sec-3", name: "非缓冲 vs 缓冲" },
   { id: "sec-4", name: "关闭 channel" },
   { id: "sec-5", name: "单向 + 实战模式" },
-  { id: "sec-6", name: "小结 & 面试要点" },
+  { id: "sec-6", name: "新手常见错误" },
+  { id: "sec-7", name: "小结 & 面试要点" },
 ]
 
 const fourUseCasesCode = `// ① 传递数据
