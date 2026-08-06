@@ -91,6 +91,10 @@ go run . all            # 运行全部
 | `pnpm main:dev` | 启动个人主页 |
 | `pnpm backend:dev` | 启动后端 (Docker) |
 
+### 后端 API
+
+接口文档见 [apps/backend/API.md](apps/backend/API.md) — 包含菜单 CRUD、用户认证、角色管理等全部接口的请求/响应格式。
+
 ### Go 学习
 
 ```bash

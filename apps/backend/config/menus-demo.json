@@ -1,0 +1,14 @@
+{
+  "project": "learning",
+  "items": [
+    {
+      "name": "AnimationDemo",
+      "label": "动画演示 Demo",
+      "icon": "🎬",
+      "order": 9,
+      "children": [
+        { "name": "StackAnimation", "label": "栈 Stack — push/pop 动画演示", "order": 1 }
+      ]
+    }
+  ]
+}

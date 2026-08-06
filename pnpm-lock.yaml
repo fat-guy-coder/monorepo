@@ -133,7 +133,7 @@ importers:
         version: 0.7.0(typescript@5.9.3)(vue@3.6.0-beta.7(typescript@5.9.3))
       vite-plugin-vue-devtools:
         specifier: latest
-        version: 8.1.2(vite@7.3.1(@types/node@22.19.15)(jiti@2.6.1)(less@4.6.3)(lightningcss@1.32.0)(sass@1.98.0)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2))(vue@3.6.0-beta.7(typescript@5.9.3))
+        version: 8.2.1(vite@7.3.1(@types/node@22.19.15)(jiti@2.6.1)(less@4.6.3)(lightningcss@1.32.0)(sass@1.98.0)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2))(vue@3.6.0-beta.7(typescript@5.9.3))
       vue-tsc:
         specifier: ^2.2.2
         version: 2.2.12(typescript@5.9.3)
@@ -162,6 +162,9 @@ importers:
       components:
         specifier: workspace:^
         version: link:../../packages/components
+      konva:
+        specifier: ^10.3.0
+        version: 10.3.0
       less:
         specifier: ^4.4.2
         version: 4.6.3
@@ -177,6 +180,9 @@ importers:
       vue:
         specifier: 3.6.0-beta.7
         version: 3.6.0-beta.7(typescript@5.9.3)
+      vue-konva:
+        specifier: ^3.4.0
+        version: 3.4.0(konva@10.3.0)(vue@3.6.0-beta.7(typescript@5.9.3))
       vue-router:
         specifier: ^4.5.0
         version: 4.6.4(vue@3.6.0-beta.7(typescript@5.9.3))
@@ -198,7 +204,7 @@ importers:
         version: 0.7.0(typescript@5.9.3)(vue@3.6.0-beta.7(typescript@5.9.3))
       vite-plugin-vue-devtools:
         specifier: latest
-        version: 8.1.2(vite@7.3.1(@types/node@22.19.15)(jiti@2.6.1)(less@4.6.3)(lightningcss@1.32.0)(sass@1.98.0)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2))(vue@3.6.0-beta.7(typescript@5.9.3))
+        version: 8.2.1(vite@7.3.1(@types/node@22.19.15)(jiti@2.6.1)(less@4.6.3)(lightningcss@1.32.0)(sass@1.98.0)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2))(vue@3.6.0-beta.7(typescript@5.9.3))
       vue-tsc:
         specifier: ^2.2.2
         version: 2.2.12(typescript@5.9.3)
@@ -1412,22 +1418,22 @@ packages:
   '@vue/devtools-api@7.7.9':
     resolution: {integrity: sha512-kIE8wvwlcZ6TJTbNeU2HQNtaxLx3a84aotTITUuL/4bzfPxzajGBOoqjMhwZJ8L9qFYDU/lAYMEEm11dnZOD6g==}
 
-  '@vue/devtools-core@8.1.2':
-    resolution: {integrity: sha512-ZGGyaSBP4/+bN2Nd9ZHNYAVDRIzMw1rv2RyXWtyZlo6mQal+IDmTvKY4V+DjAEBhaXt30mHmsgYp1yXJ/2tIWg==}
+  '@vue/devtools-core@8.2.1':
+    resolution: {integrity: sha512-s/VfAY9oDTb/kFEWmy461jaFde2MIV1RO/gi1vwM+PAZBZ/Pc2Ndu3BNBdZUze8QDUuyYvElbEEGA83syjJfzA==}
     peerDependencies:
       vue: ^3.0.0
 
   '@vue/devtools-kit@7.7.9':
     resolution: {integrity: sha512-PyQ6odHSgiDVd4hnTP+aDk2X4gl2HmLDfiyEnn3/oV+ckFDuswRs4IbBT7vacMuGdwY/XemxBoh302ctbsptuA==}
 
-  '@vue/devtools-kit@8.1.2':
-    resolution: {integrity: sha512-f75/upc+GCyjXErpgPGz4582ujS0L/adAltGy+tqXMGUJpgAcfGr6CxnnhpZY8BHuMYt6KpbF8uaFrrQG66rGQ==}
+  '@vue/devtools-kit@8.2.1':
+    resolution: {integrity: sha512-FIGIuq3AWReEpbAHY/cRGeHDfI0qOb8OCQ3YjbEAX04uaxIDbGc9rhkbVcG7rnfHPXE3RsU5KrWOu9V/okd8AQ==}
 
   '@vue/devtools-shared@7.7.9':
     resolution: {integrity: sha512-iWAb0v2WYf0QWmxCGy0seZNDPdO3Sp5+u78ORnyeonS6MT4PC7VPrryX2BpMJrwlDeaZ6BD4vP4XKjK0SZqaeA==}
 
-  '@vue/devtools-shared@8.1.2':
-    resolution: {integrity: sha512-X9RyVFYAdkBe4IUf5v48TxBF/6QPmF8CmWrDAjXzfUHrgQ/HGfTC1A6TqgXqZ03ye66l3AD51BAGD69IvKM9sw==}
+  '@vue/devtools-shared@8.2.1':
+    resolution: {integrity: sha512-Fkac7lUdGReh6pVOi3AYPRGe82LQqRmAfThW7RRligOAP0ZA/Z1z9XLHDM9dv34pV2HRc79DK8uKPeG2fLnA/g==}
 
   '@vue/language-core@2.2.0':
     resolution: {integrity: sha512-O1ZZFaaBGkKbsRfnVH1ifOK1/1BUkyK+3SQsfnh6PmMmD4qJcTU8godCeA96jjDRTL6zgnK7YzCHfaUlH2r0Mw==}
@@ -2229,6 +2235,9 @@ packages:
   kolorist@1.8.0:
     resolution: {integrity: sha512-Y+60/zizpJ3HRH8DCss+q95yr6145JXZo46OTpFvDZWLfRCE4qChOyk1b26nMaNpfHHgxagk9dXT5OP0Tfe+dQ==}
 
+  konva@10.3.0:
+    resolution: {integrity: sha512-gt19K2gzY4lHbnkvsku7eSmB+A9PTS2jG4F9coBMsdjM1UKfJNxJbDbXVpeCW1wjEGRwBD3nBamcHnqJhAeKlg==}
+
   less@4.6.3:
     resolution: {integrity: sha512-xxjVIiz0rvWAhx49t8YLA/Dj6Uig4XdJgTRI5hbYHGmiDSh+S8hi2Wxsed2trjl/uur4kbW2+e2a8Mrk9Rcgbw==}
     engines: {node: '>=18'}
@@ -3021,8 +3030,8 @@ packages:
       '@nuxt/kit':
         optional: true
 
-  vite-plugin-vue-devtools@8.1.2:
-    resolution: {integrity: sha512-gt5h1CNryR9Hy0tvhSbqY3j0F7aj0pGxBxWLa1lXSiZVkhdWDf0vbCOZyjh8ivFGE6FDHTGy3zkcZGlMZdVHig==}
+  vite-plugin-vue-devtools@8.2.1:
+    resolution: {integrity: sha512-5JLxXWWCo5lJMw16/xVeNvJ8k2zLwZPf1vITLzya/2IePrCBeGe/p/iAokgXHZpEi39fcYtPXmO8SaKeXmqCAA==}
     engines: {node: '>=v14.21.3'}
     peerDependencies:
       vite: ^6.0.0 || ^7.0.0 || ^8.0.0
@@ -3091,6 +3100,13 @@ packages:
     engines: {node: '>= 10.0.0', npm: '>= 5.0.0'}
     peerDependencies:
       vue: '>=3.0.0'
+
+  vue-konva@3.4.0:
+    resolution: {integrity: sha512-l7yqAPmc6gPbdXzxoukTiXzA6EdqTtPhzQp1pTdppwWLiimPCgFHcqp8nApXQN5dqF11p2OejwjKv150cf9ncA==}
+    engines: {node: '>= 4.0.0', npm: '>= 3.0.0'}
+    peerDependencies:
+      konva: '>7'
+      vue: ^3
 
   vue-router@4.6.4:
     resolution: {integrity: sha512-Hz9q5sa33Yhduglwz6g9skT8OBPii+4bFn88w6J+J4MfEo4KRRpmiNG/hHHkdbRFlLBOqxN8y8gf2Fb0MTUgVg==}
@@ -4161,10 +4177,10 @@ snapshots:
     dependencies:
       '@vue/devtools-kit': 7.7.9
 
-  '@vue/devtools-core@8.1.2(vue@3.6.0-beta.7(typescript@5.9.3))':
+  '@vue/devtools-core@8.2.1(vue@3.6.0-beta.7(typescript@5.9.3))':
     dependencies:
-      '@vue/devtools-kit': 8.1.2
-      '@vue/devtools-shared': 8.1.2
+      '@vue/devtools-kit': 8.2.1
+      '@vue/devtools-shared': 8.2.1
       vue: 3.6.0-beta.7(typescript@5.9.3)
 
   '@vue/devtools-kit@7.7.9':
@@ -4177,9 +4193,9 @@ snapshots:
       speakingurl: 14.0.1
       superjson: 2.2.6
 
-  '@vue/devtools-kit@8.1.2':
+  '@vue/devtools-kit@8.2.1':
     dependencies:
-      '@vue/devtools-shared': 8.1.2
+      '@vue/devtools-shared': 8.2.1
       birpc: 2.9.0
       hookable: 5.5.3
       perfect-debounce: 2.1.0
@@ -4188,7 +4204,7 @@ snapshots:
     dependencies:
       rfdc: 1.4.1
 
-  '@vue/devtools-shared@8.1.2': {}
+  '@vue/devtools-shared@8.2.1': {}
 
   '@vue/language-core@2.2.0(typescript@5.9.3)':
     dependencies:
@@ -5017,6 +5033,8 @@ snapshots:
       graceful-fs: 4.2.11
 
   kolorist@1.8.0: {}
+
+  konva@10.3.0: {}
 
   less@4.6.3:
     dependencies:
@@ -5850,11 +5868,11 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  vite-plugin-vue-devtools@8.1.2(vite@7.3.1(@types/node@22.19.15)(jiti@2.6.1)(less@4.6.3)(lightningcss@1.32.0)(sass@1.98.0)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2))(vue@3.6.0-beta.7(typescript@5.9.3)):
+  vite-plugin-vue-devtools@8.2.1(vite@7.3.1(@types/node@22.19.15)(jiti@2.6.1)(less@4.6.3)(lightningcss@1.32.0)(sass@1.98.0)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2))(vue@3.6.0-beta.7(typescript@5.9.3)):
     dependencies:
-      '@vue/devtools-core': 8.1.2(vue@3.6.0-beta.7(typescript@5.9.3))
-      '@vue/devtools-kit': 8.1.2
-      '@vue/devtools-shared': 8.1.2
+      '@vue/devtools-core': 8.2.1(vue@3.6.0-beta.7(typescript@5.9.3))
+      '@vue/devtools-kit': 8.2.1
+      '@vue/devtools-shared': 8.2.1
       sirv: 3.0.2
       vite: 7.3.1(@types/node@22.19.15)(jiti@2.6.1)(less@4.6.3)(lightningcss@1.32.0)(sass@1.98.0)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2)
       vite-plugin-inspect: 11.3.3(vite@7.3.1(@types/node@22.19.15)(jiti@2.6.1)(less@4.6.3)(lightningcss@1.32.0)(sass@1.98.0)(terser@5.46.0)(tsx@4.21.0)(yaml@2.8.2))
@@ -5906,6 +5924,11 @@ snapshots:
 
   vue-json-pretty@2.6.0(vue@3.6.0-beta.7(typescript@5.9.3)):
     dependencies:
+      vue: 3.6.0-beta.7(typescript@5.9.3)
+
+  vue-konva@3.4.0(konva@10.3.0)(vue@3.6.0-beta.7(typescript@5.9.3)):
+    dependencies:
+      konva: 10.3.0
       vue: 3.6.0-beta.7(typescript@5.9.3)
 
   vue-router@4.6.4(vue@3.6.0-beta.7(typescript@5.9.3)):

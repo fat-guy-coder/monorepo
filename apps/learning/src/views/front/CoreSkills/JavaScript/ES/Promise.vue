@@ -1,1205 +1,606 @@
 <template>
-  <div class="promise-container">
-    <header class="header">
-      <div class="title-wrapper">
-        <h1>JavaScript Promise 介绍</h1>
-        <p class="subtitle">异步编程的现代解决方案</p>
-        <a @click="goToByRouteName" style="cursor: pointer">promise的实现原理</a>
-        <p>promise过于重要，需要重点掌握</p>
-      </div>
-      <div class="demo-area">
-        <div class="promise-visualization">
-          <div class="promise-flow">
-            <div class="state pending">
-              <div class="state-label">Pending</div>
-              <div class="state-icon">⏳</div>
-            </div>
-            <div class="flow-arrow">→</div>
-            <div class="state resolved">
-              <div class="state-label">Fulfilled</div>
-              <div class="state-icon">✅</div>
-            </div>
-            <div class="flow-arrow">→</div>
-            <div class="state rejected">
-              <div class="state-label">Rejected</div>
-              <div class="state-icon">❌</div>
-            </div>
-          </div>
-
-          <div class="demo-controls">
-            <button class="run-button" @click="runDemo">运行 Promise 演示</button>
-            <div class="demo-result">
-              <div class="result-label">执行结果：</div>
-              <div class="result-content">{{ demoResult }}</div>
-            </div>
-          </div>
+  <div class="go-doc min-h-screen bg-linear-to-br from-slate-50 to-blue-50">
+    <header class="bg-white border-b border-slate-200">
+      <div class="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
+        <div>
+          <h1 class="text-2xl font-bold text-slate-800">🤝 JavaScript Promise 深度解析</h1>
+          <p class="text-sm text-slate-500 mt-1">异步编程的现代基石 — 从回调地狱到链式调用，掌握 Promise 的全部核心概念</p>
+        </div>
+        <div class="flex items-center gap-3">
+          <EditorLink file-path="apps/learning/src/views/front/CoreSkills/JavaScript/ES/Promise.vue" label="📝 查看源码" :is-admin="userStore.isAdmin" />
+          <span class="text-xs text-slate-400 bg-slate-100 px-3 py-1 rounded-full">ES6+</span>
         </div>
       </div>
     </header>
 
-    <div class="content">
-      <section class="intro-section">
-        <div class="intro-card">
-          <h2>什么是 Promise？</h2>
-          <p>
-            Promise 是 JavaScript
-            中处理异步操作的现代解决方案。它代表一个异步操作的最终完成（或失败）及其结果值。 Promise
-            提供了一种更优雅的方式来处理异步操作，避免了传统的回调地狱（Callback Hell）问题。
-          </p>
+    <main class="max-w-4xl mx-auto px-6 py-8 space-y-6">
+      <Nav :list="navList" title="目录" position="top-right" :showBackToTop="true" />
 
-          <div class="promise-states">
-            <div class="state-card">
-              <div class="state-icon pending">⏳</div>
-              <h3>Pending（待定）</h3>
-              <p>初始状态，操作尚未完成</p>
+      <!-- 1. 什么是 Promise -->
+      <section id="sec-1" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">1</span>
+          什么是 Promise？
+        </h2>
+        <p class="text-slate-600 mb-4 leading-relaxed">
+          Promise 是 JavaScript 中处理<strong>异步操作</strong>的标准方案。它代表一个异步操作的<strong>最终完成（或失败）及其结果值</strong>。Promise 解决了传统回调模式的两大痛点：<strong>回调地狱（Callback Hell）</strong>和<strong>控制反转（Inversion of Control）</strong>。
+        </p>
+
+        <h3 class="text-sm font-semibold text-slate-700 mb-3">Promise 的三种状态</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+          <div class="border border-amber-200 rounded-xl p-4 bg-amber-50/60">
+            <div class="text-2xl mb-2">⏳</div>
+            <h4 class="font-semibold text-amber-800 text-sm">Pending（待定）</h4>
+            <p class="text-xs text-amber-700 mt-1 leading-relaxed">初始状态。操作尚未完成，结果未知。Promise 创建后立即处于此状态。</p>
+          </div>
+          <div class="border border-emerald-200 rounded-xl p-4 bg-emerald-50/60">
+            <div class="text-2xl mb-2">✅</div>
+            <h4 class="font-semibold text-emerald-800 text-sm">Fulfilled（已兑现）</h4>
+            <p class="text-xs text-emerald-700 mt-1 leading-relaxed">操作成功完成。<code class="bg-emerald-100 px-1 rounded text-xs">resolve(value)</code> 被调用后进入此状态。<strong>不可逆</strong>。</p>
+          </div>
+          <div class="border border-red-200 rounded-xl p-4 bg-red-50/60">
+            <div class="text-2xl mb-2">❌</div>
+            <h4 class="font-semibold text-red-800 text-sm">Rejected（已拒绝）</h4>
+            <p class="text-xs text-red-700 mt-1 leading-relaxed">操作失败。<code class="bg-red-100 px-1 rounded text-xs">reject(error)</code> 被调用后进入此状态。<strong>不可逆</strong>。</p>
+          </div>
+        </div>
+
+        <aside class="bg-amber-50 border-l-4 border-amber-400 rounded-r-xl p-4">
+          <p class="text-sm text-amber-800"><strong>⚠️ 关键约束：</strong>Promise 的状态<strong>只能从 pending 变为 fulfilled 或 rejected</strong>，且一旦改变就<strong>不可逆转</strong>（settled）。多次调用 resolve/reject 只有第一次生效。</p>
+        </aside>
+      </section>
+
+      <!-- 2. 基本使用 -->
+      <section id="sec-2" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">2</span>
+          Promise 基本使用
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <h3 class="text-sm font-semibold text-slate-700 mb-2">创建 Promise</h3>
+            <Code language="js" :code="createCode" title="创建 Promise" />
+          </div>
+          <div>
+            <h3 class="text-sm font-semibold text-slate-700 mb-2">使用 Promise</h3>
+            <Code language="js" :code="useCode" title="使用 Promise" />
+          </div>
+        </div>
+        <aside class="bg-purple-50 border-l-4 border-purple-400 rounded-r-xl p-4 mt-4">
+          <p class="text-sm text-purple-800"><strong>🔗 前端类比：</strong><br/>
+          Promise 就像你在餐厅点餐拿到的<strong>取餐号（叫号器）</strong>——你拿到的是一个"未来会完成"的承诺，而不是食物本身。你可以提前安排"拿到食物后做什么"（<code class="bg-purple-100 px-1 rounded text-xs">.then()</code>），也可以安排"叫号失败怎么办"（<code class="bg-purple-100 px-1 rounded text-xs">.catch()</code>）。</p>
+        </aside>
+      </section>
+
+      <!-- 3. 链式调用 -->
+      <section id="sec-3" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">3</span>
+          Promise 链式调用
+        </h2>
+        <p class="text-slate-600 mb-4 leading-relaxed">
+          <code class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-xs font-mono">.then()</code> 和 <code class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-xs font-mono">.catch()</code> 都返回<strong>新的 Promise</strong>，这是链式调用的关键。每个 <code class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-xs font-mono">.then()</code> 都在前一个 Promise 的基础上创建一个新的 Promise，形成处理管道。
+        </p>
+
+        <Code language="js" :code="chainCode" title="链式调用" />
+
+        <div class="overflow-x-auto mt-4">
+          <table class="w-full text-sm border-collapse">
+            <thead>
+              <tr class="bg-slate-100 text-left">
+                <th class="px-4 py-2 border border-slate-200 font-semibold text-slate-700">回调返回值</th>
+                <th class="px-4 py-2 border border-slate-200 font-semibold text-slate-700">新 Promise 的行为</th>
+              </tr>
+            </thead>
+            <tbody class="text-slate-600">
+              <tr><td class="px-4 py-2 border border-slate-200">普通值</td><td class="px-4 py-2 border border-slate-200">新 Promise 以该值 fulfilled</td></tr>
+              <tr><td class="px-4 py-2 border border-slate-200">另一个 Promise</td><td class="px-4 py-2 border border-slate-200">新 Promise 跟随该 Promise 的状态</td></tr>
+              <tr><td class="px-4 py-2 border border-slate-200">抛出异常</td><td class="px-4 py-2 border border-slate-200">新 Promise 以该异常 rejected</td></tr>
+              <tr><td class="px-4 py-2 border border-slate-200">无返回值 (undefined)</td><td class="px-4 py-2 border border-slate-200">新 Promise 以 undefined fulfilled</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 4. 静态方法 -->
+      <section id="sec-4" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">4</span>
+          Promise 静态方法
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="border border-slate-200 rounded-xl p-4" v-for="m in staticMethods" :key="m.name">
+            <div class="flex items-center gap-2 mb-2">
+              <code class="bg-cyan-50 text-cyan-700 px-2 py-0.5 rounded text-xs font-mono font-bold">Promise.{{ m.name }}</code>
+              <code class="text-xs text-slate-400">{{ m.sig }}</code>
             </div>
-            <div class="state-card">
-              <div class="state-icon fulfilled">✅</div>
-              <h3>Fulfilled（已兑现）</h3>
-              <p>操作成功完成</p>
-            </div>
-            <div class="state-card">
-              <div class="state-icon rejected">❌</div>
-              <h3>Rejected（已拒绝）</h3>
-              <p>操作失败</p>
-            </div>
+            <p class="text-xs text-slate-600 mb-2 leading-relaxed">{{ m.desc }}</p>
+            <Code language="js" :code="m.code" />
           </div>
         </div>
       </section>
 
-      <section class="basic-usage">
-        <h2 class="section-title">Promise 基本使用</h2>
-        <div class="usage-grid">
-          <div class="usage-card">
-            <h3>创建 Promise</h3>
-            <pre><code>{{ createPromiseCode }}</code></pre>
-            <p>Promise 构造函数接收一个执行器函数，该函数有两个参数：resolve 和 reject</p>
-          </div>
-          <div class="usage-card">
-            <h3>使用 Promise</h3>
-            <pre><code>{{ usePromiseCode }}</code></pre>
-            <p>使用 .then() 处理成功结果，.catch() 处理错误，.finally() 执行清理操作</p>
-          </div>
+      <!-- 5. 微任务队列 -->
+      <section id="sec-5" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">5</span>
+          微任务队列（Microtask Queue）
+        </h2>
+        <p class="text-slate-600 mb-4 leading-relaxed">
+          Promise 的回调<strong>不会立即执行</strong>，而是被放入<strong>微任务队列（microtask queue）</strong>。微任务在当前宏任务（macrotask）执行完毕后、下一个宏任务开始前，一次性清空。
+        </p>
+
+        <Code language="js" :code="microtaskCode" title="微任务 vs 宏任务" />
+
+        <div class="bg-slate-50 rounded-xl p-4 mt-4">
+          <h3 class="text-sm font-semibold text-slate-700 mb-2">执行顺序</h3>
+          <ol class="list-decimal list-inside space-y-1 text-sm text-slate-600 leading-relaxed">
+            <li>同步代码（调用栈）</li>
+            <li><strong>微任务（microtask）</strong>：Promise.then/catch/finally、queueMicrotask、MutationObserver</li>
+            <li>宏任务（macrotask）：setTimeout、setInterval、I/O、UI 渲染</li>
+          </ol>
         </div>
+
+        <aside class="bg-purple-50 border-l-4 border-purple-400 rounded-r-xl p-4 mt-4">
+          <p class="text-sm text-purple-800"><strong>🔗 前端类比：</strong><br/>
+          微任务就像 Vue 的 <code class="bg-purple-100 px-1 rounded text-xs">nextTick</code>——在当前"一轮"更新结束后、浏览器重新渲染前执行。Promise 的回调总是在当前同步代码完成后的"第一时机"执行，比 setTimeout 快。</p>
+        </aside>
       </section>
 
-      <section class="chaining-section">
-        <h2 class="section-title">Promise 链式调用</h2>
-        <div class="chaining-example">
-          <div class="code-block">
-            <pre><code>{{ chainingCode }}</code></pre>
-          </div>
-          <div class="explanation">
-            <h3>链式调用原理</h3>
-            <p>Promise 的 .then() 方法返回一个新的 Promise，允许链式调用：</p>
-            <ul>
-              <li>如果 .then() 的回调函数返回一个值，新 Promise 会以该值兑现</li>
-              <li>如果 .then() 的回调函数返回另一个 Promise，新 Promise 会采用该 Promise 的状态</li>
-              <li>如果 .then() 的回调函数抛出错误，新 Promise 会被拒绝</li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      <section class="return-values">
-        <h2 class="section-title">.then() 方法返回值</h2>
-        <div class="return-grid">
-          <div class="return-card">
-            <h3>返回普通值</h3>
-            <pre><code>{{ returnPrimitiveCode }}</code></pre>
-            <div class="return-result">
-              <p>结果: {{ returnPrimitiveResult || '点击运行查看结果' }}</p>
-            </div>
-            <button class="run-small" @click="runReturnPrimitive">运行</button>
-            <p class="return-desc">返回普通值时，Promise 会立即以该值兑现</p>
-          </div>
-          <div class="return-card">
-            <h3>返回 Promise</h3>
-            <pre><code>{{ returnPromiseCode }}</code></pre>
-            <div class="return-result">
-              <p>结果: {{ returnPromiseResult || '点击运行查看结果' }}</p>
-            </div>
-            <button class="run-small" @click="runReturnPromise">运行</button>
-            <p class="return-desc">返回 Promise 时，会等待该 Promise 解决后再继续链式调用</p>
-          </div>
-        </div>
-      </section>
-
-      <section class="static-methods">
-        <h2 class="section-title">Promise 静态方法</h2>
-        <div class="methods-grid">
-          <div class="method-card" v-for="(method, index) in staticMethods" :key="index">
-            <div class="method-header">
-              <div class="method-name">Promise.{{ method.name }}</div>
-              <div class="method-signature">{{ method.signature }}</div>
-            </div>
-            <div class="method-description">
-              {{ method.description }}
-            </div>
-            <div class="method-example">
-              <pre><code>{{ method.example }}</code></pre>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="performance-section">
-        <h2 class="section-title">性能与注意事项</h2>
-        <div class="performance-grid">
-          <div class="performance-card">
-            <h3>性能问题</h3>
-            <ul>
-              <li>Promise 比回调函数有更高的内存开销</li>
-              <li>链式 Promise 会创建多个微任务</li>
-              <li>深层嵌套的 Promise 可能导致堆栈追踪困难</li>
-              <li>大量 Promise 可能影响垃圾回收效率</li>
-            </ul>
-          </div>
-          <div class="performance-card">
-            <h3>最佳实践</h3>
-            <ul>
-              <li>避免不必要的 Promise 嵌套</li>
-              <li>使用 async/await 简化代码</li>
-              <li>总是添加 .catch() 处理错误</li>
-              <li>使用 Promise.all() 并行处理独立操作</li>
-              <li>避免在循环中创建不必要的 Promise</li>
-            </ul>
-          </div>
-          <div class="performance-card">
-            <h3>垃圾回收</h3>
-            <p>Promise 对象在解决后不会被立即回收：</p>
-            <ul>
-              <li>已解决的 Promise 会保留在内存中，直到没有引用</li>
-              <li>链式调用会创建中间 Promise 对象</li>
-              <li>避免在长期运行的应用中保留未使用的 Promise 引用</li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      <section class="use-cases">
-        <h2 class="section-title">适用场景</h2>
-        <div class="cases-grid">
-          <div class="case-card" v-for="(useCase, index) in useCases" :key="index">
-            <div class="case-icon">{{ useCase.icon }}</div>
-            <div class="case-content">
-              <h3>{{ useCase.title }}</h3>
-              <p>{{ useCase.description }}</p>
-              <div class="case-example">
-                <pre><code>{{ useCase.example }}</code></pre>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-    </div>
-
-    <footer class="footer">
-      <p>Promise 是现代 JavaScript 异步编程的基石，合理使用可以显著提高代码可读性和可维护性</p>
-      <div class="resources">
-        <h3>推荐资源：</h3>
-        <ul>
-          <li>
-            <a
-              href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"
-              target="_blank"
-              >MDN Promise 文档</a
-            >
-          </li>
-          <li><a href="https://promisesaplus.com/" target="_blank">Promises/A+ 规范</a></li>
-          <li>
-            <a href="https://javascript.info/async" target="_blank">JavaScript.info 异步教程</a>
-          </li>
+      <!-- 6. 最佳实践 -->
+      <section id="sec-6" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">6</span>
+          最佳实践
+        </h2>
+        <ul class="space-y-2 text-slate-600 mb-4">
+          <li class="flex items-start gap-2"><span class="text-emerald-500 mt-1">✅</span><span>总是添加 <code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">.catch()</code> 处理错误——未捕获的 Promise rejection 会导致 <code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">unhandledrejection</code> 事件</span></li>
+          <li class="flex items-start gap-2"><span class="text-emerald-500 mt-1">✅</span><span>用 <code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">Promise.all()</code> 并行执行独立操作，用 <code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">Promise.allSettled()</code> 获取全部结果</span></li>
+          <li class="flex items-start gap-2"><span class="text-emerald-500 mt-1">✅</span><span>避免不必要的 Promise 嵌套，用 async/await 简化代码</span></li>
+          <li class="flex items-start gap-2"><span class="text-emerald-500 mt-1">✅</span><span><code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">.finally()</code> 用于清理逻辑（关闭 loading、清理定时器等），不依赖 Promise 结果</span></li>
+          <li class="flex items-start gap-2"><span class="text-amber-500 mt-1">⚠️</span><span>避免在循环中创建 Promise 链——用 <code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">async/await</code> 或 <code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">reduce</code> 实现顺序执行</span></li>
         </ul>
-      </div>
-    </footer>
+      </section>
+
+      <!-- 7. Promise 生命周期动画演示 -->
+      <section id="sec-7" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">🎮</span>
+          Promise 生命周期动画演示
+        </h2>
+        <p class="text-slate-600 mb-4 leading-relaxed">
+          下面展示了 Promise 内部的核心机制：<strong>回调队列</strong> + <strong>状态转换</strong>。点击按钮逐步操作，观察 Promise 的完整生命周期。
+        </p>
+
+        <!-- 控制按钮 -->
+        <div class="flex items-center gap-2 mb-4 flex-wrap">
+          <button @click="animNewPromise" :disabled="animating"
+            class="px-3 py-2 bg-cyan-500 text-white rounded-lg text-sm font-medium hover:bg-cyan-600 disabled:opacity-40 transition-colors">🆕 new Promise</button>
+          <button @click="animAddThen" :disabled="animating || !promiseCreated || promiseSettled"
+            class="px-3 py-2 bg-blue-500 text-white rounded-lg text-sm font-medium hover:bg-blue-600 disabled:opacity-40 transition-colors">📥 .then(cb)</button>
+          <button @click="animResolve" :disabled="animating || !promiseCreated || promiseSettled"
+            class="px-3 py-2 bg-emerald-500 text-white rounded-lg text-sm font-medium hover:bg-emerald-600 disabled:opacity-40 transition-colors">✅ resolve(42)</button>
+          <button @click="animReject" :disabled="animating || !promiseCreated || promiseSettled"
+            class="px-3 py-2 bg-red-500 text-white rounded-lg text-sm font-medium hover:bg-red-600 disabled:opacity-40 transition-colors">❌ reject(err)</button>
+          <button @click="animReset" :disabled="animating"
+            class="px-3 py-2 border border-slate-300 text-slate-600 rounded-lg text-sm hover:bg-slate-50 disabled:opacity-40 transition-colors">🔄 重置</button>
+        </div>
+
+        <!-- Canvas -->
+        <div ref="canvasContainer" class="bg-slate-900 rounded-xl overflow-hidden" style="height: 380px"></div>
+
+        <!-- 日志 -->
+        <div class="mt-4 bg-slate-50 rounded-xl p-4 max-h-32 overflow-y-auto font-mono text-xs text-slate-600 leading-relaxed">
+          <div v-for="(log, i) in logs" :key="i" class="flex gap-2">
+            <span class="text-slate-400 shrink-0">{{ log.time }}</span>
+            <span :class="log.color">{{ log.msg }}</span>
+          </div>
+          <div v-if="logs.length === 0" class="text-slate-400">操作日志将显示在这里...</div>
+        </div>
+      </section>
+
+      <!-- 8. 适用场景 -->
+      <section id="sec-8" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">8</span>
+          适用场景
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="border border-slate-200 rounded-xl p-4" v-for="sc in scenarios" :key="sc.icon">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="text-xl">{{ sc.icon }}</span>
+              <h3 class="font-semibold text-slate-800 text-sm">{{ sc.title }}</h3>
+            </div>
+            <Code language="js" :code="sc.code" />
+          </div>
+        </div>
+      </section>
+    </main>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, defineEmits } from 'vue'
+import { ref, onMounted, onUnmounted, nextTick } from 'vue'
+import Konva from 'konva'
+import { Code, EditorLink, Nav } from 'components'
+import { useUserStore } from '@/stores/userProfle'
 
-const emit = defineEmits(['goToByRouteName'])
+const userStore = useUserStore()
 
-const goToByRouteName = () => {
-  emit('goToByRouteName', 'PromiseImplementation')
+const navList = [
+  { id: "sec-1", name: "什么是Promise" },
+  { id: "sec-2", name: "基本使用" },
+  { id: "sec-3", name: "链式调用" },
+  { id: "sec-4", name: "静态方法" },
+  { id: "sec-5", name: "微任务队列" },
+  { id: "sec-6", name: "最佳实践" },
+  { id: "sec-7", name: "🎮 动画演示" },
+  { id: "sec-8", name: "适用场景" },
+]
+
+// ============ 动画相关 ============
+const canvasContainer = ref<HTMLDivElement>()
+const animating = ref(false)
+const promiseCreated = ref(false)
+const promiseSettled = ref(false)
+const logs = ref<{ time: string; msg: string; color: string }[]>([])
+
+function addLog(msg: string, color = 'text-slate-300') {
+  const now = new Date()
+  const time = now.toLocaleTimeString('zh-CN', { hour12: false })
+  logs.value.push({ time, msg, color })
 }
 
-const demoResult = ref('点击"运行Promise演示"按钮查看结果')
-const returnPrimitiveResult = ref('')
-const returnPromiseResult = ref('')
+let stage: Konva.Stage
+let layer: Konva.Layer
 
-const createPromiseCode = `// 创建 Promise
+// 画布尺寸
+const W = 800; const H = 380
+
+// 布局常量
+const PROMISE_X = 60; const PROMISE_Y = 60
+const PROMISE_W = 200; const PROMISE_H = 120
+const QUEUE_X = 340; const QUEUE_Y = 60
+const QUEUE_W = 300; const SLOT_H = 36; const SLOT_GAP = 6
+const ARROW_X = 280
+
+// 颜色
+const C_BG = '#1e293b'
+const C_PENDING = '#f59e0b'
+const C_FULFILLED = '#10b981'
+const C_REJECTED = '#ef4444'
+const C_CALLBACK = '#6366f1'
+const C_ARROW = '#64748b'
+const C_TEXT = '#e2e8f0'
+
+// Konva 节点引用
+let promiseGroup: Konva.Group
+let promiseStateRect: Konva.Rect
+let promiseStateText: Konva.Text
+let promiseValueText: Konva.Text
+let arrowLine: Konva.Arrow
+let queueBox: Konva.Rect
+let queueLabel: Konva.Text
+let callbackSlots: Konva.Group[] = []  // 回调槽位
+let callbackCount = 0
+
+function initKonva() {
+  stage = new Konva.Stage({ container: canvasContainer.value!, width: W, height: H })
+  layer = new Konva.Layer()
+  stage.add(layer)
+
+  // 背景
+  layer.add(new Konva.Rect({ x: 0, y: 0, width: W, height: H, fill: C_BG, listening: false }))
+
+  // === Promise Box ===
+  promiseGroup = new Konva.Group({})
+  layer.add(promiseGroup)
+
+  // Promise 标题
+  const pTitle = new Konva.Text({ x: PROMISE_X + 10, y: PROMISE_Y - 22, text: 'Promise 对象', fontSize: 13, fontFamily: 'sans-serif', fill: '#94a3b8' })
+  promiseGroup.add(pTitle)
+
+  // Promise 主体
+  promiseGroup.add(new Konva.Rect({ x: PROMISE_X, y: PROMISE_Y, width: PROMISE_W, height: PROMISE_H, stroke: C_PENDING, strokeWidth: 2, cornerRadius: 10, fill: 'rgba(245,158,11,0.1)', dash: [4, 3] }))
+
+  // 状态 label
+  promiseGroup.add(new Konva.Text({ x: PROMISE_X + 15, y: PROMISE_Y + 15, text: '状态:', fontSize: 13, fontFamily: 'sans-serif', fill: '#94a3b8' }))
+  promiseStateText = new Konva.Text({ x: PROMISE_X + 60, y: PROMISE_Y + 13, text: 'Pending', fontSize: 15, fontFamily: 'monospace', fill: C_PENDING, fontStyle: 'bold' })
+  promiseGroup.add(promiseStateText)
+
+  // State 色块
+  promiseStateRect = new Konva.Rect({ x: PROMISE_X + 15, y: PROMISE_Y + 42, width: PROMISE_W - 30, height: 6, fill: C_PENDING, cornerRadius: 3 })
+  promiseGroup.add(promiseStateRect)
+
+  // value label
+  promiseGroup.add(new Konva.Text({ x: PROMISE_X + 15, y: PROMISE_Y + 62, text: 'value:', fontSize: 13, fontFamily: 'sans-serif', fill: '#94a3b8' }))
+  promiseValueText = new Konva.Text({ x: PROMISE_X + 62, y: PROMISE_Y + 60, text: 'undefined', fontSize: 15, fontFamily: 'monospace', fill: '#64748b' })
+  promiseGroup.add(promiseValueText)
+
+  // === 箭头 ===
+  arrowLine = new Konva.Arrow({
+    points: [PROMISE_X + PROMISE_W + 5, PROMISE_Y + PROMISE_H / 2, ARROW_X - 5, PROMISE_Y + 45],
+    pointerLength: 10, pointerWidth: 8, fill: C_ARROW, stroke: C_ARROW, strokeWidth: 2,
+  })
+  layer.add(arrowLine)
+
+  // 箭头上方文字
+  layer.add(new Konva.Text({ x: ARROW_X - 60, y: PROMISE_Y + 5, text: 'resolve()\n触发回调', fontSize: 11, fontFamily: 'sans-serif', fill: '#64748b', align: 'center' }))
+
+  // === 回调队列 ===
+  queueLabel = new Konva.Text({ x: QUEUE_X + 10, y: QUEUE_Y - 22, text: '回调队列 (0 个)', fontSize: 13, fontFamily: 'sans-serif', fill: '#94a3b8' })
+
+  queueBox = new Konva.Rect({
+    x: QUEUE_X, y: QUEUE_Y, width: QUEUE_W, height: 200,
+    stroke: C_CALLBACK, strokeWidth: 2, cornerRadius: 10,
+    fill: 'rgba(99,102,241,0.08)', dash: [4, 3],
+  })
+  layer.add(queueBox)
+  layer.add(queueLabel)
+
+  // 槽位占位符
+  for (let i = 0; i < 5; i++) {
+    const g = new Konva.Group({ visible: false })
+    const slotY = QUEUE_Y + 10 + i * (SLOT_H + SLOT_GAP)
+    g.add(new Konva.Rect({ x: QUEUE_X + 10, y: slotY, width: QUEUE_W - 20, height: SLOT_H, fill: 'rgba(99,102,241,0.2)', stroke: C_CALLBACK, strokeWidth: 1, cornerRadius: 6 }))
+    g.add(new Konva.Text({ x: QUEUE_X + 22, y: slotY + 8, text: '', fontSize: 13, fontFamily: 'monospace', fill: C_TEXT }))
+    callbackSlots.push(g)
+    layer.add(g)
+  }
+
+  layer.batchDraw()
+}
+
+// --- 动画操作 ---
+
+function animNewPromise() {
+  if (animating.value) return
+  promiseCreated.value = true
+  promiseSettled.value = false
+  callbackCount = 0
+  addLog('new Promise((resolve, reject) => {...})  创建 Promise，状态 = Pending', 'text-cyan-300')
+
+  // 重置 UI
+  promiseStateText.text('Pending')
+  promiseStateText.fill(C_PENDING)
+  promiseStateRect.fill(C_PENDING)
+  promiseValueText.text('undefined')
+  promiseValueText.fill('#64748b')
+  queueLabel.text('回调队列 (0 个)')
+  callbackSlots.forEach(g => g.visible(false))
+  promiseGroup.findOne('Rect')?.stroke(C_PENDING)
+  promiseGroup.findOne('Rect')?.fill('rgba(245,158,11,0.1)')
+
+  layer.batchDraw()
+}
+
+function animAddThen() {
+  if (animating.value || !promiseCreated.value || promiseSettled.value) return
+  if (callbackCount >= 5) { addLog('⚠️ 回调队列已满（最多5个演示）', 'text-amber-400'); return }
+
+  const names = ['A', 'B', 'C', 'D', 'E']
+  addLog(`.then(callback_${names[callbackCount]})  注册回调到队列`, 'text-blue-300')
+
+  const slot = callbackSlots[callbackCount]
+  const slotY = QUEUE_Y + 10 + callbackCount * (SLOT_H + SLOT_GAP)
+  const text = slot.findOne('Text') as Konva.Text
+  text.text(`→ callback_${names[callbackCount]}(value)`)
+  slot.visible(true)
+  // 入场动画
+  slot.opacity(0)
+  slot.y(slotY - 15)
+  new Konva.Tween({ node: slot, opacity: 1, y: slotY, duration: 0.3, easing: Konva.Easings.EaseOut }).play()
+
+  callbackCount++
+  queueLabel.text(`回调队列 (${callbackCount} 个)`)
+  layer.batchDraw()
+}
+
+async function animResolve() {
+  if (animating.value || !promiseCreated.value || promiseSettled.value) return
+  animating.value = true
+
+  addLog('resolve(42)  调用！Promise 进入 Fulfilled 状态', 'text-emerald-300')
+
+  // 1. 状态切换动画：pending → fulfilled
+  promiseStateText.text('Fulfilled')
+  promiseStateText.fill(C_FULFILLED)
+  promiseValueText.text('42')
+  promiseValueText.fill(C_FULFILLED)
+  promiseGroup.findOne('Rect')?.stroke(C_FULFILLED)
+  promiseGroup.findOne('Rect')?.fill('rgba(16,185,129,0.1)')
+  new Konva.Tween({ node: promiseStateRect, fill: C_FULFILLED, duration: 0.4, easing: Konva.Easings.EaseOut }).play()
+  layer.batchDraw()
+
+  await sleep(200)
+
+  // 2. 逐个执行回调（动画展示）
+  for (let i = callbackCount - 1; i >= 0; i--) {
+    const slot = callbackSlots[i]
+    const text = slot.findOne('Text') as Konva.Text
+    const names = ['A', 'B', 'C', 'D', 'E']
+    const prevText = text.text()
+    addLog(`  执行 callback_${names[i]}  收到 value=42 → 已完成`, 'text-indigo-300')
+
+    // 执行动画：变绿 + 右移
+    const rect = slot.findOne('Rect') as Konva.Rect
+    rect.fill('rgba(16,185,129,0.4)')
+    text.text(`✓ callback_${names[i]}(42) done`)
+    layer.batchDraw()
+
+    await sleep(500)
+
+    // 淡出移除
+    await new Promise<void>(r => new Konva.Tween({ node: slot, opacity: 0, x: 40, duration: 0.3, easing: Konva.Easings.EaseIn, onFinish: r }).play())
+    slot.visible(false)
+    slot.opacity(1)
+    slot.x(0)
+    text.text(prevText)
+    rect.fill('rgba(99,102,241,0.2)')
+  }
+
+  callbackCount = 0
+  queueLabel.text('回调队列 (0 个)')
+  promiseSettled.value = true
+  layer.batchDraw()
+
+  addLog('✅ 所有回调执行完毕，队列已清空', 'text-emerald-300')
+  animating.value = false
+}
+
+async function animReject() {
+  if (animating.value || !promiseCreated.value || promiseSettled.value) return
+  animating.value = true
+
+  addLog('reject("Network Error")  调用！Promise 进入 Rejected 状态', 'text-red-300')
+
+  // 状态切换
+  promiseStateText.text('Rejected')
+  promiseStateText.fill(C_REJECTED)
+  promiseValueText.text('"Network Error"')
+  promiseValueText.fill(C_REJECTED)
+  promiseGroup.findOne('Rect')?.stroke(C_REJECTED)
+  promiseGroup.findOne('Rect')?.fill('rgba(239,68,68,0.1)')
+  new Konva.Tween({ node: promiseStateRect, fill: C_REJECTED, duration: 0.4, easing: Konva.Easings.EaseOut }).play()
+  layer.batchDraw()
+
+  await sleep(300)
+
+  // .then 注册的回调不会被触发（reject 走 .catch 路径）
+  for (let i = callbackCount - 1; i >= 0; i--) {
+    const slot = callbackSlots[i]
+    const rect = slot.findOne('Rect') as Konva.Rect
+    const text = slot.findOne('Text') as Konva.Text
+    rect.fill('rgba(239,68,68,0.3)')
+    text.text(text.text() + ' (跳过)')
+    layer.batchDraw()
+    await sleep(400)
+    slot.visible(false)
+    slot.opacity(1)
+    rect.fill('rgba(99,102,241,0.2)')
+  }
+
+  callbackCount = 0
+  queueLabel.text('回调队列 (0 个)')
+  promiseSettled.value = true
+  layer.batchDraw()
+
+  addLog('❌ .then 回调被跳过（只走 .catch 路径）。队列清空', 'text-red-300')
+  animating.value = false
+}
+
+function animReset() {
+  if (animating.value) return
+  promiseCreated.value = false
+  promiseSettled.value = false
+  callbackCount = 0
+  logs.value = []
+  addLog('🔄 重置 — 所有状态回到初始', 'text-slate-400')
+
+  promiseStateText.text('Pending')
+  promiseStateText.fill(C_PENDING)
+  promiseStateRect.fill(C_PENDING)
+  promiseValueText.text('undefined')
+  promiseValueText.fill('#64748b')
+  queueLabel.text('回调队列 (0 个)')
+  promiseGroup.findOne('Rect')?.stroke(C_PENDING)
+  promiseGroup.findOne('Rect')?.fill('rgba(245,158,11,0.1)')
+  callbackSlots.forEach(g => g.visible(false))
+  layer.batchDraw()
+}
+
+// ============ 初始化 ============
+onMounted(async () => {
+  await nextTick()
+  initKonva()
+  addLog('🟢 就绪。点击按钮观察 Promise 的生命周期', 'text-slate-400')
+})
+
+onUnmounted(() => stage?.destroy())
+
+function sleep(ms: number) { return new Promise(r => setTimeout(r, ms)) }
+
+// ============ 代码示例 ============
+const createCode = `// Promise 构造函数接收 executor
 const promise = new Promise((resolve, reject) => {
   // 异步操作
   setTimeout(() => {
-    const success = Math.random() > 0.5;
+    const ok = Math.random() > 0.3
+    if (ok) resolve('成功!')
+    else    reject(new Error('失败!'))
+  }, 1000)
+})
+// 此时 promise 处于 Pending 状态`
 
-    if (success) {
-      resolve('操作成功！');
-    } else {
-      reject(new Error('操作失败！'));
-    }
-  }, 1000);
-});`
-
-const usePromiseCode = `// 使用 Promise
-promise
+const useCode = `promise
   .then(result => {
-    console.log(result); // 成功时执行
+    console.log('成功:', result)     // resolve 后执行
+    return result.toUpperCase()     // 返回新值 → 链式传递
   })
   .catch(error => {
-    console.error(error); // 失败时执行
+    console.error('失败:', error)    // reject 后执行
   })
   .finally(() => {
-    console.log('操作完成'); // 无论成功失败都会执行
-  });`
+    console.log('完成')             // 无论如何都执行（不接收参数）
+  })`
 
-const chainingCode = `// Promise 链式调用
-fetch('/api/user')
-  .then(response => response.json()) // 返回普通值
-  .then(user => {
-    return fetch(\`/api/posts/\${user.id}\`); // 返回新Promise
-  })
-  .then(response => response.json())
-  .then(posts => {
-    console.log('用户帖子:', posts);
-  })
-  .catch(error => {
-    console.error('请求失败:', error);
-  });`
+const chainCode = `// 链式调用：每个 .then 返回新 Promise
+fetch('/api/user/123')                   // Promise<Response>
+  .then(res => res.json())              // Promise<User>
+  .then(user => fetch('/api/posts/' + user.id))  // Promise<Response>
+  .then(res => res.json())              // Promise<Post[]>
+  .then(posts => console.log(posts))    // Promise<void>
+  .catch(err => console.error('请求链中任意一步失败都会到这里', err))`
 
-const returnPrimitiveCode = `// .then() 返回普通值
-Promise.resolve(10)
-  .then(value => {
-    console.log('第一步:', value);
-    return value * 2; // 返回普通值
-  })
-  .then(value => {
-    console.log('第二步:', value);
-    return value + 5; // 返回普通值
-  })
-  .then(value => {
-    console.log('最终结果:', value);
-    return value;
-  });`
+const microtaskCode = `console.log('1. 同步')
 
-const returnPromiseCode = `// .then() 返回 Promise
-Promise.resolve(10)
-  .then(value => {
-    console.log('第一步:', value);
-    return new Promise(resolve => {
-      setTimeout(() => resolve(value * 2), 1000);
-    }); // 返回Promise
-  })
-  .then(value => {
-    console.log('第二步:', value);
-    return new Promise(resolve => {
-      setTimeout(() => resolve(value + 5), 1000);
-    }); // 返回Promise
-  })
-  .then(value => {
-    console.log('最终结果:', value);
-    return value;
-  });`
+setTimeout(() => console.log('4. 宏任务'), 0)
+
+Promise.resolve().then(() => {
+  console.log('3. 微任务 (Promise)')
+})
+
+console.log('2. 同步')
+
+// 输出顺序: 1 → 2 → 3 → 4
+// 微任务总是在当前宏任务末尾执行，早于下一个宏任务`
 
 const staticMethods = [
-  {
-    name: 'resolve',
-    signature: 'Promise.resolve(value)',
-    description: '创建一个已解决的 Promise 对象',
-    example: `// 创建已解决的 Promise
-const resolvedPromise = Promise.resolve(42);
-
-resolvedPromise.then(value => {
-  console.log(value); // 42
-});`,
-  },
-  {
-    name: 'reject',
-    signature: 'Promise.reject(reason)',
-    description: '创建一个已拒绝的 Promise 对象',
-    example: `// 创建已拒绝的 Promise
-const rejectedPromise = Promise.reject(new Error('失败'));
-
-rejectedPromise.catch(error => {
-  console.error(error.message); // '失败'
-});`,
-  },
-  {
-    name: 'all',
-    signature: 'Promise.all(iterable)',
-    description: '等待所有 Promise 完成，或任一 Promise 失败',
-    example: `// 并行执行多个 Promise
-const promise1 = Promise.resolve(1);
-const promise2 = Promise.resolve(2);
-const promise3 = new Promise(resolve => setTimeout(resolve, 100, 3));
-
-Promise.all([promise1, promise2, promise3])
-  .then(values => {
-    console.log(values); // [1, 2, 3]
-  });`,
-  },
-  {
-    name: 'allSettled',
-    signature: 'Promise.allSettled(iterable)',
-    description: '等待所有 Promise 完成（无论成功或失败）',
-    example: `// 获取所有 Promise 的结果
-const promises = [
-  Promise.resolve(1),
-  Promise.reject(new Error('失败')),
-  Promise.resolve(3)
-];
-
-Promise.allSettled(promises)
-  .then(results => {
-    results.forEach(result => {
-      if (result.status === 'fulfilled') {
-        console.log('成功:', result.value);
-      } else {
-        console.log('失败:', result.reason.message);
-      }
-    });
-  });`,
-  },
-  {
-    name: 'race',
-    signature: 'Promise.race(iterable)',
-    description: '返回第一个解决（无论成功或失败）的 Promise',
-    example: `// 获取最先完成的 Promise
-const promise1 = new Promise(resolve => setTimeout(resolve, 500, '第一个'));
-const promise2 = new Promise(resolve => setTimeout(resolve, 100, '第二个'));
-
-Promise.race([promise1, promise2])
-  .then(value => {
-    console.log(value); // '第二个'
-  });`,
-  },
-  {
-    name: 'any',
-    signature: 'Promise.any(iterable)',
-    description: '返回第一个成功的 Promise，如果全部失败则返回 AggregateError',
-    example: `// 获取第一个成功的 Promise
-const promises = [
-  Promise.reject(new Error('错误1')),
-  new Promise(resolve => setTimeout(resolve, 200, '成功1')),
-  Promise.reject(new Error('错误2'))
-];
-
-Promise.any(promises)
-  .then(value => {
-    console.log(value); // '成功1'
-  });`,
-  },
+  { name: 'resolve', sig: '(value)', desc: '创建已 fulfilled 的 Promise', code: `Promise.resolve(42).then(v => console.log(v)) // 42` },
+  { name: 'reject', sig: '(reason)', desc: '创建已 rejected 的 Promise', code: `Promise.reject(new Error('fail')).catch(e => console.error(e))` },
+  { name: 'all', sig: '(iterable)', desc: '全部成功 → 结果数组；任一失败 → 立即 reject', code: `Promise.all([fetch('/a'), fetch('/b')])
+  .then(([a, b]) => ...)` },
+  { name: 'allSettled', sig: '(iterable)', desc: '等待全部完成，无论成败，获取所有结果', code: `const results = await Promise.allSettled(tasks)
+// [{status:'fulfilled',value:...}, {status:'rejected',reason:...}]` },
+  { name: 'race', sig: '(iterable)', desc: '返回第一个 settled 的 Promise（无论成败）', code: `Promise.race([timeout(5000), fetch('/api')])
+// 超时控制：5 秒没响应就 reject` },
+  { name: 'any', sig: '(iterable)', desc: '返回第一个 fulfilled 的；全部失败 → AggregateError', code: `Promise.any([fetch(s1), fetch(s2), fetch(s3)])
+// 主备切换：任意一个服务可用即可` },
 ]
 
-const useCases = [
-  {
-    icon: '🌐',
-    title: 'API 请求',
-    description: '处理网络请求和响应',
-    example: `// 使用 fetch API
-function getUserData(userId) {
-  return fetch(\`https://api.example.com/users/\${userId}\`)
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('网络响应异常');
-      }
-      return response.json();
-    });
+const scenarios = [
+  { icon: '🌐', title: 'API 请求', code: `fetch('/api/users/' + userId)
+  .then(res => res.json())
+  .then(user => updateUI(user))
+  .catch(err => showError(err))
+  .finally(() => hideSpinner())` },
+  { icon: '⏱️', title: '延时/超时控制', code: `function delay(ms) {
+  return new Promise(r => setTimeout(r, ms))
 }
 
-// 使用
-getUserData(123)
-  .then(user => console.log(user))
-  .catch(error => console.error(error));`,
-  },
-  {
-    icon: '📁',
-    title: '文件操作',
-    description: '异步读取或写入文件',
-    example: `// Node.js 文件读取
-const fs = require('fs').promises;
-
-function readFileAsync(path) {
-  return fs.readFile(path, 'utf8')
-    .then(data => JSON.parse(data))
-    .catch(error => {
-      console.error('文件读取失败:', error);
-      return {};
-    });
-}
-
-// 使用
-readFileAsync('config.json')
-  .then(config => console.log(config));`,
-  },
-  {
-    icon: '⏱️',
-    title: '定时操作',
-    description: '实现带延迟的异步操作',
-    example: `// 带延迟的 Promise
-function delay(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-// 使用
-delay(2000)
-  .then(() => {
-    console.log('2秒后执行');
-    return delay(1000);
-  })
-  .then(() => {
-    console.log('再1秒后执行');
-  });`,
-  },
-  {
-    icon: '🔄',
-    title: '异步流程控制',
-    description: '管理复杂的异步操作序列',
-    example: `// 顺序执行异步操作
-function executeSequentially(promises) {
-  return promises.reduce((chain, promiseFunc) => {
-    return chain.then(promiseFunc);
-  }, Promise.resolve());
-}
-
-// 使用
-executeSequentially([
-  () => doTask1(),
-  () => doTask2(),
-  () => doTask3()
-])
-.then(finalResult => console.log(finalResult));`,
-  },
+// 超时赛跑
+Promise.race([fetch('/api'), delay(5000)])
+  .then(handleResponse)` },
+  { icon: '📁', title: '文件读取', code: `const fs = require('fs').promises
+fs.readFile('data.json', 'utf8')
+  .then(JSON.parse)
+  .then(data => process(data))
+  .catch(() => ({}))  // 默认值` },
+  { icon: '🔄', title: '顺序异步流程', code: `[task1, task2, task3].reduce(
+  (chain, task) => chain.then(task),
+  Promise.resolve()
+)
+// 每个 task 在前一个完成后执行
+// 等价于: await task1(); await task2(); await task3()` },
 ]
-
-const runDemo = () => {
-  demoResult.value = 'Promise 执行中...'
-
-  let promise: Promise<void> | null = new Promise((resolve, reject) => {
-    setTimeout(() => {
-      Math.random() > 0.3 ? resolve('成功完成操作！') : reject(new Error('操作失败！')) // eslint-disable-line
-    }, 1500)
-  })
-    .then((result) => {
-      demoResult.value = `✅ 成功: ${result}`
-    })
-    .catch((error) => {
-      demoResult.value = `❌ 错误: ${error.message}`
-    })
-    .finally(() => {
-      setTimeout(() => {
-        demoResult.value = '演示完成，可以再次运行'
-      }, 2000)
-      promise = null
-    })
-}
-
-const runReturnPrimitive = () => {
-  returnPrimitiveResult.value = '执行中...'
-
-  Promise.resolve(10)
-    .then((value) => {
-      returnPrimitiveResult.value = `第一步: ${value}`
-      return value * 2
-    })
-    .then((value) => {
-      returnPrimitiveResult.value += `\\n第二步: ${value}`
-      return value + 5
-    })
-    .then((value) => {
-      returnPrimitiveResult.value += `\\n最终结果: ${value}`
-    })
-}
-
-const runReturnPromise = () => {
-  returnPromiseResult.value = '执行中...'
-
-  Promise.resolve(10)
-    .then((value) => {
-      returnPromiseResult.value = `第一步: ${value}`
-      return new Promise((resolve) => {
-        setTimeout(() => resolve(value * 2), 1000)
-      })
-    })
-    .then((value) => {
-      returnPromiseResult.value += `\\n第二步: ${value}`
-      return new Promise((resolve) => {
-        setTimeout(() => resolve(Number(value) + 5), 1000)
-      })
-    })
-    .then((value) => {
-      returnPromiseResult.value += `\\n最终结果: ${value}`
-    })
-}
 </script>
-
-<style lang="less" scoped>
-// 颜色变量
-@primary-color: #4a6cf7;
-@primary-light: #e6eeff;
-@secondary-color: #3a56d4;
-@accent-color: #ff9800;
-@text-color: #2c3e50;
-@light-gray: #f8f9fc;
-@border-color: #e0e6ed;
-@card-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-@success-color: #4caf50;
-@error-color: #f44336;
-
-// 基础样式
-.promise-container {
-  font-family: 'Inter', sans-serif;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem 1.5rem;
-  color: @text-color;
-  background: #fff;
-  line-height: 1.6;
-}
-
-.header {
-  text-align: center;
-  margin-bottom: 3rem;
-  padding-bottom: 2rem;
-  border-bottom: 1px solid @border-color;
-
-  .title-wrapper {
-    margin-bottom: 2rem;
-
-    h1 {
-      font-size: 2.5rem;
-      font-weight: 700;
-      color: @secondary-color;
-      margin-bottom: 0.5rem;
-    }
-
-    .subtitle {
-      font-size: 1.3rem;
-      color: #666;
-      font-weight: 300;
-    }
-  }
-}
-
-.demo-area {
-  max-width: 900px;
-  margin: 0 auto;
-
-  .promise-visualization {
-    background: @light-gray;
-    border-radius: 16px;
-    padding: 2rem;
-    box-shadow: @card-shadow;
-
-    .promise-flow {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 2rem;
-      margin-bottom: 2rem;
-
-      .state {
-        text-align: center;
-        padding: 1.5rem;
-        border-radius: 12px;
-        min-width: 150px;
-        box-shadow: @card-shadow;
-        background: white;
-
-        .state-icon {
-          font-size: 2.5rem;
-          margin: 0.5rem 0;
-        }
-
-        .state-label {
-          font-weight: 600;
-        }
-
-        &.pending {
-          border-top: 4px solid #ffc107;
-        }
-
-        &.resolved {
-          border-top: 4px solid @success-color;
-        }
-
-        &.rejected {
-          border-top: 4px solid @error-color;
-        }
-      }
-
-      .flow-arrow {
-        font-size: 2rem;
-        color: #777;
-      }
-    }
-
-    .demo-controls {
-      text-align: center;
-
-      .run-button {
-        background: @primary-color;
-        color: white;
-        border: none;
-        padding: 0.8rem 1.8rem;
-        border-radius: 30px;
-        font-size: 1.1rem;
-        font-weight: 500;
-        cursor: pointer;
-        transition: all 0.3s;
-
-        &:hover {
-          background: darken(@primary-color, 10%);
-          transform: translateY(-2px);
-        }
-      }
-
-      .demo-result {
-        margin-top: 1.5rem;
-        padding: 1.5rem;
-        background: white;
-        border-radius: 12px;
-        box-shadow: @card-shadow;
-        border: 1px solid @border-color;
-        min-height: 80px;
-        text-align: left;
-
-        .result-label {
-          font-weight: 500;
-          margin-bottom: 0.5rem;
-          color: @primary-color;
-        }
-
-        .result-content {
-          font-family: 'Source Code Pro', monospace;
-          white-space: pre-line;
-        }
-      }
-    }
-  }
-}
-
-.content {
-  display: grid;
-  gap: 3rem;
-}
-
-.section-title {
-  font-size: 1.8rem;
-  color: @secondary-color;
-  text-align: center;
-  margin-bottom: 2rem;
-  padding-bottom: 0.8rem;
-  position: relative;
-
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 80px;
-    height: 4px;
-    background: linear-gradient(to right, @primary-color, @accent-color);
-    border-radius: 2px;
-  }
-}
-
-.intro-section {
-  .intro-card {
-    background: @light-gray;
-    border-radius: 16px;
-    padding: 2.5rem;
-    box-shadow: @card-shadow;
-
-    h2 {
-      color: @secondary-color;
-      margin-top: 0;
-      margin-bottom: 1.5rem;
-      font-size: 1.8rem;
-    }
-
-    p {
-      margin-bottom: 2rem;
-      font-size: 1.1rem;
-      line-height: 1.8;
-    }
-  }
-
-  .promise-states {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1.5rem;
-    margin-top: 1.5rem;
-
-    .state-card {
-      background: white;
-      border-radius: 12px;
-      padding: 1.5rem;
-      text-align: center;
-      box-shadow: @card-shadow;
-      transition: transform 0.3s ease;
-
-      &:hover {
-        transform: translateY(-5px);
-      }
-
-      .state-icon {
-        font-size: 2.5rem;
-        margin-bottom: 1rem;
-
-        &.pending {
-          color: #ffc107;
-        }
-
-        &.fulfilled {
-          color: @success-color;
-        }
-
-        &.rejected {
-          color: @error-color;
-        }
-      }
-
-      h3 {
-        color: @secondary-color;
-        margin: 0.5rem 0;
-      }
-
-      p {
-        margin: 0;
-        color: #666;
-        font-size: 0.95rem;
-      }
-    }
-  }
-}
-
-.basic-usage {
-  .usage-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
-
-    @media (max-width: 900px) {
-      grid-template-columns: 1fr;
-    }
-
-    .usage-card {
-      background: white;
-      border-radius: 12px;
-      padding: 1.5rem;
-      box-shadow: @card-shadow;
-      border-top: 4px solid @primary-color;
-
-      h3 {
-        color: @secondary-color;
-        margin-top: 0;
-        margin-bottom: 1rem;
-      }
-
-      pre {
-        background: #2d2d2d;
-        border-radius: 8px;
-        padding: 1.2rem;
-        overflow-x: auto;
-
-        code {
-          font-family: 'Source Code Pro', monospace;
-          color: #f8f8f2;
-          font-size: 0.95rem;
-          line-height: 1.6;
-
-          .comment {
-            color: #6a9955;
-          }
-          .keyword {
-            color: #c586c0;
-          }
-          .function {
-            color: #dcdcaa;
-          }
-          .string {
-            color: #ce9178;
-          }
-        }
-      }
-
-      p {
-        margin: 1rem 0 0;
-        font-size: 0.95rem;
-        color: #555;
-        line-height: 1.7;
-      }
-    }
-  }
-}
-
-.chaining-section {
-  .chaining-example {
-    display: grid;
-    grid-template-columns: 1.5fr 1fr;
-    gap: 1.5rem;
-    background: white;
-    border-radius: 16px;
-    padding: 2rem;
-    box-shadow: @card-shadow;
-
-    @media (max-width: 900px) {
-      grid-template-columns: 1fr;
-    }
-
-    .code-block {
-      pre {
-        margin: 0;
-        background: #2d2d2d;
-        border-radius: 8px;
-        padding: 1.2rem;
-        overflow-x: auto;
-
-        code {
-          font-family: 'Source Code Pro', monospace;
-          color: #f8f8f2;
-          font-size: 0.95rem;
-          line-height: 1.6;
-        }
-      }
-    }
-
-    .explanation {
-      h3 {
-        color: @secondary-color;
-        margin-top: 0;
-        margin-bottom: 1rem;
-      }
-
-      ul {
-        padding-left: 1.2rem;
-
-        li {
-          margin-bottom: 0.8rem;
-          line-height: 1.6;
-        }
-      }
-    }
-  }
-}
-
-.return-values {
-  .return-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
-
-    @media (max-width: 900px) {
-      grid-template-columns: 1fr;
-    }
-
-    .return-card {
-      background: white;
-      border-radius: 12px;
-      padding: 1.5rem;
-      box-shadow: @card-shadow;
-      border-top: 4px solid @primary-color;
-
-      h3 {
-        color: @secondary-color;
-        margin-top: 0;
-        margin-bottom: 1rem;
-      }
-
-      pre {
-        background: #2d2d2d;
-        border-radius: 8px;
-        padding: 1.2rem;
-        overflow-x: auto;
-        margin-bottom: 1rem;
-
-        code {
-          font-family: 'Source Code Pro', monospace;
-          color: #f8f8f2;
-          font-size: 0.95rem;
-          line-height: 1.6;
-        }
-      }
-
-      .return-result {
-        background: #f8f9fc;
-        border-radius: 8px;
-        padding: 1rem;
-        margin-bottom: 1rem;
-        min-height: 60px;
-        font-family: 'Source Code Pro', monospace;
-        white-space: pre-line;
-      }
-
-      .run-small {
-        background: @primary-light;
-        color: @primary-color;
-        border: 1px solid @primary-color;
-        padding: 0.4rem 1rem;
-        border-radius: 4px;
-        font-family: 'Inter', sans-serif;
-        font-weight: 500;
-        cursor: pointer;
-        margin-bottom: 1rem;
-        transition: all 0.2s;
-
-        &:hover {
-          background: @primary-color;
-          color: white;
-        }
-      }
-
-      .return-desc {
-        margin: 0;
-        font-size: 0.9rem;
-        color: #666;
-      }
-    }
-  }
-}
-
-.static-methods {
-  .methods-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-    gap: 1.5rem;
-  }
-
-  .method-card {
-    background: white;
-    border-radius: 12px;
-    padding: 1.5rem;
-    box-shadow: @card-shadow;
-    border-left: 4px solid @primary-color;
-
-    .method-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1rem;
-      flex-wrap: wrap;
-
-      .method-name {
-        font-weight: 700;
-        color: @secondary-color;
-        font-size: 1.2rem;
-      }
-
-      .method-signature {
-        font-family: 'Source Code Pro', monospace;
-        background: #f0f4f8;
-        padding: 0.3rem 0.6rem;
-        border-radius: 4px;
-        font-size: 0.9rem;
-        color: #d35400;
-      }
-    }
-
-    .method-description {
-      margin-bottom: 1rem;
-      font-size: 0.95rem;
-      color: #555;
-      line-height: 1.7;
-    }
-
-    .method-example {
-      pre {
-        margin: 0;
-        background: #2d2d2d;
-        border-radius: 8px;
-        padding: 1.2rem;
-        overflow-x: auto;
-
-        code {
-          font-family: 'Source Code Pro', monospace;
-          color: #f8f8f2;
-          font-size: 0.9rem;
-          line-height: 1.5;
-        }
-      }
-    }
-  }
-}
-
-.performance-section {
-  .performance-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1.5rem;
-  }
-
-  .performance-card {
-    background: white;
-    border-radius: 12px;
-    padding: 1.5rem;
-    box-shadow: @card-shadow;
-
-    h3 {
-      color: @secondary-color;
-      margin-top: 0;
-      margin-bottom: 1rem;
-      padding-bottom: 0.5rem;
-      border-bottom: 2px solid @primary-light;
-    }
-
-    ul {
-      padding-left: 1.2rem;
-
-      li {
-        margin-bottom: 0.8rem;
-        line-height: 1.6;
-      }
-    }
-
-    p {
-      margin: 0 0 1rem;
-      font-size: 0.95rem;
-      color: #555;
-      line-height: 1.7;
-    }
-  }
-}
-
-.use-cases {
-  .cases-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-    gap: 1.5rem;
-  }
-
-  .case-card {
-    display: flex;
-    background: white;
-    border-radius: 12px;
-    padding: 1.5rem;
-    box-shadow: @card-shadow;
-    gap: 1.2rem;
-    border-top: 3px solid @primary-color;
-    transition: transform 0.3s ease;
-
-    &:hover {
-      transform: translateY(-5px);
-    }
-
-    .case-icon {
-      width: 50px;
-      height: 50px;
-      background: @primary-light;
-      color: @primary-color;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.5rem;
-      flex-shrink: 0;
-    }
-
-    .case-content {
-      flex: 1;
-
-      h3 {
-        color: @secondary-color;
-        margin-top: 0;
-        margin-bottom: 0.8rem;
-        font-size: 1.2rem;
-      }
-
-      p {
-        margin: 0 0 1rem;
-        font-size: 0.95rem;
-        color: #555;
-        line-height: 1.7;
-      }
-    }
-
-    .case-example {
-      background: #2d2d2d;
-      border-radius: 6px;
-      padding: 0.8rem;
-      margin-top: 0.5rem;
-
-      pre {
-        margin: 0;
-
-        code {
-          font-family: 'Source Code Pro', monospace;
-          color: #f8f8f2;
-          font-size: 0.9rem;
-          line-height: 1.5;
-        }
-      }
-    }
-  }
-}
-
-.footer {
-  margin-top: 4rem;
-  padding: 2rem;
-  text-align: center;
-  background: @light-gray;
-  border-radius: 16px;
-  font-size: 1.1rem;
-  font-weight: 500;
-  color: @secondary-color;
-  box-shadow: @card-shadow;
-  border-top: 2px solid fade(@primary-color, 30%);
-
-  p {
-    margin-bottom: 1.5rem;
-  }
-
-  .resources {
-    margin-top: 1.5rem;
-
-    h3 {
-      font-size: 1.1rem;
-      margin-bottom: 0.8rem;
-    }
-
-    ul {
-      list-style: none;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      gap: 1.5rem;
-      flex-wrap: wrap;
-
-      li a {
-        color: @primary-color;
-        text-decoration: none;
-        font-weight: 500;
-
-        &:hover {
-          text-decoration: underline;
-        }
-      }
-    }
-  }
-}
-
-@media (max-width: 768px) {
-  .promise-container {
-    padding: 1.5rem 1rem;
-  }
-
-  .header h1 {
-    font-size: 2rem;
-  }
-
-  .section-title {
-    font-size: 1.6rem;
-  }
-
-  .intro-card {
-    padding: 1.5rem !important;
-  }
-
-  .chaining-example {
-    grid-template-columns: 1fr !important;
-  }
-}
-</style>
