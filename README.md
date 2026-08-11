@@ -62,9 +62,11 @@ go run . all            # 运行全部
 
 详见 [apps/python/LEARNING_PATH.md](apps/python/LEARNING_PATH.md)
 
-### 🎮 Godot（规划中）
+### 🎮 Godot（GDScript）
 
-学习路径将在 `apps/learning/` 中建立，涵盖 GDScript、场景系统、信号机制、物理引擎、着色器等。
+101 篇学习文档（`apps/learning/src/views/GameProduction/`），涵盖 GDScript 语法、场景系统、信号机制、物理引擎等。
+
+**实战项目** — `apps/game/blitz/`：一个完整的 2D 射击游戏，代码与文档双向关联（见 `.claude/skills/go-doc-style/SKILL.md` 中「Blitz 项目关联规范」）。
 
 ## AI 增强开发工作流 (OpenSpec)
 
@@ -93,7 +95,50 @@ go run . all            # 运行全部
 
 ### 后端 API
 
-接口文档见 [apps/backend/API.md](apps/backend/API.md) — 包含菜单 CRUD、用户认证、角色管理等全部接口的请求/响应格式。
+> 🟢 **调试期间后端通常在本地运行** → `http://localhost:3000`
+> 生产环境 → `http://47.108.233.237:3000`
+>
+> 完整接口文档见 [apps/backend/API.md](apps/backend/API.md)。以下是 AI 辅助开发最常用的接口速查：
+
+#### 菜单 API（最常用）
+
+| 操作 | 方法 | 路径 | 说明 |
+|------|------|------|------|
+| 全量菜单树 | `GET` | `/api/menus?project=learning` | 返回完整嵌套树 |
+| 根菜单 | `GET` | `/api/menus?project=learning&root=true` | 只返回顶级（前端侧边栏用） |
+| 扁平列表 | `GET` | `/api/menus?project=learning&flat=true` | 所有菜单打平，每个含 parentId |
+| 单个菜单 | `GET` | `/api/menus/:id` | 按 UUID 查 |
+| 搜索 | `GET` | `/api/menus?flat=true&search=关键词` | 模糊匹配 label/name |
+| 创建 | `POST` | `/api/menus` | `{ name, label, parentId?, icon?, order?, project? }` |
+| 批量创建树 | `POST` | `/api/menus/batch` | `{ project, parentId, items: [...] }` — 幂等，同名跳过 |
+| 更新 | `PUT` | `/api/menus/:id` | 只传需更新的字段 |
+| 删除（递归） | `DELETE` | `/api/menus/:id` | 删该节点及所有后代 |
+| 批量删除 | `DELETE` | `/api/menus/batch` | `{ parentId }` 或 `{ ids: [...] }` |
+
+#### 响应格式
+
+```json
+{ "code": 200, "message": "success", "data": ... }
+```
+
+#### 菜单 JSON 配置文件
+
+`apps/backend/config/menus-*.json` — 用于批量导入/重建菜单树：
+
+```bash
+cd apps/backend
+bun run scripts/seed-menus.ts --config config/menus-xxx.json          # 导入（幂等）
+bun run scripts/seed-menus.ts --config config/menus-xxx.json --clean   # 清空后重导
+```
+
+#### 用户/角色 API
+
+| 操作 | 方法 | 路径 |
+|------|------|------|
+| 注册 | `POST` | `/api/user/register` |
+| 登录 | `POST` | `/api/user/login` |
+| 当前用户 | `GET` | `/api/user/me` |
+| 角色列表 | `GET` | `/api/roles` |
 
 ### Go 学习
 
@@ -177,6 +222,26 @@ docker-compose restart backend
 
 适用于 `apps/main` 及所有面向用户的页面。学习文档使用独立的 Tailwind 浅色主题（见 `go-doc-style` skill）。
 
+## 🤖 AI Skills 速查
+
+本项目在 `.claude/skills/` 下配置了多个 Skill，AI 可通过 `/skill-name` 调用：
+
+| Skill | 用途 |
+|-------|------|
+| `go-doc-style` | **所有学习文档**的统一样式规范（布局/配色/组件/Tailwind）。创建或编辑 .vue 文档时必须遵循 |
+| `dsa-visualizer` | Canvas 动画规范。用 vue-konva 在文档中做数据结构操作动画（数组/链表/栈/队列等） |
+| `openspec-propose` | 提出新变更的完整提案（proposal + design + tasks） |
+| `openspec-apply-change` | 实施 OpenSpec 变更中的任务 |
+| `openspec-archive-change` | 完成后归档变更 |
+| `openspec-explore` | 进入探索模式，理清需求和设计方案 |
+
+## 📊 进度追踪
+
+**`PROGRESS.md`** 是全项目进度面板，记录每个子项目的完成状态和当前任务。
+新 AI 会话启动后，读取 `README.md` + `PROGRESS.md` 即可接续工作。
+
+**当前活跃任务：** DSA 算法文档填充（模块 1-2 完成 ✅，模块 3-13 待填充）+ Canvas 动画
+
 ## 开发规范
 
 1. TypeScript 优先
@@ -185,3 +250,4 @@ docker-compose restart backend
 4. 从 `packages/components` 引入共享组件，避免重复造轮子
 5. Go 示例代码标注 `// 输出:` 注释
 6. 学习文档遵循 `go-doc-style` skill 规范
+7. DSA 文档适合加动画的必须在小结前插入 `🎬 动画演示` section（见 `dsa-visualizer` skill）

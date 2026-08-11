@@ -467,3 +467,53 @@ func _physics_process(delta: float) -> void:
   <RouterLink to="/backend/BackendLanguage/GO/go-stage-1-basics/go-1-3-operators" class="...">下一节：标题 →</RouterLink>
 </nav>
 ```
+
+## 动画演示 Section（DSA / 数据结构文档必须）
+
+> 数据结构与算法文档如果适合通过动画帮助理解（数组操作、链表反转、栈的 push/pop、队列出入等），**必须在最后一个知识点 section 之后、小结 section 之前**插入一个 `🎬 动画演示` section。
+
+### 规范
+
+1. **使用 vue-konva**（已安装：`vue-konva ^3.4.0` + `konva ^10.3.0`）
+2. **不创建共享组件**——动画代码直接写在当前 .vue 的 `<script setup>` 中
+3. **按钮必须覆盖文档介绍的操作**——如果文档讲了链表反转，动画就要有「反转」按钮
+4. **画布上必须展示动态信息**——链表长度、当前操作复杂度、指针状态等
+5. **必须有按钮反馈样式**：`active:scale-95 transition-all duration-150`
+
+### section 结构
+
+```html
+<section id="sec-viz" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+  <h2>🎬 动画演示：XXX操作</h2>
+  <!-- 说明文字 + 动态信息标签 + 控制按钮 + Canvas -->
+</section>
+```
+
+### 动态信息展示（必须）
+
+Canvas 区域上方或内部展示：
+- 📏 **数据规模**：length/size/capacity（随操作实时变化）
+- ⏱️ **操作复杂度**：如 `Push  O(1)` / `Insert  O(n)`
+- 🔍 **操作状态**：如「正在查找 42…」「在第 3 步比较」
+- 🏷️ **特殊标注**：如指针位置（prev/curr/next）、容量边界
+
+```html
+<div class="flex items-center gap-3 mb-2 text-xs">
+  <span class="bg-slate-100 px-2 py-1 rounded-full">📏 长度: {{ bars.length }}</span>
+  <span class="bg-cyan-50 text-cyan-700 px-2 py-1 rounded-full font-mono">{{ status }}</span>
+</div>
+```
+
+### 具体实现
+
+完整动画模板、代码和规范见 [dsa-visualizer skill](.claude/skills/dsa-visualizer/SKILL.md)。
+
+### navList 更新
+
+```ts
+const navList = [
+  // ...原有条目...
+  { id: "sec-viz", name: "🎬 动画演示" },
+  { id: "sec-N", name: "小结" },
+]
+```
