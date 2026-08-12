@@ -270,7 +270,7 @@
       </div>
     </div>
     <!-- 公开首页：go-doc-style 风格平台介绍 -->
-    <div v-else class="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+    <div v-else class="min-h-screen bg-linear-to-br from-slate-50 to-blue-50">
       <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
         <!-- Hero -->
         <section class="text-center mb-20">
