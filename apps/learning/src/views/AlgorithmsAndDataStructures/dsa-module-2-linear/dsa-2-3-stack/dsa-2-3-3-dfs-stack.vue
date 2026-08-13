@@ -366,7 +366,7 @@ const dfsBusy=ref(false), dfsDone=ref(false), dfsStatus=ref('')
 const dfsBox=ref<HTMLDivElement>()
 const d6=(ms:number)=>new Promise(r=>setTimeout(r,ms))
 function dfsEdge(e:[number,number]){ const a=dfsTreePos[e[0]],b=dfsTreePos[e[1]]; return {points:[a.x,a.y+24,b.x,b.y-24],stroke:dfsC.muted,strokeWidth:2} }
-function dfsCircle(n:number){ const p=dfsTreePos[n]; const isCurr=dfsCurr.value===n, isOut=dfsOut.value.includes(n), isIn=dfsStack.value.includes(n); const fill=isCurr?dfsC.orange:isOut?dfsC.green:isIn?dfsC.cyan:dfsC.ghost; return {x:p.x,y:p.y,radius:24,fill,stroke:'#64748b',strokeWidth:2,shadowColor:'rgba(0,0,0,.1)',shadowBlur:4} }
+function dfsCircle(n:number){ const p=dfsTreePos[n]; const isCurr=dfsCurr.value===n, isOut=dfsOut.includes(n), isIn=dfsStack.includes(n); const fill=isCurr?dfsC.orange:isOut?dfsC.green:isIn?dfsC.cyan:dfsC.ghost; return {x:p.x,y:p.y,radius:24,fill,stroke:'#64748b',strokeWidth:2,shadowColor:'rgba(0,0,0,.1)',shadowBlur:4} }
 function dfsNodeText(n:number){ const p=dfsTreePos[n]; return {x:p.x-24,y:p.y-24,width:48,height:48,text:String(n),fontSize:16,fontFamily:'monospace',fontStyle:'bold',fill:dfsC.text,align:'center',verticalAlign:'middle'} }
 function dfsStackRect(v:number){ const i=dfsStack.indexOf(v); const isTop=i===dfsStack.length-1; const x=350,y=270-i*40; return {x,y,width:64,height:34,fill:dfsC.cyan,cornerRadius:6,stroke:isTop?dfsC.orange:'#64748b',strokeWidth:isTop?2.5:1.5,shadowColor:'rgba(0,0,0,.1)',shadowBlur:3} }
 function dfsStackText(v:number){ const i=dfsStack.indexOf(v); const x=350,y=270-i*40; return {x,y,width:64,height:34,text:String(v),fontSize:15,fontFamily:'monospace',fontStyle:'bold',fill:dfsC.text,align:'center',verticalAlign:'middle'} }

@@ -29,7 +29,7 @@ context: |
   - openspec/ — AI 辅助规范开发工作流
 
   ## 关键设计约束
-  - 学习文档 .vue 文件使用 go-doc-style skill 统一样式（白底浅色主题，Tailwind CSS，Code 组件）
+  - 学习文档 .vue 文件使用 doc-style skill 统一样式（白底浅色主题，Tailwind CSS，Code 组件）
   - 学习网站页面跳转用 goToByName() 或 Link 组件，不用 <RouterLink>（需自动打开 tab + 展开菜单）
   - Go 代码每个输出语句紧接 // 输出: ... 注释
   - EditorLink 组件仅 admin 可见，通过 props 传 isAdmin（不用 provide/inject）
@@ -39,7 +39,7 @@ context: |
   ## 设计系统
   主色 #00ffff (cyan), 辅色 #ff00ff (fuchsia), 背景 #0a0a0f, 强调 #ff3333, 成功 #00ff88
   赛博朋克风 — 深色渐变 + 发光边框 + 网格叠加 + GSAP 动画
-  学习文档用独立浅色主题（见 go-doc-style skill）
+  学习文档用独立浅色主题（见 doc-style skill）
 
   ## 用户角色
   - admin: 可看到 EditorLink、右键菜单"跳转菜单"等管理功能

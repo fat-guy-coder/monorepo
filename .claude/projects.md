@@ -3,7 +3,7 @@
 ## Godot 学习内容进度
 
 > 文档路径: `apps/learning/src/views/GameProduction/GotDot/`
-> 样式规范: go-doc-style skill（Godot 用 blue 主色调，TS+Python 双类比，强类型 GDScript）
+> 样式规范: doc-style skill（Godot 用 blue 主色调，TS+Python 双类比，强类型 GDScript）
 
 | 阶段 | 状态 | 篇数 | 备注 |
 |------|------|------|------|

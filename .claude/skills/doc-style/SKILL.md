@@ -1,14 +1,59 @@
 ---
-name: go-doc-style
-description: GO 学习文档 .vue 文件的统一样式规范。当需要创建或编辑 GO 路线图下的学习文档时使用，确保所有文档风格一致。
+name: doc-style
+description: 所有学习文档 .vue 文件的统一样式规范（Go/Python/Godot/DSA 等）。当需要创建或编辑学习网站下的学习文档时使用，确保所有文档风格一致。
 metadata:
-  version: "1.0"
-  appliesTo: "apps/learning/src/views/backend/BackendLanguage/GO/**/*.vue, apps/learning/src/views/GameProduction/**/*.vue"
+  version: "2.0"
+  appliesTo: "apps/learning/src/views/**/*.vue"
 ---
 
-# Go 学习文档样式规范
+# 学习文档统一样式规范（doc-style）
 
-所有 GO 学习路线图下的 .vue 文档遵循此规范，确保视觉风格统一。
+所有学习网站下的 .vue 文档遵循此规范（Go、Python、Godot、DSA 等），确保视觉风格统一。
+
+## 🤖 AI 批量填充策略（执行批量任务时必读）
+
+> 当用户要求「一次填充多个文档」「继续填 XX 模块的文档」这类**批量任务**时，**不要串行一篇一篇写**——用 `Agent` 工具派生子代理并行处理，大幅提速。
+
+### 何时用子代理
+
+| 场景 | 做法 |
+|------|------|
+| 一个模块有 N 篇文档要填 | 每个子代理负责 1~2 篇，并行写 |
+| 一个阶段有多个子主题 | 按子主题分组，每组一个子代理 |
+| 文档内容相互独立（不同知识点） | 天然适合并行，无冲突 |
+
+### 具体做法
+
+1. **先摸清任务清单**：用 Glob 列出待填充的 .vue 文件，确认哪些是空壳（< 200 字节）
+2. **拆分任务**：按文件/子主题分组，每组一个子代理
+3. **派发子代理**：在同一轮里并行调用多个 `Agent` 工具（`subagent_type: "general-purpose"` 或 `"Explore"`），每个 agent 的 prompt 里必须：
+   - 指定要写的**具体文件路径**
+   - 附上本 skill 的**关键规范**（布局/配色/组件/navList/结构图/动画）
+   - 说明该文档的知识点主题和深度要求
+4. **并行等待**：子代理在后台运行，全部完成后汇总结果
+5. **抽查校验**：对每篇文档做一次 `vue-tsc`/构建检查，确认无编译错误（尤其模板字面量闭合、变量重名）
+
+### 子代理 prompt 模板
+
+```
+你是学习文档编写者。请填充这个 .vue 文档：
+- 文件路径：<path>
+- 知识点：<主题>
+- 规范：遵循 doc-style skill（见 .claude/skills/doc-style/SKILL.md）
+  - 布局：header + main(max-w-4xl space-y-6) + section 卡片
+  - 配色：bg-gradient-to-br from-slate-50 to-blue-50，cyan 主色
+  - 组件：import { Code, Nav } from 'components'
+  - navList 用 { id, name }，section 加对应 id
+  - 代码语言用 ts（DSA 文档）
+- 要求：自给自足、至少 3 个代码示例、前端类比、常见错误、小结
+- 完成后直接返回最终文件内容
+```
+
+### 注意
+
+- **子代理之间不要互相依赖**——每篇文档独立成篇，避免共享状态
+- **DSA 文档**若需要结构图（📐）和动画（🎬），在 prompt 里一并说明，或由主 agent 统一补
+- 子代理写完后，主 agent 负责**统一检查**样式一致性（配色、间距、组件用法）
 
 ## 技术选型
 
@@ -170,7 +215,7 @@ import { Code } from 'components'
 | hiddenToolbar | boolean | false | 隐藏工具栏 |
 | css | object | {} | 额外样式 |
 
-**重要**: 代码字符串中有模板字面量 `${}` 时，用 `&#36;{}` 转义，或在 script 中用原始字符串定义。
+**重要**: 代码字符串（放在反引号模板字面量里）中有 `${}` 时，用 `\${}`（反斜杠）转义。Code 组件通过文本插值 `{{ code }}` 渲染（无 v-html），HTML 实体 `&#36;{}` 会显示成字面文本、不生效，所以必须用 `\${}`。
 
 ### 2. 手动代码块（备选 — 仅 Code 组件不适用时）
 

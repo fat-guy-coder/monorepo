@@ -44,7 +44,7 @@ monorepo/
 
 | Skill | 用途 |
 |-------|------|
-| `go-doc-style` | 所有学习文档 .vue 文件的统一样式规范（创建/编辑文档时必须遵循） |
+| `doc-style` | 所有学习文档 .vue 文件的统一样式规范（创建/编辑文档时必须遵循） |
 | `dsa-diagram` | DSA 文档**开头**的静态 SVG 结构图规范（结构图 + before/after 操作示意图） |
 | `dsa-visualizer` | DSA 文档**结尾**的 Canvas 动画规范（vue-konva inline 动画） |
 | `openspec-propose` | 提出新变更的完整提案 |
@@ -105,7 +105,7 @@ monorepo/
 4. 动画使用 GSAP + CSS (main 项目)
 5. 确保构建通过后再提交代码
 6. **优先使用 packages/components 共享组件**（Button, Input, Select, Modal, Tree, Menu, Code, EditorLink, Nav, Link, message 等）
-7. **Go 学习文档遵循 go-doc-style skill 规范**
+7. **Go 学习文档遵循 doc-style skill 规范**
 8. **学习网站页面跳转用 Link 组件或 goToByName()，不用 RouterLink**（需自动打开 tab + 展开菜单）
 
 ## 关键约定
@@ -145,7 +145,7 @@ monorepo/
 | 背景中 | `#1a1a2e` | 次要背景 |
 
 ### 学习文档浅色主题 (apps/learning Go 文档)
-参考 `.claude/skills/go-doc-style/SKILL.md`，白底 + 蓝灰渐变 + Tailwind CSS
+参考 `.claude/skills/doc-style/SKILL.md`，白底 + 蓝灰渐变 + Tailwind CSS
 
 ## 工作区共享组件 (packages/components)
 

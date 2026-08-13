@@ -312,6 +312,167 @@ function layoutStack() {
 
 ---
 
+## 模板 E：树（节点圆 + 边线）⭐⭐⭐
+
+**适用文档**：二叉树遍历、BST、AVL、红黑树、Treap、Trie、线段树、堆等所有树形结构（模块 4/5）
+
+这是树模块的核心动画模板。节点用 `v-circle`，边用 `v-line` 连父子。
+
+### 数据模型（⚠️ reactive 数组，不要 `.value`）
+
+```ts
+const R=24, LEVEL_H=88, TOP=50  // 节点半径 / 层高 / 顶部留白
+interface TNode { id:number; val:number|string; x:number; y:number; color:string; s?:number; highlight?:boolean }
+const tNodes=reactive<TNode[]>([])                     // ⚠️ reactive：tNodes.push / tNodes.length，不加 .value
+const tEdges=reactive<{a:number; b:number}[]>([])      // 边：父 id → 子 id
+const tChild=reactive<Record<number,{left:number|null;right:number|null}>>({})
+const tCurr=ref<number|null>(null)                     // ref：访问 .value
+const tVisited=reactive<number[]>([])                  // ⚠️ reactive：includes 不加 .value
+```
+
+**坑（之前出过 runtime bug）**：`reactive<T[]>` 访问元素/长度**不用 `.value`**，只有 `ref<T>` 才用 `.value`。混用会 `Cannot read properties of undefined (reading 'includes')`。
+
+### 固定树布局（遍历/查找用，手工坐标）
+
+```ts
+// 层序坐标：根居中，第 k 层第 i 个节点 x 均分
+function makeFixedTree(root:number, child:Record<number,{left:number|null;right:number|null}>) {
+  tNodes.length=0; tEdges.length=0; Object.keys(tChild).forEach(k=>delete tChild[k])
+  // 1) 复制邻接关系
+  Object.assign(tChild, child)
+  // 2) BFS 层序遍历，分配 x（本层均分）/ y（层高递增）
+  let level=[root], y=TOP
+  while(level.length) {
+    const gap=W.value/(level.length+1)   // 本层节点均分
+    level.forEach((id,i)=>{
+      tNodes.push({id, val:id, x:gap*(i+1), y, color:C.cyan, s:1})
+    })
+    // 3) 收集下一层 + 记录边
+    const next:number[]=[]
+    level.forEach(id=>{
+      const {left,right}=child[id]||{}
+      if(left!=null){ tEdges.push({a:id,b:left}); next.push(left) }
+      if(right!=null){ tEdges.push({a:id,b:right}); next.push(right) }
+    })
+    level=next; y+=LEVEL_H
+  }
+}
+```
+
+### 渲染：圆 + 边 + 文字
+
+```html
+<v-stage :config="{width:W,height:H}">
+  <v-layer>
+    <!-- 边：父圆下缘 → 子圆上缘 -->
+    <v-line v-for="e in tEdges" :key="'e'+e.a+e.b" :config="edgeCfg(e)" />
+    <!-- 节点圆 -->
+    <v-circle v-for="n in tNodes" :key="n.id" :config="circleCfg(n)" />
+    <!-- 节点值 -->
+    <v-text v-for="n in tNodes" :key="'t'+n.id" :config="tTextCfg(n)" />
+  </v-layer>
+</v-stage>
+```
+
+```ts
+function pos(id:number){ return tNodes.find(n=>n.id===id) ?? {x:0,y:0} }
+function edgeCfg(e:{a:number;b:number}) {
+  const pa=pos(e.a), pb=pos(e.b)
+  return { points:[pa.x, pa.y+R, pb.x, pb.y-R], stroke:'#94a3b8', strokeWidth:2 }
+}
+function circleCfg(n:any){ const s=n.s??1
+  return { x:n.x, y:n.y, radius:R*s, fill:n.color, stroke:'#64748b', strokeWidth:1.5,
+    shadowColor:'rgba(0,0,0,.12)', shadowBlur:5, shadowOffsetY:2, opacity:n.highlight===false?0.3:1 } }
+function tTextCfg(n:any){ const s=n.s??1
+  return { x:n.x-R, y:n.y-R, width:R*2, height:R*2, text:String(n.val), fontSize:15,
+    fontFamily:'monospace', fontStyle:'bold', fill:'#fff', align:'center', verticalAlign:'middle', scale:{x:s,y:s} } }
+```
+
+### 🔥 遍历动画（前序为例）
+
+```ts
+async function doPreorder() {
+  act('前序遍历  根→左→右  O(n)', async()=>{
+    resetTreeColor()
+    const order:number[]=[]
+    const stack:number[]=[rootId]
+    while(stack.length) {
+      const id=stack.pop()!
+      const n=pos(id)
+      order.push(id)
+      // 当前节点变橙
+      n.color=C.orange; status.value=`访问 ${id}`; await d(420)
+      // 已访问变绿
+      n.color=C.green; await d(120)
+      // 右先入栈、左后入栈（弹栈时先访问左）
+      const {left,right}=tChild[id]||{}
+      if(right!=null) stack.push(right)
+      if(left!=null) stack.push(left)
+    }
+    status.value=`前序: ${order.join(' → ')}`
+    await d(600)
+  })
+}
+// 中序 / 后序：调整「变色时刻」——中序在左子树返回后、右子树前变色；后序在左右子树返回后变色
+// 层序：用 queue（shift）代替 stack
+```
+
+**遍历三种顺序的变色时机**（这是讲解重点，务必准确）：
+- **前序**：进栈时（第一次遇到）变色
+- **中序**：左子树处理完、即将处理右子树时变色
+- **后序**：左右子树都处理完时变色
+- **层序**：出队时变色
+
+### BST 查找 / 插入
+
+```ts
+// 查找：沿根→叶路径高亮（当前橙，已比较变灰）
+async function doSearch(key:number) {
+  act(`查找 ${key}  O(h)`, async()=>{
+    let id:number|null=rootId
+    while(id!=null) {
+      const n=pos(id)
+      n.color=C.orange; status.value=`比较 ${id} vs ${key}`; await d(400)
+      if(n.val===key){ n.color=C.green; status.value=`找到 ${key}`; return }
+      n.color=C.ghost  // 已比较，非目标
+      id = key < n.val ? tChild[id]?.left??null : tChild[id]?.right??null
+    }
+    status.value=`未找到 ${key}`
+  })
+}
+
+// 插入：沿路径找位置，新节点绿色弹出
+async function doInsert(key:number) {
+  act(`插入 ${key}  O(h)`, async()=>{
+    // 先找插入位置（高亮路径），再新建节点 scale 0→1
+    // 完成后重新布局（makeFixedTree 或局部更新），保持层序
+  })
+}
+```
+
+### AVL / 平衡树旋转（LL/RR/LR/RL）
+
+旋转动画要点：**高亮失衡节点 + 三个相关节点变色 → 边断开 → 节点移动到新位置 → 重连边**。
+
+```ts
+async function doRotate(type:'LL'|'RR'|'LR'|'RL') {
+  act(`旋转 ${type}  O(1)`, async()=>{
+    // 1) 高亮失衡节点（红）+ 旋转轴三节点（橙）
+    // 2) 短暂停顿，展示失衡高度差
+    // 3) 移动节点坐标（LL：x 右移 y 下移；RR：x 左移 y 下移）——用 tween 或分步 d()
+    // 4) 重连边（更新 tChild），重新布局
+  })
+}
+```
+
+**平衡树旋转的视觉核心**：让读者看到「某个节点『转』到了根的位置」。用分步移动 + 颜色渐变即可，不必真的做弧形路径。
+
+### 动态信息标签
+
+树动画信息栏：`📏 节点数: N`、`🌳 高度: H`、`⏱️ O(h)`、`🔍 状态: ...`（遍历顺序 / 比较过程 / 旋转类型）。
+
+---
+
 ## 按钮配色速查
 
 | 操作类型 | Tailwind class |

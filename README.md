@@ -42,7 +42,7 @@ monorepo/
 │   ├── config.yaml         #   项目上下文（AI proposal 时自动读取）
 │   └── changes/            #   历史变更档案
 ├── .claude/
-│   ├── skills/             # AI Skills（go-doc-style / dsa-diagram / dsa-visualizer / openspec-*）
+│   ├── skills/             # AI Skills（doc-style / dsa-diagram / dsa-visualizer / openspec-*）
 │   └── scheduled_tasks.json
 ├── docker-compose.yml      # PostgreSQL + 后端 容器编排
 ├── turbo.json              # Turborepo 构建设置
@@ -314,7 +314,7 @@ bun run scripts/seed-menus.ts --config config/menus-xxx.json --clean   # 清空�
 ```
 1. POST /api/menus/batch  或  编辑 config/menus-xxx.json → bun db:seed:go
 2. pnpm learning:gen                    # 自动生成 .vue 文件 + 路由
-3. 编辑 .vue 文档内容（遵循 go-doc-style skill）
+3. 编辑 .vue 文档内容（遵循 doc-style skill）
 4. pnpm learning:dev                    # 验证页面显示
 ```
 
@@ -383,7 +383,7 @@ docker-compose restart backend
 | 强调 | `#ff3333` | red |
 | 成功 | `#00ff88` | emerald |
 
-适用于管理后台及面向用户的页面。学习文档使用独立的 Tailwind 浅色主题（见 `go-doc-style` skill）。
+适用于管理后台及面向用户的页面。学习文档使用独立的 Tailwind 浅色主题（见 `doc-style` skill）。
 
 ---
 
@@ -393,7 +393,7 @@ docker-compose restart backend
 
 | Skill | 类型 | 用途 |
 |-------|------|------|
-| `go-doc-style` | 规范 | **所有学习文档**的统一样式规范（布局/配色/组件/Tailwind）。DSA 文档还规定「开头结构图 + 结尾动画」两段式结构 |
+| `doc-style` | 规范 | **所有学习文档**的统一样式规范（布局/配色/组件/Tailwind）。DSA 文档还规定「开头结构图 + 结尾动画」两段式结构 |
 | `dsa-diagram` | 规范 | 文档**开头**的静态 SVG 结构图规范（内联 SVG、配色、marker、before/after 操作示意图） |
 | `dsa-visualizer` | 规范 | 文档**结尾**的 Canvas 动画规范。用 vue-konva 做数据结构操作动画（数组/链表/栈/队列/跳表等） |
 | `openspec-propose` | 工作流 | 提出新变更的完整提案（proposal + design + tasks） |
@@ -422,7 +422,7 @@ docker-compose restart backend
 3. 确保构建通过后再提交
 4. 从 `packages/components` 引入共享组件，避免重复造轮子
 5. Go 示例代码标注 `// 输出:` 注释
-6. 学习文档遵循 `go-doc-style` skill 规范
+6. 学习文档遵循 `doc-style` skill 规范
 7. DSA 文档开头必须插入 `📐 结构总览` section（静态 SVG 结构图，见 `dsa-diagram` skill）
 8. DSA 文档适合加动画的必须在小结前插入 `🎬 动画演示` section（见 `dsa-visualizer` skill）
 9. Blitz 的 `.gd` 脚本顶部必须标注对应的学习文档引用，文档中通过 EditorLink 反向关联源码

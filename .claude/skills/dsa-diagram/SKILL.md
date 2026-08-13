@@ -154,6 +154,50 @@ metadata:
 
 ---
 
+## 模板：树结构图（二叉树 / BST / 多叉树）
+
+树模块（模块 4）最常见。节点用**圆**（`<circle>`，区别于链表的 rect），边用 `<line>` 连父子。布局：根在上，孩子在下，层序水平展开。
+
+```html
+<svg viewBox="0 0 720 260" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="tr-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" />
+    </marker>
+  </defs>
+
+  <!-- 边：父圆下缘 → 子圆上缘（先画边，节点后画覆盖端点） -->
+  <line x1="200" y1="94" x2="120" y2="166" stroke="#94a3b8" stroke-width="2" marker-end="url(#tr-arr)" />
+  <line x1="200" y1="94" x2="280" y2="166" stroke="#94a3b8" stroke-width="2" marker-end="url(#tr-arr)" />
+  <line x1="120" y1="166" x2="70" y2="214" stroke="#94a3b8" stroke-width="2" marker-end="url(#tr-arr)" />
+  <line x1="120" y1="166" x2="170" y2="214" stroke="#94a3b8" stroke-width="2" marker-end="url(#tr-arr)" />
+
+  <!-- 节点（圆 r=24，值居中） -->
+  <circle cx="200" cy="70" r="24" fill="#06b6d4" stroke="#0891b2" stroke-width="2" />
+  <text x="200" y="70" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">8</text>
+
+  <circle cx="120" cy="142" r="24" fill="#06b6d4" stroke="#0891b2" stroke-width="2" />
+  <text x="120" y="142" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">3</text>
+
+  <circle cx="280" cy="142" r="24" fill="#06b6d4" stroke="#0891b2" stroke-width="2" />
+  <text x="280" y="142" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">10</text>
+
+  <!-- 空子节点（虚线圆 + null） -->
+  <circle cx="70" cy="190" r="22" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" />
+  <text x="70" y="190" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" fill="#64748b">null</text>
+  <circle cx="170" cy="190" r="22" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" />
+  <text x="170" y="190" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" fill="#64748b">null</text>
+</svg>
+```
+
+**要点**：
+- 节点 `<circle r="24">`，值 `<text text-anchor="middle" dominant-baseline="central">`，深底白字
+- 边 `<line>` 从父圆下缘 `(cx, cy+24)` 到子圆上缘 `(cx, cy-24)`，带箭头 marker
+- **强调**当前查找/遍历路径节点用 `#f59e0b` 描边加粗（`stroke-width="3"`）；新增 `#4ade80`；删除 `#ef4444`
+- 空子节点用虚线圆 + "null"（BST 讲解插入位置时常用）
+- **多叉树**（Trie / B 树）节点可换回 `<rect>`（能容纳多个 key），边同理
+- 层序坐标心算：根居中 `x=360`，第 2 层两个节点 `x=220/500`，第 3 层 `x=120/320/400/600`… 间距按节点数均分
+
 ## 内容编写原则
 
 1. **一张结构图说清本质**——读者只看结构图就能理解「这个结构长什么样」。

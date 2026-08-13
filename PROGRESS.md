@@ -1,21 +1,22 @@
 # 📊 全项目进度面板
 
-> 更新时间: 2026-08-13 | 当前活跃任务: **DSA 算法文档更新（模块 3→13）**
+> 更新时间: 2026-08-13 | 当前活跃任务: **DSA 算法文档更新（模块 4→13）**
 
 ## 🎯 当前任务（下次 AI 会话继续入口）
 
 **主任务：** 填充 DSA 算法与数据结构学习文档（`apps/learning/src/views/AlgorithmsAndDataStructures/`）
 - ✅ 模块 1（复杂度分析）：8/8 篇，100% 完成
 - ✅ 模块 2（线性数据结构）：22/22 篇，100% 完成（全部含「结构图 + 正文 + 动画」三层）
-- ⏳ 模块 3-13：待填充
+- ✅ 模块 3（哈希表）：10/10 篇，100% 完成（全部含「结构图 + 正文 + 动画」三层）
+- ⏳ 模块 4-13：待填充
 
-**继续指令：** 对 AI 说「继续 DSA 算法文档的更新」或「从 dsa-module-3-hash 开始填充文档」
+**继续指令：** 对 AI 说「继续 DSA 算法文档的更新」或「从 dsa-module-4-tree 开始填充文档」
 
 **子任务：** 模块 2 视觉增强（✅ 已完成）
 - 22 篇全部有：开头静态 SVG 结构图（`📐 结构总览`）+ 结尾 Canvas 动画（`🎬 动画演示`）
 - 结构图规范见 `.claude/skills/dsa-diagram/SKILL.md`
 - 动画规范见 `.claude/skills/dsa-visualizer/SKILL.md`
-- 文档样式规范见 `.claude/skills/go-doc-style/SKILL.md`
+- 文档样式规范见 `.claude/skills/doc-style/SKILL.md`
 
 ---
 
@@ -27,8 +28,8 @@
 |------|------|--------|------|--------|------|------|
 | 1 | 复杂度分析基础 | 8 | ✅ 8/8 | 0 | 0 | ✅ 完成 |
 | 2 | 线性数据结构 | 22 | ✅ 22/22 | 🎨 22 | 🎬 22 | ✅ 完成 |
-| 3 | 哈希表 | 10 | 空壳 | — | — | ⏳ 待填充 |
-| 4 | 树 | 18 | 空壳 | — | — | ⏳ 待填充 |
+| 3 | 哈希表 | 10 | ✅ 10/10 | 🎨 10 | 🎬 10 | ✅ 完成 |
+| 4 | 树 | 17 | 空壳 | — | — | ⏳ 待填充 |
 | 5 | 堆 | 7 | 空壳 | — | — | ⏳ 待填充 |
 | 6 | 图 | 18 | 空壳 | — | — | ⏳ 待填充 |
 | 7 | 排序 | 12 | 空壳 | — | — | ⏳ 待填充 |
@@ -38,7 +39,7 @@
 | 11 | 字符串算法 | 11 | 空壳 | — | — | ⏳ 待填充 |
 | 12 | 高级数据结构 | 10 | 空壳 | — | — | ⏳ 待填充 |
 | 13 | 解题方法论 | 8 | 空壳 | — | — | ⏳ 待填充 |
-| **合计** | | **159** | **30** | **22** | **22** | **19%** |
+| **合计** | | **158** | **40** | **32** | **32** | **25%** |
 
 **视觉增强（模块 2 全部完成）：**
 
@@ -95,7 +96,7 @@
 
 > 路径: `apps/learning/src/views/GameProduction/`
 
-共 101 个 .vue 文档（空壳为主）。Godot 文档也遵循 `go-doc-style` 规范，但 GDScript 代码使用强类型（Static Typing）。
+共 101 个 .vue 文档（空壳为主）。Godot 文档也遵循 `doc-style` 规范，但 GDScript 代码使用强类型（Static Typing）。
 
 **继续指令：** 「继续 Godot 文档的填充」
 
@@ -146,7 +147,7 @@ API 文档: `apps/backend/API.md` | 快速启动: `docker-compose up -d backend 
 
 | Skill | 用途 | 位置 |
 |-------|------|------|
-| `go-doc-style` | 所有学习文档的统一样式规范（布局/配色/组件） | `.claude/skills/go-doc-style/` |
+| `doc-style` | 所有学习文档的统一样式规范（布局/配色/组件） | `.claude/skills/doc-style/` |
 | `dsa-diagram` | 文档开头静态 SVG 结构图规范（内联 SVG/配色/marker） | `.claude/skills/dsa-diagram/` |
 | `dsa-visualizer` | 文档结尾 Canvas 动画规范（vue-konva inline 动画模板） | `.claude/skills/dsa-visualizer/` |
 | `openspec-propose` | OpenSpec 变更提案 | `.claude/skills/openspec-propose/` |
@@ -169,3 +170,14 @@ API 文档: `apps/backend/API.md` | 快速启动: `docker-compose up -d backend 
 | 继续游戏开发 | 「继续 Blitz 游戏项目开发」 |
 
 > **提示：** 新会话中 AI 首先读取 `README.md` 和 `PROGRESS.md`（本文件），即可了解全局状态和当前任务。
+
+### ⚡ 批量文档填充：用子代理并行
+
+批量填充文档（一次填一个模块/阶段的多篇）时，**不要串行写**，用 `Agent` 工具派生子代理并行处理：
+
+1. Glob 列出待填充的空壳文件（< 200 字节）
+2. 按文件/子主题分组，每组一个子代理
+3. 同一轮并行调用多个 `Agent`（`general-purpose`），prompt 里附 `doc-style` 关键规范 + 文件路径 + 知识点主题
+4. 全部完成后统一 `vue-tsc`/构建校验
+
+完整策略见 `.claude/skills/doc-style/SKILL.md` 开头的「🤖 AI 批量填充策略」章节。
