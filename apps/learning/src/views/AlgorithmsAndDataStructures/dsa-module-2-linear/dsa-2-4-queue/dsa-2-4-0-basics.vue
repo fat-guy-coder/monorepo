@@ -10,6 +10,151 @@
     <main class="max-w-4xl mx-auto px-6 py-8 space-y-6">
       <Nav :list="navList" title="📑 目录" position="top-right" :showBackToTop="true" />
 
+      <!-- 📐 结构总览 -->
+      <section id="sec-overview" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">📐</span>
+          结构总览：队列
+        </h2>
+        <p class="text-slate-600 mb-4 leading-relaxed text-sm">
+          队列是 <strong>FIFO（先进先出）</strong> 结构：元素从 <strong>队尾 rear</strong> 入队（enqueue），从 <strong>队头 front</strong> 出队（dequeue）。两端操作、中间不可访问。
+        </p>
+
+        <!-- 结构图 -->
+        <figure class="mb-6">
+          <svg viewBox="0 0 720 220" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <marker id="qb0-n" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" /></marker>
+              <marker id="qb0-out" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#ef4444" /></marker>
+              <marker id="qb0-in" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#4ade80" /></marker>
+              <marker id="qb0-down" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" /></marker>
+            </defs>
+            <text x="20" y="26" font-size="14" font-family="monospace" font-weight="bold" fill="#64748b">FIFO 队列：队尾（rear）入 → 队头（front）出</text>
+            <text x="20" y="48" font-size="11" font-family="monospace" fill="#94a3b8">青=数据节点 · 灰箭头=数据流动方向 · 红=出队 · 绿=入队</text>
+
+            <!-- 数据节点 -->
+            <rect x="210" y="82" width="56" height="44" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="238" y="104" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">5</text>
+            <rect x="320" y="82" width="56" height="44" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="348" y="104" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">3</text>
+            <rect x="430" y="82" width="56" height="44" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="458" y="104" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">8</text>
+
+            <!-- 数据流动（front → rear） -->
+            <line x1="266" y1="104" x2="318" y2="104" stroke="#94a3b8" stroke-width="2" marker-end="url(#qb0-n)" />
+            <line x1="376" y1="104" x2="428" y2="104" stroke="#94a3b8" stroke-width="2" marker-end="url(#qb0-n)" />
+
+            <!-- front / rear 指针 -->
+            <line x1="238" y1="128" x2="238" y2="142" stroke="#94a3b8" stroke-width="2" marker-end="url(#qb0-down)" />
+            <text x="238" y="160" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#64748b">front · 队头</text>
+            <line x1="458" y1="128" x2="458" y2="142" stroke="#94a3b8" stroke-width="2" marker-end="url(#qb0-down)" />
+            <text x="458" y="160" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#64748b">rear · 队尾</text>
+
+            <!-- 出队（左） -->
+            <line x1="170" y1="104" x2="92" y2="104" stroke="#ef4444" stroke-width="2" marker-end="url(#qb0-out)" />
+            <text x="130" y="88" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" fill="#ef4444">dequeue 出队</text>
+            <!-- 入队（右） -->
+            <line x1="488" y1="104" x2="566" y2="104" stroke="#4ade80" stroke-width="2" marker-end="url(#qb0-in)" />
+            <text x="527" y="88" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" fill="#16a34a">enqueue 入队</text>
+          </svg>
+          <figcaption class="text-xs text-slate-400 mt-1">图 1：队列结构——front 出队、rear 入队，数据从左向右流动</figcaption>
+        </figure>
+
+        <!-- 操作示意图：enqueue -->
+        <h3 class="text-sm font-semibold text-slate-700 mb-2">操作：enqueue 入队 —— rear 右移 O(1)</h3>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
+          <figure>
+            <p class="text-xs text-slate-500 font-semibold mb-1">入队前</p>
+            <svg viewBox="0 0 340 130" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="qben-n" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" /></marker>
+              </defs>
+              <line x1="82" y1="62" x2="88" y2="62" stroke="#94a3b8" stroke-width="2" marker-end="url(#qben-n)" />
+              <line x1="142" y1="62" x2="148" y2="62" stroke="#94a3b8" stroke-width="2" marker-end="url(#qben-n)" />
+              <line x1="202" y1="62" x2="208" y2="62" stroke="#94a3b8" stroke-width="2" marker-end="url(#qben-n)" />
+              <rect x="30" y="44" width="52" height="36" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="56" y="62" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">5</text>
+              <rect x="90" y="44" width="52" height="36" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="116" y="62" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">3</text>
+              <rect x="150" y="44" width="52" height="36" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="176" y="62" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">8</text>
+              <rect x="210" y="44" width="52" height="36" rx="6" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" />
+              <text x="236" y="62" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" fill="#94a3b8">空</text>
+              <text x="56" y="116" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#f59e0b">▲ front</text>
+              <text x="236" y="116" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#60a5fa">▲ rear</text>
+            </svg>
+            <figcaption class="text-xs text-slate-400 mt-1">rear 指向下一个空位</figcaption>
+          </figure>
+          <figure>
+            <p class="text-xs text-slate-500 font-semibold mb-1">入队后（写入 rear，rear 右移）</p>
+            <svg viewBox="0 0 340 130" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="qben2-n" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" /></marker>
+              </defs>
+              <line x1="72" y1="62" x2="78" y2="62" stroke="#94a3b8" stroke-width="2" marker-end="url(#qben2-n)" />
+              <line x1="132" y1="62" x2="138" y2="62" stroke="#94a3b8" stroke-width="2" marker-end="url(#qben2-n)" />
+              <line x1="192" y1="62" x2="198" y2="62" stroke="#94a3b8" stroke-width="2" marker-end="url(#qben2-n)" />
+              <line x1="252" y1="62" x2="258" y2="62" stroke="#94a3b8" stroke-width="2" marker-end="url(#qben2-n)" />
+              <rect x="20" y="44" width="52" height="36" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="46" y="62" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">5</text>
+              <rect x="80" y="44" width="52" height="36" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="106" y="62" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">3</text>
+              <rect x="140" y="44" width="52" height="36" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="166" y="62" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">8</text>
+              <rect x="200" y="44" width="52" height="36" rx="6" fill="#4ade80" stroke="#22c55e" stroke-width="2" />
+              <text x="226" y="62" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#0f172a">9</text>
+              <rect x="260" y="44" width="52" height="36" rx="6" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" />
+              <text x="286" y="62" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" fill="#94a3b8">空</text>
+              <text x="46" y="116" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#f59e0b">▲ front</text>
+              <text x="286" y="116" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#60a5fa">▲ rear</text>
+            </svg>
+            <figcaption class="text-xs text-slate-400 mt-1">新元素 9 写入原 rear 位，rear 右移一格</figcaption>
+          </figure>
+        </div>
+
+        <!-- 操作示意图：dequeue -->
+        <h3 class="text-sm font-semibold text-slate-700 mb-2">操作：dequeue 出队 —— front 右移 O(1)</h3>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <figure>
+            <p class="text-xs text-slate-500 font-semibold mb-1">出队前</p>
+            <svg viewBox="0 0 340 130" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="qbde-n" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" /></marker>
+              </defs>
+              <line x1="82" y1="62" x2="88" y2="62" stroke="#94a3b8" stroke-width="2" marker-end="url(#qbde-n)" />
+              <line x1="142" y1="62" x2="148" y2="62" stroke="#94a3b8" stroke-width="2" marker-end="url(#qbde-n)" />
+              <rect x="30" y="44" width="52" height="36" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="56" y="62" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">5</text>
+              <rect x="90" y="44" width="52" height="36" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="116" y="62" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">3</text>
+              <rect x="150" y="44" width="52" height="36" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="176" y="62" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">8</text>
+              <text x="56" y="116" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#f59e0b">▲ front</text>
+              <text x="176" y="116" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#60a5fa">▲ rear</text>
+            </svg>
+            <figcaption class="text-xs text-slate-400 mt-1">front 指向队头 5</figcaption>
+          </figure>
+          <figure>
+            <p class="text-xs text-slate-500 font-semibold mb-1">出队后（front 右移，节点不移动）</p>
+            <svg viewBox="0 0 340 130" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="qbde2-n" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" /></marker>
+              </defs>
+              <line x1="142" y1="62" x2="148" y2="62" stroke="#94a3b8" stroke-width="2" marker-end="url(#qbde2-n)" />
+              <rect x="30" y="44" width="52" height="36" rx="6" fill="none" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="4 3" />
+              <text x="56" y="62" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ef4444">5</text>
+              <rect x="90" y="44" width="52" height="36" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="116" y="62" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">3</text>
+              <rect x="150" y="44" width="52" height="36" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="176" y="62" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">8</text>
+              <text x="116" y="116" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#f59e0b">▲ front</text>
+              <text x="176" y="116" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#60a5fa">▲ rear</text>
+            </svg>
+            <figcaption class="text-xs text-slate-400 mt-1">返回 5，front 右移指向 3（元素无需前移，O(1)）</figcaption>
+          </figure>
+        </div>
+      </section>
+
       <section id="sec-1" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
           <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">1</span>什么是队列？—— FIFO 数据结构</h2>
@@ -149,7 +294,7 @@ import { Code, Nav } from 'components'
 import { RouterLink } from 'vue-router'
 import { ref, reactive, onMounted, onUnmounted } from 'vue'
 
-const navList=[{id:"sec-1",name:"什么是队列"},{id:"sec-mem",name:"💾 内存存储"},{id:"sec-2",name:"基本操作"},{id:"sec-3",name:"三种实现"},{id:"sec-4",name:"经典应用"},{id:"sec-viz",name:"🎬 动画演示"},{id:"sec-6",name:"小结"}]
+const navList=[{id:"sec-overview",name:"📐 结构总览"},{id:"sec-1",name:"什么是队列"},{id:"sec-mem",name:"💾 内存存储"},{id:"sec-2",name:"基本操作"},{id:"sec-3",name:"三种实现"},{id:"sec-4",name:"经典应用"},{id:"sec-viz",name:"🎬 动画演示"},{id:"sec-6",name:"小结"}]
 
 const qMemCode = `// 链表队列（分散内存）
 //  front                    rear

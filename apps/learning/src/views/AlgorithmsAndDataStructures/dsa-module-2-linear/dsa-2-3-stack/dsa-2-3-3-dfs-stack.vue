@@ -15,6 +15,82 @@
     <main class="max-w-4xl mx-auto px-6 py-8 space-y-6">
       <Nav :list="navList" title="📑 目录" position="top-right" :showBackToTop="true" />
 
+      <!-- 📐 结构总览 -->
+      <section id="sec-overview" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">📐</span>
+          结构总览：二叉树 + 显式栈
+        </h2>
+        <p class="text-slate-600 mb-4 leading-relaxed text-sm">
+          递归遍历靠<strong>系统调用栈</strong>隐式保存路径；迭代遍历用一个<strong>显式栈 stack</strong> 手动模拟——弹出栈顶访问，再按<strong>先右后左</strong>压入子节点，LIFO 保证左孩子先弹出，从而还原"根→左→右"的前序顺序。
+        </p>
+
+        <!-- 结构图 -->
+        <figure class="mb-6">
+          <svg viewBox="0 0 560 280" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <marker id="ov-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" />
+              </marker>
+            </defs>
+            <text x="140" y="24" text-anchor="middle" font-size="12" font-family="monospace" fill="#64748b">二叉树（前序）</text>
+            <!-- 边 -->
+            <line x1="140" y1="60" x2="80" y2="150" stroke="#94a3b8" stroke-width="2" />
+            <line x1="140" y1="60" x2="200" y2="150" stroke="#94a3b8" stroke-width="2" />
+            <line x1="80" y1="150" x2="50" y2="230" stroke="#94a3b8" stroke-width="2" />
+            <line x1="80" y1="150" x2="110" y2="230" stroke="#94a3b8" stroke-width="2" />
+            <!-- 节点 -->
+            <circle cx="140" cy="60" r="20" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="140" y="60" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">1</text>
+            <circle cx="80" cy="150" r="20" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="80" y="150" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">2</text>
+            <circle cx="200" cy="150" r="20" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="200" y="150" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">3</text>
+            <circle cx="50" cy="230" r="20" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="50" y="230" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">4</text>
+            <circle cx="110" cy="230" r="20" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="110" y="230" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">5</text>
+            <!-- 显式栈 -->
+            <text x="430" y="136" text-anchor="middle" font-size="12" font-family="monospace" fill="#64748b" font-weight="bold">stack（显式）</text>
+            <rect x="390" y="200" width="80" height="36" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="430" y="218" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">3</text>
+            <rect x="390" y="156" width="80" height="36" rx="6" fill="#f59e0b" stroke="#d97706" stroke-width="1.5" />
+            <text x="430" y="174" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">2</text>
+            <!-- 连接箭头 -->
+            <line x1="300" y1="178" x2="385" y2="178" stroke="#94a3b8" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#ov-a)" />
+            <text x="16" y="270" font-size="11" font-family="monospace" fill="#64748b">先压右孩子 3，再压左孩子 2 → 2 在栈顶，下次先弹左</text>
+          </svg>
+          <figcaption class="text-xs text-slate-400 mt-1">图 1：弹出根 1 访问后，栈中先压右 3、再压左 2，LIFO 保证左 2 先弹出</figcaption>
+        </figure>
+
+        <!-- 操作示意图：前序压栈顺序 -->
+        <h3 class="text-sm font-semibold text-slate-700 mb-2">操作：前序遍历压栈 —— 先压右孩子，再压左孩子</h3>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <figure>
+            <p class="text-xs text-slate-500 font-semibold mb-1">弹出根 1 访问（输出 [1]）</p>
+            <svg viewBox="0 0 220 200" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+              <path d="M 60 60 L 60 180 L 160 180 L 160 60" fill="none" stroke="#94a3b8" stroke-width="2" />
+              <rect x="70" y="60" width="80" height="36" rx="6" fill="#f59e0b" stroke="#d97706" stroke-width="1.5" />
+              <text x="110" y="78" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">1</text>
+              <text x="110" y="36" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" fill="#f59e0b">弹出 1 → 访问</text>
+            </svg>
+          </figure>
+          <figure>
+            <p class="text-xs text-slate-500 font-semibold mb-1">先压右 3，再压左 2（栈顶 = 2）</p>
+            <svg viewBox="0 0 220 200" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+              <path d="M 60 60 L 60 180 L 160 180 L 160 60" fill="none" stroke="#94a3b8" stroke-width="2" />
+              <rect x="70" y="136" width="80" height="36" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="110" y="154" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">3</text>
+              <text x="188" y="154" text-anchor="start" dominant-baseline="central" font-size="11" font-family="monospace" fill="#64748b">右</text>
+              <rect x="70" y="98" width="80" height="36" rx="6" fill="#4ade80" stroke="#22c55e" stroke-width="2" />
+              <text x="110" y="116" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#0f172a">2</text>
+              <text x="188" y="116" text-anchor="start" dominant-baseline="central" font-size="11" font-family="monospace" fill="#16a34a">左</text>
+            </svg>
+            <figcaption class="text-xs text-slate-400 mt-1">2 在栈顶 → 下次先弹出左孩子，实现"根→左→右"</figcaption>
+          </figure>
+        </div>
+      </section>
+
       <!-- 1. Why iterative DFS -->
       <section id="sec-1" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
@@ -198,6 +274,40 @@
         </aside>
       </section>
 
+      <!-- 🎬 动画演示 -->
+      <section id="sec-viz" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">🎬</span>
+          动画演示：前序遍历的栈模拟
+        </h2>
+        <p class="text-slate-600 mb-3 leading-relaxed text-sm">递归 → 显式栈：<strong>弹出栈顶访问（橙=当前节点），先压右孩子再压左孩子</strong>（LIFO 保证左先弹）。绿色 = 已访问。</p>
+        <div class="flex flex-wrap items-center gap-2 mb-2 text-xs">
+          <span class="bg-slate-100 px-2 py-1 rounded-full">📏 栈深度: {{ dfsStack.length }}</span>
+          <span class="bg-cyan-50 text-cyan-700 px-2 py-1 rounded-full font-mono">{{ dfsStatus }}</span>
+          <span class="bg-slate-100 px-2 py-1 rounded-full text-slate-500">📤 输出: [{{ dfsOut.join(', ') }}]</span>
+        </div>
+        <div class="flex flex-wrap items-center gap-2 mb-2">
+          <button @mousedown="dfsStep" :disabled="dfsBusy || dfsDone" class="px-3 py-1.5 rounded-lg text-xs font-medium border transition-all duration-150 active:scale-95 bg-purple-50 text-purple-700 border-purple-200 hover:bg-purple-100 hover:shadow-sm disabled:opacity-40">{{ dfsDone ? '✅ 遍历完成' : '▶ 下一步' }}</button>
+          <button @mousedown="dfsReset" :disabled="dfsBusy" class="px-3 py-1.5 rounded-lg text-xs font-medium border transition-all duration-150 active:scale-95 bg-slate-50 text-slate-500 border-slate-300 hover:bg-slate-100 hover:shadow-sm disabled:opacity-40">↺ Reset</button>
+        </div>
+        <div ref="dfsBox" class="w-full relative" :style="{height:dfsH+'px'}">
+          <v-stage :config="{width:dfsW, height:dfsH}">
+            <v-layer>
+              <v-text :config="{x:30,y:8,text:'二叉树（前序）',fontSize:11,fontFamily:'monospace',fill:dfsC.muted,fontStyle:'bold'}" />
+              <v-text :config="{x:350,y:30,text:'栈 stack',fontSize:11,fontFamily:'monospace',fill:dfsC.muted,fontStyle:'bold'}" />
+              <v-text :config="{x:30,y:308,text:'输出 (visited)',fontSize:11,fontFamily:'monospace',fill:dfsC.muted,fontStyle:'bold'}" />
+              <v-line v-for="(e,i) in dfsEdges" :key="'e'+i" :config="dfsEdge(e)" />
+              <v-circle v-for="n in dfsTreeKeys" :key="'c'+n" :config="dfsCircle(n)" />
+              <v-text v-for="n in dfsTreeKeys" :key="'ct'+n" :config="dfsNodeText(n)" />
+              <v-rect v-for="v in dfsStack" :key="'s'+v" :config="dfsStackRect(v)" />
+              <v-text v-for="v in dfsStack" :key="'st'+v" :config="dfsStackText(v)" />
+              <v-rect v-for="v in dfsOut" :key="'o'+v" :config="dfsOutRect(v)" />
+              <v-text v-for="v in dfsOut" :key="'ot'+v" :config="dfsOutText(v)" />
+            </v-layer>
+          </v-stage>
+        </div>
+      </section>
+
       <!-- 小结 -->
       <section id="sec-7" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
@@ -228,16 +338,55 @@
 <script setup lang="ts">
 import { Code, Nav } from 'components'
 import { RouterLink } from 'vue-router'
+import { ref, reactive, onMounted, onUnmounted } from 'vue'
 
 const navList = [
+  { id: "sec-overview", name: "📐 结构总览" },
   { id: "sec-1", name: "递归 vs 迭代" },
   { id: "sec-2", name: "前序遍历 #144" },
   { id: "sec-3", name: "中序遍历 #94" },
   { id: "sec-4", name: "后序遍历 #145" },
   { id: "sec-5", name: "通用 DFS 模板" },
   { id: "sec-6", name: "DFS vs BFS" },
+  { id: "sec-viz", name: "🎬 动画演示" },
   { id: "sec-7", name: "小结" },
 ]
+
+// ===== 🎬 前序遍历栈模拟动画 =====
+const dfsC={cyan:'#06b6d4',green:'#4ade80',red:'#ef4444',orange:'#f59e0b',text:'#1e293b',muted:'#94a3b8',ghost:'#e2e8f0'}
+const dfsW=ref(700), dfsH=ref(380)
+const dfsTreeKeys=[1,2,3,4,5]
+const dfsTreePos: Record<number,{x:number;y:number}> = {1:{x:150,y:70},2:{x:85,y:160},3:{x:215,y:160},4:{x:45,y:250},5:{x:125,y:250}}
+const dfsEdges: [number,number][] = [[1,2],[1,3],[2,4],[2,5]]
+const dfsChildren: Record<number,{left:number|null;right:number|null}> = {1:{left:2,right:3},2:{left:4,right:5},3:{left:null,right:null},4:{left:null,right:null},5:{left:null,right:null}}
+const dfsStack=reactive<number[]>([])
+const dfsOut=reactive<number[]>([])
+const dfsCurr=ref<number|null>(null)
+const dfsBusy=ref(false), dfsDone=ref(false), dfsStatus=ref('')
+const dfsBox=ref<HTMLDivElement>()
+const d6=(ms:number)=>new Promise(r=>setTimeout(r,ms))
+function dfsEdge(e:[number,number]){ const a=dfsTreePos[e[0]],b=dfsTreePos[e[1]]; return {points:[a.x,a.y+24,b.x,b.y-24],stroke:dfsC.muted,strokeWidth:2} }
+function dfsCircle(n:number){ const p=dfsTreePos[n]; const isCurr=dfsCurr.value===n, isOut=dfsOut.value.includes(n), isIn=dfsStack.value.includes(n); const fill=isCurr?dfsC.orange:isOut?dfsC.green:isIn?dfsC.cyan:dfsC.ghost; return {x:p.x,y:p.y,radius:24,fill,stroke:'#64748b',strokeWidth:2,shadowColor:'rgba(0,0,0,.1)',shadowBlur:4} }
+function dfsNodeText(n:number){ const p=dfsTreePos[n]; return {x:p.x-24,y:p.y-24,width:48,height:48,text:String(n),fontSize:16,fontFamily:'monospace',fontStyle:'bold',fill:dfsC.text,align:'center',verticalAlign:'middle'} }
+function dfsStackRect(v:number){ const i=dfsStack.indexOf(v); const isTop=i===dfsStack.length-1; const x=350,y=270-i*40; return {x,y,width:64,height:34,fill:dfsC.cyan,cornerRadius:6,stroke:isTop?dfsC.orange:'#64748b',strokeWidth:isTop?2.5:1.5,shadowColor:'rgba(0,0,0,.1)',shadowBlur:3} }
+function dfsStackText(v:number){ const i=dfsStack.indexOf(v); const x=350,y=270-i*40; return {x,y,width:64,height:34,text:String(v),fontSize:15,fontFamily:'monospace',fontStyle:'bold',fill:dfsC.text,align:'center',verticalAlign:'middle'} }
+function dfsOutRect(v:number){ const i=dfsOut.indexOf(v); const x=30+i*56,y=330; return {x,y,width:48,height:34,fill:dfsC.green,cornerRadius:6,stroke:'#64748b',strokeWidth:1,shadowColor:'rgba(0,0,0,.08)',shadowBlur:2} }
+function dfsOutText(v:number){ const i=dfsOut.indexOf(v); const x=30+i*56,y=330; return {x,y,width:48,height:34,text:String(v),fontSize:15,fontFamily:'monospace',fontStyle:'bold',fill:'#fff',align:'center',verticalAlign:'middle'} }
+async function dfsStep(){
+  if(dfsBusy.value||dfsDone.value)return; dfsBusy.value=true
+  if(!dfsStack.length){ dfsDone.value=true; dfsStatus.value='✅ 遍历完成'; dfsBusy.value=false; return }
+  const node=dfsStack.pop()!
+  dfsCurr.value=node; dfsStatus.value=`弹出 ${node} → 访问`; await d6(450)
+  dfsOut.push(node); dfsCurr.value=null; await d6(200)
+  const ch=dfsChildren[node]
+  if(ch.right!==null){ dfsStack.push(ch.right); dfsStatus.value=`压入右孩子 ${ch.right}`; await d6(300) }
+  if(ch.left!==null){ dfsStack.push(ch.left); dfsStatus.value=`压入左孩子 ${ch.left}`; await d6(300) }
+  dfsBusy.value=false
+}
+function dfsReset(){ dfsBusy.value=false; dfsStack.length=0; dfsOut.length=0; dfsCurr.value=null; dfsDone.value=false; dfsStatus.value=''; dfsStack.push(1) }
+let roDFS:ResizeObserver|null=null
+onMounted(()=>{ dfsStack.push(1); if(dfsBox.value){ dfsW.value=dfsBox.value.clientWidth; roDFS=new ResizeObserver(e=>{const w=e[0]?.contentRect.width; if(w&&w>200) dfsW.value=Math.max(460,w)}); roDFS.observe(dfsBox.value) }})
+onUnmounted(()=>roDFS?.disconnect())
 
 class TreeNode { val: number; left: TreeNode | null; right: TreeNode | null; constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) { this.val = val ?? 0; this.left = left ?? null; this.right = right ?? null } }
 

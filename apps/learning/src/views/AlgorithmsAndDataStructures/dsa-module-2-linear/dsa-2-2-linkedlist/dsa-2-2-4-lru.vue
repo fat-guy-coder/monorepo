@@ -15,6 +15,186 @@
     <main class="max-w-4xl mx-auto px-6 py-8 space-y-6">
       <Nav :list="navList" title="📑 目录" position="top-right" :showBackToTop="true" />
 
+      <!-- 📐 结构总览 -->
+      <section id="sec-overview" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">📐</span>
+          结构总览：LRU Cache
+        </h2>
+        <p class="text-slate-600 mb-4 leading-relaxed text-sm">
+          <strong>HashMap</strong> 负责 O(1) 按 key 找到节点引用；<strong>双向链表</strong> 负责维护访问顺序——越靠 <strong>head 越新</strong>，越靠 <strong>tail 越旧</strong>。
+        </p>
+
+        <!-- 结构图 -->
+        <figure class="mb-6">
+          <svg viewBox="0 0 560 250" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <marker id="lr-n" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" />
+              </marker>
+              <marker id="lr-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#60a5fa" />
+              </marker>
+              <marker id="lr-map" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" />
+              </marker>
+            </defs>
+
+            <!-- HashMap 容器 -->
+            <rect x="140" y="18" width="280" height="66" rx="8" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5" />
+            <text x="280" y="38" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#64748b">HashMap (key → 节点引用)</text>
+            <text x="190" y="62" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" fill="#64748b">1 → n1</text>
+            <text x="300" y="62" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" fill="#64748b">2 → n2</text>
+
+            <!-- HashMap → 链表 映射（虚线） -->
+            <line x1="190" y1="86" x2="190" y2="128" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#lr-map)" />
+            <line x1="300" y1="86" x2="300" y2="128" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#lr-map)" />
+
+            <!-- next 箭头（上，向右） -->
+            <line x1="112" y1="150" x2="156" y2="150" stroke="#94a3b8" stroke-width="2" marker-end="url(#lr-n)" />
+            <line x1="220" y1="150" x2="266" y2="150" stroke="#94a3b8" stroke-width="2" marker-end="url(#lr-n)" />
+            <line x1="330" y1="150" x2="376" y2="150" stroke="#94a3b8" stroke-width="2" marker-end="url(#lr-n)" />
+            <!-- prev 箭头（下，向左） -->
+            <line x1="156" y1="170" x2="112" y2="170" stroke="#60a5fa" stroke-width="2" marker-end="url(#lr-p)" />
+            <line x1="266" y1="170" x2="220" y2="170" stroke="#60a5fa" stroke-width="2" marker-end="url(#lr-p)" />
+            <line x1="376" y1="170" x2="330" y2="170" stroke="#60a5fa" stroke-width="2" marker-end="url(#lr-p)" />
+
+            <!-- head 哨兵 -->
+            <rect x="60" y="130" width="52" height="60" rx="6" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" />
+            <text x="86" y="150" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" fill="#64748b">head</text>
+            <text x="86" y="172" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#94a3b8">(哨兵)</text>
+
+            <!-- 节点 1 -->
+            <rect x="160" y="130" width="60" height="60" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="190" y="146" text-anchor="middle" dominant-baseline="central" font-size="9" font-family="monospace" fill="#cffafe">next →</text>
+            <text x="190" y="162" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">1:A</text>
+            <text x="190" y="178" text-anchor="middle" dominant-baseline="central" font-size="9" font-family="monospace" fill="#cffafe">← prev</text>
+
+            <!-- 节点 2 -->
+            <rect x="270" y="130" width="60" height="60" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="300" y="146" text-anchor="middle" dominant-baseline="central" font-size="9" font-family="monospace" fill="#cffafe">next →</text>
+            <text x="300" y="162" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">2:B</text>
+            <text x="300" y="178" text-anchor="middle" dominant-baseline="central" font-size="9" font-family="monospace" fill="#cffafe">← prev</text>
+
+            <!-- tail 哨兵 -->
+            <rect x="380" y="130" width="52" height="60" rx="6" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" />
+            <text x="406" y="150" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" fill="#64748b">tail</text>
+            <text x="406" y="172" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#94a3b8">(哨兵)</text>
+
+            <!-- 图例 -->
+            <text x="16" y="218" font-size="11" font-family="monospace" fill="#94a3b8">HashMap 存 key → 节点引用（O(1) 定位） · 越靠 head 越新，越靠 tail 越旧</text>
+            <text x="16" y="238" font-size="11" font-family="monospace" fill="#94a3b8">→ next（灰） · ← prev（蓝） · 虚线 = 哨兵 / 映射</text>
+          </svg>
+          <figcaption class="text-xs text-slate-400 mt-1">图 1：LRU 结构——HashMap 负责查找，双向链表负责新旧顺序</figcaption>
+        </figure>
+
+        <!-- 操作示意图：get 命中 moveToHead -->
+        <h3 class="text-sm font-semibold text-slate-700 mb-2">操作：get(2) 命中 —— moveToHead 移到最前</h3>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
+          <figure>
+            <p class="text-xs text-slate-500 font-semibold mb-1">访问前（2 在中间）</p>
+            <svg viewBox="0 0 340 110" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="lr-g1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" /></marker>
+              </defs>
+              <line x1="50" y1="55" x2="66" y2="55" stroke="#94a3b8" stroke-width="2" marker-end="url(#lr-g1)" />
+              <line x1="120" y1="55" x2="136" y2="55" stroke="#94a3b8" stroke-width="2" marker-end="url(#lr-g1)" />
+              <line x1="190" y1="55" x2="206" y2="55" stroke="#94a3b8" stroke-width="2" marker-end="url(#lr-g1)" />
+              <line x1="260" y1="55" x2="276" y2="55" stroke="#94a3b8" stroke-width="2" marker-end="url(#lr-g1)" />
+              <rect x="10" y="30" width="40" height="50" rx="6" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" />
+              <text x="30" y="55" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">head</text>
+              <rect x="70" y="30" width="50" height="50" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="95" y="55" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">1:A</text>
+              <rect x="140" y="30" width="50" height="50" rx="6" fill="#06b6d4" stroke="#f59e0b" stroke-width="2" />
+              <text x="165" y="55" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">2:B</text>
+              <text x="165" y="92" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#f59e0b">命中</text>
+              <rect x="210" y="30" width="50" height="50" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="235" y="55" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">3:C</text>
+              <rect x="280" y="30" width="40" height="50" rx="6" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" />
+              <text x="300" y="55" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">tail</text>
+            </svg>
+          </figure>
+          <figure>
+            <p class="text-xs text-slate-500 font-semibold mb-1">访问后（2 移到最前）</p>
+            <svg viewBox="0 0 340 110" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="lr-g2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" /></marker>
+              </defs>
+              <line x1="50" y1="55" x2="66" y2="55" stroke="#94a3b8" stroke-width="2" marker-end="url(#lr-g2)" />
+              <line x1="120" y1="55" x2="136" y2="55" stroke="#94a3b8" stroke-width="2" marker-end="url(#lr-g2)" />
+              <line x1="190" y1="55" x2="206" y2="55" stroke="#94a3b8" stroke-width="2" marker-end="url(#lr-g2)" />
+              <line x1="260" y1="55" x2="276" y2="55" stroke="#94a3b8" stroke-width="2" marker-end="url(#lr-g2)" />
+              <rect x="10" y="30" width="40" height="50" rx="6" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" />
+              <text x="30" y="55" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">head</text>
+              <rect x="70" y="30" width="50" height="50" rx="6" fill="#4ade80" stroke="#22c55e" stroke-width="2" />
+              <text x="95" y="55" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#0f172a">2:B</text>
+              <text x="95" y="92" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#16a34a">最新</text>
+              <rect x="140" y="30" width="50" height="50" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="165" y="55" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">1:A</text>
+              <rect x="210" y="30" width="50" height="50" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="235" y="55" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">3:C</text>
+              <rect x="280" y="30" width="40" height="50" rx="6" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" />
+              <text x="300" y="55" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">tail</text>
+            </svg>
+            <figcaption class="text-xs text-slate-400 mt-1">moveToHead = removeNode(2) + addToHead(2)，O(1)</figcaption>
+          </figure>
+        </div>
+
+        <!-- 操作示意图：put 满淘汰 -->
+        <h3 class="text-sm font-semibold text-slate-700 mb-2">操作：put 满 —— 淘汰 tail 的前驱（最旧）</h3>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <figure>
+            <p class="text-xs text-slate-500 font-semibold mb-1">淘汰前（容量满，3 最旧）</p>
+            <svg viewBox="0 0 340 110" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="lr-p1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" /></marker>
+              </defs>
+              <line x1="50" y1="55" x2="66" y2="55" stroke="#94a3b8" stroke-width="2" marker-end="url(#lr-p1)" />
+              <line x1="120" y1="55" x2="136" y2="55" stroke="#94a3b8" stroke-width="2" marker-end="url(#lr-p1)" />
+              <line x1="190" y1="55" x2="206" y2="55" stroke="#94a3b8" stroke-width="2" marker-end="url(#lr-p1)" />
+              <line x1="260" y1="55" x2="276" y2="55" stroke="#94a3b8" stroke-width="2" marker-end="url(#lr-p1)" />
+              <rect x="10" y="30" width="40" height="50" rx="6" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" />
+              <text x="30" y="55" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">head</text>
+              <rect x="70" y="30" width="50" height="50" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="95" y="55" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">1:A</text>
+              <rect x="140" y="30" width="50" height="50" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="165" y="55" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">2:B</text>
+              <rect x="210" y="30" width="50" height="50" rx="6" fill="#ef4444" stroke="#dc2626" stroke-width="2" />
+              <text x="235" y="55" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">3:C</text>
+              <text x="235" y="92" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#dc2626">最旧</text>
+              <rect x="280" y="30" width="40" height="50" rx="6" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" />
+              <text x="300" y="55" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">tail</text>
+            </svg>
+          </figure>
+          <figure>
+            <p class="text-xs text-slate-500 font-semibold mb-1">淘汰后（3 移除，新节点插入头部）</p>
+            <svg viewBox="0 0 340 130" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="lr-p2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" /></marker>
+              </defs>
+              <line x1="50" y1="55" x2="66" y2="55" stroke="#94a3b8" stroke-width="2" marker-end="url(#lr-p2)" />
+              <line x1="120" y1="55" x2="136" y2="55" stroke="#94a3b8" stroke-width="2" marker-end="url(#lr-p2)" />
+              <line x1="190" y1="55" x2="206" y2="55" stroke="#94a3b8" stroke-width="2" marker-end="url(#lr-p2)" />
+              <line x1="260" y1="55" x2="276" y2="55" stroke="#94a3b8" stroke-width="2" marker-end="url(#lr-p2)" />
+              <rect x="10" y="30" width="40" height="50" rx="6" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" />
+              <text x="30" y="55" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">head</text>
+              <rect x="70" y="30" width="50" height="50" rx="6" fill="#4ade80" stroke="#22c55e" stroke-width="2" />
+              <text x="95" y="55" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#0f172a">n:D</text>
+              <text x="95" y="92" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#16a34a">新插入</text>
+              <rect x="140" y="30" width="50" height="50" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="165" y="55" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">1:A</text>
+              <rect x="210" y="30" width="50" height="50" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="235" y="55" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">2:B</text>
+              <rect x="280" y="30" width="40" height="50" rx="6" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" />
+              <text x="300" y="55" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">tail</text>
+              <rect x="250" y="96" width="70" height="26" rx="6" fill="none" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="4 3" />
+              <text x="285" y="109" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" fill="#ef4444">3:C 淘汰</text>
+            </svg>
+            <figcaption class="text-xs text-slate-400 mt-1">removeTail = tail.prev，同时从 HashMap 删除该 key</figcaption>
+          </figure>
+        </div>
+      </section>
+
       <!-- 1. LRU 概念 -->
       <section id="sec-1" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
@@ -266,6 +446,34 @@
         </div>
       </section>
 
+      <!-- 🎬 动画演示 -->
+      <section id="sec-viz" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">🎬</span>
+          动画演示：LRU 的 get 与 put
+        </h2>
+        <p class="text-slate-600 mb-3 leading-relaxed text-sm">越靠<strong>左越新</strong>（head 侧），越靠<strong>右越旧</strong>（tail 侧）。<strong>get 命中 → moveToHead</strong>；<strong>put → 插到头部，容量满则淘汰最旧的 tail 前驱</strong>。</p>
+        <div class="flex flex-wrap items-center gap-2 mb-2 text-xs">
+          <span class="bg-slate-100 px-2 py-1 rounded-full">📏 数据: {{ lruNodes.length - 2 }} / {{ LRU_CAP }}</span>
+          <span class="bg-cyan-50 text-cyan-700 px-2 py-1 rounded-full font-mono">{{ lruStatus }}</span>
+          <span class="bg-slate-100 px-2 py-1 rounded-full text-slate-500">⏱️ get/put 均 O(1)</span>
+        </div>
+        <div class="flex flex-wrap items-center gap-2 mb-2">
+          <button @mousedown="lruGet" :disabled="lruBusy" class="px-3 py-1.5 rounded-lg text-xs font-medium border transition-all duration-150 active:scale-95 bg-amber-50 text-amber-700 border-amber-200 hover:bg-amber-100 hover:shadow-sm disabled:opacity-40">get(随机key)</button>
+          <button @mousedown="lruPut" :disabled="lruBusy" class="px-3 py-1.5 rounded-lg text-xs font-medium border transition-all duration-150 active:scale-95 bg-cyan-50 text-cyan-700 border-cyan-200 hover:bg-cyan-100 hover:shadow-sm disabled:opacity-40">put(新key)</button>
+          <button @mousedown="lruReset" :disabled="lruBusy" class="px-3 py-1.5 rounded-lg text-xs font-medium border transition-all duration-150 active:scale-95 bg-slate-50 text-slate-500 border-slate-300 hover:bg-slate-100 hover:shadow-sm disabled:opacity-40">↺ Reset</button>
+        </div>
+        <div ref="lruBox" class="w-full relative overflow-x-auto" :style="{height:lruH+'px'}">
+          <v-stage :config="{width:lruW, height:lruH}">
+            <v-layer>
+              <v-arrow v-for="(n,i) in lruNodes.slice(0,-1)" :key="'a'+n.id" :config="lruArrow(i)" />
+              <v-rect v-for="n in lruNodes" :key="n.id" :config="lruR(n)" />
+              <v-text v-for="n in lruNodes" :key="'t'+n.id" :config="lruT(n)" />
+            </v-layer>
+          </v-stage>
+        </div>
+      </section>
+
       <!-- 8. 总结 -->
       <section id="sec-8" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
@@ -296,8 +504,10 @@
 <script setup lang="ts">
 import { Code, Nav } from 'components'
 import { RouterLink } from 'vue-router'
+import { ref, reactive, onMounted, onUnmounted } from 'vue'
 
 const navList = [
+  { id: "sec-overview", name: "📐 结构总览" },
   { id: "sec-1", name: "LRU 是什么" },
   { id: "sec-2", name: "HashMap+双向链表" },
   { id: "sec-3", name: "数据结构设计" },
@@ -305,8 +515,32 @@ const navList = [
   { id: "sec-5", name: "辅助方法详解" },
   { id: "sec-6", name: "前端类比" },
   { id: "sec-7", name: "面试追问" },
+  { id: "sec-viz", name: "🎬 动画演示" },
   { id: "sec-8", name: "总结" },
 ]
+
+// ===== 🎬 LRU 动画 =====
+const lruC={cyan:'#06b6d4',green:'#4ade80',red:'#ef4444',orange:'#f59e0b',text:'#1e293b',muted:'#94a3b8',ghost:'#e2e8f0',blue:'#60a5fa'}
+const lruW=ref(700), lruH=ref(200)
+const LRW=56, LRH2=34, LRGAP=92, LRNY=100, LRBX=24
+const LRU_CAP=3
+interface LRNode { id:number; key:number; val:number; kind:'head'|'data'|'tail'; color:string; s:number; x:number }
+const lruNodes=reactive<LRNode[]>([])
+const lruBusy=ref(false), lruStatus=ref(''), lruNid=ref(10)
+const lruBox=ref<HTMLDivElement>()
+const d4=(ms:number)=>new Promise(r=>setTimeout(r,ms))
+function lruLayout(){ lruNodes.forEach((n,i)=>{ n.x=LRBX+i*LRGAP }) }
+function lruInit(){ lruNodes.length=0; lruNodes.push({id:-1,key:-1,val:-1,kind:'head',color:lruC.muted,s:1,x:0}); [{k:1,v:11},{k:2,v:22}].forEach((o,i)=>lruNodes.push({id:i+1,key:o.k,val:o.v,kind:'data',color:lruC.cyan,s:1,x:0})); lruNodes.push({id:-2,key:-1,val:-1,kind:'tail',color:lruC.muted,s:1,x:0}); lruLayout() }
+function lruR(n:any){ const s=n.s??1; const isSent=n.kind!=='data'; return {x:n.x+(LRW*(1-s))/2, y:LRNY+(LRH2*(1-s))/2, width:LRW*s, height:LRH2*s, fill:isSent?lruC.ghost:n.color, cornerRadius:6, stroke:isSent?'#94a3b8':'#64748b', strokeWidth:1.5, dash:isSent?[4,3]:undefined, shadowColor:'rgba(0,0,0,.1)', shadowBlur:4, shadowOffsetY:2} }
+function lruT(n:any){ const s=n.s??1; const label=n.kind==='head'?'head':n.kind==='tail'?'tail':`${n.key}:${n.val}`; return {x:n.x+(LRW*(1-s))/2, y:LRNY+(LRH2*(1-s))/2, width:LRW*s, height:LRH2*s, text:label, fontSize:n.kind==='data'?13:12, fontFamily:'monospace', fontStyle:n.kind==='data'?'bold':'normal', fill:n.kind==='data'?lruC.text:lruC.muted, align:'center', verticalAlign:'middle'} }
+function lruArrow(i:number){ const a=lruNodes[i],b=lruNodes[i+1]; return {points:[a.x+LRW, LRNY, b.x, LRNY], fill:lruC.muted, stroke:lruC.muted, strokeWidth:2, pointerLength:7, pointerWidth:5} }
+async function lruAct(msg:string,fn:()=>Promise<void>){ if(lruBusy.value)return; lruBusy.value=true; lruStatus.value=msg; try{await fn()}catch(_){}; await d4(300); lruBusy.value=false; lruStatus.value='' }
+function lruGet(){ const data=lruNodes.filter(n=>n.kind==='data'); if(!data.length)return; const pick=data[~~(Math.random()*data.length)]; lruAct(`get(${pick.key}) 命中 → moveToHead  O(1)`, async()=>{ const idx=lruNodes.indexOf(pick); pick.color=lruC.orange; await d4(300); pick.s=0; pick.color=lruC.ghost; lruLayout(); await d4(250); lruNodes.splice(idx,1); const fresh:LRNode={id:lruNid.value++,key:pick.key,val:pick.val,kind:'data',color:lruC.green,s:0,x:0}; lruNodes.splice(1,0,fresh); lruLayout(); await d4(60); fresh.s=1; lruLayout(); await d4(450); fresh.color=lruC.cyan }) }
+function lruPut(){ const key=lruNid.value; lruAct(`put(${key}) 插入 → 容量检查  O(1)`, async()=>{ const nb:LRNode={id:lruNid.value++,key,val:~~(Math.random()*90+10),kind:'data',color:lruC.green,s:0,x:0}; lruNodes.splice(1,0,nb); lruLayout(); await d4(60); nb.s=1; lruLayout(); await d4(400); nb.color=lruC.cyan; if(lruNodes.length-2>LRU_CAP){ const old=lruNodes[lruNodes.length-2]; lruStatus.value=`容量满(${LRU_CAP}) 淘汰最旧 key=${old.key}`; old.color=lruC.red; await d4(350); old.s=0; old.color=lruC.ghost; lruLayout(); await d4(250); lruNodes.splice(lruNodes.length-2,1); lruLayout() } }) }
+function lruReset(){ lruBusy.value=false; lruInit() }
+let roLRU:ResizeObserver|null=null
+onMounted(()=>{ lruInit(); if(lruBox.value){ lruW.value=lruBox.value.clientWidth; roLRU=new ResizeObserver(e=>{const w=e[0]?.contentRect.width; if(w&&w>200) lruW.value=Math.max(420,w)}); roLRU.observe(lruBox.value) }})
+onUnmounted(()=>roLRU?.disconnect())
 
 const codeDesign = `// 链表节点
 class CacheNode {

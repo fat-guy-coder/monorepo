@@ -15,6 +15,86 @@
     <main class="max-w-4xl mx-auto px-6 py-8 space-y-6">
       <Nav :list="navList" title="📑 目录" position="top-right" :showBackToTop="true" />
 
+      <!-- 📐 结构总览 -->
+      <section id="sec-overview" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">📐</span>
+          结构总览：中缀 → 后缀 → 求值
+        </h2>
+        <p class="text-slate-600 mb-4 leading-relaxed text-sm">
+          表达式求值分两步：先用 <strong>Shunting-yard</strong> 把中缀 <code>3 + 4 × 2</code> 转成无括号的后缀 <code>3 4 2 × +</code>（运算符后置），再<strong>一个数字栈</strong>单遍扫描求值——数字入栈，遇运算符弹两个算一个压回。
+        </p>
+
+        <!-- 结构图：中缀转后缀 -->
+        <figure class="mb-6">
+          <svg viewBox="0 0 560 240" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <marker id="ov-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" />
+              </marker>
+            </defs>
+            <text x="16" y="28" font-size="12" font-family="monospace" fill="#64748b">中缀 infix：运算符在操作数中间，需括号/优先级</text>
+            <!-- 中缀行 -->
+            <rect x="40" y="44" width="52" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="66" y="64" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">3</text>
+            <rect x="104" y="44" width="52" height="40" rx="6" fill="#f59e0b" stroke="#d97706" stroke-width="1.5" />
+            <text x="130" y="64" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">+</text>
+            <rect x="168" y="44" width="52" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="194" y="64" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">4</text>
+            <rect x="232" y="44" width="52" height="40" rx="6" fill="#f59e0b" stroke="#d97706" stroke-width="1.5" />
+            <text x="258" y="64" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">×</text>
+            <rect x="296" y="44" width="52" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="322" y="64" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">2</text>
+            <!-- 转换箭头 -->
+            <line x1="280" y1="96" x2="280" y2="128" stroke="#94a3b8" stroke-width="2" marker-end="url(#ov-a)" />
+            <text x="296" y="116" font-size="11" font-family="monospace" fill="#64748b">Shunting-yard 转后缀</text>
+            <!-- 后缀行 -->
+            <text x="16" y="168" font-size="12" font-family="monospace" fill="#64748b">后缀 postfix：运算符后置，无括号无优先级</text>
+            <rect x="40" y="176" width="52" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="66" y="196" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">3</text>
+            <rect x="104" y="176" width="52" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="130" y="196" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">4</text>
+            <rect x="168" y="176" width="52" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="194" y="196" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">2</text>
+            <rect x="232" y="176" width="52" height="40" rx="6" fill="#f59e0b" stroke="#d97706" stroke-width="1.5" />
+            <text x="258" y="196" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">×</text>
+            <rect x="296" y="176" width="52" height="40" rx="6" fill="#f59e0b" stroke="#d97706" stroke-width="1.5" />
+            <text x="322" y="196" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">+</text>
+          </svg>
+          <figcaption class="text-xs text-slate-400 mt-1">图 1：中缀转后缀——橙框为运算符，高优先级 × 先落到操作数后，+ 最后</figcaption>
+        </figure>
+
+        <!-- 操作示意图：后缀求值 -->
+        <h3 class="text-sm font-semibold text-slate-700 mb-2">操作：后缀求值 —— 数字入栈，遇 × 弹两个算一个压回</h3>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <figure>
+            <p class="text-xs text-slate-500 font-semibold mb-1">读到 ×（弹出栈顶 4、2）</p>
+            <svg viewBox="0 0 220 200" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+              <path d="M 60 60 L 60 180 L 160 180 L 160 60" fill="none" stroke="#94a3b8" stroke-width="2" />
+              <rect x="70" y="136" width="80" height="36" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="110" y="154" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">3</text>
+              <rect x="70" y="98" width="80" height="36" rx="6" fill="#06b6d4" stroke="#f59e0b" stroke-width="2" />
+              <text x="110" y="116" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">4</text>
+              <rect x="70" y="60" width="80" height="36" rx="6" fill="#06b6d4" stroke="#f59e0b" stroke-width="2" />
+              <text x="110" y="78" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">2</text>
+              <text x="110" y="36" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" fill="#f59e0b">token: ×</text>
+            </svg>
+          </figure>
+          <figure>
+            <p class="text-xs text-slate-500 font-semibold mb-1">4 × 2 = 8 压回（新栈顶 = 8）</p>
+            <svg viewBox="0 0 220 200" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+              <path d="M 60 60 L 60 180 L 160 180 L 160 60" fill="none" stroke="#94a3b8" stroke-width="2" />
+              <rect x="70" y="136" width="80" height="36" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="110" y="154" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">3</text>
+              <rect x="70" y="98" width="80" height="36" rx="6" fill="#4ade80" stroke="#22c55e" stroke-width="2" />
+              <text x="110" y="116" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#0f172a">8</text>
+              <text x="110" y="36" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" fill="#16a34a">4 × 2 = 8</text>
+            </svg>
+            <figcaption class="text-xs text-slate-400 mt-1">弹出 4、2 计算 8 压回，继续读下一个 token +</figcaption>
+          </figure>
+        </div>
+      </section>
+
       <!-- 1. 三种表达式 -->
       <section id="sec-1" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
@@ -206,6 +286,37 @@
         <div class="mb-4"><Code language="ts" :code="decodeTraceCode" title="decode_trace.ts" /></div>
       </section>
 
+      <!-- 🎬 动画演示 -->
+      <section id="sec-viz" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">🎬</span>
+          动画演示：后缀表达式求值（RPN）
+        </h2>
+        <p class="text-slate-600 mb-3 leading-relaxed text-sm">表达式 <strong>4 13 5 / +</strong>（即 (4 + 13/5)）。<strong>数字入栈，运算符弹出两个操作数计算后压回</strong>。橙=当前 token，灰=已处理。</p>
+        <div class="flex flex-wrap items-center gap-2 mb-2 text-xs">
+          <span class="bg-slate-100 px-2 py-1 rounded-full">📏 栈深度: {{ evStack.length }}</span>
+          <span class="bg-cyan-50 text-cyan-700 px-2 py-1 rounded-full font-mono">{{ evStatus }}</span>
+          <span class="bg-slate-100 px-2 py-1 rounded-full text-slate-500 ml-auto">⏱️ O(n) 单遍扫描</span>
+        </div>
+        <div class="flex flex-wrap items-center gap-2 mb-2">
+          <button @mousedown="evStep" :disabled="evBusy || evDone" class="px-3 py-1.5 rounded-lg text-xs font-medium border transition-all duration-150 active:scale-95 bg-purple-50 text-purple-700 border-purple-200 hover:bg-purple-100 hover:shadow-sm disabled:opacity-40">{{ evDone ? '✅ 求值完成' : '▶ 下一步' }}</button>
+          <button @mousedown="evReset" :disabled="evBusy" class="px-3 py-1.5 rounded-lg text-xs font-medium border transition-all duration-150 active:scale-95 bg-slate-50 text-slate-500 border-slate-300 hover:bg-slate-100 hover:shadow-sm disabled:opacity-40">↺ Reset</button>
+        </div>
+        <div ref="evBox" class="w-full relative" :style="{height:evH+'px'}">
+          <v-stage :config="{width:evW, height:evH}">
+            <v-layer>
+              <v-text :config="{x:20,y:8,text:'输入 tokens:',fontSize:11,fontFamily:'monospace',fill:evC.muted,fontStyle:'bold'}" />
+              <v-rect v-for="(tk,i) in evTokens" :key="'tr'+i" :config="evTokRect(i)" />
+              <v-text v-for="(tk,i) in evTokens" :key="'tt'+i" :config="evTokText(i)" />
+              <v-text :config="{x:evW/2-70,y:120,text:'操作数栈:',fontSize:11,fontFamily:'monospace',fill:evC.muted,fontStyle:'bold'}" />
+              <v-rect v-for="b in evStack" :key="b.id" :config="evR(b)" />
+              <v-text v-for="b in evStack" :key="'t'+b.id" :config="evT(b)" />
+              <v-text v-if="!evStack.length" :config="{x:evW/2-40,y:200,text:'栈为空',fontSize:14,fill:evC.muted,align:'center'}" />
+            </v-layer>
+          </v-stage>
+        </div>
+      </section>
+
       <!-- 小结 -->
       <section id="sec-7" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
@@ -236,16 +347,60 @@
 <script setup lang="ts">
 import { Code, Nav } from 'components'
 import { RouterLink } from 'vue-router'
+import { ref, reactive, onMounted, onUnmounted } from 'vue'
 
 const navList = [
+  { id: "sec-overview", name: "📐 结构总览" },
   { id: "sec-1", name: "三种表达式" },
   { id: "sec-2", name: "有效括号 #20" },
   { id: "sec-3", name: "中缀转后缀" },
   { id: "sec-4", name: "后缀求值 & 计算器" },
   { id: "sec-5", name: "最长有效括号 #32" },
   { id: "sec-6", name: "字符串解码 #394" },
+  { id: "sec-viz", name: "🎬 动画演示" },
   { id: "sec-7", name: "小结" },
 ]
+
+// ===== 🎬 后缀求值动画 =====
+const evC={cyan:'#06b6d4',green:'#4ade80',red:'#ef4444',orange:'#f59e0b',text:'#1e293b',muted:'#94a3b8'}
+const evW=ref(700), evH=ref(320)
+interface EVBar { id:number; val:number; color:string; s:number }
+const evStack=reactive<EVBar[]>([])
+const evTokens=['4','13','5','/','+']
+const evIdx=ref(0), evDone=ref(false), evBusy=ref(false), evStatus=ref(''), evId=ref(10)
+const evBox=ref<HTMLDivElement>()
+const d5=(ms:number)=>new Promise(r=>setTimeout(r,ms))
+function evTokRect(i:number){ const isCur=i===evIdx.value, isDone=i<evIdx.value; return {x:20+i*54, y:30, width:44, height:32, fill:isCur?evC.orange:isDone?evC.muted:evC.cyan, cornerRadius:6, stroke:'#64748b', strokeWidth:1, opacity:isDone?0.4:1} }
+function evTokText(i:number){ const isCur=i===evIdx.value, isDone=i<evIdx.value; return {x:20+i*54, y:30, width:44, height:32, text:evTokens[i], fontSize:15, fontFamily:'monospace', fontStyle:'bold', fill:isCur?'#fff':isDone?evC.muted:evC.text, align:'center', verticalAlign:'middle'} }
+function evR(b:any){ const bw=140,bh=34,x=evW.value/2-bw/2,y=270-(evStack.indexOf(b)+1)*40; const s=b.s??1; return {x:x+(bw*(1-s))/2, y:y+(bh*(1-s))/2, width:bw*s, height:bh*s, fill:b.color, cornerRadius:6, stroke:'#64748b', strokeWidth:1.5, shadowColor:'rgba(0,0,0,.1)', shadowBlur:3} }
+function evT(b:any){ const bw=140,bh=34,x=evW.value/2-bw/2,y=270-(evStack.indexOf(b)+1)*40; const s=b.s??1; return {x:x+(bw*(1-s))/2, y:y+(bh*(1-s))/2, width:bw*s, height:bh*s, text:String(b.val), fontSize:15, fontFamily:'monospace', fontStyle:'bold', fill:evC.text, align:'center', verticalAlign:'middle'} }
+function evCompute(a:number,b:number,op:string){ if(op==='+')return a+b; if(op==='-')return a-b; if(op==='*')return a*b; return Math.trunc(a/b) }
+async function evStep(){
+  if(evBusy.value||evDone.value)return; evBusy.value=true
+  const tok=evTokens[evIdx.value]
+  if(/^\d+$/.test(tok)){
+    evStatus.value=`读到数字 ${tok} → 入栈`
+    const nb:EVBar={id:evId.value++,val:Number(tok),color:evC.green,s:0}; evStack.push(nb)
+    await d5(60); nb.s=1; await d5(400); nb.color=evC.cyan
+  } else {
+    evStatus.value=`运算符 ${tok} → 弹出两个操作数`
+    const b=evStack[evStack.length-1], a=evStack[evStack.length-2]
+    b.color=evC.red; a.color=evC.red; await d5(400)
+    b.s=0; a.s=0; await d5(300)
+    const res=evCompute(a.val,b.val,tok)
+    evStack.splice(evStack.length-2,2)
+    const nb:EVBar={id:evId.value++,val:res,color:evC.green,s:0}; evStack.push(nb)
+    await d5(60); nb.s=1; await d5(400); nb.color=evC.cyan
+    evStatus.value=`${a.val} ${tok} ${b.val} = ${res}`
+  }
+  evIdx.value++
+  if(evIdx.value>=evTokens.length){ evDone.value=true; evStatus.value=`✅ 结果 = ${evStack[evStack.length-1]?.val}` }
+  evBusy.value=false
+}
+function evReset(){ evBusy.value=false; evStack.length=0; evIdx.value=0; evDone.value=false; evStatus.value='' }
+let roEV:ResizeObserver|null=null
+onMounted(()=>{ if(evBox.value){ evW.value=evBox.value.clientWidth; roEV=new ResizeObserver(e=>{const w=e[0]?.contentRect.width; if(w&&w>200) evW.value=Math.max(300,w)}); roEV.observe(evBox.value) }})
+onUnmounted(()=>roEV?.disconnect())
 
 const validParenCode = `// ===== LeetCode 20: Valid Parentheses =====
 // 输入 "()[]{}" → true,  "(]" → false,  "([)]" → false

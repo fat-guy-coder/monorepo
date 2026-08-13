@@ -15,6 +15,156 @@
     <main class="max-w-4xl mx-auto px-6 py-8 space-y-6">
       <Nav :list="navList" title="📑 目录" position="top-right" :showBackToTop="true" />
 
+      <!-- 📐 结构总览 -->
+      <section id="sec-overview" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">📐</span>
+          结构总览：单向链表
+        </h2>
+        <p class="text-slate-600 mb-4 leading-relaxed text-sm">
+          每个节点只有 <strong>data + next</strong> 一个指针，只能从 <strong>head</strong> 一路向后遍历，最后一个节点的 next 指向 <strong>null</strong>。
+        </p>
+
+        <!-- 结构图 -->
+        <figure class="mb-6">
+          <svg viewBox="0 0 560 190" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <marker id="sg-n" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" />
+              </marker>
+            </defs>
+            <text x="16" y="28" font-size="13" font-family="monospace" fill="#64748b" font-weight="bold">head → [data|next] → [data|next] → [data|next] → null</text>
+            <text x="16" y="50" font-size="11" font-family="monospace" fill="#94a3b8">每个节点只有 next 指针，单向遍历 O(n)</text>
+
+            <!-- head 指针 -->
+            <text x="30" y="100" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#64748b">head</text>
+            <line x1="50" y1="100" x2="96" y2="100" stroke="#94a3b8" stroke-width="2" marker-end="url(#sg-n)" />
+
+            <!-- 连线 -->
+            <line x1="170" y1="100" x2="226" y2="100" stroke="#94a3b8" stroke-width="2" marker-end="url(#sg-n)" />
+            <line x1="300" y1="100" x2="356" y2="100" stroke="#94a3b8" stroke-width="2" marker-end="url(#sg-n)" />
+            <line x1="430" y1="100" x2="478" y2="100" stroke="#94a3b8" stroke-width="2" marker-end="url(#sg-n)" />
+
+            <!-- 节点 1 -->
+            <rect x="100" y="70" width="70" height="60" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="135" y="86" text-anchor="middle" dominant-baseline="central" font-size="9" font-family="monospace" fill="#cffafe">data</text>
+            <text x="135" y="103" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">1</text>
+            <text x="135" y="120" text-anchor="middle" dominant-baseline="central" font-size="9" font-family="monospace" fill="#cffafe">next →</text>
+
+            <!-- 节点 2 -->
+            <rect x="230" y="70" width="70" height="60" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="265" y="86" text-anchor="middle" dominant-baseline="central" font-size="9" font-family="monospace" fill="#cffafe">data</text>
+            <text x="265" y="103" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">2</text>
+            <text x="265" y="120" text-anchor="middle" dominant-baseline="central" font-size="9" font-family="monospace" fill="#cffafe">next →</text>
+
+            <!-- 节点 3 -->
+            <rect x="360" y="70" width="70" height="60" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="395" y="86" text-anchor="middle" dominant-baseline="central" font-size="9" font-family="monospace" fill="#cffafe">data</text>
+            <text x="395" y="103" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">3</text>
+            <text x="395" y="120" text-anchor="middle" dominant-baseline="central" font-size="9" font-family="monospace" fill="#cffafe">next →</text>
+
+            <!-- null -->
+            <text x="488" y="100" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#64748b">null</text>
+          </svg>
+          <figcaption class="text-xs text-slate-400 mt-1">图 1：单向链表结构——每个节点存 data 和 next，单向遍历直到 null</figcaption>
+        </figure>
+
+        <!-- 操作示意图：头插 -->
+        <h3 class="text-sm font-semibold text-slate-700 mb-2">操作：头插 O(1) —— 新节点指向原 head</h3>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
+          <figure>
+            <p class="text-xs text-slate-500 font-semibold mb-1">插入前</p>
+            <svg viewBox="0 0 240 110" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="sg-ins1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" /></marker>
+              </defs>
+              <text x="12" y="50" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#64748b">head</text>
+              <line x1="28" y1="50" x2="52" y2="50" stroke="#94a3b8" stroke-width="2" marker-end="url(#sg-ins1)" />
+              <line x1="112" y1="50" x2="136" y2="50" stroke="#94a3b8" stroke-width="2" marker-end="url(#sg-ins1)" />
+              <line x1="196" y1="50" x2="220" y2="50" stroke="#94a3b8" stroke-width="2" marker-end="url(#sg-ins1)" />
+              <rect x="56" y="25" width="56" height="50" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="84" y="50" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">1</text>
+              <text x="84" y="88" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">head</text>
+              <rect x="140" y="25" width="56" height="50" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="168" y="50" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">2</text>
+              <text x="228" y="50" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" fill="#64748b">null</text>
+            </svg>
+          </figure>
+          <figure>
+            <p class="text-xs text-slate-500 font-semibold mb-1">插入后（x 为新节点）</p>
+            <svg viewBox="0 0 330 110" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="sg-ins2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" /></marker>
+              </defs>
+              <text x="12" y="50" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#64748b">head</text>
+              <line x1="28" y1="50" x2="52" y2="50" stroke="#94a3b8" stroke-width="2" marker-end="url(#sg-ins2)" />
+              <line x1="112" y1="50" x2="136" y2="50" stroke="#94a3b8" stroke-width="2" marker-end="url(#sg-ins2)" />
+              <line x1="196" y1="50" x2="220" y2="50" stroke="#94a3b8" stroke-width="2" marker-end="url(#sg-ins2)" />
+              <line x1="280" y1="50" x2="304" y2="50" stroke="#94a3b8" stroke-width="2" marker-end="url(#sg-ins2)" />
+              <rect x="56" y="25" width="56" height="50" rx="6" fill="#4ade80" stroke="#22c55e" stroke-width="2" />
+              <text x="84" y="50" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#0f172a">x</text>
+              <text x="84" y="88" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#16a34a">new</text>
+              <rect x="140" y="25" width="56" height="50" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="168" y="50" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">1</text>
+              <text x="168" y="88" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">原head</text>
+              <rect x="224" y="25" width="56" height="50" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="252" y="50" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">2</text>
+              <text x="314" y="50" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" fill="#64748b">null</text>
+            </svg>
+            <figcaption class="text-xs text-slate-400 mt-1">newNode.next = 原head，然后 head = newNode（改 2 个指针）</figcaption>
+          </figure>
+        </div>
+
+        <!-- 操作示意图：删除 -->
+        <h3 class="text-sm font-semibold text-slate-700 mb-2">操作：删除节点 —— 前驱的 next 跳过被删节点</h3>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <figure>
+            <p class="text-xs text-slate-500 font-semibold mb-1">删除前</p>
+            <svg viewBox="0 0 330 110" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="sg-del1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" /></marker>
+              </defs>
+              <text x="12" y="50" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#64748b">head</text>
+              <line x1="28" y1="50" x2="52" y2="50" stroke="#94a3b8" stroke-width="2" marker-end="url(#sg-del1)" />
+              <line x1="112" y1="50" x2="136" y2="50" stroke="#94a3b8" stroke-width="2" marker-end="url(#sg-del1)" />
+              <line x1="196" y1="50" x2="220" y2="50" stroke="#94a3b8" stroke-width="2" marker-end="url(#sg-del1)" />
+              <line x1="280" y1="50" x2="304" y2="50" stroke="#94a3b8" stroke-width="2" marker-end="url(#sg-del1)" />
+              <rect x="56" y="25" width="56" height="50" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="84" y="50" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">1</text>
+              <text x="84" y="88" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">前驱 prev</text>
+              <rect x="140" y="25" width="56" height="50" rx="6" fill="#ef4444" stroke="#dc2626" stroke-width="2" />
+              <text x="168" y="50" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">2</text>
+              <text x="168" y="88" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#dc2626">被删</text>
+              <rect x="224" y="25" width="56" height="50" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="252" y="50" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">3</text>
+              <text x="314" y="50" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" fill="#64748b">null</text>
+            </svg>
+          </figure>
+          <figure>
+            <p class="text-xs text-slate-500 font-semibold mb-1">删除后（prev.next 指向 node3）</p>
+            <svg viewBox="0 0 300 110" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="sg-del2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" /></marker>
+              </defs>
+              <text x="12" y="50" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#64748b">head</text>
+              <line x1="28" y1="50" x2="52" y2="50" stroke="#94a3b8" stroke-width="2" marker-end="url(#sg-del2)" />
+              <line x1="112" y1="50" x2="172" y2="50" stroke="#94a3b8" stroke-width="2" marker-end="url(#sg-del2)" />
+              <line x1="232" y1="50" x2="256" y2="50" stroke="#94a3b8" stroke-width="2" marker-end="url(#sg-del2)" />
+              <rect x="56" y="25" width="56" height="50" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="84" y="50" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">1</text>
+              <text x="84" y="88" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">前驱 prev</text>
+              <rect x="116" y="25" width="56" height="50" rx="6" fill="none" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="4 3" />
+              <text x="144" y="50" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" fill="#ef4444">2</text>
+              <text x="144" y="88" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#ef4444">(GC)</text>
+              <rect x="176" y="25" width="56" height="50" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="204" y="50" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">3</text>
+              <text x="264" y="50" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" fill="#64748b">null</text>
+            </svg>
+            <figcaption class="text-xs text-slate-400 mt-1">prev.next = 被删.next，被删节点无人引用后被 GC 回收</figcaption>
+          </figure>
+        </div>
+      </section>
+
       <!-- 1. 什么是链表 -->
       <section id="sec-1" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
@@ -412,6 +562,7 @@ onMounted(()=>{ slInit(); if(slBox.value){ slW.value=slBox.value.clientWidth; ro
 onUnmounted(()=>roSL?.disconnect())
 
 const navList = [
+  { id: "sec-overview", name: "📐 结构总览" },
   { id: "sec-1", name: "什么是链表" },
   { id: "sec-mem", name: "💾 内存中的存储" },
   { id: "sec-2", name: "ListNode 与遍历" },

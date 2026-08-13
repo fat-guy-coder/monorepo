@@ -15,6 +15,126 @@
     <main class="max-w-4xl mx-auto px-6 py-8 space-y-6">
       <Nav :list="navList" title="📑 目录" position="top-right" :showBackToTop="true" />
 
+      <!-- 📐 结构总览 -->
+      <section id="sec-overview" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">📐</span>
+          结构总览：双指针
+        </h2>
+        <p class="text-slate-600 mb-4 leading-relaxed text-sm">
+          双指针是一种<strong>解题策略</strong>：在线性结构上放两个指针协同移动。对撞指针把 <strong>left</strong> 放最左、<strong>right</strong> 放最右，
+          每次根据条件让一侧向内移动，<strong>每个元素最多被访问常数次</strong>，从而把 O(n²) 降为 O(n)。
+        </p>
+
+        <!-- 结构图 -->
+        <figure class="mb-6">
+          <svg viewBox="0 0 640 200" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <marker id="ov-tp-l" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#4ade80" />
+              </marker>
+              <marker id="ov-tp-r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#ef4444" />
+              </marker>
+            </defs>
+            <text x="16" y="24" font-size="13" font-family="monospace" fill="#64748b" font-weight="bold">有序数组 + 左右两个指针（对撞指针）</text>
+
+            <!-- L 指针 -->
+            <line x1="67" y1="50" x2="67" y2="74" stroke="#4ade80" stroke-width="2" marker-end="url(#ov-tp-l)" />
+            <text x="67" y="42" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#16a34a">L = 0</text>
+            <!-- R 指针 -->
+            <line x1="377" y1="50" x2="377" y2="74" stroke="#ef4444" stroke-width="2" marker-end="url(#ov-tp-r)" />
+            <text x="377" y="42" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#dc2626">R = 5</text>
+
+            <!-- 元素格子 -->
+            <rect x="40" y="80" width="54" height="44" rx="6" fill="#06b6d4" stroke="#4ade80" stroke-width="2.5" />
+            <text x="67" y="102" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">1</text>
+            <rect x="102" y="80" width="54" height="44" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="129" y="102" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">3</text>
+            <rect x="164" y="80" width="54" height="44" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="191" y="102" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">4</text>
+            <rect x="226" y="80" width="54" height="44" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="253" y="102" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">6</text>
+            <rect x="288" y="80" width="54" height="44" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="315" y="102" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">8</text>
+            <rect x="350" y="80" width="54" height="44" rx="6" fill="#06b6d4" stroke="#ef4444" stroke-width="2.5" />
+            <text x="377" y="102" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">10</text>
+
+            <!-- 下标 -->
+            <text x="67" y="140" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" fill="#16a34a" font-weight="bold">[0]</text>
+            <text x="129" y="140" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" fill="#64748b">[1]</text>
+            <text x="191" y="140" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" fill="#64748b">[2]</text>
+            <text x="253" y="140" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" fill="#64748b">[3]</text>
+            <text x="315" y="140" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" fill="#64748b">[4]</text>
+            <text x="377" y="140" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" fill="#dc2626" font-weight="bold">[5]</text>
+
+            <text x="16" y="178" font-size="11" font-family="monospace" fill="#0891b2">left 右移 → · right 左移 ←，直到 left >= right（相遇）</text>
+          </svg>
+          <figcaption class="text-xs text-slate-400 mt-1">图 1：对撞指针结构 —— left 从 0 出发、right 从 n-1 出发，向中间夹逼</figcaption>
+        </figure>
+
+        <!-- 操作示意图：对撞移动 -->
+        <h3 class="text-sm font-semibold text-slate-700 mb-2">操作：对撞指针相向移动（sum &lt; target 则 left++，否则 right--）</h3>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <figure>
+            <p class="text-xs text-slate-500 font-semibold mb-1">初始：L=0，R=5</p>
+            <svg viewBox="0 0 320 150" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+              <text x="40" y="48" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" font-weight="bold" fill="#16a34a">L →</text>
+              <text x="270" y="48" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" font-weight="bold" fill="#dc2626">← R</text>
+
+              <rect x="20" y="60" width="40" height="40" rx="6" fill="#06b6d4" stroke="#4ade80" stroke-width="2.5" />
+              <text x="40" y="80" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">1</text>
+              <rect x="66" y="60" width="40" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="86" y="80" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">3</text>
+              <rect x="112" y="60" width="40" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="132" y="80" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">4</text>
+              <rect x="158" y="60" width="40" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="178" y="80" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">6</text>
+              <rect x="204" y="60" width="40" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="224" y="80" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">8</text>
+              <rect x="250" y="60" width="40" height="40" rx="6" fill="#06b6d4" stroke="#ef4444" stroke-width="2.5" />
+              <text x="270" y="80" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">10</text>
+
+              <text x="40" y="112" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">[0]</text>
+              <text x="86" y="112" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">[1]</text>
+              <text x="132" y="112" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">[2]</text>
+              <text x="178" y="112" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">[3]</text>
+              <text x="224" y="112" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">[4]</text>
+              <text x="270" y="112" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">[5]</text>
+            </svg>
+            <figcaption class="text-xs text-slate-400 mt-1">两个指针分居两端，中间是未搜索区间</figcaption>
+          </figure>
+          <figure>
+            <p class="text-xs text-slate-500 font-semibold mb-1">移动后：L=2，R=3</p>
+            <svg viewBox="0 0 320 150" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+              <text x="132" y="48" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" font-weight="bold" fill="#16a34a">L →</text>
+              <text x="178" y="48" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" font-weight="bold" fill="#dc2626">← R</text>
+
+              <rect x="20" y="60" width="40" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="40" y="80" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">1</text>
+              <rect x="66" y="60" width="40" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="86" y="80" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">3</text>
+              <rect x="112" y="60" width="40" height="40" rx="6" fill="#06b6d4" stroke="#4ade80" stroke-width="2.5" />
+              <text x="132" y="80" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">4</text>
+              <rect x="158" y="60" width="40" height="40" rx="6" fill="#06b6d4" stroke="#ef4444" stroke-width="2.5" />
+              <text x="178" y="80" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">6</text>
+              <rect x="204" y="60" width="40" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="224" y="80" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">8</text>
+              <rect x="250" y="60" width="40" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="270" y="80" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">10</text>
+
+              <text x="40" y="112" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">[0]</text>
+              <text x="86" y="112" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">[1]</text>
+              <text x="132" y="112" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#16a34a" font-weight="bold">[2]</text>
+              <text x="178" y="112" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#dc2626" font-weight="bold">[3]</text>
+              <text x="224" y="112" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">[4]</text>
+              <text x="270" y="112" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">[5]</text>
+            </svg>
+            <figcaption class="text-xs text-slate-400 mt-1">left 右移、right 左移，逐步缩小搜索区间直至相遇</figcaption>
+          </figure>
+        </div>
+      </section>
+
       <!-- 1. 双指针总览 -->
       <section id="sec-1" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
@@ -318,6 +438,7 @@ onMounted(()=>{ tpInit(); if(tpBox.value){ tpW.value=tpBox.value.clientWidth; la
 onUnmounted(()=>roTP?.disconnect())
 
 const navList = [
+  { id: "sec-overview", name: "📐 结构总览" },
   { id: "sec-1", name: "双指针思想" },
   { id: "sec-2", name: "对撞指针" },
   { id: "sec-3", name: "快慢指针" },

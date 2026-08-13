@@ -15,6 +15,166 @@
     <main class="max-w-4xl mx-auto px-6 py-8 space-y-6">
       <Nav :list="navList" title="📑 目录" position="top-right" :showBackToTop="true" />
 
+      <!-- 📐 结构总览 -->
+      <section id="sec-overview" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">📐</span>
+          结构总览：双向链表
+        </h2>
+        <p class="text-slate-600 mb-4 leading-relaxed text-sm">
+          每个节点有 <strong>prev + next</strong> 两个指针，可双向遍历。带上 <strong>head / tail 哨兵</strong>（虚线框）后，头尾操作无需判空。
+        </p>
+
+        <!-- 结构图 -->
+        <figure class="mb-6">
+          <svg viewBox="0 0 560 200" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <marker id="ov-n" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" />
+              </marker>
+              <marker id="ov-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#60a5fa" />
+              </marker>
+            </defs>
+            <text x="16" y="28" font-size="13" font-family="monospace" fill="#64748b" font-weight="bold">head ↔ n1 ↔ n2 ↔ n3 ↔ tail</text>
+            <text x="16" y="50" font-size="11" font-family="monospace" fill="#94a3b8">→ next（灰）  ·  ← prev（蓝）  ·  虚线框 = 哨兵节点</text>
+
+            <!-- next 箭头（上，向右） -->
+            <line x1="72" y1="90" x2="120" y2="90" stroke="#94a3b8" stroke-width="2" marker-end="url(#ov-n)" />
+            <line x1="180" y1="90" x2="230" y2="90" stroke="#94a3b8" stroke-width="2" marker-end="url(#ov-n)" />
+            <line x1="290" y1="90" x2="340" y2="90" stroke="#94a3b8" stroke-width="2" marker-end="url(#ov-n)" />
+            <line x1="400" y1="90" x2="450" y2="90" stroke="#94a3b8" stroke-width="2" marker-end="url(#ov-n)" />
+            <!-- prev 箭头（下，向左） -->
+            <line x1="120" y1="120" x2="72" y2="120" stroke="#60a5fa" stroke-width="2" marker-end="url(#ov-p)" />
+            <line x1="230" y1="120" x2="180" y2="120" stroke="#60a5fa" stroke-width="2" marker-end="url(#ov-p)" />
+            <line x1="340" y1="120" x2="290" y2="120" stroke="#60a5fa" stroke-width="2" marker-end="url(#ov-p)" />
+            <line x1="450" y1="120" x2="400" y2="120" stroke="#60a5fa" stroke-width="2" marker-end="url(#ov-p)" />
+
+            <!-- head 哨兵 -->
+            <rect x="20" y="70" width="52" height="60" rx="6" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" />
+            <text x="46" y="92" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" fill="#64748b">head</text>
+            <text x="46" y="115" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#94a3b8">(哨兵)</text>
+
+            <!-- 数据节点 1 -->
+            <rect x="120" y="70" width="60" height="60" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="150" y="86" text-anchor="middle" dominant-baseline="central" font-size="9" font-family="monospace" fill="#cffafe">next →</text>
+            <text x="150" y="103" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">1</text>
+            <text x="150" y="120" text-anchor="middle" dominant-baseline="central" font-size="9" font-family="monospace" fill="#cffafe">← prev</text>
+
+            <!-- 数据节点 2 -->
+            <rect x="230" y="70" width="60" height="60" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="260" y="86" text-anchor="middle" dominant-baseline="central" font-size="9" font-family="monospace" fill="#cffafe">next →</text>
+            <text x="260" y="103" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">2</text>
+            <text x="260" y="120" text-anchor="middle" dominant-baseline="central" font-size="9" font-family="monospace" fill="#cffafe">← prev</text>
+
+            <!-- 数据节点 3 -->
+            <rect x="340" y="70" width="60" height="60" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="370" y="86" text-anchor="middle" dominant-baseline="central" font-size="9" font-family="monospace" fill="#cffafe">next →</text>
+            <text x="370" y="103" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">3</text>
+            <text x="370" y="120" text-anchor="middle" dominant-baseline="central" font-size="9" font-family="monospace" fill="#cffafe">← prev</text>
+
+            <!-- tail 哨兵 -->
+            <rect x="450" y="70" width="52" height="60" rx="6" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" />
+            <text x="476" y="92" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" fill="#64748b">tail</text>
+            <text x="476" y="115" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#94a3b8">(哨兵)</text>
+          </svg>
+          <figcaption class="text-xs text-slate-400 mt-1">图 1：双向链表结构——每个数据节点都存 prev + next 两个指针</figcaption>
+        </figure>
+
+        <!-- 操作示意图：插入 -->
+        <h3 class="text-sm font-semibold text-slate-700 mb-2">操作：在 node2 后插入 newNode —— 改 4 个指针 O(1)</h3>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
+          <figure>
+            <p class="text-xs text-slate-500 font-semibold mb-1">插入前</p>
+            <svg viewBox="0 0 300 120" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="ins-n" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" /></marker>
+                <marker id="ins-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#60a5fa" /></marker>
+              </defs>
+              <line x1="90" y1="52" x2="210" y2="52" stroke="#94a3b8" stroke-width="2" marker-end="url(#ins-n)" />
+              <line x1="210" y1="74" x2="90" y2="74" stroke="#60a5fa" stroke-width="2" marker-end="url(#ins-p)" />
+              <rect x="30" y="40" width="60" height="50" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="60" y="65" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">2</text>
+              <text x="60" y="100" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">node2</text>
+              <rect x="210" y="40" width="60" height="50" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="240" y="65" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">3</text>
+              <text x="240" y="100" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">node3</text>
+            </svg>
+          </figure>
+          <figure>
+            <p class="text-xs text-slate-500 font-semibold mb-1">插入后（x 为 newNode）</p>
+            <svg viewBox="0 0 300 120" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="ins2-n" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" /></marker>
+                <marker id="ins2-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#60a5fa" /></marker>
+              </defs>
+              <line x1="80" y1="52" x2="120" y2="52" stroke="#94a3b8" stroke-width="2" marker-end="url(#ins2-n)" />
+              <line x1="180" y1="52" x2="220" y2="52" stroke="#94a3b8" stroke-width="2" marker-end="url(#ins2-n)" />
+              <line x1="120" y1="74" x2="80" y2="74" stroke="#60a5fa" stroke-width="2" marker-end="url(#ins2-p)" />
+              <line x1="220" y1="74" x2="180" y2="74" stroke="#60a5fa" stroke-width="2" marker-end="url(#ins2-p)" />
+              <rect x="20" y="40" width="60" height="50" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="50" y="65" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">2</text>
+              <text x="50" y="100" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">node2</text>
+              <rect x="120" y="40" width="60" height="50" rx="6" fill="#4ade80" stroke="#22c55e" stroke-width="2" />
+              <text x="150" y="65" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#0f172a">x</text>
+              <text x="150" y="100" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#16a34a">newNode</text>
+              <rect x="220" y="40" width="60" height="50" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="250" y="65" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">3</text>
+              <text x="250" y="100" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">node3</text>
+            </svg>
+            <figcaption class="text-xs text-slate-400 mt-1">newNode.prev=node2 · newNode.next=node3 · node2.next=x · node3.prev=x</figcaption>
+          </figure>
+        </div>
+
+        <!-- 操作示意图：删除 -->
+        <h3 class="text-sm font-semibold text-slate-700 mb-2">操作：删除 node2 —— 改 2 个指针 O(1)</h3>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <figure>
+            <p class="text-xs text-slate-500 font-semibold mb-1">删除前</p>
+            <svg viewBox="0 0 300 120" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="del-n" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" /></marker>
+                <marker id="del-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#60a5fa" /></marker>
+              </defs>
+              <line x1="70" y1="52" x2="120" y2="52" stroke="#94a3b8" stroke-width="2" marker-end="url(#del-n)" />
+              <line x1="180" y1="52" x2="230" y2="52" stroke="#94a3b8" stroke-width="2" marker-end="url(#del-n)" />
+              <line x1="120" y1="74" x2="70" y2="74" stroke="#60a5fa" stroke-width="2" marker-end="url(#del-p)" />
+              <line x1="230" y1="74" x2="180" y2="74" stroke="#60a5fa" stroke-width="2" marker-end="url(#del-p)" />
+              <rect x="10" y="40" width="60" height="50" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="40" y="65" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">1</text>
+              <text x="40" y="100" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">node1</text>
+              <rect x="120" y="40" width="60" height="50" rx="6" fill="#ef4444" stroke="#dc2626" stroke-width="2" />
+              <text x="150" y="65" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">2</text>
+              <text x="150" y="100" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#dc2626">node2</text>
+              <rect x="230" y="40" width="60" height="50" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="260" y="65" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">3</text>
+              <text x="260" y="100" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">node3</text>
+            </svg>
+          </figure>
+          <figure>
+            <p class="text-xs text-slate-500 font-semibold mb-1">删除后（node2 已摘除）</p>
+            <svg viewBox="0 0 300 120" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="del2-n" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" /></marker>
+                <marker id="del2-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#60a5fa" /></marker>
+              </defs>
+              <line x1="70" y1="52" x2="230" y2="52" stroke="#94a3b8" stroke-width="2" marker-end="url(#del2-n)" />
+              <line x1="230" y1="74" x2="70" y2="74" stroke="#60a5fa" stroke-width="2" marker-end="url(#del2-p)" />
+              <rect x="10" y="40" width="60" height="50" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="40" y="65" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">1</text>
+              <text x="40" y="100" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">node1</text>
+              <rect x="230" y="40" width="60" height="50" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="260" y="65" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">3</text>
+              <text x="260" y="100" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">node3</text>
+              <rect x="120" y="40" width="60" height="50" rx="6" fill="none" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="4 3" />
+              <text x="150" y="65" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" fill="#ef4444">2</text>
+              <text x="150" y="100" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#ef4444">(GC)</text>
+            </svg>
+            <figcaption class="text-xs text-slate-400 mt-1">node1.next=node3 · node3.prev=node1，node2 指针置空后被 GC 回收</figcaption>
+          </figure>
+        </div>
+      </section>
+
       <!-- 1. 为什么需要双向链表 -->
       <section id="sec-1" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
@@ -190,6 +350,41 @@
         </div>
       </section>
 
+      <!-- 🎬 动画演示 -->
+      <section id="sec-viz" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">🎬</span>
+          动画演示：双向链表的前后指针
+        </h2>
+        <p class="text-slate-600 mb-3 leading-relaxed text-sm">因为每个节点都有 <strong>prev + next</strong> 两个指针，前插/后插/删除都只需改指针、O(1)。上半部灰箭头 = next，下半部蓝箭头 = prev。</p>
+        <div class="flex flex-wrap items-center gap-2 mb-2 text-xs">
+          <span class="bg-slate-100 px-2 py-1 rounded-full">📏 长度: {{ dlNodes.length }}</span>
+          <span class="bg-cyan-50 text-cyan-700 px-2 py-1 rounded-full font-mono">{{ dlStatus }}</span>
+          <span class="bg-slate-100 px-2 py-1 rounded-full text-slate-500">⏱️ 前插/后插/删除均 O(1)</span>
+          <span class="flex items-center gap-1 text-slate-500"><span class="inline-block w-4 h-0 border-t-2 border-slate-400"></span>next</span>
+          <span class="flex items-center gap-1 text-slate-500"><span class="inline-block w-4 h-0 border-t-2 border-blue-400"></span>prev</span>
+        </div>
+        <div class="flex flex-wrap items-center gap-2 mb-2">
+          <button @mousedown="dlAddFirst" :disabled="dlBusy" class="px-3 py-1.5 rounded-lg text-xs font-medium border transition-all duration-150 active:scale-95 bg-cyan-50 text-cyan-700 border-cyan-200 hover:bg-cyan-100 hover:shadow-sm disabled:opacity-40">头插 O(1)</button>
+          <button @mousedown="dlAddLast" :disabled="dlBusy" class="px-3 py-1.5 rounded-lg text-xs font-medium border transition-all duration-150 active:scale-95 bg-cyan-50 text-cyan-700 border-cyan-200 hover:bg-cyan-100 hover:shadow-sm disabled:opacity-40">尾插 O(1)</button>
+          <button @mousedown="dlInsertBefore" :disabled="dlBusy" class="px-3 py-1.5 rounded-lg text-xs font-medium border transition-all duration-150 active:scale-95 bg-cyan-50 text-cyan-700 border-cyan-200 hover:bg-cyan-100 hover:shadow-sm disabled:opacity-40">前插 O(1)</button>
+          <button @mousedown="dlRemoveNode" :disabled="dlBusy" class="px-3 py-1.5 rounded-lg text-xs font-medium border transition-all duration-150 active:scale-95 bg-red-50 text-red-600 border-red-200 hover:bg-red-100 hover:shadow-sm disabled:opacity-40">删除 O(1)</button>
+          <button @mousedown="dlBackward" :disabled="dlBusy" class="px-3 py-1.5 rounded-lg text-xs font-medium border transition-all duration-150 active:scale-95 bg-amber-50 text-amber-700 border-amber-200 hover:bg-amber-100 hover:shadow-sm disabled:opacity-40">反向遍历</button>
+          <button @mousedown="dlReset" :disabled="dlBusy" class="px-3 py-1.5 rounded-lg text-xs font-medium border transition-all duration-150 active:scale-95 bg-slate-50 text-slate-500 border-slate-300 hover:bg-slate-100 hover:shadow-sm disabled:opacity-40">↺ Reset</button>
+        </div>
+        <div ref="dlBox" class="w-full relative overflow-x-auto" :style="{height:dlH+'px'}">
+          <v-stage :config="{width:dlW, height:dlH}">
+            <v-layer>
+              <v-arrow v-for="(n,i) in dlNodes.slice(0,-1)" :key="'n'+n.id" :config="dlNextArrow(i)" />
+              <v-arrow v-for="(n,i) in dlNodes.slice(0,-1)" :key="'p'+n.id" :config="dlPrevArrow(i)" />
+              <v-rect v-for="n in dlNodes" :key="n.id" :config="dlR(n)" />
+              <v-text v-for="n in dlNodes" :key="'t'+n.id" :config="dlT(n)" />
+              <v-text v-if="!dlNodes.length" :config="{x:24,y:dlNY,text:'null',fontSize:16,fill:dlC.muted}" />
+            </v-layer>
+          </v-stage>
+        </div>
+      </section>
+
       <!-- 7. 总结 -->
       <section id="sec-7" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
@@ -219,16 +414,45 @@
 <script setup lang="ts">
 import { Code, Nav } from 'components'
 import { RouterLink } from 'vue-router'
+import { ref, reactive, onMounted, onUnmounted } from 'vue'
 
 const navList = [
+  { id: "sec-overview", name: "📐 结构总览" },
   { id: "sec-1", name: "为什么需要双向链表" },
   { id: "sec-2", name: "节点定义与遍历" },
   { id: "sec-3", name: "插入与删除 O(1)" },
   { id: "sec-4", name: "哨兵节点" },
   { id: "sec-5", name: "循环双向链表" },
   { id: "sec-6", name: "实战：实现 Deque" },
+  { id: "sec-viz", name: "🎬 动画演示" },
   { id: "sec-7", name: "总结" },
 ]
+
+// ===== 🎬 双向链表动画 =====
+const dlC={cyan:'#06b6d4',green:'#4ade80',red:'#ef4444',orange:'#f59e0b',text:'#1e293b',muted:'#94a3b8',ghost:'#e2e8f0',blue:'#60a5fa'}
+const dlW=ref(700), dlH=ref(230)
+const DLW=52, DLH2=34, DLGAP=92, dlNY=105, DLBX=24
+interface DN { id:number; val:number; color:string; s:number; x:number }
+const dlNodes=reactive<DN[]>([])
+const dlBusy=ref(false), dlStatus=ref(''), dlNid=ref(10)
+const dlBox=ref<HTMLDivElement>()
+const d4=(ms:number)=>new Promise(r=>setTimeout(r,ms))
+function dlLayout(){ dlNodes.forEach((n,i)=>{ n.x=DLBX+i*DLGAP }) }
+function dlInit(){ dlNodes.length=0; [1,2,3,4].forEach((v,i)=>dlNodes.push({id:i+1,val:v,color:dlC.cyan,s:1,x:0})); dlLayout() }
+function dlR(n:any){ const s=n.s??1; return {x:n.x+(DLW*(1-s))/2, y:dlNY+(DLH2*(1-s))/2, width:DLW*s, height:DLH2*s, fill:n.color, cornerRadius:6, stroke:'#64748b', strokeWidth:1.5, shadowColor:'rgba(0,0,0,.1)', shadowBlur:4, shadowOffsetY:2} }
+function dlT(n:any){ const s=n.s??1; return {x:n.x+(DLW*(1-s))/2, y:dlNY+(DLH2*(1-s))/2, width:DLW*s, height:DLH2*s, text:String(n.val), fontSize:16, fontFamily:'monospace', fontStyle:'bold', fill:dlC.text, align:'center', verticalAlign:'middle'} }
+function dlNextArrow(i:number){ const a=dlNodes[i],b=dlNodes[i+1]; return {points:[a.x+DLW, dlNY-11, b.x, dlNY-11], fill:dlC.muted, stroke:dlC.muted, strokeWidth:2, pointerLength:7, pointerWidth:5} }
+function dlPrevArrow(i:number){ const a=dlNodes[i],b=dlNodes[i+1]; return {points:[b.x, dlNY+11, a.x+DLW, dlNY+11], fill:dlC.blue, stroke:dlC.blue, strokeWidth:2, pointerLength:7, pointerWidth:5} }
+async function dlAct(msg:string,fn:()=>Promise<void>){ if(dlBusy.value)return; dlBusy.value=true; dlStatus.value=msg; try{await fn()}catch(_){}; await d4(300); dlBusy.value=false; dlStatus.value='' }
+function dlAddFirst(){ dlAct('头插  O(1)', async()=>{ const v=~~(Math.random()*90+10); const nb:DN={id:dlNid.value++,val:v,color:dlC.green,s:0,x:0}; dlNodes.unshift(nb); dlLayout(); await d4(60); nb.s=1; dlLayout(); await d4(450); nb.color=dlC.cyan }) }
+function dlAddLast(){ dlAct('尾插  O(1)', async()=>{ const v=~~(Math.random()*90+10); const nb:DN={id:dlNid.value++,val:v,color:dlC.green,s:0,x:0}; dlNodes.push(nb); dlLayout(); await d4(60); nb.s=1; dlLayout(); await d4(450); nb.color=dlC.cyan }) }
+function dlInsertBefore(){ if(dlNodes.length<2)return; dlAct('前插  O(1) — 靠 prev 直取前驱', async()=>{ const i=Math.max(1,~~(dlNodes.length/2)); const v=~~(Math.random()*90+10); const nb:DN={id:dlNid.value++,val:v,color:dlC.green,s:0,x:0}; dlNodes.splice(i,0,nb); dlLayout(); await d4(60); nb.s=1; dlLayout(); await d4(450); nb.color=dlC.cyan }) }
+function dlRemoveNode(){ if(dlNodes.length<2)return; dlAct('删除  O(1) — prev.next = next', async()=>{ const i=~~(dlNodes.length/2); dlNodes[i].color=dlC.red; await d4(400); dlNodes[i].color=dlC.ghost; dlNodes[i].s=0; dlLayout(); await d4(300); dlNodes.splice(i,1); dlLayout() }) }
+function dlBackward(){ if(!dlNodes.length)return; dlAct('反向遍历  O(n) — 沿 prev 走', async()=>{ for(let i=dlNodes.length-1;i>=0;i--){ dlNodes.forEach((n,idx)=>n.color=idx===i?dlC.orange:dlC.cyan); await d4(350) } dlNodes.forEach(n=>n.color=dlC.cyan) }) }
+function dlReset(){ dlBusy.value=false; dlInit() }
+let roDL:ResizeObserver|null=null
+onMounted(()=>{ dlInit(); if(dlBox.value){ dlW.value=dlBox.value.clientWidth; roDL=new ResizeObserver(e=>{const w=e[0]?.contentRect.width; if(w&&w>200) dlW.value=Math.max(420,w)}); roDL.observe(dlBox.value) }})
+onUnmounted(()=>roDL?.disconnect())
 
 const codeNode = `class DoublyListNode<T> {
   val: T

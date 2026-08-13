@@ -10,6 +10,110 @@
     <main class="max-w-4xl mx-auto px-6 py-8 space-y-6">
       <Nav :list="navList" title="📑 目录" position="top-right" :showBackToTop="true" />
 
+      <!-- 📐 结构总览 -->
+      <section id="sec-overview" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">📐</span>
+          结构总览：栈（Stack）
+        </h2>
+        <p class="text-slate-600 mb-4 leading-relaxed text-sm">
+          栈是<strong>后进先出（LIFO）</strong>的线性结构，只能在<strong>栈顶 top</strong> 进行 push / pop，<strong>栈底 bottom</strong> 不可直接访问——像一叠盘子，最后放上去的最先拿下来。
+        </p>
+
+        <!-- 结构图 -->
+        <figure class="mb-6">
+          <svg viewBox="0 0 560 300" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <marker id="ov-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" />
+              </marker>
+            </defs>
+            <!-- 栈体容器（开口向上） -->
+            <path d="M 200 140 L 200 290 L 360 290 L 360 140" fill="none" stroke="#94a3b8" stroke-width="2" />
+            <!-- 栈底 → 栈顶三个元素 -->
+            <rect x="210" y="240" width="140" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="280" y="260" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">5</text>
+            <rect x="210" y="196" width="140" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="280" y="216" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">3</text>
+            <rect x="210" y="152" width="140" height="40" rx="6" fill="#f59e0b" stroke="#d97706" stroke-width="1.5" />
+            <text x="280" y="172" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">8</text>
+            <!-- top / bottom 标注 -->
+            <line x1="150" y1="172" x2="205" y2="172" stroke="#94a3b8" stroke-width="2" marker-end="url(#ov-a)" />
+            <text x="100" y="172" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" fill="#64748b" font-weight="bold">top 栈顶</text>
+            <line x1="150" y1="260" x2="205" y2="260" stroke="#94a3b8" stroke-width="2" marker-end="url(#ov-a)" />
+            <text x="100" y="260" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" fill="#64748b" font-weight="bold">bottom 栈底</text>
+            <!-- 右侧图例 -->
+            <text x="470" y="150" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" fill="#0f172a" font-weight="bold">LIFO</text>
+            <text x="470" y="176" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" fill="#64748b">后进先出</text>
+            <text x="470" y="210" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" fill="#0891b2">push 入栈</text>
+            <text x="470" y="234" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" fill="#ef4444">pop 出栈</text>
+          </svg>
+          <figcaption class="text-xs text-slate-400 mt-1">图 1：栈结构——橙框为栈顶 top，只能从这里 push/pop；栈底 bottom 不可直接访问</figcaption>
+        </figure>
+
+        <!-- 操作示意图：push -->
+        <h3 class="text-sm font-semibold text-slate-700 mb-2">操作：push(9) 入栈 —— 新元素压到栈顶 O(1)</h3>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
+          <figure>
+            <p class="text-xs text-slate-500 font-semibold mb-1">push 前（top = 3）</p>
+            <svg viewBox="0 0 220 200" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+              <path d="M 60 60 L 60 180 L 160 180 L 160 60" fill="none" stroke="#94a3b8" stroke-width="2" />
+              <rect x="70" y="136" width="80" height="36" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="110" y="154" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">5</text>
+              <rect x="70" y="98" width="80" height="36" rx="6" fill="#f59e0b" stroke="#d97706" stroke-width="1.5" />
+              <text x="110" y="116" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">3</text>
+            </svg>
+          </figure>
+          <figure>
+            <p class="text-xs text-slate-500 font-semibold mb-1">push 后（新节点 9 在栈顶）</p>
+            <svg viewBox="0 0 220 200" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="ps-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#4ade80" /></marker>
+              </defs>
+              <line x1="110" y1="20" x2="110" y2="56" stroke="#4ade80" stroke-width="2" marker-end="url(#ps-a)" />
+              <path d="M 60 60 L 60 180 L 160 180 L 160 60" fill="none" stroke="#94a3b8" stroke-width="2" />
+              <rect x="70" y="136" width="80" height="36" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="110" y="154" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">5</text>
+              <rect x="70" y="98" width="80" height="36" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="110" y="116" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">3</text>
+              <rect x="70" y="60" width="80" height="36" rx="6" fill="#4ade80" stroke="#22c55e" stroke-width="2" />
+              <text x="110" y="78" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#0f172a">9</text>
+            </svg>
+            <figcaption class="text-xs text-slate-400 mt-1">新元素 9 压到栈顶，top 上移一位</figcaption>
+          </figure>
+        </div>
+
+        <!-- 操作示意图：pop -->
+        <h3 class="text-sm font-semibold text-slate-700 mb-2">操作：pop() 出栈 —— 栈顶元素弹出 O(1)</h3>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <figure>
+            <p class="text-xs text-slate-500 font-semibold mb-1">pop 前（栈顶 = 8）</p>
+            <svg viewBox="0 0 220 200" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+              <path d="M 60 60 L 60 180 L 160 180 L 160 60" fill="none" stroke="#94a3b8" stroke-width="2" />
+              <rect x="70" y="136" width="80" height="36" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="110" y="154" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">5</text>
+              <rect x="70" y="98" width="80" height="36" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="110" y="116" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">3</text>
+              <rect x="70" y="60" width="80" height="36" rx="6" fill="#f59e0b" stroke="#d97706" stroke-width="1.5" />
+              <text x="110" y="78" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">8</text>
+            </svg>
+          </figure>
+          <figure>
+            <p class="text-xs text-slate-500 font-semibold mb-1">pop 后（8 已弹出，top = 3）</p>
+            <svg viewBox="0 0 220 200" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+              <path d="M 60 60 L 60 180 L 160 180 L 160 60" fill="none" stroke="#94a3b8" stroke-width="2" />
+              <rect x="70" y="136" width="80" height="36" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="110" y="154" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">5</text>
+              <rect x="70" y="98" width="80" height="36" rx="6" fill="#f59e0b" stroke="#d97706" stroke-width="1.5" />
+              <text x="110" y="116" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">3</text>
+              <rect x="70" y="60" width="80" height="36" rx="6" fill="none" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="4 3" />
+              <text x="110" y="78" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" fill="#ef4444">8</text>
+            </svg>
+            <figcaption class="text-xs text-slate-400 mt-1">8 弹出返回，top 下移一位（虚线 = 已被移除）</figcaption>
+          </figure>
+        </div>
+      </section>
+
       <!-- 1. 什么是栈 -->
       <section id="sec-1" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
@@ -166,7 +270,7 @@ import { Code, Nav } from 'components'
 import { RouterLink } from 'vue-router'
 import { ref, reactive, onMounted, onUnmounted } from 'vue'
 
-const navList=[{id:"sec-1",name:"什么是栈"},{id:"sec-mem",name:"💾 内存存储"},{id:"sec-2",name:"基本操作"},{id:"sec-3",name:"数组 vs 链表"},{id:"sec-4",name:"经典应用"},{id:"sec-viz",name:"🎬 动画演示"},{id:"sec-6",name:"小结"}]
+const navList=[{id:"sec-overview",name:"📐 结构总览"},{id:"sec-1",name:"什么是栈"},{id:"sec-mem",name:"💾 内存存储"},{id:"sec-2",name:"基本操作"},{id:"sec-3",name:"数组 vs 链表"},{id:"sec-4",name:"经典应用"},{id:"sec-viz",name:"🎬 动画演示"},{id:"sec-6",name:"小结"}]
 
 const stkMemCode = `// 数组实现的栈（连续内存）
 // 容量=5, top=3（指向栈顶下一个空位）

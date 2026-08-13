@@ -3,6 +3,12 @@
 > 一切为了做独立游戏而铺路。Godot 做游戏，Go 写后端，Python 写工具。
 > 学到的全部沉淀为结构化文档，反哺开发效率。
 
+## 📌 新会话启动必读
+
+**新会话开始时，先读 [README.md](README.md) 和 [PROGRESS.md](PROGRESS.md)** 了解项目全貌与当前进度，再开始任务：
+- [README.md](README.md) — 项目总览（技术栈、npm 命令、AI Skills 速查、开发规范）
+- [PROGRESS.md](PROGRESS.md) — 进度面板（每个子项目的完成状态 + 「继续指令」提示词）
+
 ## 项目结构
 
 ```
@@ -38,7 +44,9 @@ monorepo/
 
 | Skill | 用途 |
 |-------|------|
-| `go-doc-style` | Go 学习文档 .vue 文件的统一样式规范（创建/编辑文档时必须遵循） |
+| `go-doc-style` | 所有学习文档 .vue 文件的统一样式规范（创建/编辑文档时必须遵循） |
+| `dsa-diagram` | DSA 文档**开头**的静态 SVG 结构图规范（结构图 + before/after 操作示意图） |
+| `dsa-visualizer` | DSA 文档**结尾**的 Canvas 动画规范（vue-konva inline 动画） |
 | `openspec-propose` | 提出新变更的完整提案 |
 | `openspec-apply-change` | 实施 OpenSpec 变更中的任务 |
 | `openspec-explore` | 进入探索模式，理清需求和设计方案 |

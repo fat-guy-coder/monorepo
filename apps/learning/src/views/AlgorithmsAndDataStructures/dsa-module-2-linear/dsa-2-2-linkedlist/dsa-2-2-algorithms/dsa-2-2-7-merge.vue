@@ -15,6 +15,157 @@
     <main class="max-w-4xl mx-auto px-6 py-8 space-y-6">
       <Nav :list="navList" title="📑 目录" position="top-right" :showBackToTop="true" />
 
+      <!-- 📐 结构总览 -->
+      <section id="sec-overview" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">📐</span>
+          结构总览：合并两个有序链表
+        </h2>
+        <p class="text-slate-600 mb-4 leading-relaxed text-sm">
+          两条有序链表各用一个指针比较当前节点，<strong>较小的先接入结果</strong>，指针后移，直到一条走完再把另一条剩余部分整体接上。
+        </p>
+
+        <!-- 结构图 -->
+        <figure class="mb-6">
+          <svg viewBox="0 0 520 220" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <marker id="mg-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" /></marker>
+            </defs>
+
+            <text x="16" y="20" font-size="12" font-family="monospace" fill="#64748b" font-weight="bold">链表 A（有序）</text>
+            <!-- A: 1→3→5→7 -->
+            <line x1="78" y1="47" x2="98" y2="47" stroke="#94a3b8" stroke-width="2" marker-end="url(#mg-a)" />
+            <line x1="150" y1="47" x2="170" y2="47" stroke="#94a3b8" stroke-width="2" marker-end="url(#mg-a)" />
+            <line x1="222" y1="47" x2="242" y2="47" stroke="#94a3b8" stroke-width="2" marker-end="url(#mg-a)" />
+            <rect x="30" y="30" width="48" height="34" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="54" y="47" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#ffffff">1</text>
+            <rect x="102" y="30" width="48" height="34" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="126" y="47" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#ffffff">3</text>
+            <rect x="174" y="30" width="48" height="34" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="198" y="47" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#ffffff">5</text>
+            <rect x="246" y="30" width="48" height="34" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="270" y="47" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#ffffff">7</text>
+
+            <text x="16" y="90" font-size="12" font-family="monospace" fill="#64748b" font-weight="bold">链表 B（有序）</text>
+            <!-- B: 2→4→6 -->
+            <line x1="78" y1="117" x2="98" y2="117" stroke="#94a3b8" stroke-width="2" marker-end="url(#mg-a)" />
+            <line x1="150" y1="117" x2="170" y2="117" stroke="#94a3b8" stroke-width="2" marker-end="url(#mg-a)" />
+            <rect x="30" y="100" width="48" height="34" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="54" y="117" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#ffffff">2</text>
+            <rect x="102" y="100" width="48" height="34" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="126" y="117" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#ffffff">4</text>
+            <rect x="174" y="100" width="48" height="34" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="198" y="117" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#ffffff">6</text>
+
+            <text x="16" y="160" font-size="12" font-family="monospace" fill="#16a34a" font-weight="bold">结果（归并后）</text>
+            <!-- Result: 1→2→3→4→5→6→7 -->
+            <line x1="78" y1="187" x2="90" y2="187" stroke="#94a3b8" stroke-width="2" marker-end="url(#mg-a)" />
+            <line x1="142" y1="187" x2="154" y2="187" stroke="#94a3b8" stroke-width="2" marker-end="url(#mg-a)" />
+            <line x1="206" y1="187" x2="218" y2="187" stroke="#94a3b8" stroke-width="2" marker-end="url(#mg-a)" />
+            <line x1="270" y1="187" x2="282" y2="187" stroke="#94a3b8" stroke-width="2" marker-end="url(#mg-a)" />
+            <line x1="334" y1="187" x2="346" y2="187" stroke="#94a3b8" stroke-width="2" marker-end="url(#mg-a)" />
+            <line x1="398" y1="187" x2="410" y2="187" stroke="#94a3b8" stroke-width="2" marker-end="url(#mg-a)" />
+            <rect x="30" y="170" width="48" height="34" rx="6" fill="#4ade80" stroke="#22c55e" stroke-width="1.5" />
+            <text x="54" y="187" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#0f172a">1</text>
+            <rect x="94" y="170" width="48" height="34" rx="6" fill="#4ade80" stroke="#22c55e" stroke-width="1.5" />
+            <text x="118" y="187" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#0f172a">2</text>
+            <rect x="158" y="170" width="48" height="34" rx="6" fill="#4ade80" stroke="#22c55e" stroke-width="1.5" />
+            <text x="182" y="187" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#0f172a">3</text>
+            <rect x="222" y="170" width="48" height="34" rx="6" fill="#4ade80" stroke="#22c55e" stroke-width="1.5" />
+            <text x="246" y="187" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#0f172a">4</text>
+            <rect x="286" y="170" width="48" height="34" rx="6" fill="#4ade80" stroke="#22c55e" stroke-width="1.5" />
+            <text x="310" y="187" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#0f172a">5</text>
+            <rect x="350" y="170" width="48" height="34" rx="6" fill="#4ade80" stroke="#22c55e" stroke-width="1.5" />
+            <text x="374" y="187" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#0f172a">6</text>
+            <rect x="414" y="170" width="48" height="34" rx="6" fill="#4ade80" stroke="#22c55e" stroke-width="1.5" />
+            <text x="438" y="187" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#0f172a">7</text>
+          </svg>
+          <figcaption class="text-xs text-slate-400 mt-1">图 1：两条有序链表 A、B 归并成一条有序结果链表</figcaption>
+        </figure>
+
+        <!-- 操作示意图：双指针比较 -->
+        <h3 class="text-sm font-semibold text-slate-700 mb-2">操作：双指针比较，小的进结果，指针后移</h3>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <figure>
+            <p class="text-xs text-slate-500 font-semibold mb-1">比较：1 vs 2</p>
+            <svg viewBox="0 0 340 160" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+              <defs><marker id="m1-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" /></marker></defs>
+              <text x="8" y="48" font-size="11" font-family="monospace" font-weight="bold" fill="#64748b">A</text>
+              <text x="8" y="98" font-size="11" font-family="monospace" font-weight="bold" fill="#64748b">B</text>
+              <text x="8" y="148" font-size="11" font-family="monospace" font-weight="bold" fill="#16a34a">R</text>
+              <!-- pA 指针 -->
+              <text x="50" y="14" text-anchor="middle" font-size="11" font-family="monospace" font-weight="bold" fill="#f59e0b">pA</text>
+              <line x1="50" y1="20" x2="50" y2="28" stroke="#f59e0b" stroke-width="1.5" />
+              <!-- pB 指针 -->
+              <text x="50" y="64" text-anchor="middle" font-size="11" font-family="monospace" font-weight="bold" fill="#f59e0b">pB</text>
+              <line x1="50" y1="70" x2="50" y2="78" stroke="#f59e0b" stroke-width="1.5" />
+              <!-- A: 1→3→5 -->
+              <line x1="70" y1="44" x2="96" y2="44" stroke="#94a3b8" stroke-width="2" marker-end="url(#m1-a)" />
+              <line x1="140" y1="44" x2="166" y2="44" stroke="#94a3b8" stroke-width="2" marker-end="url(#m1-a)" />
+              <rect x="30" y="30" width="40" height="28" rx="6" fill="#06b6d4" stroke="#f59e0b" stroke-width="2.5" />
+              <text x="50" y="44" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#ffffff">1</text>
+              <rect x="100" y="30" width="40" height="28" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="120" y="44" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#ffffff">3</text>
+              <rect x="170" y="30" width="40" height="28" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="190" y="44" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#ffffff">5</text>
+              <!-- B: 2→4→6 -->
+              <line x1="70" y1="94" x2="96" y2="94" stroke="#94a3b8" stroke-width="2" marker-end="url(#m1-a)" />
+              <line x1="140" y1="94" x2="166" y2="94" stroke="#94a3b8" stroke-width="2" marker-end="url(#m1-a)" />
+              <rect x="30" y="80" width="40" height="28" rx="6" fill="#06b6d4" stroke="#f59e0b" stroke-width="2.5" />
+              <text x="50" y="94" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#ffffff">2</text>
+              <rect x="100" y="80" width="40" height="28" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="120" y="94" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#ffffff">4</text>
+              <rect x="170" y="80" width="40" height="28" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="190" y="94" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#ffffff">6</text>
+              <!-- Result: dummy -->
+              <rect x="30" y="130" width="40" height="28" rx="6" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" />
+              <text x="50" y="144" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">dummy</text>
+            </svg>
+            <figcaption class="text-xs text-slate-400 mt-1">pA 指向 1、pB 指向 2，1 &lt; 2 → 1 进结果</figcaption>
+          </figure>
+          <figure>
+            <p class="text-xs text-slate-500 font-semibold mb-1">1 进结果，pA 后移</p>
+            <svg viewBox="0 0 340 160" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+              <defs><marker id="m2-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" /></marker></defs>
+              <text x="8" y="48" font-size="11" font-family="monospace" font-weight="bold" fill="#64748b">A</text>
+              <text x="8" y="98" font-size="11" font-family="monospace" font-weight="bold" fill="#64748b">B</text>
+              <text x="8" y="148" font-size="11" font-family="monospace" font-weight="bold" fill="#16a34a">R</text>
+              <!-- pA 指针（已后移到 3） -->
+              <text x="120" y="14" text-anchor="middle" font-size="11" font-family="monospace" font-weight="bold" fill="#f59e0b">pA</text>
+              <line x1="120" y1="20" x2="120" y2="28" stroke="#f59e0b" stroke-width="1.5" />
+              <!-- pB 指针（仍在 2） -->
+              <text x="50" y="64" text-anchor="middle" font-size="11" font-family="monospace" font-weight="bold" fill="#f59e0b">pB</text>
+              <line x1="50" y1="70" x2="50" y2="78" stroke="#f59e0b" stroke-width="1.5" />
+              <!-- A: 1(已选)→3→5 -->
+              <line x1="70" y1="44" x2="96" y2="44" stroke="#94a3b8" stroke-width="2" marker-end="url(#m2-a)" />
+              <line x1="140" y1="44" x2="166" y2="44" stroke="#94a3b8" stroke-width="2" marker-end="url(#m2-a)" />
+              <rect x="30" y="30" width="40" height="28" rx="6" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" />
+              <text x="50" y="44" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#64748b">1</text>
+              <rect x="100" y="30" width="40" height="28" rx="6" fill="#06b6d4" stroke="#f59e0b" stroke-width="2.5" />
+              <text x="120" y="44" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#ffffff">3</text>
+              <rect x="170" y="30" width="40" height="28" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="190" y="44" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#ffffff">5</text>
+              <!-- B: 2→4→6 -->
+              <line x1="70" y1="94" x2="96" y2="94" stroke="#94a3b8" stroke-width="2" marker-end="url(#m2-a)" />
+              <line x1="140" y1="94" x2="166" y2="94" stroke="#94a3b8" stroke-width="2" marker-end="url(#m2-a)" />
+              <rect x="30" y="80" width="40" height="28" rx="6" fill="#06b6d4" stroke="#f59e0b" stroke-width="2.5" />
+              <text x="50" y="94" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#ffffff">2</text>
+              <rect x="100" y="80" width="40" height="28" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="120" y="94" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#ffffff">4</text>
+              <rect x="170" y="80" width="40" height="28" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="190" y="94" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#ffffff">6</text>
+              <!-- Result: dummy→1 -->
+              <line x1="70" y1="144" x2="96" y2="144" stroke="#94a3b8" stroke-width="2" marker-end="url(#m2-a)" />
+              <rect x="30" y="130" width="40" height="28" rx="6" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" />
+              <text x="50" y="144" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">dummy</text>
+              <rect x="100" y="130" width="40" height="28" rx="6" fill="#4ade80" stroke="#22c55e" stroke-width="1.5" />
+              <text x="120" y="144" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#0f172a">1</text>
+            </svg>
+            <figcaption class="text-xs text-slate-400 mt-1">1 进结果（绿），pA 后移到 3，pB 停在 2 继续比较</figcaption>
+          </figure>
+        </div>
+      </section>
+
       <!-- 1. 总览 -->
       <section id="sec-1" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
@@ -201,6 +352,7 @@ onMounted(()=>{ mInit(); if(mBox.value){ mW.value=mBox.value.clientWidth
 onUnmounted(()=>roM?.disconnect())
 
 const navList = [
+  { id: "sec-overview", name: "📐 结构总览" },
   { id: "sec-1", name: "总览" },
   { id: "sec-2", name: "合并两个 & K个" },
   { id: "sec-3", name: "排序链表" },

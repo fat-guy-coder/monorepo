@@ -15,6 +15,105 @@
     <main class="max-w-4xl mx-auto px-6 py-8 space-y-6">
       <Nav :list="navList" title="📑 目录" position="top-right" :showBackToTop="true" />
 
+      <!-- 📐 结构总览 -->
+      <section id="sec-overview" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">📐</span>
+          结构总览：动态数组
+        </h2>
+        <p class="text-slate-600 mb-4 leading-relaxed text-sm">
+          动态数组 = 静态数组 + 自动扩容。它维护两个字段：<strong>size</strong>（当前元素个数）和 <strong>capacity</strong>（底层分配的容量，capacity ≥ size）。
+          当 <code class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-xs font-mono">size == capacity</code> 时，分配更大的数组并复制旧元素。
+        </p>
+
+        <!-- 结构图 -->
+        <figure class="mb-6">
+          <svg viewBox="0 0 640 210" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+            <text x="16" y="24" font-size="13" font-family="monospace" fill="#64748b" font-weight="bold">动态数组 = 底层数组（实格 = 已有元素，虚格 = 预留空间）</text>
+
+            <!-- 元素格子：前 3 个有数据，后 3 个预留 -->
+            <rect x="30" y="64" width="64" height="48" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="62" y="88" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">1</text>
+            <rect x="102" y="64" width="64" height="48" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="134" y="88" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">2</text>
+            <rect x="174" y="64" width="64" height="48" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="206" y="88" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">3</text>
+            <rect x="246" y="64" width="64" height="48" rx="6" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" />
+            <rect x="318" y="64" width="64" height="48" rx="6" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" />
+            <rect x="390" y="64" width="64" height="48" rx="6" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" />
+
+            <!-- 下标 -->
+            <text x="62" y="124" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" fill="#64748b">[0]</text>
+            <text x="134" y="124" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" fill="#64748b">[1]</text>
+            <text x="206" y="124" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" fill="#64748b">[2]</text>
+            <text x="278" y="124" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" fill="#94a3b8">[3]</text>
+            <text x="350" y="124" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" fill="#94a3b8">[4]</text>
+            <text x="422" y="124" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" fill="#94a3b8">[5]</text>
+
+            <!-- size 标注 -->
+            <line x1="30" y1="148" x2="238" y2="148" stroke="#0891b2" stroke-width="1.5" />
+            <line x1="30" y1="144" x2="30" y2="152" stroke="#0891b2" stroke-width="1.5" />
+            <line x1="238" y1="144" x2="238" y2="152" stroke="#0891b2" stroke-width="1.5" />
+            <text x="30" y="164" font-size="11" font-family="monospace" fill="#0891b2" font-weight="bold">size = 3（已有元素）</text>
+
+            <!-- capacity 标注 -->
+            <line x1="30" y1="182" x2="454" y2="182" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" />
+            <line x1="30" y1="178" x2="30" y2="186" stroke="#94a3b8" stroke-width="1.5" />
+            <line x1="454" y1="178" x2="454" y2="186" stroke="#94a3b8" stroke-width="1.5" />
+            <text x="30" y="198" font-size="11" font-family="monospace" fill="#64748b">capacity = 6（分配的总空间，含预留）</text>
+          </svg>
+          <figcaption class="text-xs text-slate-400 mt-1">图 1：动态数组结构 —— size 是逻辑长度，capacity 是物理容量，虚线框 = 预留的未用空间</figcaption>
+        </figure>
+
+        <!-- 操作示意图：扩容 -->
+        <h3 class="text-sm font-semibold text-slate-700 mb-2">操作：扩容 —— capacity 4 → 8，复制旧元素 + 写入新元素</h3>
+        <figure>
+          <svg viewBox="0 0 560 220" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <marker id="ov-exp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" />
+              </marker>
+            </defs>
+            <text x="16" y="22" font-size="12" font-family="monospace" fill="#64748b" font-weight="bold">旧数组 capacity=4（已满，push(5) 触发扩容）</text>
+
+            <!-- 旧数组 4 个元素 -->
+            <rect x="20" y="44" width="54" height="42" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="47" y="65" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">1</text>
+            <rect x="82" y="44" width="54" height="42" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="109" y="65" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">2</text>
+            <rect x="144" y="44" width="54" height="42" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="171" y="65" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">3</text>
+            <rect x="206" y="44" width="54" height="42" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="233" y="65" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">4</text>
+
+            <!-- 复制箭头 -->
+            <line x1="47" y1="88" x2="47" y2="156" stroke="#94a3b8" stroke-width="2" marker-end="url(#ov-exp)" />
+            <line x1="109" y1="88" x2="109" y2="156" stroke="#94a3b8" stroke-width="2" marker-end="url(#ov-exp)" />
+            <line x1="171" y1="88" x2="171" y2="156" stroke="#94a3b8" stroke-width="2" marker-end="url(#ov-exp)" />
+            <line x1="233" y1="88" x2="233" y2="156" stroke="#94a3b8" stroke-width="2" marker-end="url(#ov-exp)" />
+            <text x="260" y="122" font-size="10" font-family="monospace" fill="#94a3b8">复制旧元素 O(n)</text>
+
+            <text x="16" y="140" font-size="12" font-family="monospace" fill="#64748b" font-weight="bold">新数组 capacity=8（复制 1,2,3,4 后，再写入 5）</text>
+
+            <!-- 新数组 8 个元素 -->
+            <rect x="20" y="160" width="54" height="42" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="47" y="181" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">1</text>
+            <rect x="82" y="160" width="54" height="42" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="109" y="181" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">2</text>
+            <rect x="144" y="160" width="54" height="42" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="171" y="181" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">3</text>
+            <rect x="206" y="160" width="54" height="42" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="233" y="181" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">4</text>
+            <rect x="268" y="160" width="54" height="42" rx="6" fill="#4ade80" stroke="#22c55e" stroke-width="2" />
+            <text x="295" y="181" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#0f172a">5</text>
+            <rect x="330" y="160" width="54" height="42" rx="6" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" />
+            <rect x="392" y="160" width="54" height="42" rx="6" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" />
+            <rect x="454" y="160" width="54" height="42" rx="6" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" />
+          </svg>
+          <figcaption class="text-xs text-slate-400 mt-1">图 2：扩容 —— 分配 2x 新数组，逐个复制旧元素（O(n)），再写入新元素；扩容代价被后续 push 均摊为 O(1)</figcaption>
+        </figure>
+      </section>
+
       <!-- 1. 动态数组的概念 -->
       <section id="sec-1" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
@@ -314,6 +413,7 @@ onMounted(()=>{ init2(); if(b2.value){ W2.value=b2.value.clientWidth; layout2();
 onUnmounted(()=>ro2?.disconnect())
 
 const navList = [
+  { id: "sec-overview", name: "📐 结构总览" },
   { id: "sec-1", name: "动态数组概念" },
   { id: "sec-2", name: "扩容策略" },
   { id: "sec-3", name: "均摊分析" },

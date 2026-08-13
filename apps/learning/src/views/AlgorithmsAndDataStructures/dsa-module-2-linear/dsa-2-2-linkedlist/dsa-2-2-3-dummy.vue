@@ -15,6 +15,107 @@
     <main class="max-w-4xl mx-auto px-6 py-8 space-y-6">
       <Nav :list="navList" title="📑 目录" position="top-right" :showBackToTop="true" />
 
+      <!-- 📐 结构总览 -->
+      <section id="sec-overview" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">📐</span>
+          结构总览：哑节点
+        </h2>
+        <p class="text-slate-600 mb-4 leading-relaxed text-sm">
+          <strong>dummy 是不存数据的虚拟哨兵节点</strong>（虚线框），它的 <strong>next 才是真正的 head</strong>。有了 dummy，删除头节点也能像删除中间节点一样统一处理。
+        </p>
+
+        <!-- 结构图 -->
+        <figure class="mb-6">
+          <svg viewBox="0 0 560 190" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <marker id="dm-n" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" />
+              </marker>
+            </defs>
+            <text x="16" y="28" font-size="13" font-family="monospace" fill="#64748b" font-weight="bold">dummy(哨兵) → [data|next] → [data|next] → [data|next] → null</text>
+            <text x="16" y="50" font-size="11" font-family="monospace" fill="#94a3b8">dummy 不存数据，dummy.next 才是真正的 head</text>
+
+            <!-- 连线 -->
+            <line x1="110" y1="100" x2="166" y2="100" stroke="#94a3b8" stroke-width="2" marker-end="url(#dm-n)" />
+            <line x1="240" y1="100" x2="286" y2="100" stroke="#94a3b8" stroke-width="2" marker-end="url(#dm-n)" />
+            <line x1="360" y1="100" x2="406" y2="100" stroke="#94a3b8" stroke-width="2" marker-end="url(#dm-n)" />
+            <line x1="480" y1="100" x2="506" y2="100" stroke="#94a3b8" stroke-width="2" marker-end="url(#dm-n)" />
+
+            <!-- dummy 哨兵 -->
+            <rect x="40" y="70" width="70" height="60" rx="6" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" />
+            <text x="75" y="90" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" fill="#64748b">dummy</text>
+            <text x="75" y="112" text-anchor="middle" dominant-baseline="central" font-size="9" font-family="monospace" fill="#94a3b8">(不存数据)</text>
+
+            <!-- 节点 1 -->
+            <rect x="170" y="70" width="70" height="60" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="205" y="86" text-anchor="middle" dominant-baseline="central" font-size="9" font-family="monospace" fill="#cffafe">data</text>
+            <text x="205" y="103" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">1</text>
+            <text x="205" y="120" text-anchor="middle" dominant-baseline="central" font-size="9" font-family="monospace" fill="#cffafe">next →</text>
+
+            <!-- 节点 2 -->
+            <rect x="290" y="70" width="70" height="60" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="325" y="86" text-anchor="middle" dominant-baseline="central" font-size="9" font-family="monospace" fill="#cffafe">data</text>
+            <text x="325" y="103" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">2</text>
+            <text x="325" y="120" text-anchor="middle" dominant-baseline="central" font-size="9" font-family="monospace" fill="#cffafe">next →</text>
+
+            <!-- 节点 3 -->
+            <rect x="410" y="70" width="70" height="60" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="445" y="86" text-anchor="middle" dominant-baseline="central" font-size="9" font-family="monospace" fill="#cffafe">data</text>
+            <text x="445" y="103" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">3</text>
+            <text x="445" y="120" text-anchor="middle" dominant-baseline="central" font-size="9" font-family="monospace" fill="#cffafe">next →</text>
+
+            <!-- null -->
+            <text x="516" y="100" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#64748b">null</text>
+          </svg>
+          <figcaption class="text-xs text-slate-400 mt-1">图 1：哑节点结构——dummy 在前占位，真正数据从 dummy.next 开始</figcaption>
+        </figure>
+
+        <!-- 操作示意图：删除头节点（对比有无 dummy） -->
+        <h3 class="text-sm font-semibold text-slate-700 mb-2">操作：删除头节点 —— 有无 dummy 的对比</h3>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <figure>
+            <p class="text-xs text-slate-500 font-semibold mb-1">❌ 无 dummy：需特判 head = head.next</p>
+            <svg viewBox="0 0 240 110" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="dm-nod" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" /></marker>
+              </defs>
+              <text x="12" y="50" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#64748b">head</text>
+              <line x1="28" y1="50" x2="52" y2="50" stroke="#94a3b8" stroke-width="2" marker-end="url(#dm-nod)" />
+              <line x1="112" y1="50" x2="136" y2="50" stroke="#94a3b8" stroke-width="2" marker-end="url(#dm-nod)" />
+              <line x1="196" y1="50" x2="220" y2="50" stroke="#94a3b8" stroke-width="2" marker-end="url(#dm-nod)" />
+              <rect x="56" y="25" width="56" height="50" rx="6" fill="#ef4444" stroke="#dc2626" stroke-width="2" />
+              <text x="84" y="50" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">1</text>
+              <text x="84" y="88" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#dc2626">被删头</text>
+              <rect x="140" y="25" width="56" height="50" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="168" y="50" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">2</text>
+              <text x="228" y="50" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" fill="#64748b">null</text>
+            </svg>
+            <figcaption class="text-xs text-slate-400 mt-1">head 本身被删，要单独写 head = head.next 特判</figcaption>
+          </figure>
+          <figure>
+            <p class="text-xs text-slate-500 font-semibold mb-1">✅ 有 dummy：dummy.next 直接跳过</p>
+            <svg viewBox="0 0 300 110" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="dm-yes" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" /></marker>
+              </defs>
+              <line x1="84" y1="50" x2="108" y2="50" stroke="#94a3b8" stroke-width="2" marker-end="url(#dm-yes)" />
+              <line x1="168" y1="50" x2="192" y2="50" stroke="#94a3b8" stroke-width="2" marker-end="url(#dm-yes)" />
+              <line x1="252" y1="50" x2="276" y2="50" stroke="#94a3b8" stroke-width="2" marker-end="url(#dm-yes)" />
+              <rect x="28" y="25" width="56" height="50" rx="6" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" />
+              <text x="56" y="50" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">dummy</text>
+              <rect x="112" y="25" width="56" height="50" rx="6" fill="#ef4444" stroke="#dc2626" stroke-width="2" />
+              <text x="140" y="50" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">1</text>
+              <text x="140" y="88" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#dc2626">被删头</text>
+              <rect x="196" y="25" width="56" height="50" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="224" y="50" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">2</text>
+              <text x="284" y="50" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" fill="#64748b">null</text>
+            </svg>
+            <figcaption class="text-xs text-slate-400 mt-1">dummy.next = dummy.next.next，与删除中间节点同一套代码</figcaption>
+          </figure>
+        </div>
+      </section>
+
       <!-- 1. 什么是哑节点 -->
       <section id="sec-1" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
@@ -220,6 +321,36 @@ return dummy.next
         </aside>
       </section>
 
+      <!-- 🎬 动画演示 -->
+      <section id="sec-viz" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">🎬</span>
+          动画演示：哑节点统一头尾处理
+        </h2>
+        <p class="text-slate-600 mb-3 leading-relaxed text-sm">灰色虚线节点 = <strong>dummy</strong>（不存数据）。删除/头插都从 dummy 出发，<strong>头节点和中段节点逻辑完全一致</strong>，无需特判。</p>
+        <div class="flex flex-wrap items-center gap-2 mb-2 text-xs">
+          <span class="bg-slate-100 px-2 py-1 rounded-full">📏 数据节点: {{ dmNodes.length - 1 }}</span>
+          <span class="bg-cyan-50 text-cyan-700 px-2 py-1 rounded-full font-mono">{{ dmStatus }}</span>
+          <span class="bg-slate-100 px-2 py-1 rounded-full text-slate-500">⏱️ 删除 O(n)·头插 O(1)</span>
+        </div>
+        <div class="flex flex-wrap items-center gap-2 mb-2">
+          <button @mousedown="dmRemoveVal" :disabled="dmBusy" class="px-3 py-1.5 rounded-lg text-xs font-medium border transition-all duration-150 active:scale-95 bg-purple-50 text-purple-700 border-purple-200 hover:bg-purple-100 hover:shadow-sm disabled:opacity-40">删除 value=2</button>
+          <button @mousedown="dmRemoveHead" :disabled="dmBusy" class="px-3 py-1.5 rounded-lg text-xs font-medium border transition-all duration-150 active:scale-95 bg-red-50 text-red-600 border-red-200 hover:bg-red-100 hover:shadow-sm disabled:opacity-40">删除头部</button>
+          <button @mousedown="dmInsertHead" :disabled="dmBusy" class="px-3 py-1.5 rounded-lg text-xs font-medium border transition-all duration-150 active:scale-95 bg-cyan-50 text-cyan-700 border-cyan-200 hover:bg-cyan-100 hover:shadow-sm disabled:opacity-40">头插</button>
+          <button @mousedown="dmReset" :disabled="dmBusy" class="px-3 py-1.5 rounded-lg text-xs font-medium border transition-all duration-150 active:scale-95 bg-slate-50 text-slate-500 border-slate-300 hover:bg-slate-100 hover:shadow-sm disabled:opacity-40">↺ Reset</button>
+        </div>
+        <div ref="dmBox" class="w-full relative overflow-x-auto" :style="{height:dmH+'px'}">
+          <v-stage :config="{width:dmW, height:dmH}">
+            <v-layer>
+              <v-arrow v-for="(n,i) in dmNodes.slice(0,-1)" :key="'a'+n.id" :config="dmArrow(i)" />
+              <v-rect v-for="n in dmNodes" :key="n.id" :config="dmR(n)" />
+              <v-text v-for="n in dmNodes" :key="'t'+n.id" :config="dmT(n)" />
+              <v-text :config="{x:dmNodes.length?dmNodes[dmNodes.length-1].x+DMW+12:DMBX, y:DMNY, text:'null', fontSize:13, fill:dmC.muted}" />
+            </v-layer>
+          </v-stage>
+        </div>
+      </section>
+
       <!-- 7. 总结 -->
       <section id="sec-7" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
@@ -249,16 +380,42 @@ return dummy.next
 <script setup lang="ts">
 import { Code, Nav } from 'components'
 import { RouterLink } from 'vue-router'
+import { ref, reactive, onMounted, onUnmounted } from 'vue'
 
 const navList = [
+  { id: "sec-overview", name: "📐 结构总览" },
   { id: "sec-1", name: "什么是哑节点" },
   { id: "sec-2", name: "合并两个有序链表" },
   { id: "sec-3", name: "移除链表元素" },
   { id: "sec-4", name: "两数相加" },
   { id: "sec-5", name: "深拷贝随机指针链表" },
   { id: "sec-6", name: "使用时机总结" },
+  { id: "sec-viz", name: "🎬 动画演示" },
   { id: "sec-7", name: "总结" },
 ]
+
+// ===== 🎬 哑节点动画 =====
+const dmC={cyan:'#06b6d4',green:'#4ade80',red:'#ef4444',orange:'#f59e0b',text:'#1e293b',muted:'#94a3b8',ghost:'#e2e8f0',blue:'#60a5fa'}
+const dmW=ref(700), dmH=ref(200)
+const DMW=56, DMH2=34, DMGAP=92, DMNY=100, DMBX=24
+interface DMNode { id:number; val:number; dummy:boolean; color:string; s:number; x:number }
+const dmNodes=reactive<DMNode[]>([])
+const dmBusy=ref(false), dmStatus=ref(''), dmNid=ref(10)
+const dmBox=ref<HTMLDivElement>()
+const d4=(ms:number)=>new Promise(r=>setTimeout(r,ms))
+function dmLayout(){ dmNodes.forEach((n,i)=>{ n.x=DMBX+i*DMGAP }) }
+function dmInit(){ dmNodes.length=0; dmNodes.push({id:0,val:-1,dummy:true,color:dmC.muted,s:1,x:0}); [1,2,3,2,4].forEach((v,i)=>dmNodes.push({id:i+1,val:v,dummy:false,color:dmC.cyan,s:1,x:0})); dmLayout() }
+function dmR(n:any){ const s=n.s??1; return {x:n.x+(DMW*(1-s))/2, y:DMNY+(DMH2*(1-s))/2, width:DMW*s, height:DMH2*s, fill:n.dummy?dmC.ghost:n.color, cornerRadius:6, stroke:n.dummy?'#94a3b8':'#64748b', strokeWidth:1.5, dash:n.dummy?[4,3]:undefined, shadowColor:'rgba(0,0,0,.1)', shadowBlur:4, shadowOffsetY:2} }
+function dmT(n:any){ const s=n.s??1; return {x:n.x+(DMW*(1-s))/2, y:DMNY+(DMH2*(1-s))/2, width:DMW*s, height:DMH2*s, text:n.dummy?'dummy':String(n.val), fontSize:n.dummy?12:16, fontFamily:'monospace', fontStyle:n.dummy?'normal':'bold', fill:n.dummy?dmC.muted:dmC.text, align:'center', verticalAlign:'middle'} }
+function dmArrow(i:number){ const a=dmNodes[i],b=dmNodes[i+1]; return {points:[a.x+DMW, DMNY, b.x, DMNY], fill:dmC.muted, stroke:dmC.muted, strokeWidth:2, pointerLength:7, pointerWidth:5} }
+async function dmAct(msg:string,fn:()=>Promise<void>){ if(dmBusy.value)return; dmBusy.value=true; dmStatus.value=msg; try{await fn()}catch(_){}; await d4(300); dmBusy.value=false; dmStatus.value='' }
+function dmRemoveVal(){ dmAct('删除 value=2 — curr 从 dummy 出发', async()=>{ let ci=0; while(ci<dmNodes.length-1){ dmNodes[ci].color=dmC.orange; const ni=ci+1; dmNodes[ni].color=dmC.blue; await d4(280); if(dmNodes[ni].val===2){ dmNodes[ni].color=dmC.red; await d4(220); dmNodes[ni].s=0; dmNodes[ni].color=dmC.ghost; dmLayout(); await d4(220); dmNodes.splice(ni,1); dmLayout() } else { dmNodes[ci].color=dmC.cyan; ci=ni } await d4(150) } dmNodes.forEach(n=>n.color=n.dummy?dmC.muted:dmC.cyan) }) }
+function dmRemoveHead(){ if(dmNodes.length<2)return; dmAct('删除头部 — dummy.next 直接跳过', async()=>{ const h=dmNodes[1]; h.color=dmC.red; await d4(300); h.s=0; h.color=dmC.ghost; dmLayout(); await d4(250); dmNodes.splice(1,1); dmLayout() }) }
+function dmInsertHead(){ dmAct('头插 — dummy.next 指向新节点', async()=>{ const v=~~(Math.random()*90+10); const nb:DMNode={id:dmNid.value++,val:v,dummy:false,color:dmC.green,s:0,x:0}; dmNodes.splice(1,0,nb); dmLayout(); await d4(60); nb.s=1; dmLayout(); await d4(450); nb.color=dmC.cyan }) }
+function dmReset(){ dmBusy.value=false; dmInit() }
+let roDM:ResizeObserver|null=null
+onMounted(()=>{ dmInit(); if(dmBox.value){ dmW.value=dmBox.value.clientWidth; roDM=new ResizeObserver(e=>{const w=e[0]?.contentRect.width; if(w&&w>200) dmW.value=Math.max(420,w)}); roDM.observe(dmBox.value) }})
+onUnmounted(()=>roDM?.disconnect())
 
 const codeMergeNoDummy = `// 不用哑节点：需要特判第一个节点
 function mergeTwoLists(

@@ -42,7 +42,7 @@ monorepo/
 │   ├── config.yaml         #   项目上下文（AI proposal 时自动读取）
 │   └── changes/            #   历史变更档案
 ├── .claude/
-│   ├── skills/             # AI Skills（go-doc-style / dsa-visualizer / openspec-*）
+│   ├── skills/             # AI Skills（go-doc-style / dsa-diagram / dsa-visualizer / openspec-*）
 │   └── scheduled_tasks.json
 ├── docker-compose.yml      # PostgreSQL + 后端 容器编排
 ├── turbo.json              # Turborepo 构建设置
@@ -154,10 +154,10 @@ go run . all            # 运行全部
 ### 📊 算法与数据结构（13 模块 ~157 篇）
 
 ```
-模块1 复杂度分析 (8篇 ✅) → 模块2 线性结构 (20篇 ✅) → 模块3-13 待填充
+模块1 复杂度分析 (8篇 ✅) → 模块2 线性结构 (22篇 ✅) → 模块3-13 待填充
 ```
 
-位于 `apps/learning/src/views/AlgorithmsAndDataStructures/`，其中 12 篇含 Canvas 动画。
+位于 `apps/learning/src/views/AlgorithmsAndDataStructures/`。模块 2 的 22 篇已全部完成「📐 结构图 + 正文 + 🎬 动画」三层内容。
 
 ---
 
@@ -389,12 +389,13 @@ docker-compose restart backend
 
 ## 🤖 AI Skills 速查
 
-本项目在 `.claude/skills/` 下配置了 6 个 Skill，AI 可通过 `/skill-name` 调用：
+本项目在 `.claude/skills/` 下配置了 7 个 Skill，AI 可通过 `/skill-name` 调用：
 
 | Skill | 类型 | 用途 |
 |-------|------|------|
-| `go-doc-style` | 规范 | **所有学习文档**的统一样式规范（布局/配色/组件/Tailwind）。创建或编辑 .vue 文档时必须遵循 |
-| `dsa-visualizer` | 规范 | Canvas 动画规范。用 vue-konva 在文档中做数据结构操作动画（数组/链表/栈/队列等） |
+| `go-doc-style` | 规范 | **所有学习文档**的统一样式规范（布局/配色/组件/Tailwind）。DSA 文档还规定「开头结构图 + 结尾动画」两段式结构 |
+| `dsa-diagram` | 规范 | 文档**开头**的静态 SVG 结构图规范（内联 SVG、配色、marker、before/after 操作示意图） |
+| `dsa-visualizer` | 规范 | 文档**结尾**的 Canvas 动画规范。用 vue-konva 做数据结构操作动画（数组/链表/栈/队列/跳表等） |
 | `openspec-propose` | 工作流 | 提出新变更的完整提案（proposal + design + tasks） |
 | `openspec-apply-change` | 工作流 | 实施 OpenSpec 变更中的任务 |
 | `openspec-archive-change` | 工作流 | 完成后归档变更 |
@@ -409,7 +410,7 @@ docker-compose restart backend
 
 **当前活跃任务：**
 - 🎮 首要：Blitz 独立游戏开发（核心战斗原型 Phase 1）
-- 📝 DSA 算法文档填充（模块 1-2 ✅，模块 3-13 待填充）+ Canvas 动画
+- 📝 DSA 算法文档填充（模块 1-2 ✅ 含结构图+动画，模块 3-13 待填充）
 - 🐹 Go 文档待填充（阶段 2-7，89 篇）
 
 ---
@@ -422,5 +423,6 @@ docker-compose restart backend
 4. 从 `packages/components` 引入共享组件，避免重复造轮子
 5. Go 示例代码标注 `// 输出:` 注释
 6. 学习文档遵循 `go-doc-style` skill 规范
-7. DSA 文档适合加动画的必须在小结前插入 `🎬 动画演示` section（见 `dsa-visualizer` skill）
-8. Blitz 的 `.gd` 脚本顶部必须标注对应的学习文档引用，文档中通过 EditorLink 反向关联源码
+7. DSA 文档开头必须插入 `📐 结构总览` section（静态 SVG 结构图，见 `dsa-diagram` skill）
+8. DSA 文档适合加动画的必须在小结前插入 `🎬 动画演示` section（见 `dsa-visualizer` skill）
+9. Blitz 的 `.gd` 脚本顶部必须标注对应的学习文档引用，文档中通过 EditorLink 反向关联源码

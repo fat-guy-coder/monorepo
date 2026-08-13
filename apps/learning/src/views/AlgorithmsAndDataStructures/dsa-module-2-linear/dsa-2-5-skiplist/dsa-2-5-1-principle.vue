@@ -15,6 +15,204 @@
     <main class="max-w-4xl mx-auto px-6 py-8 space-y-6">
       <Nav :list="navList" title="目录" position="top-right" :showBackToTop="true" />
 
+      <!-- 📐 结构总览 -->
+      <section id="sec-overview" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">📐</span>
+          结构总览：跳表多层索引
+        </h2>
+        <p class="text-slate-600 mb-4 leading-relaxed text-sm">
+          跳表 = <strong>有序链表</strong> + <strong>多层索引</strong>。底层 L1 是完整链表（3→7→11→19→22→29→37），
+          每向上一层约减半节点形成"快车道"，最高层 L3 最稀疏（只剩 19）。<strong>head 哨兵</strong>（虚线框）立在每层最左，消除边界判断。
+        </p>
+
+        <!-- 结构图 -->
+        <figure class="mb-6">
+          <svg viewBox="0 0 700 260" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <marker id="ov-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" />
+              </marker>
+            </defs>
+
+            <!-- 层级标签 -->
+            <text x="8" y="54" font-size="12" font-family="monospace" font-weight="bold" fill="#64748b">L3</text>
+            <text x="8" y="124" font-size="12" font-family="monospace" font-weight="bold" fill="#64748b">L2</text>
+            <text x="8" y="194" font-size="12" font-family="monospace" font-weight="bold" fill="#64748b">L1</text>
+
+            <!-- head 哨兵（三层各一个，虚线框） -->
+            <rect x="40" y="30" width="48" height="40" rx="6" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" />
+            <text x="64" y="50" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" fill="#64748b">head</text>
+            <rect x="40" y="100" width="48" height="40" rx="6" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" />
+            <text x="64" y="120" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" fill="#64748b">head</text>
+            <rect x="40" y="170" width="48" height="40" rx="6" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" />
+            <text x="64" y="190" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" fill="#64748b">head</text>
+
+            <!-- L3：head → 19 → null -->
+            <line x1="88" y1="50" x2="344" y2="50" stroke="#94a3b8" stroke-width="2" marker-end="url(#ov-arr)" />
+            <line x1="392" y1="50" x2="660" y2="50" stroke="#94a3b8" stroke-width="2" marker-end="url(#ov-arr)" />
+
+            <!-- L2：head → 7 → 19 → 29 → 37 → null -->
+            <line x1="88" y1="120" x2="192" y2="120" stroke="#94a3b8" stroke-width="2" marker-end="url(#ov-arr)" />
+            <line x1="240" y1="120" x2="344" y2="120" stroke="#94a3b8" stroke-width="2" marker-end="url(#ov-arr)" />
+            <line x1="392" y1="120" x2="496" y2="120" stroke="#94a3b8" stroke-width="2" marker-end="url(#ov-arr)" />
+            <line x1="544" y1="120" x2="572" y2="120" stroke="#94a3b8" stroke-width="2" marker-end="url(#ov-arr)" />
+            <line x1="620" y1="120" x2="660" y2="120" stroke="#94a3b8" stroke-width="2" marker-end="url(#ov-arr)" />
+
+            <!-- L1：head → 3 → 7 → 11 → 19 → 22 → 29 → 37 → null -->
+            <line x1="88" y1="190" x2="116" y2="190" stroke="#94a3b8" stroke-width="2" marker-end="url(#ov-arr)" />
+            <line x1="164" y1="190" x2="192" y2="190" stroke="#94a3b8" stroke-width="2" marker-end="url(#ov-arr)" />
+            <line x1="240" y1="190" x2="268" y2="190" stroke="#94a3b8" stroke-width="2" marker-end="url(#ov-arr)" />
+            <line x1="316" y1="190" x2="344" y2="190" stroke="#94a3b8" stroke-width="2" marker-end="url(#ov-arr)" />
+            <line x1="392" y1="190" x2="420" y2="190" stroke="#94a3b8" stroke-width="2" marker-end="url(#ov-arr)" />
+            <line x1="468" y1="190" x2="496" y2="190" stroke="#94a3b8" stroke-width="2" marker-end="url(#ov-arr)" />
+            <line x1="544" y1="190" x2="572" y2="190" stroke="#94a3b8" stroke-width="2" marker-end="url(#ov-arr)" />
+            <line x1="620" y1="190" x2="660" y2="190" stroke="#94a3b8" stroke-width="2" marker-end="url(#ov-arr)" />
+
+            <!-- null 文本 -->
+            <text x="670" y="50" font-size="12" font-family="monospace" fill="#94a3b8">null</text>
+            <text x="670" y="120" font-size="12" font-family="monospace" fill="#94a3b8">null</text>
+            <text x="670" y="190" font-size="12" font-family="monospace" fill="#94a3b8">null</text>
+
+            <!-- 垂直连接线（同一节点跨层） -->
+            <line x1="368" y1="70" x2="368" y2="100" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3 3" />
+            <line x1="368" y1="140" x2="368" y2="170" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3 3" />
+            <line x1="216" y1="140" x2="216" y2="170" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3 3" />
+            <line x1="520" y1="140" x2="520" y2="170" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3 3" />
+            <line x1="596" y1="140" x2="596" y2="170" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3 3" />
+
+            <!-- 数据节点：L3 -->
+            <rect x="344" y="30" width="48" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="368" y="50" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">19</text>
+
+            <!-- 数据节点：L2 -->
+            <rect x="192" y="100" width="48" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="216" y="120" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">7</text>
+            <rect x="344" y="100" width="48" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="368" y="120" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">19</text>
+            <rect x="496" y="100" width="48" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="520" y="120" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">29</text>
+            <rect x="572" y="100" width="48" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="596" y="120" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">37</text>
+
+            <!-- 数据节点：L1 -->
+            <rect x="116" y="170" width="48" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="140" y="190" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">3</text>
+            <rect x="192" y="170" width="48" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="216" y="190" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">7</text>
+            <rect x="268" y="170" width="48" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="292" y="190" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">11</text>
+            <rect x="344" y="170" width="48" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="368" y="190" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">19</text>
+            <rect x="420" y="170" width="48" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="444" y="190" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">22</text>
+            <rect x="496" y="170" width="48" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="520" y="190" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">29</text>
+            <rect x="572" y="170" width="48" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="596" y="190" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">37</text>
+          </svg>
+          <figcaption class="text-xs text-slate-400 mt-1">图 1：跳表结构——L3/L2/L1 三层索引，虚线竖线表示同一节点跨层，最左 head 为哨兵节点</figcaption>
+        </figure>
+
+        <!-- 操作示意图：查找 22 -->
+        <h3 class="text-sm font-semibold text-slate-700 mb-2">操作：查找 22 —— 自上而下，能右移就右移、不能就下降</h3>
+        <figure>
+          <svg viewBox="0 0 700 260" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <marker id="srch-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#f59e0b" />
+              </marker>
+              <marker id="srch-n" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" />
+              </marker>
+            </defs>
+
+            <text x="8" y="54" font-size="12" font-family="monospace" font-weight="bold" fill="#64748b">L3</text>
+            <text x="8" y="124" font-size="12" font-family="monospace" font-weight="bold" fill="#64748b">L2</text>
+            <text x="8" y="194" font-size="12" font-family="monospace" font-weight="bold" fill="#64748b">L1</text>
+
+            <!-- 查找路径步骤标注 -->
+            <text x="64" y="16" text-anchor="middle" font-size="12" font-family="monospace" font-weight="bold" fill="#f59e0b">①</text>
+            <text x="368" y="16" text-anchor="middle" font-size="12" font-family="monospace" font-weight="bold" fill="#f59e0b">②</text>
+            <text x="368" y="84" text-anchor="middle" font-size="12" font-family="monospace" font-weight="bold" fill="#f59e0b">③</text>
+            <text x="368" y="154" text-anchor="middle" font-size="12" font-family="monospace" font-weight="bold" fill="#f59e0b">④</text>
+            <text x="444" y="154" text-anchor="middle" font-size="12" font-family="monospace" font-weight="bold" fill="#f59e0b">⑤</text>
+
+            <!-- head 哨兵 -->
+            <rect x="40" y="30" width="48" height="40" rx="6" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" />
+            <text x="64" y="50" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" fill="#64748b">head</text>
+            <rect x="40" y="100" width="48" height="40" rx="6" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" />
+            <text x="64" y="120" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" fill="#64748b">head</text>
+            <rect x="40" y="170" width="48" height="40" rx="6" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" />
+            <text x="64" y="190" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" fill="#64748b">head</text>
+
+            <!-- L3：head → 19（路径，橙色） -->
+            <line x1="88" y1="50" x2="344" y2="50" stroke="#f59e0b" stroke-width="2.5" marker-end="url(#srch-a)" />
+            <line x1="392" y1="50" x2="660" y2="50" stroke="#94a3b8" stroke-width="2" marker-end="url(#srch-n)" />
+
+            <!-- L2：19 处 29>22 不能走，直接下降（水平箭头灰色） -->
+            <line x1="88" y1="120" x2="192" y2="120" stroke="#94a3b8" stroke-width="2" marker-end="url(#srch-n)" />
+            <line x1="240" y1="120" x2="344" y2="120" stroke="#94a3b8" stroke-width="2" marker-end="url(#srch-n)" />
+            <line x1="392" y1="120" x2="496" y2="120" stroke="#94a3b8" stroke-width="2" marker-end="url(#srch-n)" />
+            <line x1="544" y1="120" x2="572" y2="120" stroke="#94a3b8" stroke-width="2" marker-end="url(#srch-n)" />
+            <line x1="620" y1="120" x2="660" y2="120" stroke="#94a3b8" stroke-width="2" marker-end="url(#srch-n)" />
+
+            <!-- L1：19 → 22（路径，橙色，命中） -->
+            <line x1="88" y1="190" x2="116" y2="190" stroke="#94a3b8" stroke-width="2" marker-end="url(#srch-n)" />
+            <line x1="164" y1="190" x2="192" y2="190" stroke="#94a3b8" stroke-width="2" marker-end="url(#srch-n)" />
+            <line x1="240" y1="190" x2="268" y2="190" stroke="#94a3b8" stroke-width="2" marker-end="url(#srch-n)" />
+            <line x1="316" y1="190" x2="344" y2="190" stroke="#94a3b8" stroke-width="2" marker-end="url(#srch-n)" />
+            <line x1="392" y1="190" x2="420" y2="190" stroke="#f59e0b" stroke-width="2.5" marker-end="url(#srch-a)" />
+            <line x1="468" y1="190" x2="496" y2="190" stroke="#94a3b8" stroke-width="2" marker-end="url(#srch-n)" />
+            <line x1="544" y1="190" x2="572" y2="190" stroke="#94a3b8" stroke-width="2" marker-end="url(#srch-n)" />
+            <line x1="620" y1="190" x2="660" y2="190" stroke="#94a3b8" stroke-width="2" marker-end="url(#srch-n)" />
+
+            <text x="670" y="50" font-size="12" font-family="monospace" fill="#94a3b8">null</text>
+            <text x="670" y="120" font-size="12" font-family="monospace" fill="#94a3b8">null</text>
+            <text x="670" y="190" font-size="12" font-family="monospace" fill="#94a3b8">null</text>
+
+            <!-- 下降路径（橙色） -->
+            <line x1="368" y1="70" x2="368" y2="100" stroke="#f59e0b" stroke-width="2" stroke-dasharray="3 3" />
+            <line x1="368" y1="140" x2="368" y2="170" stroke="#f59e0b" stroke-width="2" stroke-dasharray="3 3" />
+            <!-- 其他垂直连接线（灰色） -->
+            <line x1="216" y1="140" x2="216" y2="170" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3 3" />
+            <line x1="520" y1="140" x2="520" y2="170" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3 3" />
+            <line x1="596" y1="140" x2="596" y2="170" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3 3" />
+
+            <!-- 当前节点 19（橙色） -->
+            <rect x="344" y="30" width="48" height="40" rx="6" fill="#f59e0b" stroke="#b45309" stroke-width="1.5" />
+            <text x="368" y="50" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">19</text>
+            <rect x="344" y="100" width="48" height="40" rx="6" fill="#f59e0b" stroke="#b45309" stroke-width="1.5" />
+            <text x="368" y="120" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">19</text>
+            <rect x="344" y="170" width="48" height="40" rx="6" fill="#f59e0b" stroke="#b45309" stroke-width="1.5" />
+            <text x="368" y="190" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">19</text>
+
+            <!-- 命中节点 22（绿色） -->
+            <rect x="420" y="170" width="48" height="40" rx="6" fill="#4ade80" stroke="#16a34a" stroke-width="2" />
+            <text x="444" y="190" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#0f172a">22</text>
+
+            <!-- 其余节点（灰色底纹的 cyan 正常节点） -->
+            <rect x="192" y="100" width="48" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="216" y="120" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">7</text>
+            <rect x="496" y="100" width="48" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="520" y="120" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">29</text>
+            <rect x="572" y="100" width="48" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="596" y="120" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">37</text>
+            <rect x="116" y="170" width="48" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="140" y="190" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">3</text>
+            <rect x="192" y="170" width="48" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="216" y="190" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">7</text>
+            <rect x="268" y="170" width="48" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="292" y="190" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">11</text>
+            <rect x="496" y="170" width="48" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="520" y="190" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">29</text>
+            <rect x="572" y="170" width="48" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="596" y="190" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">37</text>
+          </svg>
+          <figcaption class="text-xs text-slate-400 mt-1">图 2：查找 22 的路径——① L3 从 head 出发 ② 右移到 19 ③ 19 右无路，下降到 L2 ④ 29&gt;22 再下降到 L1 ⑤ 命中 22</figcaption>
+        </figure>
+      </section>
+
       <!-- 为什么需要跳表 -->
       <section id="sec-1" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
@@ -313,6 +511,39 @@
         </aside>
       </section>
 
+      <!-- 🎬 动画演示 -->
+      <section id="sec-viz" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">🎬</span>
+          动画演示：跳表查找 22（自上而下）
+        </h2>
+        <p class="text-slate-600 mb-3 leading-relaxed text-sm">查找 22：从最高层 <strong>L3</strong> 出发，<strong>能右移就右移，不能就下降一层</strong>。橙=当前节点，绿=命中目标。</p>
+        <div class="flex flex-wrap items-center gap-2 mb-2 text-xs">
+          <span class="bg-slate-100 px-2 py-1 rounded-full">🎯 target = 22 · 步骤 {{ skStepIdx + 1 }}/{{ skSteps.length }}</span>
+          <span class="bg-cyan-50 text-cyan-700 px-2 py-1 rounded-full font-mono">{{ skStatus }}</span>
+          <span class="bg-slate-100 px-2 py-1 rounded-full text-slate-500 ml-auto">⏱️ O(log n)</span>
+        </div>
+        <div class="flex flex-wrap items-center gap-2 mb-2">
+          <button @mousedown="skStep" :disabled="skBusy || skDone" class="px-3 py-1.5 rounded-lg text-xs font-medium border transition-all duration-150 active:scale-95 bg-purple-50 text-purple-700 border-purple-200 hover:bg-purple-100 hover:shadow-sm disabled:opacity-40">{{ skDone ? '✅ 查找完成' : '▶ 下一步' }}</button>
+          <button @mousedown="skReset" :disabled="skBusy" class="px-3 py-1.5 rounded-lg text-xs font-medium border transition-all duration-150 active:scale-95 bg-slate-50 text-slate-500 border-slate-300 hover:bg-slate-100 hover:shadow-sm disabled:opacity-40">↺ Reset</button>
+        </div>
+        <div ref="skBox" class="w-full relative overflow-x-auto" :style="{height:skH+'px'}">
+          <v-stage :config="{width:skW, height:skH}">
+            <v-layer>
+              <v-text :config="{x:6,y:skRowY[0]+8,text:'L3',fontSize:11,fontFamily:'monospace',fontStyle:'bold',fill:skC.muted}" />
+              <v-text :config="{x:6,y:skRowY[1]+8,text:'L2',fontSize:11,fontFamily:'monospace',fontStyle:'bold',fill:skC.muted}" />
+              <v-text :config="{x:6,y:skRowY[2]+8,text:'L1',fontSize:11,fontFamily:'monospace',fontStyle:'bold',fill:skC.muted}" />
+              <v-arrow v-for="a in skArrows" :key="a.key" :config="{points:a.points,stroke:skC.muted,fill:skC.muted,strokeWidth:1.5,pointerLength:6,pointerWidth:5}" />
+              <v-rect v-for="r in [0,1,2]" :key="'h'+r" :config="skHeadRect(r)" />
+              <v-text v-for="r in [0,1,2]" :key="'ht'+r" :config="skHeadText(r)" />
+              <v-rect v-for="n in skNodes" :key="'n'+n.r+'-'+n.v" :config="skNodeRect(n.v,n.r)" />
+              <v-text v-for="n in skNodes" :key="'t'+n.r+'-'+n.v" :config="skNodeText(n.v,n.r)" />
+              <v-text :config="{x:skNullX,y:skRowY[2]+8,text:'null',fontSize:12,fontFamily:'monospace',fill:skC.muted}" />
+            </v-layer>
+          </v-stage>
+        </div>
+      </section>
+
       <!-- 小结 -->
       <section id="sec-8" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
@@ -342,6 +573,7 @@
 <script setup lang="ts">
 import { Code, Nav } from 'components'
 import { RouterLink } from 'vue-router'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 
 const skipMemCode = `// 跳表节点内存布局（4 层结构, p=0.25）
 //
@@ -360,6 +592,7 @@ const skipMemCode = `// 跳表节点内存布局（4 层结构, p=0.25）
 // 对比红黑树：3 个指针/节点 = 3n → 跳表更省`
 
 const navList = [
+  { id: "sec-overview", name: "📐 结构总览" },
   { id: "sec-1", name: "为什么需要跳表" },
   { id: "sec-mem", name: "💾 内存存储" },
   { id: "sec-2", name: "多层索引概念" },
@@ -368,8 +601,48 @@ const navList = [
   { id: "sec-5", name: "删除操作" },
   { id: "sec-6", name: "复杂度分析" },
   { id: "sec-7", name: "跳表 vs 平衡树" },
+  { id: "sec-viz", name: "🎬 动画演示" },
   { id: "sec-8", name: "小结" },
 ]
+
+// ===== 🎬 跳表查找动画 =====
+const skC={cyan:'#06b6d4',green:'#4ade80',red:'#ef4444',orange:'#f59e0b',text:'#1e293b',muted:'#94a3b8',ghost:'#e2e8f0'}
+const skW=ref(700), skH=ref(260)
+const skRowY=[50,120,190]
+const skHeadX=44, skNullX=640
+const skX: Record<number,number> = {3:130,7:200,11:270,19:340,22:410,29:480,37:550}
+const skRows: number[][] = [[19],[7,19,29,37],[3,7,11,19,22,29,37]]
+const skSteps = [
+  {desc:'① L3：从 head 出发',row:0,val:-1},
+  {desc:'② 19 < 22 → 右移到 19',row:0,val:19},
+  {desc:'③ 19 的 L3 后继=null → 下降到 L2',row:1,val:19},
+  {desc:'④ 29 > 22 → 下降到 L1',row:2,val:19},
+  {desc:'⑤ 19 → 22，命中！',row:2,val:22},
+]
+const skStepIdx=ref(-1), skDone=ref(false), skBusy=ref(false), skStatus=ref('')
+const skCur=ref<{row:number;val:number}>({row:0,val:-1})
+const skBox=ref<HTMLDivElement>()
+const d9=(ms:number)=>new Promise(r=>setTimeout(r,ms))
+const skNodes=computed(()=>{ const list:{v:number;r:number}[]=[]; skRows.forEach((row,r)=>row.forEach(v=>list.push({v,r}))); return list })
+const skArrows=computed(()=>{ const arr:{points:number[];key:string}[]=[]; skRows.forEach((row,r)=>{ const y=skRowY[r]+17; if(row.length){ arr.push({points:[skHeadX+52,y,skX[row[0]]-26,y],key:'h'+r}); for(let i=0;i<row.length-1;i++) arr.push({points:[skX[row[i]]+26,y,skX[row[i+1]]-26,y],key:r+'-'+i}); arr.push({points:[skX[row[row.length-1]]+26,y,skNullX,y],key:'n'+r}) } }); return arr })
+function skHeadRect(r:number){ const isCur=skCur.value.row===r&&skCur.value.val===-1; return {x:skHeadX,y:skRowY[r],width:52,height:34,fill:isCur?skC.orange:skC.ghost,cornerRadius:6,stroke:'#94a3b8',strokeWidth:1.5,dash:[4,3]} }
+function skHeadText(r:number){ return {x:skHeadX,y:skRowY[r],width:52,height:34,text:'head',fontSize:12,fontFamily:'monospace',fill:skC.muted,align:'center',verticalAlign:'middle'} }
+function skNodeRect(v:number,r:number){ const cur=skCur.value; const isCur=cur.row===r&&cur.val===v; const isFound=v===22&&isCur; const fill=isFound?skC.green:isCur?skC.orange:skC.cyan; return {x:skX[v]-26,y:skRowY[r],width:52,height:34,fill,cornerRadius:6,stroke:isCur||isFound?'#1e293b':'#64748b',strokeWidth:isCur||isFound?2:1.5,shadowColor:'rgba(0,0,0,.08)',shadowBlur:2} }
+function skNodeText(v:number,r:number){ return {x:skX[v]-26,y:skRowY[r],width:52,height:34,text:String(v),fontSize:15,fontFamily:'monospace',fontStyle:'bold',fill:skC.text,align:'center',verticalAlign:'middle'} }
+async function skStep(){
+  if(skBusy.value||skDone.value)return
+  skBusy.value=true
+  skStepIdx.value++
+  if(skStepIdx.value>=skSteps.length){ skDone.value=true; skStatus.value='✅ 查找 22 完成'; skBusy.value=false; return }
+  const s=skSteps[skStepIdx.value]; skCur.value={row:s.row,val:s.val}; skStatus.value=s.desc
+  if(s.val===22&&s.row===2) skDone.value=true
+  await d9(500)
+  skBusy.value=false
+}
+function skReset(){ skBusy.value=false; skStepIdx.value=-1; skDone.value=false; skStatus.value=''; skCur.value={row:0,val:-1} }
+let roSK:ResizeObserver|null=null
+onMounted(()=>{ if(skBox.value){ skW.value=skBox.value.clientWidth; roSK=new ResizeObserver(e=>{const w=e[0]?.contentRect.width; if(w&&w>200) skW.value=Math.max(700,w)}); roSK.observe(skBox.value) }})
+onUnmounted(()=>roSK?.disconnect())
 
 const problemCode = `// 有序链表查找 37——必须从头走到尾
 // head -> 3 -> 7 -> 11 -> 19 -> 22 -> 29 -> 37 -> null

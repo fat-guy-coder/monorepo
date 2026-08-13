@@ -468,6 +468,42 @@ func _physics_process(delta: float) -> void:
 </nav>
 ```
 
+## 结构图 Section（DSA / 数据结构文档开头必须）
+
+> 数据结构与算法文档（**仅 DSA 文档**，GO 等其他学习文档暂不要求）在**文档最前面**——header 之后、`<Nav>` 之后、第一个编号 section 之前——必须插入一个 `📐 结构总览` section，用**静态 SVG** 画一张结构图 + 关键操作示意图，让读者一眼看懂数据结构本体。
+
+### 规范
+
+1. **仅 DSA 文档需要**——`apps/learning/src/views/AlgorithmsAndDataStructures/**/*.vue`，其他文档（Go/Python 等）暂不要求
+2. **用内联 `<svg>`**（不用 vue-konva，不用 v-html），`viewBox` + `w-full h-auto` 响应式
+3. **结构图 + 操作示意图**——先一张图展示数据结构本体，再用 1~2 张小图（before/after）展示核心操作
+4. **配色与动画一致**——沿用 cyan 主题（节点 `#06b6d4`、箭头灰 `#94a3b8`、哨兵虚线、新增绿、删除红）
+5. **marker id 唯一**——同一页面多张 SVG 时加前缀区分
+
+### section 结构
+
+```html
+<section id="sec-overview" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+  <h2>📐 结构总览：XXX</h2>
+  <p>说明文字</p>
+  <!-- 结构图 SVG -->
+  <!-- 操作示意图 before/after -->
+</section>
+```
+
+### 具体实现
+
+完整模板、配色常量、SVG 写法规范见 [dsa-diagram skill](.claude/skills/dsa-diagram/SKILL.md)。
+
+### navList 更新
+
+```ts
+const navList = [
+  { id: "sec-overview", name: "📐 结构总览" },
+  // ...原有条目...
+]
+```
+
 ## 动画演示 Section（DSA / 数据结构文档必须）
 
 > 数据结构与算法文档如果适合通过动画帮助理解（数组操作、链表反转、栈的 push/pop、队列出入等），**必须在最后一个知识点 section 之后、小结 section 之前**插入一个 `🎬 动画演示` section。

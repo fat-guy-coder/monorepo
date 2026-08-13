@@ -15,6 +15,116 @@
     <main class="max-w-4xl mx-auto px-6 py-8 space-y-6">
       <Nav :list="navList" title="目录" position="top-right" :showBackToTop="true" />
 
+      <!-- 📐 结构总览 -->
+      <section id="sec-overview" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">📐</span>
+          结构总览：循环队列
+        </h2>
+        <p class="text-slate-600 mb-4 leading-relaxed text-sm">
+          循环队列用一个<strong>固定大小数组</strong> + <strong>front / rear 两个指针</strong>，指针走到数组末尾后通过 <strong>取模（% capacity）绕回开头</strong>，出队只移动指针、不移动元素，做到 O(1)。
+        </p>
+
+        <!-- 结构图 -->
+        <figure class="mb-6">
+          <svg viewBox="0 0 720 190" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <marker id="cq0-wrap" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#f59e0b" /></marker>
+            </defs>
+            <text x="20" y="24" font-size="14" font-family="monospace" font-weight="bold" fill="#64748b">循环队列：环形数组 + front / rear 指针</text>
+            <text x="20" y="44" font-size="11" font-family="monospace" fill="#94a3b8">青=已占用 · 虚线=空槽 · 橙=front · 蓝=rear · 虚线弧=取模绕回</text>
+
+            <!-- 取模绕回弧线（rear 从末尾绕回开头） -->
+            <path d="M 560 78 C 560 40, 70 40, 70 78" fill="none" stroke="#f59e0b" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#cq0-wrap)" />
+            <text x="315" y="56" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" fill="#f59e0b">取模绕回 (rear+1) % 8</text>
+
+            <!-- 8 个槽位 -->
+            <rect x="40" y="86" width="60" height="44" rx="6" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" />
+            <rect x="110" y="86" width="60" height="44" rx="6" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" />
+            <rect x="180" y="86" width="60" height="44" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="210" y="108" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">3</text>
+            <rect x="250" y="86" width="60" height="44" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="280" y="108" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">8</text>
+            <rect x="320" y="86" width="60" height="44" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="350" y="108" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">2</text>
+            <rect x="390" y="86" width="60" height="44" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="420" y="108" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">5</text>
+            <rect x="460" y="86" width="60" height="44" rx="6" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" />
+            <rect x="530" y="86" width="60" height="44" rx="6" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" />
+
+            <!-- 下标 -->
+            <text x="70" y="146" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#94a3b8">[0]</text>
+            <text x="140" y="146" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#94a3b8">[1]</text>
+            <text x="210" y="146" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#94a3b8">[2]</text>
+            <text x="280" y="146" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#94a3b8">[3]</text>
+            <text x="350" y="146" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#94a3b8">[4]</text>
+            <text x="420" y="146" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#94a3b8">[5]</text>
+            <text x="490" y="146" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#94a3b8">[6]</text>
+            <text x="560" y="146" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#94a3b8">[7]</text>
+
+            <!-- front / rear -->
+            <text x="210" y="172" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#f59e0b">▲ front=2</text>
+            <text x="490" y="172" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#60a5fa">▲ rear=6</text>
+          </svg>
+          <figcaption class="text-xs text-slate-400 mt-1">图 1：循环队列——front 指向队头 2，rear 指向下一空位 6，指针越过末尾后绕回</figcaption>
+        </figure>
+
+        <!-- 操作示意图：rear 绕回 -->
+        <h3 class="text-sm font-semibold text-slate-700 mb-2">操作：rear 越过数组末尾 → 绕回开头（% capacity）</h3>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <figure>
+            <p class="text-xs text-slate-500 font-semibold mb-1">写入末尾：rear=7</p>
+            <svg viewBox="0 0 340 130" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="cqr-n" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" /></marker>
+              </defs>
+              <rect x="20" y="36" width="36" height="34" rx="5" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" />
+              <rect x="60" y="36" width="36" height="34" rx="5" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" />
+              <rect x="100" y="36" width="36" height="34" rx="5" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="118" y="53" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">3</text>
+              <rect x="140" y="36" width="36" height="34" rx="5" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="158" y="53" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">8</text>
+              <rect x="180" y="36" width="36" height="34" rx="5" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="198" y="53" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">2</text>
+              <rect x="220" y="36" width="36" height="34" rx="5" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="238" y="53" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">5</text>
+              <rect x="260" y="36" width="36" height="34" rx="5" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" />
+              <rect x="300" y="36" width="36" height="34" rx="5" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" />
+              <text x="118" y="100" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" font-weight="bold" fill="#f59e0b">▲ front</text>
+              <text x="318" y="100" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" font-weight="bold" fill="#60a5fa">▲ rear</text>
+              <text x="318" y="118" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#60a5fa">(空槽 7)</text>
+            </svg>
+            <figcaption class="text-xs text-slate-400 mt-1">rear 指向数组末尾空槽 7，下一步写入</figcaption>
+          </figure>
+          <figure>
+            <p class="text-xs text-slate-500 font-semibold mb-1">写入后：rear 绕回 0</p>
+            <svg viewBox="0 0 340 130" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="cqr2-wrap" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#f59e0b" /></marker>
+              </defs>
+              <path d="M 318 20 C 318 8, 38 8, 38 20" fill="none" stroke="#f59e0b" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#cqr2-wrap)" />
+              <rect x="20" y="36" width="36" height="34" rx="5" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" />
+              <rect x="60" y="36" width="36" height="34" rx="5" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" />
+              <rect x="100" y="36" width="36" height="34" rx="5" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="118" y="53" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">3</text>
+              <rect x="140" y="36" width="36" height="34" rx="5" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="158" y="53" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">8</text>
+              <rect x="180" y="36" width="36" height="34" rx="5" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="198" y="53" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">2</text>
+              <rect x="220" y="36" width="36" height="34" rx="5" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="238" y="53" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">5</text>
+              <rect x="260" y="36" width="36" height="34" rx="5" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" />
+              <rect x="300" y="36" width="36" height="34" rx="5" fill="#4ade80" stroke="#22c55e" stroke-width="2" />
+              <text x="318" y="53" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#0f172a">9</text>
+              <text x="118" y="100" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" font-weight="bold" fill="#f59e0b">▲ front</text>
+              <text x="38" y="100" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" font-weight="bold" fill="#60a5fa">▲ rear</text>
+              <text x="38" y="118" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#60a5fa">(7+1)%8=0</text>
+            </svg>
+            <figcaption class="text-xs text-slate-400 mt-1">写入 9 后 rear=(7+1)%8=0，绕回开头</figcaption>
+          </figure>
+        </div>
+      </section>
+
       <!-- Section 1: 为什么需要循环队列 -->
       <section id="sec-1" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
@@ -343,6 +453,36 @@
         </aside>
       </section>
 
+      <!-- 🎬 动画演示 -->
+      <section id="sec-viz" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">🎬</span>
+          动画演示：循环队列的 front/rear 指针
+        </h2>
+        <p class="text-slate-600 mb-3 leading-relaxed text-sm">容量 6。<strong>入队写入 rear 位置，出队从 front 移除</strong>，指针移动后 <code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs">% 6</code> 绕回。F=front（橙），R=rear（蓝）。</p>
+        <div class="flex flex-wrap items-center gap-2 mb-2 text-xs">
+          <span class="bg-slate-100 px-2 py-1 rounded-full">📏 size: {{ cqSize }} / {{ cqCap }}</span>
+          <span class="bg-slate-100 px-2 py-1 rounded-full">🚪 front={{ cqFront }} · rear={{ cqRear }}</span>
+          <span class="bg-cyan-50 text-cyan-700 px-2 py-1 rounded-full font-mono">{{ cqStatus }}</span>
+        </div>
+        <div class="flex flex-wrap items-center gap-2 mb-2">
+          <button @mousedown="cqEnqueue" :disabled="cqBusy" class="px-3 py-1.5 rounded-lg text-xs font-medium border transition-all duration-150 active:scale-95 bg-cyan-50 text-cyan-700 border-cyan-200 hover:bg-cyan-100 hover:shadow-sm disabled:opacity-40">入队 Enqueue</button>
+          <button @mousedown="cqDequeue" :disabled="cqBusy" class="px-3 py-1.5 rounded-lg text-xs font-medium border transition-all duration-150 active:scale-95 bg-red-50 text-red-600 border-red-200 hover:bg-red-100 hover:shadow-sm disabled:opacity-40">出队 Dequeue</button>
+          <button @mousedown="cqReset" :disabled="cqBusy" class="px-3 py-1.5 rounded-lg text-xs font-medium border transition-all duration-150 active:scale-95 bg-slate-50 text-slate-500 border-slate-300 hover:bg-slate-100 hover:shadow-sm disabled:opacity-40">↺ Reset</button>
+        </div>
+        <div ref="cqBox" class="w-full relative overflow-x-auto" :style="{height:cqH+'px'}">
+          <v-stage :config="{width:cqW, height:cqH}">
+            <v-layer>
+              <v-rect v-for="(v,i) in cqArr" :key="'c'+i" :config="cqCellRect(i)" />
+              <v-text v-for="(v,i) in cqArr" :key="'ct'+i" :config="cqCellText(i)" />
+              <v-text v-for="(v,i) in cqArr" :key="'ci'+i" :config="cqCellIdx(i)" />
+              <v-text :config="cqFrontLabel()" />
+              <v-text :config="cqRearLabel()" />
+            </v-layer>
+          </v-stage>
+        </div>
+      </section>
+
       <!-- Section 7: 小结 -->
       <section id="sec-7" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
@@ -431,16 +571,66 @@
 <script setup lang="ts">
 import { Code, Nav } from 'components'
 import { RouterLink } from 'vue-router'
+import { ref, reactive, onMounted, onUnmounted } from 'vue'
 
 const navList = [
+  { id: "sec-overview", name: "📐 结构总览" },
   { id: "sec-1", name: "为什么需要循环队列" },
   { id: "sec-2", name: "基本实现（front/rear+取模）" },
   { id: "sec-3", name: "空与满的三种区分策略" },
   { id: "sec-4", name: "设计循环队列（#622）" },
   { id: "sec-5", name: "真实世界的循环队列" },
   { id: "sec-6", name: "常见陷阱与最佳实践" },
+  { id: "sec-viz", name: "🎬 动画演示" },
   { id: "sec-7", name: "小结与刷题推荐" },
 ]
+
+// ===== 🎬 循环队列动画 =====
+const cqC={cyan:'#06b6d4',green:'#4ade80',red:'#ef4444',orange:'#f59e0b',text:'#1e293b',muted:'#94a3b8',ghost:'#e2e8f0',blue:'#60a5fa'}
+const cqW=ref(700), cqH=ref(210)
+const cqCap=6
+const cqArr=reactive<(number|null)[]>([null,null,null,null,null,null])
+const cqFront=ref(0), cqRear=ref(0), cqSize=ref(0), cqBusy=ref(false), cqStatus=ref('')
+const cqFlash=ref(-1), cqFlashColor=ref(cqC.green)
+const cqBox=ref<HTMLDivElement>()
+const d8=(ms:number)=>new Promise(r=>setTimeout(r,ms))
+function cqCellRect(i:number){ const has=cqArr[i]!==null; const isFlash=i===cqFlash.value; const fill=isFlash?cqFlashColor.value:has?cqC.cyan:cqC.ghost; return {x:40+i*62,y:80,width:54,height:44,fill,cornerRadius:6,stroke:'#94a3b8',strokeWidth:1.5} }
+function cqCellText(i:number){ const v=cqArr[i]; return {x:40+i*62,y:80,width:54,height:44,text:v===null?'':String(v),fontSize:16,fontFamily:'monospace',fontStyle:'bold',fill:cqC.text,align:'center',verticalAlign:'middle'} }
+function cqCellIdx(i:number){ return {x:40+i*62,y:126,width:54,text:'['+i+']',fontSize:10,fontFamily:'monospace',fill:cqC.muted,align:'center'} }
+function cqFrontLabel(){ return {x:40+cqFront.value*62+27,y:156,text:'▲ F',fontSize:12,fontFamily:'monospace',fontStyle:'bold',fill:cqC.orange,align:'center'} }
+function cqRearLabel(){ return {x:40+cqRear.value*62+27,y:178,text:'▲ R',fontSize:12,fontFamily:'monospace',fontStyle:'bold',fill:cqC.blue,align:'center'} }
+async function cqEnqueue(){
+  if(cqBusy.value)return
+  if(cqSize.value>=cqCap){ cqStatus.value='⚠️ 队列已满'; return }
+  cqBusy.value=true
+  const v=~~(Math.random()*90+10)
+  const oldRear=cqRear.value
+  cqStatus.value=`入队 ${v} → 写入 rear=${oldRear}`
+  cqFlash.value=oldRear; cqFlashColor.value=cqC.green
+  cqArr[oldRear]=v; await d8(400)
+  cqFlash.value=-1
+  cqRear.value=(oldRear+1)%cqCap; cqSize.value++
+  cqStatus.value=cqRear.value<oldRear?`rear 从 ${oldRear} 绕回 ${cqRear.value} (%${cqCap})`:`rear 后移 → ${cqRear.value}`
+  await d8(400)
+  cqBusy.value=false
+}
+async function cqDequeue(){
+  if(cqBusy.value)return
+  if(cqSize.value===0){ cqStatus.value='⚠️ 队列已空'; return }
+  cqBusy.value=true
+  const oldFront=cqFront.value
+  cqStatus.value=`出队 → 移除 front=${oldFront} 的值 ${cqArr[oldFront]}`
+  cqFlash.value=oldFront; cqFlashColor.value=cqC.red; await d8(400)
+  cqArr[oldFront]=null; cqFlash.value=-1
+  cqFront.value=(oldFront+1)%cqCap; cqSize.value--
+  cqStatus.value=`front 后移 → ${cqFront.value}`
+  await d8(400)
+  cqBusy.value=false
+}
+function cqReset(){ cqBusy.value=false; for(let i=0;i<cqCap;i++) cqArr[i]=null; cqFront.value=0; cqRear.value=0; cqSize.value=0; cqStatus.value=''; cqFlash.value=-1 }
+let roCQ:ResizeObserver|null=null
+onMounted(()=>{ if(cqBox.value){ cqW.value=cqBox.value.clientWidth; roCQ=new ResizeObserver(e=>{const w=e[0]?.contentRect.width; if(w&&w>200) cqW.value=Math.max(440,w)}); roCQ.observe(cqBox.value) }})
+onUnmounted(()=>roCQ?.disconnect())
 
 const circularQueueDiagram = `   0   1   2   3   4   5   6   7
 ┌───┬───┬───┬───┬─────┬───┬───┬───┐

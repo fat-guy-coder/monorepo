@@ -15,6 +15,194 @@
     <main class="max-w-4xl mx-auto px-6 py-8 space-y-6">
       <Nav :list="navList" title="目录" position="top-right" :showBackToTop="true" />
 
+      <!-- 📐 结构总览 -->
+      <section id="sec-overview" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">📐</span>
+          结构总览：Redis ZSet 双结构
+        </h2>
+        <p class="text-slate-600 mb-4 leading-relaxed text-sm">
+          Redis ZSet 每个元素同时存两份：<strong>dict（哈希表）</strong>负责 <code class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-xs font-mono">member → score</code> 的 O(1) 精确查询；
+          <strong>skiplist（跳表）</strong>负责按 score 排序、范围与排名查询。二者共享同一批 member，各取所长。
+        </p>
+
+        <!-- 结构图 -->
+        <figure class="mb-6">
+          <svg viewBox="0 0 780 260" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <marker id="zs-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" />
+              </marker>
+            </defs>
+
+            <!-- 分隔线 -->
+            <line x1="330" y1="20" x2="330" y2="250" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="4 4" />
+
+            <!-- 左侧：dict -->
+            <text x="24" y="28" font-size="13" font-family="monospace" font-weight="bold" fill="#64748b">dict（哈希表）</text>
+            <text x="24" y="46" font-size="11" font-family="monospace" fill="#94a3b8">无序 · O(1) 查 score</text>
+
+            <!-- dict 条目（顺序打乱，体现无序） -->
+            <rect x="30" y="60" width="60" height="30" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="60" y="75" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#ffffff">C</text>
+            <line x1="90" y1="75" x2="130" y2="75" stroke="#94a3b8" stroke-width="2" marker-end="url(#zs-arr)" />
+            <rect x="130" y="60" width="60" height="30" rx="6" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" />
+            <text x="160" y="75" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#0f172a">12</text>
+
+            <rect x="30" y="100" width="60" height="30" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="60" y="115" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#ffffff">A</text>
+            <line x1="90" y1="115" x2="130" y2="115" stroke="#94a3b8" stroke-width="2" marker-end="url(#zs-arr)" />
+            <rect x="130" y="100" width="60" height="30" rx="6" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" />
+            <text x="160" y="115" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#0f172a">5</text>
+
+            <rect x="30" y="140" width="60" height="30" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="60" y="155" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#ffffff">E</text>
+            <line x1="90" y1="155" x2="130" y2="155" stroke="#94a3b8" stroke-width="2" marker-end="url(#zs-arr)" />
+            <rect x="130" y="140" width="60" height="30" rx="6" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" />
+            <text x="160" y="155" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#0f172a">25</text>
+
+            <rect x="30" y="180" width="60" height="30" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="60" y="195" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#ffffff">B</text>
+            <line x1="90" y1="195" x2="130" y2="195" stroke="#94a3b8" stroke-width="2" marker-end="url(#zs-arr)" />
+            <rect x="130" y="180" width="60" height="30" rx="6" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" />
+            <text x="160" y="195" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#0f172a">10</text>
+
+            <rect x="30" y="220" width="60" height="30" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="60" y="235" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#ffffff">D</text>
+            <line x1="90" y1="235" x2="130" y2="235" stroke="#94a3b8" stroke-width="2" marker-end="url(#zs-arr)" />
+            <rect x="130" y="220" width="60" height="30" rx="6" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" />
+            <text x="160" y="235" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#0f172a">20</text>
+
+            <!-- 右侧：skiplist -->
+            <text x="350" y="28" font-size="13" font-family="monospace" font-weight="bold" fill="#64748b">skiplist（跳表）</text>
+            <text x="350" y="46" font-size="11" font-family="monospace" fill="#94a3b8">按 score 排序 · O(log n) 范围/排名</text>
+
+            <text x="338" y="104" text-anchor="end" font-size="12" font-family="monospace" font-weight="bold" fill="#64748b">L2</text>
+            <text x="338" y="194" text-anchor="end" font-size="12" font-family="monospace" font-weight="bold" fill="#64748b">L1</text>
+
+            <!-- head 哨兵 -->
+            <rect x="352" y="80" width="56" height="40" rx="6" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" />
+            <text x="380" y="100" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" fill="#64748b">head</text>
+            <rect x="352" y="170" width="56" height="40" rx="6" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" />
+            <text x="380" y="190" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" fill="#64748b">head</text>
+
+            <!-- L2：head → C:12 → E:25 → null -->
+            <line x1="408" y1="100" x2="562" y2="100" stroke="#94a3b8" stroke-width="2" marker-end="url(#zs-arr)" />
+            <line x1="618" y1="100" x2="702" y2="100" stroke="#94a3b8" stroke-width="2" marker-end="url(#zs-arr)" />
+            <line x1="758" y1="100" x2="772" y2="100" stroke="#94a3b8" stroke-width="2" marker-end="url(#zs-arr)" />
+
+            <!-- L1：head → A → B → C → D → E → null -->
+            <line x1="408" y1="190" x2="422" y2="190" stroke="#94a3b8" stroke-width="2" marker-end="url(#zs-arr)" />
+            <line x1="478" y1="190" x2="492" y2="190" stroke="#94a3b8" stroke-width="2" marker-end="url(#zs-arr)" />
+            <line x1="548" y1="190" x2="562" y2="190" stroke="#94a3b8" stroke-width="2" marker-end="url(#zs-arr)" />
+            <line x1="618" y1="190" x2="632" y2="190" stroke="#94a3b8" stroke-width="2" marker-end="url(#zs-arr)" />
+            <line x1="688" y1="190" x2="702" y2="190" stroke="#94a3b8" stroke-width="2" marker-end="url(#zs-arr)" />
+            <line x1="758" y1="190" x2="772" y2="190" stroke="#94a3b8" stroke-width="2" marker-end="url(#zs-arr)" />
+
+            <text x="772" y="100" font-size="12" font-family="monospace" fill="#94a3b8">null</text>
+            <text x="772" y="190" font-size="12" font-family="monospace" fill="#94a3b8">null</text>
+
+            <!-- 垂直连接线 -->
+            <line x1="590" y1="120" x2="590" y2="170" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3 3" />
+            <line x1="730" y1="120" x2="730" y2="170" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3 3" />
+
+            <!-- L2 节点 -->
+            <rect x="562" y="80" width="56" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="590" y="100" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">C:12</text>
+            <rect x="702" y="80" width="56" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="730" y="100" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">E:25</text>
+
+            <!-- L1 节点 -->
+            <rect x="422" y="170" width="56" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="450" y="190" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">A:5</text>
+            <rect x="492" y="170" width="56" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="520" y="190" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">B:10</text>
+            <rect x="562" y="170" width="56" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="590" y="190" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">C:12</text>
+            <rect x="632" y="170" width="56" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="660" y="190" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">D:20</text>
+            <rect x="702" y="170" width="56" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="730" y="190" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">E:25</text>
+          </svg>
+          <figcaption class="text-xs text-slate-400 mt-1">图 1：ZSet 双结构——左 dict 无序存 member→score（O(1) 查分数），右 skiplist 按 score 排序（O(log n) 范围/排名查询）</figcaption>
+        </figure>
+
+        <!-- 操作示意图：ZRANK -->
+        <h3 class="text-sm font-semibold text-slate-700 mb-2">操作：ZRANK 查 D 的排名 —— 每右移一步累加 span</h3>
+        <figure>
+          <svg viewBox="0 0 560 220" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <marker id="zrk-n" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" />
+              </marker>
+              <marker id="zrk-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#f59e0b" />
+              </marker>
+            </defs>
+
+            <text x="8" y="74" font-size="12" font-family="monospace" font-weight="bold" fill="#64748b">L2</text>
+            <text x="8" y="164" font-size="12" font-family="monospace" font-weight="bold" fill="#64748b">L1</text>
+
+            <!-- span 标注 -->
+            <text x="150" y="46" text-anchor="middle" font-size="11" font-family="monospace" font-weight="bold" fill="#f59e0b">span=2</text>
+            <text x="310" y="46" text-anchor="middle" font-size="11" font-family="monospace" font-weight="bold" fill="#f59e0b">span=2</text>
+            <text x="280" y="136" text-anchor="middle" font-size="11" font-family="monospace" font-weight="bold" fill="#f59e0b">span=1</text>
+
+            <!-- rank 累加标注 -->
+            <text x="50" y="96" text-anchor="middle" font-size="11" font-family="monospace" font-weight="bold" fill="#94a3b8">rank=0</text>
+            <text x="250" y="96" text-anchor="middle" font-size="11" font-family="monospace" font-weight="bold" fill="#b45309">rank=2</text>
+            <text x="310" y="186" text-anchor="middle" font-size="11" font-family="monospace" font-weight="bold" fill="#16a34a">rank=3</text>
+
+            <!-- head 哨兵 -->
+            <rect x="24" y="50" width="52" height="40" rx="6" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" />
+            <text x="50" y="70" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" fill="#64748b">head</text>
+            <rect x="24" y="140" width="52" height="40" rx="6" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" />
+            <text x="50" y="160" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" fill="#64748b">head</text>
+
+            <!-- L2 箭头：head→C（路径橙）→E→null -->
+            <line x1="76" y1="70" x2="224" y2="70" stroke="#f59e0b" stroke-width="2.5" marker-end="url(#zrk-a)" />
+            <line x1="276" y1="70" x2="344" y2="70" stroke="#94a3b8" stroke-width="2" marker-end="url(#zrk-n)" />
+            <line x1="396" y1="70" x2="430" y2="70" stroke="#94a3b8" stroke-width="2" marker-end="url(#zrk-n)" />
+
+            <!-- L1 箭头 -->
+            <line x1="76" y1="160" x2="104" y2="160" stroke="#94a3b8" stroke-width="2" marker-end="url(#zrk-n)" />
+            <line x1="156" y1="160" x2="164" y2="160" stroke="#94a3b8" stroke-width="2" marker-end="url(#zrk-n)" />
+            <line x1="216" y1="160" x2="224" y2="160" stroke="#94a3b8" stroke-width="2" marker-end="url(#zrk-n)" />
+            <line x1="276" y1="160" x2="284" y2="160" stroke="#f59e0b" stroke-width="2.5" marker-end="url(#zrk-a)" />
+            <line x1="336" y1="160" x2="344" y2="160" stroke="#94a3b8" stroke-width="2" marker-end="url(#zrk-n)" />
+            <line x1="396" y1="160" x2="430" y2="160" stroke="#94a3b8" stroke-width="2" marker-end="url(#zrk-n)" />
+
+            <text x="440" y="70" font-size="12" font-family="monospace" fill="#94a3b8">null</text>
+            <text x="440" y="160" font-size="12" font-family="monospace" fill="#94a3b8">null</text>
+
+            <!-- 下降路径（C，橙） + 其他垂直连接线 -->
+            <line x1="250" y1="90" x2="250" y2="140" stroke="#f59e0b" stroke-width="2" stroke-dasharray="3 3" />
+            <line x1="370" y1="90" x2="370" y2="140" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3 3" />
+
+            <!-- 当前节点 C（橙） -->
+            <rect x="224" y="50" width="52" height="40" rx="6" fill="#f59e0b" stroke="#b45309" stroke-width="1.5" />
+            <text x="250" y="70" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">C:12</text>
+            <rect x="224" y="140" width="52" height="40" rx="6" fill="#f59e0b" stroke="#b45309" stroke-width="1.5" />
+            <text x="250" y="160" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">C:12</text>
+
+            <!-- 命中节点 D（绿） -->
+            <rect x="284" y="140" width="52" height="40" rx="6" fill="#4ade80" stroke="#16a34a" stroke-width="2" />
+            <text x="310" y="160" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#0f172a">D:20</text>
+
+            <!-- 其余节点 -->
+            <rect x="344" y="50" width="52" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="370" y="70" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">E:25</text>
+            <rect x="104" y="140" width="52" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="130" y="160" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">A:5</text>
+            <rect x="164" y="140" width="52" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="190" y="160" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">B:10</text>
+            <rect x="344" y="140" width="52" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="370" y="160" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">E:25</text>
+          </svg>
+          <figcaption class="text-xs text-slate-400 mt-1">图 2：ZRANK D —— head→C 累加 span=2（rank=2），C 处 E&gt;D 下降到 L1，C→D 累加 span=1（rank=3），无需从头数一遍</figcaption>
+        </figure>
+      </section>
+
       <!-- Redis Sorted Set 概述 -->
       <section id="sec-1" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
@@ -321,6 +509,40 @@
         </aside>
       </section>
 
+      <!-- 🎬 动画演示 -->
+      <section id="sec-viz" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">🎬</span>
+          动画演示：ZRANK 排名查询（span 累加）
+        </h2>
+        <p class="text-slate-600 mb-3 leading-relaxed text-sm">查 <strong>D</strong> 的排名：利用 <strong>span</strong> 每右移一步就累加跳过的节点数，<strong>无需从头数一遍</strong>。橙=当前节点，绿=命中。</p>
+        <div class="flex flex-wrap items-center gap-2 mb-2 text-xs">
+          <span class="bg-slate-100 px-2 py-1 rounded-full">🎯 目标 D · rank = {{ zsRank }}</span>
+          <span class="bg-cyan-50 text-cyan-700 px-2 py-1 rounded-full font-mono">{{ zsStatus }}</span>
+          <span class="bg-slate-100 px-2 py-1 rounded-full text-slate-500 ml-auto">⏱️ O(log n)</span>
+        </div>
+        <div class="flex flex-wrap items-center gap-2 mb-2">
+          <button @mousedown="zsStep" :disabled="zsBusy || zsDone" class="px-3 py-1.5 rounded-lg text-xs font-medium border transition-all duration-150 active:scale-95 bg-purple-50 text-purple-700 border-purple-200 hover:bg-purple-100 hover:shadow-sm disabled:opacity-40">{{ zsDone ? '✅ 查询完成' : '▶ 下一步' }}</button>
+          <button @mousedown="zsReset" :disabled="zsBusy" class="px-3 py-1.5 rounded-lg text-xs font-medium border transition-all duration-150 active:scale-95 bg-slate-50 text-slate-500 border-slate-300 hover:bg-slate-100 hover:shadow-sm disabled:opacity-40">↺ Reset</button>
+        </div>
+        <div ref="zsBox" class="w-full relative overflow-x-auto" :style="{height:zsH+'px'}">
+          <v-stage :config="{width:zsW, height:zsH}">
+            <v-layer>
+              <v-text :config="{x:6,y:zsRowY[0]+8,text:'L2',fontSize:11,fontFamily:'monospace',fontStyle:'bold',fill:zsC.muted}" />
+              <v-text :config="{x:6,y:zsRowY[1]+8,text:'L1',fontSize:11,fontFamily:'monospace',fontStyle:'bold',fill:zsC.muted}" />
+              <v-text :config="{x:160,y:30,text:'span=2',fontSize:10,fontFamily:'monospace',fill:zsC.orange}" />
+              <v-text :config="{x:355,y:30,text:'span=2',fontSize:10,fontFamily:'monospace',fill:zsC.orange}" />
+              <v-arrow v-for="a in zsArrows" :key="a.key" :config="{points:a.points,stroke:zsC.muted,fill:zsC.muted,strokeWidth:1.5,pointerLength:6,pointerWidth:5}" />
+              <v-rect v-for="r in [0,1]" :key="'h'+r" :config="zsHeadRect(r)" />
+              <v-text v-for="r in [0,1]" :key="'ht'+r" :config="zsHeadText(r)" />
+              <v-rect v-for="n in zsNodes" :key="'n'+n.r+'-'+n.m" :config="zsNodeRect(n.m,n.r)" />
+              <v-text v-for="n in zsNodes" :key="'t'+n.r+'-'+n.m" :config="zsNodeText(n.m,n.r)" />
+              <v-text :config="{x:zsNullX,y:zsRowY[1]+8,text:'null',fontSize:12,fontFamily:'monospace',fill:zsC.muted}" />
+            </v-layer>
+          </v-stage>
+        </div>
+      </section>
+
       <!-- 小结 -->
       <section id="sec-7" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
@@ -351,16 +573,58 @@
 <script setup lang="ts">
 import { Code, Nav } from 'components'
 import { RouterLink } from 'vue-router'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 
 const navList = [
+  { id: "sec-overview", name: "📐 结构总览" },
   { id: "sec-1", name: "Redis ZSet 概述" },
   { id: "sec-2", name: "为什么选跳表" },
   { id: "sec-3", name: "Redis 的定制改造" },
   { id: "sec-4", name: "命令与操作对应" },
   { id: "sec-5", name: "性能对比" },
   { id: "sec-6", name: "其他工业应用" },
+  { id: "sec-viz", name: "🎬 动画演示" },
   { id: "sec-7", name: "小结" },
 ]
+
+// ===== 🎬 ZRANK 排名动画 =====
+const zsC={cyan:'#06b6d4',green:'#4ade80',red:'#ef4444',orange:'#f59e0b',text:'#1e293b',muted:'#94a3b8',ghost:'#e2e8f0'}
+const zsW=ref(700), zsH=ref(200)
+const zsRowY=[50,125]
+const zsHeadX=44, zsNullX=520
+const zsX: Record<string,number> = {A:130,B:210,C:290,D:370,E:450}
+const zsScores: Record<string,number> = {A:5,B:10,C:12,D:20,E:25}
+const zsRows: string[][] = [['C','E'],['A','B','C','D','E']]
+const zsSteps = [
+  {desc:'① L2：从 head 出发，rank=0',row:0,val:'head',rank:0},
+  {desc:'② head→C(span=2)，C<D → rank=2，移到 C',row:0,val:'C',rank:2},
+  {desc:'③ C→E，E>D → 下降到 L1',row:1,val:'C',rank:2},
+  {desc:'④ C→D(span=1)，命中！rank=3',row:1,val:'D',rank:3},
+]
+const zsStepIdx=ref(-1), zsDone=ref(false), zsBusy=ref(false), zsStatus=ref(''), zsRank=ref(0)
+const zsCur=ref<{row:number;val:string}>({row:0,val:'head'})
+const zsBox=ref<HTMLDivElement>()
+const d11=(ms:number)=>new Promise(r=>setTimeout(r,ms))
+const zsNodes=computed(()=>{ const list:{m:string;r:number}[]=[]; zsRows.forEach((row,r)=>row.forEach(m=>list.push({m,r}))); return list })
+const zsArrows=computed(()=>{ const arr:{points:number[];key:string}[]=[]; zsRows.forEach((row,r)=>{ const y=zsRowY[r]+17; if(row.length){ arr.push({points:[zsHeadX+52,y,zsX[row[0]]-30,y],key:'h'+r}); for(let i=0;i<row.length-1;i++) arr.push({points:[zsX[row[i]]+30,y,zsX[row[i+1]]-30,y],key:r+'-'+i}); arr.push({points:[zsX[row[row.length-1]]+30,y,zsNullX,y],key:'n'+r}) } }); return arr })
+function zsHeadRect(r:number){ const isCur=zsCur.value.row===r&&zsCur.value.val==='head'; return {x:zsHeadX,y:zsRowY[r],width:52,height:34,fill:isCur?zsC.orange:zsC.ghost,cornerRadius:6,stroke:'#94a3b8',strokeWidth:1.5,dash:[4,3]} }
+function zsHeadText(r:number){ return {x:zsHeadX,y:zsRowY[r],width:52,height:34,text:'head',fontSize:12,fontFamily:'monospace',fill:zsC.muted,align:'center',verticalAlign:'middle'} }
+function zsNodeRect(m:string,r:number){ const cur=zsCur.value; const isCur=cur.row===r&&cur.val===m; const isFound=m==='D'&&isCur; const fill=isFound?zsC.green:isCur?zsC.orange:zsC.cyan; return {x:zsX[m]-30,y:zsRowY[r],width:60,height:34,fill,cornerRadius:6,stroke:isCur||isFound?'#1e293b':'#64748b',strokeWidth:isCur||isFound?2:1.5,shadowColor:'rgba(0,0,0,.08)',shadowBlur:2} }
+function zsNodeText(m:string,r:number){ return {x:zsX[m]-30,y:zsRowY[r],width:60,height:34,text:`${m}:${zsScores[m]}`,fontSize:13,fontFamily:'monospace',fontStyle:'bold',fill:zsC.text,align:'center',verticalAlign:'middle'} }
+async function zsStep(){
+  if(zsBusy.value||zsDone.value)return
+  zsBusy.value=true
+  zsStepIdx.value++
+  if(zsStepIdx.value>=zsSteps.length){ zsDone.value=true; zsStatus.value='✅ D 的排名 = 3（0-indexed）'; zsBusy.value=false; return }
+  const s=zsSteps[zsStepIdx.value]; zsCur.value={row:s.row,val:s.val}; zsRank.value=s.rank; zsStatus.value=s.desc
+  if(s.val==='D'&&s.row===1) zsDone.value=true
+  await d11(550)
+  zsBusy.value=false
+}
+function zsReset(){ zsBusy.value=false; zsStepIdx.value=-1; zsDone.value=false; zsStatus.value=''; zsRank.value=0; zsCur.value={row:0,val:'head'} }
+let roZS:ResizeObserver|null=null
+onMounted(()=>{ if(zsBox.value){ zsW.value=zsBox.value.clientWidth; roZS=new ResizeObserver(e=>{const w=e[0]?.contentRect.width; if(w&&w>200) zsW.value=Math.max(600,w)}); roZS.observe(zsBox.value) }})
+onUnmounted(()=>roZS?.disconnect())
 
 const spanConcept = `// Redis 跳表节点的 C 结构体（简化）
 // typedef struct zskiplistNode {

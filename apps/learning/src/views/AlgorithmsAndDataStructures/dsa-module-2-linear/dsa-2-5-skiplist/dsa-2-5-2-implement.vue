@@ -15,6 +15,192 @@
     <main class="max-w-4xl mx-auto px-6 py-8 space-y-6">
       <Nav :list="navList" title="目录" position="top-right" :showBackToTop="true" />
 
+      <!-- 📐 结构总览 -->
+      <section id="sec-overview" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">📐</span>
+          结构总览：跳表节点 forward[] 指针数组
+        </h2>
+        <p class="text-slate-600 mb-4 leading-relaxed text-sm">
+          跳表节点与链表节点最大的区别：<strong>一个节点有多个 forward 指针</strong>（数组）。数组长度 = 节点层数，
+          <code class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-xs font-mono">forward[i]</code> 指向该节点在第 i+1 层的后继。层数越高，指针跳得越远。
+        </p>
+
+        <!-- 结构图 -->
+        <figure class="mb-6">
+          <svg viewBox="0 0 560 200" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <marker id="fwd-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" />
+              </marker>
+            </defs>
+
+            <text x="16" y="18" font-size="12" font-family="monospace" font-weight="bold" fill="#64748b">一个节点 = val + forward[] 数组（下标 i = 第 i+1 层）</text>
+
+            <!-- 节点 19 的 val + forward 数组 -->
+            <rect x="30" y="34" width="130" height="36" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="95" y="52" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">19</text>
+            <rect x="30" y="70" width="130" height="36" rx="6" fill="#e0f2fe" stroke="#7dd3fc" stroke-width="1.5" />
+            <text x="95" y="88" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" fill="#0369a1">forward[2]</text>
+            <rect x="30" y="106" width="130" height="36" rx="6" fill="#e0f2fe" stroke="#7dd3fc" stroke-width="1.5" />
+            <text x="95" y="124" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" fill="#0369a1">forward[1]</text>
+            <rect x="30" y="142" width="130" height="36" rx="6" fill="#e0f2fe" stroke="#7dd3fc" stroke-width="1.5" />
+            <text x="95" y="160" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" fill="#0369a1">forward[0]</text>
+
+            <!-- 层级标签 -->
+            <text x="245" y="76" text-anchor="middle" font-size="11" font-family="monospace" font-weight="bold" fill="#64748b">L3</text>
+            <text x="245" y="112" text-anchor="middle" font-size="11" font-family="monospace" font-weight="bold" fill="#64748b">L2</text>
+            <text x="245" y="148" text-anchor="middle" font-size="11" font-family="monospace" font-weight="bold" fill="#64748b">L1</text>
+
+            <!-- forward 指针箭头 -->
+            <line x1="160" y1="88" x2="330" y2="88" stroke="#94a3b8" stroke-width="2" marker-end="url(#fwd-arr)" />
+            <line x1="160" y1="124" x2="320" y2="124" stroke="#94a3b8" stroke-width="2" marker-end="url(#fwd-arr)" />
+            <line x1="160" y1="160" x2="320" y2="160" stroke="#94a3b8" stroke-width="2" marker-end="url(#fwd-arr)" />
+
+            <!-- forward[2] → null -->
+            <text x="348" y="88" font-size="13" font-family="monospace" fill="#94a3b8">null</text>
+
+            <!-- forward[1] → 29（L2 后继） -->
+            <rect x="320" y="106" width="56" height="36" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="348" y="124" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">29</text>
+
+            <!-- forward[0] → 22（L1 后继） -->
+            <rect x="320" y="142" width="56" height="36" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="348" y="160" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">22</text>
+          </svg>
+          <figcaption class="text-xs text-slate-400 mt-1">图 1：节点 19 有 3 层 → forward[] 长度 3。forward[0]→22（L1）、forward[1]→29（L2）、forward[2]→null（L3，已是最高层）</figcaption>
+        </figure>
+
+        <!-- 操作示意图：插入 25 -->
+        <h3 class="text-sm font-semibold text-slate-700 mb-2">操作：插入 25（randomLevel = 2）—— 先找前驱 update[]，再逐层改指针</h3>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <figure>
+            <p class="text-xs text-slate-500 font-semibold mb-1">插入前：找到各层前驱</p>
+            <svg viewBox="0 0 380 210" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="insb-n" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                  <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" />
+                </marker>
+              </defs>
+
+              <text x="8" y="74" font-size="12" font-family="monospace" font-weight="bold" fill="#64748b">L2</text>
+              <text x="8" y="164" font-size="12" font-family="monospace" font-weight="bold" fill="#64748b">L1</text>
+
+              <text x="120" y="44" text-anchor="middle" font-size="11" font-family="monospace" font-weight="bold" fill="#b45309">update[1]</text>
+              <text x="190" y="136" text-anchor="middle" font-size="11" font-family="monospace" font-weight="bold" fill="#b45309">update[0]</text>
+
+              <!-- head 哨兵 -->
+              <rect x="14" y="50" width="52" height="40" rx="6" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" />
+              <text x="40" y="70" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" fill="#64748b">head</text>
+              <rect x="14" y="140" width="52" height="40" rx="6" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" />
+              <text x="40" y="160" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" fill="#64748b">head</text>
+
+              <!-- L2 箭头：head→19→29→null -->
+              <line x1="66" y1="70" x2="94" y2="70" stroke="#94a3b8" stroke-width="2" marker-end="url(#insb-n)" />
+              <line x1="146" y1="70" x2="284" y2="70" stroke="#94a3b8" stroke-width="2" marker-end="url(#insb-n)" />
+              <line x1="336" y1="70" x2="352" y2="70" stroke="#94a3b8" stroke-width="2" marker-end="url(#insb-n)" />
+
+              <!-- L1 箭头：head→19→22→29→null -->
+              <line x1="66" y1="160" x2="94" y2="160" stroke="#94a3b8" stroke-width="2" marker-end="url(#insb-n)" />
+              <line x1="146" y1="160" x2="164" y2="160" stroke="#94a3b8" stroke-width="2" marker-end="url(#insb-n)" />
+              <line x1="216" y1="160" x2="284" y2="160" stroke="#94a3b8" stroke-width="2" marker-end="url(#insb-n)" />
+              <line x1="336" y1="160" x2="352" y2="160" stroke="#94a3b8" stroke-width="2" marker-end="url(#insb-n)" />
+
+              <text x="360" y="70" font-size="12" font-family="monospace" fill="#94a3b8">null</text>
+              <text x="360" y="160" font-size="12" font-family="monospace" fill="#94a3b8">null</text>
+
+              <!-- 垂直连接线 -->
+              <line x1="120" y1="90" x2="120" y2="140" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3 3" />
+              <line x1="310" y1="90" x2="310" y2="140" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3 3" />
+
+              <!-- 前驱节点 19（update[1]，橙色） -->
+              <rect x="94" y="50" width="52" height="40" rx="6" fill="#f59e0b" stroke="#b45309" stroke-width="1.5" />
+              <text x="120" y="70" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">19</text>
+              <rect x="94" y="140" width="52" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="120" y="160" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">19</text>
+
+              <!-- 前驱节点 22（update[0]，橙色） -->
+              <rect x="164" y="140" width="52" height="40" rx="6" fill="#f59e0b" stroke="#b45309" stroke-width="1.5" />
+              <text x="190" y="160" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">22</text>
+
+              <!-- 节点 29 -->
+              <rect x="284" y="50" width="52" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="310" y="70" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">29</text>
+              <rect x="284" y="140" width="52" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="310" y="160" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">29</text>
+            </svg>
+            <figcaption class="text-xs text-slate-400 mt-1">update[1]=19（L2 前驱）、update[0]=22（L1 前驱）—— 这两处指针将被改写</figcaption>
+          </figure>
+
+          <figure>
+            <p class="text-xs text-slate-500 font-semibold mb-1">插入后（25 为 newNode，绿色）</p>
+            <svg viewBox="0 0 380 210" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="insa-n" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                  <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" />
+                </marker>
+                <marker id="insa-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                  <path d="M 0 0 L 10 5 L 0 10 z" fill="#22c55e" />
+                </marker>
+              </defs>
+
+              <text x="8" y="74" font-size="12" font-family="monospace" font-weight="bold" fill="#64748b">L2</text>
+              <text x="8" y="164" font-size="12" font-family="monospace" font-weight="bold" fill="#64748b">L1</text>
+
+              <!-- head 哨兵 -->
+              <rect x="14" y="50" width="52" height="40" rx="6" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" />
+              <text x="40" y="70" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" fill="#64748b">head</text>
+              <rect x="14" y="140" width="52" height="40" rx="6" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" />
+              <text x="40" y="160" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" fill="#64748b">head</text>
+
+              <!-- L2 箭头：head→19→25→29→null -->
+              <line x1="66" y1="70" x2="94" y2="70" stroke="#94a3b8" stroke-width="2" marker-end="url(#insa-n)" />
+              <line x1="146" y1="70" x2="219" y2="70" stroke="#22c55e" stroke-width="2" marker-end="url(#insa-g)" />
+              <line x1="271" y1="70" x2="284" y2="70" stroke="#94a3b8" stroke-width="2" marker-end="url(#insa-n)" />
+              <line x1="336" y1="70" x2="352" y2="70" stroke="#94a3b8" stroke-width="2" marker-end="url(#insa-n)" />
+
+              <!-- L1 箭头：head→19→22→25→29→null -->
+              <line x1="66" y1="160" x2="94" y2="160" stroke="#94a3b8" stroke-width="2" marker-end="url(#insa-n)" />
+              <line x1="146" y1="160" x2="164" y2="160" stroke="#94a3b8" stroke-width="2" marker-end="url(#insa-n)" />
+              <line x1="216" y1="160" x2="219" y2="160" stroke="#22c55e" stroke-width="2" marker-end="url(#insa-g)" />
+              <line x1="271" y1="160" x2="284" y2="160" stroke="#94a3b8" stroke-width="2" marker-end="url(#insa-n)" />
+              <line x1="336" y1="160" x2="352" y2="160" stroke="#94a3b8" stroke-width="2" marker-end="url(#insa-n)" />
+
+              <text x="360" y="70" font-size="12" font-family="monospace" fill="#94a3b8">null</text>
+              <text x="360" y="160" font-size="12" font-family="monospace" fill="#94a3b8">null</text>
+
+              <!-- 垂直连接线 -->
+              <line x1="120" y1="90" x2="120" y2="140" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3 3" />
+              <line x1="245" y1="90" x2="245" y2="140" stroke="#22c55e" stroke-width="1.5" stroke-dasharray="3 3" />
+              <line x1="310" y1="90" x2="310" y2="140" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3 3" />
+
+              <!-- 节点 19（恢复 cyan） -->
+              <rect x="94" y="50" width="52" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="120" y="70" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">19</text>
+              <rect x="94" y="140" width="52" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="120" y="160" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">19</text>
+
+              <!-- 节点 22（恢复 cyan） -->
+              <rect x="164" y="140" width="52" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="190" y="160" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">22</text>
+
+              <!-- 新节点 25（绿色） -->
+              <rect x="219" y="50" width="52" height="40" rx="6" fill="#4ade80" stroke="#22c55e" stroke-width="2" />
+              <text x="245" y="70" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#0f172a">25</text>
+              <rect x="219" y="140" width="52" height="40" rx="6" fill="#4ade80" stroke="#22c55e" stroke-width="2" />
+              <text x="245" y="160" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#0f172a">25</text>
+
+              <!-- 节点 29 -->
+              <rect x="284" y="50" width="52" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="310" y="70" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">29</text>
+              <rect x="284" y="140" width="52" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="310" y="160" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">29</text>
+            </svg>
+            <figcaption class="text-xs text-slate-400 mt-1">25 有 2 层：L1 中 22→25→29，L2 中 19→25→29（绿箭头为被改写的指针）</figcaption>
+          </figure>
+        </div>
+      </section>
+
       <!-- 概述与架构 -->
       <section id="sec-1" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
@@ -307,6 +493,38 @@
         </div>
       </section>
 
+      <!-- 🎬 动画演示 -->
+      <section id="sec-viz" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">🎬</span>
+          动画演示：插入 25（randomLevel = 2）
+        </h2>
+        <p class="text-slate-600 mb-3 leading-relaxed text-sm">插入四步：<strong>查找前驱（橙）→ 生成层数 → 创建节点（绿）→ 逐层改指针</strong>。25 有 2 层，所以在 L1 和 L2 都插入。</p>
+        <div class="flex flex-wrap items-center gap-2 mb-2 text-xs">
+          <span class="bg-slate-100 px-2 py-1 rounded-full">📏 size: {{ skiRows[1].length }}</span>
+          <span class="bg-cyan-50 text-cyan-700 px-2 py-1 rounded-full font-mono">{{ skiStatus }}</span>
+          <span class="bg-slate-100 px-2 py-1 rounded-full text-slate-500 ml-auto">⏱️ 插入 O(log n)</span>
+        </div>
+        <div class="flex flex-wrap items-center gap-2 mb-2">
+          <button @mousedown="skiInsert" :disabled="skiBusy" class="px-3 py-1.5 rounded-lg text-xs font-medium border transition-all duration-150 active:scale-95 bg-cyan-50 text-cyan-700 border-cyan-200 hover:bg-cyan-100 hover:shadow-sm disabled:opacity-40">插入 25</button>
+          <button @mousedown="skiReset" :disabled="skiBusy" class="px-3 py-1.5 rounded-lg text-xs font-medium border transition-all duration-150 active:scale-95 bg-slate-50 text-slate-500 border-slate-300 hover:bg-slate-100 hover:shadow-sm disabled:opacity-40">↺ Reset</button>
+        </div>
+        <div ref="skiBox" class="w-full relative overflow-x-auto" :style="{height:skiH+'px'}">
+          <v-stage :config="{width:skiW, height:skiH}">
+            <v-layer>
+              <v-text :config="{x:6,y:skiRowY[0]+8,text:'L2',fontSize:11,fontFamily:'monospace',fontStyle:'bold',fill:skiC.muted}" />
+              <v-text :config="{x:6,y:skiRowY[1]+8,text:'L1',fontSize:11,fontFamily:'monospace',fontStyle:'bold',fill:skiC.muted}" />
+              <v-arrow v-for="a in skiArrows" :key="a.key" :config="{points:a.points,stroke:skiC.muted,fill:skiC.muted,strokeWidth:1.5,pointerLength:6,pointerWidth:5}" />
+              <v-rect v-for="r in [0,1]" :key="'h'+r" :config="skiHeadRect(r)" />
+              <v-text v-for="r in [0,1]" :key="'ht'+r" :config="skiHeadText(r)" />
+              <v-rect v-for="n in skiNodes" :key="'n'+n.r+'-'+n.v" :config="skiNodeRect(n.v,n.r)" />
+              <v-text v-for="n in skiNodes" :key="'t'+n.r+'-'+n.v" :config="skiNodeText(n.v,n.r)" />
+              <v-text :config="{x:skiNullX,y:skiRowY[1]+8,text:'null',fontSize:12,fontFamily:'monospace',fill:skiC.muted}" />
+            </v-layer>
+          </v-stage>
+        </div>
+      </section>
+
       <!-- 复杂度总结 -->
       <section id="sec-10" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
@@ -359,8 +577,10 @@
 <script setup lang="ts">
 import { Code, Nav } from 'components'
 import { RouterLink } from 'vue-router'
+import { ref, reactive, computed, onMounted, onUnmounted } from 'vue'
 
 const navList = [
+  { id: "sec-overview", name: "📐 结构总览" },
   { id: "sec-1", name: "架构总览" },
   { id: "sec-2", name: "Node 节点类" },
   { id: "sec-3", name: "类结构与常量" },
@@ -370,8 +590,51 @@ const navList = [
   { id: "sec-7", name: "delete" },
   { id: "sec-8", name: "contains 与调试" },
   { id: "sec-9", name: "完整代码整合" },
+  { id: "sec-viz", name: "🎬 动画演示" },
   { id: "sec-10", name: "复杂度总结" },
 ]
+
+// ===== 🎬 跳表插入动画 =====
+const skiC={cyan:'#06b6d4',green:'#4ade80',red:'#ef4444',orange:'#f59e0b',text:'#1e293b',muted:'#94a3b8',ghost:'#e2e8f0'}
+const skiW=ref(700), skiH=ref(190)
+const skiRowY=[50,120]
+const skiHeadX=44, skiNullX=580
+const skiX: Record<number,number> = {3:120,7:185,11:250,19:315,22:380,25:445,29:510}
+const skiRows=reactive<number[][]>([[19,29],[3,7,11,19,22,29]])
+const skiHigh=ref<{v:number;r:number}[]>([])
+const skiNew=ref(false)
+const skiBusy=ref(false), skiStatus=ref('')
+const skiBox=ref<HTMLDivElement>()
+const d10=(ms:number)=>new Promise(r=>setTimeout(r,ms))
+const skiNodes=computed(()=>{ const list:{v:number;r:number}[]=[]; skiRows.forEach((row,r)=>row.forEach(v=>list.push({v,r}))); return list })
+const skiArrows=computed(()=>{ const arr:{points:number[];key:string}[]=[]; skiRows.forEach((row,r)=>{ const y=skiRowY[r]+17; if(row.length){ arr.push({points:[skiHeadX+52,y,skiX[row[0]]-26,y],key:'h'+r}); for(let i=0;i<row.length-1;i++) arr.push({points:[skiX[row[i]]+26,y,skiX[row[i+1]]-26,y],key:r+'-'+i}); arr.push({points:[skiX[row[row.length-1]]+26,y,skiNullX,y],key:'n'+r}) } }); return arr })
+function skiHeadRect(r:number){ return {x:skiHeadX,y:skiRowY[r],width:52,height:34,fill:skiC.ghost,cornerRadius:6,stroke:'#94a3b8',strokeWidth:1.5,dash:[4,3]} }
+function skiHeadText(r:number){ return {x:skiHeadX,y:skiRowY[r],width:52,height:34,text:'head',fontSize:12,fontFamily:'monospace',fill:skiC.muted,align:'center',verticalAlign:'middle'} }
+function skiNodeRect(v:number,r:number){ const isHigh=skiHigh.value.some(h=>h.v===v&&h.r===r); const isNew=skiNew.value&&v===25; const fill=isNew?skiC.green:isHigh?skiC.orange:skiC.cyan; return {x:skiX[v]-26,y:skiRowY[r],width:52,height:34,fill,cornerRadius:6,stroke:isNew||isHigh?'#1e293b':'#64748b',strokeWidth:isNew||isHigh?2:1.5,shadowColor:'rgba(0,0,0,.08)',shadowBlur:2} }
+function skiNodeText(v:number,r:number){ return {x:skiX[v]-26,y:skiRowY[r],width:52,height:34,text:String(v),fontSize:15,fontFamily:'monospace',fontStyle:'bold',fill:skiC.text,align:'center',verticalAlign:'middle'} }
+async function skiInsert(){
+  if(skiBusy.value)return
+  skiBusy.value=true
+  skiStatus.value='① 查找前驱：update[0]=22(L1), update[1]=19(L2)'
+  skiHigh.value=[{v:22,r:1},{v:19,r:0}]
+  await d10(800)
+  skiStatus.value='② randomLevel()=2 → 创建节点 25'
+  skiNew.value=true
+  skiRows[0].splice(1,0,25)
+  skiRows[1].splice(4,0,25)
+  skiHigh.value=[]
+  await d10(500)
+  skiStatus.value='③ 逐层改指针：22→25→29，19→25→29'
+  await d10(600)
+  skiStatus.value='✅ 插入完成'
+  await d10(400)
+  skiNew.value=false
+  skiBusy.value=false
+}
+function skiReset(){ skiBusy.value=false; skiRows[0]=[19,29]; skiRows[1]=[3,7,11,19,22,29]; skiHigh.value=[]; skiNew.value=false; skiStatus.value='' }
+let roSKI:ResizeObserver|null=null
+onMounted(()=>{ if(skiBox.value){ skiW.value=skiBox.value.clientWidth; roSKI=new ResizeObserver(e=>{const w=e[0]?.contentRect.width; if(w&&w>200) skiW.value=Math.max(620,w)}); roSKI.observe(skiBox.value) }})
+onUnmounted(()=>roSKI?.disconnect())
 
 const nodeClassCode = `// Node 节点类
 // 每个节点包含一个值和一组 forward 指针

@@ -15,6 +15,80 @@
     <main class="max-w-4xl mx-auto px-6 py-8 space-y-6">
       <Nav :list="navList" title="📑 目录" position="top-right" :showBackToTop="true" />
 
+      <!-- 📐 结构总览 -->
+      <section id="sec-overview" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">📐</span>
+          结构总览：单调递减栈
+        </h2>
+        <p class="text-slate-600 mb-4 leading-relaxed text-sm">
+          单调栈是<strong>加了单调性约束</strong>的栈：栈内元素从<strong>栈底到栈顶</strong>保持单调。下图是<strong>单调递减栈（栈底大 → 栈顶小）</strong>，入栈前如果违反单调性就弹出栈顶——这个"弹出"动作正是找<strong>下一个更大元素</strong>的关键。
+        </p>
+
+        <!-- 结构图 -->
+        <figure class="mb-6">
+          <svg viewBox="0 0 560 300" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <marker id="ov-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" />
+              </marker>
+            </defs>
+            <path d="M 200 140 L 200 290 L 360 290 L 360 140" fill="none" stroke="#94a3b8" stroke-width="2" />
+            <rect x="210" y="240" width="140" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="280" y="260" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">8</text>
+            <rect x="210" y="196" width="140" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="280" y="216" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">5</text>
+            <rect x="210" y="152" width="140" height="40" rx="6" fill="#f59e0b" stroke="#d97706" stroke-width="1.5" />
+            <text x="280" y="172" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">3</text>
+            <line x1="150" y1="172" x2="205" y2="172" stroke="#94a3b8" stroke-width="2" marker-end="url(#ov-a)" />
+            <text x="100" y="172" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" fill="#64748b" font-weight="bold">top · 小</text>
+            <line x1="150" y1="260" x2="205" y2="260" stroke="#94a3b8" stroke-width="2" marker-end="url(#ov-a)" />
+            <text x="100" y="260" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" fill="#64748b" font-weight="bold">bottom · 大</text>
+            <text x="470" y="150" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" fill="#0f172a" font-weight="bold">单调递减</text>
+            <text x="470" y="176" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" fill="#64748b">栈底大 → 栈顶小</text>
+            <text x="470" y="210" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" fill="#0891b2">8 &gt; 5 &gt; 3</text>
+            <text x="470" y="234" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" fill="#64748b">违反单调就弹栈</text>
+          </svg>
+          <figcaption class="text-xs text-slate-400 mt-1">图 1：单调递减栈——栈底大、栈顶小，元素值严格递减</figcaption>
+        </figure>
+
+        <!-- 操作示意图：入栈弹出 -->
+        <h3 class="text-sm font-semibold text-slate-700 mb-2">操作：入栈 6 —— 弹出比 6 小的栈顶，维护单调（找下一个更大元素）</h3>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <figure>
+            <p class="text-xs text-slate-500 font-semibold mb-1">入栈前（3、5 比 6 小，将被弹出）</p>
+            <svg viewBox="0 0 260 220" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+              <path d="M 60 50 L 60 190 L 160 190 L 160 50" fill="none" stroke="#94a3b8" stroke-width="2" />
+              <rect x="70" y="146" width="80" height="36" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="110" y="164" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">8</text>
+              <rect x="70" y="108" width="80" height="36" rx="6" fill="#06b6d4" stroke="#f59e0b" stroke-width="2" />
+              <text x="110" y="126" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">5</text>
+              <rect x="70" y="70" width="80" height="36" rx="6" fill="#06b6d4" stroke="#f59e0b" stroke-width="2" />
+              <text x="110" y="88" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">3</text>
+              <rect x="185" y="88" width="50" height="36" rx="6" fill="#4ade80" stroke="#22c55e" stroke-width="2" />
+              <text x="210" y="106" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#0f172a">6</text>
+              <text x="210" y="68" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" fill="#16a34a">入栈 6</text>
+            </svg>
+          </figure>
+          <figure>
+            <p class="text-xs text-slate-500 font-semibold mb-1">入栈后（3、5 被弹出，6 压顶）</p>
+            <svg viewBox="0 0 260 220" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+              <path d="M 60 50 L 60 190 L 160 190 L 160 50" fill="none" stroke="#94a3b8" stroke-width="2" />
+              <rect x="70" y="146" width="80" height="36" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="110" y="164" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">8</text>
+              <rect x="70" y="108" width="80" height="36" rx="6" fill="#4ade80" stroke="#22c55e" stroke-width="2" />
+              <text x="110" y="126" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#0f172a">6</text>
+              <rect x="175" y="62" width="50" height="36" rx="6" fill="none" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="4 3" />
+              <text x="200" y="80" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" fill="#ef4444">3</text>
+              <rect x="175" y="112" width="50" height="36" rx="6" fill="none" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="4 3" />
+              <text x="200" y="130" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" fill="#ef4444">5</text>
+              <text x="200" y="170" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" fill="#ef4444">弹出 3、5</text>
+            </svg>
+            <figcaption class="text-xs text-slate-400 mt-1">3、5 &lt; 6 被弹出——它们的"下一个更大元素"就是 6</figcaption>
+          </figure>
+        </div>
+      </section>
+
       <!-- 1. 单调栈概念 -->
       <section id="sec-1" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
@@ -296,6 +370,7 @@ onMounted(()=>{ stkInit(); if(stkBox.value){ stkW.value=stkBox.value.clientWidth
 onUnmounted(()=>roSK?.disconnect())
 
 const navList = [
+  { id: "sec-overview", name: "📐 结构总览" },
   { id: "sec-1", name: "概念与模板" },
   { id: "sec-2", name: "Next Greater Element" },
   { id: "sec-3", name: "每日温度 #739" },

@@ -15,6 +15,103 @@
     <main class="max-w-4xl mx-auto px-6 py-8 space-y-6">
       <Nav :list="navList" title="📑 目录" position="top-right" :showBackToTop="true" />
 
+      <!-- 📐 结构总览 -->
+      <section id="sec-overview" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">📐</span>
+          结构总览：链表反转
+        </h2>
+        <p class="text-slate-600 mb-4 leading-relaxed text-sm">
+          反转的核心是用 <strong>prev / curr / next</strong> 三个指针，逐一把每个节点的 <strong>next 箭头调头</strong>：先保存 next，再让 curr.next 指向 prev，最后三人组整体前进。
+        </p>
+
+        <!-- 结构图 -->
+        <figure class="mb-6">
+          <svg viewBox="0 0 560 220" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <marker id="rv-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" /></marker>
+              <marker id="rv-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#ef4444" /></marker>
+              <marker id="rv-o" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#f59e0b" /></marker>
+              <marker id="rv-b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#60a5fa" /></marker>
+            </defs>
+
+            <text x="16" y="28" font-size="13" font-family="monospace" fill="#64748b" font-weight="bold">prev（红）· curr（橙）· next（蓝）三指针迭代反转</text>
+
+            <!-- prev 指针 → null -->
+            <text x="120" y="58" text-anchor="middle" font-size="12" font-family="monospace" font-weight="bold" fill="#ef4444">prev</text>
+            <line x1="120" y1="64" x2="120" y2="108" stroke="#ef4444" stroke-width="2" marker-end="url(#rv-p)" />
+            <text x="120" y="122" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" fill="#94a3b8">null</text>
+
+            <!-- curr 指针 → 节点1 -->
+            <text x="228" y="58" text-anchor="middle" font-size="12" font-family="monospace" font-weight="bold" fill="#f59e0b">curr</text>
+            <line x1="228" y1="64" x2="228" y2="96" stroke="#f59e0b" stroke-width="2" marker-end="url(#rv-o)" />
+
+            <!-- next 指针 → 节点2 -->
+            <text x="328" y="58" text-anchor="middle" font-size="12" font-family="monospace" font-weight="bold" fill="#60a5fa">next</text>
+            <line x1="328" y1="64" x2="328" y2="96" stroke="#60a5fa" stroke-width="2" marker-end="url(#rv-b)" />
+
+            <!-- 节点 1 -->
+            <rect x="200" y="100" width="56" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="228" y="120" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">1</text>
+            <!-- 1 → 2 -->
+            <line x1="256" y1="120" x2="296" y2="120" stroke="#94a3b8" stroke-width="2" marker-end="url(#rv-a)" />
+
+            <!-- 节点 2 -->
+            <rect x="300" y="100" width="56" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="328" y="120" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">2</text>
+            <!-- 2 → 3 -->
+            <line x1="356" y1="120" x2="396" y2="120" stroke="#94a3b8" stroke-width="2" marker-end="url(#rv-a)" />
+
+            <!-- 节点 3 -->
+            <rect x="400" y="100" width="56" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="428" y="120" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">3</text>
+            <text x="486" y="120" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" fill="#94a3b8">null</text>
+          </svg>
+          <figcaption class="text-xs text-slate-400 mt-1">图 1：反转前链表 + prev/curr/next 三指针位置（prev 初始指向 null）</figcaption>
+        </figure>
+
+        <!-- 操作示意图：反转前 vs 反转后 -->
+        <h3 class="text-sm font-semibold text-slate-700 mb-2">操作：反转后所有箭头方向调头</h3>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <figure>
+            <p class="text-xs text-slate-500 font-semibold mb-1">反转前</p>
+            <svg viewBox="0 0 320 110" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+              <defs><marker id="rb-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" /></marker></defs>
+              <text x="68" y="22" text-anchor="middle" font-size="11" font-family="monospace" font-weight="bold" fill="#64748b">head</text>
+              <line x1="68" y1="28" x2="68" y2="36" stroke="#64748b" stroke-width="1.5" />
+              <line x1="96" y1="60" x2="126" y2="60" stroke="#94a3b8" stroke-width="2" marker-end="url(#rb-a)" />
+              <line x1="186" y1="60" x2="216" y2="60" stroke="#94a3b8" stroke-width="2" marker-end="url(#rb-a)" />
+              <rect x="40" y="40" width="56" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="68" y="60" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">1</text>
+              <rect x="130" y="40" width="56" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="158" y="60" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">2</text>
+              <rect x="220" y="40" width="56" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="248" y="60" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">3</text>
+              <text x="296" y="60" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" fill="#94a3b8">null</text>
+            </svg>
+            <figcaption class="text-xs text-slate-400 mt-1">反转前：1→2→3，head 指向 1，next 全部向右</figcaption>
+          </figure>
+          <figure>
+            <p class="text-xs text-slate-500 font-semibold mb-1">反转后</p>
+            <svg viewBox="0 0 320 110" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+              <defs><marker id="ra-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" /></marker></defs>
+              <text x="248" y="22" text-anchor="middle" font-size="11" font-family="monospace" font-weight="bold" fill="#64748b">head</text>
+              <line x1="248" y1="28" x2="248" y2="36" stroke="#64748b" stroke-width="1.5" />
+              <line x1="216" y1="60" x2="186" y2="60" stroke="#94a3b8" stroke-width="2" marker-end="url(#ra-a)" />
+              <line x1="126" y1="60" x2="96" y2="60" stroke="#94a3b8" stroke-width="2" marker-end="url(#ra-a)" />
+              <rect x="40" y="40" width="56" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="68" y="60" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">1</text>
+              <rect x="130" y="40" width="56" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="158" y="60" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">2</text>
+              <rect x="220" y="40" width="56" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="248" y="60" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">3</text>
+              <text x="20" y="60" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" fill="#94a3b8">null</text>
+            </svg>
+            <figcaption class="text-xs text-slate-400 mt-1">反转后：3→2→1，箭头全部调头向左，head 指向 3</figcaption>
+          </figure>
+        </div>
+      </section>
+
       <!-- 1. 反转链表总览 -->
       <section id="sec-1" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
@@ -245,6 +342,7 @@ onMounted(()=>{ initRev(); if(revBox.value){ revW.value=revBox.value.clientWidth
 onUnmounted(()=>roRev?.disconnect())
 
 const navList = [
+  { id: "sec-overview", name: "📐 结构总览" },
   { id: "sec-1", name: "反转链表总览" },
   { id: "sec-2", name: "反转整个链表" },
   { id: "sec-3", name: "反转前N / 区间" },

@@ -15,6 +15,176 @@
     <main class="max-w-4xl mx-auto px-6 py-8 space-y-6">
       <Nav :list="navList" title="📑 目录" position="top-right" :showBackToTop="true" />
 
+      <!-- 📐 结构总览 -->
+      <section id="sec-overview" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">📐</span>
+          结构总览：快慢指针
+        </h2>
+        <p class="text-slate-600 mb-4 leading-relaxed text-sm">
+          快慢指针 = <strong>fast 每次走 2 步、slow 每次走 1 步</strong>，速度差恒为 1。fast 到末尾时 slow 恰在中点；有环时二者必然相遇。
+        </p>
+
+        <!-- 结构图 -->
+        <figure class="mb-6">
+          <svg viewBox="0 0 620 200" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <marker id="tp-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" /></marker>
+              <marker id="tp-o" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#f59e0b" /></marker>
+              <marker id="tp-b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#60a5fa" /></marker>
+            </defs>
+
+            <text x="16" y="28" font-size="13" font-family="monospace" fill="#64748b" font-weight="bold">fast 每次 +2（蓝） · slow 每次 +1（橙）— 走 2 步后 slow=3, fast=5</text>
+
+            <!-- slow 指针 -->
+            <text x="216" y="58" text-anchor="middle" font-size="12" font-family="monospace" font-weight="bold" fill="#f59e0b">slow</text>
+            <line x1="216" y1="64" x2="216" y2="96" stroke="#f59e0b" stroke-width="2" marker-end="url(#tp-o)" />
+            <!-- fast 指针 -->
+            <text x="376" y="58" text-anchor="middle" font-size="12" font-family="monospace" font-weight="bold" fill="#60a5fa">fast</text>
+            <line x1="376" y1="64" x2="376" y2="96" stroke="#60a5fa" stroke-width="2" marker-end="url(#tp-b)" />
+
+            <!-- 节点 1 -->
+            <rect x="30" y="100" width="52" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="56" y="120" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">1</text>
+            <line x1="82" y1="120" x2="106" y2="120" stroke="#94a3b8" stroke-width="2" marker-end="url(#tp-a)" />
+            <!-- 节点 2 -->
+            <rect x="110" y="100" width="52" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="136" y="120" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">2</text>
+            <line x1="162" y1="120" x2="186" y2="120" stroke="#94a3b8" stroke-width="2" marker-end="url(#tp-a)" />
+            <!-- 节点 3 -->
+            <rect x="190" y="100" width="52" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="216" y="120" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">3</text>
+            <line x1="242" y1="120" x2="266" y2="120" stroke="#94a3b8" stroke-width="2" marker-end="url(#tp-a)" />
+            <!-- 节点 4 -->
+            <rect x="270" y="100" width="52" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="296" y="120" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">4</text>
+            <line x1="322" y1="120" x2="346" y2="120" stroke="#94a3b8" stroke-width="2" marker-end="url(#tp-a)" />
+            <!-- 节点 5 -->
+            <rect x="350" y="100" width="52" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="376" y="120" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">5</text>
+            <line x1="402" y1="120" x2="426" y2="120" stroke="#94a3b8" stroke-width="2" marker-end="url(#tp-a)" />
+            <!-- 节点 6 -->
+            <rect x="430" y="100" width="52" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="456" y="120" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">6</text>
+            <line x1="482" y1="120" x2="506" y2="120" stroke="#94a3b8" stroke-width="2" marker-end="url(#tp-a)" />
+            <!-- 节点 7 -->
+            <rect x="510" y="100" width="52" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="536" y="120" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">7</text>
+            <text x="592" y="120" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" fill="#94a3b8">null</text>
+          </svg>
+          <figcaption class="text-xs text-slate-400 mt-1">图 1：快慢指针结构——同一链表上两个指针，速度差为 1</figcaption>
+        </figure>
+
+        <!-- 操作示意图 1：找中点 -->
+        <h3 class="text-sm font-semibold text-slate-700 mb-2">操作：找中点 —— fast 到末尾，slow 停在中点</h3>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
+          <figure>
+            <p class="text-xs text-slate-500 font-semibold mb-1">开始</p>
+            <svg viewBox="0 0 320 110" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+              <defs><marker id="fm-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" /></marker></defs>
+              <text x="32" y="22" text-anchor="middle" font-size="11" font-family="monospace" font-weight="bold" fill="#f59e0b">slow=fast</text>
+              <line x1="32" y1="28" x2="32" y2="36" stroke="#f59e0b" stroke-width="1.5" />
+              <line x1="50" y1="57" x2="74" y2="57" stroke="#94a3b8" stroke-width="2" marker-end="url(#fm-a)" />
+              <line x1="114" y1="57" x2="138" y2="57" stroke="#94a3b8" stroke-width="2" marker-end="url(#fm-a)" />
+              <line x1="178" y1="57" x2="202" y2="57" stroke="#94a3b8" stroke-width="2" marker-end="url(#fm-a)" />
+              <line x1="242" y1="57" x2="266" y2="57" stroke="#94a3b8" stroke-width="2" marker-end="url(#fm-a)" />
+              <rect x="14" y="40" width="36" height="34" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="32" y="57" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#ffffff">1</text>
+              <rect x="78" y="40" width="36" height="34" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="96" y="57" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#ffffff">2</text>
+              <rect x="142" y="40" width="36" height="34" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="160" y="57" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#ffffff">3</text>
+              <rect x="206" y="40" width="36" height="34" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="224" y="57" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#ffffff">4</text>
+              <rect x="270" y="40" width="36" height="34" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="288" y="57" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#ffffff">5</text>
+              <text x="312" y="57" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" fill="#94a3b8">null</text>
+            </svg>
+            <figcaption class="text-xs text-slate-400 mt-1">开始：slow = fast = head，都在节点 1</figcaption>
+          </figure>
+          <figure>
+            <p class="text-xs text-slate-500 font-semibold mb-1">结束</p>
+            <svg viewBox="0 0 320 110" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+              <defs><marker id="fm2-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" /></marker></defs>
+              <text x="160" y="22" text-anchor="middle" font-size="11" font-family="monospace" font-weight="bold" fill="#f59e0b">slow（中点）</text>
+              <line x1="160" y1="28" x2="160" y2="36" stroke="#f59e0b" stroke-width="1.5" />
+              <text x="290" y="22" text-anchor="middle" font-size="11" font-family="monospace" font-weight="bold" fill="#60a5fa">fast=null</text>
+              <line x1="50" y1="57" x2="74" y2="57" stroke="#94a3b8" stroke-width="2" marker-end="url(#fm2-a)" />
+              <line x1="114" y1="57" x2="138" y2="57" stroke="#94a3b8" stroke-width="2" marker-end="url(#fm2-a)" />
+              <line x1="178" y1="57" x2="202" y2="57" stroke="#94a3b8" stroke-width="2" marker-end="url(#fm2-a)" />
+              <line x1="242" y1="57" x2="266" y2="57" stroke="#94a3b8" stroke-width="2" marker-end="url(#fm2-a)" />
+              <rect x="14" y="40" width="36" height="34" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="32" y="57" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#ffffff">1</text>
+              <rect x="78" y="40" width="36" height="34" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="96" y="57" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#ffffff">2</text>
+              <rect x="142" y="40" width="36" height="34" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="160" y="57" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#ffffff">3</text>
+              <rect x="206" y="40" width="36" height="34" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="224" y="57" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#ffffff">4</text>
+              <rect x="270" y="40" width="36" height="34" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="288" y="57" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#ffffff">5</text>
+              <text x="312" y="57" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" fill="#94a3b8">null</text>
+            </svg>
+            <figcaption class="text-xs text-slate-400 mt-1">结束：fast 到 null，slow 正好停在中点（节点 3）</figcaption>
+          </figure>
+        </div>
+
+        <!-- 操作示意图 2：环检测 -->
+        <h3 class="text-sm font-semibold text-slate-700 mb-2">操作：环检测 —— 有环则 fast/slow 必然相遇</h3>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <figure>
+            <p class="text-xs text-slate-500 font-semibold mb-1">无环</p>
+            <svg viewBox="0 0 320 120" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+              <defs><marker id="cy-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" /></marker></defs>
+              <text x="160" y="22" text-anchor="middle" font-size="11" font-family="monospace" font-weight="bold" fill="#f59e0b">slow</text>
+              <line x1="160" y1="28" x2="160" y2="36" stroke="#f59e0b" stroke-width="1.5" />
+              <text x="290" y="22" text-anchor="middle" font-size="11" font-family="monospace" font-weight="bold" fill="#60a5fa">fast=null</text>
+              <line x1="50" y1="57" x2="74" y2="57" stroke="#94a3b8" stroke-width="2" marker-end="url(#cy-a)" />
+              <line x1="114" y1="57" x2="138" y2="57" stroke="#94a3b8" stroke-width="2" marker-end="url(#cy-a)" />
+              <line x1="178" y1="57" x2="202" y2="57" stroke="#94a3b8" stroke-width="2" marker-end="url(#cy-a)" />
+              <line x1="242" y1="57" x2="266" y2="57" stroke="#94a3b8" stroke-width="2" marker-end="url(#cy-a)" />
+              <rect x="14" y="40" width="36" height="34" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="32" y="57" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#ffffff">1</text>
+              <rect x="78" y="40" width="36" height="34" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="96" y="57" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#ffffff">2</text>
+              <rect x="142" y="40" width="36" height="34" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="160" y="57" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#ffffff">3</text>
+              <rect x="206" y="40" width="36" height="34" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="224" y="57" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#ffffff">4</text>
+              <rect x="270" y="40" width="36" height="34" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="288" y="57" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#ffffff">5</text>
+              <text x="312" y="57" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" fill="#94a3b8">null</text>
+            </svg>
+            <figcaption class="text-xs text-slate-400 mt-1">无环：fast 走到 null，循环退出，返回 false</figcaption>
+          </figure>
+          <figure>
+            <p class="text-xs text-slate-500 font-semibold mb-1">有环（5→3）</p>
+            <svg viewBox="0 0 320 120" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+              <defs><marker id="cy2-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" /></marker></defs>
+              <text x="224" y="18" text-anchor="middle" font-size="11" font-family="monospace" font-weight="bold" fill="#16a34a">fast=slow 相遇</text>
+              <line x1="224" y1="24" x2="224" y2="32" stroke="#16a34a" stroke-width="1.5" />
+              <line x1="50" y1="47" x2="74" y2="47" stroke="#94a3b8" stroke-width="2" marker-end="url(#cy2-a)" />
+              <line x1="114" y1="47" x2="138" y2="47" stroke="#94a3b8" stroke-width="2" marker-end="url(#cy2-a)" />
+              <line x1="178" y1="47" x2="202" y2="47" stroke="#94a3b8" stroke-width="2" marker-end="url(#cy2-a)" />
+              <line x1="242" y1="47" x2="266" y2="47" stroke="#94a3b8" stroke-width="2" marker-end="url(#cy2-a)" />
+              <!-- 环：5 → 3 -->
+              <path d="M 288 64 L 288 86 L 160 86 L 160 66" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#cy2-a)" />
+              <rect x="14" y="30" width="36" height="34" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="32" y="47" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#ffffff">1</text>
+              <rect x="78" y="30" width="36" height="34" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="96" y="47" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#ffffff">2</text>
+              <rect x="142" y="30" width="36" height="34" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="160" y="47" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#ffffff">3</text>
+              <rect x="206" y="30" width="36" height="34" rx="6" fill="#06b6d4" stroke="#f59e0b" stroke-width="2.5" />
+              <text x="224" y="47" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#ffffff">4</text>
+              <rect x="270" y="30" width="36" height="34" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="288" y="47" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#ffffff">5</text>
+            </svg>
+            <figcaption class="text-xs text-slate-400 mt-1">有环：5.next 指回 3，fast 与 slow 在节点 4 相遇，返回 true</figcaption>
+          </figure>
+        </div>
+      </section>
+
       <!-- 1. 快慢指针原理 -->
       <section id="sec-1" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
@@ -202,6 +372,7 @@ onMounted(()=>{ tpInit(); if(tpBox.value){ tpW.value=tpBox.value.clientWidth
 onUnmounted(()=>roTP?.disconnect())
 
 const navList = [
+  { id: "sec-overview", name: "📐 结构总览" },
   { id: "sec-1", name: "快慢指针原理" },
   { id: "sec-2", name: "中点 & 删除倒数第N" },
   { id: "sec-3", name: "环检测 & 环入口" },

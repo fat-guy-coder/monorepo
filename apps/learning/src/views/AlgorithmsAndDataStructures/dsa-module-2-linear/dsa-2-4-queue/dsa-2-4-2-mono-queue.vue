@@ -15,6 +15,127 @@
     <main class="max-w-4xl mx-auto px-6 py-8 space-y-6">
       <Nav :list="navList" title="目录" position="top-right" :showBackToTop="true" />
 
+      <!-- 📐 结构总览 -->
+      <section id="sec-overview" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">📐</span>
+          结构总览：单调队列
+        </h2>
+        <p class="text-slate-600 mb-4 leading-relaxed text-sm">
+          单调队列是一种特殊的 <strong>双端队列</strong>：元素始终保持 <strong>单调</strong>（递减或递增）。求<strong>滑动窗口最大值</strong>用单调递减队列——<strong>队头（front）是当前窗口最大</strong>，队尾（back）最小。
+        </p>
+
+        <!-- 结构图 -->
+        <figure class="mb-6">
+          <svg viewBox="0 0 720 210" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <marker id="mq0-n" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" /></marker>
+              <marker id="mq0-down" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" /></marker>
+            </defs>
+            <text x="20" y="26" font-size="14" font-family="monospace" font-weight="bold" fill="#64748b">单调递减队列：队头最大，队尾最小（大 → 小）</text>
+            <text x="20" y="48" font-size="11" font-family="monospace" fill="#94a3b8">青=数据节点 · 灰箭头=递减方向 · 队头出答案，队尾维护单调</text>
+
+            <!-- 递减方向标注 -->
+            <line x1="250" y1="66" x2="440" y2="66" stroke="#94a3b8" stroke-width="2" marker-end="url(#mq0-n)" />
+            <text x="345" y="56" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" fill="#94a3b8">递减 →</text>
+
+            <!-- 数据节点（递减） -->
+            <rect x="220" y="82" width="56" height="44" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="248" y="104" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">5</text>
+            <rect x="320" y="82" width="56" height="44" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="348" y="104" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">3</text>
+            <rect x="420" y="82" width="56" height="44" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="448" y="104" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">1</text>
+
+            <line x1="276" y1="104" x2="318" y2="104" stroke="#94a3b8" stroke-width="2" marker-end="url(#mq0-n)" />
+            <line x1="376" y1="104" x2="418" y2="104" stroke="#94a3b8" stroke-width="2" marker-end="url(#mq0-n)" />
+
+            <!-- front / back -->
+            <line x1="248" y1="128" x2="248" y2="142" stroke="#94a3b8" stroke-width="2" marker-end="url(#mq0-down)" />
+            <text x="248" y="160" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#64748b">front · 最大</text>
+            <line x1="448" y1="128" x2="448" y2="142" stroke="#94a3b8" stroke-width="2" marker-end="url(#mq0-down)" />
+            <text x="448" y="160" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#64748b">back · 最小</text>
+          </svg>
+          <figcaption class="text-xs text-slate-400 mt-1">图 1：单调递减队列——队头 5 是当前窗口最大值</figcaption>
+        </figure>
+
+        <!-- 操作示意图：滑动窗口四步 -->
+        <h3 class="text-sm font-semibold text-slate-700 mb-2">操作：滑动窗口最大值四步（nums=[1,3,-1,-3,5,3,6,7], k=3，处理 i=4 值 5）</h3>
+        <p class="text-slate-500 text-xs mb-3">口诀：<strong>去过期 → 弹破坏 → 入新值 → 取答案</strong>。处理前 deque 存下标 [1,2,3]（值 3,-1,-3）。</p>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <figure>
+            <p class="text-xs text-slate-500 font-semibold mb-1">① 去过期：队头滑出窗口</p>
+            <svg viewBox="0 0 340 130" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="mqs1-out" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#ef4444" /></marker>
+                <marker id="mqs1-n" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" /></marker>
+              </defs>
+              <line x1="56" y1="62" x2="16" y2="62" stroke="#ef4444" stroke-width="2" marker-end="url(#mqs1-out)" />
+              <rect x="30" y="44" width="52" height="36" rx="6" fill="none" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="4 3" />
+              <text x="56" y="62" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ef4444">3</text>
+              <rect x="130" y="44" width="52" height="36" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="156" y="62" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">-1</text>
+              <rect x="190" y="44" width="52" height="36" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="216" y="62" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">-3</text>
+              <line x1="182" y1="62" x2="188" y2="62" stroke="#94a3b8" stroke-width="2" marker-end="url(#mqs1-n)" />
+              <text x="156" y="116" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#f59e0b">▲ front</text>
+              <text x="216" y="116" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#60a5fa">▲ back</text>
+            </svg>
+            <figcaption class="text-xs text-slate-400 mt-1">队头下标 1 ≤ i-k=1 → 过期弹出，front 右移到 -1</figcaption>
+          </figure>
+
+          <figure>
+            <p class="text-xs text-slate-500 font-semibold mb-1">② 弹破坏：队尾弹出 ≤ 新值的</p>
+            <svg viewBox="0 0 340 130" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="mqs2-out" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#ef4444" /></marker>
+              </defs>
+              <line x1="56" y1="62" x2="16" y2="62" stroke="#ef4444" stroke-width="2" marker-end="url(#mqs2-out)" />
+              <line x1="116" y1="62" x2="76" y2="62" stroke="#ef4444" stroke-width="2" marker-end="url(#mqs2-out)" />
+              <rect x="30" y="44" width="52" height="36" rx="6" fill="none" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="4 3" />
+              <text x="56" y="62" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ef4444">-3</text>
+              <rect x="90" y="44" width="52" height="36" rx="6" fill="none" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="4 3" />
+              <text x="116" y="62" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ef4444">-1</text>
+              <rect x="230" y="44" width="52" height="36" rx="6" fill="#4ade80" stroke="#22c55e" stroke-width="2" />
+              <text x="256" y="62" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#0f172a">5</text>
+              <text x="256" y="116" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#16a34a">新值 5</text>
+            </svg>
+            <figcaption class="text-xs text-slate-400 mt-1">队尾 -3、-1 均 ≤ 5 → 从队尾依次弹出（单调性破坏）</figcaption>
+          </figure>
+
+          <figure>
+            <p class="text-xs text-slate-500 font-semibold mb-1">③ 入新值：push 下标 4</p>
+            <svg viewBox="0 0 340 130" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="mqs3-in" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#4ade80" /></marker>
+              </defs>
+              <line x1="110" y1="62" x2="124" y2="62" stroke="#4ade80" stroke-width="2" marker-end="url(#mqs3-in)" />
+              <rect x="130" y="44" width="52" height="36" rx="6" fill="#4ade80" stroke="#22c55e" stroke-width="2" />
+              <text x="156" y="62" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#0f172a">5</text>
+              <text x="156" y="116" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#16a34a">deque=[4]</text>
+            </svg>
+            <figcaption class="text-xs text-slate-400 mt-1">push 下标 4（值 5），此时 deque 只剩它一个</figcaption>
+          </figure>
+
+          <figure>
+            <p class="text-xs text-slate-500 font-semibold mb-1">④ 取答案：队头=窗口最大</p>
+            <svg viewBox="0 0 340 130" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="mqs4-n" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" /></marker>
+              </defs>
+              <rect x="110" y="44" width="52" height="36" rx="6" fill="#06b6d4" stroke="#f59e0b" stroke-width="2.5" />
+              <text x="136" y="62" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">5</text>
+              <text x="136" y="116" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#f59e0b">▲ front</text>
+              <line x1="166" y1="62" x2="210" y2="62" stroke="#94a3b8" stroke-width="2" marker-end="url(#mqs4-n)" />
+              <rect x="212" y="44" width="52" height="36" rx="6" fill="#4ade80" stroke="#22c55e" stroke-width="1.5" />
+              <text x="238" y="62" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">5</text>
+              <text x="238" y="116" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#16a34a">输出</text>
+            </svg>
+            <figcaption class="text-xs text-slate-400 mt-1">i=4 ≥ k-1=2 → 队头 5 即当前窗口最大，输出 5</figcaption>
+          </figure>
+        </div>
+      </section>
+
       <!-- Section 1: 单调队列概念 -->
       <section id="sec-1" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
@@ -334,6 +455,41 @@
         </aside>
       </section>
 
+      <!-- 🎬 动画演示 -->
+      <section id="sec-viz" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">🎬</span>
+          动画演示：滑动窗口最大值（单调递减队列）
+        </h2>
+        <p class="text-slate-600 mb-3 leading-relaxed text-sm"><code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs">nums=[1,3,-1,-3,5,3,6,7], k=3</code>。四步：<strong>去过期 → 弹破坏 → 入新值 → 取答案</strong>。橙=当前入队，青=窗口内，灰=已过期。</p>
+        <div class="flex flex-wrap items-center gap-2 mb-2 text-xs">
+          <span class="bg-slate-100 px-2 py-1 rounded-full">📏 窗口 k={{ mqK }} · 进度 {{ mqI }}/{{ mqNums.length }}</span>
+          <span class="bg-cyan-50 text-cyan-700 px-2 py-1 rounded-full font-mono">{{ mqStatus }}</span>
+          <span class="bg-slate-100 px-2 py-1 rounded-full text-slate-500">📤 结果: [{{ mqOut.join(', ') }}]</span>
+        </div>
+        <div class="flex flex-wrap items-center gap-2 mb-2">
+          <button @mousedown="mqStep" :disabled="mqBusy || mqDone" class="px-3 py-1.5 rounded-lg text-xs font-medium border transition-all duration-150 active:scale-95 bg-purple-50 text-purple-700 border-purple-200 hover:bg-purple-100 hover:shadow-sm disabled:opacity-40">{{ mqDone ? '✅ 完成' : '▶ 下一步' }}</button>
+          <button @mousedown="mqReset" :disabled="mqBusy" class="px-3 py-1.5 rounded-lg text-xs font-medium border transition-all duration-150 active:scale-95 bg-slate-50 text-slate-500 border-slate-300 hover:bg-slate-100 hover:shadow-sm disabled:opacity-40">↺ Reset</button>
+        </div>
+        <div ref="mqBox" class="w-full relative overflow-x-auto" :style="{height:mqH+'px'}">
+          <v-stage :config="{width:mqW, height:mqH}">
+            <v-layer>
+              <v-text :config="{x:30,y:12,text:'nums（橙=当前 · 青=窗口）',fontSize:11,fontFamily:'monospace',fill:mqC.muted,fontStyle:'bold'}" />
+              <v-rect v-for="(v,j) in mqNums" :key="'n'+j" :config="mqNumRect(j)" />
+              <v-text v-for="(v,j) in mqNums" :key="'nt'+j" :config="mqNumText(j)" />
+              <v-text v-for="(v,j) in mqNums" :key="'ni'+j" :config="mqNumIdx(j)" />
+              <v-text :config="{x:30,y:108,text:'单调队列（front→back，存下标）',fontSize:11,fontFamily:'monospace',fill:mqC.muted,fontStyle:'bold'}" />
+              <v-rect v-for="(v,pos) in mqDeque" :key="'d'+v" :config="mqDequeRect(v,pos)" />
+              <v-text v-for="(v,pos) in mqDeque" :key="'dv'+v" :config="mqDequeVal(v,pos)" />
+              <v-text v-for="(v,pos) in mqDeque" :key="'di'+v" :config="mqDequeIdx(v,pos)" />
+              <v-text :config="{x:30,y:205,text:'输出（各窗口最大值）',fontSize:11,fontFamily:'monospace',fill:mqC.muted,fontStyle:'bold'}" />
+              <v-rect v-for="(v,pos) in mqOut" :key="'o'+pos" :config="mqOutRect(v,pos)" />
+              <v-text v-for="(v,pos) in mqOut" :key="'ot'+pos" :config="mqOutText(v,pos)" />
+            </v-layer>
+          </v-stage>
+        </div>
+      </section>
+
       <!-- Section 7: 小结 -->
       <section id="sec-7" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
@@ -407,16 +563,55 @@
 <script setup lang="ts">
 import { Code, Nav } from 'components'
 import { RouterLink } from 'vue-router'
+import { ref, reactive, onMounted, onUnmounted } from 'vue'
 
 const navList = [
+  { id: "sec-overview", name: "📐 结构总览" },
   { id: "sec-1", name: "什么是单调队列" },
   { id: "sec-2", name: "滑动窗口最大值详解" },
   { id: "sec-3", name: "最短子数组和至少为K" },
   { id: "sec-4", name: "Jump Game VI" },
   { id: "sec-5", name: "受限子序列和" },
   { id: "sec-6", name: "单调队列 vs 单调栈" },
+  { id: "sec-viz", name: "🎬 动画演示" },
   { id: "sec-7", name: "小结与刷题路线" },
 ]
+
+// ===== 🎬 单调队列动画 =====
+const mqC={cyan:'#06b6d4',green:'#4ade80',red:'#ef4444',orange:'#f59e0b',text:'#1e293b',muted:'#94a3b8',ghost:'#e2e8f0'}
+const mqW=ref(700), mqH=ref(270)
+const mqNums=[1,3,-1,-3,5,3,6,7]
+const mqK=3
+const mqDeque=reactive<number[]>([])  // 存下标
+const mqOut=reactive<number[]>([])    // 结果
+const mqI=ref(0), mqCur=ref(-1), mqDone=ref(false), mqBusy=ref(false), mqStatus=ref('')
+const mqBox=ref<HTMLDivElement>()
+const d7=(ms:number)=>new Promise(r=>setTimeout(r,ms))
+function mqNumRect(j:number){ const i=mqI.value; const isCur=j===mqCur.value; const inWin=j>=i-mqK&&j<i; const fill=isCur?mqC.orange:inWin?mqC.cyan:mqC.ghost; const opacity=(j>=i&&!isCur)?0.35:1; return {x:30+j*62,y:40,width:52,height:36,fill,cornerRadius:6,stroke:isCur?mqC.orange:'#94a3b8',strokeWidth:isCur?2.5:1,opacity} }
+function mqNumText(j:number){ const x=30+j*62; return {x,y:40,width:52,height:36,text:String(mqNums[j]),fontSize:16,fontFamily:'monospace',fontStyle:'bold',fill:mqC.text,align:'center',verticalAlign:'middle'} }
+function mqNumIdx(j:number){ return {x:30+j*62,y:78,width:52,text:'['+j+']',fontSize:10,fontFamily:'monospace',fill:mqC.muted,align:'center'} }
+function mqDequeRect(v:number,pos:number){ const isFront=pos===0; const x=30+pos*62,y=132; return {x,y,width:52,height:36,fill:mqC.cyan,cornerRadius:6,stroke:isFront?mqC.orange:'#64748b',strokeWidth:isFront?2.5:1.5,shadowColor:'rgba(0,0,0,.08)',shadowBlur:2} }
+function mqDequeVal(v:number,pos:number){ const x=30+pos*62,y=132; return {x,y,width:52,height:36,text:String(mqNums[v]),fontSize:16,fontFamily:'monospace',fontStyle:'bold',fill:mqC.text,align:'center',verticalAlign:'middle'} }
+function mqDequeIdx(v:number,pos:number){ return {x:30+pos*62,y:170,width:52,text:'['+v+']',fontSize:10,fontFamily:'monospace',fill:mqC.muted,align:'center'} }
+function mqOutRect(v:number,pos:number){ const x=30+pos*62,y=228; return {x,y,width:52,height:36,fill:mqC.green,cornerRadius:6,stroke:'#64748b',strokeWidth:1,shadowColor:'rgba(0,0,0,.08)',shadowBlur:2} }
+function mqOutText(v:number,pos:number){ const x=30+pos*62,y=228; return {x,y,width:52,height:36,text:String(v),fontSize:16,fontFamily:'monospace',fontStyle:'bold',fill:'#fff',align:'center',verticalAlign:'middle'} }
+async function mqStep(){
+  if(mqBusy.value||mqDone.value)return; mqBusy.value=true
+  const i=mqI.value
+  if(i>=mqNums.length){ mqDone.value=true; mqStatus.value='✅ 完成'; mqBusy.value=false; return }
+  mqCur.value=i
+  mqStatus.value=`i=${i} 值=${mqNums[i]}：处理开始`; await d7(250)
+  if(mqDeque.length && mqDeque[0] <= i-mqK){ const old=mqDeque.shift()!; mqStatus.value=`去过期：队头 [${old}] 滑出窗口`; await d7(350) }
+  while(mqDeque.length && mqNums[mqDeque[mqDeque.length-1]] <= mqNums[i]){ const old=mqDeque.pop()!; mqStatus.value=`弹破坏：队尾值 ${mqNums[old]} ≤ ${mqNums[i]}`; await d7(320) }
+  mqDeque.push(i); mqStatus.value=`入新值：[${i}]=${mqNums[i]}`; await d7(320)
+  if(i>=mqK-1){ const max=mqNums[mqDeque[0]]; mqOut.push(max); mqStatus.value=`取答案：窗口最大值 = ${max}`; await d7(320) }
+  mqI.value++
+  mqBusy.value=false
+}
+function mqReset(){ mqBusy.value=false; mqDeque.length=0; mqOut.length=0; mqI.value=0; mqCur.value=-1; mqDone.value=false; mqStatus.value='' }
+let roMQ:ResizeObserver|null=null
+onMounted(()=>{ if(mqBox.value){ mqW.value=mqBox.value.clientWidth; roMQ=new ResizeObserver(e=>{const w=e[0]?.contentRect.width; if(w&&w>200) mqW.value=Math.max(520,w)}); roMQ.observe(mqBox.value) }})
+onUnmounted(()=>roMQ?.disconnect())
 
 const slidingWindowApproachesCode = `// ==========================================
 // 解法1: 暴力法 — O(n*k)

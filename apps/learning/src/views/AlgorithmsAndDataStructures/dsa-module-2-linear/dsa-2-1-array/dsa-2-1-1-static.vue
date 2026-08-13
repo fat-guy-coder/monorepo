@@ -15,6 +15,115 @@
     <main class="max-w-4xl mx-auto px-6 py-8 space-y-6">
       <Nav :list="navList" title="📑 目录" position="top-right" :showBackToTop="true" />
 
+      <!-- 📐 结构总览 -->
+      <section id="sec-overview" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">📐</span>
+          结构总览：静态数组
+        </h2>
+        <p class="text-slate-600 mb-4 leading-relaxed text-sm">
+          数组是<strong>一块连续内存</strong>，元素类型相同、按固定字节数紧挨排列。只要知道<strong>基地址 base</strong> 和<strong>下标 i</strong>，
+          就能用 <code class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-xs font-mono">base + i × size</code> 一步算出目标地址 —— 这就是 O(1) 随机访问。
+        </p>
+
+        <!-- 结构图 -->
+        <figure class="mb-6">
+          <svg viewBox="0 0 640 200" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+            <text x="16" y="24" font-size="13" font-family="monospace" fill="#64748b" font-weight="bold">一块连续内存：元素紧挨排列，类型相同（int32 = 4 字节）</text>
+
+            <!-- 地址标注 -->
+            <text x="75" y="64" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">0x1000</text>
+            <text x="161" y="64" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">0x1004</text>
+            <text x="247" y="64" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">0x1008</text>
+            <text x="333" y="64" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">0x100C</text>
+
+            <!-- 元素格子 -->
+            <rect x="40" y="76" width="70" height="52" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="75" y="102" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">42</text>
+            <rect x="126" y="76" width="70" height="52" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="161" y="102" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">17</text>
+            <rect x="212" y="76" width="70" height="52" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="247" y="102" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">99</text>
+            <rect x="298" y="76" width="70" height="52" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="333" y="102" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">3</text>
+
+            <!-- 下标 -->
+            <text x="75" y="142" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" fill="#64748b">[0]</text>
+            <text x="161" y="142" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" fill="#64748b">[1]</text>
+            <text x="247" y="142" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" fill="#64748b">[2]</text>
+            <text x="333" y="142" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" fill="#64748b">[3]</text>
+
+            <!-- 底部公式 -->
+            <text x="16" y="178" font-size="11" font-family="monospace" fill="#0891b2">arr[2] 地址 = 0x1000 + 2 × 4 = 0x1008  →  O(1) 随机访问</text>
+          </svg>
+          <figcaption class="text-xs text-slate-400 mt-1">图 1：静态数组结构 —— 连续内存 + base + i × size 寻址，下标与地址一一对应</figcaption>
+        </figure>
+
+        <!-- 操作示意图：随机访问 -->
+        <h3 class="text-sm font-semibold text-slate-700 mb-2">操作：随机访问 arr[2] —— 数组 O(1) vs 链表 O(n)</h3>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <figure>
+            <p class="text-xs text-slate-500 font-semibold mb-1">数组：arr[2] 一步直达</p>
+            <svg viewBox="0 0 320 170" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="ra-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                  <path d="M 0 0 L 10 5 L 0 10 z" fill="#f59e0b" />
+                </marker>
+              </defs>
+              <line x1="175" y1="16" x2="175" y2="44" stroke="#f59e0b" stroke-width="2" marker-end="url(#ra-arr)" />
+              <text x="175" y="10" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#f59e0b">arr[2]</text>
+
+              <rect x="24" y="54" width="54" height="44" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="51" y="76" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#ffffff">42</text>
+              <rect x="86" y="54" width="54" height="44" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="113" y="76" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#ffffff">17</text>
+              <rect x="148" y="54" width="54" height="44" rx="6" fill="#06b6d4" stroke="#f59e0b" stroke-width="2.5" />
+              <text x="175" y="76" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#ffffff">99</text>
+              <rect x="210" y="54" width="54" height="44" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="237" y="76" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#ffffff">3</text>
+
+              <text x="51" y="112" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">[0]</text>
+              <text x="113" y="112" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">[1]</text>
+              <text x="175" y="112" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#f59e0b" font-weight="bold">[2]</text>
+              <text x="237" y="112" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">[3]</text>
+
+              <text x="16" y="140" font-size="11" font-family="monospace" fill="#0891b2">base + 2×4 一次乘加直达</text>
+            </svg>
+            <figcaption class="text-xs text-slate-400 mt-1">arr[2] 直接算地址命中，与数组长度无关 O(1)</figcaption>
+          </figure>
+          <figure>
+            <p class="text-xs text-slate-500 font-semibold mb-1">链表：要逐个遍历 3 步</p>
+            <svg viewBox="0 0 320 170" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="ll-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                  <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" />
+                </marker>
+              </defs>
+              <line x1="66" y1="76" x2="82" y2="76" stroke="#94a3b8" stroke-width="2" marker-end="url(#ll-arr)" />
+              <line x1="134" y1="76" x2="150" y2="76" stroke="#94a3b8" stroke-width="2" marker-end="url(#ll-arr)" />
+              <line x1="202" y1="76" x2="218" y2="76" stroke="#94a3b8" stroke-width="2" marker-end="url(#ll-arr)" />
+
+              <rect x="16" y="54" width="48" height="44" rx="6" fill="#f59e0b" stroke="#d97706" stroke-width="1.5" />
+              <text x="40" y="76" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#ffffff">42</text>
+              <rect x="84" y="54" width="48" height="44" rx="6" fill="#f59e0b" stroke="#d97706" stroke-width="1.5" />
+              <text x="108" y="76" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#ffffff">17</text>
+              <rect x="152" y="54" width="48" height="44" rx="6" fill="#4ade80" stroke="#22c55e" stroke-width="2" />
+              <text x="176" y="76" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#0f172a">99</text>
+              <rect x="220" y="54" width="48" height="44" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="244" y="76" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#ffffff">3</text>
+
+              <text x="40" y="112" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">0</text>
+              <text x="108" y="112" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">1</text>
+              <text x="176" y="112" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#16a34a" font-weight="bold">2</text>
+              <text x="244" y="112" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">3</text>
+
+              <text x="16" y="140" font-size="11" font-family="monospace" fill="#64748b">head → 0 → 1 → 2 逐个跳转</text>
+            </svg>
+            <figcaption class="text-xs text-slate-400 mt-1">链表节点分散存储，只能沿指针逐个遍历到第 3 个 O(n)</figcaption>
+          </figure>
+        </div>
+      </section>
+
       <section id="sec-1" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
           <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">1</span>
@@ -346,6 +455,7 @@ onUnmounted(() => ro?.disconnect())
 
 // ===== navList =====
 const navList = [
+  { id: "sec-overview", name: "📐 结构总览" },
   { id: "sec-1", name: "数组的本质" },
   { id: "sec-2", name: "寻址公式" },
   { id: "sec-3", name: "CPU缓存友好性" },

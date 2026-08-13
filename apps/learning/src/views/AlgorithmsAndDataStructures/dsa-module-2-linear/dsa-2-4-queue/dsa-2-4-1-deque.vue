@@ -15,6 +15,144 @@
     <main class="max-w-4xl mx-auto px-6 py-8 space-y-6">
       <Nav :list="navList" title="目录" position="top-right" :showBackToTop="true" />
 
+      <!-- 📐 结构总览 -->
+      <section id="sec-overview" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">📐</span>
+          结构总览：双端队列
+        </h2>
+        <p class="text-slate-600 mb-4 leading-relaxed text-sm">
+          <strong>Deque（双端队列）</strong> 两端都能插入和删除：左侧 <strong>front</strong> 支持 <strong>addFirst / removeFirst</strong>，右侧 <strong>rear</strong> 支持 <strong>addLast / removeLast</strong>，全部 O(1)。
+        </p>
+
+        <!-- 结构图 -->
+        <figure class="mb-6">
+          <svg viewBox="0 0 720 210" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <marker id="dq0-n" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" /></marker>
+              <marker id="dq0-in" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#4ade80" /></marker>
+              <marker id="dq0-out" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#ef4444" /></marker>
+              <marker id="dq0-down" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" /></marker>
+            </defs>
+            <text x="20" y="26" font-size="14" font-family="monospace" font-weight="bold" fill="#64748b">双端队列：两端都能插入 / 删除（front ⇄ rear）</text>
+            <text x="20" y="48" font-size="11" font-family="monospace" fill="#94a3b8">绿=插入 · 红=删除 · 灰=数据流动 · 青=数据节点</text>
+
+            <!-- 数据节点 -->
+            <rect x="220" y="82" width="56" height="44" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="248" y="104" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">1</text>
+            <rect x="320" y="82" width="56" height="44" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="348" y="104" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">2</text>
+            <rect x="420" y="82" width="56" height="44" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="448" y="104" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">3</text>
+
+            <!-- 数据流动 -->
+            <line x1="276" y1="104" x2="318" y2="104" stroke="#94a3b8" stroke-width="2" marker-end="url(#dq0-n)" />
+            <line x1="376" y1="104" x2="418" y2="104" stroke="#94a3b8" stroke-width="2" marker-end="url(#dq0-n)" />
+
+            <!-- 左侧：头部操作 -->
+            <line x1="130" y1="88" x2="216" y2="88" stroke="#4ade80" stroke-width="2" marker-end="url(#dq0-in)" />
+            <text x="168" y="70" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" fill="#16a34a">addFirst</text>
+            <line x1="216" y1="120" x2="130" y2="120" stroke="#ef4444" stroke-width="2" marker-end="url(#dq0-out)" />
+            <text x="168" y="138" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" fill="#ef4444">removeFirst</text>
+
+            <!-- 右侧：尾部操作 -->
+            <line x1="480" y1="88" x2="566" y2="88" stroke="#4ade80" stroke-width="2" marker-end="url(#dq0-in)" />
+            <text x="528" y="70" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" fill="#16a34a">addLast</text>
+            <line x1="566" y1="120" x2="480" y2="120" stroke="#ef4444" stroke-width="2" marker-end="url(#dq0-out)" />
+            <text x="528" y="138" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" fill="#ef4444">removeLast</text>
+
+            <!-- front / rear -->
+            <line x1="248" y1="128" x2="248" y2="142" stroke="#94a3b8" stroke-width="2" marker-end="url(#dq0-down)" />
+            <text x="248" y="158" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#64748b">front</text>
+            <line x1="448" y1="128" x2="448" y2="142" stroke="#94a3b8" stroke-width="2" marker-end="url(#dq0-down)" />
+            <text x="448" y="158" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#64748b">rear</text>
+          </svg>
+          <figcaption class="text-xs text-slate-400 mt-1">图 1：双端队列结构——front / rear 两端都能插入（绿）和删除（红）</figcaption>
+        </figure>
+
+        <!-- 操作示意图：头部 -->
+        <h3 class="text-sm font-semibold text-slate-700 mb-2">头部操作：addFirst（头插）—— O(1)</h3>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
+          <figure>
+            <p class="text-xs text-slate-500 font-semibold mb-1">插入前</p>
+            <svg viewBox="0 0 340 130" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="dqaf-n" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" /></marker>
+              </defs>
+              <line x1="142" y1="62" x2="148" y2="62" stroke="#94a3b8" stroke-width="2" marker-end="url(#dqaf-n)" />
+              <rect x="90" y="44" width="52" height="36" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="116" y="62" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">2</text>
+              <rect x="150" y="44" width="52" height="36" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="176" y="62" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">3</text>
+              <text x="116" y="116" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#f59e0b">▲ front</text>
+              <text x="176" y="116" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#60a5fa">▲ rear</text>
+            </svg>
+            <figcaption class="text-xs text-slate-400 mt-1">front 指向队头 2</figcaption>
+          </figure>
+          <figure>
+            <p class="text-xs text-slate-500 font-semibold mb-1">插入后（新节点 1 放到 front 左侧）</p>
+            <svg viewBox="0 0 340 130" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="dqaf2-n" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" /></marker>
+              </defs>
+              <line x1="82" y1="62" x2="88" y2="62" stroke="#94a3b8" stroke-width="2" marker-end="url(#dqaf2-n)" />
+              <line x1="142" y1="62" x2="148" y2="62" stroke="#94a3b8" stroke-width="2" marker-end="url(#dqaf2-n)" />
+              <rect x="30" y="44" width="52" height="36" rx="6" fill="#4ade80" stroke="#22c55e" stroke-width="2" />
+              <text x="56" y="62" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#0f172a">1</text>
+              <rect x="90" y="44" width="52" height="36" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="116" y="62" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">2</text>
+              <rect x="150" y="44" width="52" height="36" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="176" y="62" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">3</text>
+              <text x="56" y="116" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#f59e0b">▲ front</text>
+              <text x="176" y="116" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#60a5fa">▲ rear</text>
+            </svg>
+            <figcaption class="text-xs text-slate-400 mt-1">addFirst：新节点 1 成为新的 front；removeFirst 同理（从左侧摘除）</figcaption>
+          </figure>
+        </div>
+
+        <!-- 操作示意图：尾部 -->
+        <h3 class="text-sm font-semibold text-slate-700 mb-2">尾部操作：removeLast（尾删）—— O(1)</h3>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <figure>
+            <p class="text-xs text-slate-500 font-semibold mb-1">删除前</p>
+            <svg viewBox="0 0 340 130" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="dqrl-n" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" /></marker>
+              </defs>
+              <line x1="82" y1="62" x2="88" y2="62" stroke="#94a3b8" stroke-width="2" marker-end="url(#dqrl-n)" />
+              <line x1="142" y1="62" x2="148" y2="62" stroke="#94a3b8" stroke-width="2" marker-end="url(#dqrl-n)" />
+              <rect x="30" y="44" width="52" height="36" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="56" y="62" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">1</text>
+              <rect x="90" y="44" width="52" height="36" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="116" y="62" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">2</text>
+              <rect x="150" y="44" width="52" height="36" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="176" y="62" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">3</text>
+              <text x="56" y="116" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#f59e0b">▲ front</text>
+              <text x="176" y="116" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#60a5fa">▲ rear</text>
+            </svg>
+            <figcaption class="text-xs text-slate-400 mt-1">rear 指向队尾 3</figcaption>
+          </figure>
+          <figure>
+            <p class="text-xs text-slate-500 font-semibold mb-1">删除后（摘除 rear 节点 3）</p>
+            <svg viewBox="0 0 340 130" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="dqrl2-n" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" /></marker>
+              </defs>
+              <line x1="82" y1="62" x2="88" y2="62" stroke="#94a3b8" stroke-width="2" marker-end="url(#dqrl2-n)" />
+              <rect x="30" y="44" width="52" height="36" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="56" y="62" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">1</text>
+              <rect x="90" y="44" width="52" height="36" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="116" y="62" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">2</text>
+              <rect x="150" y="44" width="52" height="36" rx="6" fill="none" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="4 3" />
+              <text x="176" y="62" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ef4444">3</text>
+              <text x="56" y="116" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#f59e0b">▲ front</text>
+              <text x="116" y="116" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#60a5fa">▲ rear</text>
+            </svg>
+            <figcaption class="text-xs text-slate-400 mt-1">removeLast：rear 左移指向 2；addLast 同理（追加到右侧）</figcaption>
+          </figure>
+        </div>
+      </section>
+
       <!-- Section 1: 概述 -->
       <section id="sec-1" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
@@ -444,6 +582,7 @@ onMounted(()=>{ qInit(); if(qBox.value){ qW.value=qBox.value.clientWidth; roQ=ne
 onUnmounted(()=>roQ?.disconnect())
 
 const navList = [
+  { id: "sec-overview", name: "📐 结构总览" },
   { id: "sec-1", name: "什么是双端队列" },
   { id: "sec-2", name: "链表实现 Deque" },
   { id: "sec-3", name: "循环数组实现 Deque" },

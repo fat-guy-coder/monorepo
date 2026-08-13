@@ -15,6 +15,136 @@
     <main class="max-w-4xl mx-auto px-6 py-8 space-y-6">
       <Nav :list="navList" title="📑 目录" position="top-right" :showBackToTop="true" />
 
+      <!-- 📐 结构总览 -->
+      <section id="sec-overview" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">📐</span>
+          结构总览：前缀和
+        </h2>
+        <p class="text-slate-600 mb-4 leading-relaxed text-sm">
+          前缀和是一种<strong>预处理技术</strong>：用 O(n) 构建辅助数组 <code class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-xs font-mono">prefix</code>，
+          其中 <code class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-xs font-mono">prefix[i] = arr[0] + ... + arr[i-1]</code>（多一个哨兵 prefix[0]=0）。
+          之后任意区间和都能用 <code class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-xs font-mono">prefix[R+1] - prefix[L]</code> 在 O(1) 内算出。
+        </p>
+
+        <!-- 结构图 -->
+        <figure class="mb-6">
+          <svg viewBox="0 0 520 220" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+            <text x="16" y="24" font-size="13" font-family="monospace" fill="#64748b" font-weight="bold">原数组 + 前缀和数组（上下对应，prefix 多一个哨兵）</text>
+
+            <!-- 原数组 -->
+            <rect x="88" y="44" width="56" height="44" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="116" y="66" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">3</text>
+            <rect x="152" y="44" width="56" height="44" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="180" y="66" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">1</text>
+            <rect x="216" y="44" width="56" height="44" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="244" y="66" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">4</text>
+            <rect x="280" y="44" width="56" height="44" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="308" y="66" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">1</text>
+            <rect x="344" y="44" width="56" height="44" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="372" y="66" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">5</text>
+            <rect x="408" y="44" width="56" height="44" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="436" y="66" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">9</text>
+
+            <text x="116" y="100" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">[0]</text>
+            <text x="180" y="100" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">[1]</text>
+            <text x="244" y="100" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">[2]</text>
+            <text x="308" y="100" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">[3]</text>
+            <text x="372" y="100" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">[4]</text>
+            <text x="436" y="100" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">[5]</text>
+
+            <text x="16" y="118" font-size="11" font-family="monospace" fill="#0891b2" font-weight="bold">前缀和 prefix（prefix[i] = 前 i 个元素之和，prefix[0]=0 哨兵）</text>
+
+            <!-- 前缀和数组（哨兵 + n 个） -->
+            <rect x="24" y="138" width="56" height="44" rx="6" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" />
+            <text x="52" y="160" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#64748b">0</text>
+            <rect x="88" y="138" width="56" height="44" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="116" y="160" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#ffffff">3</text>
+            <rect x="152" y="138" width="56" height="44" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="180" y="160" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#ffffff">4</text>
+            <rect x="216" y="138" width="56" height="44" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="244" y="160" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#ffffff">8</text>
+            <rect x="280" y="138" width="56" height="44" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="308" y="160" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#ffffff">9</text>
+            <rect x="344" y="138" width="56" height="44" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="372" y="160" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#ffffff">14</text>
+            <rect x="408" y="138" width="56" height="44" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="436" y="160" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#ffffff">23</text>
+
+            <text x="52" y="194" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#94a3b8">[0]</text>
+            <text x="116" y="194" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">[1]</text>
+            <text x="180" y="194" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">[2]</text>
+            <text x="244" y="194" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">[3]</text>
+            <text x="308" y="194" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">[4]</text>
+            <text x="372" y="194" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">[5]</text>
+            <text x="436" y="194" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">[6]</text>
+          </svg>
+          <figcaption class="text-xs text-slate-400 mt-1">图 1：前缀和结构 —— prefix[i+1] 与 arr[i] 上下对齐，prefix[i+1] = arr[0..i] 之和</figcaption>
+        </figure>
+
+        <!-- 操作示意图：区间和 -->
+        <h3 class="text-sm font-semibold text-slate-700 mb-2">操作：区间和 sum[2..4] = prefix[5] - prefix[2] = 14 - 4 = 10</h3>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <figure>
+            <p class="text-xs text-slate-500 font-semibold mb-1">原数组区间 [2,4]（直接累加 O(n)）</p>
+            <svg viewBox="0 0 320 150" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+              <rect x="14" y="60" width="40" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="34" y="80" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">3</text>
+              <rect x="60" y="60" width="40" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="80" y="80" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">1</text>
+              <rect x="106" y="60" width="40" height="40" rx="6" fill="#f59e0b" stroke="#d97706" stroke-width="2" />
+              <text x="126" y="80" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">4</text>
+              <rect x="152" y="60" width="40" height="40" rx="6" fill="#f59e0b" stroke="#d97706" stroke-width="2" />
+              <text x="172" y="80" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">1</text>
+              <rect x="198" y="60" width="40" height="40" rx="6" fill="#f59e0b" stroke="#d97706" stroke-width="2" />
+              <text x="218" y="80" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">5</text>
+              <rect x="244" y="60" width="40" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="264" y="80" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">9</text>
+
+              <text x="34" y="112" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">[0]</text>
+              <text x="80" y="112" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">[1]</text>
+              <text x="126" y="112" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#d97706" font-weight="bold">[2]</text>
+              <text x="172" y="112" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#d97706" font-weight="bold">[3]</text>
+              <text x="218" y="112" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#d97706" font-weight="bold">[4]</text>
+              <text x="264" y="112" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">[5]</text>
+
+              <text x="14" y="136" font-size="11" font-family="monospace" fill="#64748b">arr[2]+arr[3]+arr[4] = 4+1+5 = 10</text>
+            </svg>
+            <figcaption class="text-xs text-slate-400 mt-1">朴素做法：逐个累加区间元素，查询次数多时是 O(n) 每次</figcaption>
+          </figure>
+          <figure>
+            <p class="text-xs text-slate-500 font-semibold mb-1">前缀和查表（O(1)）</p>
+            <svg viewBox="0 0 320 150" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+              <rect x="14" y="60" width="36" height="40" rx="6" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" />
+              <text x="32" y="80" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#64748b">0</text>
+              <rect x="54" y="60" width="36" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="72" y="80" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#ffffff">3</text>
+              <rect x="94" y="60" width="36" height="40" rx="6" fill="#ef4444" stroke="#dc2626" stroke-width="2" />
+              <text x="112" y="80" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#ffffff">4</text>
+              <rect x="134" y="60" width="36" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="152" y="80" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#ffffff">8</text>
+              <rect x="174" y="60" width="36" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="192" y="80" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#ffffff">9</text>
+              <rect x="214" y="60" width="36" height="40" rx="6" fill="#4ade80" stroke="#22c55e" stroke-width="2" />
+              <text x="232" y="80" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#0f172a">14</text>
+              <rect x="254" y="60" width="36" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="272" y="80" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#ffffff">23</text>
+
+              <text x="32" y="112" text-anchor="middle" dominant-baseline="central" font-size="9" font-family="monospace" fill="#94a3b8">[0]</text>
+              <text x="72" y="112" text-anchor="middle" dominant-baseline="central" font-size="9" font-family="monospace" fill="#64748b">[1]</text>
+              <text x="112" y="112" text-anchor="middle" dominant-baseline="central" font-size="9" font-family="monospace" fill="#dc2626" font-weight="bold">[2]</text>
+              <text x="152" y="112" text-anchor="middle" dominant-baseline="central" font-size="9" font-family="monospace" fill="#64748b">[3]</text>
+              <text x="192" y="112" text-anchor="middle" dominant-baseline="central" font-size="9" font-family="monospace" fill="#64748b">[4]</text>
+              <text x="232" y="112" text-anchor="middle" dominant-baseline="central" font-size="9" font-family="monospace" fill="#16a34a" font-weight="bold">[5]</text>
+              <text x="272" y="112" text-anchor="middle" dominant-baseline="central" font-size="9" font-family="monospace" fill="#64748b">[6]</text>
+
+              <text x="14" y="136" font-size="11" font-family="monospace" fill="#0891b2">sum = prefix[5] − prefix[2] = 14 − 4 = 10</text>
+            </svg>
+            <figcaption class="text-xs text-slate-400 mt-1">预处理一次 O(n)，之后每次区间查询只做一次减法 O(1)</figcaption>
+          </figure>
+        </div>
+      </section>
+
       <!-- 1. 前缀和概念 -->
       <section id="sec-1" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
@@ -313,6 +443,7 @@ onMounted(()=>{ psInit(); if(psBox.value){ psW.value=psBox.value.clientWidth; la
 onUnmounted(()=>roPS?.disconnect())
 
 const navList = [
+  { id: "sec-overview", name: "📐 结构总览" },
   { id: "sec-1", name: "前缀和概念" },
   { id: "sec-2", name: "区间查询与变体" },
   { id: "sec-3", name: "差分数组" },
