@@ -65,8 +65,6 @@
 
             <!-- 术语标注 -->
             <text x="360" y="36" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" fill="#f59e0b" font-weight="bold">根 root</text>
-            <text x="200" y="150" text-anchor="middle" dominant-baseline="central" font-size="0"></text>
-            <text x="58" y="150" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" fill="#64748b">父→子</text>
             <text x="58" y="245" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" fill="#16a34a">叶 leaf</text>
 
             <!-- 深度 / 高度 / 层 -->
@@ -81,7 +79,8 @@
             <!-- 度标注 -->
             <text x="360" y="104" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#0891b2">度(1)=3</text>
 
-            <text x="16" y="305" font-size="11" font-family="monospace" fill="#64748b">深度：根→该节点边的数量（自上而下）；高度：该节点→最远叶子的边数（自下而上）；层 = 深度 + 1</text>
+            <text x="16" y="298" font-size="11" font-family="monospace" fill="#64748b">根=无父的节点；父→子=一条边；兄弟 sibling=同一父节点的节点（2、3、4）；度=孩子个数（度(1)=3）</text>
+            <text x="16" y="318" font-size="11" font-family="monospace" fill="#64748b">深度：根→该节点的边数（自上而下）；高度：该节点→最远叶子的边数（自下而上）；层 = 深度 + 1</text>
           </svg>
           <figcaption class="text-xs text-slate-400 mt-1">图 1：根（橙描边）、内部节点（青）、叶子（绿）——深度自上而下，高度自下而上</figcaption>
         </figure>
