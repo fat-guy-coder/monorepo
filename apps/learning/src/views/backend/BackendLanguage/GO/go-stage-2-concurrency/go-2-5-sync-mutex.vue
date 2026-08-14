@@ -3,6 +3,54 @@
     <header class="bg-white border-b border-slate-200"><div class="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between"><div><h1 class="text-2xl font-bold text-slate-800">🔒 Mutex 互斥锁</h1><p class="text-sm text-slate-500 mt-1">sync.Mutex / RWMutex — 保护共享数据，Go 的 goroutine 是并行的，所以需要锁</p></div><div class="flex items-center gap-3"><EditorLink file-path="apps/go/concurrency/go-2-5-sync-mutex.go" label="📝 查看源码" :is-admin="userStore.isAdmin" /><span class="text-xs text-slate-400 bg-slate-100 px-3 py-1 rounded-full">阶段 2-5</span></div></div></header>
     <main class="max-w-4xl mx-auto px-6 py-8 space-y-6"><Nav :list="navList" title="📑 目录" position="top-right" :showBackToTop="true" />
 
+      <!-- 📐 结构总览 -->
+      <section id="sec-overview" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">📐</span>
+          结构总览：互斥锁 = 临界区 + 等待队列
+        </h2>
+        <p class="text-slate-600 mb-4 leading-relaxed text-sm">
+          Mutex 保证同一时刻<strong>只有一个 goroutine</strong>能进入临界区。其他 goroutine 尝试 Lock 时会<strong>阻塞排队</strong>，
+          等当前持有者 Unlock 后，队列里第一个等待者被唤醒获取锁。
+        </p>
+
+        <figure class="mb-4">
+          <svg viewBox="0 0 720 250" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <marker id="mx-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" />
+              </marker>
+            </defs>
+
+            <text x="16" y="24" font-size="13" font-family="monospace" fill="#64748b" font-weight="bold">临界区（共享变量 counter，同一时刻只允许一个 goroutine 进入）</text>
+            <rect x="40" y="36" width="280" height="130" rx="8" fill="#fef3c7" stroke="#f59e0b" stroke-width="2" />
+            <text x="180" y="66" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#b45309">counter++</text>
+            <text x="180" y="92" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" fill="#b45309">mu.Lock()</text>
+            <text x="180" y="112" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" fill="#b45309">  counter++  ← 临界区</text>
+            <text x="180" y="132" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" fill="#b45309">mu.Unlock()</text>
+
+            <rect x="180" y="8" width="100" height="26" rx="6" fill="#4ade80" stroke="#22c55e" stroke-width="2" />
+            <text x="230" y="21" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" font-weight="bold" fill="#0f172a">🔒 已锁定</text>
+
+            <rect x="360" y="60" width="120" height="44" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="2" />
+            <text x="420" y="82" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">G1（持有锁）</text>
+            <line x1="360" y1="82" x2="320" y2="82" stroke="#06b6d4" stroke-width="2" marker-end="url(#mx-arr)" />
+
+            <text x="540" y="24" font-size="12" font-family="monospace" fill="#64748b" font-weight="bold">等待队列（阻塞排队）</text>
+            <rect x="520" y="36" width="120" height="40" rx="6" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" />
+            <text x="580" y="56" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#64748b">G2（等待）</text>
+            <rect x="520" y="84" width="120" height="40" rx="6" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" />
+            <text x="580" y="104" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#64748b">G3（等待）</text>
+            <rect x="520" y="132" width="120" height="40" rx="6" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" />
+            <text x="580" y="152" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#64748b">G4（等待）</text>
+            <line x1="520" y1="56" x2="500" y2="82" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#mx-arr)" />
+
+            <text x="16" y="230" font-size="11" font-family="monospace" fill="#0891b2">G1 Unlock 后 → G2 从队列唤醒 → 获取锁进临界区 → 依次类推（FIFO 公平）</text>
+          </svg>
+          <figcaption class="text-xs text-slate-400 mt-1">图 1：Mutex 互斥——G1 持锁进临界区（绿色），G2/G3/G4 在等待队列阻塞排队，G1 Unlock 后 G2 被唤醒</figcaption>
+        </figure>
+      </section>
+
       <!-- 1. 竞态条件 -->
       <section id="sec-1" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">1</span>竞态条件 — 为什么 Go 也需要锁？</h2>
@@ -56,12 +104,119 @@
         <aside class="bg-emerald-50 border-l-4 border-emerald-400 rounded-r-xl p-4"><p class="text-sm text-emerald-800"><strong>✅ 检测利器：go run -race</strong>（编译时插入竞态检查）和 <strong>go vet</strong>（锁拷贝检查）。CI 标配：<code class="bg-emerald-100 px-1 rounded text-xs font-mono">go test -race ./...</code></p></aside>
       </section>
 
+      <!-- 🎬 动画演示 -->
+      <section id="sec-viz" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">🎬</span>
+          动画演示：互斥锁的 Lock / Unlock
+        </h2>
+        <p class="text-slate-600 mb-3 leading-relaxed text-sm">
+          点「Lock」让队首的 goroutine 进入临界区（绿色），其余在等待队列排队。点「Unlock」释放锁，队首下一个自动进入临界区。
+          观察同一时刻<strong>只有一个 goroutine 在临界区</strong>。
+        </p>
+        <div class="flex flex-wrap items-center gap-2 mb-2 text-xs">
+          <span class="bg-slate-100 px-2 py-1 rounded-full">🚦 锁状态: {{ locked ? '🔒 已锁' : '🔓 未锁' }}</span>
+          <span class="bg-slate-100 px-2 py-1 rounded-full">👥 排队: {{ waiting.length }} 个</span>
+          <span class="bg-cyan-50 text-cyan-700 px-2 py-1 rounded-full font-mono">{{ status }}</span>
+        </div>
+        <div class="flex flex-wrap items-center gap-2 mb-2">
+          <button @mousedown="doLock" :disabled="busy || (waiting.length === 0 && !locked)" class="px-3 py-1.5 rounded-lg text-xs font-medium border transition-all duration-150 active:scale-95 active:shadow-inner bg-cyan-50 text-cyan-700 border-cyan-200 hover:bg-cyan-100 hover:border-cyan-300 hover:shadow-sm disabled:opacity-40 disabled:cursor-not-allowed disabled:scale-100">Lock (进入临界区)</button>
+          <button @mousedown="doUnlock" :disabled="busy || !locked" class="px-3 py-1.5 rounded-lg text-xs font-medium border transition-all duration-150 active:scale-95 active:shadow-inner bg-red-50 text-red-600 border-red-200 hover:bg-red-100 hover:border-red-300 hover:shadow-sm disabled:opacity-40 disabled:cursor-not-allowed disabled:scale-100">Unlock (释放锁)</button>
+          <button @mousedown="doReset" :disabled="busy" class="px-3 py-1.5 rounded-lg text-xs font-medium border transition-all duration-150 active:scale-95 active:shadow-inner bg-slate-50 text-slate-500 border-slate-300 hover:bg-slate-100 hover:border-slate-400 hover:shadow-sm disabled:opacity-40 disabled:cursor-not-allowed disabled:scale-100">↺ Reset</button>
+        </div>
+        <div ref="box" class="w-full relative" :style="{height: H+'px'}">
+          <v-stage :config="{width: W, height: H}">
+            <v-layer>
+              <!-- 临界区 -->
+              <v-rect :config="csRectCfg" />
+              <v-text :config="csLabelCfg" />
+              <v-rect v-if="holder" :config="holderCfg" />
+              <v-text v-if="holder" :config="holderTextCfg" />
+              <!-- 锁状态 -->
+              <v-text :config="lockCfg" />
+              <!-- 等待队列 -->
+              <v-rect v-for="(g,i) in waiting" :key="'w'+g" :config="waitRectCfg(i)" />
+              <v-text v-for="(g,i) in waiting" :key="'wt'+g" :config="waitTextCfg(i)" />
+            </v-layer>
+          </v-stage>
+        </div>
+      </section>
+
       <section id="sec-6" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100"><h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">📋</span>小结</h2><ul class="space-y-2 text-slate-600"><li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span>Mutex = 原子 CAS + futex 休眠排队。Lock+defer Unlock 记住这四个单词</span></li><li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span>传递数据用 channel，保护共享变量用 Mutex，读多写少用 RWMutex</span></li><li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span>Mutex 不可重入、不可复制——传参用指针</span></li><li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span><strong>go test -race</strong> 必须跑——很多竞态在低并发时根本不出现</span></li></ul></section>
     </main>
     <footer class="max-w-4xl mx-auto px-6 py-8"><nav class="flex justify-between items-center pt-4 border-t border-slate-200 text-sm"><RouterLink to="/backend/BackendLanguage/GO/go-stage-2-concurrency/go-2-4-timer-ticker" class="text-slate-500 hover:text-cyan-600 flex items-center gap-1">← 上一节：Timer/Ticker</RouterLink><RouterLink to="/backend/BackendLanguage/GO/go-stage-2-concurrency/go-2-6-sync-wg-once" class="text-cyan-600 hover:text-cyan-700 font-medium flex items-center gap-1">下一节：WaitGroup/Once →</RouterLink></nav></footer>
   </div></template>
-<script setup lang="ts">import { Code, EditorLink, Nav } from 'components'; import { RouterLink } from 'vue-router'; import { useUserStore } from '@/stores/userProfle'; const userStore = useUserStore()
-const navList = [{id:"sec-1",name:"竞态条件"},{id:"sec-2",name:"Mutex原理+用法"},{id:"sec-3",name:"Mutex vs Channel"},{id:"sec-4",name:"RWMutex"},{id:"sec-5",name:"死锁三场景"},{id:"sec-6",name:"小结"}]
+<script setup lang="ts">import { Code, EditorLink, Nav } from 'components'; import { RouterLink } from 'vue-router'; import { useUserStore } from '@/stores/userProfle'; import { ref, reactive, computed, onMounted, onUnmounted } from 'vue'; const userStore = useUserStore()
+const navList = [{id:"sec-overview",name:"📐 结构总览"},{id:"sec-1",name:"竞态条件"},{id:"sec-2",name:"Mutex原理+用法"},{id:"sec-3",name:"Mutex vs Channel"},{id:"sec-4",name:"RWMutex"},{id:"sec-5",name:"死锁三场景"},{id:"sec-viz",name:"🎬 动画演示"},{id:"sec-6",name:"小结"}]
+
+// ===== 🎬 Mutex 锁竞争动画 =====
+const C = { cyan:'#06b6d4', green:'#4ade80', red:'#ef4444', orange:'#f59e0b', muted:'#64748b', ghost:'#e2e8f0' }
+const H = ref(170), W = ref(700)
+const CSX = 40, CSY = 55, CSW = 220, CSH = 70   // 临界区
+const box = ref<HTMLDivElement>()
+const busy = ref(false), status = ref('')
+const d = (ms: number) => new Promise(r => setTimeout(r, ms))
+
+const waiting = reactive(['G2', 'G3', 'G4'])
+const holder = ref<string | null>('G1')   // 当前持有锁
+const locked = computed(() => holder.value !== null)
+
+function init() { waiting.splice(0, waiting.length, 'G2', 'G3', 'G4'); holder.value = 'G1'; status.value = '' }
+
+const csRectCfg = { x: CSX, y: CSY, width: CSW, height: CSH, fill: '#fef3c7', cornerRadius: 8, stroke: '#f59e0b', strokeWidth: 2 }
+const csLabelCfg = { x: CSX, y: CSY + 10, width: CSW, text: '临界区', fontSize: 12, fontFamily: 'monospace', fontStyle: 'bold', fill: '#b45309', align: 'center' }
+const holderCfg = computed(() => ({ x: CSX + 70, y: CSY + 28, width: 80, height: 32, fill: C.green, cornerRadius: 6, stroke: '#22c55e', strokeWidth: 2 }))
+const holderTextCfg = computed(() => ({ x: CSX + 70, y: CSY + 28, width: 80, height: 32, text: holder.value ?? '', fontSize: 13, fontFamily: 'monospace', fontStyle: 'bold', fill: '#0f172a', align: 'center', verticalAlign: 'middle' }))
+const lockCfg = computed(() => ({ x: CSX + CSW + 20, y: CSY + 10, text: locked.value ? '🔒' : '🔓', fontSize: 24, align: 'center' }))
+function waitRectCfg(i: number) {
+  const x = CSX + CSW + 90
+  const y = CSY + 10 + i * 42
+  return { x, y, width: 90, height: 34, fill: C.ghost, cornerRadius: 6, stroke: '#94a3b8', strokeWidth: 1.5 }
+}
+function waitTextCfg(i: number) {
+  const x = CSX + CSW + 90
+  const y = CSY + 10 + i * 42
+  return { x, y, width: 90, height: 34, text: waiting[i] + '（等）', fontSize: 12, fontFamily: 'monospace', fontStyle: 'bold', fill: C.muted, align: 'center', verticalAlign: 'middle' }
+}
+
+async function act(msg: string, fn: () => Promise<void>) {
+  if (busy.value) return; busy.value = true; status.value = msg
+  try { await fn() } catch (_) {}
+  finally { await d(250); busy.value = false; status.value = '' }
+}
+
+function doLock() {
+  act('Lock  O(1) 阻塞等待', async () => {
+    if (holder.value !== null) { status.value = '锁被占用，排队等待...'; await d(500); return }
+    if (!waiting.length) { status.value = '无 goroutine 可进入'; await d(400); return }
+    const g = waiting.shift()!
+    status.value = `${g} 获取锁，进入临界区`
+    holder.value = g
+    await d(500)
+  })
+}
+
+function doUnlock() {
+  act('Unlock  O(1) 唤醒队列', async () => {
+    const g = holder.value
+    status.value = `${g} 释放锁`
+    holder.value = null
+    await d(400)
+  })
+}
+
+function doReset() { busy.value = false; init() }
+
+let ro: ResizeObserver | null = null
+onMounted(() => {
+  init()
+  if (box.value) {
+    W.value = box.value.clientWidth
+    ro = new ResizeObserver(e => { const w = e[0]?.contentRect.width; if (w && w > 100) W.value = w })
+    ro.observe(box.value)
+  }
+})
+onUnmounted(() => ro?.disconnect())
 const raceCode = `// ❌ 竞态条件——counter++ = 读→加→写，三步不原子
 var counter int
 var wg sync.WaitGroup

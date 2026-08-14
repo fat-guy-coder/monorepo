@@ -3,6 +3,46 @@
     <header class="bg-white border-b border-slate-200"><div class="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between"><div><h1 class="text-2xl font-bold text-slate-800">⚛️ atomic 原子操作</h1><p class="text-sm text-slate-500 mt-1">无锁并发 — CPU 指令级别的原子保障，比 Mutex 快 10-100 倍</p></div><div class="flex items-center gap-3"><EditorLink file-path="apps/go/concurrency/go-2-7-atomic.go" label="📝 查看源码" :is-admin="userStore.isAdmin" /><span class="text-xs text-slate-400 bg-slate-100 px-3 py-1 rounded-full">阶段 2-7</span></div></div></header>
     <main class="max-w-4xl mx-auto px-6 py-8 space-y-6"><Nav :list="navList" title="📑 目录" position="top-right" :showBackToTop="true" />
 
+      <!-- 📐 结构总览 -->
+      <section id="sec-overview" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">📐</span>
+          结构总览：counter++ 的竞态 vs atomic 的原子性
+        </h2>
+        <p class="text-slate-600 mb-4 leading-relaxed text-sm">
+          <code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">counter++</code> 是三条 CPU 指令（LOAD→ADD→STORE），两个核心同时执行会互相覆盖。
+          atomic 用一条<strong>带 LOCK 前缀的指令</strong>（如 LOCK XADD）锁住内存总线，把整个读-改-写变成原子操作。
+        </p>
+        <figure class="mb-4">
+          <svg viewBox="0 0 720 220" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <marker id="at-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" />
+              </marker>
+            </defs>
+
+            <!-- 非原子：三条指令 -->
+            <text x="16" y="24" font-size="13" font-family="monospace" fill="#ef4444" font-weight="bold">❌ counter++（三条指令，可被中断）</text>
+            <rect x="30" y="36" width="120" height="44" rx="6" fill="#fee2e2" stroke="#ef4444" stroke-width="1.5" />
+            <text x="90" y="58" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#b91c1c">① LOAD 读</text>
+            <line x1="150" y1="58" x2="180" y2="58" stroke="#94a3b8" stroke-width="2" marker-end="url(#at-arr)" />
+            <rect x="185" y="36" width="120" height="44" rx="6" fill="#fee2e2" stroke="#ef4444" stroke-width="1.5" />
+            <text x="245" y="58" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#b91c1c">② ADD 加</text>
+            <line x1="305" y1="58" x2="335" y2="58" stroke="#94a3b8" stroke-width="2" marker-end="url(#at-arr)" />
+            <rect x="340" y="36" width="120" height="44" rx="6" fill="#fee2e2" stroke="#ef4444" stroke-width="1.5" />
+            <text x="400" y="58" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#b91c1c">③ STORE 写</text>
+            <text x="16" y="104" font-size="11" font-family="monospace" fill="#b91c1c">两个核心同时 LOAD 读到同一个值 → 各自 +1 写回 → 丢失一次 +1</text>
+
+            <!-- 原子：一条指令 -->
+            <text x="16" y="138" font-size="13" font-family="monospace" fill="#4ade80" font-weight="bold">✅ atomic.Add（一条 LOCK 指令，不可中断）</text>
+            <rect x="30" y="150" width="200" height="44" rx="6" fill="#dcfce7" stroke="#4ade80" stroke-width="2" />
+            <text x="130" y="172" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#15803d">LOCK XADD（读+加+写一条）</text>
+            <text x="16" y="212" font-size="11" font-family="monospace" fill="#15803d">LOCK 前缀锁内存总线——在这条指令完成前，其他核心无法访问这块内存</text>
+          </svg>
+          <figcaption class="text-xs text-slate-400 mt-1">图 1：counter++ 三条指令可被中断（竞态），atomic 用 LOCK 前缀把读改写成一条原子指令</figcaption>
+        </figure>
+      </section>
+
       <!-- 1. 为什么需要 atomic -->
       <section id="sec-1" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">1</span>为什么 counter++ 不安全？— atomic 解决了什么</h2>
@@ -53,7 +93,7 @@
     <footer class="max-w-4xl mx-auto px-6 py-8"><nav class="flex justify-between items-center pt-4 border-t border-slate-200 text-sm"><RouterLink to="/backend/BackendLanguage/GO/go-stage-2-concurrency/go-2-6-sync-wg-once" class="text-slate-500 hover:text-cyan-600 flex items-center gap-1">← 上一节：WaitGroup/Once</RouterLink><RouterLink to="/backend/BackendLanguage/GO/go-stage-2-concurrency/go-2-8-context" class="text-cyan-600 hover:text-cyan-700 font-medium flex items-center gap-1">下一节：Context →</RouterLink></nav></footer>
   </div></template>
 <script setup lang="ts">import { Code, EditorLink, Nav } from 'components'; import { RouterLink } from 'vue-router'; import { useUserStore } from '@/stores/userProfle'; const userStore = useUserStore()
-const navList = [{id:"sec-1",name:"为什么需要atomic"},{id:"sec-2",name:"基本API"},{id:"sec-3",name:"CAS"},{id:"sec-4",name:"RCU实战"},{id:"sec-5",name:"选型指南"},{id:"sec-6",name:"小结"}]
+const navList = [{id:"sec-overview",name:"📐 结构总览"},{id:"sec-1",name:"为什么需要atomic"},{id:"sec-2",name:"基本API"},{id:"sec-3",name:"CAS"},{id:"sec-4",name:"RCU实战"},{id:"sec-5",name:"选型指南"},{id:"sec-6",name:"小结"}]
 const whyCode = `// ❌ 这有竞态条件——counter++ = LOAD+ADD+STORE 三条 CPU 指令
 var counter int64
 go func() { counter++ }() // goroutine A: LOAD=5

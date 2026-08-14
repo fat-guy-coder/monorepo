@@ -10,6 +10,131 @@
     <main class="max-w-4xl mx-auto px-6 py-8 space-y-6">
       <Nav :list="navList" title="📑 目录" position="top-right" :showBackToTop="true" />
 
+      <!-- 📐 结构总览 -->
+      <section id="sec-overview" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">📐</span>
+          结构总览：channel = 环形队列 + 等待队列
+        </h2>
+        <p class="text-slate-600 mb-4 leading-relaxed text-sm">
+          每个 <code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">make(chan T, N)</code> 底层是一个 <strong>hchan 结构体</strong>，
+          核心是<strong>一个 N 容量的环形缓冲区（buf）</strong> + <strong>两个等待队列（sendq / recvq）</strong>。
+          发送写到 <code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">sendx</code> 指向的位置，接收从 <code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">recvx</code> 读，两指针各自绕圈前进。
+        </p>
+
+        <!-- 结构图：环形队列 + 等待队列 -->
+        <figure class="mb-6">
+          <svg viewBox="0 0 720 320" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <marker id="ch-ov-send" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#f59e0b" />
+              </marker>
+              <marker id="ch-ov-recv" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#4ade80" />
+              </marker>
+              <marker id="ch-ov-flow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" />
+              </marker>
+            </defs>
+
+            <text x="16" y="24" font-size="13" font-family="monospace" fill="#64748b" font-weight="bold">容量 5 的缓冲 channel（dataqsiz=5），已有 3 个元素（qcount=3）</text>
+
+            <!-- 环形队列：6 个槽位弧形排列（含 1 个空槽用于展示 sendx） -->
+            <!-- 槽 0 有数据（recvx 指向这里） -->
+            <rect x="90" y="120" width="76" height="48" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="2" />
+            <text x="128" y="138" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">A</text>
+            <text x="128" y="158" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#cffafe">buf[0]</text>
+            <!-- 槽 1 有数据 -->
+            <rect x="190" y="120" width="76" height="48" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="228" y="138" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">B</text>
+            <text x="228" y="158" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#cffafe">buf[1]</text>
+            <!-- 槽 2 有数据 -->
+            <rect x="290" y="120" width="76" height="48" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="328" y="138" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">C</text>
+            <text x="328" y="158" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#cffafe">buf[2]</text>
+            <!-- 槽 3 空（sendx 指向这里） -->
+            <rect x="390" y="120" width="76" height="48" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="2.5" stroke-dasharray="5 3" />
+            <text x="428" y="144" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" fill="#b45309">空</text>
+            <text x="428" y="162" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#b45309">buf[3]</text>
+            <!-- 槽 4 空 -->
+            <rect x="490" y="120" width="76" height="48" rx="6" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" />
+            <text x="528" y="144" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" fill="#64748b">空</text>
+            <text x="528" y="162" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">buf[4]</text>
+
+            <!-- 环形箭头：从 buf[4] 尾部绕回 buf[0] 头部（表示环形） -->
+            <path d="M 566 144 Q 600 144 600 96 Q 600 60 540 60 Q 120 60 100 60 Q 80 60 80 90 Q 80 116 100 116" fill="none" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="6 4" marker-end="url(#ch-ov-flow)" />
+
+            <!-- recvx 指针（绿色，指向 buf[0]） -->
+            <line x1="128" y1="76" x2="128" y2="112" stroke="#4ade80" stroke-width="2.5" marker-end="url(#ch-ov-recv)" />
+            <rect x="74" y="52" width="108" height="22" rx="4" fill="#4ade80" />
+            <text x="128" y="63" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" font-weight="bold" fill="#0f172a">recvx = 0（读这里）</text>
+
+            <!-- sendx 指针（橙色，指向 buf[3]） -->
+            <line x1="428" y1="76" x2="428" y2="112" stroke="#f59e0b" stroke-width="2.5" marker-end="url(#ch-ov-send)" />
+            <rect x="374" y="52" width="108" height="22" rx="4" fill="#f59e0b" />
+            <text x="428" y="63" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" font-weight="bold" fill="#0f172a">sendx = 3（写这里）</text>
+
+            <!-- 分隔线 -->
+            <line x1="16" y1="210" x2="704" y2="210" stroke="#e2e8f0" stroke-width="1" />
+
+            <!-- 等待队列 -->
+            <text x="16" y="236" font-size="12" font-family="monospace" fill="#64748b" font-weight="bold">sendq（等待发送的 goroutine 队列，FIFO）</text>
+            <rect x="30" y="250" width="140" height="40" rx="6" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" />
+            <text x="100" y="270" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" fill="#64748b">（空 —— 缓冲未满）</text>
+
+            <text x="360" y="236" font-size="12" font-family="monospace" fill="#64748b" font-weight="bold">recvq（等待接收的 goroutine 队列，FIFO）</text>
+            <rect x="370" y="250" width="140" height="40" rx="6" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" />
+            <text x="440" y="270" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" fill="#64748b">（空 —— 缓冲有数据）</text>
+
+            <text x="16" y="308" font-size="11" font-family="monospace" fill="#0891b2">qcount=3 · dataqsiz=5 · sendx=3 · recvx=0 · 下一个 send 写到 buf[3]，下一个 recv 读 buf[0]</text>
+          </svg>
+          <figcaption class="text-xs text-slate-400 mt-1">图 1：缓冲 channel 的环形队列——sendx 指向下一个写入位，recvx 指向下一个读取位，两指针各自绕圈（越界后回到 0）</figcaption>
+        </figure>
+
+        <!-- 操作示意图：send 和 recv -->
+        <h3 class="text-sm font-semibold text-slate-700 mb-2">操作：send 写入 buf[sendx]，recv 读取 buf[recvx]</h3>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <figure>
+            <p class="text-xs text-slate-500 font-semibold mb-1">发送 ch &lt;- "D"（写 buf[3]，sendx 前进到 4）</p>
+            <svg viewBox="0 0 340 120" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="ch-ov-s1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#f59e0b" /></marker>
+              </defs>
+              <rect x="30" y="40" width="52" height="36" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="56" y="58" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#ffffff">A</text>
+              <rect x="98" y="40" width="52" height="36" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="124" y="58" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#ffffff">B</text>
+              <rect x="166" y="40" width="52" height="36" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="192" y="58" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#ffffff">C</text>
+              <rect x="234" y="40" width="52" height="36" rx="6" fill="#4ade80" stroke="#22c55e" stroke-width="2" />
+              <text x="260" y="58" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#0f172a">D</text>
+              <line x1="260" y1="20" x2="260" y2="36" stroke="#f59e0b" stroke-width="2.5" marker-end="url(#ch-ov-s1)" />
+              <text x="260" y="14" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" fill="#b45309">sendx→4</text>
+              <text x="16" y="96" font-size="11" font-family="monospace" fill="#64748b">qcount 3→4，D 写入 buf[3]（绿色）</text>
+            </svg>
+          </figure>
+          <figure>
+            <p class="text-xs text-slate-500 font-semibold mb-1">接收 v := &lt;-ch（读 buf[0]，recvx 前进到 1）</p>
+            <svg viewBox="0 0 340 120" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="ch-ov-r1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#4ade80" /></marker>
+              </defs>
+              <rect x="30" y="40" width="52" height="36" rx="6" fill="#ef4444" stroke="#dc2626" stroke-width="2" />
+              <text x="56" y="58" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#ffffff">A</text>
+              <rect x="98" y="40" width="52" height="36" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="124" y="58" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#ffffff">B</text>
+              <rect x="166" y="40" width="52" height="36" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="192" y="58" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#ffffff">C</text>
+              <rect x="234" y="40" width="52" height="36" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="260" y="58" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#ffffff">D</text>
+              <line x1="124" y1="20" x2="124" y2="36" stroke="#4ade80" stroke-width="2.5" marker-end="url(#ch-ov-r1)" />
+              <text x="124" y="14" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" fill="#15803d">recvx→1</text>
+              <text x="16" y="96" font-size="11" font-family="monospace" fill="#64748b">qcount 4→3，A 从 buf[0] 读出（红色），recvx 移到 buf[1]</text>
+            </svg>
+          </figure>
+        </div>
+      </section>
+
       <!-- 1. Channel 是什么？用来干嘛？ -->
       <section id="sec-1" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">1</span>Channel 到底是什么？用来干嘛？</h2>
@@ -171,6 +296,44 @@
         <div class="overflow-x-auto mb-3"><table class="w-full text-sm border-collapse"><thead><tr class="bg-slate-100 text-left"><th class="px-4 py-2 border font-semibold">场景</th><th class="px-4 py-2 border font-semibold">用什么</th><th class="px-4 py-2 border font-semibold">原因</th></tr></thead><tbody class="text-slate-600"><tr><td class="px-4 py-2 border">发信号"我完成了"</td><td class="px-4 py-2 border font-mono text-xs">make(chan struct{})</td><td class="px-4 py-2 border">非缓冲，同步等待。struct{} 零内存</td></tr><tr><td class="px-4 py-2 border">多 goroutine 同时退出</td><td class="px-4 py-2 border">close(channel)</td><td class="px-4 py-2 border">close 是广播——所有等待者同时被唤醒</td></tr><tr><td class="px-4 py-2 border">生产者-消费者解耦</td><td class="px-4 py-2 border font-mono text-xs">make(chan T, N)</td><td class="px-4 py-2 border">缓冲管道，生产快消费慢时有缓冲</td></tr><tr><td class="px-4 py-2 border">限流/并发控制</td><td class="px-4 py-2 border font-mono text-xs">make(chan struct{}, N)</td><td class="px-4 py-2 border">缓冲 channel 就是信号量——容量=最大并发数</td></tr></tbody></table></div>
       </section>
 
+      <!-- 🎬 动画演示 -->
+      <section id="sec-viz" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">🎬</span>
+          动画演示：缓冲 channel 的环形队列
+        </h2>
+        <p class="text-slate-600 mb-3 leading-relaxed text-sm">
+          点「发送」往 <code class="bg-slate-100 text-cyan-700 px-1 py-0.5 rounded text-xs font-mono">sendx</code> 位置写入数据（sendx 前进），点「接收」从 <code class="bg-slate-100 text-cyan-700 px-1 py-0.5 rounded text-xs font-mono">recvx</code> 位置读出数据（recvx 前进）。
+          指针到末尾会<strong>绕回开头</strong>——这就是「环形」。缓冲满时发送会阻塞（按钮禁用），缓冲空时接收会阻塞。
+        </p>
+        <div class="flex flex-wrap items-center gap-2 mb-2 text-xs">
+          <span class="bg-slate-100 px-2 py-1 rounded-full">📏 qcount: {{ qcount }} / {{ CAP }}</span>
+          <span class="bg-orange-50 text-orange-700 px-2 py-1 rounded-full font-mono">✏️ sendx = {{ sendx }}</span>
+          <span class="bg-green-50 text-green-700 px-2 py-1 rounded-full font-mono">🔍 recvx = {{ recvx }}</span>
+          <span class="bg-cyan-50 text-cyan-700 px-2 py-1 rounded-full font-mono">{{ status }}</span>
+        </div>
+        <div class="flex flex-wrap items-center gap-2 mb-2">
+          <button @mousedown="doSend" :disabled="busy || qcount >= CAP" class="px-3 py-1.5 rounded-lg text-xs font-medium border transition-all duration-150 active:scale-95 active:shadow-inner bg-cyan-50 text-cyan-700 border-cyan-200 hover:bg-cyan-100 hover:border-cyan-300 hover:shadow-sm disabled:opacity-40 disabled:cursor-not-allowed disabled:scale-100">发送 (ch &lt;- v)</button>
+          <button @mousedown="doRecv" :disabled="busy || qcount <= 0" class="px-3 py-1.5 rounded-lg text-xs font-medium border transition-all duration-150 active:scale-95 active:shadow-inner bg-green-50 text-green-700 border-green-200 hover:bg-green-100 hover:border-green-300 hover:shadow-sm disabled:opacity-40 disabled:cursor-not-allowed disabled:scale-100">接收 (v := &lt;-ch)</button>
+          <button @mousedown="doReset" :disabled="busy" class="px-3 py-1.5 rounded-lg text-xs font-medium border transition-all duration-150 active:scale-95 active:shadow-inner bg-slate-50 text-slate-500 border-slate-300 hover:bg-slate-100 hover:border-slate-400 hover:shadow-sm disabled:opacity-40 disabled:cursor-not-allowed disabled:scale-100">↺ Reset</button>
+        </div>
+        <div ref="box" class="w-full relative" :style="{height: H+'px'}">
+          <v-stage :config="{width: W, height: H}">
+            <v-layer>
+              <!-- 环形回绕箭头（背景装饰） -->
+              <v-arrow v-for="(a,i) in wrapArrows" :key="'wa'+i" :config="a" />
+              <!-- 槽位 -->
+              <v-rect v-for="(s,i) in slots" :key="'sr'+i" :config="slotRect(i)" />
+              <v-text v-for="(s,i) in slots" :key="'st'+i" :config="slotText(i)" />
+              <!-- sendx 指针 -->
+              <v-text :config="sendPtrCfg" />
+              <!-- recvx 指针 -->
+              <v-text :config="recvPtrCfg" />
+            </v-layer>
+          </v-stage>
+        </div>
+      </section>
+
       <!-- 7. 小结 -->
       <section id="sec-7" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">📋</span>小结 &amp; 面试要点</h2>
@@ -193,17 +356,148 @@
 import { Code, EditorLink, Nav } from 'components'
 import { RouterLink } from 'vue-router'
 import { useUserStore } from '@/stores/userProfle'
+import { ref, reactive, computed, onMounted, onUnmounted } from 'vue'
 const userStore = useUserStore()
 
 const navList = [
+  { id: "sec-overview", name: "📐 结构总览" },
   { id: "sec-1", name: "是什么？用来干嘛？" },
   { id: "sec-2", name: "底层实现 hchan" },
   { id: "sec-3", name: "非缓冲 vs 缓冲" },
   { id: "sec-4", name: "关闭 channel" },
   { id: "sec-5", name: "单向 + 实战模式" },
   { id: "sec-6", name: "新手常见错误" },
+  { id: "sec-viz", name: "🎬 动画演示" },
   { id: "sec-7", name: "小结 & 面试要点" },
 ]
+
+// ===== 🎬 环形队列动画 =====
+const C = { cyan:'#06b6d4', green:'#4ade80', red:'#ef4444', orange:'#f59e0b', text:'#1e293b', muted:'#64748b', ghost:'#e2e8f0' }
+const H = ref(200), W = ref(700)
+const CAP = 5                       // 容量 dataqsiz = 5
+const SLOT = 76, GAP = 24           // 槽宽、间距
+const Y = 70, SH = 52               // 槽顶、槽高
+const BX0 = 60                      // 左偏移
+
+interface Slot { id: number; val: string; fill: string }
+const slots = reactive<Slot[]>([])
+const qcount = ref(0)               // 当前元素数
+const sendx = ref(0)                // 下一个写入位置
+const recvx = ref(0)                // 下一个读取位置
+const busy = ref(false), status = ref('')
+const nid = ref(0)
+const box = ref<HTMLDivElement>()
+const d = (ms: number) => new Promise(r => setTimeout(r, ms))
+
+const sx = (i: number) => BX0 + i * (SLOT + GAP)
+
+// 环形回绕箭头（从最后一个槽绕回第一个槽）
+const wrapArrows = computed(() => {
+  const lastX = sx(CAP - 1) + SLOT
+  const firstY = Y + SH / 2
+  return [{
+    points: [lastX, firstY, lastX + 40, firstY, lastX + 40, -20, BX0 - 20, -20, BX0 - 20, firstY, BX0, firstY],
+    stroke: '#94a3b8', strokeWidth: 1.5, dash: [6, 4], fill: 'transparent', pointerLength: 6, pointerWidth: 5,
+  }]
+})
+
+function init() {
+  slots.length = 0
+  for (let i = 0; i < CAP; i++) slots.push({ id: i, val: '', fill: C.ghost })
+  // 预置 3 个元素：A B C
+  slots[0] = { id: 0, val: 'A', fill: C.cyan }
+  slots[1] = { id: 1, val: 'B', fill: C.cyan }
+  slots[2] = { id: 2, val: 'C', fill: C.cyan }
+  qcount.value = 3
+  sendx.value = 3
+  recvx.value = 0
+  status.value = ''
+}
+
+function slotRect(i: number) {
+  const s = slots[i]
+  const isSend = i === sendx.value
+  const isRecv = i === recvx.value
+  const active = (isSend && qcount.value < CAP) || (isRecv && qcount.value > 0)
+  return {
+    x: sx(i), y: Y, width: SLOT, height: SH, cornerRadius: 6,
+    fill: s.val ? s.fill : (isSend ? '#fef3c7' : C.ghost),
+    stroke: isSend ? C.orange : (isRecv ? C.green : '#94a3b8'),
+    strokeWidth: (isSend || isRecv) ? 2.5 : 1.5,
+    dash: s.val ? undefined : [5, 3],
+    opacity: active || s.val ? 1 : 0.55,
+  }
+}
+function slotText(i: number) {
+  const s = slots[i]
+  return {
+    x: sx(i), y: Y + 14, width: SLOT, height: SH - 28,
+    text: s.val || '空', fontSize: s.val ? 18 : 12,
+    fontFamily: 'monospace', fontStyle: 'bold',
+    fill: s.val ? '#ffffff' : (i === sendx.value ? '#b45309' : C.muted),
+    align: 'center', verticalAlign: 'middle',
+  }
+}
+const sendPtrCfg = computed(() => ({
+  x: sx(sendx.value), y: Y - 22, width: SLOT, text: `✏️ sendx=${sendx.value}`,
+  fontSize: 11, fontFamily: 'monospace', fontStyle: 'bold', fill: '#b45309', align: 'center',
+}))
+const recvPtrCfg = computed(() => ({
+  x: sx(recvx.value), y: Y + SH + 8, width: SLOT, text: `🔍 recvx=${recvx.value}`,
+  fontSize: 11, fontFamily: 'monospace', fontStyle: 'bold', fill: '#15803d', align: 'center',
+}))
+
+async function act(msg: string, fn: () => Promise<void>) {
+  if (busy.value) return; busy.value = true; status.value = msg
+  try { await fn() } catch (_) {}
+  finally { await d(250); busy.value = false; status.value = '' }
+}
+
+function doSend() {
+  if (qcount.value >= CAP) return
+  act('发送  O(1)', async () => {
+    status.value = `ch <- ${String.fromCharCode(65 + nid.value)}  写入 buf[${sendx.value}]`
+    const ch = String.fromCharCode(65 + nid.value)
+    nid.value++
+    slots[sendx.value].val = ch
+    slots[sendx.value].fill = C.green
+    await d(350)
+    slots[sendx.value].fill = C.cyan
+    qcount.value++
+    status.value = `sendx ${sendx.value} → ${(sendx.value + 1) % CAP}`
+    sendx.value = (sendx.value + 1) % CAP
+    await d(300)
+  })
+}
+
+function doRecv() {
+  if (qcount.value <= 0) return
+  act('接收  O(1)', async () => {
+    const v = slots[recvx.value].val
+    status.value = `v := <-ch  读出 buf[${recvx.value}] 的 ${v}`
+    slots[recvx.value].fill = C.red
+    await d(350)
+    slots[recvx.value].val = ''
+    slots[recvx.value].fill = C.ghost
+    qcount.value--
+    status.value = `recvx ${recvx.value} → ${(recvx.value + 1) % CAP}`
+    recvx.value = (recvx.value + 1) % CAP
+    await d(300)
+  })
+}
+
+function doReset() { busy.value = false; nid.value = 3; init() }
+
+let ro: ResizeObserver | null = null
+onMounted(() => {
+  init()
+  if (box.value) {
+    W.value = box.value.clientWidth
+    ro = new ResizeObserver(e => { const w = e[0]?.contentRect.width; if (w && w > 100) W.value = w })
+    ro.observe(box.value)
+  }
+})
+onUnmounted(() => ro?.disconnect())
 
 const fourUseCasesCode = `// ① 传递数据
 ch := make(chan int)

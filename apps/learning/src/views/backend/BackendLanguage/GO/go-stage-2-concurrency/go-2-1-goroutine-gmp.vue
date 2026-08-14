@@ -16,6 +16,122 @@
     <main class="max-w-4xl mx-auto px-6 py-8 space-y-6">
       <Nav :list="navList" title="📑 目录" position="top-right" :showBackToTop="true" />
 
+      <!-- 📐 结构总览 -->
+      <section id="sec-overview" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">📐</span>
+          结构总览：GMP 三层调度模型
+        </h2>
+        <p class="text-slate-600 mb-4 leading-relaxed text-sm">
+          GMP 模型把<strong>N 个 goroutine（G）</strong>映射到<strong>M 个 OS 线程（M）</strong>上，由<strong>P 个逻辑处理器（P）</strong>调度。
+          G 是被执行的代码，M 是真正干活的线程，P 是连接两者的"工作台"——P 持有 G 的本地队列，M 必须绑定 P 才能执行 G。
+        </p>
+
+        <figure class="mb-6">
+          <svg viewBox="0 0 720 340" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <marker id="gmp-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" />
+              </marker>
+            </defs>
+
+            <!-- 全局运行队列（顶部） -->
+            <text x="16" y="22" font-size="12" font-family="monospace" fill="#64748b" font-weight="bold">全局运行队列 runq（放溢出的 G，加锁访问）</text>
+            <rect x="16" y="32" width="688" height="42" rx="6" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5 3" />
+            <text x="36" y="53" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">（通常为空——G 优先进 P 的本地队列）</text>
+
+            <!-- P0 本地队列 -->
+            <text x="16" y="102" font-size="12" font-family="monospace" fill="#64748b" font-weight="bold">P0（逻辑处理器）— 本地队列 runq（无锁）</text>
+            <rect x="16" y="112" width="340" height="72" rx="6" fill="#e0f2fe" stroke="#0ea5e9" stroke-width="1.5" />
+            <!-- 本地队列里的 G -->
+            <rect x="32" y="126" width="52" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="58" y="146" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">G1</text>
+            <rect x="96" y="126" width="52" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="122" y="146" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">G2</text>
+            <rect x="160" y="126" width="52" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="186" y="146" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">G3</text>
+            <!-- runnext 单槽缓存 -->
+            <rect x="236" y="126" width="52" height="40" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="2" stroke-dasharray="5 3" />
+            <text x="262" y="140" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" font-weight="bold" fill="#b45309">G4</text>
+            <text x="262" y="156" text-anchor="middle" dominant-baseline="central" font-size="9" font-family="monospace" fill="#b45309">runnext</text>
+            <text x="312" y="150" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#0369a1">本地队列<br/>容量 256</text>
+
+            <!-- P1 本地队列 -->
+            <text x="380" y="102" font-size="12" font-family="monospace" fill="#64748b" font-weight="bold">P1（逻辑处理器）— 本地队列 runq（无锁）</text>
+            <rect x="380" y="112" width="324" height="72" rx="6" fill="#e0f2fe" stroke="#0ea5e9" stroke-width="1.5" />
+            <rect x="396" y="126" width="52" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="422" y="146" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">G5</text>
+            <rect x="460" y="126" width="52" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="486" y="146" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">G6</text>
+            <text x="560" y="150" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#0369a1">本地队列<br/>容量 256</text>
+
+            <!-- 箭头 P → M -->
+            <line x1="186" y1="184" x2="186" y2="210" stroke="#94a3b8" stroke-width="2" marker-end="url(#gmp-arr)" />
+            <line x1="542" y1="184" x2="542" y2="210" stroke="#94a3b8" stroke-width="2" marker-end="url(#gmp-arr)" />
+
+            <!-- M0 -->
+            <text x="16" y="228" font-size="12" font-family="monospace" fill="#64748b" font-weight="bold">M0（OS 线程）</text>
+            <rect x="16" y="238" width="340" height="56" rx="6" fill="#fef2f2" stroke="#ef4444" stroke-width="1.5" />
+            <text x="36" y="258" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" font-weight="bold" fill="#b91c1c">M0 — 绑定 P0</text>
+            <text x="36" y="278" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#b91c1c">正在执行 G1（curg）</text>
+
+            <!-- M1 -->
+            <text x="380" y="228" font-size="12" font-family="monospace" fill="#64748b" font-weight="bold">M1（OS 线程）</text>
+            <rect x="380" y="238" width="324" height="56" rx="6" fill="#fef2f2" stroke="#ef4444" stroke-width="1.5" />
+            <text x="400" y="258" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" font-weight="bold" fill="#b91c1c">M1 — 绑定 P1</text>
+            <text x="400" y="278" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#b91c1c">正在执行 G5（curg）</text>
+
+            <!-- 图例 -->
+            <text x="16" y="322" font-size="11" font-family="monospace" fill="#0891b2">G=goroutine（2KB 栈）· P=逻辑处理器（=CPU 核数）· M=OS 线程 · M 必须绑 P 才能执行 G</text>
+          </svg>
+          <figcaption class="text-xs text-slate-400 mt-1">图 1：GMP 三层模型——每个 P 有本地 G 队列（含 runnext 单槽缓存），每个 M 绑定一个 P 执行 G，全局队列只在本地队列满时存放溢出的 G</figcaption>
+        </figure>
+
+        <!-- 操作示意图：工作窃取 -->
+        <h3 class="text-sm font-semibold text-slate-700 mb-2">工作窃取（Work Stealing）：空 P 从忙 P 偷一半 G</h3>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <figure>
+            <p class="text-xs text-slate-500 font-semibold mb-1">窃取前：P0 空，P1 忙（有 4 个 G）</p>
+            <svg viewBox="0 0 340 130" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+              <rect x="10" y="40" width="150" height="44" rx="6" fill="#e0f2fe" stroke="#0ea5e9" stroke-width="1.5" />
+              <text x="85" y="62" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#0369a1">P0（空）</text>
+              <rect x="180" y="40" width="150" height="44" rx="6" fill="#e0f2fe" stroke="#0ea5e9" stroke-width="1.5" />
+              <rect x="190" y="52" width="28" height="22" rx="4" fill="#06b6d4" stroke="#0891b2" stroke-width="1" />
+              <text x="204" y="63" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" font-weight="bold" fill="#fff">G5</text>
+              <rect x="224" y="52" width="28" height="22" rx="4" fill="#06b6d4" stroke="#0891b2" stroke-width="1" />
+              <text x="238" y="63" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" font-weight="bold" fill="#fff">G6</text>
+              <rect x="258" y="52" width="28" height="22" rx="4" fill="#06b6d4" stroke="#0891b2" stroke-width="1" />
+              <text x="272" y="63" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" font-weight="bold" fill="#fff">G7</text>
+              <rect x="292" y="52" width="28" height="22" rx="4" fill="#06b6d4" stroke="#0891b2" stroke-width="1" />
+              <text x="306" y="63" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" font-weight="bold" fill="#fff">G8</text>
+              <text x="170" y="110" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">P0 队列空 → 触发工作窃取</text>
+            </svg>
+          </figure>
+          <figure>
+            <p class="text-xs text-slate-500 font-semibold mb-1">窃取后：P0 从 P1 队尾偷了一半（G7、G8）</p>
+            <svg viewBox="0 0 340 130" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="gmp-steal" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#4ade80" /></marker>
+              </defs>
+              <rect x="10" y="40" width="150" height="44" rx="6" fill="#e0f2fe" stroke="#0ea5e9" stroke-width="1.5" />
+              <rect x="22" y="52" width="28" height="22" rx="4" fill="#4ade80" stroke="#22c55e" stroke-width="1.5" />
+              <text x="36" y="63" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" font-weight="bold" fill="#0f172a">G7</text>
+              <rect x="56" y="52" width="28" height="22" rx="4" fill="#4ade80" stroke="#22c55e" stroke-width="1.5" />
+              <text x="70" y="63" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" font-weight="bold" fill="#0f172a">G8</text>
+              <text x="85" y="100" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" fill="#15803d">P0（偷到 G7 G8）</text>
+              <rect x="180" y="40" width="150" height="44" rx="6" fill="#e0f2fe" stroke="#0ea5e9" stroke-width="1.5" />
+              <rect x="190" y="52" width="28" height="22" rx="4" fill="#06b6d4" stroke="#0891b2" stroke-width="1" />
+              <text x="204" y="63" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" font-weight="bold" fill="#fff">G5</text>
+              <rect x="224" y="52" width="28" height="22" rx="4" fill="#06b6d4" stroke="#0891b2" stroke-width="1" />
+              <text x="238" y="63" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" font-weight="bold" fill="#fff">G6</text>
+              <text x="255" y="100" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" fill="#0369a1">P1（剩 G5 G6）</text>
+              <path d="M 306 63 Q 320 63 320 30 Q 320 10 70 10 Q 36 10 36 40" fill="none" stroke="#4ade80" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#gmp-steal)" />
+            </svg>
+            <figcaption class="text-xs text-slate-400 mt-1">从队尾偷一半（不是队头），减少与被偷 P 的锁竞争</figcaption>
+          </figure>
+        </div>
+      </section>
+
       <!-- 1. goroutine 基础 -->
       <section id="sec-1" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
@@ -184,6 +300,46 @@
         </div>
       </section>
 
+      <!-- 🎬 动画演示 -->
+      <section id="sec-viz" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">🎬</span>
+          动画演示：GMP 调度与工作窃取
+        </h2>
+        <p class="text-slate-600 mb-3 leading-relaxed text-sm">
+          点「调度」让 M 从 P 的本地队列取一个 G 执行（G 从队列移到 M 上，绿色高亮）。点「工作窃取」让空闲的 P0 从繁忙的 P1 队尾偷 G。
+          观察 G 如何在 P 队列和 M 之间流转。
+        </p>
+        <div class="flex flex-wrap items-center gap-2 mb-2 text-xs">
+          <span class="bg-slate-100 px-2 py-1 rounded-full">📦 P0 队列: {{ p0Len }} 个 G</span>
+          <span class="bg-slate-100 px-2 py-1 rounded-full">📦 P1 队列: {{ p1Len }} 个 G</span>
+          <span class="bg-cyan-50 text-cyan-700 px-2 py-1 rounded-full font-mono">{{ status }}</span>
+        </div>
+        <div class="flex flex-wrap items-center gap-2 mb-2">
+          <button @mousedown="doSchedule" :disabled="busy || (p0Len + p1Len === 0)" class="px-3 py-1.5 rounded-lg text-xs font-medium border transition-all duration-150 active:scale-95 active:shadow-inner bg-cyan-50 text-cyan-700 border-cyan-200 hover:bg-cyan-100 hover:border-cyan-300 hover:shadow-sm disabled:opacity-40 disabled:cursor-not-allowed disabled:scale-100">调度一个 G</button>
+          <button @mousedown="doSteal" :disabled="busy || p0Len > 0 || p1Len < 2" class="px-3 py-1.5 rounded-lg text-xs font-medium border transition-all duration-150 active:scale-95 active:shadow-inner bg-purple-50 text-purple-700 border-purple-200 hover:bg-purple-100 hover:border-purple-300 hover:shadow-sm disabled:opacity-40 disabled:cursor-not-allowed disabled:scale-100">工作窃取</button>
+          <button @mousedown="doReset" :disabled="busy" class="px-3 py-1.5 rounded-lg text-xs font-medium border transition-all duration-150 active:scale-95 active:shadow-inner bg-slate-50 text-slate-500 border-slate-300 hover:bg-slate-100 hover:border-slate-400 hover:shadow-sm disabled:opacity-40 disabled:cursor-not-allowed disabled:scale-100">↺ Reset</button>
+        </div>
+        <div ref="box" class="w-full relative" :style="{height: H+'px'}">
+          <v-stage :config="{width: W, height: H}">
+            <v-layer>
+              <!-- P0 区域 -->
+              <v-rect :config="p0RectCfg" />
+              <v-text :config="p0LabelCfg" />
+              <v-rect v-for="(g,i) in p0" :key="'p0'+g.id" :config="gRectCfg(g, 0, i, p0)" />
+              <v-text v-for="(g,i) in p0" :key="'p0t'+g.id" :config="gTextCfg(g, 0, i, p0)" />
+              <!-- P1 区域 -->
+              <v-rect :config="p1RectCfg" />
+              <v-text :config="p1LabelCfg" />
+              <v-rect v-for="(g,i) in p1" :key="'p1'+g.id" :config="gRectCfg(g, 1, i, p1)" />
+              <v-text v-for="(g,i) in p1" :key="'p1t'+g.id" :config="gTextCfg(g, 1, i, p1)" />
+              <!-- M 执行中的 G -->
+              <v-text v-if="runningG" :config="runningCfg" />
+            </v-layer>
+          </v-stage>
+        </div>
+      </section>
+
       <!-- 7. 小结 -->
       <section id="sec-7" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
@@ -214,17 +370,127 @@
 import { Code, EditorLink, Nav } from 'components'
 import { RouterLink } from 'vue-router'
 import { useUserStore } from '@/stores/userProfle'
+import { ref, reactive, computed, onMounted, onUnmounted } from 'vue'
 const userStore = useUserStore()
 
 const navList = [
+  { id: "sec-overview", name: "📐 结构总览" },
   { id: "sec-1", name: "goroutine 基础" },
   { id: "sec-2", name: "GMP 调度模型" },
   { id: "sec-3", name: "可增长栈" },
   { id: "sec-4", name: "闭包陷阱 & WaitGroup" },
   { id: "sec-5", name: "goroutine 泄漏" },
   { id: "sec-6", name: "面试常见问题" },
+  { id: "sec-viz", name: "🎬 动画演示" },
   { id: "sec-7", name: "小结" },
 ]
+
+// ===== 🎬 GMP 调度动画 =====
+const C = { cyan:'#06b6d4', green:'#4ade80', red:'#ef4444', orange:'#f59e0b', text:'#1e293b', muted:'#64748b', ghost:'#e2e8f0' }
+const H = ref(220), W = ref(700)
+const PY0 = 40, PH = 70          // P 区域顶、高
+const P0X = 20, P1X = 380        // 两个 P 的 x
+const PW = 300                   // P 区域宽
+const GW = 46, GH = 34, GG = 8   // G 方块宽高间距
+const MY = 170                   // M 执行区 y
+const box = ref<HTMLDivElement>()
+const busy = ref(false), status = ref(''), nid = ref(100)
+const d = (ms: number) => new Promise(r => setTimeout(r, ms))
+
+interface GItem { id: number; name: string; color: string }
+const p0 = reactive<GItem[]>([])
+const p1 = reactive<GItem[]>([])
+const runningG = ref<GItem | null>(null)
+
+const p0Len = computed(() => p0.length)
+const p1Len = computed(() => p1.length)
+
+function init() {
+  p0.length = 0; p1.length = 0
+  p0.push({ id: 1, name: 'G1', color: C.cyan })
+  p0.push({ id: 2, name: 'G2', color: C.cyan })
+  p1.push({ id: 5, name: 'G5', color: C.cyan })
+  p1.push({ id: 6, name: 'G6', color: C.cyan })
+  p1.push({ id: 7, name: 'G7', color: C.cyan })
+  p1.push({ id: 8, name: 'G8', color: C.cyan })
+  runningG.value = null
+  status.value = ''
+}
+
+const p0RectCfg = { x: P0X, y: PY0, width: PW, height: PH, fill: '#e0f2fe', cornerRadius: 8, stroke: '#0ea5e9', strokeWidth: 1.5 }
+const p0LabelCfg = { x: P0X, y: PY0 + 8, width: PW, text: 'P0 — 本地队列', fontSize: 12, fontFamily: 'monospace', fontStyle: 'bold', fill: '#0369a1', align: 'center' }
+const p1RectCfg = { x: P1X, y: PY0, width: PW, height: PH, fill: '#e0f2fe', cornerRadius: 8, stroke: '#0ea5e9', strokeWidth: 1.5 }
+const p1LabelCfg = { x: P1X, y: PY0 + 8, width: PW, text: 'P1 — 本地队列', fontSize: 12, fontFamily: 'monospace', fontStyle: 'bold', fill: '#0369a1', align: 'center' }
+
+function gRectCfg(g: GItem, pidx: number, idx: number, arr: GItem[]) {
+  const px = pidx === 0 ? P0X : P1X
+  const x = px + 16 + idx * (GW + GG)
+  const y = PY0 + 32
+  const s = g.name.startsWith('R') ? 1 : 1
+  return { x: x + (GW * (1 - s)) / 2, y: y + (GH * (1 - s)) / 2, width: GW * s, height: GH * s,
+    fill: g.color, cornerRadius: 6, stroke: '#0891b2', strokeWidth: 1.5 }
+}
+function gTextCfg(g: GItem, pidx: number, idx: number, arr: GItem[]) {
+  const px = pidx === 0 ? P0X : P1X
+  const x = px + 16 + idx * (GW + GG)
+  const y = PY0 + 32
+  return { x, y, width: GW, height: GH, text: g.name, fontSize: 13, fontFamily: 'monospace', fontStyle: 'bold', fill: '#ffffff', align: 'center', verticalAlign: 'middle' }
+}
+const runningCfg = computed(() => ({
+  x: P0X, y: MY, width: PW * 2 + 60, text: runningG.value ? `⚙️ M 正在执行 ${runningG.value.name}` : '⚙️ M 空闲',
+  fontSize: 13, fontFamily: 'monospace', fontStyle: 'bold', fill: runningG.value ? '#15803d' : C.muted, align: 'center',
+}))
+
+async function act(msg: string, fn: () => Promise<void>) {
+  if (busy.value) return; busy.value = true; status.value = msg
+  try { await fn() } catch (_) {}
+  finally { await d(250); busy.value = false; status.value = '' }
+}
+
+function doSchedule() {
+  act('调度 O(1)', async () => {
+    // 优先从 P0 取，P0 空则从 P1 取
+    const src = p0.length ? p0 : p1
+    const g = src.shift()!
+    status.value = `M 从 ${src === p0 ? 'P0' : 'P1'} 取 ${g.name}`
+    await d(300)
+    g.color = C.green
+    runningG.value = g
+    status.value = `${g.name} 正在 M 上执行`
+    await d(600)
+    runningG.value = null
+  })
+}
+
+function doSteal() {
+  act('工作窃取 O(1)', async () => {
+    // P0 从 P1 队尾偷一半
+    const stealCount = Math.ceil(p1.length / 2)
+    status.value = `P0 从 P1 队尾偷 ${stealCount} 个 G`
+    for (let i = 0; i < stealCount; i++) {
+      const g = p1.pop()!
+      g.color = C.green
+      p0.push(g)
+      await d(300)
+    }
+    p0.forEach(g => g.color = C.cyan)
+    status.value = `P0 现有 ${p0.length} 个，P1 剩 ${p1.length} 个`
+    await d(500)
+  })
+}
+
+function doReset() { busy.value = false; init() }
+
+let ro: ResizeObserver | null = null
+onMounted(() => {
+  init()
+  if (box.value) {
+    W.value = box.value.clientWidth
+    ro = new ResizeObserver(e => { const w = e[0]?.contentRect.width; if (w && w > 100) W.value = w })
+    ro.observe(box.value)
+  }
+})
+onUnmounted(() => ro?.disconnect())
 
 const basicCode = `package main
 

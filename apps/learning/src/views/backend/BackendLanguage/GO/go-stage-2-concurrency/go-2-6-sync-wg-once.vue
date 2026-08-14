@@ -3,6 +3,53 @@
     <header class="bg-white border-b border-slate-200"><div class="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between"><div><h1 class="text-2xl font-bold text-slate-800">🧩 WaitGroup / Once / Cond</h1><p class="text-sm text-slate-500 mt-1">goroutine 同步三件套 — 像等所有人到齐再开会、像全局初始化只做一次</p></div><div class="flex items-center gap-3"><EditorLink file-path="apps/go/concurrency/go-2-6-sync-wg-once.go" label="📝 查看源码" :is-admin="userStore.isAdmin" /><span class="text-xs text-slate-400 bg-slate-100 px-3 py-1 rounded-full">阶段 2-6</span></div></div></header>
     <main class="max-w-4xl mx-auto px-6 py-8 space-y-6"><Nav :list="navList" title="📑 目录" position="top-right" :showBackToTop="true" />
 
+      <!-- 📐 结构总览 -->
+      <section id="sec-overview" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">📐</span>
+          结构总览：WaitGroup 计数信号量
+        </h2>
+        <p class="text-slate-600 mb-4 leading-relaxed text-sm">
+          WaitGroup 内部是一个 <strong>int64 原子计数器 + 信号量（sema）</strong>。Add 增加计数，Done 减少计数（Add(-1)），
+          Wait 阻塞直到计数归零——最后一个 Done 把计数减到 0 时，<strong>同时唤醒所有排队的 goroutine</strong>。
+        </p>
+        <figure class="mb-4">
+          <svg viewBox="0 0 720 220" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <marker id="wg-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" />
+              </marker>
+            </defs>
+
+            <!-- 计数器 -->
+            <text x="16" y="30" font-size="13" font-family="monospace" fill="#64748b" font-weight="bold">计数器 counter = 3（还有 3 个 goroutine 未完成）</text>
+            <rect x="300" y="44" width="120" height="60" rx="10" fill="#1e293b" stroke="#0f172a" stroke-width="2" />
+            <text x="360" y="74" text-anchor="middle" dominant-baseline="central" font-size="28" font-family="monospace" font-weight="bold" fill="#ffffff">3</text>
+
+            <!-- Add / Done 操作 -->
+            <text x="16" y="120" font-size="12" font-family="monospace" fill="#64748b" font-weight="bold">Add(n)：计数 +n（goroutine 启动前）</text>
+            <rect x="30" y="132" width="130" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="95" y="152" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#ffffff">wg.Add(3)</text>
+            <line x1="160" y1="152" x2="290" y2="90" stroke="#06b6d4" stroke-width="2" marker-end="url(#wg-arr)" />
+
+            <text x="250" y="120" font-size="12" font-family="monospace" fill="#64748b" font-weight="bold">Done()：计数 -1（goroutine 完成时）</text>
+            <rect x="260" y="132" width="130" height="40" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.5" />
+            <text x="325" y="152" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#b45309">wg.Done() ×3</text>
+            <line x1="325" y1="132" x2="345" y2="106" stroke="#f59e0b" stroke-width="2" marker-end="url(#wg-arr)" />
+
+            <!-- Wait 唤醒 -->
+            <text x="470" y="30" font-size="12" font-family="monospace" fill="#64748b" font-weight="bold">Wait()：阻塞直到计数 = 0</text>
+            <rect x="480" y="44" width="180" height="60" rx="6" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5 3" />
+            <text x="570" y="74" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" fill="#64748b">wg.Wait()</text>
+            <text x="570" y="92" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">计数=0 时唤醒</text>
+            <line x1="420" y1="74" x2="475" y2="74" stroke="#94a3b8" stroke-width="2" marker-end="url(#wg-arr)" />
+
+            <text x="16" y="196" font-size="11" font-family="monospace" fill="#0891b2">Done 到 0 → sema 信号量释放 → 所有 Wait 排队的 goroutine 同时被唤醒（广播）</text>
+          </svg>
+          <figcaption class="text-xs text-slate-400 mt-1">图 1：WaitGroup 计数信号量——Add 加计数、Done 减计数、Wait 阻塞到计数归零后同时唤醒所有等待者</figcaption>
+        </figure>
+      </section>
+
       <section id="sec-1" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">1</span>sync.WaitGroup — "等大家干完活再继续"</h2>
         <p class="text-slate-600 mb-4 leading-relaxed">你启动 5 个 goroutine 去并发下载文件，主 goroutine 需要<strong>等它们全完成</strong>才能继续。WaitGroup 就是干这个的——内部是一个<strong>计数器</strong>：Add(n) 加计数，Done() 减计数，Wait() 阻塞直到计数归零。</p>
@@ -37,7 +84,7 @@
     <footer class="max-w-4xl mx-auto px-6 py-8"><nav class="flex justify-between items-center pt-4 border-t border-slate-200 text-sm"><RouterLink to="/backend/BackendLanguage/GO/go-stage-2-concurrency/go-2-5-sync-mutex" class="text-slate-500 hover:text-cyan-600 flex items-center gap-1">← 上一节：Mutex</RouterLink><RouterLink to="/backend/BackendLanguage/GO/go-stage-2-concurrency/go-2-7-atomic" class="text-cyan-600 hover:text-cyan-700 font-medium flex items-center gap-1">下一节：Atomic →</RouterLink></nav></footer>
   </div></template>
 <script setup lang="ts">import { Code, EditorLink, Nav } from 'components'; import { RouterLink } from 'vue-router'; import { useUserStore } from '@/stores/userProfle'; const userStore = useUserStore()
-const navList = [{id:"sec-1",name:"WaitGroup"},{id:"sec-2",name:"WaitGroup+errgroup"},{id:"sec-3",name:"sync.Once"},{id:"sec-4",name:"sync.Cond"},{id:"sec-5",name:"小结"}]
+const navList = [{id:"sec-overview",name:"📐 结构总览"},{id:"sec-1",name:"WaitGroup"},{id:"sec-2",name:"WaitGroup+errgroup"},{id:"sec-3",name:"sync.Once"},{id:"sec-4",name:"sync.Cond"},{id:"sec-5",name:"小结"}]
 const wgCode = `var wg sync.WaitGroup
 for i := 1; i <= 5; i++ {
     wg.Add(1)  // ⚠️ 必须在 goroutine 外！

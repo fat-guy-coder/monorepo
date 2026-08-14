@@ -4,6 +4,66 @@
     <main class="max-w-4xl mx-auto px-6 py-8 space-y-6">
       <Nav :list="navList" title="📑 目录" position="top-right" :showBackToTop="true" />
 
+      <!-- 📐 结构总览 -->
+      <section id="sec-overview" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">📐</span>
+          结构总览：select 同时监听多个 channel
+        </h2>
+        <p class="text-slate-600 mb-4 leading-relaxed text-sm">
+          一个 goroutine 通过 select 同时阻塞在<strong>多个 channel 的 case</strong>上。哪个 channel 先就绪，就执行对应的 case 分支。
+          多个 case 同时就绪时<strong>伪随机选一个</strong>（防止饥饿）；全阻塞时如果有 default 就执行 default（非阻塞）。
+        </p>
+
+        <figure class="mb-4">
+          <svg viewBox="0 0 720 280" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <marker id="sel-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" />
+              </marker>
+            </defs>
+
+            <!-- 中心 goroutine（select 块） -->
+            <rect x="40" y="80" width="180" height="120" rx="8" fill="#fef3c7" stroke="#f59e0b" stroke-width="2" />
+            <text x="130" y="110" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#b45309">goroutine G</text>
+            <text x="130" y="135" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" fill="#b45309">select {</text>
+            <text x="130" y="155" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" fill="#b45309">  case <-ch1 ...</text>
+            <text x="130" y="175" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" fill="#b45309">  case <-ch2 ...</text>
+            <text x="130" y="195" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" fill="#b45309">}</text>
+
+            <!-- 三个 channel -->
+            <!-- ch1（就绪，绿色） -->
+            <rect x="380" y="40" width="130" height="56" rx="6" fill="#4ade80" stroke="#22c55e" stroke-width="2" />
+            <text x="445" y="68" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#0f172a">ch1（有数据）</text>
+            <!-- ch2（阻塞，灰色） -->
+            <rect x="380" y="112" width="130" height="56" rx="6" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" />
+            <text x="445" y="140" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" fill="#64748b">ch2（空）</text>
+            <!-- ch3（阻塞，灰色） -->
+            <rect x="380" y="184" width="130" height="56" rx="6" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" />
+            <text x="445" y="212" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" fill="#64748b">ch3（空）</text>
+
+            <!-- 连线：goroutine → 三个 channel（case 监听） -->
+            <line x1="220" y1="110" x2="380" y2="68" stroke="#94a3b8" stroke-width="2" marker-end="url(#sel-arr)" />
+            <line x1="220" y1="140" x2="380" y2="140" stroke="#94a3b8" stroke-width="2" marker-end="url(#sel-arr)" />
+            <line x1="220" y1="170" x2="380" y2="212" stroke="#94a3b8" stroke-width="2" marker-end="url(#sel-arr)" />
+
+            <!-- 选中 ch1 的高亮箭头 -->
+            <line x1="445" y1="40" x2="445" y2="10" stroke="#4ade80" stroke-width="3" />
+            <rect x="380" y="4" width="130" height="24" rx="4" fill="#4ade80" />
+            <text x="445" y="16" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" font-weight="bold" fill="#0f172a">✅ 选中执行</text>
+
+            <!-- default 分支（底部虚线框） -->
+            <rect x="380" y="250" width="130" height="24" rx="6" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5 3" />
+            <text x="445" y="262" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" fill="#64748b">default（可选）</text>
+            <line x1="130" y1="200" x2="130" y2="262" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5 3" />
+            <line x1="130" y1="262" x2="380" y2="262" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#sel-arr)" />
+
+            <text x="16" y="24" font-size="13" font-family="monospace" fill="#64748b" font-weight="bold">select 多路复用——G 同时监听 ch1/ch2/ch3，ch1 先就绪 → 执行 ch1 的 case</text>
+          </svg>
+          <figcaption class="text-xs text-slate-400 mt-1">图 1：select 结构——一个 goroutine 同时阻塞在多个 channel case 上，哪个先就绪执行哪个（绿色高亮），全阻塞时可走 default</figcaption>
+        </figure>
+      </section>
+
       <!-- 1. 是什么 -->
       <section id="sec-1" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">1</span>select 到底是什么？用来干嘛？</h2>
@@ -80,6 +140,37 @@
         </div>
       </section>
 
+      <!-- 🎬 动画演示 -->
+      <section id="sec-viz" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">🎬</span>
+          动画演示：select 随机选中就绪的 channel
+        </h2>
+        <p class="text-slate-600 mb-3 leading-relaxed text-sm">
+          点「随机就绪」让 1~3 个 channel 随机变为就绪，再点「执行 select」——select 会从就绪的 case 中<strong>随机选一个</strong>执行。
+          观察多次执行后，就绪的多个 channel 被选中的次数是否均匀（体现伪随机公平性）。
+        </p>
+        <div class="flex flex-wrap items-center gap-2 mb-2 text-xs">
+          <span class="bg-slate-100 px-2 py-1 rounded-full">📡 就绪: {{ readyCount }} 个</span>
+          <span class="bg-slate-100 px-2 py-1 rounded-full">🎯 累计选中: ch1={{ hit[0] }} ch2={{ hit[1] }} ch3={{ hit[2] }}</span>
+          <span class="bg-cyan-50 text-cyan-700 px-2 py-1 rounded-full font-mono">{{ status }}</span>
+        </div>
+        <div class="flex flex-wrap items-center gap-2 mb-2">
+          <button @mousedown="doRandomReady" :disabled="busy" class="px-3 py-1.5 rounded-lg text-xs font-medium border transition-all duration-150 active:scale-95 active:shadow-inner bg-purple-50 text-purple-700 border-purple-200 hover:bg-purple-100 hover:border-purple-300 hover:shadow-sm disabled:opacity-40 disabled:cursor-not-allowed disabled:scale-100">随机就绪</button>
+          <button @mousedown="doSelect" :disabled="busy || readyCount === 0" class="px-3 py-1.5 rounded-lg text-xs font-medium border transition-all duration-150 active:scale-95 active:shadow-inner bg-cyan-50 text-cyan-700 border-cyan-200 hover:bg-cyan-100 hover:border-cyan-300 hover:shadow-sm disabled:opacity-40 disabled:cursor-not-allowed disabled:scale-100">执行 select</button>
+          <button @mousedown="doReset" :disabled="busy" class="px-3 py-1.5 rounded-lg text-xs font-medium border transition-all duration-150 active:scale-95 active:shadow-inner bg-slate-50 text-slate-500 border-slate-300 hover:bg-slate-100 hover:border-slate-400 hover:shadow-sm disabled:opacity-40 disabled:cursor-not-allowed disabled:scale-100">↺ Reset</button>
+        </div>
+        <div ref="box" class="w-full relative" :style="{height: H+'px'}">
+          <v-stage :config="{width: W, height: H}">
+            <v-layer>
+              <v-rect v-for="(ch,i) in channels" :key="'ch'+i" :config="chRectCfg(i)" />
+              <v-text v-for="(ch,i) in channels" :key="'cht'+i" :config="chTextCfg(i)" />
+              <v-text v-if="selected >= 0" :config="selectedCfg" />
+            </v-layer>
+          </v-stage>
+        </div>
+      </section>
+
       <section id="sec-5" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">📋</span>小结</h2>
         <ul class="space-y-2 text-slate-600"><li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span>select 底层调用 runtime.selectgo()——<strong>统一加锁→遍历→阻塞或执行→解锁</strong></span></li><li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span><strong>七大模式：</strong>超时/default/退出/for-select/ticker/收发混合/nil chan 禁用</span></li><li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span>for + select 是 Go 中<strong>最核心的并发循环模式</strong>——几乎所有 server 都在用</span></li></ul>
@@ -88,8 +179,88 @@
     <footer class="max-w-4xl mx-auto px-6 py-8"><nav class="flex justify-between items-center pt-4 border-t border-slate-200 text-sm"><RouterLink to="/backend/BackendLanguage/GO/go-stage-2-concurrency/go-2-2-channels" class="text-slate-500 hover:text-cyan-600 transition-colors flex items-center gap-1">← 上一节：Channel</RouterLink><RouterLink to="/backend/BackendLanguage/GO/go-stage-2-concurrency/go-2-4-timer-ticker" class="text-cyan-600 hover:text-cyan-700 font-medium transition-colors flex items-center gap-1">下一节：Timer/Ticker →</RouterLink></nav></footer>
   </div></template>
 
-<script setup lang="ts">import { Code, EditorLink, Nav } from 'components'; import { RouterLink } from 'vue-router'; import { useUserStore } from '@/stores/userProfle'; const userStore = useUserStore()
-const navList = [{id:"sec-1",name:"是什么"},{id:"sec-2",name:"底层原理 selectgo"},{id:"sec-3",name:"七大实战模式"},{id:"sec-4",name:"规则 + 陷阱"},{id:"sec-5",name:"小结"}]
+<script setup lang="ts">import { Code, EditorLink, Nav } from 'components'; import { RouterLink } from 'vue-router'; import { useUserStore } from '@/stores/userProfle'; import { ref, reactive, computed, onMounted, onUnmounted } from 'vue'; const userStore = useUserStore()
+const navList = [{id:"sec-overview",name:"📐 结构总览"},{id:"sec-1",name:"是什么"},{id:"sec-2",name:"底层原理 selectgo"},{id:"sec-3",name:"七大实战模式"},{id:"sec-4",name:"规则 + 陷阱"},{id:"sec-viz",name:"🎬 动画演示"},{id:"sec-5",name:"小结"}]
+
+// ===== 🎬 select 多路复用动画 =====
+const C = { cyan:'#06b6d4', green:'#4ade80', red:'#ef4444', orange:'#f59e0b', text:'#1e293b', muted:'#64748b', ghost:'#e2e8f0' }
+const H = ref(170), W = ref(700)
+const box = ref<HTMLDivElement>()
+const busy = ref(false), status = ref('')
+const d = (ms: number) => new Promise(r => setTimeout(r, ms))
+
+interface Ch { name: string; ready: boolean; color: string }
+const channels = reactive<Ch[]>([
+  { name: 'ch1', ready: false, color: C.ghost },
+  { name: 'ch2', ready: false, color: C.ghost },
+  { name: 'ch3', ready: false, color: C.ghost },
+])
+const hit = reactive([0, 0, 0])
+const selected = ref(-1)
+
+const readyCount = computed(() => channels.filter(c => c.ready).length)
+const CHW = 140, CHH = 56, CHGAP = 30, CHY = 40
+
+function chX(i: number) { const total = channels.length * CHW + (channels.length - 1) * CHGAP; return (W.value - total) / 2 + i * (CHW + CHGAP) }
+function chRectCfg(i: number) {
+  const c = channels[i]
+  const isSel = selected.value === i
+  return { x: chX(i), y: CHY, width: CHW, height: CHH, cornerRadius: 8,
+    fill: isSel ? C.green : (c.ready ? C.cyan : C.ghost),
+    stroke: isSel ? '#22c55e' : (c.ready ? '#0891b2' : '#94a3b8'), strokeWidth: isSel ? 3 : 1.5 }
+}
+function chTextCfg(i: number) {
+  const c = channels[i]
+  return { x: chX(i), y: CHY + 10, width: CHW, text: c.name, fontSize: 14, fontFamily: 'monospace', fontStyle: 'bold', fill: (c.ready || selected.value === i) ? '#0f172a' : C.muted, align: 'center' }
+}
+const selectedCfg = computed(() => ({
+  x: chX(selected.value), y: CHY + CHH + 10, width: CHW, text: '✅ 选中', fontSize: 12, fontFamily: 'monospace', fontStyle: 'bold', fill: '#15803d', align: 'center',
+}))
+
+async function act(msg: string, fn: () => Promise<void>) {
+  if (busy.value) return; busy.value = true; status.value = msg
+  try { await fn() } catch (_) {}
+  finally { await d(250); busy.value = false; status.value = '' }
+}
+
+function doRandomReady() {
+  act('随机就绪', async () => {
+    channels.forEach(c => { c.ready = Math.random() > 0.5; c.color = c.ready ? C.cyan : C.ghost })
+    selected.value = -1
+    status.value = `${readyCount.value} 个 channel 就绪`
+    await d(500)
+  })
+}
+
+function doSelect() {
+  act('执行 select  O(1)', async () => {
+    const readyIdx = channels.map((c, i) => c.ready ? i : -1).filter(i => i >= 0)
+    if (!readyIdx.length) return
+    const pick = readyIdx[Math.floor(Math.random() * readyIdx.length)]
+    selected.value = -1
+    await d(200)
+    selected.value = pick
+    hit[pick]++
+    status.value = `select 选中 ${channels[pick].name}`
+    await d(600)
+    channels[pick].ready = false
+    channels[pick].color = C.ghost
+    selected.value = -1
+  })
+}
+
+function doReset() { busy.value = false; channels.forEach(c => { c.ready = false; c.color = C.ghost }); hit[0]=hit[1]=hit[2]=0; selected.value = -1; status.value = '' }
+
+let ro: ResizeObserver | null = null
+onMounted(() => {
+  if (box.value) {
+    W.value = box.value.clientWidth
+    ro = new ResizeObserver(e => { const w = e[0]?.contentRect.width; if (w && w > 100) W.value = w })
+    ro.observe(box.value)
+  }
+})
+onUnmounted(() => ro?.disconnect())
+
 const basicCode = `ch1 := make(chan string); ch2 := make(chan string)
 go func() { time.Sleep(10*time.Millisecond); ch1 <- "one" }()
 go func() { time.Sleep(20*time.Millisecond); ch2 <- "two" }()

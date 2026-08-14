@@ -3,6 +3,62 @@
     <header class="bg-white border-b border-slate-200"><div class="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between"><div><h1 class="text-2xl font-bold text-slate-800">♻️ sync.Pool 对象复用</h1><p class="text-sm text-slate-500 mt-1">临时对象池 — 高并发下减少 GC 压力的利器，一句话：用完别扔，还给池子下次用</p></div><div class="flex items-center gap-3"><EditorLink file-path="apps/go/concurrency/go-2-11-sync-pool.go" label="📝 查看源码" :is-admin="userStore.isAdmin" /><span class="text-xs text-slate-400 bg-slate-100 px-3 py-1 rounded-full">阶段 2-11</span></div></div></header>
     <main class="max-w-4xl mx-auto px-6 py-8 space-y-6"><Nav :list="navList" title="📑 目录" position="top-right" :showBackToTop="true" />
 
+      <!-- 📐 结构总览 -->
+      <section id="sec-overview" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">📐</span>
+          结构总览：Pool 的 Get / Put 循环
+        </h2>
+        <p class="text-slate-600 mb-4 leading-relaxed text-sm">
+          Pool 复用以分配的对象：<strong>Get</strong> 取一个（池空则 New），用完 <strong>Reset 后 Put 归还</strong>。
+          每个 P 有私有对象（无锁取），跨 P 走共享链表偷。GC 来时会清空整个池——所以 Pool 只是 GC 之前的"暂存区"。
+        </p>
+        <figure class="mb-4">
+          <svg viewBox="0 0 720 210" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <marker id="pl-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" />
+              </marker>
+            </defs>
+
+            <!-- 对象池 -->
+            <text x="16" y="24" font-size="13" font-family="monospace" fill="#64748b" font-weight="bold">sync.Pool（对象池）</text>
+            <rect x="30" y="36" width="220" height="100" rx="8" fill="#e0f2fe" stroke="#0ea5e9" stroke-width="2" />
+            <text x="140" y="60" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#0369a1">池（缓存的对象）</text>
+            <!-- 池里的对象 -->
+            <rect x="52" y="78" width="44" height="34" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="74" y="95" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" font-weight="bold" fill="#fff">buf</text>
+            <rect x="108" y="78" width="44" height="34" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="130" y="95" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" font-weight="bold" fill="#fff">buf</text>
+            <rect x="164" y="78" width="44" height="34" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="186" y="95" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" font-weight="bold" fill="#fff">buf</text>
+
+            <!-- Get 箭头 -->
+            <line x1="250" y1="66" x2="360" y2="66" stroke="#4ade80" stroke-width="2.5" marker-end="url(#pl-arr)" />
+            <text x="305" y="54" text-anchor="middle" font-size="11" font-family="monospace" font-weight="bold" fill="#15803d">Get()</text>
+
+            <!-- 使用对象 -->
+            <rect x="365" y="40" width="160" height="52" rx="8" fill="#fef3c7" stroke="#f59e0b" stroke-width="2" />
+            <text x="445" y="60" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#b45309">使用对象</text>
+            <text x="445" y="80" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#b45309">buf.WriteString(...)</text>
+
+            <!-- Put 箭头（带回） -->
+            <line x1="445" y1="100" x2="445" y2="130" stroke="#94a3b8" stroke-width="2.5" marker-end="url(#pl-arr)" />
+            <text x="460" y="118" font-size="11" font-family="monospace" font-weight="bold" fill="#64748b">Reset + Put()</text>
+
+            <!-- New 路径（池空时） -->
+            <line x1="140" y1="136" x2="140" y2="175" stroke="#ef4444" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#pl-arr)" />
+            <text x="160" y="160" font-size="11" font-family="monospace" font-weight="bold" fill="#b91c1c">池空 → New()</text>
+            <rect x="60" y="180" width="160" height="24" rx="6" fill="#fee2e2" stroke="#ef4444" stroke-width="1.5" />
+            <text x="140" y="192" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" font-weight="bold" fill="#b91c1c">New: func() any</text>
+
+            <text x="360" y="150" font-size="12" font-family="monospace" fill="#0891b2">GC 来 → 池全清空 → 下次 Get 走 New</text>
+            <text x="360" y="172" font-size="11" font-family="monospace" fill="#64748b">每 P 一个私有对象（无锁）→ 共享链表（跨 P 偷）</text>
+          </svg>
+          <figcaption class="text-xs text-slate-400 mt-1">图 1：Pool 的 Get→用→Reset→Put 循环，池空时走 New。GC 清空池，Pool 只是"暂存区"而非持久缓存</figcaption>
+        </figure>
+      </section>
+
       <section id="sec-1" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">1</span>为什么需要 Pool？— GC 是你付不起的账单</h2>
         <p class="text-slate-600 mb-4 leading-relaxed text-sm">Go 的 GC 很高效——但 GC 还是 GC。每次 <code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">new(bytes.Buffer)</code> 都在堆上分配内存。用完丢弃→GC 扫描→发现没引用了→回收。如果一秒做 10 万次这个操作，GC 就得频繁跑——CPU 飙高、STW（Stop-The-World）也变多。<strong>Pool 让你把对象"还回去"而不是"扔掉"——下次直接复用，跳过 new + GC。</strong></p>
@@ -31,7 +87,7 @@
     <footer class="max-w-4xl mx-auto px-6 py-8"><nav class="flex justify-between items-center pt-4 border-t border-slate-200 text-sm"><RouterLink to="/backend/BackendLanguage/GO/go-stage-2-concurrency/go-2-10-race-detection" class="text-slate-500 hover:text-cyan-600 flex items-center gap-1">← 上一节：竞态检测</RouterLink><RouterLink to="/backend/BackendLanguage/GO/go-stage-2-concurrency/go-2-12-errgroup" class="text-cyan-600 hover:text-cyan-700 font-medium flex items-center gap-1">下一节：errgroup →</RouterLink></nav></footer>
   </div></template>
 <script setup lang="ts">import { Code, EditorLink, Nav } from 'components'; import { RouterLink } from 'vue-router'; import { useUserStore } from '@/stores/userProfle'; const userStore = useUserStore()
-const navList = [{id:"sec-1",name:"为什么需要Pool"},{id:"sec-2",name:"内部机制"},{id:"sec-3",name:"场景+陷阱"},{id:"sec-4",name:"小结"}]
+const navList = [{id:"sec-overview",name:"📐 结构总览"},{id:"sec-1",name:"为什么需要Pool"},{id:"sec-2",name:"内部机制"},{id:"sec-3",name:"场景+陷阱"},{id:"sec-4",name:"小结"}]
 const basicCode = `var bufPool = sync.Pool{
     New: func() any { return new(bytes.Buffer) },  // 池空时才调用
 }

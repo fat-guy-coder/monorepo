@@ -3,6 +3,58 @@
     <header class="bg-white border-b border-slate-200"><div class="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between"><div><h1 class="text-2xl font-bold text-slate-800">📋 Context 上下文</h1><p class="text-sm text-slate-500 mt-1">超时 · 取消传播 · 传值 — 每一个 Go 请求都该有的"到期时间"和"退出开关"</p></div><div class="flex items-center gap-3"><EditorLink file-path="apps/go/concurrency/go-2-8-context.go" label="📝 查看源码" :is-admin="userStore.isAdmin" /><span class="text-xs text-slate-400 bg-slate-100 px-3 py-1 rounded-full">阶段 2-8</span></div></div></header>
     <main class="max-w-4xl mx-auto px-6 py-8 space-y-6"><Nav :list="navList" title="📑 目录" position="top-right" :showBackToTop="true" />
 
+      <!-- 📐 结构总览 -->
+      <section id="sec-overview" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">📐</span>
+          结构总览：context 是不可变的树
+        </h2>
+        <p class="text-slate-600 mb-4 leading-relaxed text-sm">
+          context 是一个<strong>不可变的链表/树</strong>——从 <code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">Background()</code> 根节点出发，
+          每个 <code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">WithCancel/WithTimeout/WithValue</code> 派生出新的子节点。取消是<strong>单向向下传播</strong>的：父取消 → 所有子取消。
+        </p>
+
+        <figure class="mb-4">
+          <svg viewBox="0 0 720 260" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <marker id="ctx-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" />
+              </marker>
+            </defs>
+
+            <!-- 根节点 -->
+            <rect x="280" y="16" width="160" height="44" rx="8" fill="#1e293b" stroke="#0f172a" stroke-width="2" />
+            <text x="360" y="38" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">Background()</text>
+
+            <!-- 第二层：三个派生 -->
+            <line x1="360" y1="60" x2="180" y2="104" stroke="#94a3b8" stroke-width="2" marker-end="url(#ctx-arr)" />
+            <line x1="360" y1="60" x2="360" y2="104" stroke="#94a3b8" stroke-width="2" marker-end="url(#ctx-arr)" />
+            <line x1="360" y1="60" x2="540" y2="104" stroke="#94a3b8" stroke-width="2" marker-end="url(#ctx-arr)" />
+
+            <rect x="100" y="108" width="160" height="44" rx="8" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="180" y="124" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#ffffff">WithCancel</text>
+            <text x="180" y="142" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#cffafe">手动取消</text>
+
+            <rect x="280" y="108" width="160" height="44" rx="8" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="360" y="124" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#ffffff">WithTimeout</text>
+            <text x="360" y="142" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#cffafe">超时自动取消</text>
+
+            <rect x="460" y="108" width="160" height="44" rx="8" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="540" y="124" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#ffffff">WithValue</text>
+            <text x="540" y="142" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#cffafe">携带元数据</text>
+
+            <!-- 第三层：孙节点 -->
+            <line x1="360" y1="152" x2="360" y2="196" stroke="#94a3b8" stroke-width="2" marker-end="url(#ctx-arr)" />
+            <rect x="280" y="200" width="160" height="40" rx="8" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.5" />
+            <text x="360" y="214" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" font-weight="bold" fill="#b45309">孙节点</text>
+            <text x="360" y="230" text-anchor="middle" dominant-baseline="central" font-size="9" font-family="monospace" fill="#b45309">父取消→孙也取消</text>
+
+            <text x="16" y="248" font-size="11" font-family="monospace" fill="#0891b2">取消单向向下传播：cancel 父 → 所有子孙的 Done() 同时 close</text>
+          </svg>
+          <figcaption class="text-xs text-slate-400 mt-1">图 1：context 树——Background 派生出 WithCancel/WithTimeout/WithValue，各自还能继续派生孙节点。取消沿树向下传播</figcaption>
+        </figure>
+      </section>
+
       <section id="sec-1" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">1</span>Context 解决什么问题？— "过期时间"+"退出开关"</h2>
         <p class="text-slate-600 mb-4 leading-relaxed text-sm">一个 HTTP 请求过来了，你要查数据库、调下游服务、写缓存——这些操作都需要时间。如果<strong>客户端断了连接</strong>或者<strong>等了太久</strong>，继续执行这些操作就是在<strong>浪费 CPU + 数据库连接 + 内存</strong>。context 就是<strong>给请求绑一个"有效期"和一个"取消开关"</strong>——超时或取消后，所有下游操作一起停。</p>
@@ -53,12 +105,101 @@
         </div>
       </section>
 
+      <!-- 🎬 动画演示 -->
+      <section id="sec-viz" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">🎬</span>
+          动画演示：取消传播
+        </h2>
+        <p class="text-slate-600 mb-3 leading-relaxed text-sm">
+          一棵 context 树：根节点 Background，派生出 3 个子节点。点「取消根」后——<strong>所有子孙节点依次变红（Done 被 close）</strong>。
+          观察取消如何沿着树向下传播。
+        </p>
+        <div class="flex flex-wrap items-center gap-2 mb-2 text-xs">
+          <span class="bg-slate-100 px-2 py-1 rounded-full">🌳 节点数: 4</span>
+          <span class="bg-slate-100 px-2 py-1 rounded-full">❌ 已取消: {{ cancelledCount }} 个</span>
+          <span class="bg-cyan-50 text-cyan-700 px-2 py-1 rounded-full font-mono">{{ status }}</span>
+        </div>
+        <div class="flex flex-wrap items-center gap-2 mb-2">
+          <button @mousedown="doCancel" :disabled="busy || cancelledCount === 4" class="px-3 py-1.5 rounded-lg text-xs font-medium border transition-all duration-150 active:scale-95 active:shadow-inner bg-red-50 text-red-600 border-red-200 hover:bg-red-100 hover:border-red-300 hover:shadow-sm disabled:opacity-40 disabled:cursor-not-allowed disabled:scale-100">取消根节点 (cancel())</button>
+          <button @mousedown="doReset" :disabled="busy" class="px-3 py-1.5 rounded-lg text-xs font-medium border transition-all duration-150 active:scale-95 active:shadow-inner bg-slate-50 text-slate-500 border-slate-300 hover:bg-slate-100 hover:border-slate-400 hover:shadow-sm disabled:opacity-40 disabled:cursor-not-allowed disabled:scale-100">↺ Reset</button>
+        </div>
+        <div ref="box" class="w-full relative" :style="{height: H+'px'}">
+          <v-stage :config="{width: W, height: H}">
+            <v-layer>
+              <!-- 连线 -->
+              <v-line v-for="(l,i) in edges" :key="'e'+i" :config="l" />
+              <!-- 节点 -->
+              <v-rect v-for="(n,i) in nodes" :key="'n'+i" :config="nodeRectCfg(n)" />
+              <v-text v-for="(n,i) in nodes" :key="'nt'+i" :config="nodeTextCfg(n)" />
+            </v-layer>
+          </v-stage>
+        </div>
+      </section>
+
       <section id="sec-6" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100"><h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">📋</span>小结</h2><ul class="space-y-2 text-slate-600"><li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span>context = <strong>请求的"有效期" + "取消开关"</strong>。每一个请求一个 ctx，传递到所有下游</span></li><li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span><strong>WithTimeout + defer cancel()</strong>——覆盖 90% 场景。忘记 cancel = Timer 泄漏</span></li><li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span>取消传播是<strong>双向的</strong>：父取消→所有子取消。Done() close channel = 广播效应</span></li><li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span>函数第一参数、不存 struct、Value 用自定义类型做 key、不存业务数据</span></li></ul></section>
     </main>
     <footer class="max-w-4xl mx-auto px-6 py-8"><nav class="flex justify-between items-center pt-4 border-t border-slate-200 text-sm"><RouterLink to="/backend/BackendLanguage/GO/go-stage-2-concurrency/go-2-7-atomic" class="text-slate-500 hover:text-cyan-600 flex items-center gap-1">← 上一节：Atomic</RouterLink><RouterLink to="/backend/BackendLanguage/GO/go-stage-2-concurrency/go-2-9-concurrency-patterns" class="text-cyan-600 hover:text-cyan-700 font-medium flex items-center gap-1">下一节：并发模式 →</RouterLink></nav></footer>
   </div></template>
-<script setup lang="ts">import { Code, EditorLink, Nav } from 'components'; import { RouterLink } from 'vue-router'; import { useUserStore } from '@/stores/userProfle'; const userStore = useUserStore()
-const navList = [{id:"sec-1",name:"Context解决什么问题"},{id:"sec-2",name:"六种创建方式"},{id:"sec-3",name:"取消传播树"},{id:"sec-4",name:"HTTP+优雅关闭"},{id:"sec-5",name:"新手常见错误"},{id:"sec-6",name:"小结"}]
+<script setup lang="ts">import { Code, EditorLink, Nav } from 'components'; import { RouterLink } from 'vue-router'; import { useUserStore } from '@/stores/userProfle'; import { ref, reactive, computed, onMounted, onUnmounted } from 'vue'; const userStore = useUserStore()
+const navList = [{id:"sec-overview",name:"📐 结构总览"},{id:"sec-1",name:"Context解决什么问题"},{id:"sec-2",name:"六种创建方式"},{id:"sec-3",name:"取消传播树"},{id:"sec-4",name:"HTTP+优雅关闭"},{id:"sec-5",name:"新手常见错误"},{id:"sec-viz",name:"🎬 动画演示"},{id:"sec-6",name:"小结"}]
+
+// ===== 🎬 context 取消传播动画 =====
+const C = { cyan:'#06b6d4', green:'#4ade80', red:'#ef4444', muted:'#64748b', ghost:'#e2e8f0', dark:'#1e293b' }
+const H = ref(220), W = ref(700)
+const box = ref<HTMLDivElement>()
+const busy = ref(false), status = ref('')
+const d = (ms: number) => new Promise(r => setTimeout(r, ms))
+
+interface CtxNode { id: number; label: string; x: number; y: number; canceled: boolean; isRoot: boolean }
+const nodes = reactive<CtxNode[]>([
+  { id: 0, label: 'Background', x: 300, y: 20, canceled: false, isRoot: true },
+  { id: 1, label: 'WithCancel', x: 100, y: 100, canceled: false, isRoot: false },
+  { id: 2, label: 'WithTimeout', x: 300, y: 100, canceled: false, isRoot: false },
+  { id: 3, label: 'WithValue', x: 500, y: 100, canceled: false, isRoot: false },
+])
+const edges = reactive([
+  { points: [320, 48, 140, 92], stroke: '#94a3b8', strokeWidth: 2 },
+  { points: [320, 48, 320, 92], stroke: '#94a3b8', strokeWidth: 2 },
+  { points: [320, 48, 540, 92], stroke: '#94a3b8', strokeWidth: 2 },
+])
+const cancelledCount = computed(() => nodes.filter(n => n.canceled).length)
+
+function nodeRectCfg(n: CtxNode) {
+  return { x: n.x, y: n.y, width: 120, height: 36, cornerRadius: 8,
+    fill: n.canceled ? C.red : (n.isRoot ? C.dark : C.cyan),
+    stroke: n.canceled ? '#dc2626' : (n.isRoot ? '#0f172a' : '#0891b2'), strokeWidth: 2 }
+}
+function nodeTextCfg(n: CtxNode) {
+  return { x: n.x, y: n.y, width: 120, height: 36, text: n.canceled ? '✗ ' + n.label : n.label,
+    fontSize: 12, fontFamily: 'monospace', fontStyle: 'bold',
+    fill: n.canceled || n.isRoot ? '#ffffff' : '#0f172a', align: 'center', verticalAlign: 'middle' }
+}
+
+function init() { nodes.forEach(n => n.canceled = false); status.value = '' }
+
+async function doCancel() {
+  if (busy.value) return; busy.value = true
+  status.value = 'cancel 根节点...'
+  for (const n of nodes) {
+    n.canceled = true
+    status.value = `${n.label} 已取消（Done close）`
+    await d(400)
+  }
+  await d(300); busy.value = false; status.value = ''
+}
+function doReset() { busy.value = false; init() }
+
+let ro: ResizeObserver | null = null
+onMounted(() => {
+  init()
+  if (box.value) {
+    W.value = box.value.clientWidth
+    ro = new ResizeObserver(e => { const w = e[0]?.contentRect.width; if (w && w > 100) W.value = w })
+    ro.observe(box.value)
+  }
+})
+onUnmounted(() => ro?.disconnect())
 const basicCode = `// WithCancel — 手动取消
 ctx, cancel := context.WithCancel(context.Background())
 go func() { select { case <-ctx.Done(): fmt.Println("cancelled!") } }()

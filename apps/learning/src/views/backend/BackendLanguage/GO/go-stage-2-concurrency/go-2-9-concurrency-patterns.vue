@@ -9,6 +9,55 @@
         <div class="overflow-x-auto mb-3"><table class="w-full text-sm border-collapse"><thead><tr class="bg-slate-100 text-left"><th class="px-4 py-2 border font-semibold">模式</th><th class="px-4 py-2 border font-semibold">解决什么问题</th><th class="px-4 py-2 border font-semibold">一句话</th></tr></thead><tbody class="text-slate-600"><tr><td class="px-4 py-2 border font-mono text-xs">Pipeline</td><td class="px-4 py-2 border">一个数据需要<strong>多步处理</strong>，每步慢且独立</td><td class="px-4 py-2 border">"流水线——上一步的输出是下一步的输入"</td></tr><tr><td class="px-4 py-2 border font-mono text-xs">Fan-out/in</td><td class="px-4 py-2 border">同一个处理逻辑要<strong>并行跑</strong>很多份</td><td class="px-4 py-2 border">"一个进，多个并行干，结果合一起"</td></tr><tr><td class="px-4 py-2 border font-mono text-xs">Worker Pool</td><td class="px-4 py-2 border"><strong>控制并发数</strong>——别把下游打爆了</td><td class="px-4 py-2 border">"只有 N 个工人，任务排队"</td></tr><tr><td class="px-4 py-2 border font-mono text-xs">Or-Done</td><td class="px-4 py-2 border">消费者<strong>随时可能不想要了</strong>，生产者别泄漏</td><td class="px-4 py-2 border">"不想要了就说，大家都安全退出"</td></tr><tr><td class="px-4 py-2 border font-mono text-xs">Generator</td><td class="px-4 py-2 border">数据量大/无限，<strong>按需生成</strong>不占内存</td><td class="px-4 py-2 border">"要一个才给你算一个"</td></tr></tbody></table></div>
       </section>
 
+      <!-- 📐 结构总览：Pipeline 数据流 -->
+      <section id="sec-overview" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">📐</span>
+          结构总览：Pipeline 流水线数据流
+        </h2>
+        <p class="text-slate-600 mb-4 leading-relaxed text-sm">
+          Pipeline 是最核心的模式——<strong>每个阶段是一个独立 goroutine</strong>，通过 channel 串联。数据从上游流向下游，
+          各阶段<strong>并发执行</strong>（gen 在生成第 3 个数时，sq 可能在处理第 2 个）。
+        </p>
+        <figure class="mb-4">
+          <svg viewBox="0 0 720 180" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <marker id="pl-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" />
+              </marker>
+            </defs>
+
+            <!-- gen 阶段 -->
+            <rect x="30" y="50" width="150" height="70" rx="8" fill="#e0f2fe" stroke="#0ea5e9" stroke-width="2" />
+            <text x="105" y="76" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#0369a1">gen</text>
+            <text x="105" y="98" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#0369a1">生成 2,3,4</text>
+
+            <!-- channel 1 -->
+            <line x1="180" y1="85" x2="250" y2="85" stroke="#94a3b8" stroke-width="2" marker-end="url(#pl-arr)" />
+            <text x="215" y="72" text-anchor="middle" font-size="10" font-family="monospace" fill="#64748b">ch</text>
+
+            <!-- sq 阶段 -->
+            <rect x="255" y="50" width="150" height="70" rx="8" fill="#fef3c7" stroke="#f59e0b" stroke-width="2" />
+            <text x="330" y="76" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#b45309">sq</text>
+            <text x="330" y="98" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#b45309">求平方 n²</text>
+
+            <!-- channel 2 -->
+            <line x1="405" y1="85" x2="475" y2="85" stroke="#94a3b8" stroke-width="2" marker-end="url(#pl-arr)" />
+            <text x="440" y="72" text-anchor="middle" font-size="10" font-family="monospace" fill="#64748b">ch</text>
+
+            <!-- print 阶段 -->
+            <rect x="480" y="50" width="150" height="70" rx="8" fill="#f0fdf4" stroke="#22c55e" stroke-width="2" />
+            <text x="555" y="76" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#15803d">print</text>
+            <text x="555" y="98" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#15803d">输出结果</text>
+
+            <!-- 数据流动示例 -->
+            <text x="30" y="150" font-size="12" font-family="monospace" fill="#0891b2">数据流：2,3,4 → gen → ch → sq → ch → 4,9,16 → print</text>
+            <text x="30" y="168" font-size="11" font-family="monospace" fill="#64748b">各阶段并发：gen 生成 3 时，sq 可能正在算 2² —— 不是串行等待</text>
+          </svg>
+          <figcaption class="text-xs text-slate-400 mt-1">图 1：Pipeline 三段流水线——gen（生成）→ sq（平方）→ print（输出），通过 channel 串联，各阶段并发执行</figcaption>
+        </figure>
+      </section>
+
       <section id="sec-1" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">1</span>Pipeline — 流水线多步处理</h2>
         <p class="text-slate-600 mb-3 leading-relaxed text-sm">每个阶段是一个 goroutine，通过 channel 串联——上阶段的输出 channel 是下阶段的输入。关键是<strong>每步都是并发的</strong>：gen 在生成第 3 个数时，sq 可能在处理第 2 个。≈ RxJS pipe / Unix <code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs">|</code> 管道。</p>
@@ -44,7 +93,7 @@
     <footer class="max-w-4xl mx-auto px-6 py-8"><nav class="flex justify-between items-center pt-4 border-t border-slate-200 text-sm"><RouterLink to="/backend/BackendLanguage/GO/go-stage-2-concurrency/go-2-8-context" class="text-slate-500 hover:text-cyan-600 flex items-center gap-1">← 上一节：Context</RouterLink><RouterLink to="/backend/BackendLanguage/GO/go-stage-2-concurrency/go-2-10-race-detection" class="text-cyan-600 hover:text-cyan-700 font-medium flex items-center gap-1">下一节：竞态检测 →</RouterLink></nav></footer>
   </div></template>
 <script setup lang="ts">import { Code, EditorLink, Nav } from 'components'; import { RouterLink } from 'vue-router'; import { useUserStore } from '@/stores/userProfle'; const userStore = useUserStore()
-const navList = [{id:"sec-0",name:"五种模式速览"},{id:"sec-1",name:"Pipeline"},{id:"sec-2",name:"Fan-out/in"},{id:"sec-3",name:"Worker Pool"},{id:"sec-4",name:"Or-Done"},{id:"sec-5",name:"Generator"},{id:"sec-6",name:"小结"}]
+const navList = [{id:"sec-0",name:"五种模式速览"},{id:"sec-overview",name:"📐 Pipeline 结构总览"},{id:"sec-1",name:"Pipeline"},{id:"sec-2",name:"Fan-out/in"},{id:"sec-3",name:"Worker Pool"},{id:"sec-4",name:"Or-Done"},{id:"sec-5",name:"Generator"},{id:"sec-6",name:"小结"}]
 const pipelineCode = `// Pipeline: gen → sq → print，每个阶段并发执行
 gen := func(nums ...int) <-chan int {
     out := make(chan int)
