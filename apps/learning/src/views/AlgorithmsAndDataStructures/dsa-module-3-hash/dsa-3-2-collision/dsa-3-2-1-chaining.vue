@@ -655,4 +655,3 @@ map.get(k2)   // undefined —— k1 和 k2 是不同的引用
 // OrderedHashMap：开放寻址 + Robin Hood（后面两篇会详解）
 // 引擎更偏爱开放寻址，因为它缓存友好、内存紧凑、无指针开销`
 </script>
-</template>
