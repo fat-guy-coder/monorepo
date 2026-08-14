@@ -286,6 +286,22 @@ go run . all            # 运行全部
 { "code": 200, "message": "success", "data": ... }
 ```
 
+### ⚠️ 传中文用 Python 脚本，别用 curl -d
+
+Windows 下 `curl -d '{"label":"中文"}'` 会把中文按 GBK 传给后端，存进数据库就成了乱码。**给菜单加中文 label 时，用 Python 脚本（UTF-8）或 `curl --data-binary @文件.json`**：
+
+```bash
+# ❌ 会乱码
+curl -X POST .../api/menus/batch -d '{"label":"堆的基本概念"}'
+
+# ✅ 用 Python 脚本（UTF-8 编码）
+python3 -c "
+import urllib.request, json
+data = json.dumps({'label': '堆的基本概念'}).encode('utf-8')
+urllib.request.urlopen(urllib.request.Request('http://localhost:8080/api/menus/batch', data=data, headers={'Content-Type':'application/json'}))
+"
+```
+
 ### 菜单 JSON 配置文件
 
 `apps/backend/config/menus-*.json` — 用于批量导入/重建菜单树：

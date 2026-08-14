@@ -184,6 +184,12 @@
       "order": 50,
       "children": [
         {
+          "name": "dsa-5-0-heap-basics", "label": "堆的基本概念", "icon": "📚", "order": 0,
+          "children": [
+            { "name": "dsa-5-0-1-heap-concept", "label": "堆的概念与性质", "order": 1 }
+          ]
+        },
+        {
           "name": "dsa-5-1-binary-heap", "label": "二叉堆", "order": 1,
           "children": [
             { "name": "dsa-5-1-1-structure", "label": "完全二叉树与数组表示", "order": 1 },
@@ -267,6 +273,12 @@
       "order": 70,
       "children": [
         {
+          "name": "dsa-7-0-sort-basics", "label": "排序基础", "icon": "📚", "order": 0,
+          "children": [
+            { "name": "dsa-7-0-1-overview", "label": "排序总览：稳定性与分类", "order": 1 }
+          ]
+        },
+        {
           "name": "dsa-7-1-compare", "label": "比较排序", "order": 1,
           "children": [
             { "name": "dsa-7-1-1-quick", "label": "快速排序：分区策略/随机化/三路快排", "order": 1 },
@@ -298,6 +310,12 @@
       "icon": "🔍",
       "order": 80,
       "children": [
+        {
+          "name": "dsa-8-0-search-basics", "label": "搜索基础", "icon": "📚", "order": 0,
+          "children": [
+            { "name": "dsa-8-0-1-overview", "label": "搜索总览：暴力枚举与搜索空间", "order": 1 }
+          ]
+        },
         {
           "name": "dsa-8-1-binary", "label": "二分搜索", "order": 1,
           "children": [

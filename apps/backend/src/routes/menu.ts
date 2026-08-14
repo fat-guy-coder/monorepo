@@ -455,6 +455,51 @@ routes.push({
   },
 })
 
+// GET /menus/:id/leaves — 返回某个节点下所有叶子文档（扁平列表，方便核对文档清单）
+routes.push({
+  method: 'GET',
+  pattern: /^\/api\/menus\/([^/]+)\/leaves$/,
+  handler: async (ctx) => {
+    const rootId = ctx.params['1']
+    const { project } = ctx.query
+
+    try {
+      const allMenus = await db.select().from(menu)
+        .where(project ? eq(menu.project, project) : undefined)
+        .orderBy(asc(menu.order))
+
+      // id → parentId 映射
+      const parentMap = new Map<string, string | null>()
+      allMenus.forEach(m => parentMap.set(m.id, m.parentId))
+
+      // 判断是否 rootId 的后代
+      const isDescendant = (m: any): boolean => {
+        let cur = m.parentId
+        while (cur) {
+          if (cur === rootId) return true
+          cur = parentMap.get(cur) || null
+        }
+        return false
+      }
+
+      const descendants = allMenus.filter(isDescendant)
+
+      // 叶子 = 后代中没有子节点的
+      const hasChild = new Set<string>()
+      allMenus.forEach(m => { if (m.parentId) hasChild.add(m.parentId) })
+
+      const leaves = descendants
+        .filter(d => !hasChild.has(d.id))
+        .map(d => ({ id: d.id, name: d.name, label: d.label, path: d.path, order: d.order }))
+
+      return Response.json(success({ total: leaves.length, leaves }))
+    } catch (err: any) {
+      console.error(err)
+      return Response.json(error('查询失败: ' + err.message), { status: 500 })
+    }
+  },
+})
+
 // POST /menus
 routes.push({
   method: 'POST',
@@ -531,8 +576,10 @@ routes.push({
         return Response.json(error('Menu not found', 404), { status: 404 })
       }
 
-      // 处理 parentId：空字符串、undefined、null 都转为 null
-      const parentId = (body.parentId === '' || body.parentId === undefined || body.parentId === null) ? null : body.parentId
+      // 处理 parentId：未提供则保持原值；提供空字符串/null 则设为 null；否则用新值
+      const parentId = body.parentId !== undefined
+        ? (body.parentId === '' || body.parentId === null ? null : body.parentId)
+        : existingMenu.parentId
 
       // 自动生成路径：父节点路径 + "/" + name（如果 name 或 parentId 变了）
       let generatedPath = existingMenu.path

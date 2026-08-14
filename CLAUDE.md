@@ -125,6 +125,8 @@ monorepo/
 - 返回格式：`{ code: 0, data: ..., message: "ok" }`
 - 菜单 API 支持 `?tree=true` 树形返回、`?flat=true` 扁平返回
 - 权限判断：`/api/user/me` 返回 `roles: [{ id, name }]`
+- **⚠️ Windows 下 curl 传中文会乱码**：命令行把中文按 GBK 传给后端，后端按 UTF-8 解析就乱码。给菜单加中文 label 时，用 **Python 脚本（UTF-8）** 或 `curl --data-binary @文件.json`，不要在 `-d '...'` 里直接拼中文
+- **⚠️ PUT 更新菜单时**：后端已修复「未传 parentId 误设为 null」的 bug，但注意——部分更新（只改 label/order）不会影响 parentId；要改挂载位置需显式传 `parentId`
 
 ### OpenSpec 变更规范
 - 提案前检查是否影响学习网站的菜单/路由/权限系统
