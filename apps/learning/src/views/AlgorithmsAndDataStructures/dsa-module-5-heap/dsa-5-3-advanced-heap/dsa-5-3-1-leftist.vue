@@ -341,7 +341,7 @@ const tEdges = reactive<{a:number; b:number}[]>([])
 type TreeSpec = { nodes: {id:number; val:number; x:number; y:number; npl:number; color?:string}[]; edges: {a:number; b:number}[] }
 
 function drawTree(spec: TreeSpec) {
-  tNodes.length = 0; tEdges.length = 0
+  tNodes.splice(0); tEdges.splice(0)
   spec.edges.forEach(e => tEdges.push({ a:e.a, b:e.b }))
   spec.nodes.forEach(n => tNodes.push({ id:n.id, val:n.val, x:n.x, y:n.y, color:n.color ?? C.cyan, s:1, npl:n.npl }))
 }

@@ -300,9 +300,9 @@ function layoutHeapIn(arr: number[], idBase: number, x0: number, x1: number) {
   }
 }
 
-function layoutKth() { tNodes.length = 0; tEdges.length = 0; layoutHeapIn(heapArr.value, 0, 20, W.value - 20) }
+function layoutKth() { tNodes.splice(0); tEdges.splice(0); layoutHeapIn(heapArr.value, 0, 20, W.value - 20) }
 function layoutDual() {
-  tNodes.length = 0; tEdges.length = 0
+  tNodes.splice(0); tEdges.splice(0)
   layoutHeapIn(loArr.value, 0, 20, W.value / 2 - 20)
   layoutHeapIn(hiArr.value, 100, W.value / 2 + 20, W.value - 20)
 }

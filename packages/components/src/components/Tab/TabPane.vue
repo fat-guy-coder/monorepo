@@ -1,7 +1,10 @@
 <template>
-    <div ref="tabPaneRef" class="tab-pane gradient-animation-linear-hover" :data-path="path" @click="change" :class="{
+    <div ref="tabPaneRef" class="tab-pane gradient-animation-linear-hover" :data-path="path" @click="change"
+        :style="groupColor ? { '--group-color': groupColor } : undefined"
+        :class="{
         'is-active': activeKey === path,
-        'is-disabled': disabled
+        'is-disabled': disabled,
+        'has-group': !!groupColor
     }">
         <div class="tab" v-if="$slots.tab">
             <slot name="tab"></slot>
@@ -26,6 +29,7 @@ const props = defineProps<{
     disabled?: boolean;
     closable?: boolean;
     path: string;
+    groupColor?: string;
 }>();
 
 const tabPaneRef = ref<HTMLElement | null>(null);
@@ -108,5 +112,24 @@ onUnmounted(() => {
     opacity: 0.4;
     transform: scale(0.95);
     transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+/* 分组 tab：顶部一条组色标识线（类似浏览器分组）。
+   用 ::after 而非 ::before —— .tab-pane 自带 gradient-animation-linear-hover，
+   其 ::before 已被渐变动画占用（z-index:-1），避免冲突。 */
+.tab-pane.has-group {
+    position: relative;
+
+    &::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: var(--group-color, var(--color-primary));
+        border-radius: var(--border-radius) var(--border-radius) 0 0;
+        pointer-events: none;
+    }
 }
 </style>

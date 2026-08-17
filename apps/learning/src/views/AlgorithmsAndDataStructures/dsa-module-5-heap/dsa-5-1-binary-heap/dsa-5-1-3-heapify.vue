@@ -326,7 +326,7 @@ function setH() {
 }
 
 function layout() {
-  tNodes.length = 0; tEdges.length = 0
+  tNodes.splice(0); tEdges.splice(0)
   const n = heap.length
   let level = [0], y = TOP
   while (level.length) {
@@ -344,9 +344,9 @@ function layout() {
 }
 
 function load(arr:number[]) {
-  heap.length = 0
+  heap.splice(0)
   heap.push(...arr)
-  sortedFlags.length = 0
+  sortedFlags.splice(0)
   arr.forEach(() => sortedFlags.push(false))
   layout()
 }

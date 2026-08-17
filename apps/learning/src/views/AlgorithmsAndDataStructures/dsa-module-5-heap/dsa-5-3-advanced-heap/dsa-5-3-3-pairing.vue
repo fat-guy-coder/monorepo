@@ -328,7 +328,7 @@ const tSib = reactive<{a:number; b:number}[]>([])     // sibling 边（虚线）
 type PairSpec = { nodes: {id:number; val:number; x:number; y:number; color?:string}[]; edges?: {a:number; b:number}[]; sib?: {a:number; b:number}[] }
 
 function drawPair(spec: PairSpec) {
-  tNodes.length = 0; tEdges.length = 0; tSib.length = 0
+  tNodes.splice(0); tEdges.splice(0); tSib.splice(0)
   (spec.edges ?? []).forEach(e => tEdges.push({ a:e.a, b:e.b }))
   (spec.sib ?? []).forEach(l => tSib.push({ a:l.a, b:l.b }))
   spec.nodes.forEach(n => tNodes.push({ id:n.id, val:n.val, x:n.x, y:n.y, color:n.color ?? C.cyan, s:1 }))

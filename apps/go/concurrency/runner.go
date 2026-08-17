@@ -12,16 +12,16 @@ func RunAll() {
 	RunGoroutines()
 	RunChannels()
 	RunSelect()
-	// TODO: RunTimerTicker()
-	RunSync()
-	// TODO: RunSyncWgOnce()
-	// TODO: RunAtomic()
-	// TODO: RunContext()
-	// TODO: RunConcurrencyPatterns()
-	// TODO: RunRaceDetection()
-	// TODO: RunSyncPool()
-	// TODO: RunErrgroup()
-	// TODO: RunGoroutineLeak()
+	RunTimerTicker()
+	RunMutex()
+	RunSyncWgOnce()
+	RunAtomic()
+	RunContext()
+	RunConcurrencyPatterns()
+	RunRaceDetection()
+	RunSyncPool()
+	RunErrgroup()
+	RunGoroutineLeak()
 
 	fmt.Println("\n✅ 并发编程阶段完成！")
 }
@@ -35,17 +35,35 @@ func RunTopic(topic string) bool {
 		return false
 	}
 	switch {
-	case match("goroutine", "协程"):
+	case match("goroutine", "协程", "gmp"):
 		RunGoroutines()
 	case match("channel", "chan"):
 		RunChannels()
 	case match("select"):
 		RunSelect()
-	case match("sync", "mutex", "lock"):
-		RunSync()
+	case match("timer", "ticker", "定时"):
+		RunTimerTicker()
+	case match("mutex", "lock", "锁"):
+		RunMutex()
+	case match("wg", "waitgroup", "once"):
+		RunSyncWgOnce()
+	case match("atomic", "原子"):
+		RunAtomic()
+	case match("context"):
+		RunContext()
+	case match("pattern", "并发模式"):
+		RunConcurrencyPatterns()
+	case match("race", "竞态"):
+		RunRaceDetection()
+	case match("pool"):
+		RunSyncPool()
+	case match("errgroup", "错误组"):
+		RunErrgroup()
+	case match("leak", "泄漏"):
+		RunGoroutineLeak()
 	default:
 		fmt.Printf("未知的并发主题: %s\n", t)
-		fmt.Println("可用: goroutines, channels, select, sync")
+		fmt.Println("可用: goroutines, channels, select, timer, mutex, wg, atomic, context, patterns, race, pool, errgroup, leak")
 		return false
 	}
 	return true

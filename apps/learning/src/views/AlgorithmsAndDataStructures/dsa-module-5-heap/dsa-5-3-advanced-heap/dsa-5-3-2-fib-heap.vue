@@ -351,7 +351,7 @@ const tLinks = reactive<{a:number; b:number}[]>([])
 type FibSpec = { nodes: {id:number; val:number; x:number; y:number; deg:number; min?:boolean; color?:string}[]; edges: {a:number; b:number}[]; links?: {a:number; b:number}[] }
 
 function drawFib(spec: FibSpec) {
-  tNodes.length = 0; tEdges.length = 0; tLinks.length = 0
+  tNodes.splice(0); tEdges.splice(0); tLinks.splice(0)
   spec.edges.forEach(e => tEdges.push({ a:e.a, b:e.b }))
   (spec.links ?? []).forEach(l => tLinks.push({ a:l.a, b:l.b }))
   spec.nodes.forEach(n => tNodes.push({ id:n.id, val:n.val, x:n.x, y:n.y, color:n.color ?? C.cyan, deg:n.deg, min:n.min, s:1 }))

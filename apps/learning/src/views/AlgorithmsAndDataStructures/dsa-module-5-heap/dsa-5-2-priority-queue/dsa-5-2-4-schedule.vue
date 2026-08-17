@@ -336,7 +336,7 @@ function gDistCfg(n: {id: number; x: number; y: number}) {
 }
 
 function layoutHeap() {
-  tNodes.length = 0; tEdges.length = 0
+  tNodes.splice(0); tEdges.splice(0)
   const arr = heapElts.value
   const n = arr.length
   let level = [0], y = HEAP_TOP

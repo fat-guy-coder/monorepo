@@ -263,6 +263,14 @@
             { "name": "dsa-6-5-2-min-cut", "label": "最小割与最大流-最小割定理", "order": 2 },
             { "name": "dsa-6-5-3-bipartite-match", "label": "二分图最大匹配与最大流归约", "order": 3 }
           ]
+        },
+        {
+          "name": "dsa-6-6-connectivity", "label": "图的连通性与欧拉图", "icon": "🔗", "order": 6,
+          "children": [
+            { "name": "dsa-6-6-1-scc", "label": "强连通分量(SCC)：Tarjan/Kosaraju算法", "order": 1 },
+            { "name": "dsa-6-6-2-bridge-cut", "label": "桥与割点：Tarjan求无向图连通性", "order": 2 },
+            { "name": "dsa-6-6-3-euler", "label": "欧拉路径与欧拉回路：Hierholzer算法", "order": 3 }
+          ]
         }
       ]
     },
@@ -300,6 +308,18 @@
           "children": [
             { "name": "dsa-7-3-1-quick-select", "label": "快速选择：O(n)期望第K小", "order": 1 },
             { "name": "dsa-7-3-2-median-of-medians", "label": "中位数之中位数：O(n)确定性选择", "order": 2 }
+          ]
+        },
+        {
+          "name": "dsa-7-4-more-sorts", "label": "更多经典排序", "order": 4,
+          "children": [
+            { "name": "dsa-7-4-1-bubble", "label": "冒泡排序：相邻交换与提前终止优化", "order": 1 },
+            { "name": "dsa-7-4-2-selection", "label": "选择排序：每次选出最小元素", "order": 2 },
+            { "name": "dsa-7-4-3-cocktail", "label": "鸡尾酒排序：双向冒泡", "order": 3 },
+            { "name": "dsa-7-4-4-comb", "label": "梳排序：gap 递减的冒泡改进", "order": 4 },
+            { "name": "dsa-7-4-5-tournament", "label": "锦标赛排序：胜者树选择", "order": 5 },
+            { "name": "dsa-7-4-6-timsort", "label": "Tim排序：插入+归并的工业级排序", "order": 6 },
+            { "name": "dsa-7-4-7-introsort", "label": "内省排序：快排+堆排+插入混合", "order": 7 }
           ]
         }
       ]

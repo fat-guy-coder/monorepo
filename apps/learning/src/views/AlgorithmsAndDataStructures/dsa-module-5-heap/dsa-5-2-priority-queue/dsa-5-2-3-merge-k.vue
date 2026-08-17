@@ -305,7 +305,7 @@ const tEdges = reactive<{a: number; b: number}[]>([])
 function pos(id: number): TNode { return tNodes.find(n => n.id === id) ?? { id, val: 0, x: 0, y: 0, color: C.cyan, s: 1 } }
 
 function layoutHeap() {
-  tNodes.length = 0; tEdges.length = 0
+  tNodes.splice(0); tEdges.splice(0)
   const arr = heapElts.value
   const n = arr.length
   let level = [0], y = TOP

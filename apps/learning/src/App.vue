@@ -37,9 +37,12 @@
       :parentMenuOptions="parentMenuOptions" project="learning" @submit="handleMenuFormSubmit" />
     <div class="content">
       <div class="tabs">
-        <RouteTab @tab-click="tabClick" :activeKey="activeKey" :currentDragIndex="currentDragIndex" :tabList="tabList"
+        <RouteTab @tab-click="tabClick" :activeKey="activeKey" :tabList="store.tabList" :nodes="store.nodes"
           :showContextMenu="showContextMenu" @remove="removeTab" @remove-other="removeOther" @remove-side="removeSide"
-          @set-current-drag-index="setCurrentDragIndex" @sort-tab="sortTab" @toggle-show-menu="toggleShowMenu">
+          @toggle-show-menu="toggleShowMenu" @drop-tab="onDropTab" @drop-group="onDropGroup"
+          @collapse-group="onCollapseGroup" @rename-group="onRenameGroup" @recolor-group="onRecolorGroup"
+          @ungroup-group="onUngroupGroup" @close-group="onCloseGroup" @add-tab-new-group="onAddTabNewGroup"
+          @add-tab-to-group="onAddTabToGroup" @remove-tab-from-group="onRemoveTabFromGroup">
         </RouteTab>
       </div>
       <div class="mainView" id="mainView" @scroll="handleScroll">
@@ -95,7 +98,7 @@ import { useUIConfigStore, type Theme } from '@/stores/uiconfig' //UI配置store
 import { useUserStore } from '@/stores/userProfle'
 import { useRouter } from 'vue-router'
 import { debounce, scrollIntoViewById } from '@/function/common' //常用函数
-import type { NavItem } from 'components' //导航项类型
+import type { NavItem, TabGroup } from 'components' //导航项类型
 import { useGradientAnimation } from '@/hooks/useGradientAnimation' //渐变色动画
 import { useDetectDevice } from '@/hooks/useDetectDevice' //设备信息hook
 import { loadViewByPath, viewExists } from '@/views/views-loader' //动态视图加载器
@@ -373,9 +376,6 @@ const store = useTabStore()
 //当前激活的标签
 const activeKey = computed(() => store.activeKey)
 
-//标签列表
-const tabList = computed(() => store.tabList)
-
 //是否显示右键菜单
 const showContextMenu = computed(() => store.showContextMenu)
 
@@ -482,12 +482,6 @@ watch(searchValue, (value) => {
   showMenu(value)
 })
 
-//标签列表store
-const { sortTab, setCurrentDragIndex } = store
-
-//当前拖拽的标签索引
-const currentDragIndex = computed<number>(() => store.currentDragIndex)
-
 //标签点击
 function tabClick(path: string) {
   if (path === store.activeKey) {
@@ -561,6 +555,48 @@ function removeSide(index: number, side: 'left' | 'right', key: string) {
       scrollTo(path)
     })
   })
+}
+
+// --- 标签分组相关 ---
+function onDropTab({ tabPath, groupId, beforePath }: { tabPath: string; groupId: string | null; beforePath: string | null }) {
+  store.moveTab(tabPath, { groupId, beforePath })
+}
+function onDropGroup({ groupId, beforeKey }: { groupId: string; beforeKey: string | null }) {
+  store.moveGroup(groupId, beforeKey)
+}
+function onCollapseGroup({ groupId, collapsed }: { groupId: string; collapsed: boolean }) {
+  store.setGroupCollapsed(groupId, collapsed)
+}
+function onAddTabNewGroup(tabPath: string) {
+  store.createGroup([tabPath])
+}
+function onAddTabToGroup(tabPath: string, groupId: string) {
+  store.addTabsToGroup([tabPath], groupId)
+}
+function onRemoveTabFromGroup(tabPath: string) {
+  store.removeTabFromGroup(tabPath)
+}
+
+// 组右键菜单动作（菜单本身在 RouteTab 内部，这里只接事件操作 store）
+function onRenameGroup(groupId: string, name: string) {
+  store.renameGroup(groupId, name)
+}
+function onRecolorGroup(groupId: string, color: string) {
+  store.recolorGroup(groupId, color)
+}
+function onUngroupGroup(groupId: string) {
+  store.ungroup(groupId)
+}
+async function onCloseGroup(groupId: string) {
+  const g = store.nodes.find((n): n is TabGroup => n.type === 'group' && n.id === groupId)
+  const ok = await confirm({
+    title: '关闭分组',
+    message: `确定要关闭分组"${g?.label ?? ''}"及其 ${g?.tabs.length ?? 0} 个标签吗？`,
+    confirmText: '关闭',
+    cancelText: '取消',
+    confirmType: 'danger',
+  })
+  if (ok) store.closeGroup(groupId)
 }
 
 //跳转菜单

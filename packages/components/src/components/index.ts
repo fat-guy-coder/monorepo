@@ -6,6 +6,8 @@ import { confirm } from './Confirm'
 export type { NavItem } from './Nav'
 export type { MenuItem as MenuItemType } from './Menu'
 export type { TreeNode } from './Tree'
+export type { Tab, TabGroup, TabNode } from './Tab/types'
+export { GROUP_COLORS } from './Tab/types'
 
 // 将所有组件转换为异步组件，以优化初始加载性能
 const Input = defineAsyncComponent(() => import('./Input/index.vue'))

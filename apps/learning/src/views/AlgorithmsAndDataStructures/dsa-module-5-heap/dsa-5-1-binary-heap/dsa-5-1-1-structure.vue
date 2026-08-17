@@ -350,7 +350,7 @@ const tChild: Record<number, {left:number|null; right:number|null}> = {
 }
 
 function layoutTree() {
-  tNodes.length = 0; tEdges.length = 0
+  tNodes.splice(0); tEdges.splice(0)
   let level = [0], y = TOP
   while (level.length) {
     const gap = W.value / (level.length + 1)
@@ -375,7 +375,7 @@ function layoutBars() {
 }
 
 function init() {
-  bars.length = 0
+  bars.splice(0)
   vals.forEach((v, i) => bars.push({ id: i, val: v, x: 0, y: ARR_Y, w: 0, color: C.cyan }))
   layoutTree()
   layoutBars()

@@ -300,7 +300,7 @@ const tEdges = reactive<{a: number; b: number}[]>([])
 
 // 把数组渲染成完全二叉树（下标即 id）
 function buildTreeNodes(arr: number[]) {
-  tNodes.length = 0; tEdges.length = 0
+  tNodes.splice(0); tEdges.splice(0)
   const n = arr.length
   let level = [0], y = TOP
   while (level.length) {

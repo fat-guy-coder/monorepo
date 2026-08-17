@@ -376,7 +376,7 @@ function load(m:'max'|'min') {
 }
 
 function layout() {
-  tNodes.length = 0; tEdges.length = 0
+  tNodes.splice(0); tEdges.splice(0)
   let level = [0], y = TOP
   while (level.length) {
     const gap = W.value / (level.length + 1)
