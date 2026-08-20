@@ -1,0 +1,166 @@
+{
+  "project": "learning",
+  "parentId": "09196f09-d5c2-479a-9d80-fc171c379f05",
+  "items": [
+    {
+      "name": "cg-learning-path",
+      "label": "计算机图形学学习路线图",
+      "icon": "🗺️",
+      "order": 1,
+      "isLeaf": true
+    },
+    {
+      "name": "cg-module-1-math",
+      "label": "数学基础",
+      "icon": "📐",
+      "order": 10,
+      "children": [
+        { "name": "cg-1-1-vectors", "label": "向量：点积/叉积/投影", "order": 1 },
+        { "name": "cg-1-2-matrices", "label": "矩阵与线性变换", "order": 2 },
+        { "name": "cg-1-3-affine-transform", "label": "仿射变换：平移/旋转/缩放", "order": 3 },
+        { "name": "cg-1-4-quaternion", "label": "四元数与旋转插值", "order": 4 },
+        { "name": "cg-1-5-coordinate-systems", "label": "坐标系与世界变换", "order": 5 },
+        { "name": "cg-1-6-curves-splines", "label": "贝塞尔曲线与样条", "order": 6 }
+      ]
+    },
+    {
+      "name": "cg-module-2-rendering-pipeline",
+      "label": "渲染管线",
+      "icon": "🏭",
+      "order": 20,
+      "children": [
+        { "name": "cg-2-1-pipeline-overview", "label": "图形渲染管线总览：顶点→光栅→片元", "order": 1 },
+        { "name": "cg-2-2-vertex-stage", "label": "顶点处理与 MVP 变换", "order": 2 },
+        { "name": "cg-2-3-rasterization", "label": "光栅化：三角形遍历与属性插值", "order": 3 },
+        { "name": "cg-2-4-fragment-stage", "label": "片元着色与帧缓冲", "order": 4 },
+        { "name": "cg-2-5-depth-buffer", "label": "深度缓冲与隐藏面消除", "order": 5 },
+        { "name": "cg-2-6-culling", "label": "视锥剔除与背面剔除", "order": 6 }
+      ]
+    },
+    {
+      "name": "cg-module-3-lighting-shading",
+      "label": "光照与着色",
+      "icon": "💡",
+      "order": 30,
+      "children": [
+        { "name": "cg-3-1-color-model", "label": "颜色模型：RGB/HSV/色彩空间", "order": 1 },
+        { "name": "cg-3-2-lambert-phong", "label": "冯氏光照模型：环境/漫反射/镜面", "order": 2 },
+        { "name": "cg-3-3-blinn-phong", "label": "Blinn-Phong 高光模型", "order": 3 },
+        { "name": "cg-3-4-pbr", "label": "PBR 物理渲染：BRDF 与能量守恒", "order": 4 },
+        { "name": "cg-3-5-material-texture", "label": "材质与纹理采样", "order": 5 },
+        { "name": "cg-3-6-shadow-mapping", "label": "阴影：Shadow Mapping 原理", "order": 6 }
+      ]
+    },
+    {
+      "name": "cg-module-4-texture",
+      "label": "纹理与采样",
+      "icon": "🧱",
+      "order": 40,
+      "children": [
+        { "name": "cg-4-1-uv-mapping", "label": "UV 纹理坐标与映射", "order": 1 },
+        { "name": "cg-4-2-texture-filtering", "label": "纹理过滤：双线性/三线性/各向异性", "order": 2 },
+        { "name": "cg-4-3-mipmap", "label": "Mipmap 与 LOD 选择", "order": 3 },
+        { "name": "cg-4-4-texture-compression", "label": "纹理压缩：BC/ASTC/ETC", "order": 4 },
+        { "name": "cg-4-5-normal-mapping", "label": "法线贴图与切线空间", "order": 5 },
+        { "name": "cg-4-6-procedural-noise", "label": "程序化纹理与噪声（Perlin/Simplex）", "order": 6 }
+      ]
+    },
+    {
+      "name": "cg-module-5-geometry-camera",
+      "label": "3D 几何与相机",
+      "icon": "📷",
+      "order": 50,
+      "children": [
+        { "name": "cg-5-1-mesh", "label": "Mesh 网格与顶点数据", "order": 1 },
+        { "name": "cg-5-2-scene-hierarchy", "label": "场景层级与局部/世界变换", "order": 2 },
+        { "name": "cg-5-3-camera-projection", "label": "相机与投影矩阵", "order": 3 },
+        { "name": "cg-5-4-view-frustum", "label": "视锥体与近远裁剪面", "order": 4 },
+        { "name": "cg-5-5-surface-splines", "label": "曲面：Bézier/B 样条/NURBS", "order": 5 },
+        { "name": "cg-5-6-lod", "label": "细节层次 LOD 与网格简化", "order": 6 }
+      ]
+    },
+    {
+      "name": "cg-module-6-rasterization",
+      "label": "光栅化与抗锯齿",
+      "icon": "🖼️",
+      "order": 60,
+      "children": [
+        { "name": "cg-6-1-msaa", "label": "多重采样抗锯齿 MSAA", "order": 1 },
+        { "name": "cg-6-2-fxaa-taa", "label": "后处理抗锯齿：FXAA/TAA", "order": 2 },
+        { "name": "cg-6-3-deferred-shading", "label": "延迟着色 Deferred Shading", "order": 3 },
+        { "name": "cg-6-4-ssao", "label": "环境光遮蔽 SSAO", "order": 4 },
+        { "name": "cg-6-5-gamma-tonemapping", "label": "伽马校正与色调映射", "order": 5 },
+        { "name": "cg-6-6-stencil-blending", "label": "模板测试与混合 Blend", "order": 6 }
+      ]
+    },
+    {
+      "name": "cg-module-7-ray-tracing",
+      "label": "光线追踪",
+      "icon": "🔦",
+      "order": 70,
+      "children": [
+        { "name": "cg-7-1-ray-intersection", "label": "光线与几何求交", "order": 1 },
+        { "name": "cg-7-2-bvh", "label": "加速结构：BVH 包围体层级", "order": 2 },
+        { "name": "cg-7-3-whitted", "label": "Whitted 光线追踪：反射/折射/阴影", "order": 3 },
+        { "name": "cg-7-4-path-tracing", "label": "路径追踪与蒙特卡洛积分", "order": 4 },
+        { "name": "cg-7-5-importance-sampling", "label": "重要性采样与降噪", "order": 5 },
+        { "name": "cg-7-6-real-time-rt", "label": "实时光追：DXR/Vulkan RT", "order": 6 }
+      ]
+    },
+    {
+      "name": "cg-module-8-shader",
+      "label": "着色器编程",
+      "icon": "🧩",
+      "order": 80,
+      "children": [
+        { "name": "cg-8-1-shader-basics", "label": "Shader 基础：顶点/片元着色器", "order": 1 },
+        { "name": "cg-8-2-glsl-hlsl", "label": "GLSL/HLSL 语法与内置变量", "order": 2 },
+        { "name": "cg-8-3-shader-math", "label": "Shader 常用数学与函数", "order": 3 },
+        { "name": "cg-8-4-compute-shader", "label": "计算着色器 Compute Shader", "order": 4 },
+        { "name": "cg-8-5-post-processing", "label": "后处理特效：模糊/泛光/描边", "order": 5 },
+        { "name": "cg-8-6-shader-godot", "label": "Godot 着色器：ShaderMaterial 实战", "order": 6 }
+      ]
+    },
+    {
+      "name": "cg-module-9-gpu-techniques",
+      "label": "GPU 渲染技术",
+      "icon": "⚡",
+      "order": 90,
+      "children": [
+        { "name": "cg-9-1-instancing", "label": "GPU 实例化绘制 Instancing", "order": 1 },
+        { "name": "cg-9-2-skeletal-animation", "label": "骨骼动画与蒙皮", "order": 2 },
+        { "name": "cg-9-3-particle-systems", "label": "GPU 粒子系统", "order": 3 },
+        { "name": "cg-9-4-batching", "label": "合批与渲染优化", "order": 4 },
+        { "name": "cg-9-5-billboard", "label": "公告板与贴片精灵", "order": 5 },
+        { "name": "cg-9-6-hdr-bloom", "label": "HDR 与泛光特效", "order": 6 }
+      ]
+    },
+    {
+      "name": "cg-module-10-api",
+      "label": "图形 API",
+      "icon": "🔌",
+      "order": 100,
+      "children": [
+        { "name": "cg-10-1-webgl", "label": "WebGL：浏览器 3D 渲染", "order": 1 },
+        { "name": "cg-10-2-opengl", "label": "OpenGL：状态机与绘制流程", "order": 2 },
+        { "name": "cg-10-3-vulkan", "label": "Vulkan：命令缓冲与同步", "order": 3 },
+        { "name": "cg-10-4-directx", "label": "DirectX 12：资源与命令列表", "order": 4 },
+        { "name": "cg-10-5-bgfx", "label": "跨平台渲染抽象与调试工具", "order": 5 }
+      ]
+    },
+    {
+      "name": "cg-module-11-game-rendering",
+      "label": "游戏渲染实践",
+      "icon": "🎮",
+      "order": 110,
+      "children": [
+        { "name": "cg-11-1-render-order", "label": "渲染顺序与场景图", "order": 1 },
+        { "name": "cg-11-2-skybox-fog", "label": "天空盒/雾效/体积光", "order": 2 },
+        { "name": "cg-11-3-water-render", "label": "水体渲染：反射与折射", "order": 3 },
+        { "name": "cg-11-4-terrain", "label": "地形渲染与贴花", "order": 4 },
+        { "name": "cg-11-5-godot-renderer", "label": "Godot 渲染引擎架构：Forward+/Mobile", "order": 5 },
+        { "name": "cg-11-6-render-budget", "label": "渲染性能预算与优化", "order": 6 }
+      ]
+    }
+  ]
+}

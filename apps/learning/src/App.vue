@@ -98,7 +98,7 @@ import { useUIConfigStore, type Theme } from '@/stores/uiconfig' //UI配置store
 import { useUserStore } from '@/stores/userProfle'
 import { useRouter } from 'vue-router'
 import { debounce, scrollIntoViewById } from '@/function/common' //常用函数
-import type { NavItem, TabGroup } from 'components' //导航项类型
+import type { NavItem } from 'components' //导航项类型
 import { useGradientAnimation } from '@/hooks/useGradientAnimation' //渐变色动画
 import { useDetectDevice } from '@/hooks/useDetectDevice' //设备信息hook
 import { loadViewByPath, viewExists } from '@/views/views-loader' //动态视图加载器
@@ -587,16 +587,8 @@ function onRecolorGroup(groupId: string, color: string) {
 function onUngroupGroup(groupId: string) {
   store.ungroup(groupId)
 }
-async function onCloseGroup(groupId: string) {
-  const g = store.nodes.find((n): n is TabGroup => n.type === 'group' && n.id === groupId)
-  const ok = await confirm({
-    title: '关闭分组',
-    message: `确定要关闭分组"${g?.label ?? ''}"及其 ${g?.tabs.length ?? 0} 个标签吗？`,
-    confirmText: '关闭',
-    cancelText: '取消',
-    confirmType: 'danger',
-  })
-  if (ok) store.closeGroup(groupId)
+function onCloseGroup(groupId: string) {
+  store.closeGroup(groupId)
 }
 
 //跳转菜单

@@ -79,6 +79,19 @@ export const useTabStore = defineStore('tab', () => {
     nodes.value = nodes.value.filter((n) => !(n.type === 'group' && n.tabs.length === 0))
   }
 
+  // 某个 tab 在条带顶层序中的位置（组内 tab 记为其所在组的位置，即视觉上该 tab 所在槽位）
+  function nodePosition(path: string): number {
+    for (let i = 0; i < nodes.value.length; i++) {
+      const n = nodes.value[i]
+      if (n.type === 'group') {
+        if (n.tabs.some((t) => t.path === path)) return i
+      } else if (n.path === path) {
+        return i
+      }
+    }
+    return nodes.value.length
+  }
+
   // 激活 tab 被删除时，选中它的前一个（安全兜底 home）
   function activatePrev(path: string): string {
     const flat = tabList.value
@@ -155,29 +168,50 @@ export const useTabStore = defineStore('tab', () => {
   // 组动作
   // ============================================
 
-  // 把这些 tab 从原位置抽出，新建组并追加到顶层
+  // 把这些 tab 从原位置抽出，新建组并放到「这些 tab 中最左侧那个原来的位置」，而不是列表末尾
   function createGroup(tabPaths: string[], label?: string, color?: string) {
+    // 先记录最左侧 tab 的位置，作为新组落点（保持原位）
+    let pos = nodes.value.length
+    for (const p of tabPaths) pos = Math.min(pos, nodePosition(p))
+
     const tabs = tabPaths.map((p) => spliceTabOut(p)).filter((t): t is Tab => !!t)
     if (!tabs.length) return
     pruneEmptyGroups()
-    nodes.value.push({
+
+    const group: TabGroup = {
       type: 'group',
       id: uid(),
       label: label ?? '新分组',
       color: color ?? GROUP_COLORS[Math.floor(Math.random() * GROUP_COLORS.length)],
       collapsed: false,
       tabs,
-    })
+    }
+    const idx = Math.max(0, Math.min(pos, nodes.value.length))
+    nodes.value.splice(idx, 0, group)
   }
 
-  // 把若干 tab 移入已有组
+  // 把若干 tab 移入已有组。组内位置按该 tab 在条带中相对此组的左右位置决定：
+  // 组左边的 tab 进组头，组右边的 tab 进组尾，各自保持原有相对顺序
   function addTabsToGroup(tabPaths: string[], groupId: string) {
-    const group = nodes.value.find((n) => n.type === 'group' && n.id === groupId) as TabGroup | undefined
-    if (!group) return
-    for (const p of tabPaths) {
-      const t = spliceTabOut(p)
-      if (t) group.tabs.push(t)
+    const groupIndex = nodes.value.findIndex((n) => n.type === 'group' && n.id === groupId)
+    if (groupIndex === -1) return
+    const group = nodes.value[groupIndex] as TabGroup
+
+    // 跳过已在组内的 tab；用原始条带的位置判定左右
+    const targets = tabPaths
+      .filter((p) => !group.tabs.some((t) => t.path === p))
+      .map((p) => ({ path: p, pos: nodePosition(p) }))
+
+    const left: Tab[] = []
+    const right: Tab[] = []
+    for (const { path, pos } of targets) {
+      const t = spliceTabOut(path)
+      if (!t) continue
+      if (pos < groupIndex) left.push(t)
+      else right.push(t)
     }
+
+    group.tabs = [...left, ...group.tabs, ...right]
     pruneEmptyGroups()
   }
 
