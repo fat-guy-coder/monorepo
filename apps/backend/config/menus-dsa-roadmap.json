@@ -95,8 +95,9 @@
           "name": "dsa-3-1-hash-func", "label": "哈希函数设计", "order": 1,
           "children": [
             { "name": "dsa-3-1-1-principle", "label": "哈希函数要求：确定性/均匀性/高效性", "order": 1 },
-            { "name": "dsa-3-1-2-methods", "label": "常见方法：取模/乘法/MD5/SHA", "order": 2 },
-            { "name": "dsa-3-1-3-string-hash", "label": "字符串哈希：多项式/Rabin指纹", "order": 3 }
+            { "name": "dsa-3-1-2-methods", "label": "常见方法：取模/乘法/平方取中/折叠", "order": 2 },
+            { "name": "dsa-3-1-3-string-hash", "label": "字符串哈希：多项式/Rabin指纹", "order": 3 },
+            { "name": "dsa-3-1-4-crypto-hash", "label": "密码学哈希：MD5/SHA 系列与完整性校验", "order": 4 }
           ]
         },
         {
