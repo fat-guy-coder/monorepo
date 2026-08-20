@@ -54,7 +54,7 @@
             <rect x="236" y="126" width="52" height="40" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="2" stroke-dasharray="5 3" />
             <text x="262" y="140" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" font-weight="bold" fill="#b45309">G4</text>
             <text x="262" y="156" text-anchor="middle" dominant-baseline="central" font-size="9" font-family="monospace" fill="#b45309">runnext</text>
-            <text x="312" y="150" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#0369a1">本地队列<br/>容量 256</text>
+            <text x="312" y="150" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#0369a1">本地队列<tspan x="312" y="162">容量 256</tspan></text>
 
             <!-- P1 本地队列 -->
             <text x="380" y="102" font-size="12" font-family="monospace" fill="#64748b" font-weight="bold">P1（逻辑处理器）— 本地队列 runq（无锁）</text>
@@ -63,7 +63,7 @@
             <text x="422" y="146" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">G5</text>
             <rect x="460" y="126" width="52" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
             <text x="486" y="146" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">G6</text>
-            <text x="560" y="150" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#0369a1">本地队列<br/>容量 256</text>
+            <text x="560" y="150" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#0369a1">本地队列<tspan x="560" y="162">容量 256</tspan></text>
 
             <!-- 箭头 P → M -->
             <line x1="186" y1="184" x2="186" y2="210" stroke="#94a3b8" stroke-width="2" marker-end="url(#gmp-arr)" />

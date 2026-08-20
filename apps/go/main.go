@@ -28,24 +28,31 @@ func main() {
 
 	switch stage {
 	case "1", "basics", "基础":
+		if topic != "" { if !runTopic("1", topic) { printMenu() }; return }
 		fmt.Println("\n🔰 ========== 阶段 1: 基础入门 ==========")
 		basics.RunAll()
 	case "2", "concurrency", "并发":
+		if topic != "" { if !runTopic("2", topic) { printMenu() }; return }
 		fmt.Println("\n⚡ ========== 阶段 2: 并发编程 ==========")
 		concurrency.RunAll()
 	case "3", "web", "网络":
+		if topic != "" { if !runTopic("3", topic) { printMenu() }; return }
 		fmt.Println("\n🌐 ========== 阶段 3: Web 开发 ==========")
 		web.RunAll()
 	case "4", "database", "数据库":
+		if topic != "" { if !runTopic("4", topic) { printMenu() }; return }
 		fmt.Println("\n🗄️ ========== 阶段 4: 数据库与存储 ==========")
 		database.RunAll()
 	case "5", "microservices", "微服务":
+		if topic != "" { if !runTopic("5", topic) { printMenu() }; return }
 		fmt.Println("\n🏗️ ========== 阶段 5: 微服务与分布式 ==========")
 		microservices.RunAll()
 	case "6", "engineering", "工程化":
+		if topic != "" { if !runTopic("6", topic) { printMenu() }; return }
 		fmt.Println("\n🚀 ========== 阶段 6: 工程化实战 ==========")
 		engineering.RunAll()
 	case "7", "advanced", "进阶":
+		if topic != "" { if !runTopic("7", topic) { printMenu() }; return }
 		fmt.Println("\n🧠 ========== 阶段 7: 进阶拓展 ==========")
 		advanced.RunAll()
 	case "all":
