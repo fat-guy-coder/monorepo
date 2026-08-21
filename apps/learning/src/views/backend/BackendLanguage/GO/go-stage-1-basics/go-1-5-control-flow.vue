@@ -126,10 +126,34 @@
         <!-- for-range -->
         <h3 class="text-base font-semibold text-slate-700 mb-3">for-range 遍历</h3>
         <p class="text-slate-600 mb-4 leading-relaxed">
-          <code class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-sm font-mono">for-range</code> 用于遍历数组、切片、map、字符串、channel 等可迭代对象。这是 Go 中最常用的循环形式。
+          <code class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-sm font-mono">for-range</code> 是 Go 里最常用的循环形式。很多初学者以为 range 只能遍历切片——其实它是"重载"的，<strong>后面跟的东西不同，行为也不同</strong>：
+        </p>
+        <div class="overflow-x-auto mb-4">
+          <table class="w-full text-sm border-collapse">
+            <thead><tr class="bg-slate-100 text-left"><th class="px-4 py-2 border font-semibold">range 后面跟的</th><th class="px-4 py-2 border font-semibold">循环变量</th><th class="px-4 py-2 border font-semibold">行为</th></tr></thead>
+            <tbody class="text-slate-600">
+              <tr><td class="px-4 py-2 border font-mono text-xs">切片 / 数组</td><td class="px-4 py-2 border font-mono text-xs">i, v</td><td class="px-4 py-2 border">按下标一个个取</td></tr>
+              <tr><td class="px-4 py-2 border font-mono text-xs">map</td><td class="px-4 py-2 border font-mono text-xs">k, v</td><td class="px-4 py-2 border">取键值对（顺序随机）</td></tr>
+              <tr><td class="px-4 py-2 border font-mono text-xs">字符串</td><td class="px-4 py-2 border font-mono text-xs">i, r</td><td class="px-4 py-2 border">按字符（rune）取</td></tr>
+              <tr><td class="px-4 py-2 border font-mono text-xs">channel</td><td class="px-4 py-2 border font-mono text-xs">v</td><td class="px-4 py-2 border"><strong>逐个接收，channel 关闭就停</strong></td></tr>
+              <tr><td class="px-4 py-2 border font-mono text-xs">整数（Go 1.22+）</td><td class="px-4 py-2 border font-mono text-xs">i</td><td class="px-4 py-2 border">从 0 到 n-1</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="text-slate-600 mb-4 leading-relaxed">
+          注意看区别：<strong>切片/map/字符串是"两个变量"</strong>（下标 + 值），<strong>channel 只有一个变量</strong>（每轮收到一个值）——这就是为什么并发章节里 <code class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-sm font-mono">for v := range ch</code> 看着像切片、其实不是切片。
         </p>
         <div class="mb-4">
           <Code language="go" :code="forRangeCode" title="for_range.go" />
+        </div>
+
+        <!-- for-range channel -->
+        <h3 class="text-base font-semibold text-slate-700 mb-3">遍历 channel：读到关闭为止</h3>
+        <p class="text-slate-600 mb-4 leading-relaxed">
+          channel 上的 range 是特制的：<strong>每轮循环做一次"接收"，channel 被 <code class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-sm font-mono">close</code> 就自动结束</strong>。它等价于手动写 <code class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-sm font-mono">for { v, ok := &lt;-ch; if !ok { break } }</code>。这个特性是阶段 2 并发模式（Pipeline / Worker Pool）的主力——先记住"读到关闭为止"就够了，具体用法到并发章节再展开。
+        </p>
+        <div class="mb-4">
+          <Code language="go" :code="forRangeChannelCode" title="for_range_channel.go" />
         </div>
 
         <!-- break / continue -->
@@ -554,7 +578,33 @@ func main() {
     // [字节7] = o (U+006F)
     // 注意：中文字符占3个字节，所以字节索引不是连续的！
 
-    // 遍历 channel（见并发章节）
+    // 遍历 channel：见下面的"遍历 channel：读到关闭为止"专属示例
+}`
+
+// ── 7.5. for-range 遍历 channel ──
+const forRangeChannelCode = `package main
+
+import "fmt"
+
+func main() {
+    // 有缓冲 channel：塞入 3 个值，然后关闭
+    ch := make(chan int, 3)
+    ch <- 10
+    ch <- 20
+    ch <- 30
+    close(ch) // 不 close 的话，range 会永远等下一个值！
+
+    // 每轮循环 = 做一次"接收"，channel 关闭 → 自动结束
+    for v := range ch {
+        fmt.Println(v) // 10, 20, 30
+    }
+
+    // 等价写法（channel 的 range 就是下面这个循环的语法糖）：
+    // for {
+    //     v, ok := <-ch
+    //     if !ok { break } // 读到关闭
+    //     fmt.Println(v)
+    // }
 }`
 
 // ── 8. break / continue ──

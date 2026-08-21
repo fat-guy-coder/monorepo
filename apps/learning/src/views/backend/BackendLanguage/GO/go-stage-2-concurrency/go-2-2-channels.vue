@@ -250,10 +250,31 @@
 
       <!-- 4. 关闭 channel -->
       <section id="sec-4" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
-        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">4</span>关闭 Channel：广播信号 + range 遍历</h2>
-        <p class="text-slate-600 mb-4"><strong>只有发送方关闭 channel。</strong>关闭后 buf 中剩余数据仍可读，读空后返回零值（ok=false）。range 在 close 且 buf 空后自动退出。</p>
-        <div class="overflow-x-auto mb-4"><table class="w-full text-sm border-collapse"><thead><tr class="bg-slate-100 text-left"><th class="px-4 py-2 border font-semibold">操作</th><th class="px-4 py-2 border font-semibold">结果</th></tr></thead><tbody class="text-slate-600"><tr><td class="px-4 py-2 border font-mono text-xs">close(ch) — ch 未关闭</td><td class="px-4 py-2 border text-emerald-600">✅</td></tr><tr><td class="px-4 py-2 border font-mono text-xs">close(ch) — ch 已关闭</td><td class="px-4 py-2 border text-red-600">❌ panic</td></tr><tr><td class="px-4 py-2 border font-mono text-xs">close(nil)</td><td class="px-4 py-2 border text-red-600">❌ panic</td></tr><tr><td class="px-4 py-2 border font-mono text-xs">ch <- v — ch 已关闭</td><td class="px-4 py-2 border text-red-600">❌ panic</td></tr><tr><td class="px-4 py-2 border font-mono text-xs"><-ch — 已关闭 + buf 空</td><td class="px-4 py-2 border">✅ 返回零值, ok=false</td></tr><tr><td class="px-4 py-2 border font-mono text-xs">for v := range ch — 已关闭</td><td class="px-4 py-2 border">✅ 读完 buf 自动退出</td></tr></tbody></table></div>
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">4</span>关闭 Channel：广播「结束状态」，不是发送消息</h2>
+        <p class="text-slate-600 mb-3 leading-relaxed text-sm">
+          <strong class="text-red-600">close(ch) 不会给任何 <code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">&lt;-ch</code> 发送数据。</strong>
+          它把 channel 内部的 closed 标记置 1，然后<strong>一次性广播</strong>一个状态：「通道已终结，以后不会再有任何值了」。
+          所有阻塞在接收上的 goroutine 被<strong>同时唤醒</strong>，拿到 <code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">(零值, ok=false)</code>——不是业务数据。
+          所以「广播」这个说法是对的，但广播的是<strong>「关闭」状态</strong>，而不是把某条消息复制给所有人。
+        </p>
+
+        <h3 class="text-sm font-semibold text-slate-700 mb-2">send vs close —— 本质区别</h3>
+        <div class="overflow-x-auto mb-4"><table class="w-full text-sm border-collapse"><thead><tr class="bg-slate-100 text-left"><th class="px-4 py-2 border font-semibold"></th><th class="px-4 py-2 border font-semibold"><code class="text-xs">ch &lt;- v</code>（发送）</th><th class="px-4 py-2 border font-semibold"><code class="text-xs">close(ch)</code>（关闭）</th></tr></thead><tbody class="text-slate-600"><tr><td class="px-4 py-2 border">传的是什么</td><td class="px-4 py-2 border">一个具体的<strong>数据值</strong></td><td class="px-4 py-2 border">一个<strong>状态信号</strong>（无数据）</td></tr><tr><td class="px-4 py-2 border">谁收到</td><td class="px-4 py-2 border">只被<strong>一个</strong>接收方消费</td><td class="px-4 py-2 border"><strong>所有</strong>等待者同时看到</td></tr><tr><td class="px-4 py-2 border">接收方拿到</td><td class="px-4 py-2 border font-mono text-xs">v, ok=true</td><td class="px-4 py-2 border font-mono text-xs">零值, ok=false</td></tr><tr><td class="px-4 py-2 border">能否重复</td><td class="px-4 py-2 border">能，发 N 次</td><td class="px-4 py-2 border">只能一次，重复 close → panic</td></tr></tbody></table></div>
+
+        <h3 class="text-sm font-semibold text-slate-700 mb-2">三种接收方的反应</h3>
+        <div class="space-y-2 mb-3 text-sm text-slate-600">
+          <p>① <code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">v, ok := &lt;-ch</code> —— 当前阻塞的接收方<strong>被同时唤醒</strong>，拿到 <code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">v=零值, ok=false</code>，用 <code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">if !ok</code> 判断已关闭</p>
+          <p>② <code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">for v := range ch</code> —— 先读光缓冲里剩下的值（FIFO），<strong>读空后自动退出循环</strong></p>
+          <p>③ <code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">select { case &lt;-ch }</code> —— 关闭后该 case 永久「就绪」，每次命中都返回 <code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">ok=false</code></p>
+        </div>
+        <aside class="bg-red-50 border-l-4 border-red-400 rounded-r-xl p-4 mb-4"><p class="text-sm text-red-800"><strong>⚠️ 空转陷阱：</strong><code class="bg-red-100 px-1 rounded text-xs font-mono">for { select { case &lt;-ch: } }</code> 遇到已关闭的 channel 会<strong>空转死循环</strong>（case 永远就绪）。退出必须靠 <code class="bg-red-100 px-1 rounded text-xs font-mono">v, ok := &lt;-ch</code> 判断 ok，或把 channel 置为 nil。</p></aside>
+
+        <h3 class="text-sm font-semibold text-slate-700 mb-2">内部机制：广播到底做了什么</h3>
+        <div class="mb-4"><Code language="go" :code="closeMechanismCode" title="close_mechanism.go" /></div>
+
         <div class="mb-4"><Code language="go" :code="closeCode" title="channel_close.go" /></div>
+
+        <aside class="bg-amber-50 border-l-4 border-amber-400 rounded-r-xl p-4"><p class="text-sm text-amber-800"><strong>⚠️ close 四条红线：</strong>① 只有<strong>发送方</strong>能 close（接收方关 → 发送方再 send 就 panic）② close 后不能再 send → panic ③ 不能 close 两次 → panic ④ 不能 close(nil) → panic</p></aside>
       </section>
 
       <!-- 5. 单向 channel + 实战模式 -->
@@ -268,7 +289,7 @@
 
       <!-- 6. 新手常见错误 -->
       <section id="sec-6" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
-        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">6</span>新手最容易犯的 5 个错误</h2>
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">6</span>新手最容易犯的 6 个错误</h2>
         <div class="space-y-3 text-sm">
           <div class="bg-amber-50 rounded-xl p-4 border border-amber-200">
             <h4 class="font-semibold text-amber-700 mb-1">① 无缓冲 channel：send 和 recv 必须"同时"存在</h4>
@@ -289,6 +310,10 @@
           <div class="bg-amber-50 rounded-xl p-4 border border-amber-200">
             <h4 class="font-semibold text-amber-700 mb-1">⑤ 接收方关闭 channel</h4>
             <p class="text-amber-600">接收方不知道发送方是否还要用这个 channel。接收方关闭后发送方再 send → panic。<strong>永远由发送方关闭。</strong>如果多个发送方→用 sync.Once 或专门的"关门 goroutine"来协调。</p>
+          </div>
+          <div class="bg-amber-50 rounded-xl p-4 border border-amber-200">
+            <h4 class="font-semibold text-amber-700 mb-1">⑥ select 读已关闭 channel 会空转</h4>
+            <p class="text-amber-600"><code class="bg-amber-100 px-1 rounded text-xs">for { select { case &lt;-ch: } }</code> 遇到已关闭的 ch，case 会<strong>永久就绪</strong>——每次都立即返回 ok=false，循环<strong>空转死循环</strong>（CPU 打满）。退出必须改成 <code class="bg-amber-100 px-1 rounded text-xs">v, ok := &lt;-ch</code> 判断 ok，或把 channel 置为 nil 禁用该 case。</p>
           </div>
         </div>
 
@@ -586,6 +611,21 @@ for i := 0; i < 5; i++ {
     }(i)
 }
 close(done)  // 所有 5 个 worker 同时被唤醒！`
+
+const closeMechanismCode = `// close 的底层行为（runtime closechan 的要点）：
+// ① 置 closed = 1
+// ② 唤醒接收队列所有阻塞 goroutine → 各拿 (零值, ok=false)
+// ③ 唤醒发送队列所有阻塞 goroutine → 醒来后 panic（send on closed channel）
+//
+// 细节：
+// - 缓冲 channel 关后还能读：buf 里已有的值按 FIFO 读完，读空后才返回 ok=false
+// - 广播只对「当前正在阻塞」的接收方即时生效；没在等的，下次 <-ch 也会看到已关闭
+// - close 只广播状态，不产生任何数据值
+done := make(chan struct{})   // 经典广播退出
+for i := 0; i < 5; i++ {
+    go func(id int) { <-done; fmt.Printf("worker %d 退出\\n", id) }(i)
+}
+close(done)  // 一次 close，5 个 worker 同时被唤醒——send 做不到（一条消息只能被一个接收方拿走）`
 
 const directionalCode = `// chan<- T = 只能发送
 func produce(ch chan<- int) {

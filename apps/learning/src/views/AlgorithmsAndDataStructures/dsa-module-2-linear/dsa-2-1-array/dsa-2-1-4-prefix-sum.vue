@@ -218,16 +218,187 @@
         </h2>
         <p class="text-slate-600 mb-4 leading-relaxed">
           差分数组 (Difference Array) 是前缀和的<strong>逆运算</strong>，用于高效处理<strong>频繁的区间增减操作</strong>。
+          一句话先记住它：<strong>它存的不是"值"，而是每个元素相对上一个元素的"变化量"（落差）</strong>。
           核心思想：不对区间内每个元素逐一修改，而是只标记区间的<strong>起点和终点</strong>，最后通过前缀和"恢复"出最终结果。
         </p>
 
+        <!-- 📦 结构：diff 长什么样 -->
+        <h3 class="text-sm font-semibold text-slate-700 mb-2">📦 结构：diff 长什么样</h3>
+        <p class="text-slate-600 mb-3 text-sm leading-relaxed">
+          差分数组和原数组<strong>等长</strong>，每个位置存的是"这个元素比上一个元素大了 / 小了多少"：
+        </p>
+        <div class="bg-gradient-to-r from-cyan-50 to-blue-50 rounded-xl p-4 border border-cyan-200 mb-4">
+          <p class="text-sm text-cyan-800 mb-1 font-semibold text-center font-mono">diff[0] = arr[0]；diff[i] = arr[i] - arr[i-1]（i ≥ 1）</p>
+          <p class="text-xs text-cyan-600 text-center">反过来：arr[i] = diff[0] + diff[1] + … + diff[i] —— 对 diff 做前缀和就能还原出原数组</p>
+        </div>
+
+        <figure class="mb-4">
+          <svg viewBox="0 0 520 250" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+            <text x="16" y="22" font-size="13" font-family="monospace" fill="#64748b" font-weight="bold">原数组 arr 与差分数组 diff（上下对应，diff[i] = arr[i] - arr[i-1]）</text>
+
+            <!-- 原数组 -->
+            <rect x="60" y="44" width="56" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="88" y="66" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">5</text>
+            <rect x="134" y="44" width="56" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="162" y="66" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">3</text>
+            <rect x="208" y="44" width="56" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="236" y="66" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">7</text>
+            <rect x="282" y="44" width="56" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="310" y="66" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">2</text>
+            <rect x="356" y="44" width="56" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="384" y="66" text-anchor="middle" dominant-baseline="central" font-size="15" font-family="monospace" font-weight="bold" fill="#ffffff">8</text>
+
+            <text x="88" y="100" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">[0]</text>
+            <text x="162" y="100" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">[1]</text>
+            <text x="236" y="100" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">[2]</text>
+            <text x="310" y="100" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">[3]</text>
+            <text x="384" y="100" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">[4]</text>
+
+            <!-- 相邻两数的落差 -->
+            <text x="16" y="126" font-size="11" font-family="monospace" fill="#64748b">落差:</text>
+            <text x="125" y="126" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#ef4444">-2</text>
+            <text x="199" y="126" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#22c55e">+4</text>
+            <text x="273" y="126" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#ef4444">-5</text>
+            <text x="347" y="126" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#22c55e">+6</text>
+
+            <!-- 对应虚线 -->
+            <line x1="88" y1="84" x2="88" y2="158" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3 3" />
+            <line x1="162" y1="84" x2="162" y2="158" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3 3" />
+            <line x1="236" y1="84" x2="236" y2="158" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3 3" />
+            <line x1="310" y1="84" x2="310" y2="158" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3 3" />
+            <line x1="384" y1="84" x2="384" y2="158" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3 3" />
+
+            <text x="16" y="176" font-size="11" font-family="monospace" fill="#0891b2" font-weight="bold">差分数组 diff（存落差：正=上升绿 / 负=下降红）</text>
+
+            <!-- 差分数组 -->
+            <rect x="60" y="158" width="56" height="40" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="88" y="180" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#ffffff">5</text>
+            <rect x="134" y="158" width="56" height="40" rx="6" fill="#ef4444" stroke="#dc2626" stroke-width="1.5" />
+            <text x="162" y="180" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#ffffff">-2</text>
+            <rect x="208" y="158" width="56" height="40" rx="6" fill="#4ade80" stroke="#22c55e" stroke-width="1.5" />
+            <text x="236" y="180" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#0f172a">4</text>
+            <rect x="282" y="158" width="56" height="40" rx="6" fill="#ef4444" stroke="#dc2626" stroke-width="1.5" />
+            <text x="310" y="180" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#ffffff">-5</text>
+            <rect x="356" y="158" width="56" height="40" rx="6" fill="#4ade80" stroke="#22c55e" stroke-width="1.5" />
+            <text x="384" y="180" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#0f172a">6</text>
+
+            <text x="88" y="220" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#94a3b8">[0]</text>
+            <text x="162" y="220" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">[1]</text>
+            <text x="236" y="220" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">[2]</text>
+            <text x="310" y="220" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">[3]</text>
+            <text x="384" y="220" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">[4]</text>
+          </svg>
+          <figcaption class="text-xs text-slate-400 mt-1">diff 与 arr 等长：diff[i] 是 arr[i] 相对 arr[i-1] 的落差（正=上升绿、负=下降红），diff[0]=arr[0] 是起点；把 diff 从头累加就能还原出 arr</figcaption>
+        </figure>
+
+        <!-- 🔁 操作：区间加为什么是 O(1) -->
+        <h3 class="text-sm font-semibold text-slate-700 mb-2">🔁 操作：区间加为什么是 O(1)</h3>
         <div class="bg-slate-50 rounded-xl p-4 border border-slate-200 mb-4">
           <p class="text-sm text-slate-700 mb-2"><strong>差分数组核心操作：</strong></p>
           <ol class="space-y-1.5 text-slate-600 text-sm">
             <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1 font-bold">1.</span><span><strong>构建：</strong><code>diff[0] = arr[0]; diff[i] = arr[i] - arr[i-1]</code>（i 从 1 开始）</span></li>
-            <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1 font-bold">2.</span><span><strong>区间加 val：</strong><code>diff[L] += val; diff[R+1] -= val</code></span></li>
+            <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1 font-bold">2.</span><span><strong>区间加 val：</strong><code>diff[L] += val; diff[R+1] -= val</code> —— 区间里每个元素都 +val，体现在 diff 上只有"起点 +val、终点后一位 -val"</span></li>
             <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1 font-bold">3.</span><span><strong>恢复：</strong>对 diff 做前缀和，即得最终数组</span></li>
           </ol>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
+          <figure>
+            <p class="text-xs text-slate-500 font-semibold mb-1">① 区间 [1,3] +10：只改 diff 的两个点</p>
+            <svg viewBox="0 0 340 190" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+              <text x="10" y="18" font-size="11" font-family="monospace" fill="#64748b">朴素要改 3 个元素；差分只改 2 个点</text>
+              <!-- 原数组（区间高亮） -->
+              <text x="10" y="30" font-size="10" font-family="monospace" fill="#0891b2" font-weight="bold">arr:</text>
+              <rect x="34" y="36" width="48" height="36" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="58" y="54" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">5</text>
+              <rect x="88" y="36" width="48" height="36" rx="6" fill="#f59e0b" stroke="#d97706" stroke-width="2" />
+              <text x="112" y="54" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">3</text>
+              <rect x="142" y="36" width="48" height="36" rx="6" fill="#f59e0b" stroke="#d97706" stroke-width="2" />
+              <text x="166" y="54" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">7</text>
+              <rect x="196" y="36" width="48" height="36" rx="6" fill="#f59e0b" stroke="#d97706" stroke-width="2" />
+              <text x="220" y="54" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">2</text>
+              <rect x="250" y="36" width="48" height="36" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="274" y="54" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">8</text>
+              <!-- diff 操作后 -->
+              <text x="10" y="106" font-size="10" font-family="monospace" fill="#0891b2" font-weight="bold">diff:</text>
+              <rect x="34" y="110" width="48" height="36" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="58" y="128" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">5</text>
+              <rect x="88" y="110" width="48" height="36" rx="6" fill="#f59e0b" stroke="#d97706" stroke-width="2" />
+              <text x="112" y="128" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">8</text>
+              <rect x="142" y="110" width="48" height="36" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="166" y="128" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">4</text>
+              <rect x="196" y="110" width="48" height="36" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="220" y="128" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">-5</text>
+              <rect x="250" y="110" width="48" height="36" rx="6" fill="#ef4444" stroke="#dc2626" stroke-width="2" />
+              <text x="274" y="128" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">-4</text>
+              <!-- 标注 -->
+              <text x="112" y="106" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" font-weight="bold" fill="#d97706">+10</text>
+              <text x="274" y="106" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" font-weight="bold" fill="#dc2626">-10</text>
+            </svg>
+            <figcaption class="text-xs text-slate-400 mt-1">对 [1,3] 加 10：只在 diff[1] 记 +10（起点）、diff[4] 记 -10（终点后一位），O(1)</figcaption>
+          </figure>
+          <figure>
+            <p class="text-xs text-slate-500 font-semibold mb-1">② 前缀和还原：一次性得到最终数组</p>
+            <svg viewBox="0 0 340 190" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <marker id="df-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" />
+                </marker>
+              </defs>
+              <text x="10" y="18" font-size="11" font-family="monospace" fill="#64748b">从左到右累加 diff（前缀和）</text>
+              <!-- diff（改后） -->
+              <text x="10" y="30" font-size="10" font-family="monospace" fill="#0891b2" font-weight="bold">diff:</text>
+              <rect x="34" y="36" width="48" height="36" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="58" y="54" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">5</text>
+              <rect x="88" y="36" width="48" height="36" rx="6" fill="#f59e0b" stroke="#d97706" stroke-width="2" />
+              <text x="112" y="54" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">8</text>
+              <rect x="142" y="36" width="48" height="36" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="166" y="54" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">4</text>
+              <rect x="196" y="36" width="48" height="36" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="220" y="54" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">-5</text>
+              <rect x="250" y="36" width="48" height="36" rx="6" fill="#ef4444" stroke="#dc2626" stroke-width="2" />
+              <text x="274" y="54" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">-4</text>
+              <!-- 累加箭头 -->
+              <line x1="10" y1="84" x2="10" y2="124" stroke="#94a3b8" stroke-width="2" marker-end="url(#df-arr)" />
+              <text x="20" y="104" font-size="10" font-family="monospace" fill="#64748b">前缀和</text>
+              <!-- arr（还原后，[1..3] 被 +10） -->
+              <text x="10" y="130" font-size="10" font-family="monospace" fill="#0891b2" font-weight="bold">arr:</text>
+              <rect x="34" y="136" width="48" height="36" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="58" y="154" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">5</text>
+              <rect x="88" y="136" width="48" height="36" rx="6" fill="#4ade80" stroke="#22c55e" stroke-width="2" />
+              <text x="112" y="154" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#0f172a">13</text>
+              <rect x="142" y="136" width="48" height="36" rx="6" fill="#4ade80" stroke="#22c55e" stroke-width="2" />
+              <text x="166" y="154" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#0f172a">17</text>
+              <rect x="196" y="136" width="48" height="36" rx="6" fill="#4ade80" stroke="#22c55e" stroke-width="2" />
+              <text x="220" y="154" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#0f172a">12</text>
+              <rect x="250" y="136" width="48" height="36" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+              <text x="274" y="154" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">8</text>
+            </svg>
+            <figcaption class="text-xs text-slate-400 mt-1">累加 diff 得 [5, 13, 17, 12, 8] —— 中间三个都 +10 了、两头不变，O(n) 一次收尾</figcaption>
+          </figure>
+        </div>
+
+        <!-- ⭐ 特点 -->
+        <h3 class="text-sm font-semibold text-slate-700 mb-2">⭐ 特点：记住这 4 点就够了</h3>
+        <div class="bg-slate-50 rounded-xl p-4 border border-slate-200 mb-4">
+          <ul class="space-y-1.5 text-slate-600 text-sm">
+            <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1 font-bold">▸</span><span><strong>存的是"变化量"不是"值"：</strong>diff[i] 只关心"比上一个数大/小了多少"，正号=上升、负号=下降，所以数字通常很小</span></li>
+            <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1 font-bold">▸</span><span><strong>与前缀和互为逆运算：</strong>arr → diff 是差分（相邻相减），diff → arr 是前缀和（累加）。前缀和管"查询"、差分管"更新"，一对搭档</span></li>
+            <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1 font-bold">▸</span><span><strong>区间更新 O(1)，还原 O(n)：</strong>改一个区间只动 diff 的两个点；但想读出最终数组，必须对 diff 做一遍前缀和</span></li>
+            <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1 font-bold">▸</span><span><strong>适合"先批量改、最后统一看"：</strong>如果每次改完立刻查某个位置，还原的 O(n) 就白花了 —— 那种"边改边查"的场景要用线段树 / 树状数组</span></li>
+          </ul>
+        </div>
+
+        <!-- 🎯 用途 -->
+        <h3 class="text-sm font-semibold text-slate-700 mb-2">🎯 用来做什么：典型场景</h3>
+        <div class="bg-slate-50 rounded-xl p-4 border border-slate-200 mb-4">
+          <ul class="space-y-1.5 text-slate-600 text-sm">
+            <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span><strong>批量区间加减 + 最后一次输出：</strong>反复执行"下标 [L,R] 整体 +k"，最后返回最终数组 —— 把每次 O(区间长度) 降成 O(1)</span></li>
+            <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span><strong>LeetCode 1109 航班预订：</strong>每条预订"第 L..R 天各 +seats"，最后输出每天总座位数 —— 差分数组的教科书题</span></li>
+            <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span><strong>LeetCode 1094 拼车：</strong>乘客在 start 上车（+n）、end 下车（-n），还原后看任意时刻车上人数是否超载</span></li>
+            <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span><strong>区间重叠统计（会议室）：</strong>每个时间段 +1、结束点 -1，还原后任意时刻的峰值 = 同时进行的任务数</span></li>
+            <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span><strong>批量业务调整：</strong>整体加价、批量扣库存、区间温度波动 —— 改差分两头，最后统一结算</span></li>
+          </ul>
         </div>
 
         <div class="mb-4"><Code language="ts" :code="differenceCode" title="difference_array.ts" /></div>

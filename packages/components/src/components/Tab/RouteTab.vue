@@ -4,9 +4,10 @@
     left: `${position.X}px`,
     height: showContextMenu ? 'auto' : '0px',
   }">
+    <div v-if="currentKey !== '/' && currentKey !== '/home'" @click.stop="closeCurrent">关闭</div>
+    <div @click.stop="closeAll(currentKey)">关闭其他</div>
     <div @click.stop="closeSide(currentIndex, 'left', currentKey)">关闭左侧</div>
     <div @click.stop="closeSide(currentIndex, 'right', currentKey)">关闭右侧</div>
-    <div @click.stop="closeAll(currentKey)">关闭其他</div>
     <template v-if="isGroupMode">
       <div @click.stop="addNewGroup">➕ 新建分组</div>
       <template v-if="groups.length">
@@ -217,10 +218,10 @@ function startRename(groupId: string) {
 
 function onRenameKeydown(e: KeyboardEvent) {
   if (e.key === 'Enter') {
-    ;(e.target as HTMLInputElement).blur()
+    ; (e.target as HTMLInputElement).blur()
   } else if (e.key === 'Escape') {
     cancelRenameFlag = true
-    ;(e.target as HTMLInputElement).blur()
+      ; (e.target as HTMLInputElement).blur()
   }
 }
 
@@ -272,6 +273,12 @@ const removeFromGroup = () => {
 
 const removeTab = (path: string) => {
   emit('remove', path)
+}
+
+// 右键菜单「关闭」= 点击 x 图标：关闭当前 tab
+const closeCurrent = () => {
+  if (currentKey.value) emit('remove', currentKey.value)
+  emit('toggleShowMenu', false)
 }
 const closeAll = (targetKey: string) => {
   emit('removeOther', targetKey)
