@@ -700,9 +700,11 @@ onUnmounted(() => {
 
   .tab-group-color-row {
     display: flex;
+    flex-wrap: wrap;
     gap: 6px;
     align-items: center;
     justify-content: center;
+    max-width: 9.75rem;
     padding: 6px 1rem;
     cursor: default;
 

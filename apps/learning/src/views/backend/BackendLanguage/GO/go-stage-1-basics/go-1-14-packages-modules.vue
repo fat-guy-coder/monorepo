@@ -4,7 +4,7 @@
       <div class="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
         <div>
           <h1 class="text-2xl font-bold text-slate-800">📦 包与模块管理</h1>
-          <p class="text-sm text-slate-500 mt-1">导出规则 · 导入模式 · init · internal · go.mod · 构建标签</p>
+          <p class="text-sm text-slate-500 mt-1">包是什么 · 导出规则 · 导入模式 · init · internal · go.mod · 构建标签 · 实战分层</p>
         </div>
         <div class="flex items-center gap-3">
           <EditorLink file-path="apps/go/basics/go-1-14-packages-modules.go" label="📝 查看源码" :is-admin="userStore.isAdmin" />
@@ -16,10 +16,46 @@
     <main class="max-w-4xl mx-auto px-6 py-8 space-y-6">
       <Nav :list="navList" title="📑 目录" position="top-right" :showBackToTop="true" />
 
-      <!-- 1. 导出规则 -->
+      <!-- 1. 包是什么 -->
       <section id="sec-1" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
           <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">1</span>
+          包是什么：一个目录 = 一个包
+        </h2>
+        <p class="text-slate-600 mb-4 leading-relaxed">
+          每个 <code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">.go</code> 文件的第一行必须是
+          <code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">package xxx</code>，
+          声明这个文件属于哪个包。<strong>一个目录下的所有 .go 文件必须属于同一个包</strong>——它们合体成一个编译单元，互相可以直接调用，不需要 import。
+        </p>
+        <div class="mb-4"><Code language="go" :code="pkgBasicsCode" title="greet/hello.go + greet/bye.go" /></div>
+
+        <div class="overflow-x-auto mb-4">
+          <table class="w-full text-sm border-collapse">
+            <thead><tr class="bg-slate-100 text-left"><th class="px-4 py-2 border border-slate-200 font-semibold">规则</th><th class="px-4 py-2 border border-slate-200 font-semibold">说明</th></tr></thead>
+            <tbody class="text-slate-600">
+              <tr><td class="px-4 py-2 border">包名 = 目录最后一段</td><td class="px-4 py-2 border">不是强制的，但<span class="text-cyan-700 font-medium">约定俗成</span>：目录 <code class="bg-slate-100 px-1 rounded font-mono text-xs">internal/model/</code> 里的文件就叫 <code class="bg-slate-100 px-1 rounded font-mono text-xs">package model</code></td></tr>
+              <tr><td class="px-4 py-2 border">package main</td><td class="px-4 py-2 border">特殊包——<strong>可执行程序的入口</strong>，必须含 <code class="bg-slate-100 px-1 rounded font-mono text-xs">func main()</code>。其余都是「库包」，只能被 import</td></tr>
+              <tr><td class="px-4 py-2 border">包级作用域</td><td class="px-4 py-2 border">同一个包内所有文件共享顶层标识符，跨文件直接用，<span class="text-cyan-700 font-medium">不需要也不用 import 自己人</span></td></tr>
+              <tr><td class="px-4 py-2 border">命名约定</td><td class="px-4 py-2 border">全小写、简短、单数、无下划线：<code class="bg-slate-100 px-1 rounded font-mono text-xs">model</code> 而非 <code class="bg-slate-100 px-1 rounded font-mono text-xs">Model</code> 或 <code class="bg-slate-100 px-1 rounded font-mono text-xs">models</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="mb-4"><Code language="go" :code="pkgMainCode" title="cmd/server/main.go — package main 入口" /></div>
+
+        <aside class="bg-purple-50 border-l-4 border-purple-400 rounded-r-xl p-4 mb-4">
+          <p class="text-sm text-purple-800"><strong>🔗 TS 类比：</strong>TS/ESM 是<strong>文件级</strong>模块——一个文件就是一个模块，想共享得 export/import。Go 是<strong>目录级</strong>包——一个目录的所有文件「合体」成一个包，目录内天然互相可见，只有跨目录才需要 import。所以 Go 的项目里少了很多文件间的 import 噪音。</p>
+        </aside>
+
+        <aside class="bg-amber-50 border-l-4 border-amber-400 rounded-r-xl p-4">
+          <p class="text-sm text-amber-800"><strong>⚠️ 最常见的坑：</strong>在同一个目录里写两个不同包名，编译直接报错 <code class="bg-amber-100 text-amber-700 px-1 py-0.5 rounded text-xs">found packages greet (hello.go) and admin (admin.go) in greet/</code>。新文件拷过来时最容易触发。</p>
+        </aside>
+      </section>
+
+      <!-- 2. 导出规则 -->
+      <section id="sec-2" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">2</span>
           导出规则：首字母就是访问控制
         </h2>
         <p class="text-slate-600 mb-4 leading-relaxed">
@@ -32,10 +68,10 @@
         </aside>
       </section>
 
-      <!-- 2. 导入模式 -->
-      <section id="sec-2" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+      <!-- 3. 导入模式 -->
+      <section id="sec-3" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
-          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">2</span>
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">3</span>
           导入的 5 种模式
         </h2>
         <div class="mb-4"><Code language="go" :code="importCode" title="imports.go" /></div>
@@ -44,10 +80,10 @@
         </aside>
       </section>
 
-      <!-- 3. init 函数 -->
-      <section id="sec-3" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+      <!-- 4. init 函数 -->
+      <section id="sec-4" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
-          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">3</span>
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">4</span>
           init() — 自动执行的初始化函数
         </h2>
         <p class="text-slate-600 mb-4 leading-relaxed">
@@ -62,10 +98,10 @@
         </ol>
       </section>
 
-      <!-- 4. internal 包 -->
-      <section id="sec-4" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+      <!-- 5. internal 包 -->
+      <section id="sec-5" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
-          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">4</span>
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">5</span>
           internal 包 — Go 编译器的"禁止访问"
         </h2>
         <p class="text-slate-600 mb-4 leading-relaxed">
@@ -73,21 +109,46 @@
         </p>
         <div class="mb-4"><Code language="text" :code="internalStructure" title="internal 目录结构" /></div>
 
-        <aside class="bg-blue-50 border-l-4 border-blue-400 rounded-r-xl p-4">
+        <div class="mb-4"><Code language="go" :code="internalBoundaryCode" title="真实项目：internal 边界" /></div>
+
+        <aside class="bg-blue-50 border-l-4 border-blue-400 rounded-r-xl p-4 mb-4">
           <p class="text-sm text-blue-800"><strong>💡 使用场景：</strong>将不想暴露给外部使用的实现细节放在 internal 下。例如 <code class="bg-blue-100 text-blue-700 px-1 py-0.5 rounded text-xs">myapp/internal/auth</code>——你的 cmd 可以用，但第三方 import 不了。这和 <code class="bg-blue-100 text-blue-700 px-1 py-0.5 rounded text-xs">pkg/</code> 目录（公开 API）形成鲜明对比。</p>
+        </aside>
+        <aside class="bg-purple-50 border-l-4 border-purple-400 rounded-r-xl p-4">
+          <p class="text-sm text-purple-800"><strong>🔗 TS 类比：</strong><code class="bg-purple-100 text-purple-700 px-1 py-0.5 rounded text-xs">internal/</code> ≈ Node 包里的「私有子包」——类似 <code class="bg-purple-100 text-purple-700 px-1 py-0.5 rounded text-xs">package.json</code> 用 <code class="bg-purple-100 text-purple-700 px-1 py-0.5 rounded text-xs">exports</code> 字段限制哪些路径能被外部 import。区别：Go 是<strong>编译器强制</strong>，Node 是约定 + 运行时校验。</p>
         </aside>
       </section>
 
-      <!-- 5. go.mod -->
-      <section id="sec-5" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+      <!-- 6. go.mod -->
+      <section id="sec-6" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
-          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">5</span>
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">6</span>
           go.mod 与模块管理
         </h2>
         <p class="text-slate-600 mb-4 leading-relaxed">
           <code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">go.mod</code> 定义了模块的<strong>导入路径（module path）</strong>和依赖版本。Go 1.11 引入 modules，Go 1.16 起成为默认模式。
         </p>
-        <div class="mb-4"><Code language="go" :code="gomodCode" title="go.mod 详解" /></div>
+        <div class="mb-4"><Code language="go" :code="gomodCode" title="真实 go.mod + 路径推算规则" /></div>
+
+        <p class="text-slate-600 mb-2 leading-relaxed"><strong>导入路径 = module 路径 + 相对目录</strong>。以本项目的 <code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">github.com/monorepo/go</code> 为例：</p>
+        <div class="overflow-x-auto mb-4">
+          <table class="w-full text-sm border-collapse">
+            <thead><tr class="bg-slate-100 text-left"><th class="px-4 py-2 border border-slate-200 font-semibold">目录（相对 module 根）</th><th class="px-4 py-2 border border-slate-200 font-semibold">导入路径</th><th class="px-4 py-2 border border-slate-200 font-semibold">package 名</th></tr></thead>
+            <tbody class="text-slate-600">
+              <tr><td class="px-4 py-2 border font-mono text-xs">backend/cmd/server</td><td class="px-4 py-2 border font-mono text-xs">github.com/monorepo/go/backend/cmd/server</td><td class="px-4 py-2 border font-mono text-xs">main</td></tr>
+              <tr><td class="px-4 py-2 border font-mono text-xs">backend/internal/handler</td><td class="px-4 py-2 border font-mono text-xs">github.com/monorepo/go/backend/internal/handler</td><td class="px-4 py-2 border font-mono text-xs">handler</td></tr>
+              <tr><td class="px-4 py-2 border font-mono text-xs">backend/internal/model</td><td class="px-4 py-2 border font-mono text-xs">github.com/monorepo/go/backend/internal/model</td><td class="px-4 py-2 border font-mono text-xs">model</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p class="text-slate-600 mb-2 leading-relaxed"><strong>Go 解析一个 import 语句的流程：</strong></p>
+        <ol class="list-decimal list-inside space-y-1 text-slate-600 mb-4 text-sm leading-relaxed">
+          <li>读 go.mod，拿到 module 路径（如 <code class="bg-slate-100 px-1 rounded font-mono text-xs">github.com/monorepo/go</code>）</li>
+          <li>拿 import 路径减去 module 路径 → 得到相对目录（如 <code class="bg-slate-100 px-1 rounded font-mono text-xs">backend/internal/model</code>）</li>
+          <li>去该目录找 .go 文件，确认包名</li>
+          <li>编译该包，检查导出可见性与循环依赖</li>
+        </ol>
 
         <div class="overflow-x-auto mb-4">
           <table class="w-full text-sm border-collapse">
@@ -101,12 +162,16 @@
             </tbody>
           </table>
         </div>
+
+        <aside class="bg-purple-50 border-l-4 border-purple-400 rounded-r-xl p-4">
+          <p class="text-sm text-purple-800"><strong>🔗 TS 类比：</strong>go.mod ≈ <code class="bg-purple-100 text-purple-700 px-1 py-0.5 rounded text-xs">package.json</code>（声明模块身份 + 直接依赖），go.sum ≈ <code class="bg-purple-100 text-purple-700 px-1 py-0.5 rounded text-xs">package-lock.json</code>（锁定校验和）。区别：Go 的「导入路径」自带唯一地址语义（<code class="bg-purple-100 text-purple-700 px-1 py-0.5 rounded text-xs">github.com/...</code>），而 npm 靠 registry 反查。</p>
+        </aside>
       </section>
 
-      <!-- 6. 构建标签 -->
-      <section id="sec-6" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+      <!-- 7. 构建标签 -->
+      <section id="sec-7" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
-          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">6</span>
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">7</span>
           构建标签 (Build Tags)
         </h2>
         <p class="text-slate-600 mb-4 leading-relaxed">
@@ -128,18 +193,82 @@
         </aside>
       </section>
 
-      <!-- 7. 小结 -->
-      <section id="sec-7" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+      <!-- 8. 实战：你的 Go 后端项目 -->
+      <section id="sec-8" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">8</span>
+          实战：你的 Go 后端项目（apps/go/backend）
+        </h2>
+        <p class="text-slate-600 mb-4 leading-relaxed">
+          把上面的概念落到你正在写的 <code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">apps/go/backend</code> 上——它就是一个标准的
+          <strong>cmd + internal 分层</strong> Go 工程。
+        </p>
+        <div class="mb-4"><Code language="text" :code="realTreeCode" title="apps/go 真实目录树" /></div>
+
+        <p class="text-slate-600 mb-2 leading-relaxed">
+          依赖是<strong>单向、分层</strong>的——<span class="text-cyan-700 font-medium">main → handler → service → repository → model</span>，任何一层不反向依赖，这正是避免循环导入的工程解法：
+        </p>
+        <div class="mb-4"><Code language="go" :code="realImportsCode" title="各层 import 链（真实代码）" /></div>
+
+        <div class="overflow-x-auto mb-4">
+          <table class="w-full text-sm border-collapse">
+            <thead><tr class="bg-slate-100 text-left"><th class="px-4 py-2 border border-slate-200 font-semibold">层</th><th class="px-4 py-2 border border-slate-200 font-semibold">目录</th><th class="px-4 py-2 border border-slate-200 font-semibold">职责</th></tr></thead>
+            <tbody class="text-slate-600">
+              <tr><td class="px-4 py-2 border">入口</td><td class="px-4 py-2 border font-mono text-xs">cmd/server/main.go</td><td class="px-4 py-2 border">package main：启动 HTTP 服务、注册路由</td></tr>
+              <tr><td class="px-4 py-2 border">HTTP</td><td class="px-4 py-2 border font-mono text-xs">internal/handler</td><td class="px-4 py-2 border">解析请求、调用 service、写 JSON 响应</td></tr>
+              <tr><td class="px-4 py-2 border">业务</td><td class="px-4 py-2 border font-mono text-xs">internal/service</td><td class="px-4 py-2 border">业务规则、参数校验、将来加权限/事务</td></tr>
+              <tr><td class="px-4 py-2 border">数据</td><td class="px-4 py-2 border font-mono text-xs">internal/repository</td><td class="px-4 py-2 border">读写数据（现在内存 map，将来换 PostgreSQL）</td></tr>
+              <tr><td class="px-4 py-2 border">模型</td><td class="px-4 py-2 border font-mono text-xs">internal/model</td><td class="px-4 py-2 border">数据结构定义，不依赖任何 internal 包</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <aside class="bg-emerald-50 border-l-4 border-emerald-400 rounded-r-xl p-4 mb-4">
+          <p class="text-sm text-emerald-800"><strong>✅ 为什么 internal 在这里如此合适：</strong><code class="bg-emerald-100 text-emerald-700 px-1 py-0.5 rounded text-xs">backend/internal/</code> 只能被 <code class="bg-emerald-100 text-emerald-700 px-1 py-0.5 rounded text-xs">github.com/monorepo/go/backend/</code> 目录树内的代码导入——所以 <code class="bg-emerald-100 text-emerald-700 px-1 py-0.5 rounded text-xs">basics/</code>、<code class="bg-emerald-100 text-emerald-700 px-1 py-0.5 rounded text-xs">advanced/</code> 等学习代码<strong>根本无法 import 后端实现</strong>。编译器替你守住了「学习代码 ≠ 生产依赖」这条边界。</p>
+        </aside>
+        <aside class="bg-blue-50 border-l-4 border-blue-400 rounded-r-xl p-4">
+          <p class="text-sm text-blue-800"><strong>💡 cmd/ 目录的意义：</strong>一个 module 可以有<strong>多个可执行程序</strong>，每个占 cmd/ 下一个子目录（都是 package main）。将来想加一个 <code class="bg-blue-100 text-blue-700 px-1 py-0.5 rounded text-xs">cmd/migrate</code> 做数据库迁移、<code class="bg-blue-100 text-blue-700 px-1 py-0.5 rounded text-xs">cmd/cli</code> 做命令行，直接新增子目录即可，互不干扰。</p>
+        </aside>
+      </section>
+
+      <!-- 9. 常见错误 -->
+      <section id="sec-9" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">9</span>
+          常见错误与反模式
+        </h2>
+        <div class="mb-4"><Code language="go" :code="errCode" title="三个经典编译错误" /></div>
+
+        <ol class="list-decimal list-inside space-y-1 text-slate-600 mb-4 text-sm leading-relaxed">
+          <li><strong>循环导入</strong>：a 依赖 b、b 依赖 a → <code class="bg-slate-100 px-1 rounded font-mono text-xs">import cycle not allowed</code>。解法：把公共部分抽到更底层的新包，保证依赖方向单向（参考第 8 节的分层）</li>
+          <li><strong>目录里混包名</strong>：同一目录两个 package → 编译报错。解法：每个目录只留一个包</li>
+          <li><strong>模块路径对不上</strong>：go.mod 的 module 与 import 路径前缀不符 → 编译报错。解法：先确认 go.mod，再写 import</li>
+        </ol>
+
+        <div class="mb-4"><Code language="go" :code="cycleFixCode" title="✅ 循环导入的正确修法" /></div>
+
+        <aside class="bg-purple-50 border-l-4 border-purple-400 rounded-r-xl p-4 mb-4">
+          <p class="text-sm text-purple-800"><strong>🔗 TS 类比：</strong>TS/ESM 里循环 import 有时候「能跑」（拿到的是 undefined 的坑，运行时才炸）；Go 直接<strong>编译期拒绝</strong>——更早暴露、更好修。</p>
+        </aside>
+        <aside class="bg-amber-50 border-l-4 border-amber-400 rounded-r-xl p-4">
+          <p class="text-sm text-amber-800"><strong>⚠️ 别忘了：</strong>① 改依赖后跑 <code class="bg-amber-100 text-amber-700 px-1 py-0.5 rounded text-xs">go mod tidy</code>，并把 <code class="bg-amber-100 text-amber-700 px-1 py-0.5 rounded text-xs">go.sum</code> 提交进 git（锁版本、防篡改）。② 库包别叫 <code class="bg-amber-100 text-amber-700 px-1 py-0.5 rounded text-xs">package main</code>，会被当成可执行程序。③ 包名用<strong>全小写单数</strong>，别用大写或下划线。</p>
+        </aside>
+      </section>
+
+      <!-- 10. 小结 -->
+      <section id="sec-10" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
           <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">📋</span>
           小结
         </h2>
         <ul class="space-y-2 text-slate-600">
+          <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span><strong>一个目录 = 一个包</strong>，目录内跨文件直接用；package main 才是可执行入口</span></li>
           <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span><strong>大写 = 导出，小写 = 私有</strong>——没有 public/private/protected</span></li>
           <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span><strong>未使用的导入 → 编译错误</strong>，用 goimports 自动处理</span></li>
           <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span><strong>空白导入</strong> <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">import _ "pkg"</code> 只执行 init，常用于注册驱动</span></li>
           <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span><strong>internal 包</strong>是编译器的强制访问控制，外部项目无法导入</span></li>
-          <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span><strong>go.mod</strong> 管理模块依赖，<code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">go mod tidy</code> 保持整洁</span></li>
+          <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span><strong>go.mod</strong> 管理模块依赖，<strong>导入路径 = module 路径 + 相对目录</strong>，<code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">go mod tidy</code> 保持整洁</span></li>
+          <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span><strong>工程分层</strong>：cmd + internal（handler → service → repository → model）单向依赖，天然避免循环导入</span></li>
         </ul>
       </section>
     </main>
@@ -160,14 +289,36 @@ import { useUserStore } from '@/stores/userProfle'
 const userStore = useUserStore()
 
 const navList = [
-  { id: "sec-1", name: "导出规则" },
-  { id: "sec-2", name: "导入的 5 种模式" },
-  { id: "sec-3", name: "init() 函数" },
-  { id: "sec-4", name: "internal 包" },
-  { id: "sec-5", name: "go.mod 与模块管理" },
-  { id: "sec-6", name: "构建标签" },
-  { id: "sec-7", name: "小结" },
+  { id: "sec-1", name: "包是什么" },
+  { id: "sec-2", name: "导出规则" },
+  { id: "sec-3", name: "导入的 5 种模式" },
+  { id: "sec-4", name: "init() 函数" },
+  { id: "sec-5", name: "internal 包" },
+  { id: "sec-6", name: "go.mod 与模块管理" },
+  { id: "sec-7", name: "构建标签" },
+  { id: "sec-8", name: "实战：Go 后端项目" },
+  { id: "sec-9", name: "常见错误" },
+  { id: "sec-10", name: "小结" },
 ]
+
+const pkgBasicsCode = `// greet/hello.go — 包的第一条语句：package 声明
+package greet
+
+// Hello 大写 = 导出，包外可见
+func Hello() string { return "你好，Go" }`
+
+const pkgMainCode = `// cmd/server/main.go — package main = 可执行程序入口
+package main
+
+import (
+    "fmt"
+
+    "github.com/monorepo/go/backend/internal/handler" // 普通库包
+)
+
+func main() { // ← package main 必须有的入口函数
+    fmt.Println(handler.Welcome())
+}`
 
 const exportCode = `package user
 
@@ -248,21 +399,86 @@ const internalStructure = `myapp/
 │       └── handler.go         // ❌ pkg/api 也不能 import internal
 └── go.mod                     // module myapp`
 
-const gomodCode = `// go.mod — 模块定义文件
-module github.com/yourname/myapp  // ← 模块导入路径
+const internalBoundaryCode = `// ⚠️ internal 的规则：只能被「internal 所在目录」目录树内的代码导入
+// 真实项目：module = github.com/monorepo/go
+//   backend/internal/...  ← 仅 backend/ 目录树内可导入
 
-go 1.22  // 最低 Go 版本
+// ✅ 允许：backend/cmd/server/main.go
+import "github.com/monorepo/go/backend/internal/handler"
 
-require (
-    github.com/gin-gonic/gin v1.9.1      // 直接依赖
-    golang.org/x/text v0.14.0
+// ❌ 编译报错：basics/ 学习代码（在 backend/ 目录树之外）
+import "github.com/monorepo/go/backend/internal/model"
+// → use of internal package github.com/monorepo/go/backend/internal/model is not allowed`
+
+const gomodCode = `// apps/go/go.mod — 本模块定义
+module github.com/monorepo/go   // ← 模块导入路径
+
+go 1.22
+
+// 导入路径的推算规则：
+//   import "github.com/monorepo/go/backend/internal/model"
+//          └────── module 路径 ──────┘ └─ 相对目录 ─┘
+//   → 去 backend/internal/model/ 目录找 .go 文件`
+
+const realTreeCode = `apps/go/                     ← module github.com/monorepo/go
+├── go.mod                   ← 模块定义
+├── main.go                  ← 学习示例入口（也是 package main）
+├── basics/                  ← 阶段 1-3 学习代码（库包，非可执行）
+├── backend/                 ← 实战项目
+│   ├── cmd/
+│   │   └── server/main.go        ← package main：程序入口
+│   └── internal/
+│       ├── handler/menu_handler.go   ← HTTP 层：解析请求/响应
+│       ├── service/menu_service.go   ← 业务逻辑层
+│       ├── repository/menu_repo.go   ← 数据访问层（内存 map）
+│       └── model/menu.go             ← 数据结构（最底层）`
+
+const realImportsCode = `// 依赖方向（单向，不反向 → 才不会循环导入）
+//
+//   main ──► handler ──► service ──► repository ──► model
+//  cmd/server    handler      service        repo
+
+// cmd/server/main.go
+import "github.com/monorepo/go/backend/internal/handler"
+
+// internal/handler/menu_handler.go
+import (
+    "github.com/monorepo/go/backend/internal/model"
+    "github.com/monorepo/go/backend/internal/service"
 )
 
-require (
-    github.com/bytedance/sonic v1.9.1 // indirect — 间接依赖（自动管理）
+// internal/service/menu_service.go
+import (
+    "github.com/monorepo/go/backend/internal/model"
+    "github.com/monorepo/go/backend/internal/repository"
 )
 
-// ⚠️ 模块路径 = 别人导入你的包的路径
-// module github.com/yourname/myapp → import "github.com/yourname/myapp/pkg/api"
-// 本地包直接按 go.mod 的 module 路径来 import`
+// internal/repository/menu_repo.go
+import "github.com/monorepo/go/backend/internal/model"
+
+// internal/model/menu.go — 不依赖任何 internal 包（最底层）`
+
+const errCode = `// ❌ 错误 1：循环导入
+// pkg/a/a.go  import "github.com/monorepo/go/pkg/b"
+// pkg/b/b.go  import "github.com/monorepo/go/pkg/a"
+// → import cycle not allowed
+
+// ❌ 错误 2：同一目录混了两个包名
+// greet/hello.go:  package greet
+// greet/admin.go:  package admin
+// → found packages greet (hello.go) and admin (admin.go) in greet/
+
+// ❌ 错误 3：导入路径与 module 不符
+// go.mod: module github.com/monorepo/go
+// import "github.com/wrong/other"
+// → module declares its path as github.com/monorepo/go
+//   but was required as github.com/wrong/other`
+
+const cycleFixCode = `// ✅ 正确做法：把公共部分抽到最底层，依赖保持单向
+//
+//   a ──► c    b ──► c    （c 是公共底层包，谁都不依赖 a/b）
+//
+// 项目里就是这种解法：
+//   main ──► handler ──► service ──► repository ──► model
+// model 是公共最底层，谁都不反向依赖 → 永远不会循环导入`
 </script>

@@ -33,8 +33,8 @@ context: |
   - 学习网站页面跳转用 goToByName() 或 Link 组件，不用 <RouterLink>（需自动打开 tab + 展开菜单）
   - Go 代码每个输出语句紧接 // 输出: ... 注释
   - EditorLink 组件仅 admin 可见，通过 props 传 isAdmin（不用 provide/inject）
-  - 菜单系统基于 name 字段做路由匹配，菜单数据在 apps/backend/config/ 下 JSON 文件
-  - 种子脚本用 apps/backend/scripts/seed-menus.ts --config <json路径>
+  - 菜单系统基于 name 字段做路由匹配，菜单数据以 PostgreSQL 为准（运行时后端读库，无本地 JSON）
+  - 菜单管理走 admin 后台（单条 POST /api/menus）；一次性批量建树用 POST /api/menus/batch（临时 JSON，用完即弃）
 
   ## 设计系统
   主色 #00ffff (cyan), 辅色 #ff00ff (fuchsia), 背景 #0a0a0f, 强调 #ff3333, 成功 #00ff88

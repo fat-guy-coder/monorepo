@@ -77,7 +77,7 @@
 | **合计** | | **66** | ⏳ 待填充 |
 
 - **为游戏开发服务**：数学基础/渲染管线/光照着色/光追/着色器/图形 API/游戏渲染实践
-- **菜单种子文件**：`apps/backend/config/menus-cg-roadmap.json`（幂等，可重复导入）
+- **菜单**：数据库为准，admin 后台/`POST /api/menus/batch` 管理，无本地 JSON
 - **继续指令：** 「继续计算机图形学文档的填充，从模块 1（数学基础）开始」
 - 填充文档同样遵循 `doc-style` + `dsa-diagram`（结构图）+ `dsa-visualizer`（动画）三层规范
 
@@ -150,8 +150,7 @@
 
 - ✅ 菜单 CRUD API（完整，含批量创建/删除/搜索/树形查询）
 - ✅ 用户认证 API（JWT 登录/注册/角色）
-- ✅ 种子脚本（`bun run scripts/seed-menus.ts`）
-- ✅ 菜单 JSON 配置文件（`apps/backend/config/menus-*.json`）
+- ✅ 菜单管理走 admin 后台（数据库为准，无本地菜单 JSON）
 
 API 文档: `apps/backend/API.md` | 快速启动: `docker-compose up -d backend postgres`
 

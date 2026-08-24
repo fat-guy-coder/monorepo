@@ -427,24 +427,19 @@ DELETE /api/roles/:id/users/:userId
 
 ---
 
-## 四、种子脚本
+## 四、批量导入菜单（API）
 
-### 批量导入菜单
+菜单数据以 PostgreSQL 为准，日常增改用 admin 后台（单条 `POST /api/menus`）。需要一次性批量建树时用 `POST /api/menus/batch`：
 
 ```bash
-cd apps/backend
-
-# 预览（不执行）
-bun run scripts/seed-menus.ts --config config/menus-go-roadmap.json --dry-run
-
-# 执行导入
-bun run scripts/seed-menus.ts --config config/menus-go-roadmap.json
-
-# 清空后重导（先删父菜单下所有子菜单，再导入）
-bun run scripts/seed-menus.ts --config config/menus-go-roadmap.json --clean
+# 临时 JSON（用完即弃）
+curl -X POST http://<host>:3000/api/menus/batch \
+  -H 'Content-Type: application/json' \
+  -H 'Authorization: Bearer <token>' \
+  --data-binary @menu-tree.json
 ```
 
-JSON 配置文件格式：
+body 格式：
 ```json
 {
   "project": "learning",
@@ -463,14 +458,13 @@ JSON 配置文件格式：
 }
 ```
 
-> 脚本是幂等的——同名菜单已存在则 `skipped`，不会重复创建。
+> 接口幂等——同名子菜单已存在则 `skipped` 并递归其子节点，不会重复创建，可安全重试。
 
-### 其他种子脚本
+### 其他初始化脚本
 
 ```bash
 bun run scripts/initRoles.ts     # 初始化 admin/default 角色
 bun run scripts/initUserTable.ts # 初始化用户表
-bun run scripts/seedGoRoadmapMenus.ts  # Go 路线图菜单（旧版，推荐用 seed-menus.ts）
 ```
 
 ---

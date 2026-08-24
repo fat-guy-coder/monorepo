@@ -198,12 +198,9 @@ go run . all            # 运行全部
 | `pnpm turbo:project:build` | `turbo run build --filter="$1"` | Turbo 构建**指定项目**（需传参） |
 | `pnpm learning:preview` | `pnpm --filter learning run preview` | 预览构建产物（`vite preview`） |
 
-### 🌱 数据库种子
+### 🌱 菜单管理
 
-| 命令 | 实际执行 | 说明 |
-|------|----------|------|
-| `pnpm backend:seed-go` | `pnpm -F backend db:seed:go` | 将 `menus-go-roadmap.json` 导入菜单表（幂等，同名跳过）。用于初始化/更新 Go 学习路线的菜单结构 |
-| `pnpm backend:seed-cs` | `pnpm -F backend db:seed:cs` | 将 `menus-cs-roadmap.json` 导入菜单表。用于初始化/更新 C# 学习路线的菜单结构 |
+菜单数据以 **PostgreSQL 数据库为准**（运行时后端读库），本地不维护菜单 JSON 文件。日常加/改菜单走 **admin 后台「菜单管理」**（单条 `POST /api/menus`）；一次性批量导入可用 `POST /api/menus/batch`（临时生成 JSON，用完即弃）。
 
 ### 🐍 Python 辅助
 
@@ -227,10 +224,6 @@ go run . all            # 运行全部
 | `bun run db:generate` | Drizzle — 从 schema 生成 SQL 迁移文件 |
 | `bun run db:migrate` | Drizzle — 执行迁移 |
 | `bun run db:push` | Drizzle — 直接推送 schema 到 DB（开发用，无迁移文件） |
-| `bun run db:seed` | 通用种子脚本（`seed-menus.ts`，不带参数） |
-| `bun run db:seed:go` | 导入 Go 路线菜单 JSON |
-| `bun run db:seed:cs` | 导入 C# 路线菜单 JSON |
-| `bun run db:seed:db` | 导入数据库路线菜单 JSON |
 
 ### 📐 代码质量（子项目级别）
 
@@ -302,15 +295,9 @@ urllib.request.urlopen(urllib.request.Request('http://localhost:8080/api/menus/b
 "
 ```
 
-### 菜单 JSON 配置文件
+### 菜单批量导入
 
-`apps/backend/config/menus-*.json` — 用于批量导入/重建菜单树：
-
-```bash
-cd apps/backend
-bun run scripts/seed-menus.ts --config config/menus-xxx.json          # 导入（幂等）
-bun run scripts/seed-menus.ts --config config/menus-xxx.json --clean   # 清空后重导
-```
+一次性批量建菜单用 `POST /api/menus/batch`（需登录，body 为 `{ project, parentId, items }`，`items` 为嵌套树）。幂等——同名子菜单已存在则跳过并递归其子节点，可安全重试。日常单条增改用 admin 后台即可。
 
 ### 用户/角色 API
 
@@ -328,7 +315,7 @@ bun run scripts/seed-menus.ts --config config/menus-xxx.json --clean   # 清空�
 ### 新增菜单的典型流程
 
 ```
-1. POST /api/menus/batch  或  编辑 config/menus-xxx.json → bun db:seed:go
+1. admin 后台「菜单管理」加菜单（或一次性批量用 POST /api/menus/batch）
 2. pnpm learning:gen                    # 自动生成 .vue 文件 + 路由
 3. 编辑 .vue 文档内容（遵循 doc-style skill）
 4. pnpm learning:dev                    # 验证页面显示

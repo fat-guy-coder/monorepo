@@ -245,16 +245,22 @@ jobs:
             rm backend.tar
 
             cd backend
-            if [ $(docker ps -aq -f name=backend-app) ]; then
-              docker stop backend-app && docker rm backend-app
-            fi
-
+            # 先校验依赖的 secret，再构建镜像——任一失败就保留旧容器运行，避免后端挂掉导致 502
             if [ -z "${{ secrets.DATABASE_URL }}" ]; then
               echo "ERROR: GitHub Secret DATABASE_URL is empty"
               exit 1
             fi
 
-            docker build -t backend-app .
+            if ! docker build -t backend-app .; then
+              echo "ERROR: docker build 失败，保留旧容器运行"
+              exit 1
+            fi
+
+            # 构建成功后才替换旧容器
+            if [ $(docker ps -aq -f name=backend-app) ]; then
+              docker stop backend-app && docker rm backend-app
+            fi
+
             docker run -d \
               --name backend-app \
               --network wwwroot_default \

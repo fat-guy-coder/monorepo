@@ -91,6 +91,11 @@
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">1</span>Race Detector 是什么？怎么工作的？</h2>
         <p class="text-slate-600 mb-4 leading-relaxed text-sm">Go 的 Race Detector 是基于 Google 的 <strong>ThreadSanitizer (TSan)</strong>——编译时在每次内存访问前后<strong>自动插入检查代码</strong>，运行时追踪每个内存地址的"最后一次读/写"来自哪个 goroutine。如果两个 goroutine 同时访问同一块内存且<strong>至少一个是写</strong>→ 报 DATA RACE。</p>
         <p class="text-slate-600 mb-4 leading-relaxed text-sm">底层用 <strong>Shadow Memory（影子内存）+ Vector Clock（向量时钟）</strong>：每 8 字节应用内存对应一块 shadow memory，记录"上次谁写的、上次谁读的"。检测到冲突时，通过向量时钟追溯到两个冲突的 goroutine 的创建位置。</p>
+        <div class="flex flex-wrap items-center gap-2 mb-4 bg-slate-50 rounded-xl p-3 border border-slate-200">
+          <span class="text-xs font-semibold text-slate-500">📚 这两个底层概念各有独立专题：</span>
+          <Link :route="'cs-5-d-5-shadow-memory'" text="影子内存 Shadow Memory" animation="none" size="small" class="px-3 py-1 rounded-lg text-xs font-medium border transition-all duration-150 active:scale-95 bg-cyan-50 text-cyan-700 border-cyan-200 hover:bg-cyan-100" />
+          <Link :route="'cs-10-a-4-vector-clock'" text="向量时钟 Vector Clock" animation="none" size="small" class="px-3 py-1 rounded-lg text-xs font-medium border transition-all duration-150 active:scale-95 bg-cyan-50 text-cyan-700 border-cyan-200 hover:bg-cyan-100" />
+        </div>
 
         <div class="bg-gradient-to-r from-cyan-50 to-blue-50 rounded-xl p-5 border border-cyan-200 mb-4">
           <p class="text-lg font-bold text-cyan-800 mb-2 text-center font-mono">竞态 = 两个 goroutine 同时碰同一块内存 + 至少一个在写 + 没有锁/通道同步</p>
@@ -156,7 +161,7 @@
     </main>
     <footer class="max-w-4xl mx-auto px-6 py-8"><nav class="flex justify-between items-center pt-4 border-t border-slate-200 text-sm"><RouterLink to="/backend/BackendLanguage/GO/go-stage-2-concurrency/go-2-9-concurrency-patterns" class="text-slate-500 hover:text-cyan-600 flex items-center gap-1">← 上一节：并发模式</RouterLink><RouterLink to="/backend/BackendLanguage/GO/go-stage-2-concurrency/go-2-11-sync-pool" class="text-cyan-600 hover:text-cyan-700 font-medium flex items-center gap-1">下一节：sync.Pool →</RouterLink></nav></footer>
   </div></template>
-<script setup lang="ts">import { Code, EditorLink, Nav } from 'components'; import { RouterLink } from 'vue-router'; import { useUserStore } from '@/stores/userProfle'; const userStore = useUserStore()
+<script setup lang="ts">import { Code, EditorLink, Nav, Link } from 'components'; import { RouterLink } from 'vue-router'; import { useUserStore } from '@/stores/userProfle'; const userStore = useUserStore()
 const navList = [{id:"sec-guide",name:"🧭 本章怎么学"},{id:"sec-overview",name:"📐 竞态长什么样"},{id:"sec-1",name:"Race Detector原理"},{id:"sec-2",name:"三个典型场景"},{id:"sec-3",name:"修复方案速查"},{id:"sec-4",name:"CI配置+限制"}]
 const raceCmdCode = `# 运行竞态检测
 go run -race main.go

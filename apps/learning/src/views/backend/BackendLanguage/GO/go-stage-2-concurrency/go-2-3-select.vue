@@ -101,6 +101,7 @@
         <div class="mb-4"><Code language="go" :code="doneCode" title="select_done.go" /></div>
 
         <h3 class="text-md font-semibold text-slate-700 mb-3 mt-6">④ for-select 循环（持续监听）</h3>
+        <p class="text-slate-600 mb-2 leading-relaxed text-sm">服务端程序的标准骨架。注意它<strong>没有「间隔」和「步长」</strong>——进入 select 后 goroutine 直接挂起（不占 CPU），每次迭代 = 一次事件到达，间隔完全由生产方决定。是<strong>事件驱动</strong>，不是轮询：有事就处理、没事就睡、取消了就撤。</p>
         <div class="mb-4"><Code language="go" :code="forSelectCode" title="for_select.go" /></div>
 
         <h3 class="text-md font-semibold text-slate-700 mb-3 mt-6">⑤ Ticker 定时任务</h3>
@@ -320,15 +321,17 @@ func worker(ctx context.Context, jobs <-chan Job) {
 const forSelectCode = `// ④ for-select 循环——Go 服务端程序的标准骨架
 func server(requests <-chan Request, shutdown <-chan struct{}) {
     for {
-        select {
+        select {          // 挂起等待：无事件时 goroutine 休眠，不占 CPU
         case req := <-requests:
-            handle(req)           // 处理请求
+            handle(req)           // 有请求就处理，处理完回到 select 继续挂起
         case <-shutdown:
             fmt.Println("优雅关闭中...")
-            return
+            return                // 关闭信号一到就退出
         }
     }
-}`
+}
+// 没有"间隔/步长"：每次迭代 = 一次事件到达，间隔由生产方决定。
+// 有数据→立刻处理；没数据→睡在 select 上；信号→退出。纯事件驱动。`
 const tickerCode = `// ⑤ select + Ticker——定时任务
 ticker := time.NewTicker(5 * time.Second)
 defer ticker.Stop()
