@@ -265,6 +265,107 @@
             </tbody>
           </table>
         </div>
+        <h3 class="text-sm font-semibold text-slate-700 mb-2">SHA-3 (Keccak)：海绵结构吸收 + 挤压</h3>
+        <p class="text-slate-600 mb-3 text-sm leading-relaxed">
+          与前几代完全不同的内部结构：一个固定宽度的状态（速率 r + 容量 c），
+          <strong>吸收</strong>阶段逐块把输入 XOR 进 r 区并整体置换 f，
+          <strong>挤压</strong>阶段每次置换吐出一段 r 位输出，拼起来就是任意长度的摘要。
+        </p>
+        <figure class="mb-4">
+          <svg viewBox="0 0 700 300" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <marker id="sp-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" />
+              </marker>
+            </defs>
+
+            <!-- 吸收阶段 -->
+            <text x="20" y="20" font-size="11" font-family="monospace" font-weight="bold" fill="#0891b2">吸收 Absorb：输入逐块 XOR 进速率区 r，每轮整体置换 f</text>
+
+            <!-- 输入块 -->
+            <rect x="74" y="34" width="48" height="30" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="98" y="49" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#ffffff">M1</text>
+            <rect x="222" y="34" width="48" height="30" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="246" y="49" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#ffffff">M2</text>
+            <rect x="356" y="34" width="84" height="30" rx="6" fill="#f59e0b" stroke="#d97706" stroke-width="1.5" />
+            <text x="398" y="49" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" font-weight="bold" fill="#ffffff">尾块+填充+长度</text>
+
+            <!-- M → XOR 连线 -->
+            <line x1="98" y1="64" x2="98" y2="124" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#sp-arr)" />
+            <line x1="246" y1="64" x2="246" y2="124" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#sp-arr)" />
+            <line x1="398" y1="64" x2="398" y2="124" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#sp-arr)" />
+
+            <!-- XOR 圆圈 -->
+            <circle cx="98" cy="138" r="11" fill="#ffffff" stroke="#94a3b8" stroke-width="1.5" />
+            <text x="98" y="138" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#334155">⊕</text>
+            <circle cx="246" cy="138" r="11" fill="#ffffff" stroke="#94a3b8" stroke-width="1.5" />
+            <text x="246" y="138" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#334155">⊕</text>
+            <circle cx="398" cy="138" r="11" fill="#ffffff" stroke="#94a3b8" stroke-width="1.5" />
+            <text x="398" y="138" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#334155">⊕</text>
+
+            <!-- 状态链：初始 →⊕→ f → state1 →⊕→ f → state2 →⊕→ f → 吸收完成 -->
+            <rect x="16" y="150" width="56" height="56" rx="8" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" />
+            <text x="44" y="168" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" font-weight="bold" fill="#334155">r|c</text>
+            <text x="44" y="186" text-anchor="middle" dominant-baseline="central" font-size="9" font-family="monospace" fill="#64748b">初始 0</text>
+
+            <rect x="116" y="150" width="32" height="56" rx="6" fill="#ede9fe" stroke="#a78bfa" stroke-width="1.5" />
+            <text x="132" y="178" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#6d28d9">f</text>
+
+            <rect x="168" y="150" width="56" height="56" rx="8" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="196" y="176" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#ffffff">r|c</text>
+            <text x="196" y="194" text-anchor="middle" dominant-baseline="central" font-size="9" font-family="monospace" fill="#cffafe">state1</text>
+
+            <rect x="268" y="150" width="32" height="56" rx="6" fill="#ede9fe" stroke="#a78bfa" stroke-width="1.5" />
+            <text x="284" y="178" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#6d28d9">f</text>
+
+            <rect x="320" y="150" width="56" height="56" rx="8" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="348" y="176" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#ffffff">r|c</text>
+            <text x="348" y="194" text-anchor="middle" dominant-baseline="central" font-size="9" font-family="monospace" fill="#cffafe">state2</text>
+
+            <rect x="420" y="150" width="32" height="56" rx="6" fill="#ede9fe" stroke="#a78bfa" stroke-width="1.5" />
+            <text x="436" y="178" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#6d28d9">f</text>
+
+            <rect x="472" y="150" width="80" height="56" rx="8" fill="#dcfce7" stroke="#22c55e" stroke-width="1.5" />
+            <text x="512" y="176" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#166534">吸收完成</text>
+            <text x="512" y="194" text-anchor="middle" dominant-baseline="central" font-size="9" font-family="monospace" fill="#16a34a">进入挤压</text>
+
+            <!-- 吸收箭头（y=178） -->
+            <line x1="72" y1="178" x2="87" y2="178" stroke="#94a3b8" stroke-width="2" marker-end="url(#sp-arr)" />
+            <line x1="109" y1="178" x2="116" y2="178" stroke="#94a3b8" stroke-width="2" marker-end="url(#sp-arr)" />
+            <line x1="148" y1="178" x2="168" y2="178" stroke="#94a3b8" stroke-width="2" marker-end="url(#sp-arr)" />
+            <line x1="224" y1="178" x2="235" y2="178" stroke="#94a3b8" stroke-width="2" marker-end="url(#sp-arr)" />
+            <line x1="257" y1="178" x2="268" y2="178" stroke="#94a3b8" stroke-width="2" marker-end="url(#sp-arr)" />
+            <line x1="300" y1="178" x2="320" y2="178" stroke="#94a3b8" stroke-width="2" marker-end="url(#sp-arr)" />
+            <line x1="376" y1="178" x2="387" y2="178" stroke="#94a3b8" stroke-width="2" marker-end="url(#sp-arr)" />
+            <line x1="409" y1="178" x2="420" y2="178" stroke="#94a3b8" stroke-width="2" marker-end="url(#sp-arr)" />
+            <line x1="452" y1="178" x2="472" y2="178" stroke="#94a3b8" stroke-width="2" marker-end="url(#sp-arr)" />
+
+            <!-- 挤压阶段 -->
+            <text x="20" y="226" font-size="11" font-family="monospace" font-weight="bold" fill="#0891b2">挤压 Squeeze：反复置换 f，每次吐出速率区 r 的输出，拼接成任意长度摘要</text>
+            <rect x="20" y="240" width="32" height="50" rx="6" fill="#ede9fe" stroke="#a78bfa" stroke-width="1.5" />
+            <text x="36" y="265" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#6d28d9">f</text>
+            <rect x="76" y="240" width="150" height="50" rx="8" fill="#dcfce7" stroke="#22c55e" stroke-width="1.5" />
+            <text x="151" y="257" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#166534">吐出 r 位 = Z1</text>
+            <text x="151" y="273" text-anchor="middle" dominant-baseline="central" font-size="9" font-family="monospace" fill="#16a34a">第一段输出</text>
+            <rect x="250" y="240" width="32" height="50" rx="6" fill="#ede9fe" stroke="#a78bfa" stroke-width="1.5" />
+            <text x="266" y="265" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" font-weight="bold" fill="#6d28d9">f</text>
+            <rect x="306" y="240" width="150" height="50" rx="8" fill="#dcfce7" stroke="#22c55e" stroke-width="1.5" />
+            <text x="381" y="257" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#166534">吐出 r 位 = Z2</text>
+            <text x="381" y="273" text-anchor="middle" dominant-baseline="central" font-size="9" font-family="monospace" fill="#16a34a">第二段输出</text>
+            <rect x="492" y="240" width="140" height="50" rx="8" fill="#f59e0b" stroke="#d97706" stroke-width="1.5" />
+            <text x="562" y="257" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#ffffff">摘要 z = Z1‖Z2‖…</text>
+            <text x="562" y="273" text-anchor="middle" dominant-baseline="central" font-size="9" font-family="monospace" fill="#fff7ed">任意长度定长拼接</text>
+
+            <!-- 挤压箭头（y=265） -->
+            <line x1="52" y1="265" x2="76" y2="265" stroke="#94a3b8" stroke-width="2" marker-end="url(#sp-arr)" />
+            <line x1="226" y1="265" x2="250" y2="265" stroke="#94a3b8" stroke-width="2" marker-end="url(#sp-arr)" />
+            <line x1="282" y1="265" x2="306" y2="265" stroke="#94a3b8" stroke-width="2" marker-end="url(#sp-arr)" />
+            <line x1="456" y1="265" x2="492" y2="265" stroke="#94a3b8" stroke-width="2" marker-end="url(#sp-arr)" />
+
+            <text x="20" y="292" font-size="10" font-family="monospace" fill="#64748b">容量区 c 不直接接触输入 → 天然免疫长度扩展攻击；摘要长度可在 r 粒度上任取（224~512bit）</text>
+          </svg>
+          <figcaption class="text-xs text-slate-400 mt-1">图 3：SHA-3 海绵结构 —— 吸收阶段输入逐块搅进状态，挤压阶段按需吐出 r 位拼成摘要</figcaption>
+        </figure>
         <div class="mb-4"><Code language="ts" :code="sha256Code" title="proof_of_work.ts" /></div>
         <aside class="bg-emerald-50 border-l-4 border-emerald-400 rounded-r-xl p-4">
           <p class="text-sm text-emerald-800"><strong>✅ 最佳实践：</strong>安全场景统一用 <strong>SHA-256</strong>（或 SHA-512/384）；需要可变长度或想「未来可迁移」时用 SHA-3。MD5/SHA-1 一律视为退役。</p>
@@ -340,6 +441,60 @@
         </p>
         <div class="mb-4"><Code language="ts" :code="merkleCode" title="merkle_tree.ts" /></div>
 
+        <h3 class="text-md font-semibold text-slate-700 mb-3">⑤ HMAC：哈希 + 共享密钥 = 消息认证</h3>
+        <p class="text-slate-600 mb-3 text-sm leading-relaxed">
+          前面 ①~④ 都是「没有密钥的哈希」——任何人都能算。HMAC（Hash-based Message Authentication Code）
+          在哈希里混入<strong>共享密钥</strong>，让「算得出标签」成为一种<strong>身份证明</strong>：
+          只有持有密钥的人能签名/验签。JWT、TLS 握手、云厂商接口鉴权都靠它。
+        </p>
+        <figure class="mb-3">
+          <svg viewBox="0 0 700 210" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <marker id="hm-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" />
+              </marker>
+            </defs>
+
+            <!-- 内层哈希 -->
+            <text x="20" y="22" font-size="11" font-family="monospace" fill="#64748b">内层：内摘要 = SHA-256( (K⊕ipad) ‖ 消息 M )</text>
+            <rect x="20" y="34" width="120" height="40" rx="8" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" />
+            <text x="80" y="46" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#334155">K ⊕ ipad</text>
+            <text x="80" y="60" text-anchor="middle" dominant-baseline="central" font-size="9" font-family="monospace" fill="#64748b">ipad=0x36 填满块</text>
+            <text x="150" y="54" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" fill="#94a3b8">‖</text>
+            <rect x="166" y="34" width="100" height="40" rx="8" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="216" y="54" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#ffffff">消息 M</text>
+            <line x1="266" y1="54" x2="286" y2="54" stroke="#94a3b8" stroke-width="2" marker-end="url(#hm-arr)" />
+            <rect x="290" y="34" width="100" height="40" rx="8" fill="#ede9fe" stroke="#a78bfa" stroke-width="1.5" />
+            <text x="340" y="54" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#6d28d9">SHA-256</text>
+            <line x1="390" y1="54" x2="410" y2="54" stroke="#94a3b8" stroke-width="2" marker-end="url(#hm-arr)" />
+            <rect x="414" y="34" width="90" height="40" rx="8" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" />
+            <text x="459" y="54" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" font-weight="bold" fill="#334155">内摘要</text>
+
+            <!-- 外层哈希 -->
+            <text x="20" y="118" font-size="11" font-family="monospace" fill="#64748b">外层：最终标签 = SHA-256( (K⊕opad) ‖ 内摘要 )</text>
+            <rect x="20" y="130" width="120" height="40" rx="8" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" />
+            <text x="80" y="142" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#334155">K ⊕ opad</text>
+            <text x="80" y="156" text-anchor="middle" dominant-baseline="central" font-size="9" font-family="monospace" fill="#64748b">opad=0x5c 填满块</text>
+            <text x="150" y="150" text-anchor="middle" dominant-baseline="central" font-size="14" font-family="monospace" fill="#94a3b8">‖</text>
+            <rect x="166" y="130" width="90" height="40" rx="8" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" />
+            <text x="211" y="150" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" font-weight="bold" fill="#334155">内摘要</text>
+            <line x1="256" y1="150" x2="286" y2="150" stroke="#94a3b8" stroke-width="2" marker-end="url(#hm-arr)" />
+            <rect x="290" y="130" width="100" height="40" rx="8" fill="#ede9fe" stroke="#a78bfa" stroke-width="1.5" />
+            <text x="340" y="150" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#6d28d9">SHA-256</text>
+            <line x1="390" y1="150" x2="410" y2="150" stroke="#94a3b8" stroke-width="2" marker-end="url(#hm-arr)" />
+            <rect x="414" y="130" width="120" height="40" rx="8" fill="#dcfce7" stroke="#22c55e" stroke-width="1.5" />
+            <text x="474" y="150" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#166534">HMAC 标签</text>
+
+            <!-- 虚线提示：外层用内摘要做输入 -->
+            <line x1="340" y1="74" x2="459" y2="130" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#hm-arr)" />
+            <text x="356" y="96" font-size="10" font-family="monospace" fill="#64748b">把内摘要接上 opad 再哈希</text>
+
+            <text x="20" y="194" font-size="10" font-family="monospace" fill="#64748b">密钥从未以明文进消息 → 攻击者没有密钥就伪造不了标签；两次包裹又堵死了长度扩展攻击</text>
+          </svg>
+          <figcaption class="text-xs text-slate-400 mt-1">图 4：HMAC 两次哈希 —— 密钥分两路包裹，最终标签既证明内容完整、又证明对方持有密钥</figcaption>
+        </figure>
+        <div class="mb-4"><Code language="ts" :code="hmacCode" title="hmac_auth.ts" /></div>
+
         <aside class="bg-amber-50 border-l-4 border-amber-400 rounded-r-xl p-4 mb-4">
           <p class="text-sm text-amber-800"><strong>⚠️ 安全决策清单：</strong><br/>
           1. <strong>MD5 / SHA-1 → 任何安全场景都不用</strong>（密码、签名、证书、防篡改校验）。<br/>
@@ -348,6 +503,64 @@
         </aside>
         <aside class="bg-emerald-50 border-l-4 border-emerald-400 rounded-r-xl p-4">
           <p class="text-sm text-emerald-800"><strong>✅ 一句话选型：</strong>「防损坏」用 MD5 图省事也可以，但「防篡改/防碰撞」一律 SHA-256；「存密码」交给 bcrypt/argon2——<strong>慢，就是密码哈希的最大优点</strong>。</p>
+        </aside>
+      </section>
+
+      <!-- sec-6 攻击与对策 -->
+      <section id="sec-6" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-full flex items-center justify-center font-bold">🔓</span>
+          攻击与对策：生日攻击 · 长度扩展攻击 · HMAC
+        </h2>
+        <p class="text-slate-600 mb-4 leading-relaxed">
+          前面的性质讲「哈希该有多强」，这一节讲「敌人怎么打、我们怎么防」。
+          理解这两场攻击，才能真正明白 MD5/SHA-1 为何退役、HMAC 为何存在、比特币为何双重哈希。
+        </p>
+
+        <h3 class="text-md font-semibold text-slate-700 mb-3">① 生日攻击：为什么 128bit 摘要不够安全</h3>
+        <p class="text-slate-600 mb-3 text-sm leading-relaxed">
+          找两个不同的 x、y 使 h(x)=h(y)（碰撞），比找一个给定摘要的原像容易得多——
+          因为碰撞是「两两配对」的问题：N 个哈希里约有 N²/2 对，随便挑一对就能撞上。
+          生日悖论给出结论：<strong>碰撞难度只有 2^(n/2)，不是 2^n</strong>。
+        </p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <div class="bg-slate-50 rounded-xl p-4 border border-slate-200">
+            <p class="text-xs font-semibold text-slate-700 mb-2">📐 数学直觉：难度 = 2^(n/2)</p>
+            <p class="text-xs text-slate-600 leading-relaxed font-mono">
+              MD5　  128 bit → 2^64 次（2004 王小云团队突破）<br/>
+              SHA-1　160 bit → 2^80 次（2017 SHAttered 突破）<br/>
+              SHA-256 256 bit → 2^128 次（当今不可行）
+            </p>
+          </div>
+          <div class="bg-amber-50 rounded-xl p-4 border border-amber-200">
+            <p class="text-xs font-semibold text-amber-700 mb-2">🛡️ 结论</p>
+            <p class="text-xs text-amber-800 leading-relaxed">
+              「抗碰撞」要求的摘要下限是 <strong>256 bit</strong>（对应 128 bit 抗碰撞强度）。
+              这正是 MD5(128)/SHA-1(160) 在安全场景必须退役，而 SHA-256/512、SHA-3 才是现代选择的原因。
+            </p>
+          </div>
+        </div>
+
+        <h3 class="text-md font-semibold text-slate-700 mb-3">② 长度扩展攻击：MD 结构的软肋 → 催生 HMAC 与双重哈希</h3>
+        <p class="text-slate-600 mb-3 text-sm leading-relaxed">
+          基于 MD 结构的 MD5/SHA-1/SHA-2 有个隐蔽问题：已知 <code class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-xs font-mono">H(K‖M)</code>，
+          即使不知道密钥 K，攻击者也能算出 <code class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-xs font-mono">H(K‖M‖填充‖追加内容)</code>——
+          因为输出的 H 就是下一块的「初始状态」。若系统拿 <code>H(K‖M)</code> 当认证标签，攻击者就能在你签过名的消息后面<strong>追加内容</strong>并伪造出合法标签。
+        </p>
+        <div class="overflow-x-auto mb-4">
+          <table class="w-full text-sm border-collapse">
+            <thead><tr class="bg-slate-100 text-left"><th class="px-4 py-2 border border-slate-200 font-semibold text-slate-700">对策</th><th class="px-4 py-2 border border-slate-200 font-semibold text-slate-700">思路</th><th class="px-4 py-2 border border-slate-200 font-semibold text-slate-700">代表</th></tr></thead>
+            <tbody class="text-slate-600 text-xs">
+              <tr><td class="px-4 py-2 border"><strong>HMAC</strong></td><td class="px-4 py-2 border">密钥分两次（ipad/opad）包裹，不做前缀拼接，杜绝追加</td><td class="px-4 py-2 border">JWT / TLS / API 签名</td></tr>
+              <tr><td class="px-4 py-2 border"><strong>双重哈希</strong></td><td class="px-4 py-2 border">hash(hash(x))，外层哈希让内层摘要不再「可续写」</td><td class="px-4 py-2 border">比特币 sha256(sha256(区块头))</td></tr>
+              <tr><td class="px-4 py-2 border"><strong>海绵结构</strong></td><td class="px-4 py-2 border">容量区 c 对攻击者不可见，天然免疫长度扩展</td><td class="px-4 py-2 border">SHA-3 (Keccak)</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <aside class="bg-purple-50 border-l-4 border-purple-400 rounded-r-xl p-4">
+          <p class="text-sm text-purple-800"><strong>🔗 前端类比：</strong><br/>
+          长度扩展攻击就像「在别人签好名的合同复印件后面补一行」——签名没被伪造，合同内容却被改了。<br/>
+          HMAC 则像「把合同装进只有双方知道密码的信封再签名」——你没法在不拆信封的情况下改动里面的内容。</p>
         </aside>
       </section>
 
@@ -426,7 +639,7 @@
       </section>
 
       <!-- sec-6 小结 -->
-      <section id="sec-6" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+      <section id="sec-7" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
           <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-full flex items-center justify-center font-bold">📋</span>
           小结
@@ -438,6 +651,8 @@
           <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span><strong>三大性质</strong>：单向性、抗碰撞、雪崩效应——任何一条失效算法即退役</span></li>
           <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span><strong>应用</strong>：完整性校验用 SHA-256；密码存储用加盐 + bcrypt/argon2 慢哈希；签名先哈希再加密；区块链用 Merkle 树聚合</span></li>
           <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span><strong>铁律</strong>：MD5/SHA-1 绝不用于安全场景，<strong>慢就是密码哈希的优点</strong></span></li>
+          <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span><strong>SHA-3</strong>：海绵结构（吸收 + 挤压），容量区不可见 → 天然免疫长度扩展</span></li>
+          <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span><strong>两场攻击</strong>：生日攻击 → 摘要需 ≥256bit；长度扩展攻击 → 催生 HMAC 与比特币双重哈希</span></li>
         </ul>
       </section>
     </main>
@@ -580,8 +795,9 @@ const navList = [
   { id: "sec-3", name: "SHA 家族" },
   { id: "sec-4", name: "三大性质" },
   { id: "sec-5", name: "应用场景" },
+  { id: "sec-6", name: "🔓 攻击与对策" },
   { id: "sec-viz", name: "🎬 动画演示" },
-  { id: "sec-6", name: "小结" },
+  { id: "sec-7", name: "小结" },
 ]
 
 // ===== 代码示例 =====
@@ -773,4 +989,29 @@ console.log('root:', root)
 // 想证明 tx2 在树里，给出 leaves[1] 和 h01、h23 三个值即可，
 // 不必下载全部交易 —— 这就是区块链轻钱包的原理
 // 对比：Git 的 commit 也把整棵树哈希进 commit hash（内容寻址）`
+
+const hmacCode = `// ─── HMAC：哈希 + 共享密钥 = 消息认证码 ───
+// 场景：两个系统共享密钥 K，A 给 B 发消息，B 要同时确认
+//   1) 消息没被篡改   2) 确实来自 A（而非第三方）
+// 纯哈希做不到（任何人都能算）；HMAC = 带密钥的哈希
+
+import { createHmac } from 'node:crypto'
+
+const KEY = 'shared-secret-123'
+const msg = '转账 100 元给 Alice'
+
+// 签名：密钥参与哈希 → 得到认证标签
+const tag = createHmac('sha256', KEY).update(msg).digest('hex')
+
+// 验证：接收方用同一 KEY 重算，一致才接受
+const ok = createHmac('sha256', KEY).update(msg).digest('hex') === tag
+console.log(ok ? '✅ 消息完整且来自持有密钥的一方' : '❌ 被篡改或伪造')
+
+// HMAC 内部（两次哈希，杜绝长度扩展攻击）：
+//   ipad = 0x36 填满块长；opad = 0x5c 填满块长
+//   内 = SHA256( (K⊕ipad) ‖ M )        ← 密钥不以明文前缀出现
+//   外 = SHA256( (K⊕opad) ‖ 内 )       ← 最终标签
+// 两层包裹后，攻击者既没有密钥、又无法对已签名消息做长度扩展
+
+// 真实用途：JWT (HS256)、API 请求签名、TLS 握手、云厂商接口鉴权`
 </script>
