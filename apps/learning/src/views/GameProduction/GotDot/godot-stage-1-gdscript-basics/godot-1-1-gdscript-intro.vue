@@ -6,8 +6,10 @@
           <h1 class="text-2xl font-bold text-slate-800">GDScript 简介与设计哲学</h1>
           <p class="text-sm text-slate-500 mt-1">为什么 Godot 有自己的语言——Python 风格、引擎深度集成、为游戏而生</p>
         </div>
-        <div class="flex items-center gap-3"><span class="text-xs text-slate-400 bg-slate-100 px-3 py-1 rounded-full">阶段
-            1-1</span></div>
+        <div class="flex items-center gap-3">
+          <EditorLink file-path="apps/game/blitz/scripts/player.gd" label="📝 player.gd" :is-admin="userStore.isAdmin" />
+          <span class="text-xs text-slate-400 bg-slate-100 px-3 py-1 rounded-full">阶段 1-1</span>
+        </div>
       </div>
     </header>
     <main class="max-w-4xl mx-auto px-6 py-8 space-y-6">
@@ -297,7 +299,36 @@
         </aside>
       </section>
 
+      <!-- 🕹️ 实战：Blitz -->
       <section id="sec-7" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><span
+            class="w-8 h-8 bg-blue-100 text-blue-700 rounded-lg flex items-center justify-center text-sm">🕹️</span>实战：Blitz
+          武侠角色控制器</h2>
+        <p class="text-slate-600 mb-3 leading-relaxed">Blitz 是我们正在开发的武侠动作游戏 demo。它的玩家脚本 <code
+            class="bg-slate-100 text-blue-700 px-1.5 py-0.5 rounded text-xs font-mono">player.gd</code> 就是上文"一个 GDScript
+          文件长什么样"的<strong>真实版</strong>——<code class="bg-slate-100 text-blue-700 px-1.5 py-0.5 rounded text-xs font-mono">extends</code> /
+          <code class="bg-slate-100 text-blue-700 px-1.5 py-0.5 rounded text-xs font-mono">class_name</code> /
+          <code class="bg-slate-100 text-blue-700 px-1.5 py-0.5 rounded text-xs font-mono">@export</code> /
+          <code class="bg-slate-100 text-blue-700 px-1.5 py-0.5 rounded text-xs font-mono">@onready</code> /
+          <code class="bg-slate-100 text-blue-700 px-1.5 py-0.5 rounded text-xs font-mono">enum</code> /
+          <code class="bg-slate-100 text-blue-700 px-1.5 py-0.5 rounded text-xs font-mono">match</code> 与生命周期回调全部用上：</p>
+        <div class="mb-4"><Code language="gdscript" :code="blitzPlayerCode" title="player.gd（精简）" /></div>
+        <aside class="bg-amber-50 border-l-4 border-amber-400 rounded-r-xl p-4 mb-4">
+          <p class="text-sm text-amber-800"><strong>⚠️ 新手常犯错误：</strong><br/>
+          1. <code class="bg-amber-100 px-1 rounded text-xs font-mono">extends</code> 没写在第一行 → 解析错误。它是脚本的"根"，必须放最前。<br/>
+          2. 在 <code class="bg-amber-100 px-1 rounded text-xs font-mono">_ready()</code> 之前用 <code class="bg-amber-100 px-1 rounded text-xs font-mono">$Sprite</code>
+          ——子节点还没实例化，返回 null。用 <code class="bg-amber-100 px-1 rounded text-xs font-mono">@onready var</code> 延迟到节点就绪后再取引用。<br/>
+          3. 混用 Tab 和空格缩进 → 解析错误。Godot 编辑器默认 Tab，全脚本统一一种。</p>
+        </aside>
+        <aside class="bg-purple-50 border-l-4 border-purple-400 rounded-r-xl p-4">
+          <p class="text-sm text-purple-800"><strong>🔗 前端类比：</strong><br/>
+          <code class="bg-purple-100 px-1 rounded text-xs font-mono">extends CharacterBody2D</code> ≈ <code class="bg-purple-100 px-1 rounded text-xs font-mono">class Player extends BaseClass</code>；<br/>
+          <code class="bg-purple-100 px-1 rounded text-xs font-mono">_physics_process(delta)</code> ≈ 每帧运行的 <code class="bg-purple-100 px-1 rounded text-xs font-mono">requestAnimationFrame</code> 回调；<br/>
+          <code class="bg-purple-100 px-1 rounded text-xs font-mono">match state:</code> ≈ 前端状态机（XState / Reducer）的分发逻辑。</p>
+        </aside>
+      </section>
+
+      <section id="sec-8" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><span
             class="w-8 h-8 bg-blue-100 text-blue-700 rounded-lg flex items-center justify-center text-sm">📋</span>小结
         </h2>
@@ -332,8 +363,10 @@
 </template>
 
 <script setup lang="ts">
-import { Code, Nav } from 'components'; import { RouterLink } from 'vue-router'
-const navList = [{ id: "sec-1", name: "概述" }, { id: "sec-2", name: "为什么自创语言" }, { id: "sec-3", name: "文件结构" }, { id: "sec-4", name: "语法速览" }, { id: "sec-5", name: "设计原则" }, { id: "sec-6", name: "强类型 vs 动态" }, { id: "sec-7", name: "小结" }]
+import { Code, Nav, EditorLink } from 'components'; import { RouterLink } from 'vue-router'
+import { useUserStore } from '@/stores/userProfle'
+const userStore = useUserStore()
+const navList = [{ id: "sec-1", name: "概述" }, { id: "sec-2", name: "为什么自创语言" }, { id: "sec-3", name: "文件结构" }, { id: "sec-4", name: "语法速览" }, { id: "sec-5", name: "设计原则" }, { id: "sec-6", name: "强类型 vs 动态" }, { id: "sec-7", name: "🕹️ 实战：Blitz" }, { id: "sec-8", name: "小结" }]
 const firstScriptCode = `extends CharacterBody2D
 ## 玩家角色脚本——处理移动和动画
 class_name Player
@@ -371,5 +404,34 @@ func add(a: int, b: int) -> int:
 var scores: Array[int] = [100, 200, 300]
 # scores.append("bad")    # ← 编译器阻止`
 
-const filesList: string[] = []
+const blitzPlayerCode = `# Blitz 真实脚本精简 — apps/game/blitz/scripts/player.gd
+extends CharacterBody2D          # 第一行：附加到物理角色节点
+class_name BlitzPlayer            # 注册为全局类型
+
+# ===== 导出属性（Inspector 面板可调手感）=====
+@export var move_speed: float = 320.0
+@export var jump_velocity: float = -520.0
+@export var gravity: float = 1400.0
+@export var max_health: int = 3
+
+# ===== 节点引用（@onready 延迟到 _ready 之前）=====
+@onready var hurtbox: Area2D = $Hurtbox
+
+# ===== enum + 状态机（合法状态由类型约束）=====
+enum State { NORMAL, ATTACKING, DASHING, HIT, DEAD }
+var state: State = State.NORMAL
+
+func _ready() -> void:
+    health = max_health
+    hurtbox.body_entered.connect(_on_hurtbox_body_entered)
+
+func _physics_process(delta: float) -> void:
+    if state == State.DEAD:
+        return
+    match state:
+        State.NORMAL:     _process_normal(delta)
+        State.ATTACKING:  _process_attacking(delta)
+        State.DASHING:    _process_dash(delta)
+        State.HIT:        _process_hit(delta)
+    move_and_slide()      # CharacterBody2D 的核心移动方法`
 </script>

@@ -219,6 +219,109 @@
             <div class="text-slate-600 text-sm"><strong>输出</strong>：最终 H[N] 的 4 个 32bit 状态拼接成 128 bit 摘要。</div>
           </li>
         </ol>
+
+        <!-- MD5 压缩函数细节 -->
+        <h3 class="text-sm font-semibold text-slate-700 mb-2">压缩函数 f 的一步到底在算啥</h3>
+        <p class="text-slate-600 mb-3 text-sm leading-relaxed">
+          64 步其实都在重复同一条公式。记四个工作寄存器为 a、b、c、d，<strong>每步只改写 a</strong>，其余三个被动参与：
+          <code class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-xs font-mono">a = b + ((a + F(b,c,d) + X[k] + T[i]) &lt;&lt;&lt; s)</code>，
+          算完 <code class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-xs font-mono">(a,b,c,d) ← (d, a, b, c)</code> 轮换一次角色。
+          其中 X[k] 是 512bit 块切出的第 k 个字，T[i] 是第 i 个常量（<code class="font-mono">⌊2³²×|sin(i)|⌋</code>），s 是循环左移位数。
+        </p>
+        <figure class="mb-4">
+          <svg viewBox="0 0 700 270" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <marker id="m5-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" />
+              </marker>
+            </defs>
+
+            <text x="20" y="18" font-size="11" font-family="monospace" fill="#64748b" font-weight="bold">工作寄存器（每步的输入）</text>
+
+            <!-- 寄存器 -->
+            <rect x="20" y="28" width="52" height="30" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="46" y="43" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">a</text>
+            <rect x="20" y="66" width="52" height="30" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="46" y="81" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">b</text>
+            <rect x="20" y="104" width="52" height="30" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="46" y="119" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">c</text>
+            <rect x="20" y="142" width="52" height="30" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="46" y="157" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">d</text>
+
+            <!-- F 轮函数 -->
+            <rect x="96" y="66" width="170" height="106" rx="8" fill="#ede9fe" stroke="#a78bfa" stroke-width="1.5" />
+            <text x="181" y="104" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#6d28d9">F(b,c,d)</text>
+            <text x="181" y="122" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#7c3aed">= (b&amp;c) | (~b&amp;d)</text>
+            <text x="181" y="140" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#7c3aed">第 1 轮轮函数</text>
+
+            <!-- b,c,d → F -->
+            <line x1="72" y1="81" x2="96" y2="96" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#m5-arr)" />
+            <line x1="72" y1="119" x2="96" y2="119" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#m5-arr)" />
+            <line x1="72" y1="157" x2="96" y2="142" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#m5-arr)" />
+
+            <!-- 消息字 / 常量 -->
+            <rect x="96" y="190" width="80" height="30" rx="6" fill="#f59e0b" stroke="#d97706" stroke-width="1.5" />
+            <text x="136" y="205" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#ffffff">X[k]</text>
+            <text x="136" y="234" text-anchor="middle" font-size="9" font-family="monospace" fill="#64748b">块的第 k 个字</text>
+            <rect x="188" y="190" width="80" height="30" rx="6" fill="#f59e0b" stroke="#d97706" stroke-width="1.5" />
+            <text x="228" y="205" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#ffffff">T[i]</text>
+            <text x="228" y="234" text-anchor="middle" font-size="9" font-family="monospace" fill="#64748b">第 i 个常量</text>
+
+            <!-- 求和 -->
+            <rect x="300" y="28" width="190" height="192" rx="10" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" />
+            <text x="395" y="104" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#334155">Σ 串行加法</text>
+            <text x="395" y="126" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">a + F(b,c,d)</text>
+            <text x="395" y="142" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">+ X[k] + T[i]</text>
+            <text x="395" y="164" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">(mod 2³²)</text>
+
+            <!-- a → Σ, F → Σ -->
+            <line x1="72" y1="43" x2="300" y2="56" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#m5-arr)" />
+            <line x1="266" y1="110" x2="300" y2="110" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#m5-arr)" />
+            <!-- X[k] → Σ, T[i] → Σ -->
+            <line x1="176" y1="205" x2="300" y2="196" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#m5-arr)" />
+            <line x1="268" y1="205" x2="300" y2="214" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#m5-arr)" />
+
+            <!-- 循环左移 -->
+            <rect x="520" y="66" width="150" height="40" rx="8" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="595" y="86" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#ffffff">循环左移 &lt;&lt;&lt; s</text>
+            <line x1="490" y1="104" x2="520" y2="86" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#m5-arr)" />
+
+            <!-- 加 b -->
+            <rect x="520" y="130" width="150" height="48" rx="8" fill="#dcfce7" stroke="#22c55e" stroke-width="1.5" />
+            <text x="595" y="146" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#166534">new a = b +</text>
+            <text x="595" y="164" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#166534">(… &lt;&lt;&lt; s)</text>
+            <line x1="595" y1="106" x2="595" y2="130" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#m5-arr)" />
+
+            <!-- b 走底层绕到最终加法 -->
+            <path d="M 46 96 V 232 H 595 V 178" fill="none" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#m5-arr)" />
+            <text x="320" y="246" text-anchor="middle" font-size="10" font-family="monospace" fill="#64748b">b 沿底层绕到最终加法（b 只读、不被改写）</text>
+
+            <text x="20" y="262" font-size="11" font-family="monospace" fill="#0891b2" font-weight="bold">每步算完轮换角色：(a,b,c,d) ← (d, a, b, c) —— 64 步后 4 个状态与 IV 相加即得摘要</text>
+          </svg>
+          <figcaption class="text-xs text-slate-400 mt-1">图 2-1：MD5 单步数据流 —— 四个寄存器只有 a 被改写，其余轮换角色；加法在 mod 2³² 下进行</figcaption>
+        </figure>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <div class="bg-slate-50 rounded-xl p-4 border border-slate-200">
+            <p class="text-sm font-semibold text-slate-700 mb-2">初始 IV（4 个固定常量）</p>
+            <p class="text-xs text-slate-600 font-mono leading-relaxed">
+              a = 0x67452301<br/>
+              b = 0xefcdab89<br/>
+              c = 0x98badcfe<br/>
+              d = 0x10325476
+            </p>
+          </div>
+          <div class="bg-slate-50 rounded-xl p-4 border border-slate-200">
+            <p class="text-sm font-semibold text-slate-700 mb-2">4 轮结构与消息字下标 k、移位数 s</p>
+            <p class="text-xs text-slate-600 font-mono leading-relaxed">
+              第 1 轮 F=(b&amp;c)|(~b&amp;d)　k=i　　　s 循环 7,12,17,22<br/>
+              第 2 轮 G=(b&amp;d)|(c&amp;~d)　k=(5i+1)%16　s 循环 5,9,14,20<br/>
+              第 3 轮 H=b^c^d　　　　　k=(3i+5)%16　s 循环 4,11,16,23<br/>
+              第 4 轮 I=c^(b|~d)　　　　k=(7i)%16　　s 循环 6,10,15,21
+            </p>
+          </div>
+        </div>
+        <div class="mb-4"><Code language="ts" :code="md5StepCode" title="md5_compression_step.ts" /></div>
         <div class="mb-4"><Code language="ts" :code="md5ProcessCode" title="merkle_damgard_skeleton.ts" /></div>
         <div class="bg-slate-50 rounded-xl p-4 border border-slate-200 mb-4">
           <p class="text-sm text-slate-700 mb-2"><strong>MD5 的安全时间线：</strong></p>
@@ -265,6 +368,156 @@
             </tbody>
           </table>
         </div>
+        <!-- SHA-256 内部 -->
+        <h3 class="text-sm font-semibold text-slate-700 mb-2">SHA-256 压缩函数内部：8 个寄存器 + 64 轮</h3>
+        <p class="text-slate-600 mb-3 text-sm leading-relaxed">
+          SHA-256 用 <strong>8 个 32bit 寄存器 a~h</strong> 承载 256bit 中间状态，对每个 512bit 块做 <strong>64 轮</strong>压缩。
+          每轮输入除上一轮状态外，还有 <strong>消息字 W[t]</strong> 与 <strong>轮常量 K[t]</strong>，单轮固定为两组「取模加法 + 轮函数」：
+        </p>
+        <p class="text-slate-600 mb-3 text-sm leading-relaxed font-mono bg-slate-50 rounded-xl p-4 border border-slate-200">
+          temp1 = h + Σ1(e) + Ch(e,f,g) + K[t] + W[t]<br/>
+          temp2 = Σ0(a) + Maj(a,b,c)<br/>
+          新 a = temp1 + temp2；新 e = d + temp1；其余整体右移：h=g; g=f; f=e; d=c; c=b; b=a
+        </p>
+        <figure class="mb-4">
+          <svg viewBox="0 0 700 280" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <marker id="sh-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" />
+              </marker>
+            </defs>
+
+            <text x="20" y="18" font-size="11" font-family="monospace" fill="#64748b" font-weight="bold">左列 A-D：走 Σ0/Maj</text>
+            <text x="680" y="18" font-size="11" font-family="monospace" fill="#64748b" font-weight="bold" text-anchor="end">右列 E-H：走 Σ1/Ch</text>
+
+            <!-- 左列寄存器 -->
+            <rect x="16" y="30" width="44" height="30" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="38" y="45" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">A</text>
+            <rect x="16" y="68" width="44" height="30" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="38" y="83" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">B</text>
+            <rect x="16" y="106" width="44" height="30" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="38" y="121" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">C</text>
+            <rect x="16" y="144" width="44" height="30" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="38" y="159" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">D</text>
+
+            <!-- 右列寄存器 -->
+            <rect x="640" y="30" width="44" height="30" rx="6" fill="#4ade80" stroke="#22c55e" stroke-width="1.5" />
+            <text x="662" y="45" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#0f172a">E</text>
+            <rect x="640" y="68" width="44" height="30" rx="6" fill="#4ade80" stroke="#22c55e" stroke-width="1.5" />
+            <text x="662" y="83" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#0f172a">F</text>
+            <rect x="640" y="106" width="44" height="30" rx="6" fill="#4ade80" stroke="#22c55e" stroke-width="1.5" />
+            <text x="662" y="121" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#0f172a">G</text>
+            <rect x="640" y="144" width="44" height="30" rx="6" fill="#4ade80" stroke="#22c55e" stroke-width="1.5" />
+            <text x="662" y="159" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#0f172a">H</text>
+
+            <!-- 函数框 -->
+            <rect x="88" y="32" width="150" height="44" rx="8" fill="#ede9fe" stroke="#a78bfa" stroke-width="1.5" />
+            <text x="163" y="50" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#6d28d9">Σ0(A)</text>
+            <text x="163" y="66" text-anchor="middle" dominant-baseline="central" font-size="8" font-family="monospace" fill="#7c3aed">ROTR²⊕ROTR¹³⊕ROTR²²</text>
+
+            <rect x="88" y="104" width="150" height="40" rx="8" fill="#ede9fe" stroke="#a78bfa" stroke-width="1.5" />
+            <text x="163" y="118" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#6d28d9">Maj(A,B,C)</text>
+            <text x="163" y="134" text-anchor="middle" dominant-baseline="central" font-size="8" font-family="monospace" fill="#7c3aed">(A&amp;B)⊕(A&amp;C)⊕(B&amp;C)</text>
+
+            <rect x="462" y="32" width="150" height="44" rx="8" fill="#ede9fe" stroke="#a78bfa" stroke-width="1.5" />
+            <text x="537" y="50" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#6d28d9">Σ1(E)</text>
+            <text x="537" y="66" text-anchor="middle" dominant-baseline="central" font-size="8" font-family="monospace" fill="#7c3aed">ROTR⁶⊕ROTR¹¹⊕ROTR²⁵</text>
+
+            <rect x="462" y="104" width="150" height="40" rx="8" fill="#ede9fe" stroke="#a78bfa" stroke-width="1.5" />
+            <text x="537" y="118" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#6d28d9">Ch(E,F,G)</text>
+            <text x="537" y="134" text-anchor="middle" dominant-baseline="central" font-size="8" font-family="monospace" fill="#7c3aed">(E&amp;F)⊕(~E&amp;G)</text>
+
+            <!-- 输入箭头 -->
+            <line x1="60" y1="45" x2="88" y2="50" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#sh-arr)" />
+            <line x1="60" y1="83" x2="88" y2="115" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#sh-arr)" />
+            <line x1="60" y1="121" x2="88" y2="130" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#sh-arr)" />
+            <line x1="640" y1="45" x2="612" y2="50" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#sh-arr)" />
+            <line x1="640" y1="83" x2="612" y2="115" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#sh-arr)" />
+            <line x1="640" y1="121" x2="612" y2="130" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#sh-arr)" />
+
+            <!-- K[t], W[t] -->
+            <rect x="430" y="154" width="70" height="22" rx="5" fill="#f59e0b" stroke="#d97706" stroke-width="1.5" />
+            <text x="465" y="165" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" font-weight="bold" fill="#ffffff">K[t]</text>
+            <rect x="520" y="154" width="70" height="22" rx="5" fill="#f59e0b" stroke="#d97706" stroke-width="1.5" />
+            <text x="555" y="165" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" font-weight="bold" fill="#ffffff">W[t]</text>
+
+            <!-- temp2 / temp1 -->
+            <rect x="120" y="188" width="120" height="30" rx="8" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="180" y="203" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" font-weight="bold" fill="#ffffff">temp2 = Σ0+Maj</text>
+            <rect x="430" y="188" width="180" height="30" rx="8" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="520" y="203" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" font-weight="bold" fill="#ffffff">temp1 = h+Σ1+Ch+K+W</text>
+
+            <!-- 汇入 temp2 / temp1 -->
+            <line x1="163" y1="76" x2="150" y2="188" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#sh-arr)" />
+            <line x1="163" y1="144" x2="205" y2="188" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#sh-arr)" />
+            <line x1="537" y1="76" x2="480" y2="188" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#sh-arr)" />
+            <line x1="537" y1="144" x2="520" y2="188" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#sh-arr)" />
+            <line x1="640" y1="159" x2="585" y2="188" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#sh-arr)" />
+            <line x1="465" y1="176" x2="465" y2="188" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#sh-arr)" />
+            <line x1="555" y1="176" x2="555" y2="188" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#sh-arr)" />
+
+            <!-- 新 a -->
+            <rect x="280" y="228" width="160" height="32" rx="8" fill="#dcfce7" stroke="#22c55e" stroke-width="1.5" />
+            <text x="360" y="244" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#166534">新 a = temp1 + temp2</text>
+            <line x1="240" y1="203" x2="280" y2="238" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#sh-arr)" />
+            <line x1="430" y1="203" x2="440" y2="238" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#sh-arr)" />
+
+            <text x="20" y="272" font-size="10" font-family="monospace" fill="#0891b2">寄存器轮换：h=g; g=f; f=e; e=d+temp1; d=c; c=b; b=a　→　64 轮后状态累加到 H0~H7</text>
+          </svg>
+          <figcaption class="text-xs text-slate-400 mt-1">图 3-1：SHA-256 单轮数据流 —— 左列 A-D 走 Σ0/Maj 出 temp2，右列 E-H 走 Σ1/Ch 出 temp1，两线汇合生成新 A 与新 E</figcaption>
+        </figure>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <div class="bg-slate-50 rounded-xl p-4 border border-slate-200">
+            <p class="text-sm font-semibold text-slate-700 mb-2">消息扩展：16 → 64 个字</p>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              512bit 块先切成 16 个字 W[0..15]，再用公式展开到 64 个字：<br/>
+              <code class="font-mono text-[10px] bg-slate-100 px-1 rounded">W[t] = σ1(W[t-2]) + W[t-7] + σ0(W[t-15]) + W[t-16]</code><br/>
+              σ0(x) = ROTR⁷ ⊕ ROTR¹⁸ ⊕ SHR³<br/>
+              σ1(x) = ROTR¹⁷ ⊕ ROTR¹⁹ ⊕ SHR¹⁰
+            </p>
+          </div>
+          <div class="bg-slate-50 rounded-xl p-4 border border-slate-200">
+            <p class="text-sm font-semibold text-slate-700 mb-2">轮函数与常量</p>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              轮函数：Ch=(x&amp;y)⊕(~x&amp;z)，Maj=(x&amp;y)⊕(x&amp;z)⊕(y&amp;z)<br/>
+              Σ0 = ROTR²⊕ROTR¹³⊕ROTR²²，Σ1 = ROTR⁶⊕ROTR¹¹⊕ROTR²⁵<br/>
+              K[t]：前 64 个质数立方根的小数部分，各取前 32bit —— 每个都像「随机常数」，保证轮函数非线性
+            </p>
+          </div>
+        </div>
+        <div class="mb-4"><Code language="ts" :code="sha256RoundCode" title="sha256_round.ts" /></div>
+
+        <!-- SHA-1 内部 -->
+        <h3 class="text-sm font-semibold text-slate-700 mb-2">SHA-1 压缩函数内部：5 个寄存器 + 80 步</h3>
+        <p class="text-slate-600 mb-3 text-sm leading-relaxed">
+          SHA-1 是 MD5 的「加强版」：<strong>5 个寄存器 a~e</strong>（160bit）、<strong>80 步</strong>（4 轮 × 20）。
+          消息字从 16 个扩展到 80 个：<code class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-xs font-mono">W[t] = (W[t-3]^W[t-8]^W[t-14]^W[t-16]) &lt;&lt;&lt; 1</code>。
+          单步：<code class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-xs font-mono">temp = (a&lt;&lt;&lt;5) + f(b,c,d) + e + W[t] + K</code>，然后 <code class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-xs font-mono">e=d; d=c; c=b&lt;&lt;&lt;30; b=a; a=temp</code>。
+          轮函数按步号切换：0–19 用 Ch、20–39 与 60–79 用 Parity（b^c^d）、40–59 用 Maj；4 个轮常量 K 各管 20 步。
+          寄存器只比 MD5 多一个、步数多 16、摘要多 32bit，抗碰撞强度就从 2⁶⁴ 提到 2⁸⁰——但也只撑到 2017 年的 SHAttered 攻击。
+        </p>
+        <div class="mb-4"><Code language="ts" :code="sha1StepCode" title="sha1_step.ts" /></div>
+
+        <!-- 三代结构对比表 -->
+        <h3 class="text-sm font-semibold text-slate-700 mb-2">三代 MD 结构逐项对比：MD5 vs SHA-1 vs SHA-256</h3>
+        <div class="overflow-x-auto mb-4">
+          <table class="w-full text-sm border-collapse">
+            <thead><tr class="bg-slate-100 text-left"><th class="px-4 py-2 border border-slate-200 font-semibold text-slate-700">维度</th><th class="px-4 py-2 border border-slate-200 font-semibold text-slate-700 font-mono">MD5</th><th class="px-4 py-2 border border-slate-200 font-semibold text-slate-700 font-mono">SHA-1</th><th class="px-4 py-2 border border-slate-200 font-semibold text-slate-700 font-mono">SHA-256</th></tr></thead>
+            <tbody class="text-slate-600 text-xs">
+              <tr><td class="px-4 py-2 border">摘要长度</td><td class="px-4 py-2 border font-mono">128 bit</td><td class="px-4 py-2 border font-mono">160 bit</td><td class="px-4 py-2 border font-mono">256 bit</td></tr>
+              <tr><td class="px-4 py-2 border">分组长度</td><td class="px-4 py-2 border font-mono">512 bit</td><td class="px-4 py-2 border font-mono">512 bit</td><td class="px-4 py-2 border font-mono">512 bit</td></tr>
+              <tr><td class="px-4 py-2 border">工作寄存器</td><td class="px-4 py-2 border font-mono">4×32bit (a-d)</td><td class="px-4 py-2 border font-mono">5×32bit (a-e)</td><td class="px-4 py-2 border font-mono">8×32bit (a-h)</td></tr>
+              <tr><td class="px-4 py-2 border">步数</td><td class="px-4 py-2 border font-mono">64（4轮×16）</td><td class="px-4 py-2 border font-mono">80（4轮×20）</td><td class="px-4 py-2 border font-mono">64（单轮）</td></tr>
+              <tr><td class="px-4 py-2 border">消息扩展</td><td class="px-4 py-2 border">无（直接取 X[0..15]）</td><td class="px-4 py-2 border font-mono">W[16..79] 异或+左移1</td><td class="px-4 py-2 border font-mono">W[16..63] σ0/σ1</td></tr>
+              <tr><td class="px-4 py-2 border">轮函数</td><td class="px-4 py-2 border font-mono">F/G/H/I</td><td class="px-4 py-2 border font-mono">Ch/Parity/Maj</td><td class="px-4 py-2 border font-mono">Ch/Maj/Σ0/Σ1</td></tr>
+              <tr><td class="px-4 py-2 border">主要位运算</td><td class="px-4 py-2 border font-mono">循环左移 &lt;&lt;&lt;</td><td class="px-4 py-2 border font-mono">&lt;&lt;&lt;5 / &lt;&lt;&lt;30</td><td class="px-4 py-2 border font-mono">右旋 ROTR</td></tr>
+              <tr><td class="px-4 py-2 border">常量来源</td><td class="px-4 py-2 border">64×T[i]（|sin| 取整）</td><td class="px-4 py-2 border">80×K（4 个轮常量）</td><td class="px-4 py-2 border">64×K（质数立方根）</td></tr>
+              <tr><td class="px-4 py-2 border">抗碰撞强度</td><td class="px-4 py-2 border font-mono text-red-600">2⁶⁴ → 已破(2004)</td><td class="px-4 py-2 border font-mono text-amber-600">2⁸⁰ → 已破(2017)</td><td class="px-4 py-2 border font-mono text-emerald-600">2¹²⁸ → 安全</td></tr>
+            </tbody>
+          </table>
+        </div>
+
         <h3 class="text-sm font-semibold text-slate-700 mb-2">SHA-3 (Keccak)：海绵结构吸收 + 挤压</h3>
         <p class="text-slate-600 mb-3 text-sm leading-relaxed">
           与前几代完全不同的内部结构：一个固定宽度的状态（速率 r + 容量 c），
@@ -866,6 +1119,61 @@ for (const b of blocks) H = f(H, b)
 // 5) 输出：4 个 32bit 状态拼接 = 128 bit = 32 hex
 console.log(H.map(x => x.toString(16).padStart(8, '0')).join(''))`
 
+const md5StepCode = `// ─── MD5 单步压缩（完整版）：a = b + ((a + F(b,c,d) + X[k] + T[i]) <<< s) ───
+// 32bit 循环左移（JS 位运算默认是 32bit 有符号，>>>0 归一为无符号）
+const rotl = (x: number, s: number): number => ((x << s) | (x >>> (32 - s))) >>> 0
+
+// 4 轮非线性函数（每轮 16 步，共 64 步）
+//   F(x,y,z) = (x & y) | (~x & z)    第 1 轮
+//   G(x,y,z) = (x & z) | (y & ~z)    第 2 轮
+//   H(x,y,z) = x ^ y ^ z             第 3 轮
+//   I(x,y,z) = y ^ (x | ~z)          第 4 轮
+const F = (x: number, y: number, z: number): number => ((x & y) | (~x & z)) >>> 0
+const G = (x: number, y: number, z: number): number => ((x & z) | (y & ~z)) >>> 0
+const H = (x: number, y: number, z: number): number => (x ^ y ^ z) >>> 0
+const I = (x: number, y: number, z: number): number => (y ^ (x | ~z)) >>> 0
+
+// 64 个常量 T[i] = floor(2^32 * |sin(i)|)，i = 1..64
+//   sin 的 32 位小数部分——保证「看起来随机」且与消息无关
+const T = Array.from({ length: 64 }, (_, i) => Math.floor(2 ** 32 * Math.abs(Math.sin(i + 1))) >>> 0)
+
+// 每轮的 (消息字下标 k, 移位量 s) 表：
+//   轮 1 (F)：k = i        ，s = 7, 12, 17, 22（4 个一组循环）
+//   轮 2 (G)：k = (5i+1)%16，s = 5, 9, 14, 20
+//   轮 3 (H)：k = (3i+5)%16，s = 4, 11, 16, 23
+//   轮 4 (I)：k = (7i)%16  ，s = 6, 10, 15, 21
+const ROUND: { k: (i: number) => number; s: number[]; f: (x: number, y: number, z: number) => number }[] = [
+  { k: i => i,           s: [7, 12, 17, 22], f: F },
+  { k: i => (5 * i + 1) % 16, s: [5, 9, 14, 20], f: G },
+  { k: i => (3 * i + 5) % 16, s: [4, 11, 16, 23], f: H },
+  { k: i => (7 * i) % 16, s: [6, 10, 15, 21], f: I },
+]
+
+// 初始向量 IV（第一块压缩时的 a,b,c,d）
+let [a, b, c, d] = [0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476]
+
+// 消息块切成 16 个字 X[0..15]（这里用样例值示意）
+const X = new Array<number>(16).fill(0)
+
+// 64 步主循环：t 是全局步号 0..63
+for (let t = 0; t < 64; t++) {
+  const r = ROUND[Math.floor(t / 16)]          // 当前轮（每 16 步换一个函数）
+  const k = r.k(t % 16)                          // 本轮取哪个消息字 X[k]
+  const s = r.s[t % 4]                           // 本轮移位量（4 个一组循环）
+  const tVal = T[t]                              // 本轮常量
+
+  // 核心一行：把 F(b,c,d) + X[k] + T[i] 加进 a，循环左移 s 位，再加回 b
+  const next = (b + rotl(((a + r.f(b, c, d) + X[k] + tVal) >>> 0), s)) >>> 0
+
+  // 寄存器整体轮换：(a,b,c,d) = (d, next, b, c)
+  //   新算出的 next 进 b；a 拿到旧 d，c 拿到旧 b，d 拿到旧 c
+  a = d; d = c; c = b; b = next
+}
+
+// 4 轮结束后 a,b,c,d 就是这一块的压缩结果（再与上一块状态累加）
+const digest = [a, b, c, d].map(x => x.toString(16).padStart(8, '0')).join('')
+console.log(digest)  // 'abc' 的标准 MD5：900150983cd24fb0d6963f7d28e17f72`
+
 const sha256Code = `// ─── SHA-256 的杀手应用：工作量证明 (Proof of Work) ───
 import { createHash } from 'node:crypto'
 
@@ -911,6 +1219,82 @@ console.log(local === official ? '✅ 文件完好' : '❌ 文件被篡改或下
 // 实际下载页里常见的写法（Debian/Ubuntu/Node.js 官方都提供）：
 //   sha256sum ubuntu.iso
 //   <sha256 值>  ubuntu.iso`
+
+const sha256RoundCode = `// ─── SHA-256 单轮压缩（完整版）：8 个寄存器 a~h + 64 轮 ───
+// 32bit 右旋（SHA 系以右旋为主，与 MD5 的左旋相反）
+const rotr = (x: number, n: number): number => ((x >>> n) | (x << (32 - n))) >>> 0
+
+// 消息扩展用的小 σ：把 16 个字 W[0..15] 展开成 64 个字
+const σ0 = (x: number): number => (rotr(x, 7) ^ rotr(x, 18) ^ (x >>> 3)) >>> 0
+const σ1 = (x: number): number => (rotr(x, 17) ^ rotr(x, 19) ^ (x >>> 10)) >>> 0
+// W[t] = σ1(W[t-2]) + W[t-7] + σ0(W[t-15]) + W[t-16]
+
+// 轮函数（每轮都要用）
+const Ch  = (x: number, y: number, z: number): number => ((x & y) ^ (~x & z)) >>> 0
+const Maj = (x: number, y: number, z: number): number => ((x & y) ^ (x & z) ^ (y & z)) >>> 0
+const Σ0 = (x: number): number => (rotr(x, 2) ^ rotr(x, 13) ^ rotr(x, 22)) >>> 0
+const Σ1 = (x: number): number => (rotr(x, 6) ^ rotr(x, 11) ^ rotr(x, 25)) >>> 0
+
+// 64 个轮常量 K[t]：前 64 个质数立方根的小数部分取前 32 bit
+//   K[0] = floor(frac(2^(1/3)) * 2^32) = 0x428a2f98 ...
+const K = new Array<number>(64) /* 常量表省略，可查 FIPS 180-4 */
+
+// 初始状态（第一块）
+let [a, b, c, d, e, f, g, h] = [
+  0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a,
+  0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19,
+]
+
+// 消息块展开到 64 个字（W[0..15] 直接来自块，16..63 用 σ 递推）
+const W = new Array<number>(64).fill(0)
+for (let t = 16; t < 64; t++) {
+  W[t] = (σ1(W[t - 2]) + W[t - 7] + σ0(W[t - 15]) + W[t - 16]) >>> 0
+}
+
+// 64 轮压缩：左列 A-D 走 Σ0/Maj，右列 E-H 走 Σ1/Ch
+for (let t = 0; t < 64; t++) {
+  const temp1 = (h + Σ1(e) + Ch(e, f, g) + K[t] + W[t]) >>> 0
+  const temp2 = (Σ0(a) + Maj(a, b, c)) >>> 0
+  // 产生两个新值：新 a、新 e，其余整体右移
+  h = g; g = f; f = e
+  e = (d + temp1) >>> 0
+  d = c; c = b; b = a
+  a = (temp1 + temp2) >>> 0
+}
+
+// 64 轮结束后，把 a~h 累加到上一块的状态（MD 结构）
+const digest = [a, b, c, d, e, f, g, h].map(x => x.toString(16).padStart(8, '0')).join('')
+console.log(digest)`
+
+const sha1StepCode = `// ─── SHA-1 单步压缩（完整版）：5 个寄存器 + 80 步 ───
+// 消息扩展：16 → 80 个字，异或 + 左移 1
+//   W[t] = (W[t-3] ^ W[t-8] ^ W[t-14] ^ W[t-16]) <<< 1
+for (let t = 16; t < 80; t++) {
+  W[t] = ((W[t - 3] ^ W[t - 8] ^ W[t - 14] ^ W[t - 16]) << 1 | (W[t - 3] ^ W[t - 8] ^ W[t - 14] ^ W[t - 16]) >>> 31) >>> 0
+}
+
+// 轮函数按步号切换（4 轮 × 20 步）
+const f = (t: number, b: number, c: number, d: number): number => {
+  if (t < 20) return ((b & c) | (~b & d)) >>> 0       // Ch
+  if (t < 40) return (b ^ c ^ d) >>> 0                 // Parity
+  if (t < 60) return ((b & c) | (b & d) | (c & d)) >>> 0 // Maj
+  return (b ^ c ^ d) >>> 0                             // Parity
+}
+
+// 4 个轮常量（各管 20 步）
+const K = [0x5A827999, 0x6ED9EBA1, 0x8F1BBCDC, 0xCA62C1D6]
+
+// 初始状态（160 bit = 5×32）
+let [a, b, c, d, e] = [0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476, 0xc3d2e1f0]
+
+// 80 步主循环
+for (let t = 0; t < 80; t++) {
+  const temp = ((a << 5 | a >>> 27) + f(t, b, c, d) + e + W[t] + K[Math.floor(t / 20)]) >>> 0
+  e = d; d = c; c = (b << 30 | b >>> 2) >>> 0; b = a; a = temp
+}
+
+// 'abc' 的标准 SHA-1：a9993e364706816aba3e25717850c26c9cd0d89d
+console.log([a, b, c, d, e].map(x => x.toString(16).padStart(8, '0')).join(''))`
 
 const passwordCode = `// ─── 密码存储：为什么「直接哈希密码」是错的 ───
 import { createHash, randomBytes, pbkdf2Sync } from 'node:crypto'

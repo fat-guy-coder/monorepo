@@ -161,6 +161,14 @@
           </p>
         </aside>
 
+        <aside class="bg-cyan-50 border-l-4 border-cyan-400 rounded-r-xl p-4 mb-4">
+          <p class="text-sm text-cyan-800 font-semibold">💧 背压（Backpressure）是什么？——"消费跟不上，生产自动减速"</p>
+          <p class="text-sm text-cyan-700 leading-relaxed mt-1">生产者塞得快、消费者接得慢时，<strong>系统让生产者自动停下来等</strong>，而不是让数据无限堆积——这就是<strong>背压</strong>。</p>
+          <p class="text-sm text-cyan-700 leading-relaxed mt-1"><strong>Channel 天生自带背压</strong>：缓冲 channel 塞满时，<code class="bg-cyan-100 px-1 rounded text-xs font-mono">ch &lt;- v</code> 自动阻塞；非缓冲更是每个值都必须等接收方碰头。<strong>压力从下游传导回上游</strong>——消费者越慢，生产者卡得越久，但数据不丢、内存不涨。</p>
+          <p class="text-sm text-cyan-700 leading-relaxed mt-1"><strong>生活类比：自助餐出餐口。</strong>厨房（生产者）一直出菜，取餐的人（消费者）吃得慢，出餐台（缓冲）摆满后，厨房就只能<strong>停下来等</strong>——绝不会把菜堆到地上（不会内存爆炸）。</p>
+          <p class="text-sm text-cyan-700 leading-relaxed mt-1"><strong>为什么重要：</strong>没有背压的系统，消费者一慢 → 数据堆积 → 内存暴涨 → 崩。有背压的系统，压力自动传导回上游，<strong>全链路稳定</strong>。对比：Java 的 <code class="bg-cyan-100 px-1 rounded text-xs font-mono">BlockingQueue</code> 也有背压；而 RxJS Subject 默认<strong>没有</strong>——发太快没人消费，事件就无限堆积。</p>
+        </aside>
+
         <h3 class="text-md font-semibold text-slate-700 mb-3">Channel 的四个核心用途</h3>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
           <div class="bg-slate-50 rounded-xl p-4 border border-slate-200">
@@ -231,6 +239,18 @@
           <li class="flex gap-3"><span class="shrink-0 w-7 h-7 bg-cyan-500 text-white rounded-full flex items-center justify-center text-xs font-bold">4</span><div class="text-slate-600"><strong>唤醒或阻塞</strong> — 对方在等 → 直接唤醒对方 G（goready）。对方不在等 → 把自己挂起（gopark），加入等待队列。</div></li>
           <li class="flex gap-3"><span class="shrink-0 w-7 h-7 bg-cyan-500 text-white rounded-full flex items-center justify-center text-xs font-bold">5</span><div class="text-slate-600"><strong>解锁</strong> — <code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">unlock(&hchan.lock)</code>。</div></li>
         </ol>
+
+        <h3 class="text-md font-semibold text-slate-700 mb-3 mt-6">FIFO 保证：Channel 排队的三条规则</h3>
+        <p class="text-slate-600 mb-3 leading-relaxed text-sm">
+          Channel 是<strong>队列（FIFO）</strong>，不是随便抓一把。这个性质有三层，<strong>面试爱考，并发写错也常错在这三层上</strong>：
+        </p>
+        <div class="space-y-2 mb-4 text-sm text-slate-600">
+          <p>① <strong>值按发送顺序出队</strong> — 同一 goroutine 依次 <code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">ch &lt;- 1; ch &lt;- 2; ch &lt;- 3</code>，接收方<strong>永远先读到 1</strong>（先到先出，环形队列天然保证）。</p>
+          <p>② <strong>等待队列也是 FIFO</strong> — sendq / recvq 是 FIFO 链表，阻塞的 goroutine 按<strong>到达顺序排队</strong>，队头先被服务（Go runtime 的直通优化就是"把值直接交给队头"）。</p>
+          <p>③ <strong>但多接收方竞争 ≠ 严格轮流</strong> — 「哪个 goroutine 抢到当前值」由<strong>调度器</strong>决定（谁先被唤醒、谁先跑到 <code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">&lt;-ch</code>）。<strong>值本身仍然 FIFO</strong>，变的只是「谁拿到」。</p>
+        </div>
+        <div class="mb-4"><Code language="go" :code="fifoCode" title="fifo_order.go" /></div>
+        <aside class="bg-indigo-50 border-l-4 border-indigo-400 rounded-r-xl p-4 mb-4"><p class="text-sm text-indigo-800"><strong>🎯 Worker Pool 实锤：</strong>多个 worker 从同一个 channel 抢任务时——<strong>job 永远按 1→5 的顺序出队</strong>（第 ① 条），但<strong>哪个 worker 抢到 job 3，每次运行都可能不同</strong>（第 ③ 条）。所以「任务处理顺序」要看 job 编号（确定），不能看 worker（随机）。</p></aside>
 
         <aside class="bg-blue-50 border-l-4 border-blue-400 rounded-r-xl p-4">
           <p class="text-sm text-blue-800"><strong>💡 关键洞察：</strong>Channel 本质就是一个<strong>带锁的、goroutine 感知的环形队列</strong>。"goroutine 感知"意味着它不只是存数据——当一个 G 阻塞在 channel 上时，runtime 会把这个 G 挂起（gopark），让 M 去执行其他 G。当数据到达时，runtime 再把 G 唤醒（goready）放回 P 的队列。这整个过程<strong>不需要你在代码里写任何锁或条件变量</strong>。</p>
@@ -305,7 +325,7 @@
           </div>
           <div class="bg-amber-50 rounded-xl p-4 border border-amber-200">
             <h4 class="font-semibold text-amber-700 mb-1">④ 从空 channel 读和向满 channel 写都会阻塞</h4>
-            <p class="text-amber-600">这是设计行为——不是 bug！阻塞 = 自动背压——消费慢时生产自动暂停。但如果你在主 goroutine 中操作而不希望阻塞，用 <code class="bg-amber-100 px-1 rounded text-xs">select + default</code> 做非阻塞读写。</p>
+            <p class="text-amber-600">这是设计行为——不是 bug！阻塞 = 自动背压——消费慢时生产自动暂停（💧 背压详解见上文 <a href="#sec-1" class="text-amber-700 underline decoration-dotted underline-offset-2">sec-1</a>）。但如果你在主 goroutine 中操作而不希望阻塞，用 <code class="bg-amber-100 px-1 rounded text-xs">select + default</code> 做非阻塞读写。</p>
           </div>
           <div class="bg-amber-50 rounded-xl p-4 border border-amber-200">
             <h4 class="font-semibold text-amber-700 mb-1">⑤ 接收方关闭 channel</h4>
@@ -364,6 +384,7 @@
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">📋</span>小结 &amp; 面试要点</h2>
         <ul class="space-y-2 text-slate-600">
           <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span><strong>Channel = 带锁的环形队列 + goroutine 感知</strong>——hchan 结构体，make 返回指针</span></li>
+          <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span><strong>FIFO 保证</strong>——值按发送顺序出队（先到先出）；等待队列 sendq/recvq 也是 FIFO；但多接收方「谁抢到」由调度器决定（值仍有序，分配随机）</span></li>
           <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span>非缓冲 channel：send 和 recv 直接内存拷贝（跳过 buf），同步握手</span></li>
           <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span>缓冲 channel：先写 buf 环形队列，buf 满/空时才阻塞，异步解耦</span></li>
           <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span><strong>阻塞 = gopark() 挂起 G</strong>，<strong>唤醒 = goready() 放回 P 队列</strong>——由 runtime 调度器处理</span></li>
@@ -574,6 +595,20 @@ for _, job := range jobs {
     }(job)
 }`
 
+const fifoCode = `// ① 值按发送顺序出队（先到先出）—— 队列本质
+ch := make(chan int, 5)
+ch <- 1; ch <- 2; ch <- 3
+fmt.Println(<-ch)  // 输出: 1  ← 永远先拿"最早进入"的值
+fmt.Println(<-ch)  // 输出: 2
+fmt.Println(<-ch)  // 输出: 3
+
+// ② 阻塞的 goroutine 也按到达顺序排队（sendq / recvq 是 FIFO 链表）
+// 先阻塞的先被服务——Go 会把值直接交给等待队列的"队头"
+
+// ③ 但"谁抢到下一个值"由调度器决定：
+//    值一定按 FIFO 出队（1 先于 2、2 先于 3…），
+//    多接收方竞争时，"哪个 goroutine 拿到"是随机的 —— 别依赖它`
+
 const nilChannelCode = `var nilCh chan int  // nilCh == nil
 
 // nilCh <- 1        // 永久阻塞！不是 panic
@@ -590,27 +625,27 @@ case <-timeoutCh:  // nil 时永不选中，非 nil 时正常
 case <-workCh:
 }`
 
-const closeCode = `ch := make(chan int, 3)
+const closeCode = `// 关键点：close 只是把 closed 置 1 —— 并不清空 buf！
+ch := make(chan int, 3)
 ch <- 1; ch <- 2; ch <- 3
-close(ch)                  // 发送方关闭
+close(ch)                 // ① 发送方关闭（此刻 buf 里还有 1、2、3）
 
-// ch <- 4                 // ❌ panic! send on closed channel
+// ② 关闭 ≠ 清空：buf 里剩下的值照样能读，只要还有值 ok 就是 true
+v, ok := <-ch             // v=1, ok=true   ← 还能读到！
+v, ok = <-ch              // v=2, ok=true
+v, ok = <-ch              // v=3, ok=true
 
-// range — 自动在 close + buf 空后退出
-for v := range ch { fmt.Println(v) }  // 输出: 1, 2, 3
+// ③ 直到「已关闭 且 buf 读空」，ok 才变成 false
+v, ok = <-ch              // v=0, ok=false  ← 现在才真正"已关闭且空"
+if !ok { fmt.Println("读空了，通道已关闭") }
 
-// 检查是否关闭
-v, ok := <-ch              // v=0, ok=false（已关闭且空）
+// ④ for range 就是把 ②③ 自动做完：先读光 buf，读空后自动退出
+ch2 := make(chan int, 3)
+ch2 <- 1; ch2 <- 2; ch2 <- 3
+close(ch2)
+for v := range ch2 { fmt.Println(v) }  // 输出: 1 2 3（读完自动退出）
 
-// close channel = 广播信号
-done := make(chan struct{})
-for i := 0; i < 5; i++ {
-    go func(id int) {
-        <-done
-        fmt.Printf("worker %d 退出\\n", id)
-    }(i)
-}
-close(done)  // 所有 5 个 worker 同时被唤醒！`
+// ch <- 4                 // ❌ panic! send on closed channel（close 后不能再 send）`
 
 const closeMechanismCode = `// close 的底层行为（runtime closechan 的要点）：
 // ① 置 closed = 1

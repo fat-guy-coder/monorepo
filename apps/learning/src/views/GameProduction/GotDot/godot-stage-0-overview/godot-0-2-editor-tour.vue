@@ -6,7 +6,10 @@
           <h1 class="text-2xl font-bold text-slate-800">编辑器界面与工作流</h1>
           <p class="text-sm text-slate-500 mt-1">熟悉 Godot 编辑器的各个面板、快捷键和日常操作流程</p>
         </div>
-        <div class="flex items-center gap-3"><span class="text-xs text-slate-400 bg-slate-100 px-3 py-1 rounded-full">阶段 0-2</span></div>
+        <div class="flex items-center gap-3">
+          <EditorLink file-path="apps/game/blitz/scripts/main.gd" label="📝 main.gd" :is-admin="userStore.isAdmin" />
+          <span class="text-xs text-slate-400 bg-slate-100 px-3 py-1 rounded-full">阶段 0-2</span>
+        </div>
       </div>
     </header>
 
@@ -79,6 +82,7 @@
 
         <h3 class="text-base font-semibold text-slate-700 mb-3">2.4 Script Editor（脚本编辑器）</h3>
         <p class="text-slate-600 mb-3 leading-relaxed">选中一个节点 → 点击顶部 <code class="bg-slate-100 text-blue-700 px-1.5 py-0.5 rounded text-xs font-mono">📜 Script</code> 按钮（或右键节点 → Attach Script）→ 创建或打开脚本。编辑器功能：语法高亮、自动补全、<strong>右键 → Lookup Symbol 跳转定义</strong>、错误标记。内置文档：Ctrl+Click 任何 Godot 类名或方法名直接打开文档。</p>
+        <div class="mb-4"><Code language="gdscript" :code="scriptExample" title="attached_script.gd" /></div>
         <aside class="bg-emerald-50 border-l-4 border-emerald-400 rounded-r-xl p-4">
           <p class="text-sm text-emerald-800"><strong>✅ 习惯养成：</strong>GDScript 文件<strong>第一行</strong>写 <code class="bg-emerald-100 px-1 rounded text-xs font-mono">extends Node</code>（或对应的父类）。这是告诉 Godot"这个脚本附加到什么类型的节点上"。没有这一行，自动补全不会工作。</p>
         </aside>
@@ -150,8 +154,50 @@
         </table></div>
       </section>
 
-      <!-- 小结 -->
+      <!-- 实战：Blitz -->
       <section id="sec-7" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-blue-100 text-blue-700 rounded-lg flex items-center justify-center text-sm">🕹️</span>实战：Blitz 的关卡是怎么搭出来的
+        </h2>
+        <p class="text-slate-600 mb-3 leading-relaxed">你在编辑器 Scene 面板里拖拽搭节点树，其实<strong>每一棵节点树都能用代码搭出来</strong>。Blitz 的 <code class="bg-slate-100 text-blue-700 px-1.5 py-0.5 rounded text-xs font-mono">main.gd</code> 就全部用代码搭建了关卡——这是理解"编辑器 = 节点树的图形化编辑"的最佳案例：</p>
+        <div class="mb-4"><Code language="gdscript" :code="blitzBuildWall" title="blitz/scripts/main.gd（节选）" /></div>
+        <p class="text-slate-600 mb-3 leading-relaxed">这段代码做的事，和你在编辑器里"添加 StaticBody2D 节点 → 添加 CollisionShape2D 子节点 → 设置 RectangleShape2D 形状 → 写脚本画外观"完全等价。对比一下：</p>
+        <div class="overflow-x-auto mb-4"><table class="w-full text-sm border-collapse">
+          <thead><tr class="bg-slate-100 text-left"><th class="px-4 py-2 border border-slate-200 font-semibold text-slate-700">编辑器操作</th><th class="px-4 py-2 border border-slate-200 font-semibold text-slate-700">对应代码</th></tr></thead>
+          <tbody class="text-slate-600">
+            <tr><td class="px-4 py-2 border border-slate-200">Scene 面板点 + 添加节点</td><td class="px-4 py-2 border border-slate-200 font-mono text-xs">StaticBody2D.new() + add_child()</td></tr>
+            <tr><td class="px-4 py-2 border border-slate-200">Inspector 改 position/size</td><td class="px-4 py-2 border border-slate-200 font-mono text-xs">body.position = pos</td></tr>
+            <tr><td class="px-4 py-2 border border-slate-200">给节点拖一个脚本</td><td class="px-4 py-2 border border-slate-200 font-mono text-xs">visual.set_script(DrawableRect)</td></tr>
+          </tbody>
+        </table></div>
+        <aside class="bg-blue-50 border-l-4 border-blue-400 rounded-r-xl p-4">
+          <p class="text-sm text-blue-800"><strong>💡 怎么选？</strong>静态的东西（地形、平台、UI 布局）适合在编辑器里拖；动态/批量生成的东西（100 个敌人、程序化关卡）适合用代码。Godot 两种方式无缝混用——你可以先在编辑器搭好，再用 <code class="bg-blue-100 px-1 rounded text-xs font-mono">duplicate()</code> 在代码里批量复制。</p>
+        </aside>
+      </section>
+
+      <!-- 常见错误 -->
+      <section id="sec-8" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-blue-100 text-blue-700 rounded-lg flex items-center justify-center text-sm">⚠️</span>编辑器常见错误
+        </h2>
+        <div class="space-y-3 mb-4">
+          <aside class="bg-amber-50 border-l-4 border-amber-400 rounded-r-xl p-4">
+            <p class="text-sm text-amber-800"><strong>⚠️ 错误 1：改了节点名，代码里 <code class="bg-amber-100 px-1 rounded text-xs font-mono">$旧名字</code> 没跟着改。</strong><br/>
+            节点重命名后，所有 <code class="bg-amber-100 px-1 rounded text-xs font-mono">$NodeName</code> / <code class="bg-amber-100 px-1 rounded text-xs font-mono">get_node("...")</code> 引用立即失效，运行时返回 null，报 "Invalid get index 'position'"。<strong>养成先写节点名再写引用，或用 <code class="bg-amber-100 px-1 rounded text-xs font-mono">@onready var</code> 一次性缓存引用。</strong></p>
+          </aside>
+          <aside class="bg-amber-50 border-l-4 border-amber-400 rounded-r-xl p-4">
+            <p class="text-sm text-amber-800"><strong>⚠️ 错误 2：改了属性/加了节点没保存就 F6。</strong><br/>
+            编辑器会自动保存场景文件的时机有限，<strong>忘按 Ctrl+S 就运行，改的东西完全不生效</strong>——这是新手最常困惑的"我明明改了为什么没变"。</p>
+          </aside>
+          <aside class="bg-amber-50 border-l-4 border-amber-400 rounded-r-xl p-4">
+            <p class="text-sm text-amber-800"><strong>⚠️ 错误 3：在错误的视图里找节点。</strong><br/>
+            2D 场景的节点只出现在 2D 视图，3D 节点只在 3D 视图。切到 Script 视图就看不到 Scene 面板了（会被挤到侧边）。用 <code class="bg-amber-100 px-1 rounded text-xs font-mono">Ctrl+F1/F2/F3/F4</code> 快速切换视图，别用鼠标点。</p>
+          </aside>
+        </div>
+      </section>
+
+      <!-- 小结 -->
+      <section id="sec-9" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
           <span class="w-8 h-8 bg-blue-100 text-blue-700 rounded-lg flex items-center justify-center text-sm">📋</span>小结
         </h2>
@@ -159,6 +205,7 @@
           <li class="flex items-start gap-2"><span class="text-blue-500 mt-1">▸</span><span><strong>FileSystem</strong> 管理文件，<strong>Scene</strong> 显示节点树，<strong>Inspector</strong> 改属性，<strong>Viewport</strong> 可视化编辑</span></li>
           <li class="flex items-start gap-2"><span class="text-blue-500 mt-1">▸</span><span>核心循环：<strong>加节点 → 调属性 → 写脚本 → F6 测试</strong>，循环迭代</span></li>
           <li class="flex items-start gap-2"><span class="text-blue-500 mt-1">▸</span><span><strong>Ctrl+A 添加节点</strong>（高频！）、F5/F6 运行、Ctrl+S 保存——第一天就养成肌肉记忆</span></li>
+          <li class="flex items-start gap-2"><span class="text-blue-500 mt-1">▸</span><span>编辑器里拖出来的节点树 = <code class="bg-slate-100 px-1 rounded text-blue-700 text-xs">add_child()</code> 代码，两者完全等价</span></li>
           <li class="flex items-start gap-2"><span class="text-blue-500 mt-1">▸</span><span>编辑器本身就是 Godot 做的——轻量、可定制、Git 友好（.tscn 是纯文本）</span></li>
         </ul>
       </section>
@@ -186,6 +233,44 @@ const navList = [
   { id: "sec-4", name: "视口操作" },
   { id: "sec-5", name: "日常开发工作流" },
   { id: "sec-6", name: "必备快捷键" },
-  { id: "sec-7", name: "小结" },
+  { id: "sec-7", name: "🕹️ 实战：Blitz" },
+  { id: "sec-8", name: "⚠️ 常见错误" },
+  { id: "sec-9", name: "小结" },
 ]
+
+const scriptExample = `extends Node2D
+
+## 第一行 extends 决定这个脚本能挂到哪种节点上
+## 没有 extends，编辑器不会提供任何自动补全
+
+@onready var label: Label = $Label
+## @onready 表示"等节点树就绪后再赋值"
+## $Label = get_node("Label") 的简写（≈ querySelector）
+
+func _ready() -> void:
+	# 编辑器里拖出来的节点，代码里直接引用
+	label.text = "编辑器搭树，脚本写逻辑"`
+
+const blitzBuildWall = `# apps/game/blitz/scripts/main.gd（节选）
+## 用代码搭一面墙——等价于在编辑器 Scene 面板拖节点
+func _create_wall(pos: Vector2, size: Vector2, color: Color) -> void:
+	# 1. 创建物理体（编辑器：点 + 添加 StaticBody2D）
+	var body: StaticBody2D = StaticBody2D.new()
+	body.position = pos
+	body.collision_layer = 1 << 4   # bit4: 墙壁层
+
+	# 2. 挂碰撞形状子节点（编辑器：添加 CollisionShape2D 子节点）
+	var col_shape: CollisionShape2D = CollisionShape2D.new()
+	var rect: RectangleShape2D = RectangleShape2D.new()
+	rect.size = size
+	col_shape.shape = rect
+	body.add_child(col_shape)
+
+	# 3. 挂可视化外观（编辑器：给节点拖脚本）
+	var visual: Node2D = Node2D.new()
+	visual.set_script(DrawableRect)
+	body.add_child(visual)
+
+	# 4. 把整棵树挂到当前场景（编辑器：最终就是 .tscn 的节点树）
+	add_child(body)`
 </script>

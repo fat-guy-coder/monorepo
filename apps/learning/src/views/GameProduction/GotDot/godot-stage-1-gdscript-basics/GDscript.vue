@@ -6,8 +6,10 @@
           <h1 class="text-2xl font-bold text-slate-800">GDScript 语言概览</h1>
           <p class="text-sm text-slate-500 mt-1">Godot 的专属脚本语言——Python 风格、引擎深度集成、为游戏而生</p>
         </div>
-        <div class="flex items-center gap-3"><span class="text-xs text-slate-400 bg-slate-100 px-3 py-1 rounded-full">阶段
-            1</span></div>
+        <div class="flex items-center gap-3">
+          <EditorLink file-path="apps/game/blitz/scripts/player.gd" label="📝 player.gd" :is-admin="userStore.isAdmin" />
+          <span class="text-xs text-slate-400 bg-slate-100 px-3 py-1 rounded-full">阶段 1</span>
+        </div>
       </div>
     </header>
     <main class="max-w-4xl mx-auto px-6 py-8 space-y-6">
@@ -22,7 +24,7 @@
               的类型注解 + Godot 的原生 API</strong>。它是一门<strong>领域特定语言（DSL）</strong>——就像 JSX 是 React 的 DSL。不追求通用，追求<strong>在
               Godot 中写游戏逻辑的最高效率</strong>。</p>
         </aside>
-        <pre class="code-block"><code>{{ quickExample }}</code></pre>
+        <div class="mb-4"><Code language="gdscript" :code="quickExample" title="player.gd" /></div>
       </section>
 
       <section id="sec-2" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
@@ -65,7 +67,7 @@
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><span
             class="w-8 h-8 bg-blue-100 text-blue-700 rounded-lg flex items-center justify-center text-sm">2</span>TS /
           Python / GDScript 三语对照</h2>
-        <div class="overflow-x-auto mb-4">    
+        <div class="overflow-x-auto mb-4">
           <table class="w-full text-sm border-collapse">
             <thead>
               <tr class="bg-slate-100 text-left">
@@ -154,19 +156,19 @@
         <h3 class="text-base font-semibold text-slate-700 mb-3">信号系统（Signal）</h3>
         <p class="text-slate-600 mb-3 text-sm leading-relaxed">Godot 的信号是<strong>语言级特性</strong>。≈ Vue 的 emit +
           EventEmitter 的合体，但类型安全、编辑器可视化。</p>
-        <pre class="code-block"><code>{{ signalExample }}</code></pre>
+        <div class="mb-4"><Code language="gdscript" :code="signalExample" title="signal.gd" /></div>
 
         <h3 class="text-base font-semibold text-slate-700 mb-3 mt-5">$ 节点引用</h3>
         <p class="text-slate-600 mb-3 text-sm leading-relaxed"><code
             class="bg-slate-100 text-blue-700 px-1.5 py-0.5 rounded text-xs font-mono">$Sprite2D</code> ≈ <code
             class="bg-slate-100 text-blue-700 px-1.5 py-0.5 rounded text-xs font-mono">document.querySelector('#Sprite2D')</code>——直接返回强类型节点，IDE
           自动补全所有属性。</p>
-        <pre class="code-block"><code>{{ dollarExample }}</code></pre>
+        <div class="mb-4"><Code language="gdscript" :code="dollarExample" title="onready.gd" /></div>
 
         <h3 class="text-base font-semibold text-slate-700 mb-3 mt-5">@export — Inspector 可编辑属性</h3>
         <p class="text-slate-600 mb-3 text-sm leading-relaxed">≈ Vue 的 <code
             class="bg-slate-100 text-blue-700 px-1 rounded text-xs font-mono">defineProps</code>——在编辑器中直接调参，不用改代码。</p>
-        <pre class="code-block"><code>{{ exportExample }}</code></pre>
+        <div class="mb-4"><Code language="gdscript" :code="exportExample" title="export.gd" /></div>
       </section>
 
       <section id="sec-5" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
@@ -175,7 +177,7 @@
           动态类型</h2>
         <p class="text-slate-600 mb-3 leading-relaxed"><strong>本文档所有示例使用强类型写法。</strong>和 TypeScript 的 strict mode
           一样——多写几个字符的类型标注，换 IDE 补全 + 编译检查 + 性能提升。</p>
-        <pre class="code-block"><code>{{ typedVsDynamic }}</code></pre>
+        <div class="mb-4"><Code language="gdscript" :code="typedVsDynamic" title="typed_vs_dynamic.gd" /></div>
         <div class="overflow-x-auto mb-4">
           <table class="w-full text-sm border-collapse">
             <thead>
@@ -252,7 +254,10 @@
 </template>
 
 <script setup lang="ts">
-import { Nav, Link } from 'components'
+import { Code, Nav, Link, EditorLink } from 'components'
+import { useUserStore } from '@/stores/userProfle'
+
+const userStore = useUserStore()
 
 const navList = [
   { id: "sec-1", name: "什么是 GDScript" },
@@ -304,21 +309,3 @@ var x = 10
 var x: int = 10
 func get_hp() -> int: return health`
 </script>
-
-<style scoped>
-.code-block {
-  background: #1e293b;
-  color: #e2e8f0;
-  padding: 1rem 1.25rem;
-  border-radius: 0.75rem;
-  overflow-x: auto;
-  font-size: 0.8rem;
-  line-height: 1.7;
-  margin-bottom: 1rem;
-}
-
-.code-block code {
-  font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
-  white-space: pre;
-}
-</style>

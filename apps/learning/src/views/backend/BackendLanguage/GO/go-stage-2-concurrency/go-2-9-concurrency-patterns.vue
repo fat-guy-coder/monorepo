@@ -384,12 +384,22 @@ for j := 1; j <= 5; j++ {
 }
 close(jobs) // 通知所有 worker：没有新任务了
 wg.Wait()   // 等 3 个 worker 全部收工
-// 输出示例（worker 分配顺序每次不同）:
+// 输出示例（每次运行不一定一样）:
 //   worker 1: job 1
 //   worker 2: job 2
 //   worker 3: job 3
-//   worker 1: job 4   ← 1 号干完又回来领活
+//   worker 1: job 4   ← 谁先干完回来排队的，就接下一个活
 //   worker 2: job 5
+// 也有可能是这样——worker 列换个花样，job 列照样 1→5:
+//   worker 3: job 1    ← job 还是 1 开头，但接手的是 3 号
+//   worker 1: job 2
+//   worker 2: job 3
+//   worker 3: job 4
+//   worker 1: job 5
+// ⚠️ 两层别搞混：
+//   ✅ 确定的：job 1~5 按 FIFO 顺序被取走（同一个 channel）；每个 job 恰好处理一次（range + close）
+//   ❓ 不确定的：哪个 worker 拿到哪个 job —— 3 个 worker 竞争取任务，由 Go 调度器决定谁先跑到 <-jobs
+//   （worker 抢任务的顺序每次运行都可能不同，示例只是"一种可能的输出"，不是固定结果）
 // 执行步骤：① 开 3 worker 阻塞等任务 ② 主 goroutine 发 5 个任务 ③ close 让 worker 退出 ④ wg.Wait()`
 const orDoneCode = `// 方案 B：orDone 包装——黑盒 channel 专用
 // 问题背景：消费者中途不想要了，若直接 break，生产者会一直阻塞(泄漏)

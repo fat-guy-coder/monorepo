@@ -1,55 +1,260 @@
 <template>
   <div class="go-doc min-h-screen bg-linear-to-br from-slate-50 to-blue-50">
-    <header class="bg-white border-b border-slate-200"><div class="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between"><div><h1 class="text-2xl font-bold text-slate-800">变量、常量与数据类型</h1><p class="text-sm text-slate-500 mt-1">GDScript 的基础类型系统——var/const、int/float/String/bool</p></div><div class="flex items-center gap-3"><span class="text-xs text-slate-400 bg-slate-100 px-3 py-1 rounded-full">阶段 1-2</span></div></div></header>
-    <main class="max-w-4xl mx-auto px-6 py-8 space-y-6"><Nav :list="navList" title="目录" position="top-right" :showBackToTop="true" />
+    <header class="bg-white border-b border-slate-200">
+      <div class="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
+        <div>
+          <h1 class="text-2xl font-bold text-slate-800">变量、常量与数据类型</h1>
+          <p class="text-sm text-slate-500 mt-1">GDScript 的基础类型系统——var/const、int/float/String/bool</p>
+        </div>
+        <div class="flex items-center gap-3">
+          <EditorLink file-path="apps/game/blitz/scripts/player.gd" label="📝 player.gd" :is-admin="userStore.isAdmin" />
+          <span class="text-xs text-slate-400 bg-slate-100 px-3 py-1 rounded-full">阶段 1-2</span>
+        </div>
+      </div>
+    </header>
+    <main class="max-w-4xl mx-auto px-6 py-8 space-y-6">
+      <Nav :list="navList" title="目录" position="top-right" :showBackToTop="true" />
 
-      <section id="sec-1" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100"><h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-blue-100 text-blue-700 rounded-lg flex items-center justify-center text-sm">📦</span>概述</h2>
-        <aside class="bg-purple-50 border-l-4 border-purple-400 rounded-r-xl p-4 mb-4"><p class="text-sm text-purple-800"><strong>🔗 三语对照：</strong><table class="w-full text-xs mt-2"><thead><tr class="text-left"><th class="pr-4 py-1">TS</th><th class="pr-4 py-1">Python</th><th class="pr-4 py-1 text-blue-700">GDScript</th></tr></thead><tbody><tr><td class="pr-4 py-1 font-mono">let x: number = 1</td><td class="pr-4 py-1 font-mono">x: int = 1</td><td class="pr-4 py-1 font-mono text-blue-700">var x: int = 1</td></tr><tr><td class="pr-4 py-1 font-mono">const PI: number = 3.14</td><td class="pr-4 py-1 font-mono">PI: Final[float] = 3.14</td><td class="pr-4 py-1 font-mono text-blue-700">const PI: float = 3.14</td></tr><tr><td class="pr-4 py-1 font-mono">let n: string = "hi"</td><td class="pr-4 py-1 font-mono">n: str = "hi"</td><td class="pr-4 py-1 font-mono text-blue-700">var n: String = "hi"</td></tr><tr><td class="pr-4 py-1 font-mono">let f: boolean = true</td><td class="pr-4 py-1 font-mono">f: bool = True</td><td class="pr-4 py-1 font-mono text-blue-700">var f: bool = true</td></tr></tbody></table></p></aside>
+      <!-- 📐 类型层级结构图 -->
+      <section id="sec-overview" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><span
+            class="w-8 h-8 bg-blue-100 text-blue-700 rounded-lg flex items-center justify-center text-sm">📐</span>类型层级总览</h2>
+        <p class="text-slate-600 mb-4 leading-relaxed text-sm">GDScript 的所有类型都挂在 <strong>Variant</strong> 名下，分成两大类：<strong>内置值类型</strong>（int/float/String/bool 等，赋值即复制）和 <strong>Object 引用类型</strong>（Node/Array/Dictionary 等，赋值共享同一份数据）。这是理解后面所有章节的根基。</p>
+        <svg viewBox="0 0 720 322" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="ty-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" />
+            </marker>
+          </defs>
+
+          <!-- Variant 根 -->
+          <rect x="280" y="18" width="160" height="42" rx="8" fill="#1e293b" stroke="#0f172a" stroke-width="1.5" />
+          <text x="360" y="39" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">Variant 万能基类</text>
+
+          <!-- 连线 -->
+          <line x1="360" y1="60" x2="175" y2="112" stroke="#94a3b8" stroke-width="2" marker-end="url(#ty-arr)" />
+          <line x1="360" y1="60" x2="545" y2="112" stroke="#94a3b8" stroke-width="2" marker-end="url(#ty-arr)" />
+
+          <!-- 左：内置值类型 -->
+          <rect x="28" y="118" width="300" height="172" rx="12" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5 3" />
+          <text x="178" y="138" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#64748b">内置类型 · 值语义（复制赋值）</text>
+
+          <rect x="52" y="156" width="78" height="32" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+          <text x="91" y="172" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#ffffff">int</text>
+          <rect x="139" y="156" width="78" height="32" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+          <text x="178" y="172" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#ffffff">float</text>
+          <rect x="226" y="156" width="78" height="32" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+          <text x="265" y="172" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#ffffff">bool</text>
+
+          <rect x="52" y="202" width="78" height="32" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+          <text x="91" y="218" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" font-weight="bold" fill="#ffffff">String</text>
+          <rect x="139" y="202" width="78" height="32" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+          <text x="178" y="218" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" font-weight="bold" fill="#ffffff">Vector2</text>
+          <rect x="226" y="202" width="78" height="32" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+          <text x="265" y="218" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" font-weight="bold" fill="#ffffff">Color</text>
+
+          <text x="178" y="270" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" fill="#0891b2">var a: int = b  → 复制一份值</text>
+
+          <!-- 右：Object 引用类型 -->
+          <rect x="392" y="118" width="300" height="172" rx="12" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5 3" />
+          <text x="542" y="138" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#64748b">Object · 引用语义（引用赋值）</text>
+
+          <rect x="412" y="154" width="128" height="34" rx="6" fill="#0ea5e9" stroke="#0284c7" stroke-width="1.5" />
+          <text x="476" y="171" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#ffffff">Node</text>
+          <rect x="552" y="154" width="128" height="34" rx="6" fill="#0ea5e9" stroke="#0284c7" stroke-width="1.5" />
+          <text x="616" y="171" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#ffffff">RefCounted</text>
+
+          <line x1="616" y1="188" x2="616" y2="204" stroke="#94a3b8" stroke-width="2" marker-end="url(#ty-arr)" />
+          <rect x="430" y="210" width="240" height="40" rx="6" fill="#7dd3fc" stroke="#0284c7" stroke-width="1" />
+          <text x="550" y="230" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" fill="#0369a1">Array · Dictionary · PackedXxx</text>
+
+          <text x="542" y="276" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" fill="#0891b2">var a: Array = b  → 指向同一份数据</text>
+
+          <!-- 底部说明 -->
+          <text x="360" y="312" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">extends Node2D 的场景节点也是 Object 的子类（详见 godot-1-7 类与面向对象）</text>
+        </svg>
+        <p class="text-xs text-slate-400 mt-1">图 1：GDScript 类型层级 —— 值类型赋值复制，引用类型赋值共享。这是数组/字典传参行为迥异于 int 的根源。</p>
+        <aside class="bg-amber-50 border-l-4 border-amber-400 rounded-r-xl p-4 mt-4">
+          <p class="text-sm text-amber-800"><strong>⚠️ 关键陷阱：</strong>因为 Array/Dictionary 是引用类型，<code class="bg-amber-100 px-1 rounded text-xs font-mono">var b: Array = a</code> 只是让 b 指向 a 的同一份数据——改 b 会改 a！需要独立副本时用 <code class="bg-amber-100 px-1 rounded text-xs font-mono">a.duplicate()</code>（详见 godot-1-4）。</p>
+        </aside>
+      </section>
+
+      <section id="sec-1" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><span
+            class="w-8 h-8 bg-blue-100 text-blue-700 rounded-lg flex items-center justify-center text-sm">📦</span>概述</h2>
+        <aside class="bg-purple-50 border-l-4 border-purple-400 rounded-r-xl p-4 mb-4">
+          <p class="text-sm text-purple-800"><strong>🔗 三语对照：</strong>
+          <table class="w-full text-xs mt-2">
+            <thead>
+              <tr class="text-left">
+                <th class="pr-4 py-1">TS</th>
+                <th class="pr-4 py-1">Python</th>
+                <th class="pr-4 py-1 text-blue-700">GDScript</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="pr-4 py-1 font-mono">let x: number = 1</td>
+                <td class="pr-4 py-1 font-mono">x: int = 1</td>
+                <td class="pr-4 py-1 font-mono text-blue-700">var x: int = 1</td>
+              </tr>
+              <tr>
+                <td class="pr-4 py-1 font-mono">const PI: number = 3.14</td>
+                <td class="pr-4 py-1 font-mono">PI: Final[float] = 3.14</td>
+                <td class="pr-4 py-1 font-mono text-blue-700">const PI: float = 3.14</td>
+              </tr>
+              <tr>
+                <td class="pr-4 py-1 font-mono">let n: string = "hi"</td>
+                <td class="pr-4 py-1 font-mono">n: str = "hi"</td>
+                <td class="pr-4 py-1 font-mono text-blue-700">var n: String = "hi"</td>
+              </tr>
+              <tr>
+                <td class="pr-4 py-1 font-mono">let f: boolean = true</td>
+                <td class="pr-4 py-1 font-mono">f: bool = True</td>
+                <td class="pr-4 py-1 font-mono text-blue-700">var f: bool = true</td>
+              </tr>
+            </tbody>
+          </table>
+          </p>
+        </aside>
         <p class="text-slate-600 leading-relaxed">GDScript 有 4 种基础类型和 3 种声明关键字。<strong>所有代码示例使用强类型写法。</strong></p>
       </section>
 
-      <section id="sec-2" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100"><h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-blue-100 text-blue-700 rounded-lg flex items-center justify-center text-sm">1</span>三种声明关键字</h2>
+      <section id="sec-2" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><span
+            class="w-8 h-8 bg-blue-100 text-blue-700 rounded-lg flex items-center justify-center text-sm">1</span>三种声明关键字</h2>
         <div class="mb-4"><Code language="gdscript" :code="declarationCode" title="declarations.gd" /></div>
-        <div class="overflow-x-auto mb-4"><table class="w-full text-sm border-collapse"><thead><tr class="bg-slate-100 text-left"><th class="px-4 py-2 border border-slate-200 font-semibold text-slate-700">关键字</th><th class="px-4 py-2 border border-slate-200 font-semibold text-slate-700">含义</th><th class="px-4 py-2 border border-slate-200 font-semibold text-slate-700">TS 对应</th><th class="px-4 py-2 border border-slate-200 font-semibold text-slate-700">何时用</th></tr></thead><tbody class="text-slate-600"><tr><td class="px-4 py-2 border border-slate-200 font-mono text-xs">var</td><td class="px-4 py-2 border border-slate-200">可变变量</td><td class="px-4 py-2 border border-slate-200 font-mono text-xs">let</td><td class="px-4 py-2 border border-slate-200">运行时可变的值</td></tr><tr><td class="px-4 py-2 border border-slate-200 font-mono text-xs">const</td><td class="px-4 py-2 border border-slate-200">编译时常量</td><td class="px-4 py-2 border border-slate-200 font-mono text-xs">const</td><td class="px-4 py-2 border border-slate-200">永不改变的值（速度/尺寸常量）</td></tr><tr><td class="px-4 py-2 border border-slate-200 font-mono text-xs">@export var</td><td class="px-4 py-2 border border-slate-200">导出到编辑器</td><td class="px-4 py-2 border border-slate-200">Vue defineProps</td><td class="px-4 py-2 border border-slate-200">Inspector 中可调的配置值</td></tr></tbody></table></div>
-        <aside class="bg-amber-50 border-l-4 border-amber-400 rounded-r-xl p-4"><p class="text-sm text-amber-800"><strong>⚠️ GDScript 没有 <code class="bg-amber-100 px-1 rounded text-xs font-mono">let</code> vs <code class="bg-amber-100 px-1 rounded text-xs font-mono">const</code> 的"不可变绑定"概念。</strong><code class="bg-amber-100 px-1 rounded text-xs font-mono">const</code> 是<strong>编译时常量</strong>——值在编译时就确定了，不能是函数返回值。运行时的"不可变"用 <code class="bg-amber-100 px-1 rounded text-xs font-mono">var</code> 或不重新赋值来保证。</p></aside>
+        <div class="overflow-x-auto mb-4">
+          <table class="w-full text-sm border-collapse">
+            <thead>
+              <tr class="bg-slate-100 text-left">
+                <th class="px-4 py-2 border border-slate-200 font-semibold text-slate-700">关键字</th>
+                <th class="px-4 py-2 border border-slate-200 font-semibold text-slate-700">含义</th>
+                <th class="px-4 py-2 border border-slate-200 font-semibold text-slate-700">TS 对应</th>
+                <th class="px-4 py-2 border border-slate-200 font-semibold text-slate-700">何时用</th>
+              </tr>
+            </thead>
+            <tbody class="text-slate-600">
+              <tr>
+                <td class="px-4 py-2 border border-slate-200 font-mono text-xs">var</td>
+                <td class="px-4 py-2 border border-slate-200">可变变量</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono text-xs">let</td>
+                <td class="px-4 py-2 border border-slate-200">运行时可变的值</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-2 border border-slate-200 font-mono text-xs">const</td>
+                <td class="px-4 py-2 border border-slate-200">编译时常量</td>
+                <td class="px-4 py-2 border border-slate-200 font-mono text-xs">const</td>
+                <td class="px-4 py-2 border border-slate-200">永不改变的值（速度/尺寸常量）</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-2 border border-slate-200 font-mono text-xs">@export var</td>
+                <td class="px-4 py-2 border border-slate-200">导出到编辑器</td>
+                <td class="px-4 py-2 border border-slate-200">Vue defineProps</td>
+                <td class="px-4 py-2 border border-slate-200">Inspector 中可调的配置值</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <aside class="bg-amber-50 border-l-4 border-amber-400 rounded-r-xl p-4">
+          <p class="text-sm text-amber-800"><strong>⚠️ GDScript 没有 <code class="bg-amber-100 px-1 rounded text-xs font-mono">let</code> vs <code class="bg-amber-100 px-1 rounded text-xs font-mono">const</code> 的"不可变绑定"概念。</strong><code class="bg-amber-100 px-1 rounded text-xs font-mono">const</code> 是<strong>编译时常量</strong>——值在编译时就确定了，不能是函数返回值。运行时的"不可变"用 <code class="bg-amber-100 px-1 rounded text-xs font-mono">var</code> 或不重新赋值来保证。</p>
+        </aside>
       </section>
 
-      <section id="sec-3" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100"><h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-blue-100 text-blue-700 rounded-lg flex items-center justify-center text-sm">2</span>四大基础类型</h2>
+      <section id="sec-3" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><span
+            class="w-8 h-8 bg-blue-100 text-blue-700 rounded-lg flex items-center justify-center text-sm">2</span>四大基础类型</h2>
         <div class="mb-4"><Code language="gdscript" :code="basicTypesCode" title="basic_types.gd" /></div>
         <div class="space-y-4 text-slate-600 text-sm">
-          <div class="bg-slate-50 rounded-lg p-3"><h3 class="font-semibold text-slate-700 mb-1">int — 64 位有符号整数</h3><p>范围：-9,223,372,036,854,775,808 到 9,223,372,036,854,775,807（≈ ±9.2 × 10¹⁸）。<strong>没有单独的 int8/int16/int32——只有一个 int 类型。</strong>和 Python 3 一样是<strong>无限精度</strong>不对——GDScript 的 int 是 64 位，不会自动升级为 bigint（和 Python 不同！）。</p><p class="mt-1 text-xs text-slate-400">TS: <code class="bg-slate-200 px-1 rounded">let n: number = 42</code> | Python: <code class="bg-slate-200 px-1 rounded">n: int = 42</code></p></div>
-          <div class="bg-slate-50 rounded-lg p-3"><h3 class="font-semibold text-slate-700 mb-1">float — 64 位浮点数</h3><p>IEEE 754 双精度。所有带小数点的数字都是 float。<strong>没有 float32。</strong></p><p class="mt-1 text-xs text-slate-400">TS: <code class="bg-slate-200 px-1 rounded">let f: number = 3.14</code> | Python: <code class="bg-slate-200 px-1 rounded">f: float = 3.14</code></p></div>
-          <div class="bg-slate-50 rounded-lg p-3"><h3 class="font-semibold text-slate-700 mb-1">String — UTF-8 字符串</h3><p>单引号 <code class="bg-slate-200 text-blue-700 px-1 rounded text-xs font-mono">'...'</code> 和双引号 <code class="bg-slate-200 text-blue-700 px-1 rounded text-xs font-mono">"..."</code> 等价。多行用 <code class="bg-slate-200 text-blue-700 px-1 rounded text-xs font-mono">"""..."""</code>。<strong>注意大写 S！</strong>这是故意的——Godot 的所有内置类型都是大写开头（和 C# 一致）。</p><p class="mt-1 text-xs text-slate-400">TS: <code class="bg-slate-200 px-1 rounded">let s: string = "hi"</code> | Python: <code class="bg-slate-200 px-1 rounded">s: str = "hi"</code></p></div>
-          <div class="bg-slate-50 rounded-lg p-3"><h3 class="font-semibold text-slate-700 mb-1">bool — 布尔值</h3><p>只有 <code class="bg-slate-200 text-blue-700 px-1 rounded text-xs font-mono">true</code> 和 <code class="bg-slate-200 text-blue-700 px-1 rounded text-xs font-mono">false</code>（<strong>小写！</strong>和 Python 的 True/False 不同）。任何非零数字转 bool 为 true，0 为 false。空字符串为 false。</p><p class="mt-1 text-xs text-slate-400">TS: <code class="bg-slate-200 px-1 rounded">let b: boolean = true</code> | Python: <code class="bg-slate-200 px-1 rounded">b: bool = True</code></p></div>
+          <div class="bg-slate-50 rounded-lg p-3">
+            <h3 class="font-semibold text-slate-700 mb-1">int — 64 位有符号整数</h3>
+            <p>范围：-9,223,372,036,854,775,808 到 9,223,372,036,854,775,807（≈ ±9.2 × 10¹⁸）。<strong>没有单独的 int8/int16/int32——只有一个 int 类型。</strong>和 Python 3 一样是<strong>无限精度</strong>不对——GDScript 的 int 是 64 位，不会自动升级为 bigint（和 Python 不同！）。</p>
+            <p class="mt-1 text-xs text-slate-400">TS: <code class="bg-slate-200 px-1 rounded">let n: number = 42</code> | Python: <code class="bg-slate-200 px-1 rounded">n: int = 42</code></p>
+          </div>
+          <div class="bg-slate-50 rounded-lg p-3">
+            <h3 class="font-semibold text-slate-700 mb-1">float — 64 位浮点数</h3>
+            <p>IEEE 754 双精度。所有带小数点的数字都是 float。<strong>没有 float32。</strong></p>
+            <p class="mt-1 text-xs text-slate-400">TS: <code class="bg-slate-200 px-1 rounded">let f: number = 3.14</code> | Python: <code class="bg-slate-200 px-1 rounded">f: float = 3.14</code></p>
+          </div>
+          <div class="bg-slate-50 rounded-lg p-3">
+            <h3 class="font-semibold text-slate-700 mb-1">String — UTF-8 字符串</h3>
+            <p>单引号 <code class="bg-slate-200 text-blue-700 px-1 rounded text-xs font-mono">'...'</code> 和双引号 <code class="bg-slate-200 text-blue-700 px-1 rounded text-xs font-mono">"..."</code> 等价。多行用 <code class="bg-slate-200 text-blue-700 px-1 rounded text-xs font-mono">"""..."""</code>。<strong>注意大写 S！</strong>这是故意的——Godot 的所有内置类型都是大写开头（和 C# 一致）。</p>
+            <p class="mt-1 text-xs text-slate-400">TS: <code class="bg-slate-200 px-1 rounded">let s: string = "hi"</code> | Python: <code class="bg-slate-200 px-1 rounded">s: str = "hi"</code></p>
+          </div>
+          <div class="bg-slate-50 rounded-lg p-3">
+            <h3 class="font-semibold text-slate-700 mb-1">bool — 布尔值</h3>
+            <p>只有 <code class="bg-slate-200 text-blue-700 px-1 rounded text-xs font-mono">true</code> 和 <code class="bg-slate-200 text-blue-700 px-1 rounded text-xs font-mono">false</code>（<strong>小写！</strong>和 Python 的 True/False 不同）。任何非零数字转 bool 为 true，0 为 false。空字符串为 false。</p>
+            <p class="mt-1 text-xs text-slate-400">TS: <code class="bg-slate-200 px-1 rounded">let b: boolean = true</code> | Python: <code class="bg-slate-200 px-1 rounded">b: bool = True</code></p>
+          </div>
         </div>
       </section>
 
-      <section id="sec-4" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100"><h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-blue-100 text-blue-700 rounded-lg flex items-center justify-center text-sm">3</span>类型转换（Casting）</h2>
+      <section id="sec-4" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><span
+            class="w-8 h-8 bg-blue-100 text-blue-700 rounded-lg flex items-center justify-center text-sm">3</span>类型转换（Casting）</h2>
         <div class="mb-4"><Code language="gdscript" :code="castingCode" title="casting.gd" /></div>
-        <aside class="bg-amber-50 border-l-4 border-amber-400 rounded-r-xl p-4"><p class="text-sm text-amber-800"><strong>⚠️ GDScript 的类型转换和 Python 不同：</strong><code class="bg-amber-100 px-1 rounded text-xs font-mono">int("12.3")</code> <strong>不会工作！</strong>必须先 <code class="bg-amber-100 px-1 rounded text-xs font-mono">float("12.3")</code> 再 <code class="bg-amber-100 px-1 rounded text-xs font-mono">int(12.3)</code>。这和 Python 的 <code class="bg-amber-100 px-1 rounded text-xs font-mono">int("12.3")</code> 行为不同——Python 会报错，GDScript 也报错但原因一样。</p></aside>
+        <aside class="bg-amber-50 border-l-4 border-amber-400 rounded-r-xl p-4">
+          <p class="text-sm text-amber-800"><strong>⚠️ GDScript 的类型转换和 Python 不同：</strong><code class="bg-amber-100 px-1 rounded text-xs font-mono">int("12.3")</code> <strong>不会工作！</strong>必须先 <code class="bg-amber-100 px-1 rounded text-xs font-mono">float("12.3")</code> 再 <code class="bg-amber-100 px-1 rounded text-xs font-mono">int(12.3)</code>。这和 Python 的 <code class="bg-amber-100 px-1 rounded text-xs font-mono">int("12.3")</code> 行为不同——Python 会报错，GDScript 也报错但原因一样。</p>
+        </aside>
       </section>
 
-      <section id="sec-5" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100"><h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-blue-100 text-blue-700 rounded-lg flex items-center justify-center text-sm">4</span>变量作用域</h2>
+      <section id="sec-5" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><span
+            class="w-8 h-8 bg-blue-100 text-blue-700 rounded-lg flex items-center justify-center text-sm">4</span>变量作用域</h2>
         <div class="mb-4"><Code language="gdscript" :code="scopeCode" title="scope.gd" /></div>
-        <ul class="space-y-1 text-slate-600 text-sm"><li class="flex items-start gap-2"><span class="text-blue-500 mt-1">▸</span><span><strong>函数作用域：</strong>和 JS 的 var 一样（函数级作用域），没有块级作用域（<code class="bg-slate-100 px-1 rounded text-blue-700 text-xs">if</code> 里的 var 外部可见）。</span></li><li class="flex items-start gap-2"><span class="text-blue-500 mt-1">▸</span><span><strong>文件作用域：</strong>脚本顶层的 var/const 对整个脚本可见，但<strong>不会泄漏到其他脚本</strong>。</span></li></ul>
+        <ul class="space-y-1 text-slate-600 text-sm">
+          <li class="flex items-start gap-2"><span class="text-blue-500 mt-1">▸</span><span><strong>函数作用域：</strong>和 JS 的 var 一样（函数级作用域），没有块级作用域（<code class="bg-slate-100 px-1 rounded text-blue-700 text-xs">if</code> 里的 var 外部可见）。</span></li>
+          <li class="flex items-start gap-2"><span class="text-blue-500 mt-1">▸</span><span><strong>文件作用域：</strong>脚本顶层的 var/const 对整个脚本可见，但<strong>不会泄漏到其他脚本</strong>。</span></li>
+        </ul>
       </section>
 
-      <section id="sec-6" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100"><h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-blue-100 text-blue-700 rounded-lg flex items-center justify-center text-sm">5</span>Variant — 万能类型</h2>
+      <section id="sec-6" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><span
+            class="w-8 h-8 bg-blue-100 text-blue-700 rounded-lg flex items-center justify-center text-sm">5</span>Variant — 万能类型</h2>
         <p class="text-slate-600 mb-3 leading-relaxed">不写类型标注的变量默认是 <strong>Variant 类型</strong>——可以存任何值。≈ TS 的 <code class="bg-slate-100 text-blue-700 px-1.5 py-0.5 rounded text-xs font-mono">any</code> 或 Python 的动态类型。JSON 解析、API 返回值等动态数据场景使用。但<strong>业务逻辑代码应该避免</strong>。</p>
         <div class="mb-4"><Code language="gdscript" :code="variantCode" title="variant.gd" /></div>
       </section>
 
-      <section id="sec-7" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100"><h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-blue-100 text-blue-700 rounded-lg flex items-center justify-center text-sm">📋</span>小结</h2>
-        <ul class="space-y-2 text-slate-600"><li class="flex items-start gap-2"><span class="text-blue-500 mt-1">▸</span><span><code class="bg-slate-100 px-1 rounded text-blue-700 text-xs">var</code> = let（变量），<code class="bg-slate-100 px-1 rounded text-blue-700 text-xs">const</code> = 编译时常量，<code class="bg-slate-100 px-1 rounded text-blue-700 text-xs">@export var</code> = defineProps</span></li><li class="flex items-start gap-2"><span class="text-blue-500 mt-1">▸</span><span>四大基础类型：<strong>int（64位）、float（64位）、String（UTF-8）、bool（小写 true/false）</strong></span></li><li class="flex items-start gap-2"><span class="text-blue-500 mt-1">▸</span><span>类型转换用 <code class="bg-slate-100 px-1 rounded text-blue-700 text-xs">int()/float()/str()</code>，和 Python 类似但注意 String → int 不能直接转含小数的字符串</span></li><li class="flex items-start gap-2"><span class="text-blue-500 mt-1">▸</span><span><strong>始终写类型标注</strong>（<code class="bg-slate-100 px-1 rounded text-blue-700 text-xs">: int</code>）——IDE 补全 + 编译检查 + 性能提升</span></li></ul>
+      <!-- 🕹️ 实战：Blitz -->
+      <section id="sec-7" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><span
+            class="w-8 h-8 bg-blue-100 text-blue-700 rounded-lg flex items-center justify-center text-sm">🕹️</span>实战：Blitz 玩家属性</h2>
+        <p class="text-slate-600 mb-3 leading-relaxed">Blitz 玩家脚本顶部的这一堆 <code class="bg-slate-100 text-blue-700 px-1.5 py-0.5 rounded text-xs font-mono">@export var</code> 就是本节语法的<strong>真实用法</strong>——所有手感参数都强类型 + 导出到 Inspector，策划/你自己调数值不用改代码：</p>
+        <div class="mb-4"><Code language="gdscript" :code="blitzPlayerVarsCode" title="player.gd — 导出属性（精简）" /></div>
+        <aside class="bg-purple-50 border-l-4 border-purple-400 rounded-r-xl p-4 mb-4">
+          <p class="text-sm text-purple-800"><strong>🔗 前端类比：</strong><code class="bg-purple-100 px-1 rounded text-xs font-mono">@export var move_speed: float = 320.0</code> ≈ Vue 组件的 <code class="bg-purple-100 px-1 rounded text-xs font-mono">defineProps&lt;{"{"}moveSpeed: number{"}"}&gt;()</code>——把"可配置参数"暴露出去，别人（编辑器/父组件）不用动你的代码就能调。<br/>区别：Vue 的 props 是父传子，Godot 的 @export 是<strong>编辑器面板直接改</strong>，适合调"手感"这种频繁试错的值。</p>
+        </aside>
+        <aside class="bg-emerald-50 border-l-4 border-emerald-400 rounded-r-xl p-4">
+          <p class="text-sm text-emerald-800"><strong>✅ 为什么速度用 float 而生命用 int？</strong>因为 <code class="bg-emerald-100 px-1 rounded text-xs font-mono">delta</code>（上一帧秒数）是小数，位置/速度随时可能带小数，必须 float；而生命值只会整数增减，用 int 更符合语义（<code class="bg-emerald-100 px-1 rounded text-xs font-mono">health -= 1</code>）。<strong>类型跟着语义走，而不是跟着"省事"走。</strong></p>
+        </aside>
+      </section>
+
+      <section id="sec-8" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><span
+            class="w-8 h-8 bg-blue-100 text-blue-700 rounded-lg flex items-center justify-center text-sm">📋</span>小结</h2>
+        <ul class="space-y-2 text-slate-600">
+          <li class="flex items-start gap-2"><span class="text-blue-500 mt-1">▸</span><span><code class="bg-slate-100 px-1 rounded text-blue-700 text-xs">var</code> = let（变量），<code class="bg-slate-100 px-1 rounded text-blue-700 text-xs">const</code> = 编译时常量，<code class="bg-slate-100 px-1 rounded text-blue-700 text-xs">@export var</code> = defineProps</span></li>
+          <li class="flex items-start gap-2"><span class="text-blue-500 mt-1">▸</span><span>四大基础类型：<strong>int（64位）、float（64位）、String（UTF-8）、bool（小写 true/false）</strong></span></li>
+          <li class="flex items-start gap-2"><span class="text-blue-500 mt-1">▸</span><span>类型转换用 <code class="bg-slate-100 px-1 rounded text-blue-700 text-xs">int()/float()/str()</code>，和 Python 类似但注意 String → int 不能直接转含小数的字符串</span></li>
+          <li class="flex items-start gap-2"><span class="text-blue-500 mt-1">▸</span><span><strong>始终写类型标注</strong>（<code class="bg-slate-100 px-1 rounded text-blue-700 text-xs">: int</code>）——IDE 补全 + 编译检查 + 性能提升</span></li>
+          <li class="flex items-start gap-2"><span class="text-blue-500 mt-1">▸</span><span><strong>值类型复制、引用类型共享</strong>——Array/Dictionary 传参共享同一份数据，这是新手最大的坑</span></li>
+        </ul>
       </section>
     </main>
-    <footer class="max-w-4xl mx-auto px-6 py-8"><nav class="flex justify-between items-center pt-4 border-t border-slate-200 text-sm"><RouterLink to="/GameProduction/GotDot/godot-stage-1-gdscript-basics/godot-1-1-gdscript-intro" class="text-slate-500 hover:text-blue-600 transition-colors flex items-center gap-1">← 上一节：GDScript 简介</RouterLink><RouterLink to="/GameProduction/GotDot/godot-stage-1-gdscript-basics/godot-1-3-operators" class="text-blue-600 hover:text-blue-700 font-medium transition-colors flex items-center gap-1">下一节：运算符与表达式 →</RouterLink></nav></footer>
+    <footer class="max-w-4xl mx-auto px-6 py-8">
+      <nav class="flex justify-between items-center pt-4 border-t border-slate-200 text-sm">
+        <RouterLink to="/GameProduction/GotDot/godot-stage-1-gdscript-basics/godot-1-1-gdscript-intro" class="text-slate-500 hover:text-blue-600 transition-colors flex items-center gap-1">← 上一节：GDScript 简介</RouterLink>
+        <RouterLink to="/GameProduction/GotDot/godot-stage-1-gdscript-basics/godot-1-3-operators" class="text-blue-600 hover:text-blue-700 font-medium transition-colors flex items-center gap-1">下一节：运算符与表达式 →</RouterLink>
+      </nav>
+    </footer>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Code, Nav } from 'components'; import { RouterLink } from 'vue-router'
-const navList = [{id:"sec-1",name:"概述"},{id:"sec-2",name:"声明关键字"},{id:"sec-3",name:"四大基础类型"},{id:"sec-4",name:"类型转换"},{id:"sec-5",name:"作用域"},{id:"sec-6",name:"Variant"},{id:"sec-7",name:"小结"}]
+import { Code, Nav, EditorLink } from 'components'; import { RouterLink } from 'vue-router'
+import { useUserStore } from '@/stores/userProfle'
+const userStore = useUserStore()
+const navList = [{ id: "sec-overview", name: "📐 类型层级" }, { id: "sec-1", name: "概述" }, { id: "sec-2", name: "声明关键字" }, { id: "sec-3", name: "四大基础类型" }, { id: "sec-4", name: "类型转换" }, { id: "sec-5", name: "作用域" }, { id: "sec-6", name: "Variant" }, { id: "sec-7", name: "🕹️ 实战：Blitz" }, { id: "sec-8", name: "小结" }]
 const declarationCode = `# var ——可变变量（默认）
 var health: int = 100
 var player_name: String = "Godot"
@@ -128,4 +333,21 @@ anything = Vector2(1, 2)     # OK
 # 业务逻辑中应避免——用强类型标注
 var typed_value: int = 42   # ✅ 明确类型
 # typed_value = "string"    # ❌ 编译器报错`
+const blitzPlayerVarsCode = `# Blitz 玩家属性 — apps/game/blitz/scripts/player.gd
+extends CharacterBody2D
+
+# ===== 导出属性（Inspector 可调手感）=====
+@export var move_speed: float = 320.0        # 最大移动速度 px/s
+@export var move_accel: float = 2000.0       # 加速度 px/s²（按方向键时）
+@export var jump_velocity: float = -520.0    # 跳跃初速（负=向上，Y 轴向下！）
+@export var jump_cut_multiplier: float = 0.45 # 松键时保留的速度比例（越小越"飘"）
+@export var gravity: float = 1400.0          # 重力加速度 px/s²
+@export var max_fall_speed: float = 700.0    # 终端速度（最大下落速度）
+@export var coyote_time: float = 0.08        # 离地后仍可跳的时间（秒）
+@export var max_health: int = 3              # 最大生命
+
+# ===== 纯运行时状态（不带 @export，编辑器不显示）=====
+var health: int                    # 当前生命，_ready() 里初始化为 max_health
+var invincible_timer: float = 0.0  # 受击后的无敌倒计时
+var facing_right: bool = true      # 朝向（决定攻击/眼睛方向）`
 </script>

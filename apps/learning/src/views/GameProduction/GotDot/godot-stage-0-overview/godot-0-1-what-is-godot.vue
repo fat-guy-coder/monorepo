@@ -7,6 +7,7 @@
           <p class="text-sm text-slate-500 mt-1">开源、免费、无门槛的游戏引擎——独立开发者的首选</p>
         </div>
         <div class="flex items-center gap-3">
+          <EditorLink file-path="apps/game/blitz/project.godot" label="📝 project.godot" :is-admin="userStore.isAdmin" />
           <span class="text-xs text-slate-400 bg-slate-100 px-3 py-1 rounded-full">阶段 0-1</span>
         </div>
       </div>
@@ -77,6 +78,12 @@
             </tbody>
           </table>
         </div>
+
+        <h3 class="text-base font-semibold text-slate-700 mb-3">写第一个 Godot 程序</h3>
+        <p class="text-slate-600 mb-3 leading-relaxed">在 Godot 里，脚本不是"主函数入口"——它是<strong>挂在一个节点上的类</strong>。这个最基本的例子能让你立刻理解"一切皆节点"：</p>
+        <div class="mb-4"><Code language="gdscript" :code="helloCode" title="hello.gd" /></div>
+
+        <div class="mb-4"><Code language="gdscript" :code="nodeTreeCode" title="scene_in_code.gd" /></div>
 
         <h3 class="text-base font-semibold text-slate-700 mb-3">"房间里的 C++"——为什么 Godot 快？</h3>
         <p class="text-slate-600 mb-3 leading-relaxed">
@@ -182,8 +189,45 @@
         </ul>
       </section>
 
-      <!-- 小结 -->
+      <!-- 实战：Blitz -->
       <section id="sec-6" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-blue-100 text-blue-700 rounded-lg flex items-center justify-center text-sm">🕹️</span>
+          实战：Blitz 项目
+        </h2>
+        <p class="text-slate-600 mb-3 leading-relaxed">本仓库的 <code class="bg-slate-100 text-blue-700 px-1.5 py-0.5 rounded text-xs font-mono">apps/game/blitz/</code> 就是一个真实的 Godot 项目。它的 <code class="bg-slate-100 text-blue-700 px-1.5 py-0.5 rounded text-xs font-mono">project.godot</code> 就是"识别这是一个 Godot 项目"的钥匙：</p>
+        <div class="mb-4"><Code language="text" :code="blitzProjectConfig" title="blitz/project.godot（节选）" /></div>
+        <p class="text-slate-600 mb-3 leading-relaxed">而 Blitz 的玩家角色 <code class="bg-slate-100 text-blue-700 px-1.5 py-0.5 rounded text-xs font-mono">player.gd</code> 演示了"一切皆节点 + 脚本挂在节点上"——它的每个 <code class="bg-slate-100 text-blue-700 px-1.5 py-0.5 rounded text-xs font-mono">@export</code> 属性都能在编辑器 Inspector 里调整：</p>
+        <div class="mb-4"><Code language="gdscript" :code="blitzPlayerSnippet" title="blitz/scripts/player.gd（节选）" /></div>
+        <aside class="bg-emerald-50 border-l-4 border-emerald-400 rounded-r-xl p-4">
+          <p class="text-sm text-emerald-800"><strong>✅ 学习方法：</strong>把这段代码和本文档的概念对照着看——<code class="bg-emerald-100 px-1 rounded text-xs font-mono">extends CharacterBody2D</code> 是"脚本挂节点"，<code class="bg-emerald-100 px-1 rounded text-xs font-mono">@export</code> 是"编辑器可调"，<code class="bg-emerald-100 px-1 rounded text-xs font-mono">_physics_process</code> 是"每帧逻辑入口"。</p>
+        </aside>
+      </section>
+
+      <!-- 常见错误 -->
+      <section id="sec-7" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+          <span class="w-8 h-8 bg-blue-100 text-blue-700 rounded-lg flex items-center justify-center text-sm">⚠️</span>
+          新手常见错误与误区
+        </h2>
+        <div class="space-y-3 mb-4">
+          <aside class="bg-amber-50 border-l-4 border-amber-400 rounded-r-xl p-4">
+            <p class="text-sm text-amber-800"><strong>⚠️ 错误 1：用 Godot 3 的教程学 Godot 4。</strong><br/>
+            Godot 3 和 4 的 API 差别巨大：3 的 <code class="bg-amber-100 px-1 rounded text-xs font-mono">move_and_slide()</code> 带参数、<code class="bg-amber-100 px-1 rounded text-xs font-mono">Vector2</code> 用乘法、UI 主题系统完全不同。网上大量旧教程会让你复制代码报错。<strong>只学标注"Godot 4.x"的内容，本项目全部基于 Godot 4.x。</strong></p>
+          </aside>
+          <aside class="bg-amber-50 border-l-4 border-amber-400 rounded-r-xl p-4">
+            <p class="text-sm text-amber-800"><strong>⚠️ 错误 2："GDScript 是玩具语言，只能做小游戏"。</strong><br/>
+            GDScript 是 Godot 的<strong>原生语言</strong>，深度集成引擎（自动补全、类型推导、编辑器热重载）。《Brotato》等百万销量游戏就用 GDScript 写的。只有极端性能需求（如物理引擎、大场景流式加载）才需要 C#/GDExtension。</p>
+          </aside>
+          <aside class="bg-amber-50 border-l-4 border-amber-400 rounded-r-xl p-4">
+            <p class="text-sm text-amber-800"><strong>⚠️ 错误 3：写完代码不写类型注解。</strong><br/>
+            GDScript 允许 <code class="bg-amber-100 px-1 rounded text-xs font-mono">var speed = 300.0</code>，但一旦变量多起来，编辑器就无法帮你查错和自动补全。本项目<strong>强制所有变量/函数写类型注解</strong>（<code class="bg-amber-100 px-1 rounded text-xs font-mono">var speed: float = 300.0</code>）——这是从 TS 带过来的好习惯，还能让错误在编辑阶段暴露。</p>
+          </aside>
+        </div>
+      </section>
+
+      <!-- 小结 -->
+      <section id="sec-8" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
           <span class="w-8 h-8 bg-blue-100 text-blue-700 rounded-lg flex items-center justify-center text-sm">📋</span>
           小结
@@ -191,6 +235,7 @@
         <ul class="space-y-2 text-slate-600">
           <li class="flex items-start gap-2"><span class="text-blue-500 mt-1">▸</span><span>Godot 是一个<strong>开源、免费、轻量</strong>的跨平台游戏引擎，MIT 协议无抽成</span></li>
           <li class="flex items-start gap-2"><span class="text-blue-500 mt-1">▸</span><span>核心模型：<strong>场景（Scene）≈ 组件 · 节点（Node）≈ 元素 · 信号（Signal）≈ 事件</strong></span></li>
+          <li class="flex items-start gap-2"><span class="text-blue-500 mt-1">▸</span><span>脚本不是"主函数"，而是<strong>挂在节点上的类</strong>——这是 Godot 与普通编程最大的心智差异</span></li>
           <li class="flex items-start gap-2"><span class="text-blue-500 mt-1">▸</span><span>2D 引擎是业界顶级水平，3D 在 4.x 版本大幅提升</span></li>
           <li class="flex items-start gap-2"><span class="text-blue-500 mt-1">▸</span><span>GDScript 是内置脚本语言，<strong>语法类似 Python，可选类型标注，易于前端开发者上手</strong></span></li>
           <li class="flex items-start gap-2"><span class="text-blue-500 mt-1">▸</span><span>可选 C#、C++（GDExtension）、Rust 作为性能关键模块的语言</span></li>
@@ -220,6 +265,63 @@ const navList = [
   { id: "sec-3", name: "能做什么游戏" },
   { id: "sec-4", name: "为什么选 Godot" },
   { id: "sec-5", name: "Godot 4.x 新特性" },
-  { id: "sec-6", name: "小结" },
+  { id: "sec-6", name: "🕹️ 实战：Blitz" },
+  { id: "sec-7", name: "⚠️ 常见错误" },
+  { id: "sec-8", name: "小结" },
 ]
+
+const helloCode = `extends Node
+
+## _ready 是节点加入场景树后自动调用的入口
+## （≈ React 组件挂载后的 useEffect，只执行一次）
+func _ready() -> void:
+	print("Hello, Godot! 👋")
+	# 输出: Hello, Godot! 👋
+
+## _process 每帧调用一次（≈ requestAnimationFrame）
+func _process(delta: float) -> void:
+	# delta = 距上一帧的秒数，60fps 时约 0.0167
+	rotation += delta * 2.0   # 每秒转 2 弧度`
+
+const nodeTreeCode = `extends Node2D
+
+## 用代码搭建一棵"场景树"（≈ React.createElement 一棵子树）
+func _ready() -> void:
+	# 1. 创建一个 Sprite2D 节点
+	var sprite: Sprite2D = Sprite2D.new()
+	sprite.name = "Hero"
+	sprite.position = Vector2(100, 200)
+	add_child(sprite)          # 把 sprite 挂到当前节点下
+
+	# 2. 通过节点路径访问它
+	print(get_node("Hero").name)  # 输出: Hero
+	print(get_child_count())      # 输出: 1
+
+	# 3. 游戏运行时，这棵树会每一帧被 SceneTree 遍历并触发回调
+	print("游戏 = 场景树！")`
+
+const blitzProjectConfig = `; apps/game/blitz/project.godot（节选）
+config_version=5
+
+[application]
+config/name="Blitz"
+run/main_scene="res://scenes/main.tscn"   ; F5 启动的主场景
+
+[display]
+window/size/viewport_width=1280
+window/size/viewport_height=720`
+
+const blitzPlayerSnippet = `# apps/game/blitz/scripts/player.gd（节选）
+extends CharacterBody2D
+class_name BlitzPlayer
+
+## @export 让属性出现在编辑器 Inspector 面板（≈ Vue 的 defineProps）
+@export var move_speed: float = 320.0   ## 最大移动速度 px/s
+@export var jump_velocity: float = -520.0
+
+## 每物理帧调用——角色控制的核心循环
+func _physics_process(delta: float) -> void:
+	var direction: float = Input.get_axis("move_left", "move_right")
+	velocity.x = direction * move_speed
+	move_and_slide()`
 </script>

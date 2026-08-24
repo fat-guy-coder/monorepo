@@ -24,7 +24,7 @@
         </h2>
         <p class="text-slate-600 mb-4 leading-relaxed text-sm">
           Pool 复用以分配的对象：<strong>Get</strong> 取一个（池空则 New），用完 <strong>Reset 后 Put 归还</strong>。
-          每个 P 有私有对象（无锁取），跨 P 走共享链表偷。GC 来时会<strong>先把主池转入 victim「缓刑一代」，再下一次 GC 才清空</strong>——所以对象不会瞬间消失。
+          每个 <strong>Processor</strong>（GMP 调度模型的 P）有私有对象（无锁取），跨 Processor 走共享链表偷。GC 来时会<strong>先把主池转入 victim「缓刑一代」，再下一次 GC 才清空</strong>——所以对象不会瞬间消失。
         </p>
         <figure class="mb-4">
           <svg viewBox="0 0 720 210" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
@@ -66,7 +66,7 @@
             <text x="140" y="192" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" font-weight="bold" fill="#b91c1c">New: func() any</text>
 
             <text x="360" y="150" font-size="12" font-family="monospace" fill="#0891b2">GC 来 → 主池转 victim（缓刑一代）→ 下轮 GC 才清</text>
-            <text x="360" y="172" font-size="11" font-family="monospace" fill="#64748b">每 P 一个私有对象（无锁）→ 共享链表（跨 P 偷）→ 全程无互斥锁</text>
+            <text x="360" y="172" font-size="11" font-family="monospace" fill="#64748b">每 Processor 一个私有对象 · 跨 Processor 偷 · 全程无互斥锁</text>
           </svg>
           <figcaption class="text-xs text-slate-400 mt-1">图 1：Pool 的 Get→用→Reset→Put 循环，池空时走 New。GC 将主池移入 victim 缓刑一代，再下一次 GC 才真正清空——避免「池刚清空 → 瞬间大量 New」的分配尖峰</figcaption>
         </figure>
@@ -116,8 +116,13 @@
           底层原理：全程无锁 + victim 两代缓存
         </h2>
         <p class="text-slate-600 mb-4 leading-relaxed text-sm">
-          一个冷知识：<strong>sync.Pool 里没有一把互斥锁</strong>——全靠「每 P 私有化 + 无锁双端队列 + 原子操作」实现高并发下的近似无锁。
+          一个冷知识：<strong>sync.Pool 里没有一把互斥锁</strong>——全靠「每 Processor 私有化 + 无锁双端队列 + 原子操作」实现高并发下的近似无锁。
         </p>
+        <aside class="bg-indigo-50 border-l-4 border-indigo-400 rounded-r-xl p-4 mb-4">
+          <p class="text-sm text-indigo-800"><strong>🧐 为什么叫 Pool，内部却按 Processor 分？</strong></p>
+          <p class="text-sm text-indigo-800 leading-relaxed mt-1"><code class="bg-indigo-100 px-1 rounded text-xs font-mono">sync.Pool</code> 名字里的 P 是 <strong>Pool（池）</strong>——这是<strong>类型名</strong>；实现里则给<strong>每个 Processor（GMP 调度模型的 P，对应每个 CPU 核的运行单元）</strong>维护一个私有池来提速（见 <RouterLink to="/backend/BackendLanguage/GO/go-stage-2-concurrency/go-2-1-goroutine-gmp" class="text-indigo-600 underline decoration-dotted underline-offset-2">go-2-1</RouterLink>）。</p>
+          <p class="text-sm text-indigo-800 leading-relaxed mt-1">名字的 P 和实现的 P 是<strong>两个不同含义</strong>——本文正文一律写全名 <strong>Processor</strong>，避免混淆。</p>
+        </aside>
         <div class="mb-4"><Code language="go" :code="internalsCode" title="pool_internals.go — 数据结构" /></div>
         <div class="mb-4"><Code language="go" :code="getFlowCode" title="Get 的完整优先级链" /></div>
         <div class="mb-4"><Code language="go" :code="victimCode" title="victim 缓存：GC 后的缓刑一代" /></div>
@@ -126,10 +131,10 @@
           <table class="w-full text-sm border-collapse">
             <thead><tr class="bg-slate-100 text-left"><th class="px-4 py-2 border border-slate-200 font-semibold">设计</th><th class="px-4 py-2 border border-slate-200 font-semibold">解决什么问题</th></tr></thead>
             <tbody class="text-slate-600">
-              <tr><td class="px-4 py-2 border font-mono text-xs">每 P 一个 poolLocal</td><td class="px-4 py-2 border">对象「就地取材」——本 P 自己 Get/Put 不碰任何共享状态</td></tr>
-              <tr><td class="px-4 py-2 border font-mono text-xs">private 私有槽</td><td class="px-4 py-2 border">每个 P 一个专属对象位，命中即无锁返回，最快路径</td></tr>
-              <tr><td class="px-4 py-2 border font-mono text-xs">shared poolChain 双端队列</td><td class="px-4 py-2 border">跨 P 可偷（work stealing）：借多还少时从别的 P 匀</td></tr>
-              <tr><td class="px-4 py-2 border font-mono text-xs">pad [128]byte 防伪共享</td><td class="px-4 py-2 border">两个 P 的 poolLocal 若共享同一 CPU 缓存行，改一个会互相拖慢（false sharing）——用 pad 隔开</td></tr>
+              <tr><td class="px-4 py-2 border font-mono text-xs">每 Processor 一个 poolLocal</td><td class="px-4 py-2 border">对象「就地取材」——本 Processor 自己 Get/Put 不碰任何共享状态</td></tr>
+              <tr><td class="px-4 py-2 border font-mono text-xs">private 私有槽</td><td class="px-4 py-2 border">每个 Processor 一个专属对象位，命中即无锁返回，最快路径</td></tr>
+              <tr><td class="px-4 py-2 border font-mono text-xs">shared poolChain 双端队列</td><td class="px-4 py-2 border">跨 Processor 可偷（work stealing）：借多还少时从别的 Processor 匀</td></tr>
+              <tr><td class="px-4 py-2 border font-mono text-xs">pad [128]byte 防伪共享</td><td class="px-4 py-2 border">两个 Processor 的 poolLocal 若共享同一 CPU 缓存行，改一个会互相拖慢（false sharing）——用 pad 隔开</td></tr>
               <tr><td class="px-4 py-2 border font-mono text-xs">victim 缓刑一代</td><td class="px-4 py-2 border">GC 清池后瞬间的 New 尖峰：给对象多留一轮存活期</td></tr>
             </tbody>
           </table>
@@ -173,7 +178,7 @@
             <thead><tr class="bg-slate-100 text-left"><th class="px-4 py-2 border border-slate-200 font-semibold">优点</th><th class="px-4 py-2 border border-slate-200 font-semibold">缺点 / 代价</th></tr></thead>
             <tbody class="text-slate-600">
               <tr><td class="px-4 py-2 border">减少 GC 压力：复用代替 new，堆分配大幅下降</td><td class="px-4 py-2 border">对象随时可能被 GC 清走，<strong>不保证命中</strong>，不能当持久缓存</td></tr>
-              <tr><td class="px-4 py-2 border">高并发几乎无锁（per-P 私有 + 原子操作）</td><td class="px-4 py-2 border">只适合<strong>无状态或可快速 Reset</strong> 的对象，否则脏数据</td></tr>
+              <tr><td class="px-4 py-2 border">高并发几乎无锁（per-Processor 私有 + 原子操作）</td><td class="px-4 py-2 border">只适合<strong>无状态或可快速 Reset</strong> 的对象，否则脏数据</td></tr>
               <tr><td class="px-4 py-2 border">池空自动 New 兜底，调用方无感</td><td class="px-4 py-2 border">无法设置容量上限、无淘汰策略，行为有不确定性</td></tr>
               <tr><td class="px-4 py-2 border">标准库内置，零依赖</td><td class="px-4 py-2 border">难以测试池内状态；用错（漏 Reset）会藏 bug</td></tr>
             </tbody>
@@ -211,7 +216,7 @@
         </h2>
         <ul class="space-y-2 text-slate-600">
           <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span><strong>Get→用→Reset→Put</strong>——标准四步，Put 前必须 Reset，否则脏数据</span></li>
-          <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span><strong>全程无互斥锁</strong>——每 P 私有槽 + 无锁双端队列 + 原子操作；跨 P 靠「偷」</span></li>
+          <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span><strong>全程无互斥锁</strong>——每 Processor 私有槽 + 无锁双端队列 + 原子操作；跨 Processor 靠「偷」</span></li>
           <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span><strong>victim 两代缓存</strong>——GC 把主池移入 victim 缓刑一代，避免清池后的 New 尖峰</span></li>
           <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span><strong>适用前提</strong>——无状态或可快速 Reset、高分配热点、短生命期；只适合缓存「已分配但暂闲」的对象</span></li>
           <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span><strong>先 profile 再 Pool</strong>——不是所有场景都适合，别过早优化</span></li>
@@ -290,18 +295,18 @@ func bad() string {
 
 const internalsCode = `// Pool 内部（Go 1.13+）——全程无互斥锁，纯原子操作
 type Pool struct {
-    local     unsafe.Pointer // [GOMAXPROCS]poolLocal —— 每个 P 一份
+    local     unsafe.Pointer // [GOMAXPROCS]poolLocal —— 每个 Processor 一份
     victim    unsafe.Pointer // 上一代池（GC 后的缓刑区）
     New       func() any     // 池空兜底，只在 Get 时调用
 }
 type poolLocal struct {
     private any        // P 专属槽：本 P Get/Put 无锁
-    shared  poolChain  // 无锁双端队列：其他 P 可"偷"
+    shared  poolChain  // 无锁双端队列：其他 Processor 可"偷"
     pad [128]byte      // 防 CPU 伪共享（false sharing）`
 
 const getFlowCode = `// Get 的完整优先级链（无锁设计的关键）
 func (p *Pool) Get() any {
-    l := p.pin()                 // ① 拿到当前 P 的 poolLocal
+    l := p.pin()                 // ① 拿到当前 Processor 的 poolLocal
     x := l.private               // ② 私有槽有 → 直接拿走（最快，纯本地）
     if x != nil { l.private = nil; return x }
     x, _ = l.shared.popHead()    // ③ 自己队列头（无锁原子）
@@ -310,7 +315,7 @@ func (p *Pool) Get() any {
 }
 
 // ④ getSlow 顺序：
-//    a. 从其他 P 的 shared.popTail() —— 工作窃取（无锁原子）
+//    a. 从其他 Processor 的 shared.popTail() —— 工作窃取（无锁原子）
 //    b. 全偷不到 → 查上一代 victim：先自己 private，再 shared，再偷
 //    c. 连 victim 也没有 → p.New() —— 此时才真正分配新内存
 

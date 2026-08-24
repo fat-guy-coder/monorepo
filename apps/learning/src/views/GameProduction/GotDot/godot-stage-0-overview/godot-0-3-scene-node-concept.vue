@@ -3,11 +3,62 @@
     <header class="bg-white border-b border-slate-200">
       <div class="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
         <div><h1 class="text-2xl font-bold text-slate-800">场景与节点核心概念</h1><p class="text-sm text-slate-500 mt-1">Godot 架构的基石——理解场景树和节点系统</p></div>
-        <div class="flex items-center gap-3"><span class="text-xs text-slate-400 bg-slate-100 px-3 py-1 rounded-full">阶段 0-3</span></div>
+        <div class="flex items-center gap-3">
+          <EditorLink file-path="apps/game/blitz/scripts/player.gd" label="📝 player.gd" :is-admin="userStore.isAdmin" />
+          <span class="text-xs text-slate-400 bg-slate-100 px-3 py-1 rounded-full">阶段 0-3</span>
+        </div>
       </div>
     </header>
     <main class="max-w-4xl mx-auto px-6 py-8 space-y-6">
       <Nav :list="navList" title="目录" position="top-right" :showBackToTop="true" />
+
+      <!-- 场景树结构图 -->
+      <section id="sec-overview" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-blue-100 text-blue-700 rounded-lg flex items-center justify-center text-sm">📐</span>场景树结构总览</h2>
+        <p class="text-slate-600 mb-4 leading-relaxed">下面是一个真实的<strong>角色场景树</strong>（取自 Blitz 的 Player 场景）——根节点是 CharacterBody2D，它下面挂了精灵、碰撞体和两个 Area2D 检测区。整棵树的节点在运行时<strong>每一帧被 SceneTree 遍历</strong>并触发各自的回调。</p>
+        <svg viewBox="0 0 720 300" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="st-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" />
+            </marker>
+          </defs>
+
+          <!-- 边：父节点底缘 → 子节点顶缘 -->
+          <line x1="290" y1="80" x2="145" y2="128" stroke="#94a3b8" stroke-width="2" marker-end="url(#st-arr)" />
+          <line x1="360" y1="80" x2="360" y2="128" stroke="#94a3b8" stroke-width="2" marker-end="url(#st-arr)" />
+          <line x1="430" y1="80" x2="575" y2="128" stroke="#94a3b8" stroke-width="2" marker-end="url(#st-arr)" />
+          <line x1="360" y1="174" x2="360" y2="238" stroke="#94a3b8" stroke-width="2" marker-end="url(#st-arr)" />
+          <line x1="575" y1="174" x2="575" y2="238" stroke="#94a3b8" stroke-width="2" marker-end="url(#st-arr)" />
+
+          <!-- 根节点 -->
+          <rect x="265" y="30" width="190" height="50" rx="8" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+          <text x="360" y="52" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#ffffff">Player</text>
+          <text x="360" y="70" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" fill="#cffafe">CharacterBody2D + player.gd</text>
+
+          <!-- 第一层子节点 -->
+          <rect x="70" y="130" width="150" height="44" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+          <text x="145" y="150" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">CollisionShape2D</text>
+          <text x="145" y="166" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#cffafe">碰撞形状 r=15</text>
+
+          <rect x="285" y="130" width="150" height="44" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+          <text x="360" y="150" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">ParryDetector</text>
+          <text x="360" y="166" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#cffafe">Area2D 格挡检测</text>
+
+          <rect x="500" y="130" width="150" height="44" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+          <text x="575" y="150" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">Hurtbox</text>
+          <text x="575" y="166" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#cffafe">Area2D 受击判定</text>
+
+          <!-- 第二层（Area2D 的子节点） -->
+          <rect x="285" y="240" width="150" height="44" rx="6" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" />
+          <text x="360" y="260" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#334155">CollisionShape2D</text>
+          <text x="360" y="276" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">形状挂在 Area 下</text>
+
+          <rect x="500" y="240" width="150" height="44" rx="6" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" />
+          <text x="575" y="260" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#334155">CollisionShape2D</text>
+          <text x="575" y="276" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">形状挂在 Area 下</text>
+        </svg>
+        <p class="text-xs text-slate-400 mt-2">📌 实线框 = 有脚本/功能的实体节点；虚线框 = 只承载几何数据的形状节点。子节点位置由父节点决定，父节点移动子节点跟着动。</p>
+      </section>
 
       <!-- 概述 -->
       <section id="sec-1" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
@@ -138,8 +189,19 @@
         </aside>
       </section>
 
-      <!-- 小结 -->
+      <!-- 实战：Blitz -->
       <section id="sec-7" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-blue-100 text-blue-700 rounded-lg flex items-center justify-center text-sm">🕹️</span>实战：Blitz 里的场景树</h2>
+        <p class="text-slate-600 mb-3 leading-relaxed">Blitz 的玩家角色就是一棵节点树。编辑器里看到的 <code class="bg-slate-100 text-blue-700 px-1.5 py-0.5 rounded text-xs font-mono">Player</code> 树，在 <code class="bg-slate-100 text-blue-700 px-1.5 py-0.5 rounded text-xs font-mono">player.gd</code> 里通过 <code class="bg-slate-100 text-blue-700 px-1.5 py-0.5 rounded text-xs font-mono">@onready var ... = $节点路径</code> 拿到引用，再用信号把它们"连起来"：</p>
+        <div class="mb-4"><Code language="gdscript" :code="blitzTreeCode" title="blitz/scripts/player.gd（节选）" /></div>
+        <div class="mb-4"><Code language="text" :code="blitzTreeStructure" title="blitz/scenes/player.tscn 对应的节点树" /></div>
+        <aside class="bg-purple-50 border-l-4 border-purple-400 rounded-r-xl p-4">
+          <p class="text-sm text-purple-800"><strong>🔗 对照理解：</strong>这份节点树 <code class="bg-purple-100 px-1 rounded text-xs font-mono">player.tscn</code> 就好比一个 <code class="bg-purple-100 px-1 rounded text-xs font-mono">Player.vue</code> 模板：模板里的 <code class="bg-purple-100 px-1 rounded text-xs font-mono">&lt;ParryDetector /&gt;</code> 就是脚本里的 <code class="bg-purple-100 px-1 rounded text-xs font-mono">$ParryDetector</code>。Godot 用 <code class="bg-purple-100 px-1 rounded text-xs font-mono">$路径</code> 访问子节点，Vue 用 <code class="bg-purple-100 px-1 rounded text-xs font-mono">ref</code> / <code class="bg-purple-100 px-1 rounded text-xs font-mono">$refs</code> 访问子组件——都是"模板 + 引用"的组合。</p>
+        </aside>
+      </section>
+
+      <!-- 小结 -->
+      <section id="sec-8" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-blue-100 text-blue-700 rounded-lg flex items-center justify-center text-sm">📋</span>小结</h2>
         <ul class="space-y-2 text-slate-600">
           <li class="flex items-start gap-2"><span class="text-blue-500 mt-1">▸</span><span><strong>场景 ≈ React 组件</strong>（.tscn 文件、可复用、可嵌套）——纯文本，Git 友好</span></li>
@@ -161,17 +223,21 @@
 </template>
 
 <script setup lang="ts">
-import { Code, Nav } from 'components'
+import { Code, EditorLink, Nav } from 'components'
+import { useUserStore } from '@/stores/userProfle'
+const userStore = useUserStore()
 import { RouterLink } from 'vue-router'
 
 const navList = [
+  { id: "sec-overview", name: "📐 场景树结构图" },
   { id: "sec-1", name: "概述" },
   { id: "sec-2", name: "场景（Scene）" },
   { id: "sec-3", name: "节点（Node）" },
   { id: "sec-4", name: "节点生命周期" },
   { id: "sec-5", name: "SceneTree" },
   { id: "sec-6", name: "场景实例化" },
-  { id: "sec-7", name: "小结" },
+  { id: "sec-7", name: "🕹️ 实战：Blitz" },
+  { id: "sec-8", name: "小结" },
 ]
 
 const tscnExample = `[gd_scene load_steps=2 format=3 uid="uid://abc123"]
@@ -221,4 +287,23 @@ func _on_timer_timeout():
     var bullet = preload("res://bullet.tscn").instantiate()
     bullet.position = position
     get_parent().add_child(bullet)`
+
+const blitzTreeCode = `# apps/game/blitz/scripts/player.gd（节选）
+## @onready var + $路径：从节点树中取出引用（≈ Vue 的 $refs）
+@onready var parry_detector: Area2D = $ParryDetector
+@onready var hurtbox: Area2D = $Hurtbox
+
+func _ready() -> void:
+	# 拿到子节点后，配置它的碰撞层并连接信号
+	parry_detector.collision_mask = 1 << 5
+	parry_detector.area_entered.connect(_on_parry_zone_entered)
+	hurtbox.collision_mask = 1 << 1
+	hurtbox.body_entered.connect(_on_hurtbox_body_entered)`
+
+const blitzTreeStructure = `Player (CharacterBody2D)
+├── CollisionShape2D        ← 身体碰撞（圆形 r=15）
+├── ParryDetector (Area2D)  ← 格挡检测区
+│   └── CollisionShape2D    ← 检测形状（圆形 r=42）
+└── Hurtbox (Area2D)        ← 受击判定区
+    └── CollisionShape2D    ← 判定形状（圆形 r=17）`
 </script>

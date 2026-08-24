@@ -182,7 +182,7 @@
         </h2>
         <p class="text-slate-600 mb-4 leading-relaxed">
           递归的 DFS 简洁优雅，但依赖<strong>系统调用栈</strong>；显式栈的 DFS 把「栈」掌握在自己手里，可以<strong>暂停、恢复、限制深度</strong>。
-          两者本质相同——<strong>递归就是编译器帮你维护了一个隐式栈</strong>。
+          两者本质相同——<strong>递归就是编译器帮你维护了一个隐式栈</strong>。下面把这个「隐式栈」彻底拆开看，你就明白显式栈到底在控制什么。
         </p>
         <div class="overflow-x-auto mb-4">
           <table class="w-full text-sm border-collapse">
@@ -195,10 +195,116 @@
             </tbody>
           </table>
         </div>
+
+        <h3 class="text-sm font-semibold text-slate-700 mb-2">4.1 递归背后：隐式栈到底长什么样</h3>
+        <p class="text-slate-600 mb-3 text-sm leading-relaxed">
+          你以为递归「没有栈」？恰恰相反——每次调用 <code class="bg-slate-100 px-1.5 py-0.5 rounded text-xs font-mono">preorder(child)</code>，引擎都会往<strong>系统调用栈</strong>压一个<strong>调用帧</strong>，帧里装着：<strong>返回地址</strong>（回到哪里继续跑）和<strong>局部状态</strong>（当前节点、孩子循环走到第几个）。
+          走完一棵深树，栈里可能叠着几百个帧——这就是为什么递归深度受引擎限制，太深直接 <code class="bg-slate-100 px-1.5 py-0.5 rounded text-xs font-mono">RangeError: Maximum call stack size exceeded</code>。
+        </p>
+        <figure class="mb-4">
+          <svg viewBox="0 0 700 290" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <marker id="dfs-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" />
+              </marker>
+            </defs>
+
+            <text x="30" y="26" font-size="11" font-family="monospace" font-weight="bold" fill="#64748b">递归视角：preorder(1) → preorder(2) → preorder(5)</text>
+
+            <!-- 左：迷你树 -->
+            <line x1="80" y1="88" x2="80" y2="122" stroke="#94a3b8" stroke-width="2" />
+            <line x1="80" y1="158" x2="80" y2="192" stroke="#94a3b8" stroke-width="2" />
+            <line x1="80" y1="88" x2="180" y2="122" stroke="#94a3b8" stroke-width="2" />
+            <circle cx="80" cy="70" r="18" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="80" y="70" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#fff">1</text>
+            <circle cx="80" cy="140" r="18" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
+            <text x="80" y="140" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#fff">2</text>
+            <circle cx="80" cy="210" r="18" fill="#4ade80" stroke="#22c55e" stroke-width="1.5" />
+            <text x="80" y="210" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#0f172a">5</text>
+            <circle cx="180" cy="140" r="18" fill="#f59e0b" stroke="#d97706" stroke-width="1.5" />
+            <text x="180" y="140" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#fff">3</text>
+            <text x="30" y="248" font-size="10" font-family="monospace" fill="#0891b2">● 当前执行到 preorder(5)，节点 3 还没被碰</text>
+            <text x="30" y="266" font-size="10" font-family="monospace" fill="#f59e0b">● 等 preorder(5) 返回，才轮到 preorder(3)</text>
+
+            <!-- 右：调用栈 -->
+            <text x="360" y="26" font-size="11" font-family="monospace" font-weight="bold" fill="#64748b">系统调用栈（递归的「隐式栈」）</text>
+
+            <rect x="360" y="40" width="310" height="56" rx="8" fill="#fef3c7" stroke="#f59e0b" stroke-width="2" />
+            <text x="372" y="60" font-size="12" font-family="monospace" font-weight="bold" fill="#92400e">preorder(5)</text>
+            <text x="372" y="80" font-size="9" font-family="monospace" fill="#b45309">返回: preorder(2) 的孩子循环 · 已访问[1,2,5]</text>
+
+            <rect x="360" y="104" width="310" height="56" rx="8" fill="#e0f2fe" stroke="#06b6d4" stroke-width="1.5" />
+            <text x="372" y="124" font-size="12" font-family="monospace" font-weight="bold" fill="#155e75">preorder(2)</text>
+            <text x="372" y="144" font-size="9" font-family="monospace" fill="#0e7490">返回: preorder(1) 的孩子循环 · 已访问[1,2]</text>
+
+            <rect x="360" y="168" width="310" height="56" rx="8" fill="#e0f2fe" stroke="#06b6d4" stroke-width="1.5" />
+            <text x="372" y="188" font-size="12" font-family="monospace" font-weight="bold" fill="#155e75">preorder(1)</text>
+            <text x="372" y="208" font-size="9" font-family="monospace" fill="#0e7490">返回: main · 已访问[1]</text>
+
+            <rect x="360" y="232" width="310" height="22" rx="6" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="1" />
+            <text x="515" y="243" text-anchor="middle" font-size="9" font-family="monospace" fill="#64748b">栈底（入口）</text>
+
+            <line x1="108" y1="210" x2="360" y2="70" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#dfs-arr)" />
+
+            <text x="360" y="272" font-size="10" font-family="monospace" fill="#ef4444">递归深入 = 帧一层层压栈；深度受引擎限制(~1万层)，再深就爆栈</text>
+          </svg>
+          <figcaption class="text-xs text-slate-400 mt-1">图 4-1：递归的「隐式栈」——每个挂起的调用都是一个栈帧，帧里保存返回点 + 局部状态</figcaption>
+        </figure>
+
+        <h3 class="text-sm font-semibold text-slate-700 mb-2">4.2 显式栈 = 把隐式栈「搬到代码里」</h3>
+        <p class="text-slate-600 mb-3 text-sm leading-relaxed">
+          显式栈就是<strong>你自己用 <code class="bg-slate-100 px-1.5 py-0.5 rounded text-xs font-mono">while</code> 循环 + 一个数组</strong>，把上面那个调用栈手动模拟出来。
+          关键心智模型：<strong>栈里的每个元素 = 一个「还没执行完的调用」</strong>。递归版里，引擎替你 push / pop；显式版里，你自己 push / pop。
+          一一对应关系如下：
+        </p>
+        <div class="overflow-x-auto mb-4">
+          <table class="w-full text-sm border-collapse">
+            <thead><tr class="bg-slate-100 text-left"><th class="px-4 py-2 border border-slate-200 font-semibold text-slate-700">递归（隐式栈）</th><th class="px-4 py-2 border border-slate-200 font-semibold text-slate-700">显式栈（迭代）</th></tr></thead>
+            <tbody class="text-slate-600 text-xs">
+              <tr><td class="px-4 py-2 border">引擎执行 <code class="bg-slate-100 px-1 rounded font-mono">preorder(child)</code></td><td class="px-4 py-2 border">你执行 <code class="bg-slate-100 px-1 rounded font-mono">stack.push(child)</code></td></tr>
+              <tr><td class="px-4 py-2 border">函数返回 → 引擎自动弹帧</td><td class="px-4 py-2 border">你执行 <code class="bg-slate-100 px-1 rounded font-mono">stack.pop()</code></td></tr>
+              <tr><td class="px-4 py-2 border">所有孩子处理完 → 函数自然结束</td><td class="px-4 py-2 border"><code class="bg-slate-100 px-1 rounded font-mono">while (stack.length)</code> 判断「栈空即结束」</td></tr>
+              <tr><td class="px-4 py-2 border">栈帧自动保存「下一个孩子到哪了」</td><td class="px-4 py-2 border">你提前把孩子们<strong>倒序</strong>压入，靠 LIFO 保证「最左孩子先被弹出」</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <aside class="bg-purple-50 border-l-4 border-purple-400 rounded-r-xl p-4 mb-4">
+          <p class="text-sm text-purple-800"><strong>💡 关于「用循环控制压栈执行的数量」：</strong>你的直觉方向是对的——<strong>栈里每一项 = 一个「还没执行的调用」，<code>while</code> 循环就是那个执行器</strong>：每转一圈就「执行一个调用」，直到栈空为止。但有一个关键澄清：<strong>执行的总量不是你随便指定的</strong>——树有多少节点，就必须执行多少次（前序/后序都是 O(n)）。真正可控制的，是下面三个「旋钮」；其中「限深」那一个，才是字面意义上的<strong>可控制数量</strong>。</p>
+        </aside>
+
+        <h3 class="text-sm font-semibold text-slate-700 mb-2">4.3 三个控制旋钮：显式栈到底能控制什么</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+          <div class="bg-slate-50 rounded-xl p-4 border border-slate-200">
+            <p class="text-xs font-semibold text-slate-700 mb-2">旋钮 ①：压入什么</p>
+            <p class="text-xs text-slate-600 leading-relaxed">可以只压「节点」，也可以压「任务」（<code class="font-mono text-[10px]">VISIT</code> / <code class="font-mono text-[10px]">EXPAND</code>）。压入的内容越丰富，能表达的遍历时机越多（见 4.4）。</p>
+          </div>
+          <div class="bg-slate-50 rounded-xl p-4 border border-slate-200">
+            <p class="text-xs font-semibold text-slate-700 mb-2">旋钮 ②：压入顺序</p>
+            <p class="text-xs text-slate-600 leading-relaxed">倒序压孩子 → LIFO 弹出即「从左到右」；正序压 → 「右到左」。<strong>遍历方向完全由压入顺序决定</strong>，改一行就能反转。</p>
+          </div>
+          <div class="bg-slate-50 rounded-xl p-4 border border-slate-200">
+            <p class="text-xs font-semibold text-slate-700 mb-2">旋钮 ③：弹出时机 + 限深</p>
+            <p class="text-xs text-slate-600 leading-relaxed">前序「弹出即访问」；后序「第二次遇到才访问」。<strong>还可以给条目加 <code class="font-mono text-[10px]">depth</code>，超深直接不压</strong> —— 这就是可中断、可限深（见 4.4 的 IDDFS）。</p>
+          </div>
+        </div>
+
+        <h3 class="text-sm font-semibold text-slate-700 mb-2">4.4 统一任务栈：一个 while 循环走遍 前序 / 后序</h3>
+        <p class="text-slate-600 mb-3 text-sm leading-relaxed">
+          把「压入什么」旋钮用到极致：栈里不压节点，而是压<strong>任务</strong>——<code class="bg-slate-100 px-1.5 py-0.5 rounded text-xs font-mono">VISIT</code>（访问）和 <code class="bg-slate-100 px-1.5 py-0.5 rounded text-xs font-mono">EXPAND</code>（展开）。
+          <strong>VISIT 任务相对孩子任务压得越早，就越先被访问</strong>：后序先把 VISIT 压栈底（根最后弹）、前序把 VISIT 压栈顶（根最先弹）——一个循环、一行开关，前后序通吃。
+        </p>
+        <div class="mb-4"><Code language="ts" :code="taskStackCode" title="task_stack.ts" /></div>
+        <p class="text-slate-600 mb-3 text-sm leading-relaxed">
+          最后落地「可控制数量」：给每个任务带一个 <code class="bg-slate-100 px-1.5 py-0.5 rounded text-xs font-mono">depth</code>，超过 <code class="bg-slate-100 px-1.5 py-0.5 rounded text-xs font-mono">maxDepth</code> 的节点<strong>干脆不压栈</strong>。
+          反复加大限制去搜，就是<strong>迭代加深搜索（IDDFS）</strong>——拿深度优先的内存，换广度优先「一定能找到」的保证。
+        </p>
+        <div class="mb-4"><Code language="ts" :code="depthLimitCode" title="depth_limited.ts" /></div>
+
         <aside class="bg-purple-50 border-l-4 border-purple-400 rounded-r-xl p-4">
           <p class="text-sm text-purple-800"><strong>🔗 前端类比：</strong><br/>
           React 16 重写 <strong>Fiber 架构</strong>的核心动机之一：旧的递归协调<strong>无法被中断</strong>，深树遍历会卡住主线程。
-          Fiber 改用<strong>链表 + 显式栈 + while 循环</strong>，实现了可中断、可优先级的 DFS——这正是「显式栈」价值的工程体现。</p>
+          Fiber 改用<strong>链表 + 显式栈 + while 循环</strong>，把递归调用改写成<strong>「可暂停的任务」</strong>，实现了可中断、可优先级的 DFS——这正是「显式栈」价值的工程体现，也是「任务栈」思想的终极形态。</p>
         </aside>
       </section>
 
@@ -275,7 +381,8 @@
           <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span><strong>前序（先根）</strong>：弹出栈顶即访问；迭代压孩子要<strong>倒序</strong></span></li>
           <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span><strong>后序（后根）</strong>：孩子都处理完才访问根；迭代需 <code>expanded</code> 标记</span></li>
           <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span><strong>变色时机是核心</strong>：前序=入栈/弹出时，后序=孩子返回后</span></li>
-          <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span><strong>递归本质 = 隐式栈</strong>，显式栈可中断、可限深，是框架源码的做法</span></li>
+          <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span><strong>递归本质 = 隐式栈</strong>（每个挂起的调用 = 一个栈帧）；显式栈 = 用 <code>while</code> 循环自己 push/pop</span></li>
+          <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span><strong>显式栈三个旋钮</strong>：压入什么（节点/任务）、压入顺序（方向）、弹出时机 + 限深（IDDFS）</span></li>
           <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span><strong>树 DFS 无需 visited</strong>（无环），图 DFS 必须有 visited</span></li>
         </ul>
       </section>
@@ -535,4 +642,62 @@ function postorderByReverse(root: TreeNode): number[] {
 }
 
 // 典型应用：求树高、统计子树大小、删除整棵树（先删子再删父）`
+
+const taskStackCode = `// ===== 统一任务栈：一个 while 循环走遍 前序 / 后序 =====
+// 栈里每一项 = 一个「待执行的调用」；while 循环体 = 执行器
+// 压入 VISIT 的时机，决定了根什么时候被访问
+interface TreeNode { val: number; children: TreeNode[] }
+
+type Task =
+  | { kind: 'VISIT'; node: TreeNode }    // 访问节点
+  | { kind: 'EXPAND'; node: TreeNode }   // 展开节点（压入孩子）
+
+function dfs(root: TreeNode, post: boolean): number[] {
+  const res: number[] = []
+  const stack: Task[] = [{ kind: 'EXPAND', node: root }]
+
+  while (stack.length) {                 // 还有「待执行的调用」就继续
+    const t = stack.pop()!               // 取一个出来执行
+    if (t.kind === 'VISIT') {
+      res.push(t.node.val)               // 唯一真正"访问"的地方
+    } else {
+      // EXPAND：决定「根」和「孩子」的相对顺序
+      if (post) stack.push({ kind: 'VISIT', node: t.node })  // 后序：根最后 → 先压栈底
+      for (let i = t.node.children.length - 1; i >= 0; i--) {
+        stack.push({ kind: 'EXPAND', node: t.node.children[i] })
+      }
+      if (!post) stack.push({ kind: 'VISIT', node: t.node }) // 前序：根最先 → 后压栈顶
+    }
+  }
+  return res
+}
+
+// 同一个函数：post=false → [1,2,5,6,3,7,4,8,9]（前序）
+//                 post=true  → [5,6,2,7,3,8,9,4,1]（后序）`
+
+const depthLimitCode = `// ===== 深度受限版：这就是「可控制数量」的落地 =====
+// 给每个栈条目带一个 depth，超过 maxDepth 直接不压入
+function dfsLimited(root: TreeNode, maxDepth: number): number[] {
+  const res: number[] = []
+  const stack: { node: TreeNode; depth: number }[] = [{ node: root, depth: 0 }]
+
+  while (stack.length) {
+    const { node, depth } = stack.pop()!
+    if (depth > maxDepth) continue       // ← 关键：超深 = 不访问也不压孩子
+    res.push(node.val)
+    for (let i = node.children.length - 1; i >= 0; i--) {
+      stack.push({ node: node.children[i], depth: depth + 1 })
+    }
+  }
+  return res
+}
+
+// 迭代加深搜索 IDDFS：反复加深限制，直到找到目标
+// 深度优先的内存占用 + 广度优先「一定能找到」的保证
+function iddfs(root: TreeNode, target: number, maxLimit: number): boolean {
+  for (let d = 0; d <= maxLimit; d++) {
+    if (dfsLimited(root, d).includes(target)) return true
+  }
+  return false
+}`
 </script>
