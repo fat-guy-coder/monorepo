@@ -132,27 +132,128 @@
         </div>
       </section>
 
-      <!-- 1. goroutine 基础 -->
+      <!-- 1. goroutine = 用户态协程 -->
       <section id="sec-1" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
           <span class="w-8 h-8 bg-cyan-100 text-cyan-700 rounded-lg flex items-center justify-center text-sm">1</span>
-          goroutine = 用户态轻量线程，不是 OS 线程
+          goroutine = 用户态协程，不是 OS 线程
         </h2>
         <p class="text-slate-600 mb-4 leading-relaxed">
-          goroutine 是 Go 运行时管理的<strong>用户态协程</strong>。一个 <code class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-xs font-mono">go</code> 关键字就是启动一个并发的 goroutine。
-          它<strong>不是操作系统线程</strong>——一个 OS 线程上可以运行成百上千个 goroutine，Go runtime 负责调度。
+          goroutine 是 Go 运行时（runtime）自己管理的<strong>用户态协程</strong>。一个 <code class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-xs font-mono">go</code> 关键字就启动一个并发协程。
+          它<strong>不是操作系统线程</strong>——一个 OS 线程上可以跑成百上千个 goroutine，调度由 Go runtime 完成，<strong>不劳烦内核</strong>。
+          这一节把「为什么用户态切换这么轻」讲透。
         </p>
 
-        <aside class="bg-purple-50 border-l-4 border-purple-400 rounded-r-xl p-4 mb-4">
+        <div class="mb-4"><Code language="go" :code="basicCode" title="goroutine_basic.go" /></div>
+
+        <aside class="bg-purple-50 border-l-4 border-purple-400 rounded-r-xl p-4 mb-5">
           <p class="text-sm text-purple-800"><strong>🔗 前端/跨语言类比：</strong><br/>
           JS: <code class="bg-purple-100 text-purple-700 px-1 py-0.5 rounded text-xs">await Promise.all([fetch1(), fetch2()])</code> — 两个请求并发<br/>
-          Go: <code class="bg-purple-100 text-purple-700 px-1 py-0.5 rounded text-xs">go fetch1(); go fetch2()</code> — 更简洁，写起来像同步代码却是并发的<br/>
-          <strong>关键差异：</strong>Node.js Worker Thread ~几 MB 内存；Go goroutine 初始栈仅 <strong>2KB</strong>，可轻松启动<strong>百万个</strong>。<br/>
-          Python asyncio ≈ Go goroutine 的并发模型（协程+事件循环），但 Go 还能利用多核<strong>并行</strong>。
+          Go: <code class="bg-purple-100 text-purple-700 px-1 py-0.5 rounded text-xs">go fetch1(); go fetch2()</code> — 写起来像同步代码，却是并发的<br/>
+          <strong>关键差异：</strong>Node.js 线程栈默认几 MB；Go goroutine 初始栈仅 <strong>2KB</strong>，可轻松启动<strong>百万个</strong>。<br/>
+          Python asyncio ≈ Go 的用户态并发模型（协程 + 事件循环），但 Go 有多个 P，能利用多核<strong>真正并行</strong>。
           </p>
         </aside>
 
-        <div class="mb-4"><Code language="go" :code="basicCode" title="goroutine_basic.go" /></div>
+        <h3 class="text-md font-semibold text-slate-700 mb-3">1.1 先分清「用户态」和「内核态」—— 贵的是进内核</h3>
+        <p class="text-slate-600 mb-3 leading-relaxed text-sm">
+          要理解 goroutine 为什么轻，得先知道「切换」贵在哪里。CPU 运行时分两种模式：
+        </p>
+        <div class="overflow-x-auto mb-3">
+          <table class="w-full text-sm border-collapse">
+            <thead><tr class="bg-slate-100 text-left"><th class="px-4 py-2 border border-slate-200 font-semibold">模式</th><th class="px-4 py-2 border border-slate-200 font-semibold">由谁执行</th><th class="px-4 py-2 border border-slate-200 font-semibold">权限</th><th class="px-4 py-2 border border-slate-200 font-semibold">能否碰硬件/内核数据</th></tr></thead>
+            <tbody class="text-slate-600">
+              <tr><td class="px-4 py-2 border font-mono text-xs font-bold text-slate-700">用户态 User Mode</td><td class="px-4 py-2 border">你的应用代码</td><td class="px-4 py-2 border">受限，不能执行特权指令</td><td class="px-4 py-2 border">❌</td></tr>
+              <tr><td class="px-4 py-2 border font-mono text-xs font-bold text-slate-700">内核态 Kernel Mode</td><td class="px-4 py-2 border">操作系统内核</td><td class="px-4 py-2 border">全权限，可访问所有资源</td><td class="px-4 py-2 border">✅</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="text-slate-600 mb-4 leading-relaxed text-sm">
+          每次<strong>系统调用</strong>（读写文件、收发网络、创建线程……）都要从用户态<strong>陷入内核态</strong>再返回：CPU 切换特权级、保存/恢复一整套寄存器、可能切换页表导致 <strong>TLB / Cache 失效</strong>——光这一趟就有几百 ns ~ 几 μs 的开销。这正是「线程切换贵」的根本来源。
+        </p>
+
+        <h3 class="text-md font-semibold text-slate-700 mb-3">1.2 内核线程切换：为什么一次要花几 μs</h3>
+        <p class="text-slate-600 mb-2 leading-relaxed text-sm">操作系统调度线程切换，大致做这几件事：</p>
+        <ol class="space-y-2 mb-3 text-sm text-slate-600 leading-relaxed">
+          <li class="flex gap-2"><span class="shrink-0 w-6 h-6 bg-cyan-500 text-white rounded-full flex items-center justify-center text-xs font-bold">1</span><span><strong>时钟中断触发</strong>：CPU 每若干 ms 收到硬件中断，进内核态找调度器。</span></li>
+          <li class="flex gap-2"><span class="shrink-0 w-6 h-6 bg-cyan-500 text-white rounded-full flex items-center justify-center text-xs font-bold">2</span><span><strong>保存当前线程上下文</strong>：所有通用寄存器、PC、SP、内核栈指针等，写进该线程的内核控制块。</span></li>
+          <li class="flex gap-2"><span class="shrink-0 w-6 h-6 bg-cyan-500 text-white rounded-full flex items-center justify-center text-xs font-bold">3</span><span><strong>切换内存上下文</strong>：换页表，TLB 被冲刷，之后访问数据大概率 Cache 未命中——这是隐藏的大头成本。</span></li>
+          <li class="flex gap-2"><span class="shrink-0 w-6 h-6 bg-cyan-500 text-white rounded-full flex items-center justify-center text-xs font-bold">4</span><span><strong>恢复目标线程上下文</strong>：读它的寄存器、PC，返回用户态继续跑。</span></li>
+        </ol>
+        <p class="text-slate-600 mb-4 leading-relaxed text-sm">
+          所以线程切换 ≈ <strong>一次内核往返 + 页表切换 + Cache 冷启动</strong>，约 <strong>1~10 μs</strong>，而且是<strong>抢占式</strong>——你无法控制它何时发生。
+        </p>
+
+        <h3 class="text-md font-semibold text-slate-700 mb-3">1.3 goroutine 切换：上下文就存在自己的 g 里（gobuf）</h3>
+        <p class="text-slate-600 mb-3 leading-relaxed text-sm">
+          goroutine 把「切换需要的全部现场」——栈指针 SP、指令指针 PC、通用寄存器——保存在 runtime 内部的 <code class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-xs font-mono">g.gobuf</code> 字段里。
+          切换就是：<strong>把正在跑的 G1 的寄存器写进它的 gobuf，再从 G2 的 gobuf 读出来恢复</strong>，然后跳转执行。
+          全程不触发系统调用、不进内核、不换页表——这是它比线程快 ~100 倍的根本原因。
+        </p>
+
+        <figure class="mb-4">
+          <svg viewBox="0 0 560 268" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <marker id="uctx-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" /></marker>
+            </defs>
+            <rect x="150" y="8" width="240" height="44" rx="6" fill="#fef2f2" stroke="#ef4444" stroke-width="1.5" />
+            <text x="270" y="36" text-anchor="middle" font-size="12" font-family="monospace" font-weight="bold" fill="#b91c1c">M（OS 线程）正在执行 G1</text>
+            <line x1="270" y1="52" x2="270" y2="80" stroke="#94a3b8" stroke-width="2" marker-end="url(#uctx-arr)" />
+            <text x="282" y="72" font-size="10" font-family="monospace" fill="#64748b">① G1 执行 &lt;-ch，channel 空 → 阻塞</text>
+            <rect x="150" y="82" width="240" height="66" rx="6" fill="#e0f2fe" stroke="#0ea5e9" stroke-width="1.5" />
+            <text x="270" y="102" text-anchor="middle" font-size="11" font-family="monospace" font-weight="bold" fill="#0369a1">runtime：保存 G1 上下文到 gobuf</text>
+            <text x="270" y="120" text-anchor="middle" font-size="10" font-family="monospace" fill="#0369a1">SP · PC · 寄存器 → G1.gobuf</text>
+            <text x="270" y="137" text-anchor="middle" font-size="10" font-family="monospace" fill="#0369a1">状态 _Grunning → _Gwaiting</text>
+            <line x1="270" y1="148" x2="270" y2="176" stroke="#94a3b8" stroke-width="2" marker-end="url(#uctx-arr)" />
+            <text x="282" y="168" font-size="10" font-family="monospace" fill="#64748b">② 从 P 本地队列取下一个 G2</text>
+            <rect x="150" y="178" width="240" height="66" rx="6" fill="#e0f2fe" stroke="#0ea5e9" stroke-width="1.5" />
+            <text x="270" y="198" text-anchor="middle" font-size="11" font-family="monospace" font-weight="bold" fill="#0369a1">runtime：恢复 G2 上下文</text>
+            <text x="270" y="216" text-anchor="middle" font-size="10" font-family="monospace" fill="#0369a1">从 G2.gobuf 读回 SP · PC</text>
+            <text x="270" y="233" text-anchor="middle" font-size="10" font-family="monospace" fill="#0369a1">M 跳转 → 继续执行 G2</text>
+            <rect x="414" y="82" width="132" height="122" rx="8" fill="#ecfdf5" stroke="#10b981" stroke-width="1.5" />
+            <text x="480" y="104" text-anchor="middle" font-size="11" font-family="monospace" font-weight="bold" fill="#15803d">✅ 全程用户态</text>
+            <text x="480" y="124" text-anchor="middle" font-size="10" font-family="monospace" fill="#15803d">无系统调用</text>
+            <text x="480" y="142" text-anchor="middle" font-size="10" font-family="monospace" fill="#15803d">不换页表 / 不失效 Cache</text>
+            <text x="480" y="162" text-anchor="middle" font-size="10" font-family="monospace" fill="#15803d">切换 ~ 几十~上百 ns</text>
+            <text x="480" y="182" text-anchor="middle" font-size="10" font-family="monospace" fill="#15803d">vs 线程 ~ μs（≈100 倍）</text>
+          </svg>
+          <figcaption class="text-xs text-slate-400 mt-1">图 2：一次用户态切换——G1 阻塞时把寄存器存进自己的 gobuf，再从 G2 的 gobuf 恢复，M 从头到尾没离开用户态</figcaption>
+        </figure>
+
+        <p class="text-slate-600 mb-2 leading-relaxed text-sm">把上图翻译成完整执行流程（以 G1 在 channel 上等待为例）：</p>
+        <ol class="space-y-2 mb-4 text-sm text-slate-600 leading-relaxed">
+          <li class="flex gap-2"><span class="shrink-0 w-6 h-6 bg-cyan-500 text-white rounded-full flex items-center justify-center text-xs font-bold">1</span><span>G1 在 M 上执行到 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs font-mono">&lt;-ch</code>，发现 channel 空，需要等待。</span></li>
+          <li class="flex gap-2"><span class="shrink-0 w-6 h-6 bg-cyan-500 text-white rounded-full flex items-center justify-center text-xs font-bold">2</span><span>runtime 调 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs font-mono">gopark</code>：把 SP/PC/寄存器写进 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs font-mono">G1.gobuf</code>，G1 状态 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs font-mono">_Grunning → _Gwaiting</code>，挂到 ch 的等待队列。</span></li>
+          <li class="flex gap-2"><span class="shrink-0 w-6 h-6 bg-cyan-500 text-white rounded-full flex items-center justify-center text-xs font-bold">3</span><span>runtime 从 P 的本地队列取 G2（空则工作窃取），从 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs font-mono">G2.gobuf</code> 恢复寄存器。</span></li>
+          <li class="flex gap-2"><span class="shrink-0 w-6 h-6 bg-cyan-500 text-white rounded-full flex items-center justify-center text-xs font-bold">4</span><span>M 跳转到 G2 的 PC，无缝继续执行——全程<strong>没有一次系统调用</strong>。</span></li>
+          <li class="flex gap-2"><span class="shrink-0 w-6 h-6 bg-cyan-500 text-white rounded-full flex items-center justify-center text-xs font-bold">5</span><span>回头，别的 goroutine 往 ch 发了数据 → runtime 调 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs font-mono">goready</code>，G1 变 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs font-mono">_Grunnable</code> 放回队列，轮到它时再从 gobuf 恢复接着跑。</span></li>
+        </ol>
+
+        <h3 class="text-md font-semibold text-slate-700 mb-3">1.4 协作式 + 抢占式：goroutine 比「严格协程」更抗饿</h3>
+        <p class="text-slate-600 mb-2 leading-relaxed text-sm">
+          传统协程（Lua、Python generator）是<strong>协作式</strong>：只有在你主动 <code class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-xs font-mono">yield</code> 的点才会让出 CPU，一个协程死循环就能卡死整个线程。
+          goroutine 是<strong>协作 + 抢占混合</strong>：
+        </p>
+        <ul class="space-y-2 mb-3 text-sm text-slate-600 leading-relaxed">
+          <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span><strong>协作部分（让出点）</strong>：channel 收发、系统调用、锁竞争、<code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs font-mono">time.Sleep</code>、GC、显式 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs font-mono">runtime.Gosched()</code>——这些地方 runtime 主动调度别的 G。</span></li>
+          <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span><strong>抢占部分（Go 1.14+）</strong>：基于信号<strong>异步抢占</strong>——goroutine 跑满 <strong>10ms</strong>，runtime 向它所在 M 发信号强制打断、保存上下文、换 G。所以 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs font-mono">for {}</code> 死循环在 1.14+ 也饿不死别的 goroutine（会浪费 CPU，但不是死锁）。</span></li>
+        </ul>
+        <div class="mb-4"><Code language="go" :code="goschedCode" title="user_mode_switch.go" /></div>
+
+        <h3 class="text-md font-semibold text-slate-700 mb-3">1.5 对比总表：OS 线程 vs goroutine</h3>
+        <div class="overflow-x-auto mb-4">
+          <table class="w-full text-sm border-collapse">
+            <thead><tr class="bg-slate-100 text-left"><th class="px-4 py-2 border border-slate-200 font-semibold">维度</th><th class="px-4 py-2 border border-slate-200 font-semibold">OS 线程</th><th class="px-4 py-2 border border-slate-200 font-semibold">goroutine</th></tr></thead>
+            <tbody class="text-slate-600">
+              <tr><td class="px-4 py-2 border">栈</td><td class="px-4 py-2 border">固定 1~8 MB</td><td class="px-4 py-2 border">初始 2 KB，按需 2x 增长</td></tr>
+              <tr><td class="px-4 py-2 border">谁调度</td><td class="px-4 py-2 border">操作系统内核（抢占式）</td><td class="px-4 py-2 border">Go runtime（用户态，协作 + 10ms 抢占）</td></tr>
+              <tr><td class="px-4 py-2 border">切换开销</td><td class="px-4 py-2 border">~1~10 μs（进内核 + 页表切换 + Cache 冷启动）</td><td class="px-4 py-2 border">~几十~上百 ns（纯用户态，无 syscall）</td></tr>
+              <tr><td class="px-4 py-2 border">创建开销</td><td class="px-4 py-2 border">~几十 μs</td><td class="px-4 py-2 border">~几百 ns（差 ~1000 倍）</td></tr>
+              <tr><td class="px-4 py-2 border">上限数量</td><td class="px-4 py-2 border">几千个（受内存/内核限制）</td><td class="px-4 py-2 border">百万级</td></tr>
+              <tr><td class="px-4 py-2 border">并行能力</td><td class="px-4 py-2 border">天然并行</td><td class="px-4 py-2 border">多核并行靠 P（=GOMAXPROCS）映射到线程</td></tr>
+            </tbody>
+          </table>
+        </div>
 
         <aside class="bg-amber-50 border-l-4 border-amber-400 rounded-r-xl p-4">
           <p class="text-sm text-amber-800"><strong>⚠️ 注意：</strong>main 函数退出时，<strong>所有 goroutine 都会被强制终止</strong>。示例中用 <code class="bg-amber-100 text-amber-700 px-1 py-0.5 rounded text-xs">time.Sleep</code> 只是演示，实际项目用 <code class="bg-amber-100 text-amber-700 px-1 py-0.5 rounded text-xs">sync.WaitGroup</code> 或 channel 来等待。</p>
@@ -283,7 +384,11 @@
         <div class="space-y-3 text-slate-600 text-sm">
           <div class="bg-slate-50 rounded-xl p-4 border border-slate-200">
             <strong class="text-slate-700">Q: goroutine 和 OS 线程的区别？</strong>
-            <p class="mt-1">goroutine 是<strong>用户态</strong>，Go runtime 调度，2KB 可增长栈。线程是<strong>内核态</strong>，OS 调度，1-8MB 固定栈。goroutine 切换 ~几十 ns，线程切换 ~几 μs（~100x 差距）。</p>
+            <p class="mt-1">goroutine 是<strong>用户态</strong>，Go runtime 调度，2KB 可增长栈。线程是<strong>内核态</strong>，OS 调度，1-8MB 固定栈。goroutine 切换 ~几十~上百 ns，线程切换 ~1-10 μs（~100x 差距）。根本原因：goroutine 切 G 只读写用户态内存（gobuf），线程切换要进内核 + 换页表 + TLB/Cache 失效。</p>
+          </div>
+          <div class="bg-slate-50 rounded-xl p-4 border border-slate-200">
+            <strong class="text-slate-700">Q: goroutine 是协作式还是抢占式？</strong>
+            <p class="mt-1"><strong>两者都有</strong>。协作部分：channel 收发、syscall、锁、<code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs font-mono">time.Sleep</code>、<code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs font-mono">runtime.Gosched()</code> 这些「让出点」主动让出 CPU。抢占部分：Go 1.14+ 基于信号的<strong>异步抢占</strong>，goroutine 跑满 10ms 会被强制打断。所以死循环也饿不死其他 goroutine。</p>
           </div>
           <div class="bg-slate-50 rounded-xl p-4 border border-slate-200">
             <strong class="text-slate-700">Q: GOMAXPROCS 设多少合适？</strong>
@@ -348,6 +453,7 @@
         </h2>
         <ul class="space-y-2 text-slate-600">
           <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span><code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">go f()</code> 启动一个 goroutine — 初始 2KB 栈</span></li>
+          <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span><strong>用户态切换</strong>：goroutine 的现场存在自己的 <code class="bg-slate-100 px-1 rounded text-cyan-700 text-xs">gobuf</code>，切 G 不进内核、无 syscall，~几十~上百 ns（vs 线程 ~μs，≈100 倍）</span></li>
           <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span><strong>GMP = G（goroutine）+ M（OS 线程）+ P（逻辑处理器）</strong></span></li>
           <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span>M:N 调度：N 个 goroutine → M 个 OS 线程，用户态切换极快</span></li>
           <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span><strong>工作窃取：</strong>空 P 从忙 P 偷 G，动态负载均衡</span></li>
@@ -359,7 +465,7 @@
 
     <footer class="max-w-4xl mx-auto px-6 py-8">
       <nav class="flex justify-between items-center pt-4 border-t border-slate-200 text-sm">
-        <RouterLink to="/backend/BackendLanguage/GO/go-stage-1-basics/go-1-19-testing" class="text-slate-500 hover:text-cyan-600 flex items-center gap-1">← 上一节：单元测试</RouterLink>
+        <RouterLink to="/backend/BackendLanguage/GO/go-stage-1-basics/go-1-22-reflection" class="text-slate-500 hover:text-cyan-600 flex items-center gap-1">← 上一节：反射 reflect</RouterLink>
         <RouterLink to="/backend/BackendLanguage/GO/go-stage-2-concurrency/go-2-2-channels" class="text-cyan-600 hover:text-cyan-700 font-medium flex items-center gap-1">下一节：Channel 通道 →</RouterLink>
       </nav>
     </footer>
@@ -375,7 +481,7 @@ const userStore = useUserStore()
 
 const navList = [
   { id: "sec-overview", name: "📐 结构总览" },
-  { id: "sec-1", name: "goroutine 基础" },
+  { id: "sec-1", name: "用户态协程" },
   { id: "sec-2", name: "GMP 调度模型" },
   { id: "sec-3", name: "可增长栈" },
   { id: "sec-4", name: "闭包陷阱 & WaitGroup" },
@@ -518,6 +624,41 @@ func say(s string) {
 // hello
 // world
 // ...`
+
+const goschedCode = `// runtime.Gosched() — 显式让出 CPU（把执行权交还调度器）
+// 演示「协作式切换点」：单 P 下，两个协程靠 Gosched 交替运行
+package main
+
+import (
+    "fmt"
+    "runtime"
+    "time"
+)
+
+func worker(name string) {
+    for i := 0; i < 3; i++ {
+        fmt.Println(name, i)
+        runtime.Gosched() // 让出执行权——单 P 下另一个协程才有机会跑
+    }
+}
+
+func main() {
+    runtime.GOMAXPROCS(1) // 强制单 P，保证是"切换"而不是"并行"
+
+    go worker("A")
+    go worker("B")
+
+    time.Sleep(time.Millisecond) // 给协程执行的机会
+}
+// 输出（A/B 交替，谁先跑不固定——Gosched 就是协作式切换点）:
+// B 0
+// A 0
+// B 1
+// A 1
+// B 2
+// A 2
+// 若把 Gosched 删掉：单 P 下第一个协程连续跑完 3 次才轮到第二个
+// （1.14+ 有 10ms 抢占，但 3 次循环远不到 10ms，顺序基本固定）`
 
 const gmpCode = `package main
 

@@ -93,7 +93,7 @@
     <footer class="max-w-4xl mx-auto px-6 py-8">
       <nav class="flex justify-between items-center pt-4 border-t border-slate-200 text-sm">
         <RouterLink to="/backend/BackendLanguage/GO/go-stage-1-basics/go-1-18-file-io" class="text-slate-500 hover:text-cyan-600 transition-colors flex items-center gap-1">← 上一节：文件 I/O</RouterLink>
-        <RouterLink to="/backend/BackendLanguage/GO/go-stage-2-concurrency/go-2-1-goroutine-gmp" class="text-cyan-600 hover:text-cyan-700 font-medium transition-colors flex items-center gap-1">下一节：Goroutine 与 GMP →</RouterLink>
+        <RouterLink to="/backend/BackendLanguage/GO/go-stage-1-basics/go-1-20-generics" class="text-cyan-600 hover:text-cyan-700 font-medium transition-colors flex items-center gap-1">下一节：泛型 Generics →</RouterLink>
       </nav>
     </footer>
   </div>

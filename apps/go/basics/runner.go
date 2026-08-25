@@ -28,6 +28,9 @@ func RunAll() {
 	RunTime()
 	RunFileIO()
 	RunTesting()
+	RunGenerics()
+	RunJSON()
+	RunReflection()
 
 	fmt.Println("\n✅ 基础入门阶段完成！")
 }
@@ -37,6 +40,13 @@ func RunTopic(topic string) bool {
 	topic = strings.ToLower(strings.TrimSpace(topic))
 
 	switch {
+	// 具体关键词优先（matchTopic 是子串匹配，如 "reflection" 含 "io"，会被下面宽泛的 io 抢走）
+	case matchTopic(topic, "generic", "泛型"):
+		RunGenerics()
+	case matchTopic(topic, "json", "序列化"):
+		RunJSON()
+	case matchTopic(topic, "reflect", "反射"):
+		RunReflection()
 	case matchTopic(topic, "env", "tools", "环境", "工具"):
 		RunEnvTools()
 	case matchTopic(topic, "variable", "variables", "变量", "类型"):
@@ -77,7 +87,7 @@ func RunTopic(topic string) bool {
 		RunTesting()
 	default:
 		fmt.Printf("未知的基础主题: %s\n", topic)
-		fmt.Println("可用: env, variables, operators, fmt, control, functions, defer, arrays, maps, pointers, structs, new, methods, packages, strings, errors, time, file, testing")
+		fmt.Println("可用: env, variables, operators, fmt, control, functions, defer, arrays, maps, pointers, structs, new, methods, packages, strings, errors, time, file, testing, generics, json, reflection")
 		return false
 	}
 	return true

@@ -287,6 +287,24 @@
           <p>② <code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">for v := range ch</code> —— 先读光缓冲里剩下的值（FIFO），<strong>读空后自动退出循环</strong></p>
           <p>③ <code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">select { case &lt;-ch }</code> —— 关闭后该 case 永久「就绪」，每次命中都返回 <code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">ok=false</code></p>
         </div>
+
+        <h3 class="text-sm font-semibold text-slate-700 mb-2">for v := range ch —— 语法糖拆解（⭐ 最重要）</h3>
+        <p class="text-slate-600 mb-3 leading-relaxed text-sm">
+          <code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">for v := range ch</code> 是「反复接收」的语法糖，等价于下面这段 <code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">v, ok := &lt;-ch</code> 循环：
+        </p>
+        <div class="mb-4"><Code language="go" :code="rangeChanCode" title="range-chan-sugar.go" /></div>
+        <ul class="space-y-2 text-slate-600 text-sm mb-3">
+          <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span><strong>只要 ok=true</strong>（通道开着、有值）→ 继续收，执行循环体</span></li>
+          <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span><strong>ok=false</strong>（已 close 且缓冲排空）→ 自动退出循环</span></li>
+          <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span>和 slice/map 的 range 不同：通道 range <strong>没有索引下标</strong>，循环体每次拿到的是一个<strong>值</strong>；<code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">for range ch</code>（不取值）则只关心「有没有值」——常用来<strong>纯等关闭信号</strong></span></li>
+        </ul>
+        <aside class="bg-amber-50 border-l-4 border-amber-400 rounded-r-xl p-4 mb-4">
+          <p class="text-sm text-amber-800"><strong>⚠️ 不 close 能不能用 range？</strong>能——通道开着 range 照样收值。但<strong>循环永远不会结束</strong>：range 一直阻塞等下一个值。在 main 里 → 死锁；在 goroutine 里 → 泄漏。<strong>所以 close 不是「用 range 的前提」，而是「让 range 正常退出的前提」。</strong></p>
+        </aside>
+
+        <div class="bg-slate-50 rounded-xl p-3 mb-4">
+          <p class="text-sm text-slate-700"><strong>📌 close 跟缓冲区填满无关：</strong>发 0 个、发 2 个（容量 3）都能关——close 只是宣告「不再发送」，缓冲里已有的值照收不误。只有 <code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">close</code> 之后再 <code class="bg-slate-100 text-cyan-700 px-1 rounded text-xs font-mono">ch &lt;- v</code> 才是 panic。「缓冲满」管发送阻塞，「关闭」管禁止新发送——<strong>两件事互不相干</strong>。</p>
+        </div>
         <aside class="bg-red-50 border-l-4 border-red-400 rounded-r-xl p-4 mb-4"><p class="text-sm text-red-800"><strong>⚠️ 空转陷阱：</strong><code class="bg-red-100 px-1 rounded text-xs font-mono">for { select { case &lt;-ch: } }</code> 遇到已关闭的 channel 会<strong>空转死循环</strong>（case 永远就绪）。退出必须靠 <code class="bg-red-100 px-1 rounded text-xs font-mono">v, ok := &lt;-ch</code> 判断 ok，或把 channel 置为 nil。</p></aside>
 
         <h3 class="text-sm font-semibold text-slate-700 mb-2">内部机制：广播到底做了什么</h3>
@@ -647,6 +665,28 @@ for v := range ch2 { fmt.Println(v) }  // 输出: 1 2 3（读完自动退出）
 
 // ch <- 4                 // ❌ panic! send on closed channel（close 后不能再 send）`
 
+const rangeChanCode = `// for v := range ch 是语法糖，等价于下面这段 v, ok := <-ch 循环：
+ch := make(chan int, 3)
+ch <- 10; ch <- 20; ch <- 30
+close(ch) // 不 close → 下面的 range 永不退出（main 里死锁 / goroutine 里泄漏）
+
+for v := range ch {   // 等价 ↓
+    fmt.Println(v)    // 10, 20, 30（close 后先读光存量再退出）
+}
+
+// for v := range ch 的真实展开：
+for {
+    v, ok := <-ch
+    if !ok { // 已关闭 且 缓冲排空
+        break // 自动退出循环
+    }
+    fmt.Println(v)
+}
+
+// for range ch（不取值）→ 纯等关闭信号：
+for range ch {
+    // 通道没关就一直等；一 close 立即结束循环
+}`
 const closeMechanismCode = `// close 的底层行为（runtime closechan 的要点）：
 // ① 置 closed = 1
 // ② 唤醒接收队列所有阻塞 goroutine → 各拿 (零值, ok=false)

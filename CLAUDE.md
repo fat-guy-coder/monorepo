@@ -45,6 +45,7 @@ monorepo/
 | Skill | 用途 |
 |-------|------|
 | `doc-style` | 所有学习文档 .vue 文件的统一样式规范（创建/编辑文档时必须遵循） |
+| `go-backend-practice` | Go 学习驱动规则——「能塞进 backend 就塞进去」：三档消化法（A档塞backend / B档playground / C档跑demo），阶段3 Web 开发知识基本全塞 apps/go/backend。填 Go 文档 / 加 backend 功能时遵循 |
 | `dsa-diagram` | DSA 文档**开头**的静态 SVG 结构图规范（结构图 + before/after 操作示意图） |
 | `dsa-visualizer` | DSA 文档**结尾**的 Canvas 动画规范（vue-konva inline 动画） |
 | `openspec-propose` | 提出新变更的完整提案 |

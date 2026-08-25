@@ -1,6 +1,6 @@
 # 📊 全项目进度面板
 
-> 更新时间: 2026-08-24 | 当前活跃任务: **Go 文档补全（阶段 2 并发 13/13 均含结构总览 · 下一步阶段 3 Web）**
+> 更新时间: 2026-08-25 | 当前活跃任务: **Go 文档补全（阶段 1 基础 22/22 · 阶段 2 并发 14/14 · 下一步阶段 3 Web）**
 
 ## 🎯 当前任务（下次 AI 会话继续入口）
 
@@ -96,18 +96,30 @@
 
 | 阶段 | 名称 | .vue 文档 | .go 代码 | 状态 |
 |------|------|-----------|----------|------|
-| 1 | 基础入门 | 19/19 ✅ | 19/19 ✅ | ✅ 完成 |
-| 2 | 并发编程 | 13/13 ✅ | 4/13 | 🔄 进行中 |
+| 1 | 基础入门 | 22/22 ✅ | 22/22 ✅ | ✅ 完成 |
+| 2 | 并发编程 | 14/14 ✅ | 5/14 | 🔄 进行中 |
 | 3 | Web 开发 | 0/16 | 3/16 | ⏳ 待开始 |
 | 4 | 数据库 | 0/14 | 0/14 | ⏳ 待开始 |
 | 5 | 微服务 | 0/16 | 3/16 | ⏳ 待开始 |
 | 6 | 工程化 | 0/15 | 0/15 | ⏳ 待开始 |
 | 7 | 进阶 | 0/15 | 0/15 | ⏳ 待开始 |
-| **合计** | | **32/108** | **29/108** | **28%** |
+| **合计** | | **36/108** | **33/108** | **33%** |
 
-**阶段 2 并发文档（2026-08-24 更新）：** 13 个 .vue 文件均有内容，其中 13 篇含「结构总览」层（go-2-1 ~ go-2-13）——**go-2-12 errgroup** 补「扇出任务 · 聚合错误 · 出错即取消」结构图（main → Group → 3 个 goroutine；G2 出错 → cancel 广播 → G3 收到 <-ctx.Done() 提前退出 → Wait 聚合返回第一个 error）；**go-2-13 goroutine 泄漏** 补「阻塞无人接收的 channel → park 在 sendq → 栈被引用 → GC 无法回收」结构图（含检测/修复速查）。此前已补全 go-2-9 并发模式（Fan-out/in · Worker Pool · Or-Done · Generator）、go-2-10 竞态检测（竞态三条件 · 典型场景 · 修复速查）、go-2-11 sync.Pool（无锁设计 + victim 两代缓存 · 标准姿势 · 适用场景与优缺点）；**go-1-14 包与模块** 补全为 10 节（新增「包是什么」「实战：apps/go/backend 分层」「常见错误」，强化 internal 边界 + go.mod 路径映射）；**go-2-3 select** 强化「④ for-select 循环」，明确「无间隔/事件驱动」语义。动画层（vue-konva）可选补齐。
+**阶段 2 并发文档（2026-08-24 更新）：** 13 个 .vue 文件均有内容，其中 13 篇含「结构总览」层（go-2-1 ~ go-2-13）——**go-2-12 errgroup** 补「扇出任务 · 聚合错误 · 出错即取消」结构图（main → Group → 3 个 goroutine；G2 出错 → cancel 广播 → G3 收到 <-ctx.Done() 提前退出 → Wait 聚合返回第一个 error）；**go-2-13 goroutine 泄漏** 补「阻塞无人接收的 channel → park 在 sendq → 栈被引用 → GC 无法回收」结构图（含检测/修复速查）。此前已补全 go-2-9 并发模式（Fan-out/in · Worker Pool · Or-Done · Generator）、go-2-10 竞态检测（竞态三条件 · 典型场景 · 修复速查）、go-2-11 sync.Pool（无锁设计 + victim 两代缓存 · 标准姿势 · 适用场景与优缺点）；**go-1-14 包与模块** 补全为 10 节（新增「包是什么」「实战：apps/go/backend 分层」「常见错误」，强化 internal 边界 + go.mod 路径映射）；**go-2-3 select** 强化「④ for-select 循环」，明确「无间隔/事件驱动」语义。**2026-08-25 深度补全 4 篇偏薄的阶段 2 文档**（144~176 行 → 372~412 行，均已通过 @vue/compiler-sfc 校验）——go-2-6 WaitGroup/Once/Cond（双重检查锁定执行流程 · 4 坑 · 等就绪屏障实战）、go-2-7 atomic（竞态现场还原执行流程 · Go 1.19 新 API 对照 · 5 坑 · 无锁计数器实战）、go-2-12 errgroup（fail-fast 全链路执行流程 · Promise.all/allSettled 对照表 · 5 坑 · BFF 聚合实战）、go-2-13 goroutine 泄漏（泄漏发生全流程 · pprof/goleak 检测深度 · 4 坑 · 发送方/接收方责任矩阵）；每篇均含「执行流程拆解 + 常见错误与陷阱 + 反模式经验法则 + 生产实战 + 前端类比」。动画层（vue-konva）可选补齐。
 
-**继续指令：** 「继续 Go 文档的填充」「继续 Go 阶段 3（Web 开发）」「给 go-2-12/2-13 补动画层」
+**2026-08-25 新增 4 篇基础/并发文档（补齐课程缺口）：** 按「基础入门 + 并发编程」课程缺口补了 4 个主题，每个都有线上菜单 + .vue 文档 + .go 源码 + runner 注册——**go-1-20 泛型 Generics**（cmp.Ordered / 类型集约束 / GenericStack[T] / slices·maps 标准库）、**go-1-21 JSON 序列化**（Marshal/Unmarshal / omitempty / - / 自定义 MarshalJSON / NDJSON 流式解码）、**go-1-22 反射 reflect**（TypeOf/ValueOf / 遍历字段读 tag / struct→map / 反射改值）、**go-2-14 sync.Map**（Load/Store/LoadOrStore/Range / 100 并发读缓存实战 / 读写分离适用场景）。菜单已 POST 到生产库（denglie.asia），前端 views-loader 动态 glob 自动匹配 .vue；footer 导航链已重连（go-1-19→go-1-20→go-1-21→go-1-22→go-2-1、go-2-12→go-2-13→go-2-14）。修复 basics runner 的 matchTopic 子串冲突（"reflection" 含 "io" 被 fmt 抢走 → 新 case 移到 switch 顶部，`go run . 1 reflection` / `go run . 2 syncmap` 已验证输出正确）。
+
+**2026-08-25 新增「GO 学习方法」页：** GO 主菜单下新增 `GOLearningMethod`（order=2，学习网站「GO → GO学习方法」页面），并同步更新 `apps/go/LEARNING_METHOD.md`——整合三档消化法（A 档：能塞进 backend 的并发 context/sync.Map/errgroup/限流/atomic；B 档：泛型/反射等 playground 动手练；C 档：GMP/泄漏/pprof/sync.Pool 跑 demo 看懂）、3 步主动回忆法（看 doc → go run → 改代码预测输出）、并发主题 ↔ backend 实战映射表。目标是解决「menu CRUD 用不上并发，阶段 2 知识不会自然出现」的学习盲区。
+
+**2026-08-25 并发基础补强：** go-2-6 新增「实战 3：WaitGroup 关门模式」（等所有发送者干完再 close——完整示例 + 4 步执行流程）与「坑 5：main 不等 goroutine，没 Wait 直接退出 → 打印全被跳过」；go-2-2 新增「for v := range ch 语法糖拆解」（等价 `v, ok := <-ch` 循环 / 结束条件=关闭+排空 / 不 close → 永不退出：main 死锁、goroutine 泄漏）+「close 跟缓冲填满无关」澄清。新建 `.claude/skills/go-backend-practice` skill（「能塞进 backend 就塞进去」：三档消化法 + 阶段 3 Web 开发通用后端服务基本全塞 backend），已注册到 CLAUDE.md skill 表。
+
+**📖 学习者当前位置（2026-08-25 更新，回家继续学）：**
+- **已看完**：阶段 1 基础入门 + 阶段 2 并发编程 全部文档
+- **正在练**（`apps/go/playground/channel_demo.go`，当前是无缓冲 + 关门 goroutine 版）：goroutine 异步 + WaitGroup 同步 → channel 生产-消费 → 「关门模式」（`wg.Wait()` 后再 `close`）→ 无缓冲握手 → 死锁分析（直接写 `wg.Wait` 在缓冲<发送数/无缓冲时死锁，关门 goroutine 写法对任意缓冲大小都安全）
+- **回家练习（改参数 → 预测 → 再跑）**：① 把 `n` 改 5，预测输出（应照常打 0-4，握手逐个完成）② 删掉 `defer wg.Done()`，预测会不会死锁（wg.Wait 永不返回，关门 goroutine 卡死）③ 把 `a <- c` 换成先 sleep 再发，观察握手节奏
+- **下一步学习路径**：并发基础练完 → **阶段 1.5**（backend 加 sync.Map 缓存层 + context 超时中间件）→ **阶段 2 Web 开发**（go-3-x-web，通用后端服务基本全塞进 backend，见 go-backend-practice skill / LEARNING_METHOD.md）
+
+**继续指令：** 「继续 Go 文档的填充」「继续 Go 阶段 3（Web 开发）」「给 go-2-12/2-13/2-14 补动画层」
 
 **运行：** `cd apps/go && go run . <stage> [topic]` 或 `go run . all`
 
@@ -188,6 +200,7 @@ API 文档: `apps/backend/API.md` | 快速启动: `docker-compose up -d backend 
 | Skill | 用途 | 位置 |
 |-------|------|------|
 | `doc-style` | 所有学习文档的统一样式规范（布局/配色/组件） | `.claude/skills/doc-style/` |
+| `go-backend-practice` | Go 学习驱动规则：「能塞进 backend 就塞进去」三档消化法 + 阶段 3 Web 全塞 backend | `.claude/skills/go-backend-practice/` |
 | `dsa-diagram` | 文档开头静态 SVG 结构图规范（内联 SVG/配色/marker） | `.claude/skills/dsa-diagram/` |
 | `dsa-visualizer` | 文档结尾 Canvas 动画规范（vue-konva inline 动画模板） | `.claude/skills/dsa-visualizer/` |
 | `openspec-propose` | OpenSpec 变更提案 | `.claude/skills/openspec-propose/` |

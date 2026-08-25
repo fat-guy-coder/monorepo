@@ -22,6 +22,7 @@ func RunAll() {
 	RunSyncPool()
 	RunErrgroup()
 	RunGoroutineLeak()
+	RunSyncMap()
 
 	fmt.Println("\n✅ 并发编程阶段完成！")
 }
@@ -61,9 +62,11 @@ func RunTopic(topic string) bool {
 		RunErrgroup()
 	case match("leak", "泄漏"):
 		RunGoroutineLeak()
+	case match("syncmap", "sync.map"):
+		RunSyncMap()
 	default:
 		fmt.Printf("未知的并发主题: %s\n", t)
-		fmt.Println("可用: goroutines, channels, select, timer, mutex, wg, atomic, context, patterns, race, pool, errgroup, leak")
+		fmt.Println("可用: goroutines, channels, select, timer, mutex, wg, atomic, context, patterns, race, pool, errgroup, leak, syncmap")
 		return false
 	}
 	return true
