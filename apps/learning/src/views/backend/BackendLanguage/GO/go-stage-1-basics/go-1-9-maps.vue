@@ -101,8 +101,26 @@
 
         <h3 class="text-md font-semibold text-slate-700 mb-3 mt-6">并发安全（sync.Map）</h3>
         <p class="text-slate-600 mb-2 leading-relaxed">
-          普通 map <strong>并发读写会直接 fatal error</strong>（不是 panic，无法 recover）。有两种保护方案：
+          普通 map <strong>并发读写会直接 fatal error</strong>（不是 panic，无法 recover）。<strong>怎么触发的？</strong>——只要用 goroutine 并发读写同一个 map 就会出现：
         </p>
+        <div class="mb-4"><Code language="go" :code="mapRaceCode" title="map_race.go" /></div>
+
+        <ol class="space-y-3 mb-4 text-sm">
+          <li class="flex gap-3">
+            <span class="flex-shrink-0 w-6 h-6 bg-cyan-500 text-white rounded-full flex items-center justify-center text-xs font-bold">1</span>
+            <div class="text-slate-600 leading-relaxed"><strong>触发条件：</strong>≥2 个 goroutine 并发对同一 map 做<strong>写</strong>操作——写写冲突，或读写混合冲突（如一个 goroutine 写、另一个遍历）。纯并发读不崩，但官方也不保证安全，别赌。</div>
+          </li>
+          <li class="flex gap-3">
+            <span class="flex-shrink-0 w-6 h-6 bg-cyan-500 text-white rounded-full flex items-center justify-center text-xs font-bold">2</span>
+            <div class="text-slate-600 leading-relaxed"><strong>怎么检测：</strong>map 内部有 <code class="bg-slate-100 px-1 rounded text-xs font-mono">hashWriting</code> 标志位——写开始置位、写结束复位。另一个 goroutine 想来读写时发现标志还挂着，runtime 立刻 <code class="bg-slate-100 px-1 rounded text-xs font-mono">throw</code> 中止进程。</div>
+          </li>
+          <li class="flex gap-3">
+            <span class="flex-shrink-0 w-6 h-6 bg-cyan-500 text-white rounded-full flex items-center justify-center text-xs font-bold">3</span>
+            <div class="text-slate-600 leading-relaxed"><strong>为什么救不回：</strong>这是 runtime 层的 <code class="bg-slate-100 px-1 rounded text-xs font-mono">fatal error</code>，<strong>不是 panic</strong>——<code class="bg-slate-100 px-1 rounded text-xs font-mono">recover()</code> 抓不住，进程直接崩溃退出。唯一预防办法是加锁或用 sync.Map。</div>
+          </li>
+        </ol>
+
+        <p class="text-slate-600 mb-2 leading-relaxed">所以需要保护。两种方案：</p>
         <div class="mb-4"><Code language="go" :code="concurrentCode" title="concurrent_map.go" /></div>
 
         <aside class="bg-emerald-50 border-l-4 border-emerald-400 rounded-r-xl p-4">
@@ -289,6 +307,23 @@ sort.Strings(keys)
 for _, k := range keys {
     fmt.Println(k, m[k])  // 按字母顺序输出
 }`
+
+const mapRaceCode = `// ❌ 先看问题：怎么触发的？—— 用 goroutine 并发读写同一个普通 map 就会出现
+m := make(map[int]int) // 注意：没加任何锁
+
+// 10 个 goroutine 同时往这个 map 里写 → 必炸
+for i := 0; i < 10; i++ {
+    go func(id int) {
+        for j := 0; j < 1000; j++ {
+            m[id*1000+j] = id // ← 两个 goroutine 撞在同一个 map 上
+        }
+    }(i)
+}
+time.Sleep(100 * time.Millisecond) // 给 goroutine 时间跑起来
+fmt.Println(len(m))                // 根本执行不到这行
+// 输出: fatal error: concurrent map writes
+// 或: fatal error: concurrent map read and map write（读写混合冲突时）
+// 程序在某个 goroutine 写 map 的瞬间直接崩溃——这是 fatal error，不是 panic，recover() 救不了`
 
 const concurrentCode = `// 方案一：普通 map + sync.Mutex（推荐，95% 场景）
 var (

@@ -26,6 +26,7 @@
 **模块 2/3 内容增强（2026-08-24）：**
 - `dsa-2-1-4-prefix-sum`：差分数组补全为「结构（SVG）→ 操作（before/after SVG）→ 特点 → 用途」四层
 - `dsa-3-1-4-crypto-hash`：新增 SHA-3 海绵结构图、HMAC 章节（两次哈希 SVG + 代码）、「攻击与对策」节（生日攻击 / 长度扩展攻击 / HMAC / 双重哈希对比表）
+- `dsa-3-1-1-principle`：新增「map 的 value 存在哪」小节（内存布局 SVG：引用 + 堆桶数组 + 值内联/指针两布局 + key/value 成对存 + 扩容搬家）
 - `dsa-3-1-4-crypto-hash` 二次增强：MD5 补「单步压缩数据流」——公式 `a = b + ((a + F(b,c,d) + X[k] + T[i]) <<< s)` + 图 2-1 数据流 SVG + IV/4 轮结构表 + `md5StepCode` 完整实现；SHA 补「内部实现」——SHA-256 单轮 SVG（左列 Σ0/Maj / 右列 Σ1/Ch + 消息扩展 σ0/σ1 + 64 轮 K 常量）+ `sha256RoundCode`；SHA-1 5 寄存器 80 步 + `sha1StepCode`；末尾加「三代 MD 结构逐项对比表」（MD5 vs SHA-1 vs SHA-256，9 个维度）
 - `dsa-3-3-3-consistent`：重写为 9 节完整教程——一句话定义横幅 + 取模哈希雪崩 SVG + 三步理解 + 顺时针查找规则 + 3 节点 6 key 完整走查表 + 迁移成本公式（取模≈全量 vs 一致性哈希≈1/n）+ 虚拟节点 + 增删流程 + Redis Cluster 场景陷阱，新增 `consistentHashCode`/`workedExampleCode`/`migrationCode`/`virtualNodeCode`/`addRemoveFlowCode` 等代码
 - `dsa-4-0-3-dfs`：sec-4「递归 vs 显式栈」深挖显式栈——新增「隐式栈调用帧」SVG（图 4-1，递归 ↔ 栈帧逐层对应）+ 递归↔显式栈逐行对照表 + 「用循环控制压栈数量」心智模型澄清（总量由树决定，可控的是压什么/顺序/限深三个旋钮）+ 统一任务栈代码（VISIT/EXPAND 一个 while 走遍前后序）+ 深度受限版 IDDFS 代码（可控制数量落地）
@@ -87,6 +88,39 @@
 - **菜单**：数据库为准，admin 后台/`POST /api/menus/batch` 管理，无本地 JSON
 - **继续指令：** 「继续计算机图形学文档的填充，从模块 1（数学基础）开始」
 - 填充文档同样遵循 `doc-style` + `dsa-diagram`（结构图）+ `dsa-visualizer`（动画）三层规范
+
+---
+
+## 一·六、计算机基础·操作系统（新增章节）
+
+> 路径: `apps/learning/src/views/ComputerBasicKnowledge/cs-phase-5-os/` | 学习网站「计算机基础 → 操作系统」
+
+| 模块 | 名称 | 篇数 | 状态 |
+|------|------|------|------|
+| A | 操作系统基础 | 6（os-intro/os-arch/os-compare/kernel/interrupt/boot） | ✅ 已完成（本次） |
+| B | 进程管理 | 4 | ✅ 已完成 |
+| C | 进程同步 | 4 | ✅ 已完成 |
+| D | 内存管理 | 5 | 🔄 d-5 已完成，d-1~d-4 空壳 |
+| E | 文件系统 | 3（inode/journal/io-model） | ⏳ 空壳 |
+| **合计** | | **21** | **15/21 有内容** |
+
+**2026-08-26 批量填充 B/C 两模块 8 篇（空壳 → 完整，共 3537 行，均过 @vue/compiler-sfc 校验）：**
+- **B 进程**：cs-5-b-1-pcb（PCB 与上下文切换，466 行）、cs-5-b-2-fork（fork/exec/wait + 写时复制，396 行）、cs-5-b-3-thread（**用户态/内核态线程 + 协程**，415 行）、cs-5-b-4-scheduling（FCFS/SJF/RR/MLFQ/CFS + GMP，505 行）
+- **C 同步**：cs-5-c-1-race（竞态条件/临界区/happens-before，490 行）、cs-5-c-2-locks（互斥锁/自旋锁/读写锁 + futex 底层，366 行）、cs-5-c-3-semaphore（信号量/条件变量，424 行）、cs-5-c-4-deadlock（四条件/银行家算法/检测恢复，475 行）
+- **目的：理解 Go 底层实现**——每篇含「与 Go 底层实现的关系」专节：G 结构体 ≈ goroutine 的 PCB；goroutine = 用户态协程（M:N）；`go run -race` = TSan 影子内存；sync.Mutex 底层 = 原子 CAS + 自旋 + futex 挂起；channel ≈ 信号量 = 互斥锁 + 条件变量等待队列 + 环形缓冲；Go 运行时死锁检测（fatal error: all goroutines are asleep）。Link 跳转 go-2-1-goroutine-gmp / go-2-2-channels / go-2-5-sync-mutex / go-2-6-sync-wg-once / go-2-7-atomic / go-2-10-race-detection / go-2-13-goroutine-leak
+- **风格**：amber 主题（非 Go 的 cyan），参照 cs-5-d-5-shadow-memory.vue；每篇 📐 结构总览内联 SVG + 类比三件套（🔗 前端紫色 + ⚙️ 后端·Go 青色 + 🌍 现实橙色）+ ⚠️ 坑 + Link 页脚导航链已闭环
+
+**2026-08-26 批量填充 A 模块 6 篇（空壳 → 完整，共 2659 行，均过 @vue/compiler-sfc 校验）：**
+- cs-5-a-0-os-intro（操作系统介绍：定义/四大资源管理/抽象/历史/分类，Go runtime ≈ 用户态迷你 OS，425 行）
+- cs-5-a-1-kernel（内核态 vs 用户态、系统调用 6 步全流程 + syscall table/strace，Go 每次 IO 陷入内核 + netpoller，400 行）
+- cs-5-a-2-interrupt（中断/异常/陷阱三分、IDT、中断处理 6 步、上/下半部，Go1.14+ 抢占式调度靠信号中断，528 行）
+- cs-5-a-3-boot（BIOS/UEFI→GRUB→start_kernel→init/systemd 全链路，Go runtime 启动顺序对照，391 行）
+- cs-5-a-4-os-arch（宏内核/微内核/混合内核对比，Go runtime = 用户态「微内核」+ Linux 宏内核两级配合，479 行）
+- cs-5-a-5-os-compare（Windows NT/Linux/macOS XNU/Unix 谱系，GOOS/GOARCH 交叉编译 + 生产环境为何都是 Linux，436 行）
+- **类比三件套**：🔗 前端（Chrome 标签页/浏览器沙箱/微前端）+ ⚙️ 后端·Go（GMP/内存分配器/netpoller ≈ 迷你 OS）+ 🌍 现实（酒店前台/银行柜台/公司组织），每篇三色类比框齐全
+- **页脚链**：cs-4-k-5-yield → a-0-os-intro → a-1-kernel → a-2-interrupt → a-3-boot → a-4-os-arch → a-5-os-compare → b-1-pcb → b-2-fork（b-1 上一节已改为 a-5）
+
+**继续指令：** 「继续填充操作系统模块，先填 D 模块内存管理（cs-5-d-1-paging / cs-5-d-2-virtual / cs-5-d-3-replacement / cs-5-d-4-segmentation）或 E 模块文件系统（cs-5-e-1-inode / cs-5-e-2-journal / cs-5-e-3-io-model）」
 
 ---
 

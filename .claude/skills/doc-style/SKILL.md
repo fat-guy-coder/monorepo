@@ -45,7 +45,7 @@ metadata:
   - 组件：import { Code, Nav } from 'components'
   - navList 用 { id, name }，section 加对应 id
   - 代码语言用 ts（DSA 文档）
-- 要求：自给自足、至少 3 个代码示例、前端类比、常见错误、小结
+- 要求：自给自足、至少 3 个代码示例、类比三件套（🔗 前端类比 + ⚙️ 后端类比·Go 必加，抽象概念加 🌍 现实类比）、常见错误、小结
 - 完成后直接返回最终文件内容
 ```
 
@@ -73,7 +73,9 @@ metadata:
 | 提示框(信息) | `bg-blue-50 border-blue-400 text-blue-800` | 蓝色信息提示 |
 | 提示框(警告) | `bg-amber-50 border-amber-400 text-amber-800` | 警告/注意事项 |
 | 提示框(成功) | `bg-emerald-50 border-emerald-400 text-emerald-800` | 正面/最佳实践 |
-| 提示框(类比) | `bg-purple-50 border-l-4 border-purple-400 rounded-r-xl p-4` | 🔗 前端类比桥梁 |
+| 提示框(前端类比) | `bg-purple-50 border-l-4 border-purple-400 rounded-r-xl p-4` | 🔗 前端类比桥梁（必加） |
+| 提示框(后端类比·Go) | `bg-teal-50 border-l-4 border-teal-400 rounded-r-xl p-4` | ⚙️ 后端类比桥梁（必加） |
+| 提示框(现实类比) | `bg-orange-50 border-l-4 border-orange-400 rounded-r-xl p-4` | 🌍 现实类比桥梁（抽象概念时加） |
 | 标题文字 | `text-slate-800` / `text-slate-700` | 深灰色层级 |
 | 正文文字 | `text-slate-600` | 可读性好的灰色 |
 
@@ -244,10 +246,24 @@ import { Code } from 'components'
   <p class="text-sm text-emerald-800"><strong>✅ 最佳实践：</strong>{{ bestPractice }}</p>
 </aside>
 
-<!-- 前端类比（紫色）— 复杂概念必加 -->
+<!-- 🔗 前端类比（紫色）— 每篇必加 -->
 <aside class="bg-purple-50 border-l-4 border-purple-400 rounded-r-xl p-4 mb-4">
   <p class="text-sm text-purple-800"><strong>🔗 前端类比：</strong><br/>
   {{ Go 概念 }} 就像 {{ JS/前端概念 }}—— {{ 相似之处 }}。
+  </p>
+</aside>
+
+<!-- ⚙️ 后端类比·Go（青色）— 每篇必加：用 Go 生态的概念做桥梁，帮用户连回 Go 后端 -->
+<aside class="bg-teal-50 border-l-4 border-teal-400 rounded-r-xl p-4 mb-4">
+  <p class="text-sm text-teal-800"><strong>⚙️ 后端类比·Go：</strong><br/>
+  {{ 本页概念 }} 在 Go 里对应 {{ goroutine / channel / sync.Mutex / context / 网络 IO 等 }}—— {{ 对应关系与区别 }}。
+  </p>
+</aside>
+
+<!-- 🌍 现实类比（橙色）— 概念特别抽象时加：拿日常生活/工程场景打比方 -->
+<aside class="bg-orange-50 border-l-4 border-orange-400 rounded-r-xl p-4 mb-4">
+  <p class="text-sm text-orange-800"><strong>🌍 现实类比：</strong><br/>
+  {{ 本页概念 }} 就像 {{ 日常生活场景 }}—— {{ 相似之处 }}。
   </p>
 </aside>
 ```
@@ -367,30 +383,46 @@ import { Link } from 'components'
 > 每篇文档写完后自问：一个新手只看这篇文档 + 运行代码，能不能理解这个概念？
 > 如果不能，就是内容不够。继续加例子、加类比、加执行流程图、加常见错误。
 
-1. **自给自足（最重要）**: 每篇文档覆盖一个知识点的<strong>全部核心内容</strong>——原理、语法、至少 3 个代码示例、常见错误、最佳实践、前端类比。让用户关掉搜索引擎，只在这个网站里学习。
-2. **循序渐进**: 从简单概念开始，逐步深入
-3. **代码优先**: 每个知识点配可运行代码示例（至少 2-3 个，从 hello-world 到生产级）
-4. **输出展示**: 代码后面跟上预期输出（用注释或终端块）
-5. **实用导向**: 解释"为什么需要这个"而不是只讲语法
-6. **陷阱标注**: 使用 ⚠️ 警告框标注常见错误，每个概念至少列 2 个坑
-7. **中文解释**: 概念用中文，代码关键字保留英文
+1. **自给自足（最重要）**: 每篇文档覆盖一个知识点的<strong>全部核心内容</strong>——原理、语法、至少 3 个代码示例、常见错误、最佳实践、类比。让用户关掉搜索引擎，只在这个网站里学习。
+2. **类比三件套（每篇必须）**：每篇文档必须同时包含 <strong>🔗 前端类比</strong>（JS/TS/React/Node）+ <strong>⚙️ 后端类比·Go</strong>（把知识点对回 Go 后端生态）；概念特别抽象时再补一个 <strong>🌍 现实类比</strong>（日常生活/工程场景）。三者分别用紫色 / 青色 / 橙色框（见「3. 提示框」），让用户从「前端经历 + Go 后端 + 生活直觉」三个角度理解同一个知识点。
+3. **循序渐进**: 从简单概念开始，逐步深入
+4. **代码优先**: 每个知识点配可运行代码示例（至少 2-3 个，从 hello-world 到生产级）
+5. **输出展示**: 代码后面跟上预期输出（用注释或终端块）
+6. **实用导向**: 解释"为什么需要这个"而不是只讲语法
+7. **陷阱标注**: 使用 ⚠️ 警告框标注常见错误，每个概念至少列 2 个坑
+8. **中文解释**: 概念用中文，代码关键字保留英文
 
 ### 复杂知识点深度要求
 
 对于 Go 的核心/独特概念（defer、panic/recover、goroutine/channel、interface、reflect、Functional Options 等），<strong>不能只讲"是什么"</strong>，必须讲透。<strong>每篇文档目标行数 ≥ 200 行（含代码常量），</strong>包含以下全部内容：
 
 **必须有：**
-- **前端/JS 类比** — 用 `🔗 前端类比` 提示框（紫色），拿 JS/TS/React/Node 里的概念做桥梁。例如：defer ≈ finally 块 + useEffect cleanup；panic/recover ≈ throw + 全局 error middleware；goroutine ≈ 比 Promise 更轻量的并发单元
+- **类比三件套** — 🔗 前端类比（紫色）+ ⚙️ 后端类比·Go（青色，拿 Go 生态对应：goroutine/channel/sync.Mutex/context/net/http/数据库等）每篇必加；概念特别抽象时再补 🌍 现实类比（橙色）。例如：defer ≈ finally 块（前端）≈ HTTP 中间件的收尾（后端·Go）；goroutine ≈ Promise（前端）≈ Go 自己的轻量线程（后端·Go）；channel ≈ EventEmitter（前端）≈ 消息队列 worker（后端·Go）
 - **执行流程拆解** — 把运行时行为拆成步骤列表（1→2→3→4），让读者在脑子里能"跑"一遍
 - **"为什么"而不是"只讲怎么用"** — 解释设计决策：Go 为什么没有 try-catch？为什么 recover 只能在 defer 里？为什么 LIFO 是合理的？
 - **至少 2-3 个代码示例** — 从简单到复杂，最后一个贴近生产实战
 - **反模式 + 经验法则** — 用 ⚠️ / ✅ 提示框总结什么时候用、什么时候不用
 
-**前端类比模板：**
+**类比三件套模板：**
 ```html
+<!-- 🔗 前端类比（紫色） -->
 <aside class="bg-purple-50 border-l-4 border-purple-400 rounded-r-xl p-4 mb-5">
   <p class="text-sm text-purple-800"><strong>🔗 前端类比：</strong><br/>
   {{ Go 概念 }} 就像 {{ JS/前端概念 }}—— {{ 相似之处的解释 }}。<br/>
+  </p>
+</aside>
+
+<!-- ⚙️ 后端类比·Go（青色）— 每篇必加 -->
+<aside class="bg-teal-50 border-l-4 border-teal-400 rounded-r-xl p-4 mb-5">
+  <p class="text-sm text-teal-800"><strong>⚙️ 后端类比·Go：</strong><br/>
+  {{ 本页概念 }} 在 Go 后端对应 {{ goroutine/channel/sync.Mutex/context/net/http/数据库 }}——{{ 对应关系 + 差别 }}。
+  </p>
+</aside>
+
+<!-- 🌍 现实类比（橙色）— 概念抽象时加 -->
+<aside class="bg-orange-50 border-l-4 border-orange-400 rounded-r-xl p-4 mb-5">
+  <p class="text-sm text-orange-800"><strong>🌍 现实类比：</strong><br/>
+  {{ 本页概念 }} 就像 {{ 日常生活场景 }}——{{ 相似之处 }}。
   </p>
 </aside>
 ```

@@ -192,6 +192,91 @@
           <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1 font-bold">2.</span><span><strong>为什么有冲突？</strong> 桶数量有限，key 无限，「鸽子笼原理」注定两个 key 可能落到同一个桶。</span></li>
           <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1 font-bold">3.</span><span><strong>为什么要扩容？</strong> 装得越满冲突越多，所以桶快满时要把数组翻倍、重新散列所有元素。</span></li>
         </ol>
+
+        <!-- 🗺️ value 存在哪 -->
+        <h3 class="text-sm font-semibold text-slate-700 mb-2 mt-6">🗺️ 语言内置 map 的 value 到底存在哪 —— 堆内存 + 两种布局</h3>
+        <p class="text-slate-600 mb-3 leading-relaxed text-sm">
+          这是「原理 → 语言实现」最关键的一跳：写了 <code class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-xs font-mono">m["age"] = 18</code> 之后，
+          <strong>18 到底躺在哪里？</strong> 答案分三层：
+        </p>
+        <ol class="space-y-2 text-slate-600 text-sm mb-3">
+          <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1 font-bold">1.</span><span><strong>map 变量只是「引用」</strong>——它存的是堆上一块哈希表的地址，不是数据本体。复制变量 = 复制引用，底层共享同一张表（Go / Python / JS / Java 都是如此）。</span></li>
+          <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1 font-bold">2.</span><span><strong>桶数组分配在堆内存</strong>——因为表要随扩容 rehash 搬家、要跨函数共享，不可能待在某个函数的栈帧里。</span></li>
+          <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1 font-bold">3.</span><span><strong>value 有两种躺法</strong>：小值（int / bool / 指针）<strong>内联</strong>在桶槽里，和 key 排排坐；大对象、可变对象则桶里只存一个<strong>指针</strong>，真正的对象在堆上别处。</span></li>
+        </ol>
+
+        <figure class="mb-4">
+          <svg viewBox="0 0 720 300" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <marker id="vp-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" />
+              </marker>
+            </defs>
+
+            <!-- 栈：map 变量 -->
+            <rect x="40" y="20" width="150" height="52" rx="8" fill="#e0f2fe" stroke="#0891b2" stroke-width="1.5" />
+            <text x="115" y="38" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#0f172a">m map</text>
+            <text x="115" y="56" text-anchor="middle" dominant-baseline="central" font-size="9" font-family="monospace" fill="#0891b2">只是引用，不是数据本体</text>
+
+            <!-- 箭头：变量 → 堆 -->
+            <line x1="130" y1="72" x2="130" y2="108" stroke="#94a3b8" stroke-width="2" marker-end="url(#vp-arr)" />
+            <text x="140" y="94" font-size="10" font-family="monospace" fill="#64748b">指向</text>
+
+            <!-- 堆区域 -->
+            <rect x="24" y="112" width="676" height="172" rx="10" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5 4" />
+            <text x="40" y="132" font-size="11" font-family="monospace" font-weight="bold" fill="#64748b">堆 Heap —— 桶数组（可扩容 / 跨函数共享）</text>
+
+            <!-- 桶槽 1：内联 -->
+            <rect x="40" y="150" width="160" height="58" rx="6" fill="#ffffff" stroke="#06b6d4" stroke-width="1.5" />
+            <line x1="124" y1="150" x2="124" y2="208" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3 2" />
+            <text x="82" y="172" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">key</text>
+            <text x="82" y="190" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#0f172a">"age"</text>
+            <text x="162" y="172" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">value</text>
+            <text x="162" y="190" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#16a34a">18</text>
+            <text x="120" y="224" text-anchor="middle" font-size="10" font-family="monospace" fill="#16a34a">① 值内联：val 直接躺桶里</text>
+
+            <!-- 桶槽 2：指针 -->
+            <rect x="216" y="150" width="160" height="58" rx="6" fill="#ffffff" stroke="#06b6d4" stroke-width="1.5" />
+            <line x1="300" y1="150" x2="300" y2="208" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3 2" />
+            <text x="258" y="172" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">key</text>
+            <text x="258" y="190" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#0f172a">"user"</text>
+            <text x="338" y="172" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">value</text>
+            <text x="338" y="190" text-anchor="middle" dominant-baseline="central" font-size="16" font-family="monospace" font-weight="bold" fill="#f59e0b">●</text>
+            <text x="296" y="224" text-anchor="middle" font-size="10" font-family="monospace" fill="#f59e0b">② 指针：桶里存引用</text>
+
+            <!-- 指针 → User 对象 -->
+            <line x1="338" y1="208" x2="338" y2="222" stroke="#f59e0b" stroke-width="2" marker-end="url(#vp-arr)" />
+            <rect x="236" y="226" width="204" height="46" rx="8" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.5" />
+            <text x="338" y="242" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" font-weight="bold" fill="#b45309">User 对象</text>
+            <text x="338" y="258" text-anchor="middle" dominant-baseline="central" font-size="9" font-family="monospace" fill="#d97706">堆上的另一个角落</text>
+
+            <!-- 空桶 -->
+            <rect x="432" y="150" width="130" height="58" rx="6" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" />
+            <text x="497" y="179" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" fill="#94a3b8">空桶</text>
+            <rect x="578" y="150" width="106" height="58" rx="6" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" />
+            <text x="631" y="179" text-anchor="middle" dominant-baseline="central" font-size="11" font-family="monospace" fill="#94a3b8">空桶</text>
+
+            <text x="24" y="272" font-size="10" font-family="monospace" fill="#64748b">桶里 key 和 value 成对存放：哈希只负责「定位到哪个桶」，命中与否靠比较 key 确认</text>
+          </svg>
+          <figcaption class="text-xs text-slate-400 mt-1">图 2：map 的内存布局 —— 变量只是引用，桶数组在堆上；小值内联、大值存指针指向堆上对象</figcaption>
+        </figure>
+
+        <p class="text-slate-600 mb-3 leading-relaxed text-sm">
+          不同语言倾向不同：<strong>Go</strong> 对小值内联存（桶里 8 组 key-value 排排坐）；
+          <strong>Python dict</strong> 和 <strong>Java HashMap</strong> 的槽里存的是 <code class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-xs font-mono">PyObject*</code> / <code class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-xs font-mono">Node</code> 引用——
+          真正的整数、字符串、对象都在堆上。读 <code class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-xs font-mono">m["age"]</code> 时，值类型拿到的是<strong>拷贝</strong>，引用类型拿到的是<strong>引用</strong>。
+        </p>
+        <div class="mb-4"><Code language="ts" :code="valueStorageCode" title="map_value_storage.ts" /></div>
+        <aside class="bg-amber-50 border-l-4 border-amber-400 rounded-r-xl p-4 mb-4">
+          <p class="text-sm text-amber-800"><strong>🚗 生活类比：</strong><br/>
+          停车场总入口地址 = map 变量；一排排固定车位 = 堆上的桶数组；<br/>
+          小物件（值内联）= 车直接停在车位上；大货车（指针）= 车位上只放一张「寄存单」，车停在后方立体车库——你拿着单子去取，而不是把整辆货车塞进车位。</p>
+        </aside>
+        <aside class="bg-blue-50 border-l-4 border-blue-400 rounded-r-xl p-4">
+          <p class="text-sm text-blue-800"><strong>💡 两个工程细节：</strong><br/>
+          1. 桶里<strong>同时存 key 和 value</strong>：哈希只负责「定位到哪个桶」，是不是你要的 key，要靠桶里的 key 比较确认。<br/>
+          2. Go 里 <code class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-xs font-mono">&amp;m["a"]</code> 是编译错误：扩容 rehash 会让元素<strong>搬家</strong>，语言不允许你长期持有桶内地址——这就是「map 不能取地址」的根因。</p>
+        </aside>
       </section>
 
       <section id="sec-4" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
@@ -302,6 +387,7 @@
           <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span><strong>负载因子 α = n / m</strong>，α 越大冲突越多；工程上 0.75 触发扩容</span></li>
           <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span><strong>O(1) 是平均复杂度</strong>，最坏退化 O(n)——好哈希函数 + 低负载因子是前提</span></li>
           <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span><strong>JS 的 Map/Set/Object 底层都是哈希表</strong>，你每天都在用</span></li>
+          <li class="flex items-start gap-2"><span class="text-cyan-500 mt-1">▸</span><span><strong>value 存在堆上</strong>：map 变量是引用，桶数组在堆；小值内联、大值存指针，桶里 key/value 成对存放</span></li>
         </ul>
       </section>
     </main>
@@ -574,6 +660,34 @@ report(20, 16)   // α=1.25 ❌
 // α 接近 1 时，即使还没装满，冲突概率也急剧上升（生日悖论）。
 // 提前在 0.75 扩容，用「更多空桶」换「更低冲突率」——
 // 空间换时间，是哈希表设计的一贯思路。`
+
+const valueStorageCode = `// ─── map 的 value 存在哪？—— 堆上的桶 + 两种布局 ───
+// 结论：map 变量只是「引用」，桶数组分配在堆上；
+// value 要么内联在桶槽里（小值），要么槽里存指针指向堆上的大对象
+
+// ① map 是引用类型：复制变量 ≠ 复制数据
+const m = new Map<string, number>()
+const m2 = m                 // 复制的是引用，底层共享同一张哈希表
+m2.set('a', 1)
+console.log(m.get('a'))      // 1 —— m 也能看到（同一块堆内存）
+
+// ② 桶数组在堆上，扩容要搬家（rehash）
+//    m ──▶ [桶0][桶1][桶2]…[桶N]   ← 堆内存里的一段连续数组
+//    装满了 → 新建 2 倍大数组 → 重新散列全部元素 → 释放旧数组
+//    （元素会搬家，所以语言不允许你长期持有桶内地址）
+
+// ③ 桶里 key 和 value 成对存放
+//    哈希只负责「定位到哪个桶」，命中与否要靠比较 key 确认
+
+// ④ 两种 value 布局（语言差异）：
+//    Go     ：小值（int/bool/指针）内联在桶槽里，8 组 key-value 排排坐
+//    Python ：槽里存 PyObject* 引用，整数/字符串对象都在堆上
+//    Java   ：HashMap 的 Node 持有 key/value 引用，对象在堆上
+//    JS     ：V8 对小整数（Smi）直接存值，对象存指针
+
+// ⑤ 读出来的是拷贝还是引用？
+//    值类型（int）→ 拷贝一份给你；引用类型（对象/切片）→ 把引用给你，
+//    你拿到的引用仍指向堆上那个对象（改它会改到 map 里的对象）`
 
 const mapObjectCode = `// ─── JS 的 Map：专门强化过的哈希表 ───
 const m = new Map<string, number>()
