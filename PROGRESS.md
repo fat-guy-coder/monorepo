@@ -249,6 +249,13 @@
 - ✅ 菜单 CRUD API（完整，含批量创建/删除/搜索/树形查询）
 - ✅ 用户认证 API（JWT 登录/注册/角色）
 - ✅ 菜单管理走 admin 后台（数据库为准，无本地菜单 JSON）
+- ✅ **章节学习计时系统（日志式，2026-08-27）**：
+  - `menu.suggested_minutes` 列 + `study_session` 表（起止时间 → 服务端算 `duration_minutes`）
+  - `POST /api/study-sessions`（新增记录，起止时间必填）+ `GET /api/menus/:id/study`（累计已学 vs 建议时长）
+  - 学习网站右下角「⏱ 学习计时」悬浮球 + 章节右键/Tab 右键入口，进度条「已学 X / 建议 Y 分钟」
+  - GO 章节建议时长按阶段预置（`scripts/setGoSuggestedMinutes.ts`：阶段1-7 → 30/50/45/50/65/55/70 分钟，顶层 25 分钟）
+  - Go 镜像同步：`apps/go/backend` 的 study_session 三层（repo/service/handler）已对齐 Bun
+  - ⚠️ 服务器部署：需先 `docker exec backend-app bun run scripts/initStudyTables.ts` 建表，再跑 `scripts/setGoSuggestedMinutes.ts`
 
 API 文档: `apps/backend/API.md` | 快速启动: `docker-compose up -d backend postgres`
 

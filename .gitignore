@@ -43,3 +43,9 @@ coverage/
 .claude/settings.local.json
 
 *.tsbuildinfo
+
+# Go 编译产物
+apps/go/backend
+apps/go/server.exe
+*.exe
+

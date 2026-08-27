@@ -43,6 +43,7 @@ Authorization: Bearer <accessToken>
 | `icon` | varchar(255) | 图标（emoji，可选） |
 | `order` | integer | 排序号 |
 | `project` | varchar(255) | 所属项目（`learning` / `default` 等） |
+| `suggestedMinutes` | integer | 建议学习时长（分钟），`0` = 未设置 |
 | `parentId` | varchar(255) | 父菜单 ID（null 表示顶级） |
 | `createdAt` | timestamp | 创建时间 |
 | `updatedAt` | timestamp | 更新时间 |
@@ -132,7 +133,8 @@ Content-Type: application/json
   "parentId": "父菜单UUID",        // 可选，null = 顶级菜单
   "icon": "🔧",                   // 可选
   "order": 5,                     // 可选，不传则放同级末尾
-  "project": "learning"           // 可选，默认 "default"
+  "project": "learning",          // 可选，默认 "default"
+  "suggestedMinutes": 45          // 可选，建议学习时长（分钟），0/缺省 = 未设置
 }
 ```
 
@@ -193,7 +195,8 @@ Content-Type: application/json
   "icon": "📝",              // 可选，传 "" 清空
   "order": 3,                // 可选，同级中已存在则互换
   "project": "learning",     // 可选
-  "parentId": "新父ID"       // 可选，移动节点 + 自动更新子孙 path
+  "parentId": "新父ID",      // 可选，移动节点 + 自动更新子孙 path
+  "suggestedMinutes": 45     // 可选，建议学习时长（分钟）；不传保持原值
 }
 ```
 
@@ -474,13 +477,97 @@ body 格式：
 ### 其他初始化脚本
 
 ```bash
-bun run scripts/initRoles.ts     # 初始化 admin/default 角色
-bun run scripts/initUserTable.ts # 初始化用户表
+bun run scripts/initRoles.ts        # 初始化 admin/default 角色
+bun run scripts/initUserTable.ts    # 初始化用户表
+bun run scripts/initStudyTables.ts  # menu 加 suggested_minutes 列 + 建 study_session 表
+bun run scripts/setGoSuggestedMinutes.ts  # 批量设置 GO 章节建议学习时长（幂等）
 ```
+
+> ⚠️ 服务器上执行方式：数据库脚本要在容器内跑（容器已配好 DATABASE_URL），本地跑会连错库：
+> ```bash
+> docker exec -it backend-app bun run scripts/initStudyTables.ts
+> docker exec -it backend-app bun run scripts/setGoSuggestedMinutes.ts
+> ```
 
 ---
 
-## 五、菜单权限机制
+## 五、学习计时 API — `/api/study-sessions`
+
+> 章节学习时间记录，**日志式**：一次学习填一条记录（起止时间），时长由服务端计算。同一章节多次学习的 `duration_minutes` 累加即为累计已学时间。
+
+### 数据库表结构 (`study_session`)
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| `id` | uuid | 主键，自动生成 |
+| `menu_id` | uuid | 关联 `menu.id` |
+| `started_at` | timestamp | 开始时间 |
+| `ended_at` | timestamp | 结束时间 |
+| `duration_minutes` | integer | 学习时长（分钟），服务端按 `max(0, round((ended_at - started_at) / 60s))` 计算 |
+| `created_at` | timestamp | 创建时间 |
+
+### 5.1 新增学习记录
+
+```http
+POST /api/study-sessions
+Content-Type: application/json
+
+{
+  "menuId": "章节菜单UUID",     // 必填
+  "startedAt": "2026-08-27T09:00:00Z",   // 必填，ISO 8601
+  "endedAt": "2026-08-27T09:40:00Z"      // 必填，ISO 8601
+}
+```
+
+- 三个字段全部必填；`startedAt` 必须早于 `endedAt`，否则 400
+- 菜单不存在返回 404
+- 成功返回 201，`data` 为 `study_session` 对象（含服务端算好的 `durationMinutes`）
+
+**响应 `data`**：
+```json
+{
+  "id": "uuid",
+  "menuId": "uuid",
+  "startedAt": "2026-08-27T09:00:00Z",
+  "endedAt": "2026-08-27T09:40:00Z",
+  "durationMinutes": 40,
+  "createdAt": "2026-08-27T09:41:00Z"
+}
+```
+
+### 5.2 查询章节学习统计
+
+```http
+GET /api/menus/:id/study
+```
+
+只统计已结束的记录（`ended_at IS NOT NULL`），按 `started_at` 升序返回。
+
+**响应 `data`**：
+```json
+{
+  "menuId": "uuid",
+  "label": "数组与切片",
+  "suggestedMinutes": 45,
+  "totalMinutes": 120,
+  "sessions": [
+    { "id": "uuid", "startedAt": "2026-08-26T10:00:00Z", "endedAt": "2026-08-26T10:40:00Z", "durationMinutes": 40 }
+  ]
+}
+```
+
+- `suggestedMinutes` = 该菜单的建议学习时长（来自 `menu.suggested_minutes`，`0` 表示未设置）
+- `totalMinutes` = `sessions` 里 `durationMinutes` 之和，即累计已学时间
+- 前端据此渲染「已学 X / 建议 Y 分钟」进度条
+
+### 5.3 建议学习时长来源
+
+- `suggested_minutes` 存于 `menu` 表，可通过 `POST/PUT /api/menus` 的 `suggestedMinutes` 字段设置
+- 学习网站按菜单加载；GO 章节已由 `scripts/setGoSuggestedMinutes.ts` 按阶段预置（阶段1-7 为 30/50/45/50/65/55/70 分钟，顶层介绍页 25 分钟）
+
+---
+
+## 六、菜单权限机制
 
 1. 用户通过 `user_role` 表关联到角色
 2. 角色的 `menuIds` 字段决定该角色可见的菜单（`[]` 空数组 = 全部可见）

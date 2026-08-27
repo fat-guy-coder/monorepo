@@ -308,6 +308,23 @@ urllib.request.urlopen(urllib.request.Request('http://localhost:8080/api/menus/b
 | 当前用户 | `GET` | `/api/user/me` |
 | 角色列表 | `GET` | `/api/roles` |
 
+### 学习计时 API（章节学习时间记录）
+
+> 日志式：一次学习填一条起止时间，时长由服务端算。同一章节累计 = 「已学 X / 建议 Y 分钟」进度条。
+> 学习网站右下角「⏱ 学习计时」悬浮球 + 章节右键/Tab 右键入口。
+
+| 操作 | 方法 | 路径 | 说明 |
+|------|------|------|------|
+| 新增学习记录 | `POST` | `/api/study-sessions` | `{ menuId, startedAt, endedAt }`（全必填）→ 服务端算 durationMinutes |
+| 章节学习统计 | `GET` | `/api/menus/:id/study` | `{ menuId, label, suggestedMinutes, totalMinutes, sessions[] }` |
+
+`menu.suggested_minutes` 字段保存章节建议学习时长（`0` = 未设置），GO 章节已按阶段预置。需在服务器上执行数据库初始化脚本（详见 [apps/backend/API.md](apps/backend/API.md)）：
+
+```bash
+docker exec -it backend-app bun run scripts/initStudyTables.ts
+docker exec -it backend-app bun run scripts/setGoSuggestedMinutes.ts
+```
+
 ---
 
 ## 后端工作流（完整）
