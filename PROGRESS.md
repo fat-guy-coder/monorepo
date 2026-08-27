@@ -100,9 +100,9 @@
 | A | 操作系统基础 | 6（os-intro/os-arch/os-compare/kernel/interrupt/boot） | ✅ 已完成（本次） |
 | B | 进程管理 | 4 | ✅ 已完成 |
 | C | 进程同步 | 4 | ✅ 已完成 |
-| D | 内存管理 | 5 | 🔄 d-5 已完成，d-1~d-4 空壳 |
+| D | 内存管理 | 5 | 🔄 d-1/d-5 已完成，d-2~d-4 空壳 |
 | E | 文件系统 | 3（inode/journal/io-model） | ⏳ 空壳 |
-| **合计** | | **21** | **15/21 有内容** |
+| **合计** | | **21** | **16/21 有内容** |
 
 **2026-08-26 批量填充 B/C 两模块 8 篇（空壳 → 完整，共 3537 行，均过 @vue/compiler-sfc 校验）：**
 - **B 进程**：cs-5-b-1-pcb（PCB 与上下文切换，466 行）、cs-5-b-2-fork（fork/exec/wait + 写时复制，396 行）、cs-5-b-3-thread（**用户态/内核态线程 + 协程**，415 行）、cs-5-b-4-scheduling（FCFS/SJF/RR/MLFQ/CFS + GMP，505 行）
@@ -120,7 +120,34 @@
 - **类比三件套**：🔗 前端（Chrome 标签页/浏览器沙箱/微前端）+ ⚙️ 后端·Go（GMP/内存分配器/netpoller ≈ 迷你 OS）+ 🌍 现实（酒店前台/银行柜台/公司组织），每篇三色类比框齐全
 - **页脚链**：cs-4-k-5-yield → a-0-os-intro → a-1-kernel → a-2-interrupt → a-3-boot → a-4-os-arch → a-5-os-compare → b-1-pcb → b-2-fork（b-1 上一节已改为 a-5）
 
+**2026-08-27 填充 D 模块第 1 篇（空壳 → 完整，482 行，过 @vue/compiler-sfc 校验）：**
+- cs-5-d-1-paging（分页机制：页表、多级页表、TLB）——开篇点破「页表≠数据库表」+ 数据库表 vs 页表六维对比表；页/页帧、单级页表 PTE 7 标志位、地址翻译 6 步、x86-64 四级页表按需分配、TLB 命中/未命中 + **上下文切换刷 TLB vs goroutine 共享地址空间不刷**（回扣线程篇）、缺页中断；7 个代码示例（/proc/self/maps、Go &x 虚拟地址、PTE struct、四级查表、TLB）；类比三件套（SPA 路由表/多租户隔离/酒店房号登记册）；「与 Go 底层实现的关系」专节（goroutine 2KB 栈随用随涨、runtime.mheap 页/span、Go 指针是虚拟地址）
+- **页脚链**：c-4-deadlock → d-1-paging → d-2-virtual
+
 **继续指令：** 「继续填充操作系统模块，先填 D 模块内存管理（cs-5-d-1-paging / cs-5-d-2-virtual / cs-5-d-3-replacement / cs-5-d-4-segmentation）或 E 模块文件系统（cs-5-e-1-inode / cs-5-e-2-journal / cs-5-e-3-io-model）」
+
+---
+
+## 一·七、计算机基础·计算机网络（新增章节）
+
+> 路径: `apps/learning/src/views/ComputerBasicKnowledge/cs-phase-6-network/` | 学习网站「计算机知识 → 计算机网络」
+> 根菜单 id: `90186969-7fe7-4c9b-8646-c1754c38a1e4`
+
+| 模块 | 名称 | 篇数 | 状态 |
+|------|------|------|------|
+| A | 网络基础 | 5（osi/encap/tools/fiber/copper） | 🔄 a-4/a-5 已完成，a-1~a-3 空壳 |
+| B | 应用层协议 | 5（http1-3/dns/cdn） | ⏳ 空壳 |
+| C | 传输层 | 4（tcp-handshake/congestion/flow/udp） | ⏳ 空壳 |
+| D | 网络层与安全 | 5（ip/subnet/routing/tls/security） | ⏳ 空壳 |
+| E | 网络编程 | 3（socket/epoll/proxy） | ⏳ 空壳 |
+| **合计** | | **22** | **2/22 有内容** |
+
+**2026-08-27 填充网络基础物理层 2 篇（网络阶段第一批，空壳 → 完整，共 1071 行，均过 @vue/compiler-sfc 校验）：**
+- cs-6-a-4-fiber（物理层·光纤传输：全反射原理 n₁=1.46/n₂=1.44 临界角≈80°、单模 vs 多模、光收发 7 步链路 + SFP/QSFP 光模块、损耗三窗口 850/1310/1550 + EDFA、WDM 波分复用，435 行）
+- cs-6-a-5-copper（物理层·金属传输：电信号传比特、双绞线绞合抗干扰、⭐差分信号 TX+/TX− 共模抵消原理、串扰 NEXT/FEXT、同轴电缆、以太网 100 米规则 + Cat5e~Cat8 类别表、铜 vs 光纤 7 维对照表，636 行）
+- **风格**：amber CS 主题（参照 cs-5-a-0-os-intro.vue）+ 📐 结构总览内联 SVG + 类比三件套 + ⚠️ 坑 + Link 页脚链
+- **页脚链**：a-3-tools → a-4-fiber → a-5-copper → b-1-http1（跨模块过渡）
+- **后端新接口**（待部署）：`GET /api/menus/by-name?name=xxx&project=learning` 按 name 精确查单个菜单（menu.ts 新增，API.md 已记录）
 
 ---
 

@@ -357,6 +357,33 @@ routes.push({
   }
 })
 
+// GET /menus/by-name?name=xxx&project=learning — 按 name 精确查单个菜单项（供工具/AI 直接拿 id）
+routes.push({
+  method: 'GET',
+  pattern: /^\/api\/menus\/by-name$/,
+  handler: async (ctx) => {
+    const { name, project } = ctx.query
+    if (!name) {
+      return Response.json(error('请提供 name 参数', 400), { status: 400 })
+    }
+    try {
+      const [menuItem] = await db.select().from(menu).where(
+        and(
+          eq(menu.name, name),
+          project && project !== '' ? eq(menu.project, project) : undefined
+        )
+      ).limit(1)
+      if (!menuItem) {
+        return Response.json(error('Menu not found: ' + name, 404), { status: 404 })
+      }
+      return Response.json(success(menuItem))
+    } catch (err: any) {
+      console.error(err)
+      return Response.json(error('查询失败: ' + err.message), { status: 500 })
+    }
+  },
+})
+
 // GET /menus/:id
 routes.push({
   method: 'GET',

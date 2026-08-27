@@ -150,6 +150,17 @@
           <li>编译该包，检查导出可见性与循环依赖</li>
         </ol>
 
+        <aside class="bg-emerald-50 border-l-4 border-emerald-400 rounded-r-xl p-4 mb-4">
+          <p class="text-sm text-emerald-800"><strong>✅ 会不会真去 GitHub 下载？—— 不会！</strong><br/>
+          <code class="bg-emerald-100 text-emerald-700 px-1 py-0.5 rounded text-xs">github.com/monorepo/go/backend/internal/service</code> 看起来像 GitHub 地址，但它<strong>以当前模块路径开头</strong>，Go 直接去本地目录找，<strong>零网络请求</strong>。「github.com/...」只是<strong>命名空间</strong>（全局唯一的包身份证），<strong>不是真的要从 GitHub 拉代码</strong>。<br/>
+          判断规则：<strong>以本模块路径开头 → 本地解析；否则 → 第三方依赖，走 GOPROXY 下载</strong>（如 <code class="bg-emerald-100 text-emerald-700 px-1 py-0.5 rounded text-xs">github.com/gin-gonic/gin</code> 这种才是真的要去拉）。</p>
+        </aside>
+
+        <aside class="bg-blue-50 border-l-4 border-blue-400 rounded-r-xl p-4 mb-4">
+          <p class="text-sm text-blue-800"><strong>💡 为什么 Go 没有「相对路径」import？</strong><br/>
+          你永远不会在 Go 里看到 <code class="bg-blue-100 text-blue-700 px-1 py-0.5 rounded text-xs">import "../service"</code>——Go 故意不支持。相对路径「相对于当前文件位置」，代码一搬就全断，且无法 <code class="bg-blue-100 text-blue-700 px-1 py-0.5 rounded text-xs">go get</code> 下载、无法保证可复现构建。Go 的解法是<strong>所有包都有全名（绝对路径）</strong>：本地用「模块路径 + 目录」定位，远程用完整 import 路径直接下载，一套规则通吃。这 ≈ Node 把 <code class="bg-blue-100 text-blue-700 px-1 py-0.5 rounded text-xs">import _ from 'lodash'</code>（包名）和 <code class="bg-blue-100 text-blue-700 px-1 py-0.5 rounded text-xs">import './utils'</code>（相对路径）统一成了一种写法。</p>
+        </aside>
+
         <div class="overflow-x-auto mb-4">
           <table class="w-full text-sm border-collapse">
             <thead><tr class="bg-slate-100 text-left"><th class="px-4 py-2 border border-slate-200 font-semibold">命令</th><th class="px-4 py-2 border border-slate-200 font-semibold">作用</th></tr></thead>

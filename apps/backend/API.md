@@ -91,6 +91,17 @@ GET /api/menus/search?project=learning&search=git
 GET /api/menus/:id
 ```
 
+### 1.3.1 按 name 精确查询单个菜单
+
+```http
+GET /api/menus/by-name?name=cs-5-d-1-paging&project=learning
+```
+
+- `name` 必填（菜单 name，kebab-case）
+- `project` 可选（默认不区分项目，传 `learning` 更精确）
+- 精确匹配 `name` 字段，返回单个菜单对象（含 `id`/`path`/`parentId`/`order`）——方便 AI/脚本直接拿 name 换 id 后再操作
+- 未找到返回 404
+
 ### 1.4 查询子菜单
 
 ```http
