@@ -24,7 +24,7 @@ async function setGoSuggestedMinutes() {
     WITH RECURSIVE go_tree AS (
       SELECT id FROM menu WHERE id = ${goRootId}
       UNION ALL
-      SELECT m.id FROM menu m JOIN go_tree g ON m.parent_id = g.id
+      SELECT m.id FROM menu m JOIN go_tree g ON m.parent_id = g.id::text
     )
     UPDATE menu SET suggested_minutes = CASE
       WHEN name LIKE 'go-1-%' THEN 30
@@ -48,7 +48,7 @@ async function setGoSuggestedMinutes() {
     WITH RECURSIVE go_tree AS (
       SELECT id FROM menu WHERE id = ${goRootId}
       UNION ALL
-      SELECT m.id FROM menu m JOIN go_tree g ON m.parent_id = g.id
+      SELECT m.id FROM menu m JOIN go_tree g ON m.parent_id = g.id::text
     )
     SELECT
       COUNT(*) FILTER (WHERE name LIKE 'go-1-%') AS stage1,
