@@ -182,6 +182,7 @@ const phases: Phase[] = [
         { name: 'db-4-4-2-query', label: '查询优化' },
         { name: 'db-4-4-3-locking', label: '锁优化' },
         { name: 'db-4-4-4-partition', label: '分区表' },
+        { name: 'db-4-4-5-uuid', label: 'UUID 主键选型' },
       ]},
     ]
   },

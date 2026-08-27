@@ -7,6 +7,8 @@ export interface MenuItem {
   icon?: string
   order?: number
   project?: string
+  /** 建议学习时长（分钟） */
+  suggestedMinutes?: number
   parentId?: string
   createdAt?: string
   updatedAt?: string
@@ -33,6 +35,8 @@ export interface PostApiMenusRequest {
   icon?: string
   order?: number
   project?: string
+  /** 建议学习时长（分钟） */
+  suggestedMinutes?: number
   parentId?: string
 }
 
@@ -43,6 +47,8 @@ export interface PutApiMenusIdRequest {
   icon?: string
   order?: number
   project?: string
+  /** 建议学习时长（分钟），未传不更新 */
+  suggestedMinutes?: number
   parentId?: string
 }
 

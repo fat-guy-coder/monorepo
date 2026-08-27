@@ -22,6 +22,10 @@
         <InputNumber v-model="formData.order" placeholder="数值越小越靠前" />
       </div>
       <div class="form-item">
+        <label>建议学习时长（分钟）</label>
+        <InputNumber v-model="formData.suggestedMinutes" :min="0" placeholder="留空/0 表示未设置" />
+      </div>
+      <div class="form-item">
         <label>父级菜单</label>
         <Select v-model="formData.parentId" :options="parentMenuOptions" :filterable="true" placeholder="搜索或选择父级菜单" />
       </div>
@@ -43,6 +47,8 @@ export interface MenuFormData {
   order: number
   project: string
   parentId: string
+  /** 建议学习时长（分钟），0 = 未设置 */
+  suggestedMinutes: number
 }
 
 export interface TreeNodeLike {
@@ -53,6 +59,7 @@ export interface TreeNodeLike {
   icon?: string | unknown
   order?: number
   project?: string
+  suggestedMinutes?: number
   parentId?: string
   children?: any[]
   [key: string]: unknown
@@ -88,6 +95,7 @@ const formData = reactive<MenuFormData>({
   order: 0,
   project: props.project || '',
   parentId: '',
+  suggestedMinutes: 0,
 })
 
 function resetForm() {
@@ -96,6 +104,7 @@ function resetForm() {
   formData.order = 0
   formData.project = props.project || ''
   formData.parentId = ''
+  formData.suggestedMinutes = 0
   formData.id = undefined
 }
 
@@ -110,6 +119,7 @@ watch(() => [props.visible, props.mode, props.node] as const, ([visible, mode, n
     formData.name = (n.name as string) || ''
     formData.order = (n.order as number) || 0
     formData.project = (n.project as string) || props.project || ''
+    formData.suggestedMinutes = Number((n as any).suggestedMinutes) || 0
     formData.parentId = mode === 'addChild' ? (n.id as string) : ((n.parentId as string) || '')
   }
 }, { immediate: true })

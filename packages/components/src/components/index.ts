@@ -46,6 +46,7 @@ const Tree = defineAsyncComponent(() => import('./Tree/index.vue'))
 const EditorLink = defineAsyncComponent(() => import('./EditorLink/index.vue'))
 const MenuFormModal = defineAsyncComponent(() => import('./MenuFormModal/index.vue'))
 const LearningPath = defineAsyncComponent(() => import('./LearningPath/index.vue'))
+const StudyTimer = defineAsyncComponent(() => import('./StudyTimer/index.vue'))
 // const Form = defineAsyncComponent(() => import('./Form/Form.vue'))
 // const FormItem = defineAsyncComponent(() => import('./Form/FormItem.vue'))
 
@@ -112,5 +113,6 @@ export {
   EditorLink,
   MenuFormModal,
   LearningPath,
+  StudyTimer,
   confirm,
 }

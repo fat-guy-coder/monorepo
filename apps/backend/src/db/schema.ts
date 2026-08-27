@@ -8,6 +8,7 @@ export const menu = pgTable('menu', {
   icon: varchar('icon', { length: 255 }),
   order: integer('order').default(0),
   project: varchar('project', { length: 255 }).default('default'),
+  suggestedMinutes: integer('suggested_minutes').default(0),
   parentId: varchar('parent_id', { length: 255 }),
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow(),
@@ -15,6 +16,19 @@ export const menu = pgTable('menu', {
 
 export type Menu = typeof menu.$inferSelect
 export type NewMenu = typeof menu.$inferInsert
+
+// 学习会话表 — 一次学习一条记录（开始/结束/时长），同章多次学可累计
+export const studySession = pgTable('study_session', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  menuId: uuid('menu_id').notNull().references(() => menu.id),
+  startedAt: timestamp('started_at').notNull().defaultNow(),
+  endedAt: timestamp('ended_at'),
+  durationMinutes: integer('duration_minutes').notNull().default(0),
+  createdAt: timestamp('created_at').defaultNow(),
+})
+
+export type StudySession = typeof studySession.$inferSelect
+export type NewStudySession = typeof studySession.$inferInsert
 
 // 用户表
 export const user = pgTable('user', {

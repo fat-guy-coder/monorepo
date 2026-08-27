@@ -344,6 +344,32 @@ docker-compose restart backend
 
 ---
 
+## 🐹 Go 后端（学习项目，端口 3002）
+
+> **以学习 Go 为目的**：用 Go 重写菜单 API（`apps/go/backend/`），与 Bun backend **同库同表**（菜单表列名完全一致，直接复用数据库），12 条路由已对齐。
+> 分层：`handler`（路由/解析）→ `service`（业务）→ `repository`（SQL）→ PostgreSQL。
+
+### 🚀 启动命令（推送到服务器后直接跑）
+
+```bash
+cd apps/go
+go mod tidy                                          # 自动下载依赖（lib/pq、google/uuid，纯 Go 无需装任何驱动）
+go build -o backend ./backend/cmd/server             # 编译
+DATABASE_URL=postgres://jason:123456@localhost:5432/jason ./backend   # 连服务器 Docker postgres，端口 3002
+```
+
+启动后测试：`curl http://localhost:3002/api/menus`
+
+### 📋 说明
+
+- **本地不用装 PostgreSQL**——代码推送到服务器后，服务器自动下包编译，连接服务器 Docker 里的 postgres（docker-compose 映射 5432，`localhost` 直连）
+- **首次启动自动建表**：`database.Migrate` 跑 `schema_migrations` 幂等迁移（`CREATE TABLE IF NOT EXISTS`），安全可重复执行
+- **与 Bun 共用数据**：Go 后端只读/写同一张 `menu` 表，替换 Bun 前可先并跑对比
+- ⚠️ 唯一未对齐：Bun 的 JWT 权限过滤（`tree=true` 需登录）——Go 端暂未实现，留待阶段 3 学 JWT 时补
+- 当前线上仍跑 Bun backend（`:3000`），Go 端是学习副本（`:3002`），功能对齐后即可替换
+
+---
+
 ## 技术栈
 
 ### 前端 (learning / admin)

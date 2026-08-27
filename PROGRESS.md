@@ -1,6 +1,6 @@
 # 📊 全项目进度面板
 
-> 更新时间: 2026-08-25 | 当前活跃任务: **Go 文档补全（阶段 1 基础 22/22 · 阶段 2 并发 14/14 · 下一步阶段 3 Web）**
+> 更新时间: 2026-08-27 | 当前活跃任务: **Go 阶段 4 数据库文档 14/14 ✅ · backend 已接入 PostgreSQL（代码就绪，待迁移替换 Bun）**
 
 ## 🎯 当前任务（下次 AI 会话继续入口）
 
@@ -160,11 +160,11 @@
 | 1 | 基础入门 | 22/22 ✅ | 22/22 ✅ | ✅ 完成 |
 | 2 | 并发编程 | 14/14 ✅ | 5/14 | 🔄 进行中 |
 | 3 | Web 开发 | 0/16 | 3/16 | ⏳ 待开始 |
-| 4 | 数据库 | 0/14 | 0/14 | ⏳ 待开始 |
+| 4 | 数据库 | 14/14 ✅ | backend 已数据库化 ✅ | ✅ 完成 |
 | 5 | 微服务 | 0/16 | 3/16 | ⏳ 待开始 |
 | 6 | 工程化 | 0/15 | 0/15 | ⏳ 待开始 |
 | 7 | 进阶 | 0/15 | 0/15 | ⏳ 待开始 |
-| **合计** | | **36/108** | **33/108** | **33%** |
+| **合计** | | **50/108** | **40/108** | **46%** |
 
 **阶段 2 并发文档（2026-08-24 更新）：** 13 个 .vue 文件均有内容，其中 13 篇含「结构总览」层（go-2-1 ~ go-2-13）——**go-2-12 errgroup** 补「扇出任务 · 聚合错误 · 出错即取消」结构图（main → Group → 3 个 goroutine；G2 出错 → cancel 广播 → G3 收到 <-ctx.Done() 提前退出 → Wait 聚合返回第一个 error）；**go-2-13 goroutine 泄漏** 补「阻塞无人接收的 channel → park 在 sendq → 栈被引用 → GC 无法回收」结构图（含检测/修复速查）。此前已补全 go-2-9 并发模式（Fan-out/in · Worker Pool · Or-Done · Generator）、go-2-10 竞态检测（竞态三条件 · 典型场景 · 修复速查）、go-2-11 sync.Pool（无锁设计 + victim 两代缓存 · 标准姿势 · 适用场景与优缺点）；**go-1-14 包与模块** 补全为 10 节（新增「包是什么」「实战：apps/go/backend 分层」「常见错误」，强化 internal 边界 + go.mod 路径映射）；**go-2-3 select** 强化「④ for-select 循环」，明确「无间隔/事件驱动」语义。**2026-08-25 深度补全 4 篇偏薄的阶段 2 文档**（144~176 行 → 372~412 行，均已通过 @vue/compiler-sfc 校验）——go-2-6 WaitGroup/Once/Cond（双重检查锁定执行流程 · 4 坑 · 等就绪屏障实战）、go-2-7 atomic（竞态现场还原执行流程 · Go 1.19 新 API 对照 · 5 坑 · 无锁计数器实战）、go-2-12 errgroup（fail-fast 全链路执行流程 · Promise.all/allSettled 对照表 · 5 坑 · BFF 聚合实战）、go-2-13 goroutine 泄漏（泄漏发生全流程 · pprof/goleak 检测深度 · 4 坑 · 发送方/接收方责任矩阵）；每篇均含「执行流程拆解 + 常见错误与陷阱 + 反模式经验法则 + 生产实战 + 前端类比」。动画层（vue-konva）可选补齐。
 
@@ -180,7 +180,23 @@
 - **回家练习（改参数 → 预测 → 再跑）**：① 把 `n` 改 5，预测输出（应照常打 0-4，握手逐个完成）② 删掉 `defer wg.Done()`，预测会不会死锁（wg.Wait 永不返回，关门 goroutine 卡死）③ 把 `a <- c` 换成先 sleep 再发，观察握手节奏
 - **下一步学习路径**：并发基础练完 → **阶段 1.5**（backend 加 sync.Map 缓存层 + context 超时中间件）→ **阶段 2 Web 开发**（go-3-x-web，通用后端服务基本全塞进 backend，见 go-backend-practice skill / LEARNING_METHOD.md）
 
-**继续指令：** 「继续 Go 文档的填充」「继续 Go 阶段 3（Web 开发）」「给 go-2-12/2-13/2-14 补动画层」
+**2026-08-27 阶段 4「数据库与存储」14 篇文档全部填充（空壳 → 完整，共 ~6200 行，均过 @vue/compiler-sfc 校验）：**
+- 14 篇全覆盖：go-4-1-database-sql / go-4-2-connection-pool / go-4-3-crud-basics / go-4-4-sql-security / go-4-5-gorm-start / go-4-6-gorm-association / go-4-7-sqlx-native / go-4-8-transactions / go-4-9-redis-basics / go-4-10-cache-strategy / go-4-11-distributed-lock / go-4-12-mongodb / go-4-13-migration / go-4-14-pprof-slow-query
+- **风格**：Go cyan 主题（`bg-linear-to-br from-slate-50 to-blue-50`）+ Code/EditorLink/Link/Nav 组件 + 🔗 前端类比 + ⚠️ 坑 + Link 页脚链闭环（4-1→4-2→…→4-14）
+- 内容深浅分级：go-4-1~4-4、4-8、4-13 塞进 backend（EditorLink 指向 backend 源码）；GORM/sqlx/Redis/MongoDB/分布式锁/慢查询属 B/C 档（文档自给自足 + playground/demo 玩法）
+
+**2026-08-27 backend 接入 PostgreSQL（阶段 4 知识点「塞进 backend」，与 Bun backend 同库同表）：**
+- 新增 `internal/database/` 三层：`db.go`（database/sql + lib/pq 连接池，↔ go-4-1/4-2）、`migrate.go`（`//go:embed` + `schema_migrations` 幂等迁移，↔ go-4-13）、`tx.go`（TransferBalance 事务 ACID 演示，↔ go-4-8）
+- `menu_repo.go` 内存 map → PostgreSQL：CRUD 全占位符防注入（↔ go-4-3/4-4）、`WITH RECURSIVE` 递归删除、`CreateBatchTree` 事务原子提交 + 幂等跳过（↔ go-4-8）、BuildTree map 索引建树（↔ go-1-9）、`ShiftOrders` 同级 order 后移、`UpdateDescendantPaths` 递归更新子 path
+- **handler 12 条路由已对齐 Bun menu.ts**（`apps/backend/src/routes/menu.ts`）：`GET /api/menus`（root/parentId/tree/flat/search 四种形态）、`GET /api/menus/search`（匹配树 + openKeys + selectedKeys）、`GET /api/menus/by-name`、`GET /api/menus/{id}`（带直接子）、`GET /api/menus/{id}/children`、`GET /api/menus/{id}/tree`（递归子树）、`GET /api/menus/{id}/leaves`（子树叶子统计）、`POST /api/menus`（自动算 path + order 后移）、`POST /api/menus/batch`（递归幂等建树，事务回滚）、`PUT /api/menus/{id}`（全字段 + order 互换 + path 重算 + 递归更新子孙 path）、`DELETE /api/menus/batch`（parentId 清空子树 / ids 批量删）、`DELETE /api/menus/{id}`（递归删）
+- 分层：handler（12 路由 + 请求解析）→ service（算 path/order/建树/搜索/order 互换编排）→ repository（纯 SQL 原子操作）→ PostgreSQL
+- ⚠️ 唯一未对齐：Bun 端的 JWT 权限过滤（tree=true 需登录、角色 menuIds 过滤）——Go 端暂无用户系统，**留待阶段 3 学 JWT 时补**（代码注释已标注）
+- 每个文件顶部「对照学习」注释块 + 每个函数注释（沿用 menu_handler.go 风格）
+- 依赖：`github.com/lib/pq` + `github.com/google/uuid`（**均纯 Go，编译进二进制，服务器无需装任何驱动插件**）
+- 部署（推送服务器后）：`cd apps/go && go mod tidy && go build -o backend ./backend/cmd/server`；`DATABASE_URL=postgres://jason:123456@localhost:5432/jason`（服务器 Docker postgres 映射 5432）；端口 3002
+- ⏳ **待办**：Go backend 补 JWT 权限过滤后即可替换 Bun backend（当前线上仍跑 Bun）
+
+**继续指令：** 「继续 Go 文档的填充」「继续 Go 阶段 3（Web 开发）」「给 go-2-12/2-13/2-14 补动画层」「把 go-stage-4-database 迁移到 Go backend（替换 Bun）」
 
 **运行：** `cd apps/go && go run . <stage> [topic]` 或 `go run . all`
 

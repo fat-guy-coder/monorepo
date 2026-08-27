@@ -4,6 +4,7 @@ import type { VNode } from 'vue'
 
 //菜单项类型
 export type MenuItem = {
+  suggestedMinutes: number
   id: string//菜单项id
   label: string//菜单项标签
   name: string//菜单项名称

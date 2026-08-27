@@ -579,6 +579,7 @@ routes.push({
       icon: body.icon ?? null,
       order: finalOrder,
       project: body.project ?? 'default',
+      suggestedMinutes: body.suggestedMinutes ?? 0,
       parentId: parentId
     }).returning()
 
@@ -630,6 +631,7 @@ routes.push({
       const icon = body.icon !== undefined ? (body.icon || null) : existingMenu.icon
       const order = body.order !== undefined ? body.order : existingMenu.order
       const project = body.project !== undefined ? body.project : existingMenu.project
+      const suggestedMinutes = body.suggestedMinutes !== undefined ? body.suggestedMinutes : existingMenu.suggestedMinutes
 
       // 如果 order 改变了，处理 order 互换（同级菜单中如果已存在该 order，则互换）
       if (body.order !== undefined && body.order !== existingMenu.order) {
@@ -649,7 +651,7 @@ routes.push({
         }
       }
 
-      const result = await rawQuery`UPDATE menu SET name = ${name}, label = ${label}, path = ${generatedPath}, icon = ${icon}, "order" = ${order}, project = ${project}, parent_id = ${parentId} WHERE id = ${id} RETURNING *`
+      const result = await rawQuery`UPDATE menu SET name = ${name}, label = ${label}, path = ${generatedPath}, icon = ${icon}, "order" = ${order}, project = ${project}, suggested_minutes = ${suggestedMinutes}, parent_id = ${parentId} WHERE id = ${id} RETURNING *`
 
       // 递归更新子菜单路径的函数
       const updateChildrenPaths = async (parentId: string, newParentPath: string) => {
@@ -760,6 +762,7 @@ routes.push({
       label: string
       icon?: string
       order?: number
+      suggestedMinutes?: number
       children?: TreeItem[]
     }
 
@@ -807,6 +810,7 @@ routes.push({
               icon: item.icon ?? null,
               order: item.order ?? 0,
               project,
+              suggestedMinutes: item.suggestedMinutes ?? 0,
               parentId: itemParentId,
             })
             .returning()

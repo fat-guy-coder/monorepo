@@ -16,7 +16,7 @@
       </template>
       <div v-if="currentTabInGroup" @click.stop="removeFromGroup">↩ 移出分组</div>
     </template>
-    <slot name="contextMenuItems"></slot>
+    <slot name="contextMenuItems" :currentKey="currentKey" :currentIndex="currentIndex"></slot>
   </div>
 
   <!-- 拖拽插入指示线 -->

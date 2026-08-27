@@ -28,6 +28,7 @@
             :style="{ top: menuCtxPosition.y + 'px', left: menuCtxPosition.x + 'px' }">
             <div @click.stop="handleMenuEdit">✏️ 编辑</div>
             <div @click.stop="handleMenuAddChild">➕ 新增子菜单</div>
+            <div @click.stop="handleMenuStudyTimer">⏱ 学习计时</div>
             <div @click.stop="handleMenuDelete">🗑️ 删除</div>
           </div>
         </Teleport>
@@ -43,6 +44,9 @@
           @collapse-group="onCollapseGroup" @rename-group="onRenameGroup" @recolor-group="onRecolorGroup"
           @ungroup-group="onUngroupGroup" @close-group="onCloseGroup" @add-tab-new-group="onAddTabNewGroup"
           @add-tab-to-group="onAddTabToGroup" @remove-tab-from-group="onRemoveTabFromGroup">
+          <template #contextMenuItems="{ currentKey }">
+            <div class="tab-ctx-study" @click.stop="handleTabStudyTimer(currentKey)">⏱ 学习计时</div>
+          </template>
         </RouteTab>
       </div>
       <div class="mainView" id="mainView" @scroll="handleScroll">
@@ -77,12 +81,18 @@
         <button type="submit" style="display:none"></button>
       </form>
     </Modal>
+
+    <!-- 章节学习计时（悬浮球 + 面板） -->
+    <StudyTimer v-model:visible="studyTimerVisible" :menu-options="studyMenuOptions" :menu-id="studyTimerMenu?.id"
+      :menu-label="studyTimerMenu?.label" :suggested-minutes="studyAggregate?.suggestedMinutes ?? 0"
+      :total-minutes="studyAggregate?.totalMinutes ?? 0" :fixed-menu="studyTimerFixed" @select-menu="onStudySelectMenu"
+      @ball-click="onStudyTimerBall" @add-record="onStudyAddRecord" />
   </div>
 </template>
 
 <script lang="ts" setup>
 //vue编译器会自动引入components目录下的所有组件，但不是异步组件，这一步是为了将所有组件转换为异步组件，以优化初始加载性能
-import { Menu, RouteTab, ThemeChange, Navigation, Input, Button, Modal, message, Spin, MenuFormModal, confirm } from 'components'
+import { Menu, RouteTab, ThemeChange, Navigation, Input, Button, Modal, message, Spin, MenuFormModal, StudyTimer, confirm } from 'components'
 import { computed, ref, reactive, watch, onMounted, onUnmounted, nextTick, provide } from 'vue'
 import {
   type MenuItem, //菜单项类型
@@ -90,6 +100,7 @@ import {
   findMenuItemByName, //查找菜单项 通过name
 } from '@/menu'
 import { getApiMenus, getApiMenusSearch, postApiMenus, putApiMenusId, deleteApiMenusId, type PostApiMenusRequest, type PutApiMenusIdRequest } from '@/api/menu'
+import { getApiMenusIdStudy, postApiStudySessions, type StudyAggregate } from '@/api/study-session'
 import { postApiUserLogin, postApiUserRegister, postApiUserRefresh, getApiUserMe } from '@/api/user'
 import { saveTokens, saveUserInfo, getAccessToken, isAccessTokenValid, isRefreshTokenValid, getRefreshToken, clearTokens, getUserInfo } from '@/utils/token'
 import { useTabStore } from '@/stores/tab' //标签列表store
@@ -324,6 +335,9 @@ const getMenus = async () => {
       registerRouteByPath(tab.path, tab.name)
     }
   })
+
+  // 学习计时下拉选项随菜单刷新
+  refreshStudyMenuOptions()
 }
 
 // 根据 path 和 name 注册路由
@@ -411,16 +425,16 @@ async function handleMenuDelete() {
   if (!ok) return
   try { await deleteApiMenusId(item.id); message.success('删除成功'); await getMenus() } catch { message.error('删除失败') }
 }
-interface MenuFormSubmitData { id?: string; name: string; label: string; order: number; project: string; parentId: string }
+interface MenuFormSubmitData { id?: string; name: string; label: string; order: number; project: string; parentId: string; suggestedMinutes?: number }
 async function handleMenuFormSubmit(data: MenuFormSubmitData) {
   if (!data.label) { message.error('请输入菜单名称'); return }
   if (!data.name) { message.error('请输入英文名称'); return }
   try {
     if (menuFormMode.value === 'edit' && data.id) {
-      await putApiMenusId(data.id, { name: data.name, label: data.label, order: data.order, project: data.project, parentId: data.parentId })
+      await putApiMenusId(data.id, { name: data.name, label: data.label, order: data.order, project: data.project, parentId: data.parentId, suggestedMinutes: data.suggestedMinutes ?? 0 })
       message.success('更新成功')
     } else {
-      await postApiMenus({ name: data.name, label: data.label, order: data.order, project: data.project, parentId: data.parentId })
+      await postApiMenus({ name: data.name, label: data.label, order: data.order, project: data.project, parentId: data.parentId, suggestedMinutes: data.suggestedMinutes ?? 0 })
       message.success('创建成功')
     }
     menuFormVisible.value = false; await getMenus()
@@ -437,6 +451,108 @@ const parentMenuOptions = computed(() => {
   }
   return [{ label: '根目录', value: '', path: '' }, ...flatten(menus.value)]
 })
+
+// ============ 章节学习计时 ============
+const studyTimerVisible = ref(false)
+const studyTimerFixed = ref(false) // 章节已确定（右键进入）→ 面板隐藏章节选择，直接计时
+const studyTimerMenu = ref<{ id: string; label: string; suggestedMinutes: number } | null>(null)
+const studyAggregate = ref<StudyAggregate | null>(null)
+
+// 章节下拉选项：一次性拉全量扁平菜单（含所有叶子章节），不依赖侧边栏是否展开过
+const studyMenuOptions = ref<{ value: string; label: string }[]>([])
+// 全量章节元信息（同一份 flat 拉取构建，保证下拉/悬浮球/Tab 右键查得到任意章节）：
+//   id → { id, label, suggestedMinutes }   供下拉选中后反查
+//   path → { id, label, suggestedMinutes } 供悬浮球/Tab 右键按 path 反查
+const studyMenuInfoById = new Map<string, { id: string; label: string; suggestedMinutes: number }>()
+const studyMenuInfoByPath = new Map<string, { id: string; label: string; suggestedMinutes: number }>()
+async function refreshStudyMenuOptions() {
+  try {
+    const { data } = await getApiMenus({ flat: 'true', project: 'learning' })
+    const list = ((data || []) as MenuItem[]).map(m => ({
+      id: m.id,
+      label: m.label,
+      suggestedMinutes: m.suggestedMinutes || 0,
+      path: m.path || '',
+    }))
+    studyMenuOptions.value = list.map(m => ({ value: m.id, label: m.label }))
+    studyMenuInfoById.clear()
+    studyMenuInfoByPath.clear()
+    for (const m of list) {
+      const info = { id: m.id, label: m.label, suggestedMinutes: m.suggestedMinutes }
+      studyMenuInfoById.set(m.id, info)
+      if (m.path) studyMenuInfoByPath.set(m.path, info)
+    }
+  } catch {
+    studyMenuOptions.value = []
+  }
+}
+
+async function refreshStudyAggregate(menuId: string) {
+  try {
+    const { data } = await getApiMenusIdStudy(menuId)
+    studyAggregate.value = data
+  } catch {
+    studyAggregate.value = null
+  }
+}
+
+// 打开计时面板（侧边栏菜单右键 / Tab 右键共用的入口）
+// 右键进入时章节已确定 → 锁定章节（fixed），面板直接显示计时，不再让用户选章节
+function openStudyTimer(menu: { id: string; label: string; suggestedMinutes: number }) {
+  studyTimerMenu.value = menu
+  studyTimerFixed.value = true
+  studyTimerVisible.value = true
+  refreshStudyAggregate(menu.id)
+  refreshStudyMenuOptions()
+}
+
+// 悬浮球点击 → 优先锁定「当前激活 tab」的章节直接计时（符合直觉）；非章节页面才回退到选章节模式
+function onStudyTimerBall() {
+  const info = activeKey.value ? studyMenuInfoByPath.get(activeKey.value) : undefined
+  if (info) {
+    openStudyTimer(info)
+  } else {
+    studyTimerFixed.value = false
+    refreshStudyMenuOptions()
+  }
+}
+
+// 侧边栏菜单右键「⏱ 学习计时」
+function handleMenuStudyTimer() {
+  const item = menuCtxItem.value
+  closeMenuCtx()
+  if (!item) return
+  if (!item.id) { message.warning('该菜单无 ID，无法计时'); return }
+  openStudyTimer({ id: item.id, label: item.label || item.name || '未命名', suggestedMinutes: item.suggestedMinutes || 0 })
+}
+
+// Tab 右键「⏱ 学习计时」（path 反查章节信息）
+function handleTabStudyTimer(path: string) {
+  const info = studyMenuInfoByPath.get(path)
+  if (!info) {
+    message.warning('该页面不是章节页面，无法计时')
+    return
+  }
+  openStudyTimer(info)
+}
+
+// 面板内切换章节 → 用全量映射反查章节信息 + 拉取该章节学习统计
+async function onStudySelectMenu(menuId: string) {
+  const entry = studyMenuInfoById.get(menuId) || null
+  studyTimerMenu.value = entry
+  await refreshStudyAggregate(menuId)
+}
+
+// 新增学习记录（日志式：起止时间已由组件拼成 ISO，服务端算时长）
+async function onStudyAddRecord(payload: { menuId: string; startedAt: string; endedAt: string }) {
+  try {
+    await postApiStudySessions(payload)
+    message.success('记录成功')
+    if (studyTimerMenu.value) await refreshStudyAggregate(studyTimerMenu.value.id)
+  } catch {
+    message.error('保存记录失败')
+  }
+}
 
 //当前选中的标签key列表
 const selectedKeys = computed<string[]>(() => {
@@ -925,6 +1041,22 @@ const scrollTo = (id: string) => {
   position: fixed;
   inset: 0;
   z-index: 999;
+}
+
+/* RouteTab 右键菜单里的「学习计时」项（slot 内容，App.vue 自绘样式） */
+.tab-ctx-study {
+  width: 100%;
+  text-align: center;
+  cursor: pointer;
+  font-size: var(--font-size-xs);
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+  color: var(--color-text);
+
+  &:hover {
+    background-color: var(--color-background-soft);
+    color: var(--color-primary);
+    transform: translate(1px, 1px);
+  }
 }
 
 .menu-ctx-menu {
