@@ -314,7 +314,6 @@ function addToRouteInfoMap(items: MenuItem[]) {
     }
   }
 }
-
 //获取菜单（只加载根菜单，按需加载子菜单）
 const getMenus = async () => {
   loading.value = true
