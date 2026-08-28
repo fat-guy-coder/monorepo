@@ -318,12 +318,35 @@ urllib.request.urlopen(urllib.request.Request('http://localhost:8080/api/menus/b
 | 新增学习记录 | `POST` | `/api/study-sessions` | `{ menuId, startedAt, endedAt }`（全必填）→ 服务端算 durationMinutes |
 | 章节学习统计 | `GET` | `/api/menus/:id/study` | `{ menuId, label, suggestedMinutes, totalMinutes, sessions[] }` |
 
-`menu.suggested_minutes` 字段保存章节建议学习时长（`0` = 未设置），GO 章节已按阶段预置。需在服务器上执行数据库初始化脚本（详见 [apps/backend/API.md](apps/backend/API.md)）：
+`menu.suggested_minutes` 字段保存章节建议学习时长（`0` = 未设置），GO 章节已按阶段预置。相关建表/刷建议时长脚本见下方「🔄 数据种子脚本」章节。
+
+---
+
+## 🔄 数据种子脚本（初始化 / 同步数据）
+
+> `apps/backend/scripts/` 下的脚本直接连库建表/刷数据（`rawQuery`），**全部幂等**（重复执行结果一致，可安全重跑）。
+> ⚠️ **必须在服务器容器内跑**（容器已配好 `DATABASE_URL`），本地跑会连错库；推 master 触发 CI 自动部署后端代码，但脚本要手动执行。
 
 ```bash
-docker exec -it backend-app bun run scripts/initStudyTables.ts
-docker exec -it backend-app bun run scripts/setGoSuggestedMinutes.ts
+docker exec -it backend-app bun run scripts/<脚本名>.ts
 ```
+
+| 脚本 | 作用 | 何时需要 |
+|------|------|---------|
+| `initUserTable.ts` | 建 `user` 用户表 | 首次部署 / 库被清空后 |
+| `initRoles.ts` | 建 `role` + `user_role` 表，创建 `admin`/`default` 角色并绑定 admin 用户（admin 角色 `menuIds=[]` = 全部菜单可见） | 首次部署；重灌库后 |
+| `initStudyTables.ts` | `menu` 加 `suggested_minutes` 列（建议学习时长）+ 建 `study_session` 学习记录表 + 索引 | 首次部署 / 升级学习计时功能后 |
+| `setGoSuggestedMinutes.ts` | 批量设置建议学习时长：**阶段一**按难度给 GO 叶子设值（阶段1-7 = 30/50/45/50/65/55/70，顶层页 25）；**阶段二全表**非叶子章节 = 叶子子孙建议时长之和 | 建议时长有变更 / 新增章节后跑一遍 |
+
+**部署后执行顺序**（按需，首次部署跑前 3 个，以后只有 `setGoSuggestedMinutes` 需要动）：
+
+```
+1. git push 到 master → CI 自动部署后端代码
+2. 建表/加列（首次或功能升级）→ initUserTable → initRoles → initStudyTables
+3. 建议时长有变 / 新增章节 → setGoSuggestedMinutes.ts（已泛化到全部菜单树，幂等）
+```
+
+> 💡 `setGoSuggestedMinutes.ts` 的阶段二会扫**所有**菜单树（GO/Python/Godot 等），非叶子章节建议时长自动 = 叶子子孙之和，几千条也一次聚合，放心重跑。
 
 ---
 

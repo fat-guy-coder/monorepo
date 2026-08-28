@@ -60,10 +60,10 @@ function flatten(items: any[]) {
 async function getStudiedMinutesMap(): Promise<Map<string, number>> {
   const [menus, rows] = await Promise.all([
     db.select({ id: menu.id, parentId: menu.parentId }).from(menu),
-    db.select({ menuId: studySession.menu_id, total: sum(studySession.duration_minutes) })
+    db.select({ menuId: studySession.menuId, total: sum(studySession.durationMinutes) })
       .from(studySession)
-      .where(isNotNull(studySession.ended_at))
-      .groupBy(studySession.menu_id),
+      .where(isNotNull(studySession.endedAt))
+      .groupBy(studySession.menuId),
   ])
 
   const studied = new Map<string, number>()
