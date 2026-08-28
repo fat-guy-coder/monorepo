@@ -9,6 +9,8 @@ export interface MenuItem {
   project?: string
   /** 建议学习时长（分钟） */
   suggestedMinutes?: number
+  /** 已学习时长（分钟，非叶子 = 子树总和） */
+  studiedMinutes?: number
   parentId?: string
   createdAt?: string
   updatedAt?: string

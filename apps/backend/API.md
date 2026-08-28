@@ -65,7 +65,10 @@ GET /api/menus?project=learning&root=true&flat=true&tree=true&search=关键词&p
 | `tree=true` | 返回完整树形结构（**需要登录**） | `?tree=true` |
 | `search` | 搜索关键词（匹配 label/name，需 `flat=true`） | `?flat=true&search=git` |
 
-**响应 `data`**：菜单对象数组，每个菜单含 `id, name, label, path, icon, order, project, parentId`，非叶子节点含 `children` 数组。
+**响应 `data`**：菜单对象数组，每个菜单含 `id, name, label, path, icon, order, project, parentId, suggestedMinutes, studiedMinutes`，非叶子节点含 `children` 数组。
+
+- `suggestedMinutes`：建议学习时长（分钟），`0` = 未设置
+- `studiedMinutes`：已学习时长（分钟），**非叶子 = 其子孙叶子已学时长的总和**（与「建议时长 = 叶子之和」同口径），供菜单/页签进度条使用；无学习数据时为 `0`
 
 `root=true` 或 `parentId` 模式下，每个菜单额外含 `isLeaf: boolean`。
 
@@ -493,7 +496,8 @@ bun run scripts/setGoSuggestedMinutes.ts  # 批量设置 GO 章节建议学习�
 
 ## 五、学习计时 API — `/api/study-sessions`
 
-> 章节学习时间记录，**日志式**：一次学习填一条记录（起止时间），时长由服务端计算。同一章节多次学习的 `duration_minutes` 累加即为累计已学时间。
+> 章节学习时间记录，**日志式**：一条记录 = 一个起止时间段，时长由服务端计算。同一章节多次学习的 `duration_minutes` 累加即为累计已学时间。
+> 前端**自动计时**：打开章节（激活页签）记开始，切换/关闭页签、切走窗口时调 `POST /api/study-sessions` 结算一条记录（`startedAt` 为开始时刻，`endedAt` 为当前时刻）；不足 1 分钟的段落自动忽略。无需手动录入。
 
 ### 数据库表结构 (`study_session`)
 
@@ -506,7 +510,7 @@ bun run scripts/setGoSuggestedMinutes.ts  # 批量设置 GO 章节建议学习�
 | `duration_minutes` | integer | 学习时长（分钟），服务端按 `max(0, round((ended_at - started_at) / 60s))` 计算 |
 | `created_at` | timestamp | 创建时间 |
 
-### 5.1 新增学习记录
+### 5.1 结算一条学习记录（自动计时调用）
 
 ```http
 POST /api/study-sessions
@@ -514,14 +518,15 @@ Content-Type: application/json
 
 {
   "menuId": "章节菜单UUID",     // 必填
-  "startedAt": "2026-08-27T09:00:00Z",   // 必填，ISO 8601
-  "endedAt": "2026-08-27T09:40:00Z"      // 必填，ISO 8601
+  "startedAt": "2026-08-27T09:00:00Z",   // 必填，ISO 8601（本次打开章节的开始时刻）
+  "endedAt": "2026-08-27T09:40:00Z"      // 必填，ISO 8601（切换/关闭页签时刻）
 }
 ```
 
 - 三个字段全部必填；`startedAt` 必须早于 `endedAt`，否则 400
 - 菜单不存在返回 404
 - 成功返回 201，`data` 为 `study_session` 对象（含服务端算好的 `durationMinutes`）
+- 前端在「切换/关闭页签、窗口隐藏/关闭」时自动调用，一条记录即一个学习时间段
 
 **响应 `data`**：
 ```json
@@ -558,12 +563,14 @@ GET /api/menus/:id/study
 
 - `suggestedMinutes` = 该菜单的建议学习时长（来自 `menu.suggested_minutes`，`0` 表示未设置）
 - `totalMinutes` = `sessions` 里 `durationMinutes` 之和，即累计已学时间
-- 前端据此渲染「已学 X / 建议 Y 分钟」进度条
+- `sessions` = 该章节所有学习时间段（按开始时间升序），前端据此渲染「已学 X / 建议 Y 分钟」进度条 + 每段起止时间历史列表
 
 ### 5.3 建议学习时长来源
 
 - `suggested_minutes` 存于 `menu` 表，可通过 `POST/PUT /api/menus` 的 `suggestedMinutes` 字段设置
 - 学习网站按菜单加载；GO 章节已由 `scripts/setGoSuggestedMinutes.ts` 按阶段预置（阶段1-7 为 30/50/45/50/65/55/70 分钟，顶层介绍页 25 分钟）
+- **叶子 vs 非叶子**：叶子文档的建议时长是单篇预设值；**非叶子章节（分类夹/大章节，如「阶段1 基础入门」）= 其叶子子孙建议时长之和**，由同一脚本阶段二递归计算（幂等，重复执行结果一致）
+- **学习计时面板里可直接编辑**：面板「建议 X 分钟」是可编辑输入框，修改后 `PUT /api/menus/:id` 落库并即时刷新进度条（有值才显示输入框，`0` 显示「未设置建议时长」）
 
 ---
 

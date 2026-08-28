@@ -3,7 +3,7 @@
     @mouseenter.stop.prevent="handleMouseEnter" @mouseleave="handleMouseLeave"
     @contextmenu.prevent.stop="showCtxMenu && emit('contextmenu', { item: props.item, event: $event })">
     <div class="menu-item__title" :class="titleClasses" :id="item.path">
-      <span :class="['menu-item__label']" :title="item.label || item.name">
+      <span :class="['menu-item__label']" :title="labelWithProgress">
         {{ item.label || item.name }}
       </span>
       <span v-if="canToggle" class="menu-item__arrow" :class="{ 'menu-item__arrow--open': isOpen }">
@@ -11,6 +11,9 @@
           <path d="M9 18l6-6-6-6" />
         </svg>
       </span>
+      <!-- 学习进度条：整行作为容器，已学时长按占比用背景填充（建议未设置时不显示） -->
+      <span v-if="studyProgress !== null" class="menu-item__progress"
+        :class="{ 'is-done': studyProgress >= 100 }" :style="{ '--progress-pct': studyProgress + '%' }"></span>
     </div>
     <Teleport to="body" v-if="mode === 'vertical'">
       <div v-if="shouldRenderChildren" ref="childrenWrapper" class="menu-item__children-wrapper-vertical"
@@ -254,6 +257,21 @@ const titleClasses = computed(() => ({
   'menu-item__title--hovered': isHovered.value,
 }))
 
+// 学习进度（已学/建议 百分比）：建议未设置（0）时不显示进度条
+const studyProgress = computed<number | null>(() => {
+  const suggested = Number(props.item.suggestedMinutes ?? 0)
+  const studied = Number(props.item.studiedMinutes ?? 0)
+  if (!suggested) return null
+  return Math.min(100, Math.round((studied / suggested) * 100))
+})
+const labelWithProgress = computed(() => {
+  const base = props.item.label || props.item.name || ''
+  if (studyProgress.value === null) return base
+  const suggested = Number(props.item.suggestedMinutes ?? 0)
+  const studied = Number(props.item.studiedMinutes ?? 0)
+  return `${base}（已学 ${studied} / 建议 ${suggested} 分钟）`
+})
+
 watch(
   () => props.isOpen,
   async (newVal) => {
@@ -320,6 +338,7 @@ function isMouseInElement(element: HTMLElement, mouseX: number, mouseY: number) 
   }
   
   .menu-item__title {
+    position: relative;
     display: flex;
     align-items: center;
     gap: var(--gap-xs);
@@ -328,7 +347,33 @@ function isMouseInElement(element: HTMLElement, mouseX: number, mouseY: number) 
     cursor: pointer;
     border-radius: var(--border-radius-md);
   }
-  
+
+  .menu-item__progress {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    z-index: 0;
+    background: linear-gradient(to right,
+      var(--color-primary) var(--progress-pct, 0%),
+      transparent var(--progress-pct, 0%));
+    opacity: 0.16;
+    transition: opacity 0.2s ease;
+    pointer-events: none;
+
+    &.is-done {
+      background: linear-gradient(to right,
+        var(--color-success) var(--progress-pct, 0%),
+        transparent var(--progress-pct, 0%));
+    }
+  }
+
+  /* 文本/箭头浮在进度填充之上 */
+  .menu-item__label,
+  .menu-item__arrow {
+    position: relative;
+    z-index: 1;
+  }
+
   .menu-item__label {
     flex-grow: 1;
     white-space: nowrap;

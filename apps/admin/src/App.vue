@@ -3,12 +3,6 @@
     <!-- 导航组件示例 -->
     <Navigation position="bottom-right" :offset="{ bottom: '2rem', right: '0.5rem' }" :isMobile="isMobile"
       @item-click="handleNavClick" :items="navItems">
-      <template #theme="{ item }">
-        <ThemeChange v-model:show="themeMenuShow" :theme="theme" :themes="themes"
-          :direction="isMobile ? 'vertical' : 'horizontal'" @theme-change="themeChange" />
-        <span class="nav-icon">{{ currentThemeIcon }}</span>
-        <span class="nav-text">{{ item.label }}</span>
-      </template>
     </Navigation>
     <div class="menu-container">
       <div class="search">
@@ -44,7 +38,7 @@
 
 <script lang="ts" setup>
 //vue编译器会自动引入components目录下的所有组件，但不是异步组件，这一步是为了将所有组件转换为异步组件，以优化初始加载性能
-import { Menu, RouteTab, ThemeChange, Navigation, Input, Button, message, Spin } from 'components'
+import { Menu, RouteTab, Navigation, Input, Button, message, Spin } from 'components'
 import { computed, ref, watch, onMounted, onUnmounted, nextTick, provide } from 'vue'
 import {
   type MenuItem, //菜单项类型
@@ -56,7 +50,6 @@ import {
 import { getApiMenus } from '@/api/menu'
 import { useTabStore } from '@/stores/tab' //标签列表store
 import { useDeviceStore } from '@/stores/device' //设备信息store
-import { useUIConfigStore, type Theme } from '@/stores/uiconfig' //UI配置store
 import { useRouter } from 'vue-router'
 import { debounce, scrollIntoViewById } from '@/function/common' //常用函数
 import type { NavItem } from 'components' //导航项类型
@@ -66,24 +59,17 @@ import { useDetectDevice } from '@/hooks/useDetectDevice' //设备信息hook
 //获取用户信息store
 // const userStore = useUserStore()
 const deviceStore = useDeviceStore()
-const uiConfigStore = useUIConfigStore()
 
 
 //是否是手机端
 const isMobile = computed(() => deviceStore.isMobile)
 
-//主题
-const theme = computed(() => uiConfigStore.theme)
-const themes = computed(() => uiConfigStore.themes)
-const navItems = computed(() => uiConfigStore.navItems)
-
-//当前主题图标
-const currentThemeIcon = computed(() => {
-  return uiConfigStore.themes.find((i) => i.value === uiConfigStore.theme)?.icon || '☀️'
-})
-
-//主题菜单显示状态
-const themeMenuShow = ref(false)
+//导航项
+const navItems: NavItem[] = [
+  { icon: '⚙️', label: '设置', value: 'setting' },
+  { icon: '👤', label: '用户', value: 'user' },
+  { icon: '🏠', label: '首页', value: 'home' },
+]
 
 //铆钉导航
 const handleNavClick = (item: NavItem): void => {
@@ -91,23 +77,9 @@ const handleNavClick = (item: NavItem): void => {
     case 'home':
       goToByName('home')
       break
-    case 'theme':
-      themeMenuShow.value = !themeMenuShow.value
-      break
     default:
       break
   }
-}
-
-//主题切换
-const themeChange = (theme1: Theme) => {
-  if (theme1 === 'more') {
-    goToByName('MyTheme')
-    return
-  }
-  //设置用户主题
-  uiConfigStore.setTheme(theme1)
-  document.documentElement.setAttribute('data-theme', theme1)
 }
 
 //全局渐变色动画
@@ -173,8 +145,6 @@ useDetectDevice((device) => {
 })
 
 onMounted(() => {
-  //设置主题
-  themeChange(theme.value)
   //右键菜单
   contextMenu = document.getElementById('context-menu')
   if (container.value) {
@@ -507,16 +477,5 @@ const scrollTo = (id: string) => {
   line-height: calc(100vh - 100px);
   // height: calc(100vh - 100px);
   text-align: center;
-}
-
-.nav-icon {
-  font-size: var(--font-size-xs);
-  line-height: 1;
-}
-
-.nav-text {
-  font-size: var(--font-size-xs);
-  font-weight: 500;
-  line-height: 1;
 }
 </style>

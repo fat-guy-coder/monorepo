@@ -3,12 +3,6 @@
     <!-- 导航组件示例 -->
     <Navigation position="bottom-right" :offset="{ bottom: '2rem', right: '0.5rem' }" :isMobile="isMobile"
       @item-click="handleNavClick" :items="navItems">
-      <template #theme="{ item }">
-        <ThemeChange v-model:show="themeMenuShow" :theme="theme" :themes="themes"
-          :direction="isMobile ? 'vertical' : 'horizontal'" @theme-change="themeChange" />
-        <span class="nav-icon">{{ currentThemeIcon }}</span>
-        <span class="nav-text">{{ item.label }}</span>
-      </template>
     </Navigation>
     <div class="menu-container">
       <div class="search">
@@ -39,7 +33,7 @@
     <div class="content">
       <div class="tabs">
         <RouteTab @tab-click="tabClick" :activeKey="activeKey" :tabList="store.tabList" :nodes="store.nodes"
-          :showContextMenu="showContextMenu" @remove="removeTab" @remove-other="removeOther" @remove-side="removeSide"
+          :tab-progress="studyProgressByPath" :showContextMenu="showContextMenu" @remove="removeTab" @remove-other="removeOther" @remove-side="removeSide"
           @toggle-show-menu="toggleShowMenu" @drop-tab="onDropTab" @drop-group="onDropGroup"
           @collapse-group="onCollapseGroup" @rename-group="onRenameGroup" @recolor-group="onRecolorGroup"
           @ungroup-group="onUngroupGroup" @close-group="onCloseGroup" @add-tab-new-group="onAddTabNewGroup"
@@ -82,18 +76,19 @@
       </form>
     </Modal>
 
-    <!-- 章节学习计时（悬浮球 + 面板） -->
+    <!-- 章节学习计时（入口在底部导航 navItems「⏱ 学习计时」，只渲染面板） -->
     <StudyTimer v-model:visible="studyTimerVisible" :menu-options="studyMenuOptions" :menu-id="studyTimerMenu?.id"
       :menu-label="studyTimerMenu?.label" :suggested-minutes="studyAggregate?.suggestedMinutes ?? 0"
-      :total-minutes="studyAggregate?.totalMinutes ?? 0" :fixed-menu="studyTimerFixed" @select-menu="onStudySelectMenu"
-      @ball-click="onStudyTimerBall" @add-record="onStudyAddRecord" />
+      :total-minutes="studyAggregate?.totalMinutes ?? 0" :sessions="studyAggregate?.sessions ?? []"
+      :fixed-menu="studyTimerFixed" @select-menu="onStudySelectMenu"
+      @update-suggested-minutes="onStudyUpdateSuggestedMinutes" />
   </div>
 </template>
 
 <script lang="ts" setup>
 //vue编译器会自动引入components目录下的所有组件，但不是异步组件，这一步是为了将所有组件转换为异步组件，以优化初始加载性能
-import { Menu, RouteTab, ThemeChange, Navigation, Input, Button, Modal, message, Spin, MenuFormModal, StudyTimer, confirm } from 'components'
-import { computed, ref, reactive, watch, onMounted, onUnmounted, nextTick, provide } from 'vue'
+import { Menu, RouteTab, Navigation, Input, Button, Modal, message, Spin, MenuFormModal, StudyTimer, confirm } from 'components'
+import { computed, ref, shallowRef, reactive, watch, onMounted, onUnmounted, nextTick, provide } from 'vue'
 import {
   type MenuItem, //菜单项类型
   findFatherKeysListByKey, //查找父级菜单key列表
@@ -105,7 +100,6 @@ import { postApiUserLogin, postApiUserRegister, postApiUserRefresh, getApiUserMe
 import { saveTokens, saveUserInfo, getAccessToken, isAccessTokenValid, isRefreshTokenValid, getRefreshToken, clearTokens, getUserInfo } from '@/utils/token'
 import { useTabStore } from '@/stores/tab' //标签列表store
 import { useDeviceStore } from '@/stores/device' //设备信息store
-import { useUIConfigStore, type Theme } from '@/stores/uiconfig' //UI配置store
 import { useUserStore } from '@/stores/userProfle'
 import { useRouter } from 'vue-router'
 import { debounce, scrollIntoViewById } from '@/function/common' //常用函数
@@ -118,30 +112,23 @@ import { loadViewByPath, viewExists } from '@/views/views-loader' //动态视图
 //获取用户信息store
 const userStore = useUserStore()
 const deviceStore = useDeviceStore()
-const uiConfigStore = useUIConfigStore()
 
 //是否是手机端
 const isMobile = computed(() => deviceStore.isMobile)
 
-//主题
-const theme = computed(() => uiConfigStore.theme)
-const themes = computed(() => uiConfigStore.themes)
 // navItems 动态追加"跳转"项（仅 admin）
+// ⏸/▶ 是手动暂停/继续计时开关（跟视频播放/暂停一样）：暂停后去干别的事不算学习时间
 const navItems = computed(() => {
-  const items = [...uiConfigStore.navItems]
+  const items = [
+    { icon: '⏱', label: '学习计时', value: 'studyTimer' },
+    { icon: studyPaused.value ? '▶' : '⏸', label: studyPaused.value ? '继续学习' : '暂停计时', value: 'studyPause' },
+    { icon: '👤', label: '用户', value: 'user' },
+  ]
   if (userStore.isAdmin) {
     items.push({ icon: '↗️', label: '跳转', value: 'jumpToEditor' })
   }
   return items
 })
-
-//当前主题图标
-const currentThemeIcon = computed(() => {
-  return uiConfigStore.themes.find((i) => i.value === uiConfigStore.theme)?.icon || '☀️'
-})
-
-//主题菜单显示状态
-const themeMenuShow = ref(false)
 
 //铆钉导航
 const handleNavClick = (item: NavItem): void => {
@@ -149,8 +136,11 @@ const handleNavClick = (item: NavItem): void => {
     case 'home':
       goToByName('home')
       break
-    case 'theme':
-      themeMenuShow.value = !themeMenuShow.value
+    case 'studyTimer':
+      openStudyTimerFromNav()
+      break
+    case 'studyPause':
+      toggleStudyPause()
       break
     case 'user':
       if (isLoggedIn.value) {
@@ -165,13 +155,6 @@ const handleNavClick = (item: NavItem): void => {
     default:
       break
   }
-}
-
-//主题切换
-const themeChange = (theme1: Theme) => {
-  //设置用户主题
-  uiConfigStore.setTheme(theme1)
-  document.documentElement.setAttribute('data-theme', theme1)
 }
 
 //全局渐变色动画
@@ -252,9 +235,6 @@ useDetectDevice((device) => {
 })
 
 onMounted(async () => {
-  //设置主题
-  themeChange(theme.value)
-
   // 如果 access token 过期但 refresh token 有效，主动刷新 token
   // 实现"只要不主动登出就一直有效"的体验
   if (!isAccessTokenValid() && isRefreshTokenValid()) {
@@ -276,6 +256,13 @@ onMounted(async () => {
     // 菜单加载失败（如 token 过期被拦截器清空），仍然尝试跳转
   }
 
+  // 章节学习自动计时：菜单映射就绪后，若当前激活页签是章节页则开始计时
+  syncStudySession()
+  // 注册计时兜底事件（窗口隐藏/关闭时结算当前时间段）
+  document.addEventListener('visibilitychange', onDocVisibilityChange)
+  window.addEventListener('beforeunload', onDocBeforeUnload)
+  window.addEventListener('pagehide', onDocBeforeUnload)
+
   // 获取当前用户信息（用于 admin 权限判断等）
   if (isAccessTokenValid()) {
     try {
@@ -294,9 +281,12 @@ onMounted(async () => {
   router.push(activeKey.value)
 })
 
-//卸载时清空菜单列表
+//卸载时清空菜单列表 + 移除计时兜底事件监听
 onUnmounted(() => {
   menus.value.length = 0
+  document.removeEventListener('visibilitychange', onDocVisibilityChange)
+  window.removeEventListener('beforeunload', onDocBeforeUnload)
+  window.removeEventListener('pagehide', onDocBeforeUnload)
 })
 
 // 平面映射：name → { path, label }
@@ -460,10 +450,12 @@ const studyAggregate = ref<StudyAggregate | null>(null)
 // 章节下拉选项：一次性拉全量扁平菜单（含所有叶子章节），不依赖侧边栏是否展开过
 const studyMenuOptions = ref<{ value: string; label: string }[]>([])
 // 全量章节元信息（同一份 flat 拉取构建，保证下拉/悬浮球/Tab 右键查得到任意章节）：
-//   id → { id, label, suggestedMinutes }   供下拉选中后反查
-//   path → { id, label, suggestedMinutes } 供悬浮球/Tab 右键按 path 反查
-const studyMenuInfoById = new Map<string, { id: string; label: string; suggestedMinutes: number }>()
-const studyMenuInfoByPath = new Map<string, { id: string; label: string; suggestedMinutes: number }>()
+//   id → { id, label, suggestedMinutes, studiedMinutes, path }   供下拉选中后反查
+//   path → 同上                                                   供悬浮球/Tab 右键按 path 反查
+// 页签进度（path → 已学/建议）：shallowRef 整体替换，避免对几千条做深响应式
+const studyProgressByPath = shallowRef<Record<string, { studiedMinutes: number; suggestedMinutes: number }>>({})
+const studyMenuInfoById = new Map<string, { id: string; label: string; suggestedMinutes: number; studiedMinutes: number; path: string }>()
+const studyMenuInfoByPath = new Map<string, { id: string; label: string; suggestedMinutes: number; studiedMinutes: number; path: string }>()
 async function refreshStudyMenuOptions() {
   try {
     const { data } = await getApiMenus({ flat: 'true', project: 'learning' })
@@ -471,19 +463,56 @@ async function refreshStudyMenuOptions() {
       id: m.id,
       label: m.label,
       suggestedMinutes: m.suggestedMinutes || 0,
+      studiedMinutes: m.studiedMinutes || 0,
       path: m.path || '',
     }))
     studyMenuOptions.value = list.map(m => ({ value: m.id, label: m.label }))
     studyMenuInfoById.clear()
     studyMenuInfoByPath.clear()
+    const progressMap: Record<string, { studiedMinutes: number; suggestedMinutes: number }> = {}
     for (const m of list) {
-      const info = { id: m.id, label: m.label, suggestedMinutes: m.suggestedMinutes }
+      const info = { id: m.id, label: m.label, suggestedMinutes: m.suggestedMinutes, studiedMinutes: m.studiedMinutes, path: m.path }
       studyMenuInfoById.set(m.id, info)
-      if (m.path) studyMenuInfoByPath.set(m.path, info)
+      if (m.path) {
+        studyMenuInfoByPath.set(m.path, info)
+        progressMap[m.path] = { studiedMinutes: m.studiedMinutes, suggestedMinutes: m.suggestedMinutes }
+      }
     }
+    studyProgressByPath.value = progressMap
   } catch {
     studyMenuOptions.value = []
   }
+}
+
+// 页签进度本地递增（结算一段后立即反映到页签进度条，不必重拉几千条扁平菜单）
+function bumpStudyProgress(menuId: string, minutes: number) {
+  const entry = studyMenuInfoById.get(menuId)
+  if (!entry || !entry.path) return
+  const progressMap = { ...studyProgressByPath.value }
+  const cur = progressMap[entry.path] || { studiedMinutes: entry.studiedMinutes, suggestedMinutes: entry.suggestedMinutes }
+  progressMap[entry.path] = {
+    studiedMinutes: (cur.studiedMinutes || 0) + minutes,
+    suggestedMinutes: cur.suggestedMinutes || 0,
+  }
+  studyProgressByPath.value = progressMap
+}
+
+// 侧边栏菜单树已学时长本地递增（并向上累加父章节 = 子树总和），菜单行进度条即时可见
+function bumpMenuTreeProgress(menuId: string, minutes: number) {
+  const walk = (nodes: MenuItem[], ancestors: MenuItem[]): boolean => {
+    for (const n of nodes) {
+      if (n.id === menuId) {
+        n.studiedMinutes = (Number(n.studiedMinutes ?? 0) || 0) + minutes
+        for (const a of ancestors) {
+          a.studiedMinutes = (Number(a.studiedMinutes ?? 0) || 0) + minutes
+        }
+        return true
+      }
+      if (n.children?.length && walk(n.children, [...ancestors, n])) return true
+    }
+    return false
+  }
+  walk(menus.value, [])
 }
 
 async function refreshStudyAggregate(menuId: string) {
@@ -501,12 +530,13 @@ function openStudyTimer(menu: { id: string; label: string; suggestedMinutes: num
   studyTimerMenu.value = menu
   studyTimerFixed.value = true
   studyTimerVisible.value = true
+  // fixed 模式不显示下拉；映射/下拉选项由 getMenus() 初始化，无需每次重拉全量 flat 菜单
   refreshStudyAggregate(menu.id)
-  refreshStudyMenuOptions()
 }
 
-// 悬浮球点击 → 优先锁定「当前激活 tab」的章节直接计时（符合直觉）；非章节页面才回退到选章节模式
-function onStudyTimerBall() {
+// 底部导航「⏱ 学习计时」→ 优先锁定「当前激活 tab」的章节直接计时；非章节页面才回退到选章节模式
+function openStudyTimerFromNav() {
+  studyTimerVisible.value = true
   const info = activeKey.value ? studyMenuInfoByPath.get(activeKey.value) : undefined
   if (info) {
     openStudyTimer(info)
@@ -542,14 +572,119 @@ async function onStudySelectMenu(menuId: string) {
   await refreshStudyAggregate(menuId)
 }
 
-// 新增学习记录（日志式：起止时间已由组件拼成 ISO，服务端算时长）
-async function onStudyAddRecord(payload: { menuId: string; startedAt: string; endedAt: string }) {
+// ============ 章节学习自动计时 ============
+// 打开章节（激活页签）→ 记开始；切换/关闭页签、切走窗口 → 记结束并结算一条记录。
+// 同章多段自动累加 = 已学时间，无需手动录入。
+const studySessionCurrent = ref<{ menuId: string; startedAt: string } | null>(null)
+// 手动暂停（底部导航 ⏸/▶）：人在但不想计时（去厕所/打把游戏）→ 暂停后不再自动计时，点 ▶ 恢复
+const studyPaused = ref(false)
+
+// 结束当前段落（fetch 结算；成功后若计时面板正展示该章节则回刷聚合）
+async function endStudySession() {
+  const cur = studySessionCurrent.value
+  studySessionCurrent.value = null
+  if (!cur) return
+  const endedAt = new Date().toISOString()
+  const ms = new Date(endedAt).getTime() - new Date(cur.startedAt).getTime()
+  if (ms < 60000) return // 不足 1 分钟不算一段（防抖）
   try {
-    await postApiStudySessions(payload)
-    message.success('记录成功')
-    if (studyTimerMenu.value) await refreshStudyAggregate(studyTimerMenu.value.id)
+    const res = await postApiStudySessions({ menuId: cur.menuId, startedAt: cur.startedAt, endedAt })
+    const duration = Number(res?.data?.durationMinutes ?? 0)
+    if (duration > 0) {
+      // 页签进度条 + 侧边栏菜单行进度条即时递增
+      bumpStudyProgress(cur.menuId, duration)
+      bumpMenuTreeProgress(cur.menuId, duration)
+    }
+    if (studyTimerVisible.value && studyTimerMenu.value?.id === cur.menuId) {
+      await refreshStudyAggregate(cur.menuId)
+    }
   } catch {
-    message.error('保存记录失败')
+    // 静默失败，不打断用户
+  }
+}
+
+// 关闭页面/切走窗口兜底结算：sendBeacon 在 unload 阶段也能送达（fetch 可能被浏览器取消）
+function flushStudySessionOnUnload() {
+  const cur = studySessionCurrent.value
+  studySessionCurrent.value = null
+  if (!cur) return
+  const endedAt = new Date().toISOString()
+  const ms = new Date(endedAt).getTime() - new Date(cur.startedAt).getTime()
+  if (ms < 60000) return
+  try {
+    const base = (import.meta.env.VITE_BASE_API as string) || ''
+    navigator.sendBeacon(
+      `${base}/api/study-sessions`,
+      new Blob([JSON.stringify({ menuId: cur.menuId, startedAt: cur.startedAt, endedAt })], { type: 'application/json' }),
+    )
+  } catch {
+    // 忽略
+  }
+}
+
+// 按当前激活页签同步计时：章节页 → 开始/续记；非章节页（首页/登录等）→ 结束
+function syncStudySession() {
+  if (studyPaused.value) {
+    // 手动暂停中：不开启新段落（若之前仍在计时则结算掉），保持暂停
+    endStudySession()
+    return
+  }
+  const info = activeKey.value ? studyMenuInfoByPath.get(activeKey.value) : undefined
+  if (info) {
+    if (studySessionCurrent.value?.menuId === info.id) return // 已在记该章节，不重启
+    endStudySession()
+    studySessionCurrent.value = { menuId: info.id, startedAt: new Date().toISOString() }
+  } else {
+    endStudySession()
+  }
+}
+
+// 手动暂停/继续（底部导航 ⏸/▶，跟视频播放/暂停一样）：
+//   暂停 → 结算当前段落并停止自动计时；继续 → 若当前在章节页立即开新一段
+function toggleStudyPause() {
+  studyPaused.value = !studyPaused.value
+  if (studyPaused.value) {
+    endStudySession()
+  } else {
+    syncStudySession()
+  }
+}
+
+// 页面可见性变化：切走/关闭 → 结算；回到页面 → 恢复计时
+function onDocVisibilityChange() {
+  if (document.hidden) {
+    flushStudySessionOnUnload()
+  } else {
+    syncStudySession()
+  }
+}
+function onDocBeforeUnload() {
+  flushStudySessionOnUnload()
+}
+
+// 页签切换（点菜单/点页签都会激活对应 key）→ 自动结算上一段、开启新一段
+watch(activeKey, () => syncStudySession())
+
+// 计时弹窗里编辑「建议时长」→ PUT 菜单落库 + 回刷聚合
+// 面板显示走 studyAggregate（GET /api/menus/:id/study 实时读库），改单个菜单无需重拉全量 flat 菜单（几千条）
+async function onStudyUpdateSuggestedMinutes(value: number) {
+  const menu = studyTimerMenu.value
+  if (!menu) return
+  try {
+    await putApiMenusId(menu.id, { suggestedMinutes: value })
+    message.success('已更新建议时长')
+    studyTimerMenu.value = { ...menu, suggestedMinutes: value }
+    // 同步页签进度条的建议值（已学不变），菜单行在下次拉取菜单时更新
+    const entry = studyMenuInfoById.get(menu.id)
+    if (entry?.path) {
+      const progressMap = { ...studyProgressByPath.value }
+      const cur = progressMap[entry.path] || { studiedMinutes: entry.studiedMinutes, suggestedMinutes: 0 }
+      progressMap[entry.path] = { studiedMinutes: cur.studiedMinutes || 0, suggestedMinutes: value }
+      studyProgressByPath.value = progressMap
+    }
+    await refreshStudyAggregate(menu.id)
+  } catch {
+    message.error('更新建议时长失败')
   }
 }
 
@@ -972,17 +1107,6 @@ const scrollTo = (id: string) => {
   line-height: calc(100vh - 100px);
   // height: calc(100vh - 100px);
   text-align: center;
-}
-
-.nav-icon {
-  font-size: var(--font-size-xs);
-  line-height: 1;
-}
-
-.nav-text {
-  font-size: var(--font-size-xs);
-  font-weight: 500;
-  line-height: 1;
 }
 
 /* 登录模态框样式 */

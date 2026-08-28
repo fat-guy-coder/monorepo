@@ -23,13 +23,15 @@
           </div>
         </div>
       </transition-group>
-      <!-- 主按钮 -->
+      <!-- 主按钮（折叠态：小圆片气泡；展开态：小 x） -->
       <button class="navigation-toggle" :class="{ 'is-active': isExpanded, }" @click.stop="toggle"
         :aria-label="isExpanded ? '收起导航' : '展开导航'">
         <span class="toggle-icon">
-          <span class="icon-line"></span>
-          <span class="icon-line"></span>
-          <span class="icon-line"></span>
+          <span class="bubble-dot"></span>
+          <span class="close-x" aria-hidden="true">
+            <span class="x-line"></span>
+            <span class="x-line"></span>
+          </span>
         </span>
       </button>
     </div>
@@ -181,9 +183,9 @@ defineExpose({
   --nav-item-color: var(--color-text);
   --nav-item-hover-color: var(--color-primary);
   --nav-item-background: var(--color-background-soft);
-  --nav-item-padding: var(--padding-sm) var(--padding-md);
-  --nav-item-gap: var(--gap-md);
-  --nav-item-font-size: var(--font-size-xs);
+  --nav-item-padding: 0.3rem 0.55rem;
+  --nav-item-gap: 0.25rem;
+  --nav-item-font-size: 0.65rem;
   --nav-item-font-weight: var(--font-weight-medium);
   --nav-item-border-color: var(--color-border);
   --nav-item-border-width: var(--border-width);
@@ -201,9 +203,10 @@ defineExpose({
   --nav-item-transform-slide-x: 1.25rem;
   --nav-item-transform-slide-scale: 0.8;
 
-  --navigation-toggle-width: calc(var(--nav-item-font-size) * 4);
-  --navigation-toggle-height: calc(var(--nav-item-font-size) * 4);
+  --navigation-toggle-width: calc(var(--nav-item-font-size) * 3);
+  --navigation-toggle-height: calc(var(--nav-item-font-size) * 3);
   --navigation-toggle-icon-size: var(--font-size);
+  --navigation-toggle-bubble-size: 0.45rem;
 
   --navigation-toggle-border-radius: var(--border-radius-full);
   --navigation-toggle-background: var(--color-secondary);
@@ -211,7 +214,7 @@ defineExpose({
   --navigation-toggle-box-shadow: var(--box-shadow-xs);
   --navigation-toggle-box-shadow-hover: var(--box-shadow-sm);
 
-  --navigation-toggle-icon-line-width: 1.25rem;
+  --navigation-toggle-icon-line-width: 0.7rem;
 }
 
 
@@ -476,48 +479,67 @@ defineExpose({
   &:active {
     transform: scale(0.95);
   }
-
-  &.is-active {
-    background: var(--color-secondary);
-    transform: rotate(180deg);
-
-    .toggle-icon {
-      .icon-line {
-        &:nth-child(1) {
-          transform: translateY(0.5rem) rotate(45deg);
-        }
-
-        &:nth-child(2) {
-          opacity: 0;
-        }
-
-        &:nth-child(3) {
-          transform: translateY(-0.5rem) rotate(-45deg);
-        }
-      }
-    }
-  }
 }
 
-/* 图标 */
+/* 图标容器：折叠态小圆片气泡 ↔ 展开态小 x */
 .toggle-icon {
   position: relative;
   width: var(--navigation-toggle-icon-size);
   height: var(--navigation-toggle-icon-size);
   display: flex;
-  flex-direction: column;
-  justify-content: center;
   align-items: center;
-  gap: 0.3rem;
+  justify-content: center;
 }
 
-.icon-line {
-  width: var(--navigation-toggle-icon-line-width);
-  height: 2px;
+// 折叠态：气泡（小圆片）
+.bubble-dot {
+  width: var(--navigation-toggle-bubble-size);
+  height: var(--navigation-toggle-bubble-size);
+  border-radius: 50%;
   background: currentColor;
-  border-radius: var(--border-radius-xs);
-  transition: all 0.3s ease;
-  transform-origin: center;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+// 展开态：小 x（两个交叉线）
+.close-x {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: scale(0.4);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none;
+
+  .x-line {
+    position: absolute;
+    width: var(--navigation-toggle-icon-line-width);
+    height: 2px;
+    background: currentColor;
+    border-radius: var(--border-radius-xs);
+
+    &:nth-child(1) {
+      transform: rotate(45deg);
+    }
+
+    &:nth-child(2) {
+      transform: rotate(-45deg);
+    }
+  }
+}
+
+// 展开时：气泡淡出 → x 淡入
+.navigation-toggle.is-active {
+  .bubble-dot {
+    opacity: 0;
+    transform: scale(0);
+  }
+
+  .close-x {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 /* 移动端适配 */
@@ -538,8 +560,8 @@ defineExpose({
       }
 
       .navigation-toggle {
-        width: 52px;
-        height: 52px;
+        width: 44px;
+        height: 44px;
         margin-right: 0;
         margin-bottom: 10px;
       }

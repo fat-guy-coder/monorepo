@@ -66,6 +66,10 @@
             :data-group-id="item.groupId" class="tab-item" :draggable="item.tab.path !== '/'"
             @dragstart="onTabDragStart(item.tab.path, item.groupId, $event)" @dragend="onDragEnd">
             {{ item.tab.label }}
+            <!-- 学习进度条：整块页签作容器，已学时长按占比用背景填充（无建议数据不显示） -->
+            <span v-if="tabProgressPctMap[item.tab.path]" class="tab-item__progress"
+              :class="{ 'is-done': tabProgressPctMap[item.tab.path].done }"
+              :style="{ '--progress-pct': tabProgressPctMap[item.tab.path].pct + '%' }"></span>
           </div>
         </template>
       </TabPane>
@@ -88,6 +92,8 @@ const props = defineProps<{
   keyMap?: 'path'
   type?: 'line' | 'card' | 'editable-card'
   nodes?: TabNode[]
+  /** 学习进度（path → 已学/建议），suggested > 0 时在页签底部画进度条 */
+  tabProgress?: Record<string, { studiedMinutes?: number; suggestedMinutes?: number }>
 }>()
 
 const emit = defineEmits([
@@ -157,6 +163,20 @@ const renderItems = computed<RenderItem[]>(() => {
 function itemKey(item: RenderItem): string {
   return item.kind === 'group' ? 'group:' + item.group.id : 'tab:' + item.tab.path
 }
+
+// 页签学习进度映射（path → 百分比），suggested 未设置（0）的页签不进映射 → 不画进度条
+const tabProgressPctMap = computed<Record<string, { pct: number; done: boolean }>>(() => {
+  const map: Record<string, { pct: number; done: boolean }> = {}
+  const data = props.tabProgress
+  if (!data) return map
+  for (const [path, p] of Object.entries(data)) {
+    if (!p || !p.suggestedMinutes) continue
+    const studied = p.studiedMinutes || 0
+    const pct = Math.min(100, Math.round((studied / p.suggestedMinutes) * 100))
+    map[path] = { pct, done: pct >= 100 }
+  }
+  return map
+})
 
 // 扁平 tab 序号（供 removeSide / 扁平排序使用）
 function flatTabIndex(path: string): number {
@@ -537,7 +557,6 @@ onUnmounted(() => {
 
 <style lang="less" scoped>
 .tab-item {
-  position: relative;
   top: 0px;
   left: 0px;
   background-color: transparent;
@@ -546,6 +565,26 @@ onUnmounted(() => {
 
   &:active {
     cursor: grabbing;
+  }
+}
+
+/* 学习进度条：整块页签（.tab，position: relative）作为容器，已学时长按占比用背景填充。
+   注意 .tab-item 自身不带定位 → 绝对定位的填充层相对 .tab 铺满整个页签块 */
+.tab-item__progress {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--border-radius);
+  z-index: 0;
+  background: linear-gradient(to right,
+    var(--color-primary) var(--progress-pct, 0%),
+    transparent var(--progress-pct, 0%));
+  opacity: 0.16;
+  pointer-events: none;
+
+  &.is-done {
+    background: linear-gradient(to right,
+      var(--color-success) var(--progress-pct, 0%),
+      transparent var(--progress-pct, 0%));
   }
 }
 

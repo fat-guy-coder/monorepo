@@ -5,6 +5,7 @@ import type { VNode } from 'vue'
 //菜单项类型
 export type MenuItem = {
   suggestedMinutes: number
+  studiedMinutes?: number//已学习时长（分钟，非叶子 = 子树总和）
   id: string//菜单项id
   label: string//菜单项标签
   name: string//菜单项名称
