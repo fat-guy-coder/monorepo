@@ -337,16 +337,17 @@ docker exec -it backend-app bun run scripts/<脚本名>.ts
 | `initRoles.ts` | 建 `role` + `user_role` 表，创建 `admin`/`default` 角色并绑定 admin 用户（admin 角色 `menuIds=[]` = 全部菜单可见） | 首次部署；重灌库后 |
 | `initStudyTables.ts` | `menu` 加 `suggested_minutes` 列（建议学习时长）+ 建 `study_session` 学习记录表 + 索引 | 首次部署 / 升级学习计时功能后 |
 | `setGoSuggestedMinutes.ts` | 批量设置建议学习时长：**阶段一**按难度给 GO 叶子设值（阶段1-7 = 30/50/45/50/65/55/70，顶层页 25）；**阶段二全表**非叶子章节 = 叶子子孙建议时长之和 | 建议时长有变更 / 新增章节后跑一遍 |
+| `setDsaSuggestedMinutes.ts` | 批量设置建议学习时长：按模块档位（复杂度35/线性45/哈希40/树55/堆45/图65/排序40/搜索50/DP65/贪心45/字符串60/高级60/方法论35，顶层页20）+ 难点章节加分（红黑树/网络流/后缀数组/DP优化/可持久化等，封顶90）；**阶段二全表**同上 | 建议时长有变更 / 新增 DSA 章节后跑一遍 |
 
 **部署后执行顺序**（按需，首次部署跑前 3 个，以后只有 `setGoSuggestedMinutes` 需要动）：
 
 ```
 1. git push 到 master → CI 自动部署后端代码
 2. 建表/加列（首次或功能升级）→ initUserTable → initRoles → initStudyTables
-3. 建议时长有变 / 新增章节 → setGoSuggestedMinutes.ts（已泛化到全部菜单树，幂等）
+3. 建议时长有变 / 新增章节 → setGoSuggestedMinutes.ts / setDsaSuggestedMinutes.ts（阶段二已泛化到全部菜单树，幂等）
 ```
 
-> 💡 `setGoSuggestedMinutes.ts` 的阶段二会扫**所有**菜单树（GO/Python/Godot 等），非叶子章节建议时长自动 = 叶子子孙之和，几千条也一次聚合，放心重跑。
+> 💡 两个 `set*SuggestedMinutes.ts` 的**阶段二**（非叶子 = 叶子子孙之和）是同一套通用逻辑，会扫**所有**菜单树（GO/Python/Godot/DSA 等），几千条也一次聚合；且只会覆盖「有叶子建议时长之和 > 0」的节点，重复跑结果一致，放心重跑。`setDsaSuggestedMinutes.ts` 的**阶段一**只按 `dsa-*` 章节名设叶子值，不影响其他菜单树。
 
 ---
 

@@ -662,8 +662,16 @@ function onDocBeforeUnload() {
   flushStudySessionOnUnload()
 }
 
-// 页签切换（点菜单/点页签都会激活对应 key）→ 自动结算上一段、开启新一段
-watch(activeKey, () => syncStudySession())
+// 页签切换（点菜单/点页签都会激活对应 key）→ 自动结算上一段、开启新一段。
+// 边界场景：手动暂停（⏸）后切到其他章节文档 → 视为「回来了，开始学」自动恢复计时；
+// 只有切到章节文档才自动恢复，停在原页 / 去非章节页（首页/登录等）保持暂停。
+watch(activeKey, () => {
+  if (studyPaused.value) {
+    const info = activeKey.value ? studyMenuInfoByPath.get(activeKey.value) : undefined
+    if (info) studyPaused.value = false
+  }
+  syncStudySession()
+})
 
 // 计时弹窗里编辑「建议时长」→ PUT 菜单落库 + 回刷聚合
 // 面板显示走 studyAggregate（GET /api/menus/:id/study 实时读库），改单个菜单无需重拉全量 flat 菜单（几千条）

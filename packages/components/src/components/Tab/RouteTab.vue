@@ -66,10 +66,10 @@
             :data-group-id="item.groupId" class="tab-item" :draggable="item.tab.path !== '/'"
             @dragstart="onTabDragStart(item.tab.path, item.groupId, $event)" @dragend="onDragEnd">
             {{ item.tab.label }}
-            <!-- 学习进度条：整块页签作容器，已学时长按占比用背景填充（无建议数据不显示） -->
+            <!-- 学习进度条：页签底部 3px 下划线，宽度=已学/建议 占比（无建议数据不显示） -->
             <span v-if="tabProgressPctMap[item.tab.path]" class="tab-item__progress"
-              :class="{ 'is-done': tabProgressPctMap[item.tab.path].done }"
-              :style="{ '--progress-pct': tabProgressPctMap[item.tab.path].pct + '%' }"></span>
+              :style="{ '--progress-color': tabProgressPctMap[item.tab.path].color,
+                '--progress-pct': tabProgressPctMap[item.tab.path].pct + '%' }"></span>
           </div>
         </template>
       </TabPane>
@@ -164,16 +164,30 @@ function itemKey(item: RenderItem): string {
   return item.kind === 'group' ? 'group:' + item.group.id : 'tab:' + item.tab.path
 }
 
-// 页签学习进度映射（path → 百分比），suggested 未设置（0）的页签不进映射 → 不画进度条
-const tabProgressPctMap = computed<Record<string, { pct: number; done: boolean }>>(() => {
-  const map: Record<string, { pct: number; done: boolean }> = {}
+// 进度条色段（红黄绿交通灯：越接近完成越"成功"，红=刚起步 → 绿=快完成/达标）
+const PROGRESS_SEGMENTS: Array<{ max: number; color: string }> = [
+  { max: 25, color: '#f87171' }, //  0-25%  浅红
+  { max: 50, color: '#fb923c' }, // 25-50%  橙
+  { max: 75, color: '#a3e635' }, // 50-75%  黄绿
+  { max: 100, color: '#22c55e' }, // 75-100% 绿
+]
+function progressColorFor(pct: number): string {
+  for (const s of PROGRESS_SEGMENTS) {
+    if (pct <= s.max) return s.color
+  }
+  return PROGRESS_SEGMENTS[PROGRESS_SEGMENTS.length - 1].color
+}
+
+// 页签学习进度映射（path → 百分比 + 色段色），suggested 未设置（0）的页签不进映射 → 不画进度条
+const tabProgressPctMap = computed<Record<string, { pct: number; color: string }>>(() => {
+  const map: Record<string, { pct: number; color: string }> = {}
   const data = props.tabProgress
   if (!data) return map
   for (const [path, p] of Object.entries(data)) {
     if (!p || !p.suggestedMinutes) continue
     const studied = p.studiedMinutes || 0
     const pct = Math.min(100, Math.round((studied / p.suggestedMinutes) * 100))
-    map[path] = { pct, done: pct >= 100 }
+    map[path] = { pct, color: progressColorFor(pct) }
   }
   return map
 })
@@ -568,24 +582,19 @@ onUnmounted(() => {
   }
 }
 
-/* 学习进度条：整块页签（.tab，position: relative）作为容器，已学时长按占比用背景填充。
-   注意 .tab-item 自身不带定位 → 绝对定位的填充层相对 .tab 铺满整个页签块 */
+/* 学习进度条：页签底部 3px 下划线，宽度=已学/建议 占比（无建议数据不显示）。
+   注意 .tab-item 自身不带定位 → 绝对定位的下划线相对 .tab（position: relative）定位到底部 */
 .tab-item__progress {
   position: absolute;
-  inset: 0;
-  border-radius: var(--border-radius);
-  z-index: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;
+  border-radius: 2px;
   background: linear-gradient(to right,
-    var(--color-primary) var(--progress-pct, 0%),
+    var(--progress-color, var(--color-primary)) var(--progress-pct, 0%),
     transparent var(--progress-pct, 0%));
-  opacity: 0.16;
   pointer-events: none;
-
-  &.is-done {
-    background: linear-gradient(to right,
-      var(--color-success) var(--progress-pct, 0%),
-      transparent var(--progress-pct, 0%));
-  }
 }
 
 .tab-group {

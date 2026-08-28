@@ -11,9 +11,9 @@
           <path d="M9 18l6-6-6-6" />
         </svg>
       </span>
-      <!-- 学习进度条：整行作为容器，已学时长按占比用背景填充（建议未设置时不显示） -->
+      <!-- 学习进度条：底部 3px 下划线，宽度=已学/建议 占比（建议未设置时不显示） -->
       <span v-if="studyProgress !== null" class="menu-item__progress"
-        :class="{ 'is-done': studyProgress >= 100 }" :style="{ '--progress-pct': studyProgress + '%' }"></span>
+        :style="{ '--progress-color': progressColor ?? 'var(--color-primary)', '--progress-pct': studyProgress + '%' }"></span>
     </div>
     <Teleport to="body" v-if="mode === 'vertical'">
       <div v-if="shouldRenderChildren" ref="childrenWrapper" class="menu-item__children-wrapper-vertical"
@@ -264,6 +264,25 @@ const studyProgress = computed<number | null>(() => {
   if (!suggested) return null
   return Math.min(100, Math.round((studied / suggested) * 100))
 })
+
+// 进度条色段（红黄绿交通灯：越接近完成越"成功"，红=刚起步 → 绿=快完成/达标）
+const PROGRESS_SEGMENTS: Array<{ max: number; color: string }> = [
+  { max: 25, color: '#f87171' }, //  0-25%  浅红
+  { max: 50, color: '#fb923c' }, // 25-50%  橙
+  { max: 75, color: '#a3e635' }, // 50-75%  黄绿
+  { max: 100, color: '#22c55e' }, // 75-100% 绿
+]
+function progressColorFor(pct: number): string {
+  for (const s of PROGRESS_SEGMENTS) {
+    if (pct <= s.max) return s.color
+  }
+  return PROGRESS_SEGMENTS[PROGRESS_SEGMENTS.length - 1].color
+}
+const progressColor = computed<string | null>(() => {
+  const p = studyProgress.value
+  if (p === null) return null
+  return progressColorFor(p)
+})
 const labelWithProgress = computed(() => {
   const base = props.item.label || props.item.name || ''
   if (studyProgress.value === null) return base
@@ -350,28 +369,16 @@ function isMouseInElement(element: HTMLElement, mouseX: number, mouseY: number) 
 
   .menu-item__progress {
     position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    z-index: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 3px;
+    border-radius: 2px;
     background: linear-gradient(to right,
-      var(--color-primary) var(--progress-pct, 0%),
+      var(--progress-color, var(--color-primary)) var(--progress-pct, 0%),
       transparent var(--progress-pct, 0%));
-    opacity: 0.16;
     transition: opacity 0.2s ease;
     pointer-events: none;
-
-    &.is-done {
-      background: linear-gradient(to right,
-        var(--color-success) var(--progress-pct, 0%),
-        transparent var(--progress-pct, 0%));
-    }
-  }
-
-  /* 文本/箭头浮在进度填充之上 */
-  .menu-item__label,
-  .menu-item__arrow {
-    position: relative;
-    z-index: 1;
   }
 
   .menu-item__label {
