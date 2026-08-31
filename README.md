@@ -310,13 +310,15 @@ urllib.request.urlopen(urllib.request.Request('http://localhost:8080/api/menus/b
 
 ### 学习计时 API（章节学习时间记录）
 
-> 日志式：一次学习填一条起止时间，时长由服务端算。同一章节累计 = 「已学 X / 建议 Y 分钟」进度条。
+> 一菜单单行聚合：每个章节只存一行 `study_progress`，`total_minutes` 随 start/end 累加，不按时间段存多条。同一章节累计 = 「已学 X / 建议 Y 分钟」进度条，超时转蓝「复习巩固」。
 > 学习网站右下角「⏱ 学习计时」悬浮球 + 章节右键/Tab 右键入口。
 
 | 操作 | 方法 | 路径 | 说明 |
 |------|------|------|------|
-| 新增学习记录 | `POST` | `/api/study-sessions` | `{ menuId, startedAt, endedAt }`（全必填）→ 服务端算 durationMinutes |
-| 章节学习统计 | `GET` | `/api/menus/:id/study` | `{ menuId, label, suggestedMinutes, totalMinutes, sessions[] }` |
+| 开始学习 | `POST` | `/api/menus/:id/study/start` | `{ startedAt? }`（可省略）→ 置 started_at、清 ended_at |
+| 结束学习 | `POST` | `/api/menus/:id/study/end` | `{ endedAt? }`（可省略）→ 按 started→ended 累加 total_minutes |
+| 手动补录 | `POST` | `/api/menus/:id/study/manual` | `{ startedAt, endedAt }`（必填）→ 直接累加 |
+| 章节学习统计 | `GET` | `/api/menus/:id/study` | `{ menuId, label, suggestedMinutes, totalMinutes, startedAt, endedAt, overtimeMinutes }` |
 
 `menu.suggested_minutes` 字段保存章节建议学习时长（`0` = 未设置），GO 章节已按阶段预置。相关建表/刷建议时长脚本见下方「🔄 数据种子脚本」章节。
 
@@ -335,7 +337,7 @@ docker exec -it backend-app bun run scripts/<脚本名>.ts
 |------|------|---------|
 | `initUserTable.ts` | 建 `user` 用户表 | 首次部署 / 库被清空后 |
 | `initRoles.ts` | 建 `role` + `user_role` 表，创建 `admin`/`default` 角色并绑定 admin 用户（admin 角色 `menuIds=[]` = 全部菜单可见） | 首次部署；重灌库后 |
-| `initStudyTables.ts` | `menu` 加 `suggested_minutes` 列（建议学习时长）+ 建 `study_session` 学习记录表 + 索引 | 首次部署 / 升级学习计时功能后 |
+| `initStudyTables.ts` | `menu` 加 `suggested_minutes` 列（建议学习时长）+ 建 `study_progress` 学习计时表（一菜单一行聚合，`menu_id` 主键）+ 删旧 `study_session` 表 | 首次部署 / 升级学习计时功能后（旧版「多段存储」升级到「单行聚合」时执行） |
 | `setGoSuggestedMinutes.ts` | 批量设置建议学习时长：**阶段一**按难度给 GO 叶子设值（阶段1-7 = 30/50/45/50/65/55/70，顶层页 25）；**阶段二全表**非叶子章节 = 叶子子孙建议时长之和 | 建议时长有变更 / 新增章节后跑一遍 |
 | `setDsaSuggestedMinutes.ts` | 批量设置建议学习时长：按模块档位（复杂度35/线性45/哈希40/树55/堆45/图65/排序40/搜索50/DP65/贪心45/字符串60/高级60/方法论35，顶层页20）+ 难点章节加分（红黑树/网络流/后缀数组/DP优化/可持久化等，封顶90）；**阶段二全表**同上 | 建议时长有变更 / 新增 DSA 章节后跑一遍 |
 

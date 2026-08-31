@@ -184,6 +184,14 @@
           所以线程切换 ≈ <strong>一次内核往返 + 页表切换 + Cache 冷启动</strong>，约 <strong>1~10 μs</strong>，而且是<strong>抢占式</strong>——你无法控制它何时发生。
         </p>
 
+        <div class="bg-slate-50 border-l-4 border-slate-400 rounded-r-xl p-4 mb-4">
+          <p class="text-sm text-slate-600">
+            🧵 想从根上补「线程」本身——进程 / 线程 / 协程的区别、线程的创建与调度？
+            <Link :route="'cs-5-b-3-thread'" :text="'计算机基础：线程'" animation="none" size="small"
+              class="p-0! text-sm! font-medium! text-cyan-700! hover:text-cyan-600! bg-transparent! border-none! inline!" />
+          </p>
+        </div>
+
         <h3 class="text-md font-semibold text-slate-700 mb-3">1.3 goroutine 切换：上下文就存在自己的 g 里（gobuf）</h3>
         <p class="text-slate-600 mb-3 leading-relaxed text-sm">
           goroutine 把「切换需要的全部现场」——栈指针 SP、指令指针 PC、通用寄存器——保存在 runtime 内部的 <code class="bg-slate-100 text-cyan-700 px-1.5 py-0.5 rounded text-xs font-mono">g.gobuf</code> 字段里。
@@ -473,7 +481,7 @@
 </template>
 
 <script setup lang="ts">
-import { Code, EditorLink, Nav } from 'components'
+import { Code, EditorLink, Link, Nav } from 'components'
 import { RouterLink } from 'vue-router'
 import { useUserStore } from '@/stores/userProfle'
 import { ref, reactive, computed, onMounted, onUnmounted } from 'vue'

@@ -482,7 +482,7 @@ body 格式：
 ```bash
 bun run scripts/initRoles.ts        # 初始化 admin/default 角色
 bun run scripts/initUserTable.ts    # 初始化用户表
-bun run scripts/initStudyTables.ts  # menu 加 suggested_minutes 列 + 建 study_session 表
+bun run scripts/initStudyTables.ts  # menu 加 suggested_minutes 列 + 建 study_progress 表（一菜单单行聚合，删旧 study_session）
 bun run scripts/setGoSuggestedMinutes.ts  # 批量设置 GO 章节建议学习时长（幂等）
 ```
 
@@ -494,59 +494,71 @@ bun run scripts/setGoSuggestedMinutes.ts  # 批量设置 GO 章节建议学习�
 
 ---
 
-## 五、学习计时 API — `/api/study-sessions`
+## 五、学习计时 API — `/api/menus/:id/study`
 
-> 章节学习时间记录，**日志式**：一条记录 = 一个起止时间段，时长由服务端计算。同一章节多次学习的 `duration_minutes` 累加即为累计已学时间。
-> 前端**自动计时**：打开章节（激活页签）记开始，切换/关闭页签、切走窗口时调 `POST /api/study-sessions` 结算一条记录（`startedAt` 为开始时刻，`endedAt` 为当前时刻）；不足 1 分钟的段落自动忽略。无需手动录入。
+> 章节学习时间，**一菜单单行聚合**：每个菜单一行 `study_progress`，累计已学时间 `total_minutes` 随 start/end/manual 累加，不按时间段存多条。反复打开同一章节不会产生多余数据。
+> 前端**自动计时**：打开章节（激活页签）→ `POST .../study/start` 置 `started_at`；切换/关闭页签、切走窗口 → `POST .../study/end` 结算并累加 `total_minutes`；不足 1 分钟的段落自动忽略。无需手动录入。
 
-### 数据库表结构 (`study_session`)
+### 数据库表结构 (`study_progress`)
 
 | 字段 | 类型 | 说明 |
 |------|------|------|
-| `id` | uuid | 主键，自动生成 |
-| `menu_id` | uuid | 关联 `menu.id` |
-| `started_at` | timestamp | 开始时间 |
-| `ended_at` | timestamp | 结束时间 |
-| `duration_minutes` | integer | 学习时长（分钟），服务端按 `max(0, round((ended_at - started_at) / 60s))` 计算 |
+| `menu_id` | uuid | 主键，关联 `menu.id`，一菜单一行 |
+| `total_minutes` | integer | 累计学习时间（分钟），服务端按 `max(0, round((ended_at - started_at) / 60s))` 累加 |
+| `started_at` | timestamp | 最近一次开始时间（进行中 / 上次学习） |
+| `ended_at` | timestamp | 最近一次结束时间（进行中为 NULL） |
 | `created_at` | timestamp | 创建时间 |
+| `updated_at` | timestamp | 更新时间 |
 
-### 5.1 结算一条学习记录（自动计时调用）
+### 5.1 开始学习（自动计时调用）
 
 ```http
-POST /api/study-sessions
+POST /api/menus/:id/study/start
 Content-Type: application/json
 
 {
-  "menuId": "章节菜单UUID",     // 必填
-  "startedAt": "2026-08-27T09:00:00Z",   // 必填，ISO 8601（本次打开章节的开始时刻）
-  "endedAt": "2026-08-27T09:40:00Z"      // 必填，ISO 8601（切换/关闭页签时刻）
+  "startedAt": "2026-08-27T09:00:00Z"    // 可省略，省略取服务器当前时间
 }
 ```
 
-- 三个字段全部必填；`startedAt` 必须早于 `endedAt`，否则 400
-- 菜单不存在返回 404
-- 成功返回 201，`data` 为 `study_session` 对象（含服务端算好的 `durationMinutes`）
-- 前端在「切换/关闭页签、窗口隐藏/关闭」时自动调用，一条记录即一个学习时间段
+- 置 `started_at`、**清空 `ended_at`**（新一轮开始）；菜单不存在返回 404
+- 同一菜单反复调用只更新这一行，不新增数据
+- 成功返回 `data`：`{ menuId, totalMinutes, startedAt, endedAt }`
 
-**响应 `data`**：
-```json
+### 5.2 结束学习（自动计时调用）
+
+```http
+POST /api/menus/:id/study/end
+Content-Type: application/json
+
 {
-  "id": "uuid",
-  "menuId": "uuid",
-  "startedAt": "2026-08-27T09:00:00Z",
-  "endedAt": "2026-08-27T09:40:00Z",
-  "durationMinutes": 40,
-  "createdAt": "2026-08-27T09:41:00Z"
+  "endedAt": "2026-08-27T09:40:00Z"      // 可省略，省略取服务器当前时间
 }
 ```
 
-### 5.2 查询章节学习统计
+- 按 `started_at → ended_at` 结算分钟数，`total_minutes += diff`，置 `ended_at`
+- 无 `started_at`（未 start 过）返回 400「尚未开始学习」；菜单不存在返回 404
+- 成功返回 `data`：`{ menuId, totalMinutes, startedAt, endedAt }`
+
+### 5.3 手动补录一段时长
+
+```http
+POST /api/menus/:id/study/manual
+Content-Type: application/json
+
+{
+  "startedAt": "2026-08-27T09:00:00Z",   // 必填
+  "endedAt": "2026-08-27T09:40:00Z"      // 必填
+}
+```
+
+- `total_minutes += diff`，同时置 `started_at`/`ended_at`；`startedAt` 必须早于 `endedAt`，否则 400
+
+### 5.4 查询章节学习统计
 
 ```http
 GET /api/menus/:id/study
 ```
-
-只统计已结束的记录（`ended_at IS NOT NULL`），按 `started_at` 升序返回。
 
 **响应 `data`**：
 ```json
@@ -555,22 +567,25 @@ GET /api/menus/:id/study
   "label": "数组与切片",
   "suggestedMinutes": 45,
   "totalMinutes": 120,
-  "sessions": [
-    { "id": "uuid", "startedAt": "2026-08-26T10:00:00Z", "endedAt": "2026-08-26T10:40:00Z", "durationMinutes": 40 }
-  ]
+  "startedAt": "2026-08-26T10:00:00Z",
+  "endedAt": "2026-08-26T10:40:00Z",
+  "overtimeMinutes": 75
 }
 ```
 
 - `suggestedMinutes` = 该菜单的建议学习时长（来自 `menu.suggested_minutes`，`0` 表示未设置）
-- `totalMinutes` = `sessions` 里 `durationMinutes` 之和，即累计已学时间
-- `sessions` = 该章节所有学习时间段（按开始时间升序），前端据此渲染「已学 X / 建议 Y 分钟」进度条 + 每段起止时间历史列表
+- `totalMinutes` = 该菜单累计已学时间
+- `startedAt`/`endedAt` = 最近一次学习起止（`endedAt` 为 NULL 表示正在学习中）
+- `overtimeMinutes` = `max(0, totalMinutes - suggestedMinutes)`，服务端计算，超时进度条转蓝「复习巩固」（不落库）
 
-### 5.3 建议学习时长来源
+### 5.5 建议学习时长来源
 
 - `suggested_minutes` 存于 `menu` 表，可通过 `POST/PUT /api/menus` 的 `suggestedMinutes` 字段设置
 - 学习网站按菜单加载；GO 章节已由 `scripts/setGoSuggestedMinutes.ts` 按阶段预置（阶段1-7 为 30/50/45/50/65/55/70 分钟，顶层介绍页 25 分钟）
 - **叶子 vs 非叶子**：叶子文档的建议时长是单篇预设值；**非叶子章节（分类夹/大章节，如「阶段1 基础入门」）= 其叶子子孙建议时长之和**，由同一脚本阶段二递归计算（幂等，重复执行结果一致）
 - **学习计时面板里可直接编辑**：面板「建议 X 分钟」是可编辑输入框，修改后 `PUT /api/menus/:id` 落库并即时刷新进度条（有值才显示输入框，`0` 显示「未设置建议时长」）
+
+> `/api/menus` 列表接口的 `studiedMinutes` 直接读 `study_progress.total_minutes`；非叶子章节 = 叶子子孙之和（自底向上累加）。
 
 ---
 

@@ -79,7 +79,8 @@
     <!-- 章节学习计时（入口在底部导航 navItems「⏱ 学习计时」，只渲染面板） -->
     <StudyTimer v-model:visible="studyTimerVisible" :menu-options="studyMenuOptions" :menu-id="studyTimerMenu?.id"
       :menu-label="studyTimerMenu?.label" :suggested-minutes="studyAggregate?.suggestedMinutes ?? 0"
-      :total-minutes="studyAggregate?.totalMinutes ?? 0" :sessions="studyAggregate?.sessions ?? []"
+      :total-minutes="studyAggregate?.totalMinutes ?? 0" :started-at="studyAggregate?.startedAt"
+      :ended-at="studyAggregate?.endedAt" :overtime-minutes="studyAggregate?.overtimeMinutes"
       :fixed-menu="studyTimerFixed" @select-menu="onStudySelectMenu"
       @update-suggested-minutes="onStudyUpdateSuggestedMinutes" />
   </div>
@@ -95,7 +96,7 @@ import {
   findMenuItemByName, //查找菜单项 通过name
 } from '@/menu'
 import { getApiMenus, getApiMenusSearch, postApiMenus, putApiMenusId, deleteApiMenusId, type PostApiMenusRequest, type PutApiMenusIdRequest } from '@/api/menu'
-import { getApiMenusIdStudy, postApiStudySessions, type StudyAggregate } from '@/api/study-session'
+import { getApiMenusIdStudy, postApiMenusIdStudyStart, postApiMenusIdStudyEnd, type StudyAggregate } from '@/api/study-session'
 import { postApiUserLogin, postApiUserRegister, postApiUserRefresh, getApiUserMe } from '@/api/user'
 import { saveTokens, saveUserInfo, getAccessToken, isAccessTokenValid, isRefreshTokenValid, getRefreshToken, clearTokens, getUserInfo } from '@/utils/token'
 import { useTabStore } from '@/stores/tab' //标签列表store
@@ -175,8 +176,14 @@ const container = ref<HTMLElement | null>(null)
 //是初始加载菜单吗？
 // const initMenu = ref(true)
 
-//菜单折叠状态
-const Menucollapsed = ref(isMobile.value)
+//菜单折叠状态（整个侧边栏是否收成图标条）— 持久化到 localStorage，刷新保留
+//文件夹级展开态 openKeys 不缓存，刷新即收起；折叠/展开完全由用户控制
+const Menucollapsed = ref<boolean>(isMobile.value || localStorage.getItem('menuCollapsed') === '1')
+
+//持久化侧边栏整体折叠状态
+watch(Menucollapsed, (v) => {
+  localStorage.setItem('menuCollapsed', v ? '1' : '0')
+})
 
 //切换菜单折叠状态
 const toggleCollapsed = async () => {
@@ -579,7 +586,7 @@ const studySessionCurrent = ref<{ menuId: string; startedAt: string } | null>(nu
 // 手动暂停（底部导航 ⏸/▶）：人在但不想计时（去厕所/打把游戏）→ 暂停后不再自动计时，点 ▶ 恢复
 const studyPaused = ref(false)
 
-// 结束当前段落（fetch 结算；成功后若计时面板正展示该章节则回刷聚合）
+// 结束当前段落（POST /study/end 结算累加；成功后若计时面板正展示该章节则回刷聚合）
 async function endStudySession() {
   const cur = studySessionCurrent.value
   studySessionCurrent.value = null
@@ -587,9 +594,10 @@ async function endStudySession() {
   const endedAt = new Date().toISOString()
   const ms = new Date(endedAt).getTime() - new Date(cur.startedAt).getTime()
   if (ms < 60000) return // 不足 1 分钟不算一段（防抖）
+  // 与后端 computeMinutes 同公式（max(0, round((end-start)/60000))），本地即时递增页签/菜单进度
+  const duration = Math.max(0, Math.round(ms / 60000))
   try {
-    const res = await postApiStudySessions({ menuId: cur.menuId, startedAt: cur.startedAt, endedAt })
-    const duration = Number(res?.data?.durationMinutes ?? 0)
+    await postApiMenusIdStudyEnd(cur.menuId, endedAt)
     if (duration > 0) {
       // 页签进度条 + 侧边栏菜单行进度条即时递增
       bumpStudyProgress(cur.menuId, duration)
@@ -614,28 +622,30 @@ function flushStudySessionOnUnload() {
   try {
     const base = (import.meta.env.VITE_BASE_API as string) || ''
     navigator.sendBeacon(
-      `${base}/api/study-sessions`,
-      new Blob([JSON.stringify({ menuId: cur.menuId, startedAt: cur.startedAt, endedAt })], { type: 'application/json' }),
+      `${base}/api/menus/${encodeURIComponent(cur.menuId)}/study/end`,
+      new Blob([JSON.stringify({ endedAt })], { type: 'application/json' }),
     )
   } catch {
     // 忽略
   }
 }
 
-// 按当前激活页签同步计时：章节页 → 开始/续记；非章节页（首页/登录等）→ 结束
-function syncStudySession() {
+// 按当前激活页签同步计时：章节页 → 开始/续记（POST start 落库 started_at）；非章节页（首页/登录等）→ 结束
+async function syncStudySession() {
   if (studyPaused.value) {
     // 手动暂停中：不开启新段落（若之前仍在计时则结算掉），保持暂停
-    endStudySession()
+    await endStudySession()
     return
   }
   const info = activeKey.value ? studyMenuInfoByPath.get(activeKey.value) : undefined
   if (info) {
     if (studySessionCurrent.value?.menuId === info.id) return // 已在记该章节，不重启
-    endStudySession()
-    studySessionCurrent.value = { menuId: info.id, startedAt: new Date().toISOString() }
+    await endStudySession() // 先结算上一段（end 在前，避免 start 覆盖同一菜单的 started_at 造成串段）
+    const startedAt = new Date().toISOString()
+    studySessionCurrent.value = { menuId: info.id, startedAt }
+    postApiMenusIdStudyStart(info.id, startedAt).catch(() => {}) // 静默失败，不打断用户
   } else {
-    endStudySession()
+    await endStudySession()
   }
 }
 
@@ -707,6 +717,11 @@ const selectedKeys = computed<string[]>(() => {
 //当前展开的菜单key列表
 const openKeys = ref<string[]>([])
 
+//展开目标菜单链，但不收起其他已展开分支（IDE 风格：文件夹折叠由用户完全控制）
+function expandMenuChain(path: string) {
+  openKeys.value = Array.from(new Set([...openKeys.value, ...findFatherKeysListByKey(path)]))
+}
+
 //搜索值
 const searchValue = ref<string>('')
 
@@ -753,7 +768,7 @@ function tabClick(path: string) {
   store.activateTabOnlyKey(path, () => {
     if (path !== '/') {
       if (!Menucollapsed.value) {
-        openKeys.value = findFatherKeysListByKey(path)
+        expandMenuChain(path)
       } else {
         openKeys.value = []
       }
@@ -767,7 +782,7 @@ function tabClick(path: string) {
 //展开菜单
 function expandMenu(path: string) {
   if (!Menucollapsed.value) {
-    openKeys.value = findFatherKeysListByKey(path)
+    expandMenuChain(path)
   } else {
     openKeys.value = []
   }
@@ -782,7 +797,7 @@ function removeTab(path: string) {
     router.push({ path: p })
     //手机端不展开菜单
     if (isMobile) return
-    openKeys.value = findFatherKeysListByKey(p)
+    expandMenuChain(p)
     nextTick(() => {
       scrollTo(p)
     })
@@ -795,7 +810,7 @@ function removeOther(path: string) {
   store.removeOther(path, (path) => {
     //手机端不展开菜单
     if (isMobile) return
-    openKeys.value = findFatherKeysListByKey(path)
+    expandMenuChain(path)
     nextTick(() => {
       scrollTo(path)
     })
@@ -808,7 +823,7 @@ function removeSide(index: number, side: 'left' | 'right', key: string) {
   store.removeSide(index, side, key, (path) => {
     //手机端不展开菜单
     if (isMobile) return
-    openKeys.value = findFatherKeysListByKey(path)
+    expandMenuChain(path)
     nextTick(() => {
       scrollTo(path)
     })
@@ -888,7 +903,7 @@ function goto({ path, name, label, redirect, isLeaf }: MenuItem) {
       label,
     },
     (path) => {
-      openKeys.value = findFatherKeysListByKey(path)
+      expandMenuChain(path)
     },
   )
 }
@@ -988,9 +1003,9 @@ async function goToByName(name: string, isRedirect: boolean = false, knownPath?:
       if (isMobile) return
       if (isRedirect) {
         const keys = findFatherKeysListByKey(path)
-        openKeys.value = [...keys, ...openKeys.value]
+        openKeys.value = Array.from(new Set([...keys, ...openKeys.value]))
       } else {
-        openKeys.value = findFatherKeysListByKey(path)
+        expandMenuChain(path)
       }
       nextTick(() => {
         scrollTo(path)

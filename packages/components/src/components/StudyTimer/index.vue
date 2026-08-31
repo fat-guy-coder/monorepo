@@ -36,16 +36,13 @@
           <div v-if="hintText" class="hint" :class="hintClass">{{ hintText }}</div>
         </div>
 
-        <!-- 学习记录列表（自动计时：打开章节开始，切换/关闭页签自动结算；同章多段累加 = 已学时间） -->
+        <!-- 最近学习（一菜单单行：显示最近一次起止；有 startedAt 无 endedAt = 进行中） -->
         <div class="sessions-block">
-          <div class="section-title">📚 学习记录<span class="text-muted">（{{ sessions.length }} 段）</span></div>
-          <div v-if="sessions.length" class="session-list">
-            <div v-for="s in sessions" :key="s.id" class="session-item">
-              <span class="session-range">{{ fmtSessionRange(s) }}</span>
-              <span class="session-dur">{{ s.durationMinutes }} 分钟</span>
-            </div>
+          <div class="section-title">📅 最近学习</div>
+          <div v-if="lastStudyText" class="session-item">
+            <span class="session-range">{{ lastStudyText }}</span>
           </div>
-          <div v-else class="session-empty">暂无学习记录 —— 打开章节阅读会自动计时，切换或关闭页签自动结算</div>
+          <div v-else class="session-empty">还没有学习记录 —— 打开章节阅读会自动计时，切换或关闭页签自动结算</div>
         </div>
       </template>
       <div v-else class="empty-tip">请先选择要计时的章节</div>
@@ -63,14 +60,6 @@ interface MenuOption {
   label: string
 }
 
-/** 一条学习记录（自动计时产生的起止时间段；与 App 层 StudyAggregate.sessions 对应） */
-interface SessionItem {
-  id: string
-  startedAt: string
-  endedAt?: string
-  durationMinutes: number
-}
-
 const props = withDefaults(defineProps<{
   visible: boolean
   /** 可选章节列表（value = menuId） */
@@ -79,8 +68,12 @@ const props = withDefaults(defineProps<{
   menuLabel?: string
   suggestedMinutes?: number
   totalMinutes?: number
-  /** 该章节的历史学习时间段列表（同章多段，已学时间 = 各段 durationMinutes 之和） */
-  sessions?: SessionItem[]
+  /** 最近一次开始时间（有值无 endedAt = 进行中） */
+  startedAt?: string
+  /** 最近一次结束时间 */
+  endedAt?: string
+  /** 超出建议时长（分钟，max(0, total - suggested)） */
+  overtimeMinutes?: number
   /** 章节已确定（菜单/Tab 右键进入）→ 隐藏章节选择，直接计时；false 则显示选择器 */
   fixedMenu?: boolean
 }>(), {
@@ -88,7 +81,9 @@ const props = withDefaults(defineProps<{
   menuLabel: '',
   suggestedMinutes: 0,
   totalMinutes: 0,
-  sessions: () => [],
+  startedAt: '',
+  endedAt: '',
+  overtimeMinutes: 0,
   fixedMenu: false,
 })
 
@@ -100,21 +95,30 @@ const emit = defineEmits<{
 
 const currentMenuLabel = computed(() => props.menuLabel)
 
-// ---------- 学习记录时间段格式化（本地时区，跨天显示日期） ----------
+// ---------- 最近学习时间段格式化（本地时区，跨天显示日期） ----------
 function pad2(n: number) {
   return String(n).padStart(2, '0')
 }
-function fmtSessionRange(s: SessionItem) {
-  const st = new Date(s.startedAt)
+function fmtRange(startIso: string, endIso: string) {
+  const st = new Date(startIso)
   const start = `${pad2(st.getMonth() + 1)}-${pad2(st.getDate())} ${pad2(st.getHours())}:${pad2(st.getMinutes())}`
-  if (!s.endedAt) return start
-  const et = new Date(s.endedAt)
+  const et = new Date(endIso)
   const sameDay = st.toDateString() === et.toDateString()
   const end = sameDay
     ? `${pad2(et.getHours())}:${pad2(et.getMinutes())}`
     : `${pad2(et.getMonth() + 1)}-${pad2(et.getDate())} ${pad2(et.getHours())}:${pad2(et.getMinutes())}`
   return `${start} → ${end}`
 }
+
+// 最近学习文案：有 endedAt → 上次学习起止；只有 startedAt → 进行中
+const lastStudyText = computed(() => {
+  if (!props.startedAt) return ''
+  if (!props.endedAt) {
+    const st = new Date(props.startedAt)
+    return `⏳ 进行中：开始于 ${pad2(st.getMonth() + 1)}-${pad2(st.getDate())} ${pad2(st.getHours())}:${pad2(st.getMinutes())}`
+  }
+  return `上次学习：${fmtRange(props.startedAt, props.endedAt)}`
+})
 
 // ---------- 进度条 ----------
 const progressPercent = computed(() => {
@@ -126,16 +130,20 @@ const progressPercent = computed(() => {
 const isOver = computed(() => (props.suggestedMinutes || 0) > 0 && (props.totalMinutes || 0) > (props.suggestedMinutes || 0))
 const isMet = computed(() => (props.suggestedMinutes || 0) > 0 && (props.totalMinutes || 0) >= (props.suggestedMinutes || 0))
 const progressColor = computed(() => {
-  if (isOver.value) return '#f59e0b' // 黄：已超时
+  if (isOver.value) return '#60a5fa' // 蓝：复习巩固（超过建议不是失败，用中性蓝不施压）
   if (isMet.value) return '#22c55e' // 绿：已达标
   return 'var(--color-primary, #3b82f6)'
 })
 const hintText = computed(() => {
-  if (isOver.value) return `⚠️ 已超出建议时长 ${(props.totalMinutes || 0) - (props.suggestedMinutes || 0)} 分钟`
+  if (isOver.value) {
+    // 与后端 overtimeMinutes 同公式（max(0, total - suggested)），不依赖 props.overtimeMinutes 是否传入
+    const over = Math.max(0, (props.totalMinutes || 0) - (props.suggestedMinutes || 0))
+    return `🔁 已超过建议 ${over} 分钟，进入复习巩固。要反复看很正常，慢慢来，不着急`
+  }
   if (isMet.value) return '✅ 已达建议时长，可以进入下一章了'
   return ''
 })
-const hintClass = computed(() => (isOver.value ? 'text-warning' : 'text-success'))
+const hintClass = computed(() => (isOver.value ? 'text-info' : 'text-success'))
 
 // ---------- 面板开关 ----------
 function onUpdateVisible(v: boolean) {
@@ -303,6 +311,9 @@ function onSelectMenu(id: string) {
 
 .text-success {
   color: #22c55e;
+}
+.text-info {
+  color: #60a5fa;
 }
 .text-warning {
   color: #f59e0b;

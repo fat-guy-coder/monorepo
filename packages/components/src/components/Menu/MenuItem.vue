@@ -265,6 +265,15 @@ const studyProgress = computed<number | null>(() => {
   return Math.min(100, Math.round((studied / suggested) * 100))
 })
 
+// 超时（已学 > 建议）→ 复习巩固态：进度条填满转中性蓝，不再走交通灯色。
+// 超时不是失败——需要反复复习很正常，所以不用红色/警告去"惩罚"它。
+const OVERTIME_COLOR = '#60a5fa'
+const isOvertime = computed<boolean>(() => {
+  const suggested = Number(props.item.suggestedMinutes ?? 0)
+  const studied = Number(props.item.studiedMinutes ?? 0)
+  return suggested > 0 && studied > suggested
+})
+
 // 进度条色段（红黄绿交通灯：越接近完成越"成功"，红=刚起步 → 绿=快完成/达标）
 const PROGRESS_SEGMENTS: Array<{ max: number; color: string }> = [
   { max: 25, color: '#f87171' }, //  0-25%  浅红
@@ -281,13 +290,15 @@ function progressColorFor(pct: number): string {
 const progressColor = computed<string | null>(() => {
   const p = studyProgress.value
   if (p === null) return null
+  if (isOvertime.value) return OVERTIME_COLOR
   return progressColorFor(p)
 })
 const labelWithProgress = computed(() => {
   const base = props.item.label || props.item.name || ''
-  if (studyProgress.value === null) return base
   const suggested = Number(props.item.suggestedMinutes ?? 0)
   const studied = Number(props.item.studiedMinutes ?? 0)
+  if (!suggested) return base
+  if (studied > suggested) return `${base}（已学 ${studied} / 建议 ${suggested} 分钟 · 超出 ${studied - suggested} 分钟）`
   return `${base}（已学 ${studied} / 建议 ${suggested} 分钟）`
 })
 

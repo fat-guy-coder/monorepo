@@ -63,7 +63,7 @@
         :group-color="item.groupColor">
         <template #tab>
           <div @click.right.prevent.stop="openMenu(item.tab.path, $event)" :data-id="item.tab.path"
-            :data-group-id="item.groupId" class="tab-item" :draggable="item.tab.path !== '/'"
+            :data-group-id="item.groupId" class="tab-item" :draggable="item.tab.path !== '/'" :title="tabItemTitle(item.tab.label, item.tab.path)"
             @dragstart="onTabDragStart(item.tab.path, item.groupId, $event)" @dragend="onDragEnd">
             {{ item.tab.label }}
             <!-- 学习进度条：页签底部 3px 下划线，宽度=已学/建议 占比（无建议数据不显示） -->
@@ -171,6 +171,9 @@ const PROGRESS_SEGMENTS: Array<{ max: number; color: string }> = [
   { max: 75, color: '#a3e635' }, // 50-75%  黄绿
   { max: 100, color: '#22c55e' }, // 75-100% 绿
 ]
+// 超时（已学 > 建议）→ 复习巩固态：进度条填满转中性蓝，不再走交通灯色。
+// 超时不是失败——需要反复复习很正常，所以不用红色/警告去"惩罚"它。
+const OVERTIME_COLOR = '#60a5fa'
 function progressColorFor(pct: number): string {
   for (const s of PROGRESS_SEGMENTS) {
     if (pct <= s.max) return s.color
@@ -178,19 +181,44 @@ function progressColorFor(pct: number): string {
   return PROGRESS_SEGMENTS[PROGRESS_SEGMENTS.length - 1].color
 }
 
-// 页签学习进度映射（path → 百分比 + 色段色），suggested 未设置（0）的页签不进映射 → 不画进度条
-const tabProgressPctMap = computed<Record<string, { pct: number; color: string }>>(() => {
-  const map: Record<string, { pct: number; color: string }> = {}
+interface TabProgressInfo {
+  pct: number
+  color: string
+  studied: number
+  suggested: number
+  overtime: number
+}
+
+// 页签学习进度映射（path → 百分比 + 色段色），suggested 未设置（0）的页签不进映射 → 不画进度条。
+// overtime > 0 表示已学超过建议 → 颜色固定为中性蓝（复习巩固态）
+const tabProgressPctMap = computed<Record<string, TabProgressInfo>>(() => {
+  const map: Record<string, TabProgressInfo> = {}
   const data = props.tabProgress
   if (!data) return map
   for (const [path, p] of Object.entries(data)) {
     if (!p || !p.suggestedMinutes) continue
     const studied = p.studiedMinutes || 0
-    const pct = Math.min(100, Math.round((studied / p.suggestedMinutes) * 100))
-    map[path] = { pct, color: progressColorFor(pct) }
+    const suggested = p.suggestedMinutes
+    const pct = Math.min(100, Math.round((studied / suggested) * 100))
+    const overtime = Math.max(0, studied - suggested)
+    map[path] = {
+      pct,
+      color: overtime > 0 ? OVERTIME_COLOR : progressColorFor(pct),
+      studied,
+      suggested,
+      overtime,
+    }
   }
   return map
 })
+
+// 页签 title（悬停提示）：已学/建议 分钟，超出时附超时量
+function tabItemTitle(label: string, path: string): string {
+  const info = tabProgressPctMap.value[path]
+  if (!info) return ''
+  if (info.overtime > 0) return `${label}（已学 ${info.studied} / 建议 ${info.suggested} 分钟 · 超出 ${info.overtime} 分钟）`
+  return `${label}（已学 ${info.studied} / 建议 ${info.suggested} 分钟）`
+}
 
 // 扁平 tab 序号（供 removeSide / 扁平排序使用）
 function flatTabIndex(path: string): number {

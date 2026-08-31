@@ -2,7 +2,7 @@
 import { routes } from './routes/menu'
 import { userRoutes } from './routes/user'
 import { roleRoutes } from './routes/role'
-import { studySessionRoutes } from './routes/study-session'
+import { studyRoutes } from './routes/study'
 
 const port = Number(process.env.PORT || 3000)
 const host = process.env.HOST || '0.0.0.0'
@@ -30,7 +30,7 @@ const server = Bun.serve({
 
 
     // 匹配路由
-    const allRoutes = [...routes, ...userRoutes, ...roleRoutes, ...studySessionRoutes]
+    const allRoutes = [...routes, ...userRoutes, ...roleRoutes, ...studyRoutes]
     for (const route of allRoutes) {
       if (route.method !== method) continue
 

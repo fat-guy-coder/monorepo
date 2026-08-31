@@ -1,6 +1,6 @@
 import { db, rawQuery } from '../db'
-import { menu, role, userRole, studySession } from '../db/schema'
-import { eq, isNull, or, asc, like, and, sum, isNotNull } from 'drizzle-orm'
+import { menu, role, userRole, studyProgress } from '../db/schema'
+import { eq, isNull, or, asc, like, and } from 'drizzle-orm'
 import { createAuthMiddleware } from './auth'
 
 const authMware = createAuthMiddleware()
@@ -56,14 +56,12 @@ function flatten(items: any[]) {
 }
 
 // 已学习时长映射：menuId → 已学分钟数（非叶子 = 其子孙叶子已学时长的总和，与「建议时长 = 叶子之和」同口径）
-// 一次查询全表 id/parentId + 一次聚合 study_session（只统计已结束记录），自底向上累加。
+// 一次查询全表 id/parentId + 一次读 study_progress（每菜单单行 total_minutes），自底向上累加。
 async function getStudiedMinutesMap(): Promise<Map<string, number>> {
   const [menus, rows] = await Promise.all([
     db.select({ id: menu.id, parentId: menu.parentId }).from(menu),
-    db.select({ menuId: studySession.menuId, total: sum(studySession.durationMinutes) })
-      .from(studySession)
-      .where(isNotNull(studySession.endedAt))
-      .groupBy(studySession.menuId),
+    db.select({ menuId: studyProgress.menuId, total: studyProgress.totalMinutes })
+      .from(studyProgress),
   ])
 
   const studied = new Map<string, number>()
