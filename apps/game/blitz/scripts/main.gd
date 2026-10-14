@@ -1,794 +1,513 @@
 extends Node2D
-## 茶杯头 Demo 主场景 — 关卡搭建 + 游戏管理 + UI 系统
+## Blitz 主场景 — 等距仙侠 ARPG (v0.3 战斗手感)
 ##
 ## 📚 涉及学习文档:
-##   godot-4-1-scene-tree       — 场景树: add_child/get_node 节点管理
-##   godot-4-2-scene-instantiation — PackedScene.instantiate() 场景实例化
-##   godot-5-1-input-map        — InputMap: 代码注册按键动作
-##   godot-5-8-tween            — Tween: 分数弹出动画
-##   godot-3-5-button-family    — Button: 死亡 UI 的 RESTART 按钮
-##   godot-3-4-label-richtext   — Label: HUD 文字/分数显示
-##   godot-3-3-container-nodes  — VBoxContainer/HBoxContainer 布局
-##   godot-2-9-camera2d         — Camera2D: 跟随玩家/边界限制
-##   godot-7-8-state-machines   — 状态管理: is_game_over 布尔状态
-##   godot-1-8-signals-basics   — 信号: Button.pressed.connect()
+##   godot-4-1-scene-tree          — 场景树: 谁是父谁是子决定了绘制顺序
+##   godot-4-2-scene-instantiation — PackedScene.instantiate()
+##   godot-2-8-tilemap             — 等距 Y-sort 深度排序 (本文件最重要的结构决策)
+##   godot-2-9-camera2d            — Camera2D 边界限制
+##   godot-1-8-signals-basics      — 信号接线: 玩家/敌人/复活点 → 本文件
+##   godot-7-8-state-machines      — 呼吸: 本文件不再有状态机, 它只是「编排者」
 ##
-## 🏗️ 碰撞层 Bit 分配 (全局统一):
-##   Bit 0 = 玩家身体     Bit 3 = 敌人攻击 (预留)
-##   Bit 1 = 敌人身体     Bit 4 = 墙壁/平台
-##   Bit 2 = 玩家攻击     Bit 5 = 格挡对象
-##                        Bit 6 = 终点
-##                        Bit 7 = (预留)
+## 🎮 v0.3 相对 v0.2 只多了三件事 (战线刻意压得很窄, 本体没动):
+##   ① 玩家的 parried / blocked / guard_broken 三个新信号接线 —— 见 _create_player()
+##   ② 三个信号处理器 —— 格挡反馈的「看/听/读」三层全靠它们, 见下方
+##   ③ 敌人配置多了一个 can_attack 开关 + 固定靶血厚到 10 (当肉桩试重击)
+##   关卡结构、相机、地面、障碍一个字节都没改 —— v0.2 的 31 项自检原样通过就是证据。
+##
+## 🎮 本文件从 794 行砍到 ~330 行。砍掉的是**不属于编排者的东西**:
+##   旧的 main.gd 里塞了 6 个用 `GDScript.new() + source_code` 运行时编译的内联脚本
+##   (星空/草线/格挡物/格挡特效/终点旗帜/Boss 血条)。它们存在的理由是
+##   「只有这个关卡用, 不值得单开文件」—— 但那个理由的代价是:
+##     · 编辑器完全没有补全和报错, 写错只能等运行时;
+##     · 每次实例化都重新编译一遍源码;
+##     · 想改一个特效的数值, 得先在 794 行里找到那段字符串。
+##   现在它们各自成了 scripts/world/*.gd 和 scripts/fx/*.gd 里带 class_name 的文件,
+##   整个代码库**不再有任何运行时编译**。
+##
+## 🏗️ 场景树结构 (绘制顺序 = 这个结构的直接结果, 改结构前先读这段):
+##
+##   Game (Node2D)                    ← 本脚本
+##   ├── Backdrop    (z_index -20)    ← 星空。**不是** World 的子节点
+##   ├── Floor       (z_index -10)    ← IsoFloor。**必须是 World 的兄弟**, 见下
+##   ├── World       (y_sort_enabled) ← Y-sort 根
+##   │   ├── Wall_*      (不可见, 只有碰撞 + Line2D 描边)
+##   │   ├── Obstacle_*  (原点在底面菱形中心)
+##   │   ├── RespawnPoint_*
+##   │   ├── Enemy_*
+##   │   └── Player      ← 原点在脚底
+##   ├── Fx          (z_index 40, group "fx_layer")
+##   ├── UI          (Hud, CanvasLayer 100)
+##   └── DebugOverlay(CanvasLayer 200 + 世界空间菱形高亮)
+##
+## 🏗️ 为什么地面必须是 World 的**兄弟**而不是子节点:
+##   父节点开了 y_sort_enabled 时, 一个自己没开 y-sort 的子节点会被当成
+##   **一整个整体**按它自己的 position 参与排序。地面做子节点时「碰巧」看着是对的
+##   (因为地面在原点附近), 直到有物体落在负 y 才会神秘失效 —— 是最难查的那类 bug。
+##   用 z_index = -10 的兄弟节点则是**确定性正确**的: z_index 先于 y-sort 结算。
 
 # ============================================================
-# 关卡尺寸常量
+# 关卡常量
 # ============================================================
-const LEVEL_WIDTH: float = 3200.0
-const LEVEL_HEIGHT: float = 720.0
-const GROUND_Y: float = 670.0       ## 地面顶部的 Y 坐标
-const GROUND_THICKNESS: float = 40.0
+## 地格数 (宽, 高)。24×24 → 世界尺寸约 1536×752, 比 1280×720 的视口大,
+## 这样相机才会真的「跟」起来 —— 地图比视口小的话相机只会锁死在中心,
+## 那就完全验证不了边界限制有没有生效。
+const FLOOR_CELLS: Vector2i = Vector2i(24, 24)
+## 地格 (0,0) 的世界坐标
+const FLOOR_ORIGIN: Vector2 = Vector2(200.0, 300.0)
+## 出生地格。角色初始位置 + 初始复活点**共用**这一个常量 ——
+## 分两处写的话, 改了出生点却忘了改复活点, 一死就会被送回旧位置。
+const START_CELL: Vector2i = Vector2i(8, 11)
+## 边界墙厚度
+const WALL_THICKNESS: float = 22.0
+## 边界墙内缩: 让碰撞面落在最外圈地砖**稍微靠里**一点, 免得角色半个身子压在砖外
+const WALL_MARGIN: float = 10.0
 
 # ============================================================
-# 预加载场景和脚本 (preload 在编译时加载,性能最优)
+# 节点引用
 # ============================================================
-var PlayerScene: PackedScene = preload("res://scenes/player.tscn")
-var EnemyScene: PackedScene  = preload("res://scenes/enemy.tscn")
-var AttackHitboxScene: PackedScene = preload("res://scenes/attack_hitbox.tscn")
-var DrawableRect: Script     = preload("res://scripts/drawable_rect.gd")
+var floor: IsoFloor = null
+var world: Node2D = null
+var fx: Node2D = null
+var player: BlitzPlayer = null
+var camera: CameraRig = null
+var hud: Hud = null
+var debug_overlay: DebugOverlay = null
 
-# ============================================================
-# 运行时引用
-# ============================================================
-var player: CharacterBody2D
 var score: int = 0
-var is_game_over: bool = false
-var _goal_activated: bool = false
-
-# UI 节点 (延迟初始化)
-var _score_label: Label
-var _health_container: HBoxContainer
-var _game_over_panel: Control
-var _dash_cooldown_bar: ColorRect
-
-# 追踪所有格挡对象 (供调试/统计)
-var _parry_objects: Array[Area2D] = []
+## 当前复活点位置。死亡后回到这里 —— 低惩罚死亡循环 (见 DESIGN.md)
+var _current_spawn: Vector2 = Vector2.ZERO
+## 正在复活的过场中, 防止死亡信号重复触发 (无敌帧外还有一击致死等边界情况)
+var _respawning: bool = false
 
 
 # ============================================================
-# 初始化 — Godot 场景的入口点
+# 入口
 # ============================================================
 func _ready() -> void:
-	# 1. 先注册输入 (必须在任何 Input.is_action_xxx 调用之前)
-	_setup_input_map()
-	# 2. 搭建关卡 (平台/敌人/格挡对象)
-	_build_level()
-	# 3. 创建玩家 (从 .tscn 实例化)
+	RenderingServer.set_default_clear_color(Color(0.05, 0.05, 0.11))
+
+	# 顺序有依赖: 地面 → (世界/障碍/敌人要用地面的坐标桥) → 玩家 → 相机(要用地面的边界)
+	_build_floor()
+	_build_backdrop()
+	_build_world()
 	_create_player()
-	# 4. UI 系统 (HUD/死亡面板/胜利面板)
-	_create_ui()
-	# 5. 操作说明
-	_create_instructions()
-	# 6. 背景色
-	RenderingServer.set_default_clear_color(Color(0.06, 0.06, 0.14, 1.0))
+	_create_camera()
+	_create_fx_layer()
+	_create_hud()
+	_create_debug_overlay()
 
+	_maybe_run_test_hooks()
 
-# ── InputMap 注册 ──
-# 在代码中动态注册按键动作,比 project.godot 的 Object 格式更可靠
-# 详见 godot-5-1-input-map
-func _setup_input_map() -> void:
-	var actions: Dictionary = {
-		"move_left":  [KEY_A, KEY_LEFT],
-		"move_right": [KEY_D, KEY_RIGHT],
-		"jump":       [KEY_SPACE, KEY_W, KEY_UP],
-		"dash":       [KEY_SHIFT],
-		"attack_light": [KEY_J],
-		"attack_heavy": [KEY_K],
-		"restart":    [KEY_R, KEY_ENTER],
-	}
-	for action_name: String in actions:
-		if not InputMap.has_action(action_name):
-			InputMap.add_action(action_name)
-			for key: Key in actions[action_name]:
-				var ev: InputEventKey = InputEventKey.new()
-				ev.physical_keycode = key
-				InputMap.action_add_event(action_name, ev)
 
-
-
-# ============================================================
-# 关卡搭建
-# ============================================================
-
-func _build_level() -> void:
-	_create_starfield()
-	_create_ground()
-	_create_platforms()
-	_create_parry_objects()
-	_create_enemies()
-	_create_boss()
-	_create_goal()
-
-
-# ── 星空背景 ──
-func _create_starfield() -> void:
-	var stars: Node2D = Node2D.new()
-	stars.name = "Starfield"
-	stars.z_index = -10
-	stars.set_script(_starfield_script())
-	add_child(stars)
-
-
-# ── 地面 ──
-func _create_ground() -> void:
-	# 主地面 — StaticBody2D 是不动的物理体,玩家/敌人可站在上面
-	_create_wall(
-		Vector2(LEVEL_WIDTH / 2.0, GROUND_Y + GROUND_THICKNESS / 2.0),
-		Vector2(LEVEL_WIDTH, GROUND_THICKNESS),
-		Color(0.22, 0.18, 0.12)
-	)
-	# 草地装饰线
-	var grass: Node2D = Node2D.new()
-	grass.position = Vector2(0, GROUND_Y - 2)
-	grass.set_script(_grass_line_script())
-	add_child(grass)
-
-
-# ── 浮动平台 ──
-func _create_platforms() -> void:
-	var platforms: Array[Dictionary] = [
-		{ pos = Vector2(350, 510), size = Vector2(170, 16) },
-		{ pos = Vector2(620, 420), size = Vector2(150, 16) },
-		{ pos = Vector2(900, 480), size = Vector2(160, 16) },
-		{ pos = Vector2(1250, 380), size = Vector2(180, 16) },
-		{ pos = Vector2(1650, 470), size = Vector2(180, 16) },
-		{ pos = Vector2(2000, 370), size = Vector2(200, 16) },
-		{ pos = Vector2(2400, 450), size = Vector2(160, 16) },
-		{ pos = Vector2(2700, 360), size = Vector2(170, 16) },
-	]
-	for p in platforms:
-		_create_wall(p.pos, p.size, Color(0.35, 0.25, 0.15))
-
-
-# ── 格挡对象 (粉色菱形) ──
-func _create_parry_objects() -> void:
-	var positions: Array[Vector2] = [
-		Vector2(280, GROUND_Y - 60),
-		Vector2(670, 370),
-		Vector2(1300, 330),
-		Vector2(1950, 320),
-		Vector2(2750, 310),
-	]
-	for pos in positions:
-		var obj: Area2D = _make_parry_object(pos)
-		_parry_objects.append(obj)
-		add_child(obj)
-
-
-# ── 敌人 ──
-func _create_enemies() -> void:
-	# enemy_type: 0=PATROL, 1=STATIONARY, 2=CHASER
-	_create_enemy(Vector2(450, GROUND_Y - 20), 0)
-	_create_enemy(Vector2(750, GROUND_Y - 20), 0)
-	_create_enemy(Vector2(1050, GROUND_Y - 20), 0)
-	_create_enemy(Vector2(900, 440), 1)
-	_create_enemy(Vector2(1650, 430), 1)
-	_create_enemy(Vector2(1500, GROUND_Y - 20), 2)
-	_create_enemy(Vector2(2100, GROUND_Y - 20), 2)
-	_create_enemy(Vector2(2400, 410), 0)
-
-
-# ── Boss ──
-func _create_boss() -> void:
-	var boss: CharacterBody2D = EnemyScene.instantiate()
-	boss.position = Vector2(2950, GROUND_Y - 35)
-	boss.name = "MiniBoss"
-	boss.enemy_type = 0       # PATROL
-	boss.move_speed = 100.0
-	boss.patrol_range = 120.0
-	boss.max_health = 8
-	boss.score_value = 500
-	add_child(boss)
-
-	var hp_bar: Node2D = _create_hp_bar(boss)
-	add_child(hp_bar)
-
-
-# ── 终点 ──
-func _create_goal() -> void:
-	var flag: Area2D = Area2D.new()
-	flag.name = "Goal"
-	flag.position = Vector2(3100, GROUND_Y - 55)
-	flag.collision_layer = 1 << 6
-	flag.collision_mask  = 1 << 0   # 检测玩家
-	flag.monitoring = false          # Boss 死后才激活
-	var shape: CollisionShape2D = CollisionShape2D.new()
-	var rect: RectangleShape2D = RectangleShape2D.new()
-	rect.size = Vector2(40, 130)
-	shape.shape = rect
-	flag.add_child(shape)
-
-	var visual: Node2D = Node2D.new()
-	visual.set_script(_goal_visual_script())
-	flag.add_child(visual)
-
-	flag.body_entered.connect(func(_b): _on_goal_reached())
-	add_child(flag)
-
-
-# ============================================================
-# 玩家创建 — 从 player.tscn 实例化
-# ============================================================
-func _create_player() -> void:
-	# PackedScene.instantiate() 克隆场景中的所有节点
-	# 比逐个 new() + add_child() 更简洁,且 Godot 编辑器可见
-	player = PlayerScene.instantiate()
-	player.name = "Player"
-	player.position = Vector2(120, GROUND_Y - 40)
-	# 注入攻击判定框引用 (player 需要它来生成近战攻击)
-	player.attack_hitbox_scene = AttackHitboxScene
-	add_child(player)
-
-	# 摄像机跟随 — 作为 player 的子节点自动跟随
-	var cam: Camera2D = Camera2D.new()
-	cam.position_smoothing_enabled = true
-	cam.position_smoothing_speed = 10.0
-	cam.limit_left   = -50
-	cam.limit_right  = int(LEVEL_WIDTH) + 50
-	cam.limit_top    = -200
-	cam.limit_bottom = int(LEVEL_HEIGHT)
-	player.add_child(cam)
-
-
-# ============================================================
-# UI 系统
-# ============================================================
-func _create_ui() -> void:
-	var ui: CanvasLayer = CanvasLayer.new()
-	ui.name = "UI"
-	ui.layer = 100
-	add_child(ui)
-
-	# 左上: 生命值 (红/灰方块)
-	_health_container = HBoxContainer.new()
-	_health_container.position = Vector2(24, 20)
-	ui.add_child(_health_container)
-	_update_health_display()
-
-	# 右上: 分数
-	_score_label = Label.new()
-	_score_label.position = Vector2(1180, 20)
-	_score_label.size = Vector2(80, 30)
-	_score_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	_score_label.add_theme_font_size_override("font_size", 22)
-	_score_label.add_theme_color_override("font_color", Color(1, 0.9, 0.3))
-	_score_label.text = "⭐ 0"
-	ui.add_child(_score_label)
-
-	# 冲刺冷却条
-	_dash_cooldown_bar = ColorRect.new()
-	_dash_cooldown_bar.position = Vector2(24, 54)
-	_dash_cooldown_bar.size = Vector2(100, 6)
-	_dash_cooldown_bar.color = Color(0.2, 0.8, 1.0, 0.8)
-	ui.add_child(_dash_cooldown_bar)
-
-	# 死亡面板 (初始隐藏)
-	_game_over_panel = _make_game_over_panel()
-	_game_over_panel.hide()
-	ui.add_child(_game_over_panel)
-
-	# 胜利面板 (初始隐藏)
-	var win_panel: Control = _make_win_panel()
-	win_panel.name = "WinPanel"
-	win_panel.hide()
-	ui.add_child(win_panel)
-
-
-# ── 操作说明 HUD ──
-func _create_instructions() -> void:
-	var ui: CanvasLayer = CanvasLayer.new()
-	ui.layer = 100
-	add_child(ui)
-
-	var panel: Panel = Panel.new()
-	panel.position = Vector2(24, LEVEL_HEIGHT - 70)
-	panel.size = Vector2(600, 48)
-	panel.modulate = Color(1, 1, 1, 0.7)
-	ui.add_child(panel)
-
-	var text: Label = Label.new()
-	text.position = Vector2(36, LEVEL_HEIGHT - 64)
-	text.text = "A/D 移动 | W/空格 跳跃 | Shift 闪避 | J 轻击 | K 重击 | 空中靠近🩷按跳 = 格挡"
-	text.add_theme_font_size_override("font_size", 12)
-	text.add_theme_color_override("font_color", Color(0.8, 0.8, 0.8))
-	ui.add_child(text)
-
-
-# ============================================================
-# 游戏主循环
-# ============================================================
-func _process(_delta: float) -> void:
-	if is_game_over:
-		return
-
-	_score_label.text = "⭐ %d" % score
-	_update_health_display()
-
-	# 冲刺冷却条
-	if player and is_instance_valid(player):
-		var cd_ratio: float = 1.0 - (player._dash_cooldown_timer / player.dash_cooldown)
-		_dash_cooldown_bar.size.x = cd_ratio * 100.0
-		_dash_cooldown_bar.color = Color(0.2, 0.8, 1.0, 0.8) if cd_ratio >= 1.0 else Color(0.5, 0.5, 0.5, 0.5)
-
-	_check_boss_defeated()
-
-	# 掉落死亡: 掉出关卡底部 80px 直接死
-	if player and is_instance_valid(player) and player.position.y > LEVEL_HEIGHT + 80:
-		player.take_damage(999)
-
-
-# ============================================================
-# 公开方法 (供 player/enemy 通过 current_scene 调用)
-# ============================================================
-
-## 加分 (由 enemy.die() 调用)
-func add_score(amount: int) -> void:
-	score += amount
-	_pop_score_text(amount)
-
-
-## 格挡回调 (由 player._perform_parry() 调用)
-func on_player_parry(target: Area2D) -> void:
-	if target and is_instance_valid(target):
-		var pos: Vector2 = target.position
-		target.queue_free()
-		score += 150
-		_pop_score_text(150, pos)
-		_spawn_parry_fx(pos)
-
-
-## 玩家死亡回调
-func on_player_died() -> void:
-	is_game_over = true
-	_game_over_panel.show()
-
-
-## 获取玩家引用 (由 enemy._get_player() 调用)
-func get_player() -> Node2D:
-	return player
-
-
-# ============================================================
-# 内部辅助 — 关卡构建
-# ============================================================
-
-## 创建一面墙/平台 (StaticBody2D + 碰撞形状 + 可视化矩形)
-func _create_wall(pos: Vector2, size: Vector2, color: Color) -> void:
-	var body: StaticBody2D = StaticBody2D.new()
-	body.position = pos
-	body.collision_layer = 1 << 4   # bit4: 墙壁层
-	body.collision_mask  = 0        # 不检测任何东西
-
-	var col_shape: CollisionShape2D = CollisionShape2D.new()
-	var rect: RectangleShape2D = RectangleShape2D.new()
-	rect.size = size
-	col_shape.shape = rect
-	body.add_child(col_shape)
-
-	var visual: Node2D = Node2D.new()
-	visual.set_script(DrawableRect)
-	visual.rect_color = color
-	visual.rect_size = size
-	visual.border_color = color.lightened(0.15)
-	visual.border_width = 1.5
-	body.add_child(visual)
-
-	add_child(body)
-
-
-## 在指定位置创建一个敌人 (从 enemy.tscn 实例化)
-## etype: 0=PATROL, 1=STATIONARY, 2=CHASER
-func _create_enemy(pos: Vector2, etype: int) -> void:
-	var enemy: CharacterBody2D = EnemyScene.instantiate()
-	enemy.position = pos
-	enemy.enemy_type = etype
-	add_child(enemy)
-
-
-## 创建一个格挡对象 (粉色发光菱形 Area2D)
-func _make_parry_object(pos: Vector2) -> Area2D:
-	var obj: Area2D = Area2D.new()
-	obj.position = pos
-	obj.collision_layer = 1 << 5   # bit5: 格挡对象
-	obj.collision_mask  = 0
-	obj.name = "ParryObject"
-
-	var col_shape: CollisionShape2D = CollisionShape2D.new()
-	var circle: CircleShape2D = CircleShape2D.new()
-	circle.radius = 18.0
-	col_shape.shape = circle
-	obj.add_child(col_shape)
-
-	var visual: Node2D = Node2D.new()
-	visual.set_script(_parry_visual_script())
-	obj.add_child(visual)
-
-	return obj
-
-
-func _create_hp_bar(target: Node2D) -> Node2D:
-	var bar: Node2D = Node2D.new()
-	bar.name = "HPBar"
-	bar.set_script(_hp_bar_follow_script())
-	bar.set_meta("target", target)
-	return bar
-
-
-# ============================================================
-# 游戏结束 / 胜利
-# ============================================================
-
-## 游戏结束面板 — 半透明遮罩 + 居中卡片 + RESTART 按钮
-func _make_game_over_panel() -> Control:
-	# 全屏半透明黑色遮罩
-	var overlay: ColorRect = ColorRect.new()
-	overlay.color = Color(0, 0, 0, 0.7)
-	overlay.size = Vector2(1280, 720)
-	overlay.z_index = 200
-
-	# 居中卡片
-	var card: Panel = Panel.new()
-	card.size = Vector2(400, 280)
-	card.position = Vector2(440, 180)
-	card.z_index = 201
-	var card_style: StyleBoxFlat = StyleBoxFlat.new()
-	card_style.bg_color = Color(0.08, 0.06, 0.06, 0.97)
-	card_style.border_width_left   = 3
-	card_style.border_width_right  = 3
-	card_style.border_width_top    = 3
-	card_style.border_width_bottom = 3
-	card_style.border_color = Color(1, 0.15, 0.15, 0.8)
-	card_style.corner_radius_top_left     = 16
-	card_style.corner_radius_top_right    = 16
-	card_style.corner_radius_bottom_left  = 16
-	card_style.corner_radius_bottom_right = 16
-	card.add_theme_stylebox_override("panel", card_style)
-
-	var vbox: VBoxContainer = VBoxContainer.new()
-	vbox.position = Vector2(0, 30)
-	vbox.size = Vector2(400, 220)
-	vbox.alignment = BoxContainer.ALIGNMENT_CENTER
-	card.add_child(vbox)
-
-	# YOU DIED 标题
-	var title: Label = Label.new()
-	title.text = "YOU DIED"
-	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	title.add_theme_font_size_override("font_size", 42)
-	title.add_theme_color_override("font_color", Color(1, 0.15, 0.15))
-	vbox.add_child(title)
-
-	vbox.add_child(_make_spacer(10))
-
-	# 最终分数
-	var score_label: Label = Label.new()
-	score_label.name = "FinalScore"
-	score_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	score_label.add_theme_font_size_override("font_size", 20)
-	score_label.add_theme_color_override("font_color", Color(1, 0.85, 0.2))
-	score_label.text = "Score: 0"
-	vbox.add_child(score_label)
-
-	vbox.add_child(_make_spacer(24))
-
-	# RESTART 按钮 — 使用 Godot 的 Button 控件
-	var restart_btn: Button = Button.new()
-	restart_btn.text = "RESTART"
-	restart_btn.custom_minimum_size = Vector2(200, 50)
-	restart_btn.add_theme_font_size_override("font_size", 20)
-
-	var btn_style: StyleBoxFlat = StyleBoxFlat.new()
-	btn_style.bg_color = Color(0.85, 0.15, 0.15, 1)
-	btn_style.corner_radius_top_left     = 8
-	btn_style.corner_radius_top_right    = 8
-	btn_style.corner_radius_bottom_left  = 8
-	btn_style.corner_radius_bottom_right = 8
-	restart_btn.add_theme_stylebox_override("normal", btn_style)
-
-	var btn_hover: StyleBoxFlat = StyleBoxFlat.new()
-	btn_hover.bg_color = Color(1, 0.25, 0.25, 1)
-	btn_hover.corner_radius_top_left     = 8
-	btn_hover.corner_radius_top_right    = 8
-	btn_hover.corner_radius_bottom_left  = 8
-	btn_hover.corner_radius_bottom_right = 8
-	restart_btn.add_theme_stylebox_override("hover", btn_hover)
-
-	restart_btn.add_theme_color_override("font_color", Color.WHITE)
-	restart_btn.pressed.connect(_on_restart_pressed)
-	vbox.add_child(restart_btn)
-
-	vbox.add_child(_make_spacer(10))
-
-	var hint: Label = Label.new()
-	hint.text = "or press R"
-	hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	hint.add_theme_font_size_override("font_size", 13)
-	hint.add_theme_color_override("font_color", Color(0.5, 0.5, 0.5))
-	vbox.add_child(hint)
-
-	overlay.add_child(card)
-	overlay.set_meta("score_label", score_label)
-	overlay.set_meta("card", card)
-
-	return overlay
-
-
-## 重新开始
-func _on_restart_pressed() -> void:
-	get_tree().reload_current_scene()
-
-
-## 胜利面板
-func _make_win_panel() -> Control:
-	var panel: Panel = Panel.new()
-	panel.size = Vector2(400, 240)
-	panel.position = Vector2(440, 210)
-	panel.z_index = 200
-	panel.modulate = Color(0.05, 0.12, 0.08, 0.95)
-
-	var vbox: VBoxContainer = VBoxContainer.new()
-	vbox.position = Vector2(40, 30)
-	vbox.size = Vector2(320, 180)
-	panel.add_child(vbox)
-
-	var title: Label = Label.new()
-	title.text = "🏆 关卡通过!"
-	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	title.add_theme_font_size_override("font_size", 28)
-	title.add_theme_color_override("font_color", Color(0.3, 1, 0.5))
-	vbox.add_child(title)
-
-	vbox.add_child(_make_spacer(12))
-
-	var score_label: Label = Label.new()
-	score_label.name = "WinScore"
-	score_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	score_label.add_theme_font_size_override("font_size", 18)
-	score_label.add_theme_color_override("font_color", Color(1, 0.9, 0.3))
-	vbox.add_child(score_label)
-	panel.set_meta("score_label", score_label)
-
-	vbox.add_child(_make_spacer(16))
-
-	var restart: Label = Label.new()
-	restart.text = "按 R 键重新开始"
-	restart.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	restart.add_theme_font_size_override("font_size", 14)
-	restart.add_theme_color_override("font_color", Color(0.7, 0.7, 0.7))
-	vbox.add_child(restart)
-
-	return panel
-
-
-func _on_goal_reached() -> void:
-	if is_game_over:
-		return
-	is_game_over = true
-	var win: Control = get_node_or_null("UI/WinPanel") as Control
-	if win:
-		var sl: Label = win.get_meta("score_label") as Label
-		if sl:
-			sl.text = "最终得分: ⭐ %d" % score
-		win.show()
-
-
-func _check_boss_defeated() -> void:
-	if _goal_activated:
-		return
-	var boss: Node = get_node_or_null("MiniBoss")
-	if boss == null or not is_instance_valid(boss):
-		_goal_activated = true
-		var goal: Node = get_node_or_null("Goal")
-		if goal:
-			goal.visible = true
-			goal.monitoring = true
-
-
-# ── 键盘重启 (R 键) ──
-func _input(event: InputEvent) -> void:
-	if is_game_over and Input.is_action_just_pressed("restart"):
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("restart"):
 		get_tree().reload_current_scene()
 
 
 # ============================================================
-# UI 更新
+# 地面
 # ============================================================
-
-func _update_health_display() -> void:
-	for c in _health_container.get_children():
-		c.queue_free()
-
-	if not player or not is_instance_valid(player):
-		return
-
-	for i in range(player.max_health):
-		var heart: ColorRect = ColorRect.new()
-		heart.size = Vector2(22, 22)
-		heart.color = Color(1, 0.2, 0.2) if i < player.health else Color(0.3, 0.3, 0.3)
-		_health_container.add_child(heart)
-		if i < player.max_health - 1:
-			var spacer: Control = Control.new()
-			spacer.size = Vector2(4, 0)
-			_health_container.add_child(spacer)
-
-	if _game_over_panel:
-		var sl: Label = _game_over_panel.get_meta("score_label") as Label
-		if sl:
-			sl.text = "Score: %d" % score
+func _build_floor() -> void:
+	floor = IsoFloor.new()
+	floor.name = "Floor"
+	floor.position = FLOOR_ORIGIN
+	floor.z_index = -10
+	add_child(floor)
+	floor.fill_rect(Rect2i(Vector2i.ZERO, FLOOR_CELLS))
+	# 朝向自检: 打印引擎换算 ↔ 纯数学公式的对照表 + 变体分布。
+	# 这不是「调试残留」—— 它是等距映射的回归门。改了 Iso 的公式或 TileSet 的
+	# tile_layout, 这里会立刻从「✅ 完全一致」变成「❌ N 个格子不一致」。
+	floor.debug_print_orientation()
 
 
-## 分数弹出动画 (Tween)
-func _pop_score_text(amount: int, at_pos: Vector2 = Vector2.ZERO) -> void:
-	var label: Label = Label.new()
-	label.text = "+%d" % amount
-	label.add_theme_font_size_override("font_size", 16)
-	label.add_theme_color_override("font_color", Color(1, 0.9, 0.2))
-	if at_pos == Vector2.ZERO:
-		at_pos = player.position + Vector2(0, -40) if player and is_instance_valid(player) else Vector2(640, 300)
-	label.position = at_pos - Vector2(20, 0)
-	label.z_index = 50
-	add_child(label)
-
-	# Tween 动画: 文字上浮 + 渐隐
-	var tween: Tween = create_tween()
-	tween.tween_property(label, "position:y", at_pos.y - 50, 0.6)
-	tween.parallel().tween_property(label, "modulate:a", 0.0, 0.6)
-	tween.finished.connect(label.queue_free)
+func _build_backdrop() -> void:
+	var bd: Backdrop = Backdrop.new()
+	bd.name = "Backdrop"
+	# 星空范围跟着地面走并外扩 —— 写死矩形的话, 地图一改尺寸就会露出空背景
+	bd.area = floor.bounds_global().grow(700.0)
+	add_child(bd)
 
 
-func _spawn_parry_fx(pos: Vector2) -> void:
-	var fx: Node2D = Node2D.new()
-	fx.position = pos
-	fx.z_index = 20
-	fx.set_script(_parry_fx_script())
+# ============================================================
+# 世界 (Y-sort 根)
+# ============================================================
+func _build_world() -> void:
+	world = Node2D.new()
+	world.name = "World"
+	world.y_sort_enabled = true
+	add_child(world)
+
+	_create_border_walls()
+	_create_obstacles()
+	_create_respawn_points()
+	_create_enemies()
+
+
+## 四道边界墙 —— **贴着菱形的四条边**, 而不是绕着包围盒。
+##
+## 🏗️ 为什么不能围着包围盒:
+##   地面是个菱形, 包围盒的四角是**空的** (没有地砖)。围着包围盒放墙,
+##   玩家就能走到菱形斜边之外的虚空里站着 —— 看起来像「走出了地图」。
+##   沿着四条斜边放墙 (每道墙旋转 ±26.57°, 正好等于 TILE_H/TILE_W 的坡度),
+##   可行走区域就精确等于看得见的地砖范围。
+##
+## 🏗️ 墙的**长度要超出边长一个厚度**: 菱形四角是 90° 的转折, 两块有限厚的
+##   矩形在拐角处会留下一个小楔形缺口; 每端多伸半个厚度正好补上。
+func _create_border_walls() -> void:
+	var b: Rect2 = floor.bounds_global()
+	var c: Vector2 = b.position + b.size * 0.5
+	var hw: float = b.size.x * 0.5
+	var hh: float = b.size.y * 0.5
+	# 菱形的四个顶点: 北 东 南 西
+	var corners: Array[Vector2] = [
+		c + Vector2(0.0, -hh),
+		c + Vector2(hw, 0.0),
+		c + Vector2(0.0, hh),
+		c + Vector2(-hw, 0.0),
+	]
+	for i: int in range(4):
+		var a: Vector2 = corners[i]
+		var d: Vector2 = corners[(i + 1) % 4]
+		var edge: Vector2 = d - a
+		var mid: Vector2 = (a + d) * 0.5
+		var dir: Vector2 = edge.normalized()
+		# 外法线 (指向远离中心那一侧)
+		var out_n: Vector2 = Vector2(dir.y, -dir.x)
+		if out_n.dot(mid - c) < 0.0:
+			out_n = -out_n
+		_make_wall(mid + out_n * (WALL_MARGIN + WALL_THICKNESS * 0.5), dir, edge.length() + WALL_THICKNESS)
+
+
+func _make_wall(center: Vector2, dir: Vector2, length: float) -> void:
+	var body: StaticBody2D = StaticBody2D.new()
+	body.position = center
+	body.rotation = dir.angle()
+	body.collision_layer = 1 << 4   # bit4: 墙壁
+	body.collision_mask = 0
+
+	var cs: CollisionShape2D = CollisionShape2D.new()
+	var rect: RectangleShape2D = RectangleShape2D.new()
+	rect.size = Vector2(length, WALL_THICKNESS)
+	cs.shape = rect
+	body.add_child(cs)
+
+	# 视觉用内建的 Line2D (不需要脚本): 一条暗色底线 + 一条亮色高光,
+	# 两道线就能表达「齐腰的石栏」, 也让玩家一眼看出可行走区域的边界在哪。
+	var base_line: Line2D = Line2D.new()
+	base_line.points = PackedVector2Array([Vector2(-length * 0.5, 0.0), Vector2(length * 0.5, 0.0)])
+	base_line.width = 8.0
+	base_line.default_color = Color(0.15, 0.16, 0.22)
+	body.add_child(base_line)
+
+	var top_line: Line2D = Line2D.new()
+	top_line.points = PackedVector2Array([Vector2(-length * 0.5, -4.0), Vector2(length * 0.5, -4.0)])
+	top_line.width = 3.0
+	top_line.default_color = Color(0.40, 0.45, 0.58)
+	body.add_child(top_line)
+
+	world.add_child(body)
+
+
+## 障碍物 —— 让 Y-sort 的遮挡效果**肉眼可见**的关键。
+## 一个开了 Y-sort 却没有遮挡物的关卡, 等于没验证过 Y-sort。
+func _create_obstacles() -> void:
+	# { cell = 起点地格, cells = 占地格数, height = 视觉高度 }
+	var layout: Array[Dictionary] = [
+		{ cell = Vector2i(4, 4),   cells = Vector2i(2, 1), height = 42.0 },
+		{ cell = Vector2i(9, 3),   cells = Vector2i(1, 1), height = 30.0 },
+		{ cell = Vector2i(13, 7),  cells = Vector2i(1, 2), height = 50.0 },
+		{ cell = Vector2i(18, 11), cells = Vector2i(2, 2), height = 36.0 },
+		{ cell = Vector2i(6, 14),  cells = Vector2i(1, 1), height = 30.0 },
+		{ cell = Vector2i(15, 18), cells = Vector2i(1, 1), height = 30.0 },
+		{ cell = Vector2i(20, 16), cells = Vector2i(1, 1), height = 38.0 },
+		{ cell = Vector2i(3, 19),  cells = Vector2i(2, 1), height = 40.0 },
+	]
+	for item: Dictionary in layout:
+		var cell: Vector2i = item.cell
+		var cells: Vector2i = item.cells
+		var ob: Obstacle = Obstacle.new()
+		ob.name = "Obstacle_%d_%d" % [cell.x, cell.y]
+		# ⚠️ 位置必须用 center_of_span (多格区域的重心), 不能用 center_of:
+		#    后者返回**起点那一格**的菱形中心, 2×1 的方块会整体偏半格。
+		ob.position = floor.center_of_span(cell, cells)
+		ob.configure(cells, item.height)
+		world.add_child(ob)
+
+
+func _create_respawn_points() -> void:
+	# 出生点直接就是初始复活点 (不靠「列表里第一个碰巧是它」这种隐式约定)
+	_current_spawn = floor.center_of(START_CELL)
+
+	var cells: Array[Vector2i] = [
+		START_CELL,
+		Vector2i(4, 3),
+		Vector2i(16, 20),
+		Vector2i(20, 6),
+	]
+	for cell: Vector2i in cells:
+		var rp: RespawnPoint = RespawnPoint.new()
+		rp.name = "RespawnPoint_%d_%d" % [cell.x, cell.y]
+		rp.position = floor.center_of(cell)
+		rp.activated.connect(_on_respawn_activated)
+		world.add_child(rp)
+		if cell == START_CELL:
+			# 出生点一开始就是亮的 —— 玩家一进游戏就该看到「我脚下是个安全点」
+			rp.is_active = true
+			rp.queue_redraw()
+
+
+## 敌人配置。
+##
+## 🎮 v0.3 的配比是**为了验收**而定的, 不是关卡设计:
+##   · 固定靶 (can_attack = false, 血厚) —— 用来试**重击伤害和破霸体**,
+##     它不会还手, 所以你能安静地对比「轻击 1 下 / 重击 1 下 / 满蓄 1 下」各掉多少血。
+##   · 会出招的敌人 —— 用来试**格挡 / 精准格挡**。血量调低 (4) 是因为
+##     本轮的验收对象是「挡得爽不爽」, 不是「打得久不久」。
+func _create_enemies() -> void:
+	_create_enemy(Vector2i(5, 10), BlitzEnemy.Type.PATROL, Vector2.DOWN, 70.0)
+	_create_enemy(Vector2i(10, 6), BlitzEnemy.Type.PATROL, Vector2.RIGHT, 85.0)
+	_create_enemy(Vector2i(12, 12), BlitzEnemy.Type.STATIONARY, Vector2.DOWN, 0.0, 10, false)
+	_create_enemy(Vector2i(16, 15), BlitzEnemy.Type.CHASER, Vector2.DOWN, 95.0)
+	_create_enemy(Vector2i(19, 8), BlitzEnemy.Type.CHASER, Vector2.DOWN, 80.0)
+
+
+func _create_enemy(
+	cell: Vector2i,
+	type: BlitzEnemy.Type,
+	axis: Vector2,
+	speed: float,
+	hp: int = 4,
+	can_attack: bool = true
+) -> void:
+	var e: BlitzEnemy = ENEMY_SCENE.instantiate()
+	e.name = "Enemy_%d_%d" % [cell.x, cell.y]
+	e.position = floor.center_of(cell)
+	e.enemy_type = type
+	e.patrol_axis = axis
+	e.max_health = hp
+	e.health = hp
+	e.can_attack = can_attack
+	if speed > 0.0:
+		e.move_speed = speed
+	e.died.connect(_on_enemy_died)
+	e.parried.connect(_on_enemy_parried)
+	e.armor_broken.connect(_on_enemy_armor_broken)
+	world.add_child(e)
+
+
+# ============================================================
+# 玩家 / 相机 / 特效层 / UI
+# ============================================================
+func _create_player() -> void:
+	player = PLAYER_SCENE.instantiate()
+	player.name = "Player"
+	player.global_position = _current_spawn
+	player.died.connect(_on_player_died)
+	player.hit_landed.connect(_on_player_hit_landed)
+	player.parried.connect(_on_player_parried)
+	player.blocked.connect(_on_player_blocked)
+	player.guard_broken.connect(_on_player_guard_broken)
+	world.add_child(player)
+
+
+## 相机是玩家的**子节点** —— 跟随是自动的, 不需要在 _process 里手写 position 赋值
+## (那样反而会和平滑插值打架)。子节点只负责「怎么跟」和「跟到哪为止」。
+func _create_camera() -> void:
+	camera = CameraRig.new()
+	camera.name = "CameraRig"
+	player.add_child(camera)
+	# 边界从**地面**推导, 不写死常量 (旧版 limit_left=-50 / limit_right=3250 是
+	# 给 3200px 宽的横版关卡用的, 套在等距地图上相机会大段飘到空地外面)
+	camera.fit_to_floor(floor, _viewport_size())
+	camera.make_current()
+
+
+## 特效层。所有一次性特效 (命中火花/死亡爆散/飘分) 都挂这里, 而不是挂 current_scene ——
+## 挂这里它们就自动「永远画在世界之上」, 也不会因为被塞进 y-sort 的 World 而被角色挡住。
+func _create_fx_layer() -> void:
+	fx = Node2D.new()
+	fx.name = "Fx"
+	fx.z_index = 40
+	fx.add_to_group("fx_layer")
 	add_child(fx)
-	get_tree().create_timer(0.5).timeout.connect(fx.queue_free)
 
 
-func _make_spacer(h: float) -> Control:
-	var s: Control = Control.new()
-	s.size = Vector2(0, h)
-	return s
+func _create_hud() -> void:
+	hud = Hud.new()
+	hud.name = "Hud"
+	add_child(hud)
+	hud.bind_player(player)
+	hud.set_score(score)
+
+
+func _create_debug_overlay() -> void:
+	debug_overlay = DebugOverlay.new()
+	debug_overlay.name = "DebugOverlay"
+	add_child(debug_overlay)
+	debug_overlay.setup(floor, player)
+
+
+## 视口尺寸从**项目设置**读, 不读 get_viewport_rect():
+## _ready() 时视口可能还没完成布局, 读出来是 0×0 或旧尺寸, 相机边界会算错。
+func _viewport_size() -> Vector2:
+	return Vector2(
+		float(ProjectSettings.get_setting("display/window/size/viewport_width", 1280)),
+		float(ProjectSettings.get_setting("display/window/size/viewport_height", 720))
+	)
 
 
 # ============================================================
-# 动态特效脚本 (运行时编译的 GDScript)
-# 这些脚本只在这个关卡使用,不像 player.gd 那样需要复用
-# 所以用 GDScript.new() + source_code 的方式"内联"创建
+# 信号处理 —— 所有跨节点通知都汇到这里, 节点之间互相不认识
 # ============================================================
 
-func _starfield_script() -> Script:
-	var s: GDScript = GDScript.new()
-	s.source_code = """extends Node2D
-var _stars: Array = []
-func _ready():
-	for _i in range(80):
-		_stars.append({
-			x = randf_range(0, 3200),
-			y = randf_range(0, 660),
-			r = randf_range(0.5, 2.0),
-			speed = randf_range(0.2, 1.0),
-			brightness = randf_range(0.3, 1.0),
-		})
-func _draw():
-	for star in _stars:
-		var c: Color = Color(1, 1, 1, star.brightness * (0.5 + 0.5 * sin(Time.get_ticks_msec() * 0.001 * star.speed)))
-		draw_circle(Vector2(star.x, star.y), star.r, c)
-"""
-	s.reload()
-	return s
+func _on_enemy_died(score_value: int) -> void:
+	score += score_value
+	if hud != null:
+		hud.set_score(score)
 
 
-func _grass_line_script() -> Script:
-	var s: GDScript = GDScript.new()
-	s.source_code = """extends Node2D
-func _draw():
-	for x in range(0, 3200, 8):
-		var h: float = randf_range(4.0, 10.0)
-		draw_line(Vector2(x, 0), Vector2(x, -h), Color(0.25, 0.5, 0.15, 0.6), 2.0)
-"""
-	s.reload()
-	return s
+## 敌人的 parried —— 在**敌人那一头**炸火花。
+##
+## ⚠️ 这里**故意不震屏**。玩家的 parried 和敌人的 parried 是同一件事的两端,
+##    同一次精准格挡里**两个信号都会发**, 中间只隔着几微秒。
+##    而 CameraRig.shake() 是**赋值**不是累加 (`_shake_trauma = ...`),
+##    所以同帧内第二次调用会直接盖掉第一次 —— 谁赢取决于信号发射顺序,
+##    属于「改了无关代码就会漂移」的脆弱行为。
+##    把震屏统一收在 _on_player_parried 一处, 顺序就无关紧要了。
+func _on_enemy_parried(at: Vector2) -> void:
+	HitSpark.spawn(get_tree(), at, Color(1.0, 0.9, 0.35), 34.0)
 
 
-func _parry_visual_script() -> Script:
-	var s: GDScript = GDScript.new()
-	s.source_code = """extends Node2D
-var _t: float = 0.0
-func _process(delta):
-	_t += delta
-	queue_redraw()
-func _draw():
-	var pulse: float = 1.0 + sin(_t * 5.0) * 0.25
-	draw_circle(Vector2.ZERO, 18 * pulse, Color(1.0, 0.25, 0.65, 0.25))
-	draw_circle(Vector2.ZERO, 12 * pulse, Color(1.0, 0.3, 0.65, 0.6))
-	var sz: float = 8.0 * pulse
-	var pts: PackedVector2Array = PackedVector2Array([
-		Vector2(0, -sz), Vector2(sz * 0.7, 0),
-		Vector2(0, sz), Vector2(-sz * 0.7, 0)
-	])
-	draw_polygon(pts, [Color(1, 0.45, 0.75, 0.8)])
-	draw_circle(Vector2.ZERO, 3, Color(1, 0.8, 0.9, 0.9))
-"""
-	s.reload()
-	return s
+## 敌人被满蓄重击破霸体 —— 比精准格挡更重的一击, 震屏也给得更狠
+func _on_enemy_armor_broken(at: Vector2) -> void:
+	HitSpark.spawn(get_tree(), at, Color(1.0, 0.55, 0.2), 42.0)
+	if camera != null:
+		camera.shake(7.0, 0.3)
 
 
-func _parry_fx_script() -> Script:
-	var s: GDScript = GDScript.new()
-	s.source_code = """extends Node2D
-var _t: float = 0.0
-func _process(delta):
-	_t += delta
-	queue_redraw()
-	if _t > 0.5: queue_free()
-func _draw():
-	var r: float = _t / 0.5
-	for i in range(8):
-		var angle: float = float(i) / 8.0 * TAU
-		var dist: float = lerp(0.0, 40.0, r)
-		draw_circle(Vector2(cos(angle), sin(angle)) * dist,
-			lerp(6.0, 1.0, r), Color(1, 0.4, 0.8, 1.0 - r))
-"""
-	s.reload()
-	return s
+## 玩家**精准格挡成功** —— 本轮最需要「爽」的一个瞬间。
+##
+## 🎮 反馈设计的三层, 少一层这个机制就不成立:
+##   ① 金色扩散环 (ParryFlash) —— 在**撞击的位置**炸开, 不跟着玩家走
+##   ② 震屏 8.0 (全场最重, 比破霸体的 7.0 还高) —— 弹反的本质是「力的对撞」
+##   ③ 飘字「精准格挡!」—— 玩家必须**知道刚才那下叫什么**,
+##      否则他没法有意识地去复现它, 只会当成运气好
+func _on_player_parried(at: Vector2) -> void:
+	ParryFlash.spawn(get_tree(), at, true)
+	if camera != null:
+		camera.shake(8.0, 0.25)
+	_pop_text("精准格挡!", at + Vector2(0.0, -18.0), Color(1.0, 0.92, 0.45))
 
 
-func _goal_visual_script() -> Script:
-	var s: GDScript = GDScript.new()
-	s.source_code = """extends Node2D
-var _t: float = 0.0
-func _process(delta):
-	_t += delta
-	queue_redraw()
-func _draw():
-	draw_rect(Rect2(-2, -90, 4, 90), Color(0.8, 0.8, 0.5))
-	var wave: float = sin(_t * 3.0) * 4.0
-	var flag_pts: PackedVector2Array = PackedVector2Array([
-		Vector2(0, -85), Vector2(30 + wave, -70),
-		Vector2(25 + wave * 0.5, -55), Vector2(0, -50)
-	])
-	draw_polygon(flag_pts, [Color(0.2, 0.8, 0.3, 0.9)])
-	draw_circle(Vector2(15, -60), 20 + sin(_t * 2.0) * 5, Color(1, 1, 0.3, 0.2))
-"""
-	s.reload()
-	return s
+## 玩家**普通格挡** —— 反馈必须和精准格挡**一眼可辨地不同**。
+##
+## ⚠️ 这一条不是「做得好不好看」, 是机制能不能学会的前提:
+##    普通格挡之后该撤 (精力掉了), 精准格挡之后该冲上去反打 ——
+##    两者后续操作**完全相反**。如果反馈长得像, 玩家就没有任何线索去区分
+##    「我按对了」和「我按早了」, 精准格挡这个机制就退化成了随机数。
+##    所以这里: 青色小环 + 轻微震屏 + **不给飘字** (飘字是精准格挡的专属奖励)。
+func _on_player_blocked(at: Vector2) -> void:
+	ParryFlash.spawn(get_tree(), at, false)
+	if camera != null:
+		camera.shake(2.5, 0.1)
 
 
-func _hp_bar_follow_script() -> Script:
-	var s: GDScript = GDScript.new()
-	s.source_code = """extends Node2D
+## 玩家**破防** (精力见底被打崩) —— 本轮第二重的反馈, 比精准格挡还重。
+##
+## 🎮 它必须痛到让玩家下次不敢硬挡: DESIGN.md 的准则是不惩罚死亡, 但**要惩罚决策**。
+##    硬扛到破防就是一个纯粹的坏决策, 而它唯一的「学费」就是这 0.9 秒的硬直。
+##    如果这一下看起来不痛, 玩家学到的就是「硬挡其实没啥代价」——
+##    整个精力系统会退化成一根没人看的装饰条。
+func _on_player_guard_broken() -> void:
+	if camera != null:
+		camera.shake(9.0, 0.4)
+	_pop_text("破防!", player.global_position + Vector2(0.0, -46.0), Color(0.95, 0.3, 0.35))
 
-func _process(_delta):
-	var raw = get_meta("target")
-	if not raw or not is_instance_valid(raw):
-		queue_free()
+
+func _on_player_hit_landed(_at: Vector2) -> void:
+	# 命中反馈的一半来自镜头: 没有震屏的打击就像打在棉花上
+	if camera != null:
+		camera.shake(3.0, 0.16)
+
+
+func _on_respawn_activated(point: RespawnPoint) -> void:
+	_current_spawn = point.spawn_position()
+	_pop_text("复活点已点亮", point.spawn_position(), Color(0.45, 0.95, 0.78))
+
+
+## 死亡 → 短暂停顿 → 在最近点亮的复活点复活。
+## **没有「游戏结束」这一说**: DESIGN.md 明确写了低惩罚死亡 (只损失一点资源),
+## 所以旧的 YOU DIED 面板 + RESTART 按钮 + 胜利面板约 150 行被整个删掉了。
+func _on_player_died() -> void:
+	if _respawning:
 		return
-	var target: Node2D = raw
-	position = target.position + Vector2(0, -40)
-	queue_redraw()
+	_respawning = true
 
-func _draw():
-	var raw = get_meta("target")
-	if not is_instance_valid(raw):
+	DeathBurst.spawn(get_tree(), player.global_position + Vector2(0.0, -20.0), Color(0.45, 0.75, 1.0))
+	if camera != null:
+		camera.shake(7.0, 0.35)
+
+	# 停顿一下再复活: 立刻复活会让玩家完全意识不到自己死了
+	await get_tree().create_timer(0.7).timeout
+	if not is_instance_valid(player):
 		return
-	var target: Node2D = raw
-	var max_hp: int = target.get("max_health") if target.get("max_health") != null else 5
-	var hp: int = target.get("health") if target.get("health") != null else 0
-	var ratio: float = float(hp) / float(max_hp)
-	var w: float = 50.0
-	draw_rect(Rect2(-w/2, 0, w, 6), Color(0.2, 0.2, 0.2, 0.8))
-	var c: Color = Color.RED if ratio > 0.5 else Color.ORANGE if ratio > 0.25 else Color.YELLOW
-	draw_rect(Rect2(-w/2, 0, w * ratio, 6), c)
-"""
-	s.reload()
-	return s
+	player.respawn(_current_spawn)
+	_respawning = false
+
+
+# ============================================================
+# 飘字
+# ============================================================
+func _pop_text(text: String, at: Vector2, color: Color) -> void:
+	if fx == null:
+		return
+	var label: Label = Label.new()
+	label.text = text
+	label.add_theme_font_size_override("font_size", 15)
+	label.add_theme_color_override("font_color", color)
+	label.add_theme_color_override("font_outline_color", Color(0, 0, 0, 0.9))
+	label.add_theme_constant_override("outline_size", 4)
+	# ⚠️ 非交互 UI 一定要 IGNORE: 否则这块区域的鼠标点击会被它吃掉, 左键轻击静默失效
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	label.position = at - Vector2(24.0, 10.0)
+	fx.add_child(label)
+
+	var tw: Tween = create_tween()
+	tw.tween_property(label, "position:y", label.position.y - 44.0, 0.7)
+	tw.parallel().tween_property(label, "modulate:a", 0.0, 0.7)
+	tw.finished.connect(label.queue_free)
+
+
+# ============================================================
+# 预加载场景
+# ============================================================
+const PLAYER_SCENE: PackedScene = preload("res://scenes/player.tscn")
+const ENEMY_SCENE: PackedScene = preload("res://scenes/enemy.tscn")
+
+
+# ── 集成自检钩子 ──
+# 只在命令行显式要求时启动, 正常 F5 跑游戏不会碰到它。
+#
+# 🎮 为什么值得留一个测试入口在 main.gd 里:
+#   等距视角的几类错误**截图完全看不出来** —— 碰撞体是零面积、旋转过的边界墙拦不住人、
+#   死亡后复活到了错的地方。这些都不报错, 只是「玩起来怪怪的」。
+#   headless 断言是唯一能在改代码后 2 秒内发现它们的办法。
+#
+# 用法: godot --headless --path <项目> -- --smoke     (31 项检查, 有失败则退出码 1)
+func _maybe_run_test_hooks() -> void:
+	var args: PackedStringArray = OS.get_cmdline_user_args()
+	# 🚧 临时 (v0.3 验收后删): 给起手预警拍图。⚠️ 不能加 --headless
+	if "--v03probe" in args:
+		var probe: Node = Node.new()
+		probe.name = "V03Probe"
+		probe.set_script(load("res://scripts/_v03_probe.gd"))
+		add_child(probe)
+		probe.run(self)
+		return
+	if "--smoke" in args:
+		var smoke: Node = Node.new()
+		smoke.name = "SmokeTest"
+		smoke.set_script(load("res://scripts/smoke_test.gd"))
+		add_child(smoke)
+		smoke.run(self)
