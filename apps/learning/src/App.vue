@@ -110,7 +110,6 @@ import { useUserStore } from '@/stores/userProfle'
 import { useRouter } from 'vue-router'
 import { debounce, scrollIntoViewById } from '@/function/common' //常用函数
 import type { NavItem } from 'components' //导航项类型
-import { useGradientAnimation } from '@/hooks/useGradientAnimation' //渐变色动画
 import { useDetectDevice } from '@/hooks/useDetectDevice' //设备信息hook
 import { loadViewByPath, viewExists } from '@/views/views-loader' //动态视图加载器
 
@@ -174,11 +173,7 @@ const themeChange = (theme1: Theme) => {
   document.documentElement.setAttribute('data-theme', theme1)
 }
 
-//全局渐变色动画
-useGradientAnimation({
-  gradientTypes: ['linear'],
-  triggerTimes: ['hover'],
-})
+
 
 //路由
 const router = useRouter()
