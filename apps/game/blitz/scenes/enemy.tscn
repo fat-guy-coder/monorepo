@@ -1,20 +1,8 @@
-[gd_scene format=3 uid="uid://2iqe7ldkifjf"]
+[gd_scene load_steps=2 format=3 uid="uid://2iqe7ldkifjf"]
 
-[ext_resource type="Script" uid="uid://do1j5k7jjqxtn" path="res://scripts/enemy.gd" id="1_enemy"]
+[ext_resource type="Script" path="res://scripts/enemy.gd" id="1_enemy"]
 
-[sub_resource type="RectangleShape2D" id="enemy_col"]
-size = Vector2(28, 30)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_7p1mj"]
-
-[node name="Enemy" type="CharacterBody2D" unique_id=348143319]
+[node name="Enemy" type="CharacterBody2D"]
 script = ExtResource("1_enemy")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=665904858]
-shape = SubResource("enemy_col")
-
-[node name="Hitbox" type="Area2D" parent="." unique_id=565131234]
-position = Vector2(25, 25)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=958137236]
-shape = SubResource("RectangleShape2D_7p1mj")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
