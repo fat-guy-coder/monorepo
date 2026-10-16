@@ -1,5 +1,5 @@
 import { db, rawQuery } from '../db'
-import { menu, role, userRole } from '../db/schema'
+import { menu, role, userRole, studyProgress } from '../db/schema'
 import { eq, isNull, or, asc, like, and } from 'drizzle-orm'
 import { createAuthMiddleware } from './auth'
 
@@ -53,6 +53,53 @@ function flatten(items: any[]) {
     }
     return acc
   }, [])
+}
+
+// 已学习时长映射：menuId → 已学分钟数（非叶子 = 其子孙叶子已学时长的总和，与「建议时长 = 叶子之和」同口径）
+// 一次查询全表 id/parentId + 一次读 study_progress（每菜单单行 total_minutes），自底向上累加。
+async function getStudiedMinutesMap(): Promise<Map<string, number>> {
+  const [menus, rows] = await Promise.all([
+    db.select({ id: menu.id, parentId: menu.parentId }).from(menu),
+    db.select({ menuId: studyProgress.menuId, total: studyProgress.totalMinutes })
+      .from(studyProgress),
+  ])
+
+  const studied = new Map<string, number>()
+  for (const r of rows) studied.set(r.menuId, Number(r.total ?? 0))
+
+  const childMap = new Map<string, string[]>()
+  for (const m of menus) {
+    if (m.parentId) {
+      const arr = childMap.get(m.parentId) || []
+      arr.push(m.id)
+      childMap.set(m.parentId, arr)
+    }
+  }
+
+  // 自底向上：每个菜单的已学时长 = 自身 + 所有后代
+  function acc(id: string): number {
+    let total = studied.get(id) || 0
+    for (const cid of childMap.get(id) || []) total += acc(cid)
+    studied.set(id, total)
+    return total
+  }
+  for (const m of menus) {
+    if (!m.parentId) acc(m.id)
+  }
+  return studied
+}
+
+// 给菜单树/列表递归挂上 studiedMinutes（子树总和，叶子即自身）
+async function attachStudiedMinutes(items: any[]) {
+  const map = await getStudiedMinutesMap()
+  const walk = (nodes: any[]) => {
+    for (const n of nodes) {
+      n.studiedMinutes = map.get(n.id) || 0
+      if (n.children?.length) walk(n.children)
+    }
+  }
+  walk(items)
+  return items
 }
 
 interface RouteContext {
@@ -135,6 +182,7 @@ routes.push({
           })
         }
         result = markLeaf(result)
+        result = await attachStudiedMinutes(result)
         return Response.json(success(result))
       } catch (err: any) {
         console.error(err)
@@ -170,7 +218,9 @@ routes.push({
           return { ...m, isLeaf: childCount === 0 }
         }))
         // 根据权限过滤
-        return Response.json(success(filterByPermission(result)))
+        const filtered = filterByPermission(result)
+        await attachStudiedMinutes(filtered)
+        return Response.json(success(filtered))
       } catch (err: any) {
         console.error(err)
         return Response.json(error('查询失败: ' + err.message), { status: 500 })
@@ -184,7 +234,9 @@ routes.push({
         const childCount = await db.select().from(menu).where(eq(menu.parentId, m.id)).limit(1).then(r => r.length)
         return { ...m, isLeaf: childCount === 0 }
       }))
-      return Response.json(success(flat === 'true' ? flatten(result) : result))
+      const parentResult = flat === 'true' ? flatten(result) : result
+      await attachStudiedMinutes(parentResult)
+      return Response.json(success(parentResult))
     }
 
     // 构建 where 条件
@@ -206,6 +258,7 @@ routes.push({
       }
     }
 
+    result = await attachStudiedMinutes(result)
     return Response.json(success(result))
   }
 })
@@ -345,6 +398,7 @@ routes.push({
           }
         })
 
+      await attachStudiedMinutes(result)
       return Response.json(success({
         matched: result,
         openKeys: Array.from(openKeysSet),
@@ -376,6 +430,7 @@ routes.push({
       if (!menuItem) {
         return Response.json(error('Menu not found: ' + name, 404), { status: 404 })
       }
+      await attachStudiedMinutes([menuItem])
       return Response.json(success(menuItem))
     } catch (err: any) {
       console.error(err)
@@ -406,6 +461,7 @@ routes.push({
       res.children = filteredChildren
     }
 
+    await attachStudiedMinutes([res])
     return Response.json(success(res))
   }
 })
@@ -425,6 +481,7 @@ routes.push({
       return { ...m, isLeaf: childCount === 0 }
     })
 
+    await attachStudiedMinutes(result)
     return Response.json(success(result))
   }
 })
@@ -474,7 +531,9 @@ routes.push({
         }
       }
 
-      return Response.json(success(markLeaf(root)))
+      const tree = markLeaf(root)
+      await attachStudiedMinutes([tree])
+      return Response.json(success(tree))
     } catch (err: any) {
       console.error(err)
       return Response.json(error('查询失败: ' + err.message), { status: 500 })
@@ -519,6 +578,7 @@ routes.push({
         .filter(d => !hasChild.has(d.id))
         .map(d => ({ id: d.id, name: d.name, label: d.label, path: d.path, order: d.order }))
 
+      await attachStudiedMinutes(leaves)
       return Response.json(success({ total: leaves.length, leaves }))
     } catch (err: any) {
       console.error(err)

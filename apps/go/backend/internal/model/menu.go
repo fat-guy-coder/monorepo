@@ -104,30 +104,41 @@ type LeavesResult struct {
 	Leaves []Leaf `json:"leaves"`
 }
 
-// ---------- 学习计时（对齐 Bun /api/study-sessions + /api/menus/:id/study） ----------
+// ---------- 学习计时（对齐 Bun /api/menus/:id/study + start/end/manual） ----------
 
-// StudySession 一次学习会话（同一章节可多次学习，SUM(duration) = 累计）
-type StudySession struct {
-	ID              string     `json:"id"`
-	MenuID          string     `json:"menuId"`
-	StartedAt       time.Time  `json:"startedAt"`
-	EndedAt         *time.Time `json:"endedAt,omitempty"` // nil = 进行中
-	DurationMinutes int        `json:"durationMinutes"`
-	CreatedAt       time.Time  `json:"createdAt"`
+// StudyProgress 某菜单的学习进度行（study_progress 表，一菜单一行，total_minutes 累加）
+type StudyProgress struct {
+	MenuID       string     `json:"menuId"`
+	TotalMinutes int        `json:"totalMinutes"`
+	StartedAt    *time.Time `json:"startedAt,omitempty"` // 进行中/上次开始
+	EndedAt      *time.Time `json:"endedAt,omitempty"`   // 最近一次结束（进行中为 nil）
+	CreatedAt    time.Time  `json:"createdAt"`
+	UpdatedAt    time.Time  `json:"updatedAt"`
 }
 
-// StudyCreateInput 新增一条学习记录的输入（POST /api/study-sessions，日志式：起止时间必填）
-type StudyCreateInput struct {
-	MenuID    string    `json:"menuId"`
+// StudyStartInput 开始学习的输入（POST /api/menus/:id/study/start）
+type StudyStartInput struct {
+	StartedAt *time.Time `json:"startedAt"`
+}
+
+// StudyEndInput 结束学习的输入（POST /api/menus/:id/study/end）
+type StudyEndInput struct {
+	EndedAt *time.Time `json:"endedAt"`
+}
+
+// StudyManualInput 手动补录的输入（POST /api/menus/:id/study/manual）
+type StudyManualInput struct {
 	StartedAt time.Time `json:"startedAt"`
 	EndedAt   time.Time `json:"endedAt"`
 }
 
 // StudyAggregate 某章节的学习统计（GET /api/menus/:id/study）
 type StudyAggregate struct {
-	MenuID          string          `json:"menuId"`
-	Label           string          `json:"label"`
-	SuggestedMinutes int            `json:"suggestedMinutes"`
-	TotalMinutes    int             `json:"totalMinutes"`
-	Sessions        []*StudySession `json:"sessions"`
+	MenuID           string     `json:"menuId"`
+	Label            string     `json:"label"`
+	SuggestedMinutes int        `json:"suggestedMinutes"`
+	TotalMinutes     int        `json:"totalMinutes"`
+	StartedAt        *time.Time `json:"startedAt,omitempty"`
+	EndedAt          *time.Time `json:"endedAt,omitempty"`
+	OvertimeMinutes  int        `json:"overtimeMinutes"`
 }

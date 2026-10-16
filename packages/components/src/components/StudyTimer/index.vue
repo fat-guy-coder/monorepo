@@ -1,11 +1,5 @@
 <template>
-  <!-- 悬浮球（常驻右下角，点击展开面板） -->
-  <div class="study-timer-ball" @click="togglePanel">
-    <span class="ball-icon">⏱</span>
-    <span class="ball-label">学习计时</span>
-  </div>
-
-  <!-- 展开面板 -->
+  <!-- 展开面板（入口在底部导航 navItems「⏱ 学习计时」，见 App.vue） -->
   <Modal
     :visible="visible"
     title="⏱ 章节学习计时"
@@ -25,11 +19,15 @@
 
       <template v-if="currentMenuLabel">
 
-        <!-- 进度：已学 vs 建议 -->
+        <!-- 进度：已学 vs 建议（建议时长可编辑，有值才显示输入框） -->
         <div class="progress-block">
           <div class="progress-head">
             <span>已学 <b>{{ totalMinutes }}</b> 分钟</span>
-            <span v-if="suggestedMinutes && suggestedMinutes > 0" class="text-muted">建议 {{ suggestedMinutes }} 分钟</span>
+            <span v-if="suggestedMinutes && suggestedMinutes > 0" class="suggest-row">
+              <span class="text-muted">建议</span>
+              <input class="suggest-input" type="number" min="0" :value="suggestedMinutes" @change="onSuggestChange" />
+              <span class="text-muted">分钟</span>
+            </span>
             <span v-else class="text-muted">未设置建议时长</span>
           </div>
           <div class="progress-track">
@@ -38,23 +36,13 @@
           <div v-if="hintText" class="hint" :class="hintClass">{{ hintText }}</div>
         </div>
 
-        <!-- 新增学习记录（日志式：填开始/结束时间，自动算时长） -->
-        <div class="log-block">
-          <div class="section-title">📝 新增学习记录</div>
-          <div class="log-row">
-            <label class="log-label">开始时间</label>
-            <input class="datetime-input" type="datetime-local" v-model="recordStart" />
+        <!-- 最近学习（一菜单单行：显示最近一次起止；有 startedAt 无 endedAt = 进行中） -->
+        <div class="sessions-block">
+          <div class="section-title">📅 最近学习</div>
+          <div v-if="lastStudyText" class="session-item">
+            <span class="session-range">{{ lastStudyText }}</span>
           </div>
-          <div class="log-row">
-            <label class="log-label">结束时间</label>
-            <input class="datetime-input" type="datetime-local" v-model="recordEnd" />
-          </div>
-          <div class="log-preview">
-            <span v-if="durationPreview > 0" class="text-success">本次学习 {{ durationPreview }} 分钟</span>
-            <span v-else-if="started && ended" class="text-warning">结束时间必须晚于开始时间</span>
-            <span v-else class="text-muted">填好起止时间后自动计算时长</span>
-          </div>
-          <Button size="sm" type="primary" :disabled="!canSubmit" @click="onAddRecord">保存记录</Button>
+          <div v-else class="session-empty">还没有学习记录 —— 打开章节阅读会自动计时，切换或关闭页签自动结算</div>
         </div>
       </template>
       <div v-else class="empty-tip">请先选择要计时的章节</div>
@@ -63,9 +51,8 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed } from 'vue'
+import { computed } from 'vue'
 import Modal from '../Modal/index.vue'
-import Button from '../Button/index.vue'
 import Select from '../Select/index.vue'
 
 interface MenuOption {
@@ -81,6 +68,12 @@ const props = withDefaults(defineProps<{
   menuLabel?: string
   suggestedMinutes?: number
   totalMinutes?: number
+  /** 最近一次开始时间（有值无 endedAt = 进行中） */
+  startedAt?: string
+  /** 最近一次结束时间 */
+  endedAt?: string
+  /** 超出建议时长（分钟，max(0, total - suggested)） */
+  overtimeMinutes?: number
   /** 章节已确定（菜单/Tab 右键进入）→ 隐藏章节选择，直接计时；false 则显示选择器 */
   fixedMenu?: boolean
 }>(), {
@@ -88,52 +81,44 @@ const props = withDefaults(defineProps<{
   menuLabel: '',
   suggestedMinutes: 0,
   totalMinutes: 0,
+  startedAt: '',
+  endedAt: '',
+  overtimeMinutes: 0,
   fixedMenu: false,
 })
 
 const emit = defineEmits<{
   (e: 'update:visible', value: boolean): void
-  (e: 'ball-click'): void
   (e: 'select-menu', menuId: string): void
-  (e: 'add-record', payload: { menuId: string; startedAt: string; endedAt: string }): void
+  (e: 'update-suggested-minutes', value: number): void
 }>()
 
 const currentMenuLabel = computed(() => props.menuLabel)
 
-// ---------- 新增学习记录（datetime-local → ISO） ----------
-const recordStart = ref('') // 形如 2026-08-27T09:00
-const recordEnd = ref('')
-
-// 解析 datetime-local 字符串为毫秒时间戳（new Date 按本地时区解析，与 toISOString 对应）
-function parseLocalMs(v: string): number {
-  const t = new Date(v).getTime()
-  return Number.isNaN(t) ? 0 : t
+// ---------- 最近学习时间段格式化（本地时区，跨天显示日期） ----------
+function pad2(n: number) {
+  return String(n).padStart(2, '0')
 }
-// datetime-local → ISO 8601（后端按 UTC 落库，读取展示时前端再转回本地）
-function toISO(v: string): string {
-  return new Date(v).toISOString()
+function fmtRange(startIso: string, endIso: string) {
+  const st = new Date(startIso)
+  const start = `${pad2(st.getMonth() + 1)}-${pad2(st.getDate())} ${pad2(st.getHours())}:${pad2(st.getMinutes())}`
+  const et = new Date(endIso)
+  const sameDay = st.toDateString() === et.toDateString()
+  const end = sameDay
+    ? `${pad2(et.getHours())}:${pad2(et.getMinutes())}`
+    : `${pad2(et.getMonth() + 1)}-${pad2(et.getDate())} ${pad2(et.getHours())}:${pad2(et.getMinutes())}`
+  return `${start} → ${end}`
 }
 
-const started = computed(() => !!recordStart.value)
-const ended = computed(() => !!recordEnd.value)
-const durationPreview = computed(() => {
-  if (!started.value || !ended.value) return 0
-  const diff = Math.round((parseLocalMs(recordEnd.value) - parseLocalMs(recordStart.value)) / 60000)
-  return diff > 0 ? diff : 0
+// 最近学习文案：有 endedAt → 上次学习起止；只有 startedAt → 进行中
+const lastStudyText = computed(() => {
+  if (!props.startedAt) return ''
+  if (!props.endedAt) {
+    const st = new Date(props.startedAt)
+    return `⏳ 进行中：开始于 ${pad2(st.getMonth() + 1)}-${pad2(st.getDate())} ${pad2(st.getHours())}:${pad2(st.getMinutes())}`
+  }
+  return `上次学习：${fmtRange(props.startedAt, props.endedAt)}`
 })
-const canSubmit = computed(() => started.value && ended.value && durationPreview.value > 0)
-
-function onAddRecord() {
-  if (!props.menuId) return
-  if (!canSubmit.value) return
-  emit('add-record', {
-    menuId: props.menuId,
-    startedAt: toISO(recordStart.value),
-    endedAt: toISO(recordEnd.value),
-  })
-  recordStart.value = ''
-  recordEnd.value = ''
-}
 
 // ---------- 进度条 ----------
 const progressPercent = computed(() => {
@@ -145,25 +130,32 @@ const progressPercent = computed(() => {
 const isOver = computed(() => (props.suggestedMinutes || 0) > 0 && (props.totalMinutes || 0) > (props.suggestedMinutes || 0))
 const isMet = computed(() => (props.suggestedMinutes || 0) > 0 && (props.totalMinutes || 0) >= (props.suggestedMinutes || 0))
 const progressColor = computed(() => {
-  if (isOver.value) return '#f59e0b' // 黄：已超时
+  if (isOver.value) return '#60a5fa' // 蓝：复习巩固（超过建议不是失败，用中性蓝不施压）
   if (isMet.value) return '#22c55e' // 绿：已达标
   return 'var(--color-primary, #3b82f6)'
 })
 const hintText = computed(() => {
-  if (isOver.value) return `⚠️ 已超出建议时长 ${(props.totalMinutes || 0) - (props.suggestedMinutes || 0)} 分钟`
+  if (isOver.value) {
+    // 与后端 overtimeMinutes 同公式（max(0, total - suggested)），不依赖 props.overtimeMinutes 是否传入
+    const over = Math.max(0, (props.totalMinutes || 0) - (props.suggestedMinutes || 0))
+    return `🔁 已超过建议 ${over} 分钟，进入复习巩固。要反复看很正常，慢慢来，不着急`
+  }
   if (isMet.value) return '✅ 已达建议时长，可以进入下一章了'
   return ''
 })
-const hintClass = computed(() => (isOver.value ? 'text-warning' : 'text-success'))
+const hintClass = computed(() => (isOver.value ? 'text-info' : 'text-success'))
 
-// ---------- 悬浮球 / 面板开关 ----------
-// 悬浮球是没有上下文章节的入口：通知父组件切回「可切换章节」模式
-function togglePanel() {
-  emit('ball-click')
-  emit('update:visible', !props.visible)
-}
+// ---------- 面板开关 ----------
 function onUpdateVisible(v: boolean) {
   emit('update:visible', v)
+}
+
+// ---------- 建议时长可编辑（change 时提交，父组件 PUT 落库后回刷） ----------
+function onSuggestChange(e: Event) {
+  const el = e.target as HTMLInputElement
+  const v = Math.max(0, Math.floor(Number(el.value) || 0))
+  if (v === props.suggestedMinutes) return
+  emit('update-suggested-minutes', v)
 }
 
 // ---------- 章节切换 ----------
@@ -173,39 +165,6 @@ function onSelectMenu(id: string) {
 </script>
 
 <style lang="less" scoped>
-.study-timer-ball {
-  position: fixed;
-  bottom: 5.5rem; // 避开右下角导航
-  right: 0.5rem;
-  z-index: 999;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.375rem;
-  padding: 0.5rem 0.875rem;
-  border-radius: 9999px;
-  background: var(--color-primary, #3b82f6);
-  color: #fff;
-  font-size: 0.8125rem;
-  cursor: pointer;
-  box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.25);
-  user-select: none;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-
-  &:hover {
-    box-shadow: 0 0.25rem 1.25rem rgba(0, 0, 0, 0.35);
-  }
-  &:active {
-    transform: scale(0.95);
-  }
-
-  .ball-icon {
-    line-height: 1;
-  }
-  .ball-label {
-    white-space: nowrap;
-  }
-}
-
 .study-timer-body {
   display: flex;
   flex-direction: column;
@@ -250,11 +209,35 @@ function onSelectMenu(id: string) {
   .progress-head {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     font-size: 0.8125rem;
     color: var(--color-text, #303133);
 
     .text-muted {
       color: var(--color-text-secondary, #909399);
+    }
+  }
+
+  // 建议时长可编辑输入框
+  .suggest-row {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+
+    .suggest-input {
+      width: 3.5rem;
+      padding: 0.125rem 0.375rem;
+      border: 1px solid var(--color-border, #dcdfe6);
+      border-radius: 0.375rem;
+      font-size: 0.8125rem;
+      font-family: inherit;
+      color: var(--color-text, #303133);
+      background: var(--color-background, #fff);
+      outline: none;
+
+      &:focus {
+        border-color: var(--color-primary, #3b82f6);
+      }
     }
   }
 
@@ -276,11 +259,11 @@ function onSelectMenu(id: string) {
   }
 }
 
-// 新增学习记录（日志式）
-.log-block {
+// 学习记录列表（自动计时的起止时间段）
+.sessions-block {
   display: flex;
   flex-direction: column;
-  gap: 0.625rem;
+  gap: 0.5rem;
   padding: 0.75rem;
   border: 1px solid var(--color-border, #dcdfe6);
   border-radius: 0.5rem;
@@ -291,44 +274,46 @@ function onSelectMenu(id: string) {
     color: var(--color-text, #303133);
   }
 
-  .log-row {
+  .session-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+    max-height: 12rem;
+    overflow-y: auto;
+  }
+
+  .session-item {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 0.5rem;
+    padding: 0.375rem 0.5rem;
+    border-radius: 0.375rem;
+    background: var(--color-background-soft, #f5f7fa);
+    font-size: 0.75rem;
+    color: var(--color-text, #303133);
 
-    .log-label {
-      flex-shrink: 0;
-      width: 4rem;
-      font-size: 0.8125rem;
-      color: var(--color-text-secondary, #666);
+    .session-range {
+      font-family: var(--font-mono, ui-monospace, monospace);
     }
-
-    .datetime-input {
-      flex: 1;
-      min-width: 0;
-      padding: 0.375rem 0.5rem;
-      border: 1px solid var(--color-border, #dcdfe6);
-      border-radius: 0.375rem;
-      font-size: 0.8125rem;
-      font-family: inherit;
-      color: var(--color-text, #303133);
-      background: var(--color-background, #fff);
-      outline: none;
-
-      &:focus {
-        border-color: var(--color-primary, #3b82f6);
-      }
+    .session-dur {
+      flex-shrink: 0;
+      font-weight: 600;
+      color: var(--color-primary, #3b82f6);
     }
   }
 
-  .log-preview {
+  .session-empty {
     font-size: 0.75rem;
-    min-height: 1rem;
+    color: var(--color-text-secondary, #909399);
   }
 }
 
 .text-success {
   color: #22c55e;
+}
+.text-info {
+  color: #60a5fa;
 }
 .text-warning {
   color: #f59e0b;

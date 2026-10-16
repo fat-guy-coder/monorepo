@@ -46,7 +46,7 @@ func main() {
 	// 4. 注册路由（handler → service → repository → Postgres）
 	mux := http.NewServeMux()
 	handler.RegisterMenuRoutes(mux, db)
-	handler.RegisterStudySessionRoutes(mux, db)
+	handler.RegisterStudyProgressRoutes(mux, db)
 
 	addr := ":3002" // Go 后端用 3002，避开 Bun backend 的 3000
 	log.Printf("🐹 Go 后端启动: http://localhost%s", addr)

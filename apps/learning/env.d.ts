@@ -2,6 +2,7 @@
 
 interface ImportMetaEnv {
   readonly VITE_WORKSPACE_ROOT: string
+  readonly VITE_BASE_API: string
 }
 
 interface ImportMeta {

@@ -1,13 +1,11 @@
 /**
- * Shared Theme CSS Variables
+ * Shared CSS Variables (Light Theme)
  *
  * Usage in app:
  *   import 'utils/theme.css';
  *
- * Theme switching:
- *   document.documentElement.setAttribute('data-theme', 'dark')
- *
- * Available themes: light (default), dark, warm, cool, eye-friendly
+ * Light theme only — theme switching has been removed (阉割主题切换).
+ * Variables are defined on :root so they apply globally.
  */
 
 :root {
@@ -196,109 +194,4 @@
   --padding-lg: 1rem;
   --padding-xl: 1.5rem;
   --padding-2xl: 2rem;
-}
-
-/* Dark Theme */
-[data-theme="dark"] {
-  --color-primary: #409eff;
-  --color-success: #4ade80;
-  --color-warning: #facc15;
-  --color-danger: #f87171;
-  --color-info: #58a6ff;
-  --color-background: #181818;
-  --color-background-soft: #1f1f24;
-  --color-bg-container: #1f1f24;
-  --color-text: #e5eaf3;
-  --color-text-soft: #c0c4cc;
-  --color-text-secondary: #a6a9ad;
-  --color-text-tertiary: #73767b;
-  --color-text-quaternary: #4a4a4a;
-  --color-text-light-solid: #ffffff;
-  --color-border: #434343;
-  --color-border-hover: #5a5a5a;
-  --color-hover: #2a2a2a;
-  --color-fill-tertiary: #2a2a2a;
-  --color-bg-base: #181818;
-  --color-bg-light: #1f1f24;
-  --color-highlight-text: #409eff;
-  --color-highlight-bg: #1a3a5c;
-  --box-shadow-hover: 0 2px 8px rgba(64, 158, 255, 0.4);
-}
-
-/* Warm Theme */
-[data-theme="warm"] {
-  --color-primary: #b66c2f;
-  --color-success: #256427;
-  --color-warning: #b45309;
-  --color-danger: #b91c1c;
-  --color-background: #fff8f0;
-  --color-background-soft: #ffe9d1;
-  --color-bg-container: #fff8f0;
-  --color-text: #7c2d12;
-  --color-text-soft: #9a3412;
-  --color-text-secondary: #92400e;
-  --color-text-tertiary: #a16207;
-  --color-text-quaternary: #d4a574;
-  --color-text-light-solid: #ffffff;
-  --color-border: #e6c39a;
-  --color-border-hover: #d4a574;
-  --color-hover: #fff0e6;
-  --color-fill-tertiary: #ffe9d1;
-  --color-bg-base: #fff8f0;
-  --color-bg-light: #ffe9d1;
-  --color-highlight-text: #b66c2f;
-  --color-highlight-bg: #fff0e6;
-  --box-shadow-hover: 0 2px 8px rgba(182, 108, 47, 0.3);
-}
-
-/* Cool Theme */
-[data-theme="cool"] {
-  --color-primary: #4aa3c0;
-  --color-success: #059669;
-  --color-warning: #0ea5e9;
-  --color-danger: #be185d;
-  --color-background: #f0f9ff;
-  --color-background-soft: #dbeafe;
-  --color-bg-container: #f0f9ff;
-  --color-text: #0c4a6e;
-  --color-text-soft: #075985;
-  --color-text-secondary: #0369a1;
-  --color-text-tertiary: #0284c7;
-  --color-text-quaternary: #7dd3fc;
-  --color-text-light-solid: #ffffff;
-  --color-border: #7dd3fc;
-  --color-border-hover: #38bdf8;
-  --color-hover: #e0f2fe;
-  --color-fill-tertiary: #dbeafe;
-  --color-bg-base: #f0f9ff;
-  --color-bg-light: #dbeafe;
-  --color-highlight-text: #4aa3c0;
-  --color-highlight-bg: #e0f2fe;
-  --box-shadow-hover: 0 2px 8px rgba(74, 163, 192, 0.3);
-}
-
-/* Eye-Friendly Theme */
-[data-theme="eye-friendly"] {
-  --color-primary: #3a8a5d;
-  --color-success: #4caf50;
-  --color-warning: #ff9800;
-  --color-danger: #f44336;
-  --color-background: #f0f7f2;
-  --color-background-soft: #e8f2eb;
-  --color-bg-container: #f0f7f2;
-  --color-text: #2a3d33;
-  --color-text-soft: #4a6357;
-  --color-text-secondary: #5a7a6a;
-  --color-text-tertiary: #6a8a7a;
-  --color-text-quaternary: #9ab99a;
-  --color-text-light-solid: #ffffff;
-  --color-border: #c4d9cb;
-  --color-border-hover: #a8c9ab;
-  --color-hover: #e8f2eb;
-  --color-fill-tertiary: #e8f2eb;
-  --color-bg-base: #f0f7f2;
-  --color-bg-light: #e8f2eb;
-  --color-highlight-text: #3a8a5d;
-  --color-highlight-bg: #e8f2eb;
-  --box-shadow-hover: 0 2px 8px rgba(58, 138, 93, 0.3);
 }

@@ -74,6 +74,14 @@ export const useTabStore = defineStore('tab', () => {
     return null
   }
 
+  // 激活某个 tab 时，若它被折叠组包裹，自动展开该组，让选中页签在标签栏可见
+  function expandGroupOf(path: string) {
+    const found = findTab(path)
+    if (found?.group && found.group.collapsed) {
+      found.group.collapsed = false
+    }
+  }
+
   // 清理空组
   function pruneEmptyGroups() {
     nodes.value = nodes.value.filter((n) => !(n.type === 'group' && n.tabs.length === 0))
@@ -107,24 +115,31 @@ export const useTabStore = defineStore('tab', () => {
     { path, name, label }: { path: string; name: string; label: string },
     callback?: (path: string) => void,
   ) {
-    if (activeKey.value === path) return
-    activeKey.value = path
-    if (!tabList.value.some((i) => i.path === path)) {
-      nodes.value.push({ type: 'tab', path, name, label })
+    if (activeKey.value !== path) {
+      activeKey.value = path
+      if (!tabList.value.some((i) => i.path === path)) {
+        nodes.value.push({ type: 'tab', path, name, label })
+      }
+      if (callback) callback(path)
     }
-    if (callback) callback(path)
+    // 即使目标已是激活页签，若被折叠组包裹也自动展开，保证选中页签可见
+    expandGroupOf(path)
   }
 
   function activateTabOnlyKey(path: string, callback?: (path: string) => void) {
-    if (activeKey.value === path) return
-    activeKey.value = path
-    if (callback) callback(path)
+    if (activeKey.value !== path) {
+      activeKey.value = path
+      if (callback) callback(path)
+    }
+    expandGroupOf(path)
   }
 
   function removeTab(path: string, callback?: (path: string) => void) {
     if (activeKey.value === path) {
       const next = activatePrev(path)
       activeKey.value = next
+      // 激活的「前一个」页签若在折叠组内，自动展开
+      expandGroupOf(next)
       if (callback) callback(next)
     }
     spliceTabOut(path)
@@ -137,6 +152,8 @@ export const useTabStore = defineStore('tab', () => {
     nodes.value = nodes.value
       .map((n) => (n.type === 'group' ? { ...n, tabs: n.tabs.filter((t) => keep(t.path)) } : n))
       .filter((n) => (n.type === 'group' ? n.tabs.length > 0 : keep(n.path)))
+    // 保留的页签若在折叠组内，自动展开
+    expandGroupOf(path)
     if (callback) callback(path)
   }
 
@@ -156,6 +173,8 @@ export const useTabStore = defineStore('tab', () => {
       .map((n) => (n.type === 'group' ? { ...n, tabs: n.tabs.filter((t) => keepSet.has(t.path)) } : n))
       .filter((n) => (n.type === 'group' ? n.tabs.length > 0 : keepSet.has(n.path)))
     activeKey.value = targetKey
+    // 激活的页签若在折叠组内，自动展开
+    expandGroupOf(targetKey)
     if (callback) callback(targetKey)
   }
 

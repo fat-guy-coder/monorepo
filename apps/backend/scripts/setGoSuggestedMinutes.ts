@@ -43,6 +43,45 @@ async function setGoSuggestedMinutes() {
   const affected = result?.length ?? 0
   console.log(`已更新 ${affected} 行（仅 GO 子树内、name 命中章节规则的菜单）`)
 
+  // 阶段二：非叶子章节（大章节/分类夹）建议时长 = 其叶子子孙建议时长之和
+  // 思路：递归 CTE 从【所有顶级菜单】出发收集每个节点到根的祖先链；叶子节点的 suggested_minutes
+  //       按链累加给所有祖先。覆盖全表（GO/Python/Godot 等所有菜单树，几千条也很快，一次聚合）。
+  // 只更新「是某菜单父节点」的非叶子菜单（叶子保持自身值不变）；且仅当叶子之和 > 0 才覆盖，
+  // 避免把手动设置过、但叶子暂时没数据的大章节刷成 0。幂等，重复执行结果一致。
+  const parentResult = await rawQuery`
+    WITH RECURSIVE all_tree AS (
+      SELECT id, parent_id::text AS parent_id, suggested_minutes,
+             ARRAY[id]::text[] AS chain
+      FROM menu WHERE parent_id IS NULL
+      UNION ALL
+      SELECT m.id, m.parent_id::text, m.suggested_minutes,
+             t.chain || m.id::text
+      FROM menu m
+      JOIN all_tree t ON m.parent_id = t.id::text
+    ),
+    leaves AS (
+      SELECT id::text AS id, chain, suggested_minutes
+      FROM all_tree
+      WHERE id::text NOT IN (SELECT parent_id FROM menu WHERE parent_id IS NOT NULL)
+    ),
+    sums AS (
+      SELECT t.ancestor AS node_id, SUM(l.suggested_minutes) AS total
+      FROM leaves l
+      CROSS JOIN LATERAL unnest(l.chain) AS t(ancestor)
+      WHERE t.ancestor <> l.id
+      GROUP BY t.ancestor
+    )
+    UPDATE menu m
+    SET suggested_minutes = s.total
+    FROM sums s
+    WHERE m.id::text = s.node_id
+      AND s.total > 0
+      AND m.id::text IN (SELECT DISTINCT parent_id FROM menu WHERE parent_id IS NOT NULL)
+    RETURNING m.id, m.name, m.suggested_minutes
+  `
+  const parentAffected = parentResult?.length ?? 0
+  console.log(`已更新 ${parentAffected} 个非叶子章节（全表，建议时长 = 叶子子孙之和）`)
+
   // 校验：统计 GO 子树里设置了建议时长的菜单数，按阶段分布
   const stats = await rawQuery`
     WITH RECURSIVE go_tree AS (
