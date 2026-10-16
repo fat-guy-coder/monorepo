@@ -1,6 +1,6 @@
 extends Camera2D
 class_name CameraRig
-## 等距视角相机 — 跟随玩家 + 按地面范围限制 + 震屏接口
+## 横版相机 — 跟随玩家 + 按地面范围限制 + 震屏接口
 ##
 ## 📚 涉及学习文档:
 ##   godot-2-9-camera2d       — Camera2D: position_smoothing / limit_* 边界限制
@@ -14,9 +14,15 @@ class_name CameraRig
 ##   子节点只负责「怎么跟」(平滑) 和「跟到哪为止」(limits)。
 ##
 ## 🏗️ 相机边界必须**从地面推导**, 不能写死常量:
-##   旧横版关卡的 limit_left=-50 / limit_right=3250 是给 3200px 宽的横版关卡用的,
-##   套在几百像素的等距地图上会让相机大段飘到空地外面。
-##   正确做法是拿 IsoFloor.bounds_global() 算 —— 见 fit_to_floor()。
+##   v0.1 横版把 limit_left=-50 / limit_right=3250 直接写死在 main.gd 里,
+##   那是给「就那一个 3200px 关卡」用的; 地图一改尺寸, 相机会大段飘到空地外面。
+##   正确做法是拿 BeltFloor.bounds_global() 算 —— 见 fit_to_floor()。
+##
+## 🏗️ 横版相机的两个轴天然不一样, 而 _fit_axis 的「地图比视口小就锁死中心」
+##   分支正好表达了这件事, 不需要为横版另写一套:
+##     · X 轴: 地图通常比视口宽得多 → limits 就是地图左右边界 → 相机会「跟」
+##     · 纵深轴: 地图通常比视口**矮** → 走进锁死分支 → 相机在纵深上**不动**
+##   所以「横版相机只横着滚」不是特判出来的, 是尺寸关系自己长出来的。
 ##
 ## 🏗️ 震屏为什么不用 Tween:
 ##   打击感需要「高频无规律抖动」, Tween 是两点之间的平滑插值, 做出来是「晃」不是「震」。
@@ -72,7 +78,7 @@ func shake(amount_px: float = 4.0, duration: float = 0.2) -> void:
 ##   ① 地图比视口大 → limits 就是地图边界 (常规情况)
 ##   ② 地图比视口小 → limits 会互相矛盾 (left > right) 导致相机卡在奇怪位置,
 ##      此时改为把相机**锁死在地图中心**, 左右/上下 limit 各留半个视口。
-func fit_to_floor(floor: IsoFloor, viewport_size: Vector2) -> void:
+func fit_to_floor(floor: BeltFloor, viewport_size: Vector2) -> void:
 	if floor == null:
 		return
 	var b: Rect2 = floor.bounds_global()

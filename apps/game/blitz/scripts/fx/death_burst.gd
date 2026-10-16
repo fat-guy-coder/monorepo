@@ -63,7 +63,8 @@ func _build_fragments() -> void:
 		var speed: float = randf_range(speed_min, speed_max)
 		_frags.append({
 			vel = Vector2(cos(angle), sin(angle)) * speed,
-			# 等距视角下把纵向速度压一点, 碎屑才像「落在地上」而不是飘在空中
+			# 横版里屏幕 XY **就是**地面平面 (见 belt_floor.gd 文件头), 所以
+			# 「向外撒一圈」的原始速度不需要任何修正 —— 它本来就是在地上撒开的。
 			pos = Vector2.ZERO,
 			radius = randf_range(2.0, 5.0),
 		})
@@ -74,8 +75,9 @@ func _process(delta: float) -> void:
 	for f: Dictionary in _frags:
 		f.pos += f.vel * delta
 		f.vel *= pow(damping, delta)   # 与帧率无关的指数阻尼
-		# 等距压缩: 纵向位移按 2:1 投影, 视觉上更贴地
-		f.pos = Vector2(f.pos.x, f.pos.y * Iso.TILE_H_F / Iso.TILE_W_F)
+		# ⚠️ 旧等距版这里还有一行「每帧把 f.pos.y 压成 0.5 倍」的假投影。
+		#    它其实每帧都在重复压缩同一个位移, 纵向分量被指数衰减掉 —— 看起来
+		#    「贴地」了, 实际是碎屑全被挤到一条水平线上。横版地面 1:1, 直接删掉。
 	queue_redraw()
 
 

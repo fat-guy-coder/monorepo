@@ -1,6 +1,9 @@
 # 📊 全项目进度面板
 
-> 更新时间: 2026-08-27 | 当前活跃任务: **Go 阶段 4 数据库文档 14/14 ✅ · backend 已接入 PostgreSQL（代码就绪，待迁移替换 Bun）**
+> 更新时间: 2026-10-16 | 当前活跃任务: **Blitz v0.4 视角转 2.5D 横版 —— 步骤 1–4 ✅，接着做步骤 5（攻击高度带 / 跳跃躲低扫），计划见 [`apps/game/blitz/V04_PLAN.md`](apps/game/blitz/V04_PLAN.md)**
+
+> 🔸 **本会话结束后要换电脑继续** —— Blitz 的改动**必须 commit + push** 才能带过去（分支 `feat/iso-locomotion`，跟踪 `origin/feat/iso-locomotion`）。
+> 原先的 v0.4 计划文件在会话的 `~/.claude/plans/` 里（**本机文件，换电脑就没了**），已搬到仓库的 `apps/game/blitz/V04_PLAN.md`。
 
 ## 🎯 当前任务（下次 AI 会话继续入口）
 
@@ -232,13 +235,34 @@
 
 ### 4.2 Blitz 游戏项目
 
-> 路径: `apps/game/blitz/`
+> 路径: `apps/game/blitz/` | 引擎: Godot 4.6.3 | 分支: `feat/iso-locomotion`
 
-包含：`scripts/`（GDScript 源码）、`scenes/`（场景文件）、`DESIGN.md`（设计文档）。
+包含：`scripts/`（GDScript 源码）、`scenes/`（场景文件）、`DESIGN.md`（设计文档）、**`V04_PLAN.md`（当前权威计划）**。
 
 每个 .gd 脚本顶部有 `## 📚 涉及学习文档:` 注释块关联到 Godot 学习文档，关键代码行用 `# → godot-X-Y-name: 说明` 标注。
 
-**继续指令：** 「继续 Blitz 游戏开发」
+#### 🚧 当前里程碑：v0.4 视角转 2.5D 横版（belt-scroll）
+
+v0.2 等距 / v0.3 战斗手感已完成。v0.4 的目标是把地面轴从等距菱形改成 **X（左右）+ Z（纵深）**、朝向 ±1、加真跳跃、敌人攻击改成**每个招式自带形状的范围判定**并画出预警。
+
+**起因**：等距下「跟野怪对不上」—— `Iso.ground()` 的 2:1 压扁只用在 `_draw()` 画影子，实体位置/速度/判定框全是未投影的屏幕 XY，而地砖画的是菱形。按 W 走直线，跟网格永远错开半格。
+
+| 步骤 | 内容 | 状态 |
+|---|---|---|
+| 1–2 | 地平面（`belt_floor.gd`）+ 矩形围墙 + 侧视角色 + 跳跃 | ✅ |
+| 3 | `AttackShape`（RECT/ARC/CIRCLE）+ 玩家攻击改用它 + 落雷技能 | ✅ |
+| 4 | 敌人：朝向 ±1、`AttackShape` 出招、预警画地上、贴地预警图层 | ✅ |
+| 5 | **跳跃的战术价值** —— 给 `AttackShape` 接高度带，跳起来能躲低扫 | ⏳ |
+| 6 | 格挡改前后半平面；删掉鼠标瞄准（`block_aim_override`/`block_cone_cos`） | ⏳ |
+| 7 | 自检重写 + `DESIGN.md` 回填（**整份还是 v0.2 等距版**） | ⏳ |
+
+**闸门现状：** 闸门 1（解析）空 · 闸门 2（自检）**181 项检查 0 项失败**。另有第三层截图探针 `--shots`（自检看不见渲染 —— 已靠它逮到过一个「181 条全绿」的 bug）。
+
+**关键不变量：** 一招 = **一个 `AttackShape` 实例**，预警 / `CollisionShape2D` / 自检读的都是它 → 漂移在结构上不可能。坐标桥只有 `belt_space.gd` 一处（`to_screen` / `to_world` / `ground_circle_shape`）。
+
+⚠️ **`DESIGN.md` 整份仍是 v0.2 等距版**（标题还写着「等距视角仙侠动作 RPG」），别照它写代码 —— 以 `V04_PLAN.md` 和代码为准。
+
+**继续指令：** 「继续 Blitz 的 v0.4 开发，读 `apps/game/blitz/V04_PLAN.md`，从步骤 5（攻击高度带 / 跳跃躲低扫）开始」
 
 ---
 
@@ -307,7 +331,7 @@ API 文档: `apps/backend/API.md` | 快速启动: `docker-compose up -d backend 
 | 继续 Go 文档 | 「继续 Go 学习文档的填充，从阶段 2 开始」 |
 | 继续 Godot 文档 | 「继续 Godot 学习文档的填充」 |
 | 继续后端开发 | 「继续后端 API 开发」 |
-| 继续游戏开发 | 「继续 Blitz 游戏项目开发」 |
+| 继续游戏开发 | 「继续 Blitz 的 v0.4 开发，读 `apps/game/blitz/V04_PLAN.md`，从步骤 5（攻击高度带 / 跳跃躲低扫）开始」 |
 
 > **提示：** 新会话中 AI 首先读取 `README.md` 和 `PROGRESS.md`（本文件），即可了解全局状态和当前任务。
 

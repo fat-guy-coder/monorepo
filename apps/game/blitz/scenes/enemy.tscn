@@ -1,13 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://2iqe7ldkifjf"]
+[gd_scene load_steps=2 format=3 uid="uid://2iqe7ldkifjf"]
 
 [ext_resource type="Script" path="res://scripts/enemy.gd" id="1_enemy"]
-
-[sub_resource type="RectangleShape2D" id="enemy_body_col"]
-size = Vector2(22, 12)
 
 [node name="Enemy" type="CharacterBody2D"]
 script = ExtResource("1_enemy")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, -4)
-shape = SubResource("enemy_body_col")

@@ -11,12 +11,32 @@ class_name BlitzEnemy
 ##   godot-1-8-signals-basics      — died 信号取代 current_scene 鸭子类型调用
 ##   godot-1-7-classes-oop         — enum / 类内常量
 ##
-## ⚠️ v0.2 的四条骨, 一个字都不能改回去:
+## ⚠️ v0.2 的四条骨, 前三条一个字都不能改回去:
 ##   ① 删掉重力与 `is_on_floor()`。残留的 `velocity.y = -80` 式击退在无重力世界里
 ##      会让敌人**一路飘出地图**, 而且看起来像「AI 抽风跑到地图外面」。
 ##   ② motion_mode 必须 FLOATING。
 ##   ③ 原点在**脚底**, _draw() 一律负 Y 往上。
-##   ④ 朝向是 Vector2, 不是 bool。
+##   ④ ~~朝向是 Vector2~~ → **朝向是 ±1 的整数**, 而且**和移动方向解耦** (见下面 v0.4 段)。
+##      横版只有左右两个朝向。敌人仍然按世界平面走位 (追击是斜的), 但
+##      「往哪走」不再决定「朝哪看」—— 旧代码里这两件事是同一个变量, 那是八向时代的遗产。
+##
+## 🎮 v0.4: 视角转 2.5D 横版, 敌人的攻击跟着变成**有形状的范围**。
+##   旧版是「`dir8 * attack_reach` 处一个 34×34 的方框」—— 八向里它勉强够用,
+##   但横版的地面是**平面**, 方框表达不了「身前一片扇形」这件事。
+##   现在和玩家共用 `AttackShape` (combat/attack_shape.gd):
+##     · `_enter_strike()` 建判定区 和 `_draw_windup_ground()` 画预警**读同一个对象**;
+##     · 于是「地上画的那片红」和「真的会打到你的那片」在结构上不可能漂移 ——
+##       这是 v0.3「预警必须画在判定框将会出现的那个确切位置」那条不变量的推广:
+##       旧版靠**两份代码写同样的公式**维持同步, 新版靠**只有一个来源**。
+##     · 预警由 `_tg` (GroundTelegraph) 画在**贴地层** (z = -5), 不在敌人的 `_draw()` 里。
+##       「形状对」和「看得见形状」是两回事: 画在 self 上会跟着 y-sort, 敌人站得靠前
+##       一点就整个盖住玩家的脚 —— 而玩家要判断的恰恰是自己的脚在不在里面。
+##       见 scripts/fx/ground_telegraph.gd 文件头。
+##
+## ⚠️ 有一件事**故意没跟着改**: 击退 (knockback_speed / parry_recoil) 仍是**屏幕**单位。
+##    移动改成了世界单位 (见 _world_velocity), 因为 move_speed 要和攻击距离同一个尺子;
+##    而击退是一次性的推力, 它的数值全靠手感调, 换算它只会让一组调好的数字全部失效。
+##    「屏幕方向上被推开」在观感上也正是想要的 (被砍飞是画面上的事)。
 ##
 ## 🎮 v0.3 新增: 敌人会**自己出招**了。
 ##   v0.2 的敌人只有「贴身就掉血」—— 那种伤害玩家躲不开也挡不住, 只能拉开距离,
@@ -68,9 +88,13 @@ enum AttackPhase {
 @export var enemy_type: Type = Type.PATROL
 ## 会不会出招。关掉就是纯肉桩 (main.gd 拿它配固定靶, 专门用来试重击伤害和破霸体)
 @export var can_attack: bool = true
+## 移动速度, **世界单位/s** (和玩家的 move_speed 同一把尺子)。
+## ⚠️ 因为是世界速度, 屏幕上纵深方向的位移只有横向的一半 —— 这正是 2.5D 地面该有的样子。
+##    (旧版是屏幕单位, 于是「沿纵深追」在世界尺子里快一倍, 攻击距离一改成世界单位就会对不上。)
 @export var move_speed: float = 80.0
 @export var chase_speed_scale: float = 1.35   ## 追踪时的速度倍率
-## 巡逻轴: 默认沿地格 +x (屏幕右上↘)。改成 Vector2.DOWN 就是沿 +y 巡逻。
+## 巡逻轴 —— **世界平面**上的方向。默认 +x (屏幕向右)。
+## 改成 Vector2.DOWN = 世界 +z = 屏幕向下 (朝镜头走)。
 @export var patrol_axis: Vector2 = Vector2.RIGHT
 @export var patrol_range: float = 150.0       ## 距起点的最大偏移 (px)
 @export var max_health: int = 4
@@ -91,12 +115,29 @@ enum AttackPhase {
 @export var strike_duration: float = 0.14     ## 判定框存在时长
 @export var recover_duration: float = 0.65    ## 收招破绽 —— 玩家的主要输出时机
 @export var attack_cooldown: float = 1.6      ## 两次出招之间的冷却
-@export var attack_trigger_range: float = 58.0  ## 进这个距离才起手 (略大于 reach)
-## 判定框中心离身体多远。
-## ⚠️ 别随手调大 —— 它和 EnemyAttack.BOX_SIZE 一起决定「贴身死区」的宽度,
-##    调大会让玩家可以贴着敌人免疫挥砍 (完整推导写在 enemy_attack.gd 的 BOX_SIZE 上方)。
-@export var attack_reach: float = 22.0
-@export var attack_knockback: float = 300.0   ## 打中玩家时的击退初速
+## 敌人的一刀 —— **扇形 (横劈)**。半径和张角都是**世界单位**, 见 attack_shape()。
+##
+## 🏗️ 为什么是扇形而不是旧版那个 34×34 的方框:
+##   用户对这一招的要求是「在它的攻击范围内, 离他几根横向轴上都会收到攻击」——
+##   要的就是**纵深上差一两格照样砍得到**。扇形的纵深容差是
+##     |Δz| ≤ min(Δx·tan(半角), √(R²−Δx²))
+##   也就是「贴着只扫正面, 拉开一点反而铺开」, 正是挥砍该有的样子。
+##
+## ⚠️ 半径 54 < 玩家横劈的 66, 张角 60° < 玩家的 75°: 玩家的家伙更长更开。
+##    这个不对称是**有意**的 —— 玩家手短是打不过远程的, 手长都是保命的。
+@export var sweep_radius: float = 54.0
+@export var sweep_half_angle_deg: float = 60.0
+## 敌人身体的**世界**半径 —— 它占哪块地 (屏幕上 11×5.5 的椭圆)。
+##
+## ⚠️ 11 不是新调的: enemy.tscn 原本是 22×12 的屏幕矩形, 横向半宽就是 11。
+##    换算成贴地圆之后横向一字未改, 只有纵深从 ±24 收到 ±11, 以及不再整体上浮 4px。
+const BODY_RADIUS: float = 11.0
+@export var attack_knockback: float = 300.0   ## 打中玩家时的击退初速 (屏幕单位, 见文件头)
+## ⚠️ `attack_trigger_range` 和 `attack_reach` (v0.3) 已删 —— 换成了
+##    「我这一刀**够不够得着**」直接问 shape (见 _try_start_attack)。
+##    留着那个距离常量的话, 它和扇形的半径就是两个各自独立的门槛:
+##    调了半径忘了调距离, 表现是敌人站在射程外起手、砍一片空气,
+##    而画面上看起来像是「AI 抽风」。一个门槛, 一个来源。
 
 # ============================================================
 # 可调参数 — 硬直
@@ -111,7 +152,9 @@ enum AttackPhase {
 var health: int = 0
 var is_dead: bool = false
 var start_position: Vector2 = Vector2.ZERO
-var facing_dir: Vector2 = Vector2.DOWN
+## 朝向: **只有左右两个值** (+1 朝右 / -1 朝左), 和玩家同一个约定。
+## ⚠️ 它和移动方向**解耦**: 追击时往斜线走, 但只朝左/右看 (见 _face_toward)。
+var facing: int = 1
 var attack_phase: AttackPhase = AttackPhase.NONE
 
 var _phase_timer: float = 0.0
@@ -122,6 +165,8 @@ var _flash_timer: float = 0.0
 var _patrol_sign: float = 1.0
 ## 当前在场上的攻击判定区 (STRIKE 期间非 null)。破霸体/死亡时必须收回它。
 var _attack_area: EnemyAttack = null
+## 贴地预警层 (起手时那片扇形)。**必须是独立节点** —— 见 ground_telegraph.gd § 为什么。
+var _tg: GroundTelegraph = null
 
 
 func _ready() -> void:
@@ -132,6 +177,18 @@ func _ready() -> void:
 	collision_layer = 1 << 1
 	collision_mask = 1 << 4
 
+	# ── 身体框换成**贴地椭圆** ──
+	#
+	# 🏗️ 和玩家受击框是同一条理由 (见 player.gd 的 _ready), 这边是镜像方向:
+	#    玩家的攻击范围活在地面平面上, 而 enemy.tscn 里原本是「离地 4px 的 22×12 屏幕矩形」。
+	#    屏幕矩形在地面平面里是一个**纵深 ±24、还整体朝镜头歪了 8** 的方块 ——
+	#    于是「站在这片扇形外面」的敌人照样会被砍到。
+	#    (这个形状的数值本来就接近世界半径 11 的圆: 22×11 对 22×12, 偏移只差 4px。
+	#     所以改成贴地圆几乎不动手感, 动的只是「它到底占哪块地」这件事对不对得上。)
+	var body_col: CollisionShape2D = $CollisionShape2D
+	body_col.position = Vector2.ZERO
+	body_col.shape = BeltSpace.ground_circle_shape(BODY_RADIUS)
+
 	health = max_health
 	start_position = position
 	add_to_group("enemies")
@@ -140,8 +197,37 @@ func _ready() -> void:
 	#    如果它还在, 玩家贴脸站着就会持续掉血, 「看清出招再挡」这件事
 	#    会被一个躲不掉的伤害源盖住, 本轮要验的格挡手感就完全测不出来。
 
+	# 贴地预警的**图层** —— 起手时那片扇形由它画, 而不是由敌人的 _draw() 画。
+	# ⚠️ 必须挂在自己身上 (位置自动跟随), 但它会把自己 z 到角色**下面** ——
+	#    第一版画在 self 上, 敌人站得靠前一点就整个盖住玩家的脚。见 ground_telegraph.gd。
+	_tg = GroundTelegraph.new()
+	_tg.name = "GroundTelegraph"
+	_tg.set_painter(_draw_windup_ground)
+	add_child(_tg)
+
+
+## 贴地预警层的开关与重绘。**只在起手阶段亮** —— 出招那一瞬由 EnemyAttack 自己闪,
+## 收招/硬直/死亡期间必须灭掉。
+##
+## 🏗️ 为什么不挂在「进出起手」的各个转换点上 (WINDUP/STRIKE/RECOVER/NONE 有五处赋值):
+##    那样每加一条退出路径就得想起来灭一次灯, 漏一个的后果是**一片永远不消失的假范围**
+##    —— 而它长得和真的一模一样, 只能靠撞上去才发现。按当前相位每帧结算,
+##    判据就只剩一个: 「现在是不是在起手, 而且还没死」。
+func _sync_ground_telegraph() -> void:
+	var winding: bool = attack_phase == AttackPhase.WINDUP and not is_dead
+	# ⚠️ 只动**开关**, 不要在这里碰 painter —— 第一版就是在这里把 painter 也清掉了,
+	#    于是敌人第一次收招之后那片扇形永久消失 (见 ground_telegraph.gd 的 enabled)。
+	_tg.set_active(winding)
+	if winding:
+		# 起手进度每帧都在变 (t 驱动张角), 所以每帧都要重绘
+		_tg.queue_redraw()
+
 
 func _physics_process(delta: float) -> void:
+	# ⚠️ 放在 is_dead 提前 return **之前**: 落在这个 return 之后的话, 一个在起手
+	#    途中被打死的敌人会把那片扇形**永远**留在场地上 (它长得和真的一模一样)。
+	_sync_ground_telegraph()
+
 	if is_dead:
 		return
 
@@ -218,9 +304,24 @@ func _update_attack(delta: float) -> bool:
 	return false
 
 
+## 敌人这一刀的形状 —— **横劈, 一个扇形**。
+##
+## 🏗️ 做成函数 (而不是存一份常量/`@export` 的 shape 对象), 和玩家的
+##    `light_shape()` 同一个理由: AttackShape 是 Resource, 共享一份实例的话
+##    任何一处「临时改半径试试手感」都会波及所有敌人和所有招式。
+##    每次 new 一份, 便宜且不可能出事。
+##
+## ⚠️ 和 `_draw_windup_ground()` 是**同一个来源** —— 那边画预警也调这个函数。
+##    在这里另写一套极坐标、或者把半径抄成两个常量, 改一处就会出现
+##    「地上画的红色范围」和「真的会打到你的范围」对不上, 而且是双向的。
+func attack_shape() -> AttackShape:
+	return AttackShape.make_arc(sweep_radius, sweep_half_angle_deg)
+
+
 ## 起手 → 命中。生成判定区。
 ##
-## ⚠️ 判定框位置**不做任何等距投影**: 物理世界就是屏幕 XY (见 iso.gd 文件头)。
+## ⚠️ 判定区挂在**自己脚下** (position 不偏移), 范围整份来自 shape ——
+##    它自己知道圆心在哪 (AttackShape.collision_offset)。两处都偏移就是偏两次。
 func _enter_strike() -> void:
 	attack_phase = AttackPhase.STRIKE
 	_phase_timer = strike_duration
@@ -230,7 +331,8 @@ func _enter_strike() -> void:
 	atk.knockback = attack_knockback
 	atk.source = self          # 精准格挡靠它反打 (见 enemy_attack.gd 文件头 🏗️)
 	atk.lifetime = strike_duration
-	atk.position = Iso.dir8(facing_dir) * attack_reach
+	atk.attack_shape = attack_shape()
+	atk.facing = facing
 	add_child(atk)
 	_attack_area = atk
 
@@ -277,11 +379,18 @@ func _update_ai(delta: float) -> void:
 
 func _process_patrol() -> void:
 	var axis: Vector2 = patrol_axis.normalized() if patrol_axis != Vector2.ZERO else Vector2.RIGHT
-	var offset: float = (position - start_position).dot(axis)
+	# ⚠️ 巡逻的「走了多远」必须在**世界**尺子上量 —— `position` 是屏幕坐标,
+	#    沿纵深巡逻时它每帧只动一半, 拿它比 patrol_range 会让纵深方向的巡逻范围翻倍。
+	var offset: float = (_world_pos() - BeltSpace.to_world(start_position)).dot(axis)
 	if absf(offset) > patrol_range:
 		_patrol_sign = -signf(offset)
-	facing_dir = axis * _patrol_sign
-	velocity = facing_dir * move_speed
+	velocity = _world_velocity(axis * _patrol_sign, move_speed)
+	# 朝向跟着**行进方向** —— 但只有沿 x 巡逻时它才有意义。
+	# ⚠️ 沿纵深巡逻 (patrol_axis = Vector2.DOWN) 时**不动朝向**: 那个轴在横版里没有
+	#    左右可言, `sign(axis.x)` 会得到 0 —— 而 facing = 0 在所有绘制和判定里
+	#    都表现为「朝右」, 是一个不报错的错误朝向。
+	if absf(axis.x) > 0.01:
+		facing = -1 if axis.x * _patrol_sign < 0.0 else 1
 
 
 func _process_chase() -> void:
@@ -289,11 +398,28 @@ func _process_chase() -> void:
 	if target == null:
 		velocity = velocity.move_toward(Vector2.ZERO, 400.0)
 		return
-	var to_player: Vector2 = target.global_position - global_position
+	var to_player: Vector2 = _to_world_pt(target.global_position) - _world_pos()
 	if to_player.length() > 1.0:
-		# 八向直线逼近 —— 归一化后再乘速度, 否则斜向会快 √2 倍
-		facing_dir = to_player.normalized()
-		velocity = facing_dir * move_speed * chase_speed_scale
+		# 世界平面上直线逼近 —— 归一化后再乘速度, 否则斜向会快 √2 倍
+		velocity = _world_velocity(to_player, move_speed * chase_speed_scale)
+		_face_toward(target.global_position)
+
+
+## 朝向只由「玩家在左边还是右边」决定 —— 横版里**纵深不参与朝向**。
+##
+## 🏗️ 这就是「朝向和移动方向解耦」那件事的落点。
+##   旧代码是 `facing_dir = to_player.normalized()`: 追击方向**就是**朝向,
+##   于是敌人在斜着追的时候「朝向是右下方」, 而它的攻击是一个只往右下伸的方框。
+##   横版里没有「右下」这个朝向 (美术只有左右两张), 一旦攻击改成吃朝向的扇形,
+##   旧写法就会让敌人**朝右下看、却往右侧砍** —— 预警和判定都跟着错。
+##
+## ⚠️ dx 恰好为 0 (同一列, 只差纵深) 时**保持原朝向**。
+##    写成 `facing = signi(dx)` 的话 dx=0 → facing=0, 而 0 在绘制和判定里
+##    都表现为「朝右」—— 一个静默的错误朝向, 不会有任何报错。
+func _face_toward(p_target: Vector2) -> void:
+	var dx: float = _to_world_pt(p_target).x - _world_pos().x
+	if absf(dx) > 0.01:
+		facing = -1 if dx < 0.0 else 1
 
 
 ## 满足条件就起手。由 _update_ai 每帧调。
@@ -301,8 +427,16 @@ func _process_chase() -> void:
 ## 🏗️ 朝向在**起手瞬间锁定**, 起手期间不再追踪玩家。
 ##   这是有意的, 而且对「格挡」这个机制是必须的:
 ##     · 玩家能靠走位绕开 —— 否则敌人像磁铁一样跟着你转, 走位失去意义;
-##     · 更重要的是, 玩家**能预判这一刀从哪个方向来**, 扇形格挡才有得玩。
-##   如果实测发现太容易绕, 再改成「起手前 60% 缓慢追踪」也不迟。
+##     · 更重要的是, 玩家**能预判这一刀从哪个方向来**, 格挡才有得玩。
+##
+## 🏗️ 起手的条件不是「玩家有多近」, 而是「**我这一刀真的够得着**」——
+##   直接拿待会儿要生成的那个 shape 去问 (contains_ground)。
+##   用一个独立的距离阈值的话, 那个数和扇形的半径就是两个各自独立的门槛:
+##   调了一边忘另一边, 表现是敌人在射程外起手、砍一片空气, 看起来像「AI 抽风」。
+##   现在「能不能打到」只有一个来源, 和判定、预警读的是同一个对象。
+##
+## ⚠️ 这也顺手消掉了「对着空气挥」这个观感问题: 玩家站在扇形那条够不到的缝里时,
+##    敌人**根本不会起手**, 而是继续走位把它套进来 (追击是斜的, 会自动修正纵深)。
 func _try_start_attack() -> void:
 	if not can_attack or attack_phase != AttackPhase.NONE:
 		return
@@ -311,15 +445,46 @@ func _try_start_attack() -> void:
 	var target: Node2D = _get_player()
 	if target == null:
 		return
-	var to_target: Vector2 = target.global_position - global_position
-	if to_target.length() > attack_trigger_range:
+
+	_face_toward(target.global_position)
+	# ⚠️ 先定朝向再问形状 —— 扇形的判定吃朝向, 反过来问会用上一次的朝向,
+	#    于是玩家从右边绕到左边时会多挥空一刀。
+	if not attack_shape().contains_ground(
+			_world_pos(), facing, _to_world_pt(target.global_position)):
 		return
 
-	if to_target.length() > 1.0:
-		facing_dir = to_target.normalized()
 	velocity = Vector2.ZERO
 	attack_phase = AttackPhase.WINDUP
 	_phase_timer = windup_duration
+
+
+# ============================================================
+# 世界空间 —— 攻击范围是**世界单位**, 所以「够不够得着」必须在世界尺子上量
+# ============================================================
+#
+# 🏗️ 为什么这几个小换算要单独拎出来:
+#   双空间模型 (见 belt_space.gd) 里, `position / velocity` 活在**屏幕**空间,
+#   而攻击形状活在**世界**平面。任何「两边一起算」的地方都是 bug 的温床 ——
+#   而它的表现只是「凑近了打不到 / 站在远处反而挨打」, 看不出是哪一行错了。
+#   把换算收在这三个函数里, 调用点读起来就是「世界位置 / 世界速度」, 一眼能对上尺子。
+
+## 自己的世界坐标 (x, z)。
+func _world_pos() -> Vector2:
+	return BeltSpace.to_world(global_position)
+
+
+## 任意屏幕坐标 → 世界坐标。
+func _to_world_pt(screen_pos: Vector2) -> Vector2:
+	return BeltSpace.to_world(screen_pos)
+
+
+## 世界速度向量 → 交给 CharacterBody2D 的**屏幕**速度。
+##
+## ⚠️ 这里用 to_screen 而不是先归一化再乘 —— 传进来的 world_dir 已经带了速度大小,
+##    再归一化会把 move_speed 吃掉。压扁正好发生在这一步: 世界速度恒定的前提下,
+##    屏幕上纵深方向的位移自然只有横向的一半 (这就是 2.5D 地面该有的样子)。
+func _world_velocity(world_dir: Vector2, speed: float) -> Vector2:
+	return BeltSpace.to_screen(world_dir.normalized() * speed)
 
 
 # ============================================================
@@ -335,10 +500,15 @@ func take_damage(amount: int = 1, from_position: Vector2 = Vector2.INF, breaks_a
 	_flash_timer = 0.1
 
 	# 击退方向 = 从攻击点指向自己 (几何算法, 和 player.gd 是同一套)
-	var away: Vector2 = -facing_dir
+	#
+	# ⚠️ 这里**故意在屏幕空间算** (不换成世界坐标): 击退是一次性的推力, 它的观感
+	#    就是「在画面上被推开」。换成世界空间的话, 纵深方向的击退会变成一半,
+	#    等于把一组调好的手感数字全部改掉 —— 而那跟本轮要做的「攻击形状」无关。
+	var away: Vector2 = Vector2(float(-facing), 0.0)   # 兜底: 往身后推
 	if from_position.is_finite():
 		var d: Vector2 = global_position - from_position
-		away = d.normalized() if d.length() > 0.01 else -facing_dir
+		if d.length() > 0.01:
+			away = d.normalized()
 
 	if breaks_armor:
 		# 破霸体: 打断当前出招 + 长硬直。**最高优先级**, 直接覆盖任何相位。
@@ -378,7 +548,12 @@ func on_parried() -> void:
 		var away: Vector2 = global_position - target.global_position
 		if away.length() > 0.01:
 			velocity = away.normalized() * parry_recoil
-			facing_dir = -away.normalized()
+			# 转向**面对攻击者** —— 和原来的 `facing_dir = -away.normalized()` 同一个含义
+			# (away 是「从玩家指向自己」, 取反就是朝向玩家), 只是只取左右分量。
+			# ⚠️ 不能照抄 `-away` 整条向量: 从正上方被挡下来时 away ≈ (0, ±1),
+			#    取反得到 (0, ∓1) —— 那在横版里不是一个朝向 (表现为静默地朝右)。
+			if absf(away.x) > 0.01:
+				facing = 1 if away.x < 0.0 else -1
 	parried.emit(global_position + Vector2(0.0, -20.0))
 
 
@@ -406,26 +581,25 @@ func _draw() -> void:
 	if is_dead:
 		return
 
-	# 起手预警画在**最底层** —— 它是地面上的范围提示, 不该盖住敌人本体
-	if attack_phase == AttackPhase.WINDUP:
-		_draw_windup()
+	# ⚠️ 起手预警**不在这里画** —— 它由 _tg (GroundTelegraph) 画在贴地层, 见文件头。
+	#    画在这儿的话它会跟着敌人进 y-sort, 站得靠前一点就盖住玩家的脚。
 
 	var base: Color = _type_color()
 	var body: Color = Color.WHITE if _flash_timer > 0.0 else base
 	# 起手时全身泛起警告色 —— 只靠地面那块范围还不够, 远处也要一眼看见
 	if attack_phase == AttackPhase.WINDUP:
-		var t: float = 1.0 - clampf(_phase_timer / maxf(0.001, windup_duration), 0.0, 1.0)
-		body = body.lerp(WARN_COLOR, 0.25 + t * 0.5)
+		body = body.lerp(WARN_COLOR, 0.25 + windup_t() * 0.5)
 	# 收招期间整体压暗 —— 让「现在有破绽」这件事在视觉上是**可读的**
 	elif attack_phase == AttackPhase.RECOVER:
 		body = body.darkened(0.35)
 
-	# 脚下阴影 (等距: 正圆压成 2:1 椭圆)
-	var shadow: Array[Vector2] = []
-	for i: int in range(14):
-		var a: float = float(i) / 14.0 * TAU
-		shadow.append(Iso.ground(Vector2(cos(a), sin(a)) * 14.0))
-	draw_colored_polygon(PackedVector2Array(shadow), Color(0.0, 0.0, 0.0, 0.32))
+	# 脚下阴影 —— 世界半径 14 的**圆**, 屏幕上自动成 2:1 椭圆。
+	# 🏗️ 这一处**从等距时代活了下来**: 那时用 Iso.ground() 把正圆压成 2:1,
+	#    而横版的 DEPTH_SCALE 恰好也是 0.5 —— 数值一样, 所以换视角时它不用改就对了。
+	#    (整份 iso.gd 里只有这一个函数是「概念上仍然成立」的, 其余都是等距专属。)
+	#    ⚠️ 但仍然改成走 BeltSpace: 同一个 0.5 有两份实现的话, 调其中一个就会漂。
+	var shadow: PackedVector2Array = BeltSpace.ground_circle(14.0, 14)
+	draw_colored_polygon(shadow, Color(0.0, 0.0, 0.0, 0.32))
 
 	# 身体: 低矮的梯形 (妖兽的蹲伏姿态), 原点在脚底
 	draw_colored_polygon(PackedVector2Array([
@@ -444,9 +618,9 @@ func _draw() -> void:
 	draw_line(Vector2(-6.0, -42.0), Vector2(-10.0, -50.0), base.darkened(0.5), 2.5)
 	draw_line(Vector2(6.0, -42.0), Vector2(10.0, -50.0), base.darkened(0.5), 2.5)
 
-	# 眼睛: 朝向来指示当前方向 (追踪时会跟着玩家转); 起手时变红 + 变大
-	var ex: Vector2 = Iso.dir8(facing_dir)
-	var eye_off: Vector2 = Vector2(ex.x * 4.0, ex.y * 2.5)
+	# 眼睛: 朝向来指示当前方向 (只有左右 —— 追击走斜线, 但朝向只有两个值);
+	# 起手时变红 + 变大
+	var eye_off: Vector2 = Vector2(float(facing) * 4.0, 1.2)
 	var eye_c: Color = Color(1.0, 0.95, 0.4)
 	var eye_r: float = 2.6
 	if attack_phase == AttackPhase.WINDUP:
@@ -460,30 +634,66 @@ func _draw() -> void:
 
 ## 起手预警 —— **本轮的 go/no-go 验收项**。
 ##
-## 🎮 画的是判定框**将会出现的那个确切位置**, 用的是 EnemyAttack.BOX_SIZE 和
-##    与 _enter_strike() 完全相同的坐标算法 (`dir8 * attack_reach`)。
-##    所以「你看到的范围」和「真的会打到你的范围」是同一个东西 ——
-##    预警不可能骗人, 也不会因为改了参数而悄悄对不上。
+## 🎮 画的是判定区**将会出现的那个确切范围**: 直接调 `attack_shape()` ——
+##    和 `_enter_strike()` 生成判定区时**是同一个函数、同一个几何来源**。
+##    所以「你看到的范围」和「真的会打到你的范围」在结构上不可能对不上。
+##
+## 🏗️ 这一点比 v0.3 更强。v0.3 是靠「两处写同样的公式」维持同步
+##    (`dir8 * attack_reach` 在 _draw_windup 和 _enter_strike 各写一遍) ——
+##    那种同步只要有一处改动就会被破坏, 而且是静默的。现在只剩一个来源。
 ##
 ## ⚠️ 这段的可读性直接决定本轮成败: 如果玩家看不出「它要打了」,
 ##    那精准格挡就退化成背时间表, 整个设计作废。所以这里用了三重提示
 ##    (地面范围 + 全身变色 + 眼睛变红), 任何一条单独失效都还看得见。
-func _draw_windup() -> void:
-	var t: float = 1.0 - clampf(_phase_timer / maxf(0.001, windup_duration), 0.0, 1.0)
-	var center: Vector2 = Iso.dir8(facing_dir) * attack_reach
-	var half: Vector2 = EnemyAttack.BOX_SIZE * 0.5
-	var rect: Rect2 = Rect2(center - half, EnemyAttack.BOX_SIZE)
+##
+## 🏗️ 注意参数是 **canvas** 而不是画在 self 上 —— 本函数由 `_tg` (GroundTelegraph)
+##    回调执行, 画布是那个贴地层节点。几何一个字没变, 只是落到了角色**下面**。
+##    见 ground_telegraph.gd 文件头 (第一版画在 self 上, 敌人站得靠前就盖住玩家的脚)。
+## 起手进度 0 → 1 (0 = 刚抬手, 1 = 刀要落下了)。
+##
+## 🏗️ 提成一个函数, 因为**三个**地方要靠它同步: 地面扇形的张角/亮度、身体泛红、
+##    眼睛变红。原来 `1.0 - _phase_timer / windup_duration` 在 _draw 和 _draw_windup
+##    里各写了一遍 —— 那种重复不会报错, 只会让「身体还白着、地上已经血红」这种
+##    半拍错位悄悄出现, 而且只有盯着看才发现。
+func windup_t() -> float:
+	return 1.0 - clampf(_phase_timer / maxf(0.001, windup_duration), 0.0, 1.0)
+
+
+func _draw_windup_ground(canvas: CanvasItem) -> void:
+	var t: float = windup_t()
+	var sh: AttackShape = attack_shape()
 
 	# ① 底衬: 随起手进度越来越实。快满时几乎不透明, 想忽略都难。
-	draw_rect(rect, Color(WARN_COLOR.r, WARN_COLOR.g, WARN_COLOR.b, 0.10 + t * 0.30))
-	# ② 外框: 从细到粗, 给出「快到了」的进度感
-	draw_rect(rect, Color(1.0, 0.45, 0.3, 0.40 + t * 0.55), false, 1.5 + t * 2.0)
-	# ③ 收束的四角: 从判定框的四角往中心收, 收拢到多半时就是命中帧
-	var k: float = 1.0 - t * 0.45
-	draw_line(rect.position, rect.position + half * 0.7 * k, Color(1.0, 0.6, 0.4, 0.85), 2.0)
-	draw_line(rect.position + Vector2(rect.size.x, 0.0), rect.position + Vector2(rect.size.x, 0.0) + Vector2(-half.x * 0.7 * k, half.y * 0.7 * k), Color(1.0, 0.6, 0.4, 0.85), 2.0)
-	draw_line(rect.position + rect.size, rect.position + rect.size - half * 0.7 * k, Color(1.0, 0.6, 0.4, 0.85), 2.0)
-	draw_line(rect.position + Vector2(0.0, rect.size.y), rect.position + Vector2(0.0, rect.size.y) + Vector2(half.x * 0.7 * k, -half.y * 0.7 * k), Color(1.0, 0.6, 0.4, 0.85), 2.0)
+	#    ⚠️ origin 传 Vector2.ZERO = **自己脚下**, 这是 draw_telegraph 的合同
+	#    (形状的圆心偏移烘焙在多边形里, 这里再加一次就是偏两次)。
+	sh.draw_telegraph(
+		canvas, Vector2.ZERO, facing,
+		Color(WARN_COLOR.r, WARN_COLOR.g, WARN_COLOR.b, 0.14 + t * 0.26),
+		Color(1.0, 0.45, 0.3, 0.45 + t * 0.50))
+
+	# ② 扫过的扇环: 从一侧扫到另一侧, 扫到哪儿就说明"刀到哪儿了"。
+	#    🏗️ 用的是玩家刀光那**同一个** sweep_trail_points —— 于是「挥砍的进度感」
+	#    在敌我两边是同一种视觉语言, 而它的半径也不可能和判定漂移。
+	#    ⚠️ 起手阶段刀还没挥出去, 所以只画到 t 对应的角度, 最后一段才收满。
+	var half: float = sh.half_angle_deg
+	var to_deg: float = lerpf(-half, half, t)
+	var pts: PackedVector2Array = sh.sweep_trail_points(
+		Vector2.ZERO, facing, -half, to_deg, 0.30)
+	if pts.size() >= 6:
+		canvas.draw_colored_polygon(pts, Color(1.0, 0.62, 0.35, 0.16 + t * 0.22))
+		var edge: PackedVector2Array = PackedVector2Array()
+		for i: int in range(pts.size() / 2):
+			edge.append(pts[i])
+		canvas.draw_polyline(edge, Color(1.0, 0.72, 0.45, 0.55 + t * 0.35), 2.0, true)
+
+	# ③ 前缘: 一条从脚下射向「刀现在扫到哪儿」的亮线。
+	#    和 ② 共用同一个 to_deg, 所以两者永远指向同一个角度。
+	#    ⚠️ 用 shape 自己的 polar_to_screen 求那个点 —— 朝向翻转和压扁都在里面,
+	#       在这里手写一遍 cos/sin 就是抄第二份几何, 而抄错的表现是
+	#       「刀刃指着一个判定够不到的方向」, 画面上完全看不出来。
+	canvas.draw_line(
+		Vector2.ZERO, sh.polar_to_screen(to_deg, sh.reach, facing),
+		Color(1.0, 0.85, 0.6, 0.5 + t * 0.45), 2.5)
 
 
 ## 前爪 —— 出招的**肢体语言**。地面预警告诉你「打哪儿」, 这个告诉你「它正在挥」。
@@ -491,31 +701,34 @@ func _draw_windup() -> void:
 ## 起手时往身后拉 (蓄势), 命中帧甩到身前, 收招时垂下来。
 ## 少了它, 起手预警就只剩一块地面色块, 读起来像「地上有个 UI」而不是「它要砍我了」。
 func _draw_claw(base: Color) -> void:
-	var d: Vector2 = Iso.dir8(facing_dir)
-	var shoulder: Vector2 = Vector2(0.0, -24.0) + d * 4.0
-	var claw_dir: Vector2 = d
-	var length: float = 16.0
+	var f: float = float(facing)
+	# 🏗️ 角度一律在「朝右」的坐标系里算 (swing), 最后把 x 分量按朝向镜像。
+	#    ⚠️ 不能直接对 `d = (f, 0)` 调 rotated(): 旋转是绕圈的, 不认镜面 ——
+	#       于是朝左时「往身后拉」会变成「往身前伸」, 蓄势和挥砍正好反过来。
+	#       这个 bug 只在朝左时出现, 而朝右时一切正常。
+	var swing: float = 0.6        # 待机: 爪尖略垂
+	var length: float = 15.0
 	var claw_color: Color = base.darkened(0.35)
 
 	match attack_phase:
 		AttackPhase.WINDUP:
 			var t: float = 1.0 - clampf(_phase_timer / maxf(0.001, windup_duration), 0.0, 1.0)
 			# 往身后拉: 从 -0.5 rad 拉到 -1.5 rad, 越接近命中拉得越狠
-			claw_dir = d.rotated(lerpf(-0.5, -1.5, t))
+			swing = lerpf(-0.5, -1.5, t)
 			length = lerpf(16.0, 24.0, t)
 			claw_color = base.lerp(WARN_COLOR, 0.4 + t * 0.5)
 		AttackPhase.STRIKE:
-			claw_dir = d
+			swing = 0.0
 			length = 30.0
 			claw_color = Color(1.0, 0.95, 0.85)
 		AttackPhase.RECOVER:
-			claw_dir = d.rotated(0.9)
+			swing = 0.9
 			length = 14.0
 			claw_color = base.darkened(0.55)
-		_:
-			claw_dir = d.rotated(0.6)
-			length = 15.0
 
+	var dir_r: Vector2 = Vector2.RIGHT.rotated(swing)
+	var claw_dir: Vector2 = Vector2(dir_r.x * f, dir_r.y)
+	var shoulder: Vector2 = Vector2(0.0, -24.0) + Vector2(f * 4.0, 0.0)
 	var tip: Vector2 = shoulder + claw_dir * length
 	draw_line(shoulder, tip, claw_color, 4.0)
 	# 爪尖分叉
