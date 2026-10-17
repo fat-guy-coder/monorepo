@@ -127,6 +127,20 @@ enum AttackPhase {
 ##    这个不对称是**有意**的 —— 玩家手短是打不过远程的, 手长都是保命的。
 @export var sweep_radius: float = 54.0
 @export var sweep_half_angle_deg: float = 60.0
+## 这一刀扫得到的**离地高度上限** (px)。低于/等于它才挨打 —— **跳过去就躲得开**。
+##
+## 🏗️ 这是 v0.4 加跳跃的**主要收益** (V04_PLAN 步骤 5): 没有高度带的话, 跳跃
+##    在地面战斗里只是一个好看的位移, 躲不开任何东西。
+##
+## 🎮 40 是相对于满跳高度 112.7 (jump_speed² / 2×gravity) 定的:
+##    起跳后很快就能越过 40, 于是「看到起手 → 跳」是一个**真操作**,
+##    而不是只有踩到最高点才勉强躲开。调低会变成「随便跳一下就无敌」,
+##    调高则要求卡时机 —— 数值手感仍然要 F5 再微调。
+##
+## ⚠️ 高度带**不在物理体里** (Area2D 活在 2D 平面, 表达不了离地高度),
+##    真正的判定点在 `player.gd _on_hurtbox_area_entered`。这里只定义数据,
+##    由受击方查 —— 和玩家攻击的 `AttackHitbox._try_hit` 是同一条纪律。
+@export var sweep_height_max: float = 40.0
 ## 敌人身体的**世界**半径 —— 它占哪块地 (屏幕上 11×5.5 的椭圆)。
 ##
 ## ⚠️ 11 不是新调的: enemy.tscn 原本是 22×12 的屏幕矩形, 横向半宽就是 11。
@@ -315,7 +329,9 @@ func _update_attack(delta: float) -> bool:
 ##    在这里另写一套极坐标、或者把半径抄成两个常量, 改一处就会出现
 ##    「地上画的红色范围」和「真的会打到你的范围」对不上, 而且是双向的。
 func attack_shape() -> AttackShape:
-	return AttackShape.make_arc(sweep_radius, sweep_half_angle_deg)
+	# 低空扇形: 贴地的人会被扫到, 跳起来的人躲得开 (见 sweep_height_max)。
+	# 预警 / 判定 / 自检仍然读这同一个对象 —— 高度带只是多了一条数据。
+	return AttackShape.make_arc(sweep_radius, sweep_half_angle_deg).band(0.0, sweep_height_max)
 
 
 ## 起手 → 命中。生成判定区。

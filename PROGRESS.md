@@ -1,6 +1,6 @@
 # 📊 全项目进度面板
 
-> 更新时间: 2026-10-16 | 当前活跃任务: **Blitz v0.4 视角转 2.5D 横版 —— 步骤 1–4 ✅，接着做步骤 5（攻击高度带 / 跳跃躲低扫），计划见 [`apps/game/blitz/V04_PLAN.md`](apps/game/blitz/V04_PLAN.md)**
+> 更新时间: 2026-10-18 | 当前活跃任务: **Blitz v0.4 视角转 2.5D 横版 —— 步骤 1–5 ✅，接着做步骤 6（格挡改前后半平面 / 删鼠标瞄准），计划见 [`apps/game/blitz/V04_PLAN.md`](apps/game/blitz/V04_PLAN.md)**
 
 > 🔸 **本会话结束后要换电脑继续** —— Blitz 的改动**必须 commit + push** 才能带过去（分支 `feat/iso-locomotion`，跟踪 `origin/feat/iso-locomotion`）。
 > 原先的 v0.4 计划文件在会话的 `~/.claude/plans/` 里（**本机文件，换电脑就没了**），已搬到仓库的 `apps/game/blitz/V04_PLAN.md`。
@@ -252,17 +252,22 @@ v0.2 等距 / v0.3 战斗手感已完成。v0.4 的目标是把地面轴从等�
 | 1–2 | 地平面（`belt_floor.gd`）+ 矩形围墙 + 侧视角色 + 跳跃 | ✅ |
 | 3 | `AttackShape`（RECT/ARC/CIRCLE）+ 玩家攻击改用它 + 落雷技能 | ✅ |
 | 4 | 敌人：朝向 ±1、`AttackShape` 出招、预警画地上、贴地预警图层 | ✅ |
-| 5 | **跳跃的战术价值** —— 给 `AttackShape` 接高度带，跳起来能躲低扫 | ⏳ |
+| 5 | **跳跃的战术价值** —— 敌人横扫接低空高度带（`sweep_height_max = 40`），跳起来能躲低扫 | ✅ |
 | 6 | 格挡改前后半平面；删掉鼠标瞄准（`block_aim_override`/`block_cone_cos`） | ⏳ |
 | 7 | 自检重写 + `DESIGN.md` 回填（**整份还是 v0.2 等距版**） | ⏳ |
 
-**闸门现状：** 闸门 1（解析）空 · 闸门 2（自检）**181 项检查 0 项失败**。另有第三层截图探针 `--shots`（自检看不见渲染 —— 已靠它逮到过一个「181 条全绿」的 bug）。
+**步骤 5 实现要点：** 高度带由**受击方**主动查（物理体表达不了离地高度）——
+敌人打玩家 → `player.gd _on_hurtbox_area_entered` 用玩家自己的 `height`；
+玩家打敌人 → `AttackHitbox._try_hit` 读 body 的 `height`。自检补了「贴地对照组会挨打 /
+跳到 height_max+20 躲得开」三条端到端断言。
+
+**闸门现状：** 闸门 1（解析）空 · 闸门 2（自检）**184 项检查 0 项失败** · 截图探针 17 张正常。另有第三层截图探针 `--shots`（自检看不见渲染 —— 已靠它逮到过一个「181 条全绿」的 bug）。
 
 **关键不变量：** 一招 = **一个 `AttackShape` 实例**，预警 / `CollisionShape2D` / 自检读的都是它 → 漂移在结构上不可能。坐标桥只有 `belt_space.gd` 一处（`to_screen` / `to_world` / `ground_circle_shape`）。
 
 ⚠️ **`DESIGN.md` 整份仍是 v0.2 等距版**（标题还写着「等距视角仙侠动作 RPG」），别照它写代码 —— 以 `V04_PLAN.md` 和代码为准。
 
-**继续指令：** 「继续 Blitz 的 v0.4 开发，读 `apps/game/blitz/V04_PLAN.md`，从步骤 5（攻击高度带 / 跳跃躲低扫）开始」
+**继续指令：** 「继续 Blitz 的 v0.4 开发，读 `apps/game/blitz/V04_PLAN.md`，从步骤 6（格挡前后半平面 / 删鼠标瞄准）开始」
 
 ---
 
@@ -331,7 +336,7 @@ API 文档: `apps/backend/API.md` | 快速启动: `docker-compose up -d backend 
 | 继续 Go 文档 | 「继续 Go 学习文档的填充，从阶段 2 开始」 |
 | 继续 Godot 文档 | 「继续 Godot 学习文档的填充」 |
 | 继续后端开发 | 「继续后端 API 开发」 |
-| 继续游戏开发 | 「继续 Blitz 的 v0.4 开发，读 `apps/game/blitz/V04_PLAN.md`，从步骤 5（攻击高度带 / 跳跃躲低扫）开始」 |
+| 继续游戏开发 | 「继续 Blitz 的 v0.4 开发，读 `apps/game/blitz/V04_PLAN.md`，从步骤 6（格挡前后半平面 / 删鼠标瞄准）开始」 |
 
 > **提示：** 新会话中 AI 首先读取 `README.md` 和 `PROGRESS.md`（本文件），即可了解全局状态和当前任务。
 

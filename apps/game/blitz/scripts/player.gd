@@ -1201,6 +1201,13 @@ func respawn(at: Vector2) -> void:
 func _on_hurtbox_area_entered(area: Area2D) -> void:
 	if area is EnemyAttack:
 		var atk: EnemyAttack = area
+		# 高度带: 跳得够高就躲得开。**判定点必须在这里**, 不能靠 EnemyAttack 自己查 ——
+		# 它是被动伤害标记 (monitoring = false), 根本不检测任何东西;
+		# 而物理体活在 2D 平面里, 也表达不了离地高度。
+		# 这和 AttackHitbox._try_hit 完全对称: 「谁受伤, 谁拿自己的实际高度去问 shape」。
+		# ⚠️ 必须早于 take_damage —— 否则跳过去照样会触发格挡/精准格挡/无敌帧消耗。
+		if atk.attack_shape != null and not atk.attack_shape.hits_height(height):
+			return
 		take_damage(atk.damage, atk.global_position, atk.source)
 
 

@@ -1264,6 +1264,30 @@ func _check_enemy_attack_lands(player: BlitzPlayer, enemies: Array) -> void:
 	var hit_behind: bool = await _drive_enemy_strike(striker, player, Vector2(40.0, 0.0), 1)
 	_ok("站在敌人**背后**打不到 (朝向真的接上了判定)", not hit_behind)
 
+	# ⑤ 高度带 —— 跳跃能躲开这一刀 (v0.4 步骤 5, 加跳跃的主要收益)
+	#
+	# 🏗️ 前四条验的都是「在地面上站哪会挨打」; 这一条验**第三条轴**。
+	#    ⚠️ 只断言 shape.hits_height() 是不够的 —— 那只能证明**数据对**,
+	#       证明不了那条数据真的接进了受击链路 (数据写对、没人读 = 跳跃没收益)。
+	#       所以这里走**完整一招**: 手动打进 WINDUP → STRIKE, 让玩家 Hurtbox
+	#       真的和 EnemyAttack 重叠, 看最后掉不掉血。
+	var band: AttackShape = striker.attack_shape()
+	_ok("敌人横扫带低空高度带 (跳起来躲得开的前提)",
+		band.height_max < INF and band.height_max > 0.0,
+		"height_min=%.0f height_max=%.0f" % [band.height_min, band.height_max])
+
+	# 对照组: 同一位置贴地站 → 这一刀必须真的打得到。
+	# 没有它的话, 「跳过去没掉血」也可能只是因为判定根本没接上, 假绿。
+	var hit_low: bool = await _drive_enemy_strike_at_height(
+		striker, player, Vector2(40.0, 0.0), -1, 0.0)
+	_ok("贴地站在同一位置会被横扫打到 (高度带的对照组)", hit_low)
+
+	var dodge_height: float = band.height_max + 20.0
+	var hit_high: bool = await _drive_enemy_strike_at_height(
+		striker, player, Vector2(40.0, 0.0), -1, dodge_height)
+	_ok("跳到 height_max 以上**躲开**横扫 (跳跃真的有战术价值)", not hit_high,
+		"height=%.0f > height_max=%.0f" % [dodge_height, band.height_max])
+
 	striker.attack_phase = BlitzEnemy.AttackPhase.NONE
 	striker._attack_cooldown_timer = 0.0
 	_restore_player(player)
@@ -1293,6 +1317,37 @@ func _drive_enemy_strike(
 		await get_tree().physics_frame
 		if player.health < hp0:
 			return true
+	return false
+
+
+## 同 `_drive_enemy_strike`, 但把玩家的**离地高度钉在 `at_height`** 上打完整一招。
+## 返回: 玩家这一下有没有掉血。
+##
+## ⚠️ 必须**每帧重设 height / _height_vel**。玩家 `_physics_process` 里有重力,
+##    只设一次的话, 等判定区真正生成时人已经掉回地面了 —— 于是「跳着躲开」
+##    会假失败, 而失败现象看起来像「高度带没接上」, 排查会往完全错误的方向跑。
+##    (自检里直接写私有字段不是偷懒: 这里要精确控制一个**瞬间状态**,
+##     走真实输入起跳反而引入了起跳时机这个无关变量。)
+func _drive_enemy_strike_at_height(
+	striker: BlitzEnemy, player: BlitzPlayer, world_offset: Vector2, facing: int, at_height: float
+) -> bool:
+	_prep_dummy(striker, player, BeltSpace.to_screen(world_offset))
+	striker.facing = facing
+	_restore_player(player)
+
+	striker.attack_phase = BlitzEnemy.AttackPhase.NONE
+	striker._attack_cooldown_timer = 0.0
+	var hp0: int = player.health
+	striker.attack_phase = BlitzEnemy.AttackPhase.WINDUP
+	striker._phase_timer = 0.03
+
+	for i: int in range(30):
+		player.height = at_height
+		player._height_vel = 0.0
+		await get_tree().physics_frame
+		if player.health < hp0:
+			return true
+	player.height = at_height
 	return false
 
 

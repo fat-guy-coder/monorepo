@@ -84,9 +84,12 @@ enum Kind {
 ## 默认 -INF ~ +INF = 不限制 —— 也就是说**不设置就完全没有行为变化**,
 ##    已有的招式一条都不用改。第 5 步才逐个接上。
 ##
-## ⚠️ 高度带只在 `contains()` 和 AttackHitbox 的 `body_entered` 里判 ——
-##    **物理体表达不了高度**, 因为 Area2D 活在 2D 平面里。
-##    所以「跳过去」这件事永远由判定方主动查, 而不是靠几何自动成立。
+## ⚠️ 高度带**不在物理体里**判 —— Area2D 活在 2D 平面, 表达不了离地高度。
+##    真正的判定点只有两个, 都属于**受击方**:
+##      · 玩家打敌人 → AttackHitbox._try_hit 读 body 的 height;
+##      · 敌人打玩家 → player._on_hurtbox_area_entered 读自己的 height。
+##    所以「跳过去」永远由受伤的一方拿**自己的实际高度**去问 shape,
+##    而不是靠几何自动成立。改受击判定时别忘了这两个出口是成对的。
 @export var height_min: float = -INF
 @export var height_max: float = INF
 
