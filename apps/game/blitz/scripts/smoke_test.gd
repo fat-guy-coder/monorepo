@@ -420,10 +420,14 @@ func _run_combat(game: Node) -> void:
 		if n is BlitzEnemy:
 			(n as BlitzEnemy).can_attack = false
 
-	# 用覆写出口把朝向钉死在**左** (-1)。横版朝向只有 ±1, 判定只跟 X 有关 ——
+	# 把朝向钉死在**左** (-1)。横版朝向只有 ±1, 判定只跟 X 有关 ——
 	# 所以下面所有「正面 / 背后」的攻击源坐标都必须落在 X 轴上, 而不是上下。
-	# (这个出口的消费者写在 player.gd 的 block_aim_override 上方)
-	player.block_aim_override = -1
+	# ⚠️ 直接写 facing, 不走任何「测试专用覆写出口」—— v0.3 的 block_aim_override
+	#    已经删掉 (理由见 player.gd 文件头)。这样自检摆出来的就是游戏里真实存在的
+	#    那个状态, 没有旁路可以绕过朝向规则。
+	#    (无头环境下这里不按任何移动键, 所以 _process_blocking 里的 _face(0) 是空操作,
+	#     朝向不会被下一帧改回去 —— 这也是它能直接写的前提。)
+	player.facing = -1
 	player.velocity = Vector2.ZERO
 
 	await _check_guard(player, enemies)
@@ -469,6 +473,17 @@ func _check_guard(player: BlitzPlayer, enemies: Array) -> void:
 	_ok("按住格挡键进入 BLOCKING", player.is_guard_up(),
 		"state=%s" % BlitzPlayer.State.keys()[player.state])
 	_ok("刚按下时精准窗口是开的", player.is_parry_window_open())
+
+	# ①.5 举盾**不会**偷偷改朝向 —— 朝向是玩家的输入结果, 不是格挡的副作用。
+	#       v0.3 靠 block_aim_override 强制朝向, 那条出口删掉之后这里才成为真·不变量
+	#       (见 player.gd 文件头)。将来若有人加「格挡时自动面向敌人」, 这里会立刻红 ——
+	#       那一套正是本轮删掉的东西, 不该以另一种形式长回来。
+	# ⚠️ 不要在这里清 _parry_window_timer: 下面 ② 正要靠「窗口是开的」来测精准格挡。
+	#    重新进一次格挡不会重开窗口 (parry_cooldown 还没过), 所以这一次调用是无副作用的。
+	var facing_before: int = player.facing
+	player._enter_blocking()
+	_ok("举盾不改朝向 (没有隐藏的自动转向)", player.facing == facing_before,
+		"facing %d -> %d" % [facing_before, player.facing])
 
 	# ② 精准格挡: 窗口内被**正面**攻击 → 零伤 + 零耗 + 攻击者硬直
 	# ⚠️ 朝向 = 左 (-1), 所以「正面」在 **-X 方向**。写成上下方向的话判定会
@@ -995,7 +1010,6 @@ func _check_skill(player: BlitzPlayer, enemies: Array) -> void:
 	player.stamina.refill()
 	player.invincible_timer = 0.0
 	player.health = player.max_health
-	player.block_aim_override = -1      # 沿用前面钉死的朝向 (不影响落雷, 落雷只吃 facing)
 
 	var sh: AttackShape = player.skill_shape()
 	_ok("落雷是**圆**, 而且圆心在身前 (不是脚下)",
@@ -1354,7 +1368,6 @@ func _drive_enemy_strike_at_height(
 ## 把玩家恢复到「能挨打」的干净状态 (不无敌、不满血以外的一切干扰)。
 func _restore_player(player: BlitzPlayer) -> void:
 	player.state = BlitzPlayer.State.NORMAL
-	player.block_aim_override = 0
 	player.invincible_timer = 0.0
 	player.health = player.max_health
 	player.velocity = Vector2.ZERO

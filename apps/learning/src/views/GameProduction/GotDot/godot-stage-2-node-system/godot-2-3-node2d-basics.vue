@@ -1,6 +1,6 @@
 <template>
   <div class="go-doc min-h-screen bg-linear-to-br from-slate-50 to-blue-50">
-    <header class="bg-white border-b border-slate-200"><div class="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between"><div><h1 class="text-2xl font-bold text-slate-800">Node2D：2D 节点基类</h1><p class="text-sm text-slate-500 mt-1">所有 2D 节点的根——position、rotation、scale、transform</p></div><div class="flex items-center gap-3"><EditorLink file-path="apps/game/blitz/scripts/drawable_rect.gd" label="📝 drawable_rect.gd" :is-admin="userStore.isAdmin" /><span class="text-xs text-slate-400 bg-slate-100 px-3 py-1 rounded-full">阶段 2-3</span></div></div></header>
+    <header class="bg-white border-b border-slate-200"><div class="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between"><div><h1 class="text-2xl font-bold text-slate-800">Node2D：2D 节点基类</h1><p class="text-sm text-slate-500 mt-1">所有 2D 节点的根——position、rotation、scale、transform</p></div><div class="flex items-center gap-3"><EditorLink file-path="apps/game/blitz/scripts/world/obstacle.gd" label="📝 obstacle.gd" :is-admin="userStore.isAdmin" /><span class="text-xs text-slate-400 bg-slate-100 px-3 py-1 rounded-full">阶段 2-3</span></div></div></header>
     <main class="max-w-4xl mx-auto px-6 py-8 space-y-6"><Nav :list="navList" title="目录" position="top-right" :showBackToTop="true" />
 
       <section id="sec-1" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">

@@ -1,6 +1,6 @@
 # 📊 全项目进度面板
 
-> 更新时间: 2026-10-18 | 当前活跃任务: **Blitz v0.4 视角转 2.5D 横版 —— 步骤 1–5 ✅，接着做步骤 6（格挡改前后半平面 / 删鼠标瞄准），计划见 [`apps/game/blitz/V04_PLAN.md`](apps/game/blitz/V04_PLAN.md)**
+> 更新时间: 2026-10-20 | 当前活跃任务: **Blitz v0.4 视角转 2.5D 横版 —— 步骤 1–7 全部完成 ✅，待人工验收（F5）后进入 v0.5。设计见 [`apps/game/blitz/DESIGN.md`](apps/game/blitz/DESIGN.md)，过程档案见 [`V04_PLAN.md`](apps/game/blitz/V04_PLAN.md)**
 
 > 🔸 **本会话结束后要换电脑继续** —— Blitz 的改动**必须 commit + push** 才能带过去（分支 `feat/iso-locomotion`，跟踪 `origin/feat/iso-locomotion`）。
 > 原先的 v0.4 计划文件在会话的 `~/.claude/plans/` 里（**本机文件，换电脑就没了**），已搬到仓库的 `apps/game/blitz/V04_PLAN.md`。
@@ -253,21 +253,37 @@ v0.2 等距 / v0.3 战斗手感已完成。v0.4 的目标是把地面轴从等�
 | 3 | `AttackShape`（RECT/ARC/CIRCLE）+ 玩家攻击改用它 + 落雷技能 | ✅ |
 | 4 | 敌人：朝向 ±1、`AttackShape` 出招、预警画地上、贴地预警图层 | ✅ |
 | 5 | **跳跃的战术价值** —— 敌人横扫接低空高度带（`sweep_height_max = 40`），跳起来能躲低扫 | ✅ |
-| 6 | 格挡改前后半平面；删掉鼠标瞄准（`block_aim_override`/`block_cone_cos`） | ⏳ |
-| 7 | 自检重写 + `DESIGN.md` 回填（**整份还是 v0.2 等距版**） | ⏳ |
+| 6 | 格挡改前后半平面；删掉鼠标瞄准（`block_aim_override`/`block_cone_cos`） | ✅ |
+| 7 | 自检审计 + `DESIGN.md` 整份回填成横版 + 根 README + 学习站死链修复 | ✅ |
 
 **步骤 5 实现要点：** 高度带由**受击方**主动查（物理体表达不了离地高度）——
 敌人打玩家 → `player.gd _on_hurtbox_area_entered` 用玩家自己的 `height`；
 玩家打敌人 → `AttackHitbox._try_hit` 读 body 的 `height`。自检补了「贴地对照组会挨打 /
 跳到 height_max+20 躲得开」三条端到端断言。
 
-**闸门现状：** 闸门 1（解析）空 · 闸门 2（自检）**184 项检查 0 项失败** · 截图探针 17 张正常。另有第三层截图探针 `--shots`（自检看不见渲染 —— 已靠它逮到过一个「181 条全绿」的 bug）。
+**步骤 6 实现要点：** 半平面判定本身早就落地了，这一步清的是 v0.3 的两个壳 ——
+`block_cone_cos`（扇形半角，横版里改了也不生效的静默接口）和 `block_aim_override`
+（鼠标瞄准最后出口；`facing` 现在恒为 ±1，不再需要「进格挡时补一次朝向」）。
+自检改成直接写 `player.facing = -1`（没有测试旁路），并加了一条**举盾不改朝向**
+防回归断言。`_is_in_guard_cone` → `_is_in_guard_front`，`_draw_guard_cone` → `_draw_guard_plane`。
+
+**步骤 7 实现要点：** 自检审计无缺口（185 项即完整基线；`enemy_attack.BOX_SIZE` 的宽高比断言已作废，
+它只是手工摆判定区的兜底）。`DESIGN.md` 整份重写成 belt-scroll（含「等距错在哪」一节，
+固化两轮实测结论）。顺手修掉重力 1200→1400 遗留的两处过期数值（满跳 112.7→96.6）。
+学习站：5 处指向已删文件的 EditorLink 改指现存文件；1-3 / 1-6 / 6-2 / 2-8 四处「当前 Blitz 行为」
+的说法修正。**剩余文档债**（ParryDetector / coyote / 八向，涉及 7 篇）记在 `V04_PLAN.md` 已知问题里。
+
+**闸门现状：** 闸门 1（解析）空 · 闸门 2（自检）**185 项检查 0 项失败** · 截图探针 17 张正常。另有第三层截图探针 `--shots`（自检看不见渲染 —— 已靠它逮到过一个「181 条全绿」的 bug）。
 
 **关键不变量：** 一招 = **一个 `AttackShape` 实例**，预警 / `CollisionShape2D` / 自检读的都是它 → 漂移在结构上不可能。坐标桥只有 `belt_space.gd` 一处（`to_screen` / `to_world` / `ground_circle_shape`）。
 
-⚠️ **`DESIGN.md` 整份仍是 v0.2 等距版**（标题还写着「等距视角仙侠动作 RPG」），别照它写代码 —— 以 `V04_PLAN.md` 和代码为准。
+✅ **`DESIGN.md` 已回填成 v0.4**，现在它是唯一权威设计文档（视角选型 / 坐标模型 / 攻击形状 / 代码地图 / 验收清单）。
+`V04_PLAN.md` 降为过程档案（逐步记录 + 踩坑 + 已知问题）。
 
-**继续指令：** 「继续 Blitz 的 v0.4 开发，读 `apps/game/blitz/V04_PLAN.md`，从步骤 6（格挡前后半平面 / 删鼠标瞄准）开始」
+⚠️ **v0.4 还差人工验收**（必须 F5 真开窗口）：横向跟地砖对得上吗 / 跳跃读得出吗 / 预警看得见吗 /
+纵深容差合适吗 / 跳得开低扫吗 / 精准格挡有回报吗 / 精力逼出取舍吗 / 破防够痛吗。
+
+**继续指令：** 「继续 Blitz 的开发。v0.4 已完成，先读 `apps/game/blitz/DESIGN.md` 了解现状；如果人工验收还没做，先陪我过一遍验收清单；通过后再开始 v0.5（装备掉落 + 词条 + 技能槽位）」
 
 ---
 
@@ -336,7 +352,7 @@ API 文档: `apps/backend/API.md` | 快速启动: `docker-compose up -d backend 
 | 继续 Go 文档 | 「继续 Go 学习文档的填充，从阶段 2 开始」 |
 | 继续 Godot 文档 | 「继续 Godot 学习文档的填充」 |
 | 继续后端开发 | 「继续后端 API 开发」 |
-| 继续游戏开发 | 「继续 Blitz 的 v0.4 开发，读 `apps/game/blitz/V04_PLAN.md`，从步骤 6（格挡前后半平面 / 删鼠标瞄准）开始」 |
+| 继续游戏开发 | 「继续 Blitz 的开发。v0.4 已完成，先读 `apps/game/blitz/DESIGN.md`；人工验收还没做就先过验收清单，通过后开始 v0.5（装备 + 词条 + 技能槽）」 |
 
 > **提示：** 新会话中 AI 首先读取 `README.md` 和 `PROGRESS.md`（本文件），即可了解全局状态和当前任务。
 

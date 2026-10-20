@@ -87,7 +87,14 @@ class_name BlitzPlayer
 ##     「鼠标指着哪个方向」不再是一个能被表达的状态: 鼠标在角色正上方时该朝左还是朝右?
 ##     没有答案。v0.3 那条「格挡时朝向跟随鼠标」的规则**是被等距逼出来的补丁**,
 ##     换成横版之后它自己没有意义了 —— 于是格挡时朝向 = 当前 facing, 和其他状态一致。
-##     (留着 block_aim_override 这个出口, 自检要靠它指定朝向。见那个变量。)
+##
+##   · **block_aim_override (强制朝向出口)** —— 它是鼠标瞄准留下的壳, 存在的唯一理由是
+##     「让自检精确摆出'从正面来 / 从背后来'」。删掉它的理由和删鼠标瞄准是同一条:
+##     facing 现在**恒为 ±1** (见下面的 var facing), 「未定向」这个状态不存在了,
+##     于是「进入格挡前先补一次朝向」也不需要了。
+##     自检改成直接写 `player.facing = -1` —— 那正是游戏里真实存在的状态, 没有旁路
+##     可以绕过朝向规则, 比留一个「只有测试才用」的出口更可信。
+##     (留着的话迟早会有人拿它去写「格挡时自动转向敌人」, 那正好是刚删掉的那套东西。)
 ##
 ##   · **coyote time (土狼时间)** —— 它的定义是「刚离开地面的一小段时间里仍然可以跳」,
 ##     前提是**有地面边缘可以掉下去**。横版清关的地面是一整块平地 (见 belt_floor.gd),
@@ -260,12 +267,6 @@ const JUMP_ACTION: String = "jump"
 @export var parry_cooldown: float = 0.45
 ## 格挡时的移动速度倍率
 @export var block_move_scale: float = 0.4
-## ⚠️ **横版里已经不起作用, 保留只是为了让旧存档/旧注释不至于对不上**。
-##
-## 它的原义是「格挡扇形的半角余弦」: 0.0 = ±90° 的半平面, 0.7 收窄成 ±45°。
-## 横版朝向只有 ±1, 判定退化成一次符号比较 (见 _is_in_guard_cone), 0.0 是唯一
-## 有意义的取值 —— 调它不会改变任何行为。第 6 步 (格挡改造) 会把它删掉。
-@export var block_cone_cos: float = 0.0
 @export var guard_break_duration: float = 0.9     ## 破防硬直
 @export var guard_break_knockback: float = 300.0
 
@@ -329,19 +330,6 @@ var _grounded: bool = true
 var _jump_buffer_timer: float = 0.0
 ## 走路摆动相位。腿的摆动只跟**位移速度**有关, 站着不动就停住 —— 见 _draw_legs()
 var _walk_phase: float = 0.0
-
-## 格挡朝向的**覆写出口**: 0 = 不覆写 (用当前 facing), +1/-1 = 强制朝右/朝左。
-##
-## 🏗️ 留这个出口的两个真实消费者:
-##   ① **headless 自检** —— 自检要把「攻击从正面来 / 从背后来」精确摆出来,
-##      不指定朝向就只能靠先按住移动键来转向, 那会把「输入路径」和「格挡判定」两件事
-##      混在同一条断言里, 一红就分不清是哪一边坏了。
-##   ② 未来的锁定/自动转向。
-##
-## ⚠️ v0.3 它是 Vector2 (鼠标瞄准的覆写)。取消鼠标瞄准之后, 能表达的状态只剩左右,
-##    于是它也退化成一个 int —— 保留接口的形状跟着模型走, 不要留一个「什么都能指」
-##    的出口, 那种出口迟早会被人用来绕过朝向规则。
-var block_aim_override: int = 0
 
 var health: int = 0
 var invincible_timer: float = 0.0
@@ -661,8 +649,6 @@ func _process_blocking(delta: float) -> void:
 
 	# 朝向和别的状态一致: 你往哪走就朝哪。**不再跟随鼠标** —— 见文件头「删掉的东西」。
 	_face(input_dir.x)
-	if block_aim_override != 0:
-		facing = block_aim_override
 
 	# 闪避是**万能取消**: 举着盾也能翻滚出去。
 	# 没有它的话, 被围住时玩家只剩「举盾硬扛」和「放盾跑」两个选项,
@@ -769,9 +755,9 @@ func _process_guard_broken(delta: float) -> void:
 func _enter_blocking() -> void:
 	state = State.BLOCKING
 	_charge_timer = 0.0
-	# 立刻定朝向, 否则进入格挡的第一帧还是旧朝向 —— 那正好是最需要挡的一帧
-	if block_aim_override != 0:
-		facing = block_aim_override
+	# 这里**不需要**先补一次朝向 —— facing 恒为 ±1 (见 var facing 和文件头
+	# block_aim_override 那一条)。v0.3 的 facing 可以是「未定向」的 Vector2,
+	# 才必须在进入格挡的第一帧补一次, 而那一帧正好是最需要挡的一帧。
 
 	if _parry_cooldown_timer <= 0.0:
 		_parry_window_timer = parry_window
@@ -782,14 +768,15 @@ func _enter_blocking() -> void:
 ##
 ## 🏗️ 横版里这就是「前后半平面」: 只看 X 方向的差, **纵深 (Y) 完全不参与**。
 ##    这正好实现了用户要的效果 —— 「站得比我靠前/靠后一点都还算在正面」。
-##    在等距时代这里是个 ±90° 的扇形 (要连续算角度, 还得跟鼠标瞄准对齐);
-##    现在退化成一次符号比较, 而且**没有可以调窄的余地** —— 因为朝向本来就只有两个值,
-##    所以 block_cone_cos 在横版里只剩 0.0 一个合法取值 (见那个变量)。
+##    在等距时代这里是个 ±90° 的扇形 (要连续算角度, 还得跟鼠标瞄准对齐), 并且有一个
+##    `block_cone_cos` 旋钮可以把它收窄成 ±45°。横版里那个旋钮**已经删掉**:
+##    朝向只有两个值, 判定没有可以调窄的余地 —— 留一个不起作用的旋钮, 只会让人以为
+##    「调一下就能让格挡更窄」, 而改它什么都不会发生 (静默无效是最坏的一类接口)。
 ##
 ## ⚠️ 用的是「玩家 → 攻击者」这个向量, 不是「攻击者 → 玩家」。
 ##    写成反的会让正面和背面整个对调 —— 表现是「正面的挡不住、背后的反而挡住了」,
 ##    而这两件事在屏幕上看起来都只是「格挡有时候不灵」。
-func _is_in_guard_cone(from_position: Vector2) -> bool:
+func _is_in_guard_front(from_position: Vector2) -> bool:
 	if not from_position.is_finite():
 		# 没有来源信息时按「挡得住」处理: 宁可对玩家有利, 也不要静默变成背刺
 		return true
@@ -1056,7 +1043,7 @@ func _start_dash(input_dir: Vector2) -> void:
 # 受伤 / 死亡 / 复活
 # ============================================================
 
-## amount: 伤害值。from_position: 伤害来源坐标 (用来算击退方向 **和扇形格挡判定**)。
+## amount: 伤害值。from_position: 伤害来源坐标 (用来算击退方向 **和格挡的前后半平面判定**)。
 ## source: 攻击者节点。只有敌人的攻击判定区会传 —— 精准格挡要靠它把对方打硬直。
 ##
 ## ⚠️ 第三个参数和 BlitzEnemy.take_damage 的同位参数含义**不同**
@@ -1083,9 +1070,9 @@ func take_damage(amount: int = 1, from_position: Vector2 = Vector2.INF, source: 
 ##   | 正面 | 否        | 否     | 破防: 零伤但进 GUARD_BROKEN + 击退
 ##   | 背后 | 无所谓    | 无所谓 | **照常掉血**
 func _resolve_guard(amount: int, from_position: Vector2, source: Node2D) -> void:
-	# ① 背后的攻击挡不住 —— 这是扇形格挡的**核心**。
+	# ① 背后的攻击挡不住 —— 这是格挡的**核心** (横版里就是前后半平面)。
 	#    写成全方位的话玩家永远不会知道自己站错了位置, 只会觉得格挡时灵时不灵。
-	if not _is_in_guard_cone(from_position):
+	if not _is_in_guard_front(from_position):
 		_apply_damage(amount, from_position)
 		return
 
@@ -1385,7 +1372,7 @@ func _draw_shadow() -> void:
 	# ⚠️ 不能反过来 (越高越大) —— 那个读起来像「跳起来更重」, 而且会让人以为
 	#    影子是某种攻击预警圈。
 	#
-	# 160px 这个分母不是随手取的: 满跳高度 = jump_speed² / (2×gravity)
+	# 260 这个分母不是随手取的: 满跳高度 = jump_speed² / (2×gravity)
 	# = 520² / 2800 ≈ 96px。所以满跳时影子还剩约 40% 的尺寸, 落地前的收缩是连续的,
 	# 不会在半空突然「啪」一下消失。
 	var k: float = clampf(1.0 - height / 260.0, 0.55, 1.0)

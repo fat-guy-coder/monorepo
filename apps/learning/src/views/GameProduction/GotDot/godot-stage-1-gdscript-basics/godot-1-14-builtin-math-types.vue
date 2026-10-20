@@ -7,7 +7,7 @@
           <p class="text-sm text-slate-500 mt-1">Vector2/Vector3/Color/Rect2/Transform2D——游戏数学的基石</p>
         </div>
         <div class="flex items-center gap-3">
-          <EditorLink file-path="apps/game/blitz/scripts/drawable_rect.gd" label="📝 drawable_rect.gd" :is-admin="userStore.isAdmin" />
+          <EditorLink file-path="apps/game/blitz/scripts/world/obstacle.gd" label="📝 obstacle.gd" :is-admin="userStore.isAdmin" />
           <span class="text-xs text-slate-400 bg-slate-100 px-3 py-1 rounded-full">阶段 1-14</span>
         </div>
       </div>

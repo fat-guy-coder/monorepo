@@ -135,7 +135,7 @@
 
       <section id="sec-6" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-blue-100 text-blue-700 rounded-lg flex items-center justify-center text-sm">🕹️</span>实战：Blitz 不用 TileMap 的程序化建图</h2>
-        <p class="text-slate-600 mb-3 leading-relaxed">打开 <code class="bg-slate-100 text-blue-700 px-1.5 py-0.5 rounded text-xs font-mono">apps/game/blitz/scripts/main.gd</code>——Blitz 的关卡<strong>没有用 TileMap</strong>，而是用代码循环创建 StaticBody2D 墙块。适用场景不同：<strong>手绘艺术关</strong>用 TileMap（快、所见即所得）；<strong>程序化生成/固定数值关卡</strong>用代码（灵活、可算）。</p>
+        <p class="text-slate-600 mb-3 leading-relaxed">打开 <code class="bg-slate-100 text-blue-700 px-1.5 py-0.5 rounded text-xs font-mono">apps/game/blitz/scripts/main.gd</code>——Blitz 的关卡<strong>没有用 TileMap</strong>：地面由 <code class="bg-slate-100 text-blue-700 px-1.5 py-0.5 rounded text-xs font-mono">belt_floor.gd</code> 程序化平铺，边界用代码创建 StaticBody2D 墙。适用场景不同：<strong>手绘艺术关</strong>用 TileMap（快、所见即所得）；<strong>程序化生成/固定数值关卡</strong>用代码（灵活、可算）。</p>
         <div class="mb-4"><Code language="gdscript" :code="blitzLevelCode" title="main.gd — 精简" /></div>
         <aside class="bg-blue-50 border-l-4 border-blue-400 rounded-r-xl p-4"><p class="text-sm text-blue-800"><strong>💡 提示：</strong>两种方式可以混用——大背景用 TileMap 手绘，动态机关/程序化房间用代码生成，各取所长。</p></aside>
       </section>
@@ -251,29 +251,24 @@ func _world_to_screen(world: Vector2) -> Vector2:
         (world.x + world.y) * TILE_H / 2.0
     )`
 
-const blitzLevelCode = `# main.gd 精简 —— Blitz 不用 TileMap,用代码铺关卡
-# 为什么? 关卡是程序化算出来的(平台坐标写死在数组里),
-# 直接 new StaticBody2D 比手绘 TileMap 更灵活。
+const blitzLevelCode = `# main.gd 精简 —— Blitz 不用 TileMap, 用代码建关卡
+# 地面: belt_floor.gd 程序化平铺条带 (也不是 TileMap/TileSet)
+# 边界: 四道 StaticBody2D 墙。v0.4 的地面是矩形, 所以墙都是**轴对齐**的,
+#       矩形拐角不需要楔形补齐 —— 比等距时代的菱形斜边简单一个数量级。
 
-func _create_wall(pos: Vector2, size: Vector2, color: Color) -> void:
+func _make_wall(center: Vector2, dir: Vector2, length: float) -> void:
     var body: StaticBody2D = StaticBody2D.new()
-    body.position = pos
+    body.position = center
+    body.rotation = dir.angle()
     body.collision_layer = 1 << 4   # bit4: 墙壁层
+    body.collision_mask = 0         # 墙不主动找任何人, 是角色撞上来
 
-    var col_shape: CollisionShape2D = CollisionShape2D.new()
+    var cs: CollisionShape2D = CollisionShape2D.new()
     var rect: RectangleShape2D = RectangleShape2D.new()
-    rect.size = size
-    col_shape.shape = rect
-    body.add_child(col_shape)
-    add_child(body)
-
-func _create_platforms() -> void:
-    var platforms: Array[Dictionary] = [
-        { pos = Vector2(350, 510), size = Vector2(170, 16) },
-        { pos = Vector2(620, 420), size = Vector2(150, 16) },
-    ]
-    for p: Dictionary in platforms:
-        _create_wall(p.pos, p.size, Color(0.35, 0.25, 0.15))`
+    rect.size = Vector2(length, WALL_THICKNESS)
+    cs.shape = rect
+    body.add_child(cs)
+    add_child(body)`
 
 const setCellCode = `# ✅ 正确: 第 2 个参数是格子坐标(不是像素)
 tilemap.set_cell(Vector2i(3, 5), source_id, Vector2i(1, 0))

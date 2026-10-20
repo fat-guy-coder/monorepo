@@ -146,14 +146,21 @@ func _ready() -> void:
     collision_layer = 1 << 0   # bit0: "我是玩家身体"
     collision_mask  = 1 << 4   # bit4: "我只跟墙壁碰撞"
 
-# 子弹：layer=bit2，mask=bit1|bit4 —— 用 | 合并"检测敌人 或 墙壁"
-# apps/game/blitz/scripts/bullet.gd
-collision_layer = 1 << 2                 # bit2: "我是玩家子弹"
-collision_mask  = (1 << 1) | (1 << 4)    # bit1(敌人身体) | bit4(墙壁)
+# 玩家攻击判定框 —— apps/game/blitz/scripts/attack_hitbox.gd
+collision_layer = 1 << 2                 # bit2: "我是玩家攻击"
+collision_mask  = 1 << 1                 # bit1: "我只找敌人身体"
 
-# 三元表达式 —— 朝向决定方向（玩家闪避）
-var d: float = 1.0 if facing_right else -1.0
-velocity = Vector2(d * dash_speed, 0.0)
+# 敌人的攻击判定区反过来：自己不找任何人，由玩家的 Hurtbox 找它
+# apps/game/blitz/scripts/combat/enemy_attack.gd
+collision_layer = 1 << 3                 # bit3: "我是敌人攻击"
+collision_mask  = 0
+
+# 需要同时命中多层时用 | 合并，例如"打到敌人 或 墙壁"：
+# collision_mask = (1 << 1) | (1 << 4)
+
+# 三元表达式 —— 朝向只有 ±1（v0.4 横版）
+var dir_x: float = 1.0 if facing > 0 else -1.0
+velocity = Vector2(dir_x * dash_speed, 0.0)
 
 # fmod（浮点取模）+ 乘法 + 比较 —— 无敌闪烁
 var blink_visible: bool = fmod(invincible_timer * 12.0, 2.0) < 1.0`

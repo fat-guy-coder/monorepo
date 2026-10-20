@@ -1,6 +1,6 @@
 <template>
   <div class="go-doc min-h-screen bg-linear-to-br from-slate-50 to-blue-50">
-    <header class="bg-white border-b border-slate-200"><div class="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between"><div><h1 class="text-2xl font-bold text-slate-800">函数</h1><p class="text-sm text-slate-500 mt-1">声明、参数、返回值、lambda——GDScript 的函数系统</p></div><div class="flex items-center gap-3"><EditorLink file-path="apps/game/blitz/scripts/bullet.gd" label="📝 bullet.gd" :is-admin="userStore.isAdmin" /><span class="text-xs text-slate-400 bg-slate-100 px-3 py-1 rounded-full">阶段 1-6</span></div></div></header>
+    <header class="bg-white border-b border-slate-200"><div class="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between"><div><h1 class="text-2xl font-bold text-slate-800">函数</h1><p class="text-sm text-slate-500 mt-1">声明、参数、返回值、lambda——GDScript 的函数系统</p></div><div class="flex items-center gap-3"><EditorLink file-path="apps/game/blitz/scripts/combat/attack_shape.gd" label="📝 attack_shape.gd" :is-admin="userStore.isAdmin" /><span class="text-xs text-slate-400 bg-slate-100 px-3 py-1 rounded-full">阶段 1-6</span></div></div></header>
     <main class="max-w-4xl mx-auto px-6 py-8 space-y-6"><Nav :list="navList" title="目录" position="top-right" :showBackToTop="true" />
 
       <section id="sec-1" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100"><h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-blue-100 text-blue-700 rounded-lg flex items-center justify-center text-sm">1</span>函数声明</h2>
@@ -33,8 +33,8 @@
 
       <!-- 🕹️ 实战：Blitz -->
       <section id="sec-7" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100"><h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-blue-100 text-blue-700 rounded-lg flex items-center justify-center text-sm">🕹️</span>实战：Blitz 的函数与回调</h2>
-        <p class="text-slate-600 mb-3 leading-relaxed">Blitz 的子弹命中、敌人受击、延迟销毁全靠函数 + Callable 回调组织：</p>
-        <div class="mb-4"><Code language="gdscript" :code="blitzFunctionsCode" title="bullet.gd / enemy.gd / main.gd（精简）" /></div>
+        <p class="text-slate-600 mb-3 leading-relaxed">Blitz 的命中判定、敌人受击、特效延迟销毁全靠函数 + Callable 回调组织：</p>
+        <div class="mb-4"><Code language="gdscript" :code="blitzFunctionsCode" title="attack_hitbox.gd / enemy.gd / fx（精简）" /></div>
         <aside class="bg-purple-50 border-l-4 border-purple-400 rounded-r-xl p-4"><p class="text-sm text-purple-800"><strong>🔗 前端类比：</strong><code class="bg-purple-100 px-1 rounded text-xs font-mono">body.has_method("take_damage")</code> + 调用 ≈ TS 里的 <code class="bg-purple-100 px-1 rounded text-xs font-mono">if ("take_damage" in body)</code> 结构判断；<br/><code class="bg-purple-100 px-1 rounded text-xs font-mono">timer.timeout.connect(fx.queue_free)</code> ≈ TS 的 <code class="bg-purple-100 px-1 rounded text-xs font-mono">setTimeout(() =&gt; fx.remove(), 1000)</code>，但传的是函数引用（一等公民）。</p></aside>
       </section>
 
@@ -147,7 +147,7 @@ var big: Array[int] = scores.filter(func(s: int) -> bool: return s > 2)
 # Callable 类型（一等公民）
 var action: Callable = func(): print("clicked")
 action.call()`
-const blitzFunctionsCode = `# 1) 鸭子类型：只检查方法，不检查具体类（bullet.gd 精简）
+const blitzFunctionsCode = `# 1) 鸭子类型：只检查方法，不检查具体类（attack_hitbox.gd 精简）
 func _on_body_entered(body: Node2D) -> void:
     if _has_hit:
         return                      # 提前返回：防止重复命中
@@ -163,9 +163,9 @@ func _on_body_entered(body: Node2D) -> void:
 func _ready() -> void:
     body_entered.connect(_on_body_entered)   # 信号 → 方法引用
     var timer: SceneTreeTimer = get_tree().create_timer(lifetime)
-    timer.timeout.connect(queue_free)        # 3 秒后自动销毁子弹
+    timer.timeout.connect(queue_free)        # 3 秒后自动销毁判定框
 
-# 4) 特效延迟销毁（bullet.gd 精简）
+# 4) 特效延迟销毁（fx/hit_spark.gd 精简）
 func _spawn_hit_effect() -> void:
     var fx: Node2D = Node2D.new()
     fx.position = position

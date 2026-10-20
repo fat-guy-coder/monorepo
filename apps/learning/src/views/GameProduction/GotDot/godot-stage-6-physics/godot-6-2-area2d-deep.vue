@@ -1,6 +1,6 @@
 <template>
   <div class="go-doc min-h-screen bg-linear-to-br from-slate-50 to-blue-50">
-    <header class="bg-white border-b border-slate-200"><div class="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between"><div><h1 class="text-2xl font-bold text-slate-800">📡 Area2D 深入</h1><p class="text-sm text-slate-500 mt-1">检测区域、重叠信号、碰撞层——用 Area2D 做子弹 / 受击框 / 感应区</p></div><div class="flex items-center gap-3"><EditorLink file-path="apps/game/blitz/scripts/bullet.gd" label="📝 bullet.gd" :is-admin="userStore.isAdmin" /><span class="text-xs text-slate-400 bg-slate-100 px-3 py-1 rounded-full">阶段 6-2</span></div></div></header>
+    <header class="bg-white border-b border-slate-200"><div class="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between"><div><h1 class="text-2xl font-bold text-slate-800">📡 Area2D 深入</h1><p class="text-sm text-slate-500 mt-1">检测区域、重叠信号、碰撞层——用 Area2D 做子弹 / 受击框 / 感应区</p></div><div class="flex items-center gap-3"><EditorLink file-path="apps/game/blitz/scripts/combat/enemy_attack.gd" label="📝 enemy_attack.gd" :is-admin="userStore.isAdmin" /><span class="text-xs text-slate-400 bg-slate-100 px-3 py-1 rounded-full">阶段 6-2</span></div></div></header>
     <main class="max-w-4xl mx-auto px-6 py-8 space-y-6"><Nav :list="navList" title="目录" position="top-right" :showBackToTop="true" />
 
       <section id="sec-1" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100"><h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-blue-100 text-blue-700 rounded-lg flex items-center justify-center text-sm">🎯</span>Area2D vs CharacterBody2D</h2>
@@ -23,20 +23,20 @@
 
       <section id="sec-3" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100"><h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-blue-100 text-blue-700 rounded-lg flex items-center justify-center text-sm">2</span>实战一：Area2D 做子弹</h2>
         <p class="text-slate-600 mb-3 leading-relaxed">子弹是最经典的 Area2D 用例——不需要物理碰撞（不想把敌人弹开），只需要"检测到敌人就伤害"。</p>
-        <div class="mb-4"><Code language="gdscript" :code="bulletCode" title="bullet.gd — Area2D 子弹" /></div>
+        <div class="mb-4"><Code language="gdscript" :code="bulletCode" title="bullet.gd — Area2D 子弹（通用示例）" /></div>
         <aside class="bg-amber-50 border-l-4 border-amber-400 rounded-r-xl p-4 mb-4"><p class="text-sm text-amber-800"><strong>⚠️ 关键：Area2D 必须有 CollisionShape2D 才能检测！</strong>没有形状的 Area2D 是"幽灵"——body_entered 永远不会触发。这是新手最常见的坑。</p></aside>
       </section>
 
       <section id="sec-4" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100"><h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-blue-100 text-blue-700 rounded-lg flex items-center justify-center text-sm">3</span>实战二：Area2D 做受击框 (Hitbox/Hurtbox)</h2>
         <p class="text-slate-600 mb-3 leading-relaxed">CharacterBody2D 的碰撞形状通常很小（为了精准的平台碰撞）。但游戏手感的"受击判定"应该比视觉稍大——加一个 Area2D 子节点做专门的受击框。</p>
         <div class="mb-4"><Code language="gdscript" :code="hitboxCode" title="敌人 Hitbox + 玩家 Hurtbox" /></div>
-        <ul class="space-y-2 text-slate-600 mb-4"><li class="flex items-start gap-2"><span class="text-blue-500 mt-1">▸</span><span><strong>Hitbox</strong> (敌人身上) — 检测"什么东西打中我了"（玩家子弹）</span></li><li class="flex items-start gap-2"><span class="text-blue-500 mt-1">▸</span><span><strong>Hurtbox</strong> (玩家身上) — 检测"什么东西碰到我了"（敌人身体）</span></li></ul>
+        <ul class="space-y-2 text-slate-600 mb-4"><li class="flex items-start gap-2"><span class="text-blue-500 mt-1">▸</span><span><strong>Hitbox</strong> (敌人身上) — 检测"什么东西打中我了"（玩家的攻击判定框，mask = bit2）</span></li><li class="flex items-start gap-2"><span class="text-blue-500 mt-1">▸</span><span><strong>Hurtbox</strong> (玩家身上) — 检测"什么东西碰到我了"（敌人的攻击判定区，mask = bit3）</span></li></ul>
         <aside class="bg-emerald-50 border-l-4 border-emerald-400 rounded-r-xl p-4"><p class="text-sm text-emerald-800"><strong>✅ 为什么不用 CharacterBody2D 自带的碰撞？</strong>因为它的 collision_mask 被墙壁占用了（bit4）。如果你加上敌人层(bit1)，角色会跟敌人<strong>物理碰撞</strong>（推来推去）。而 Area2D 子节点只检测不碰撞——解耦了"平台物理"和"受击判定"。</p></aside>
       </section>
 
       <section id="sec-5" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100"><h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-blue-100 text-blue-700 rounded-lg flex items-center justify-center text-sm">4</span>实战三：Area2D 做感应区</h2>
-        <p class="text-slate-600 mb-3 leading-relaxed">玩家身上的 ParryDetector 是一个 Area2D，只做一件事：检测附近有没有粉色格挡对象。它比子弹的 Area2D 还简单——只需要 area_entered / area_exited 来设置一个 bool。</p>
-        <div class="mb-4"><Code language="gdscript" :code="sensorCode" title="player.gd — ParryDetector 感应区" /></div>
+        <p class="text-slate-600 mb-3 leading-relaxed">玩家身上的 Hurtbox 是一个 Area2D，只做一件事：检测有没有敌人攻击判定区碰到自己（mask = bit3）。它比子弹的 Area2D 还简单——只需要 area_entered 把「伤害来源」交给玩家处理；敌人打没打中，判定权在受伤方手里。</p>
+        <div class="mb-4"><Code language="gdscript" :code="sensorCode" title="player.gd — Hurtbox 受击判定" /></div>
       </section>
 
       <section id="sec-6" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100"><h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-blue-100 text-blue-700 rounded-lg flex items-center justify-center text-sm">5</span>monitoring 与 monitorable</h2>
@@ -59,7 +59,7 @@ import { useUserStore } from '@/stores/userProfle'
 const userStore = useUserStore()
 const navList = [{id:"sec-1",name:"Area2D vs Body"},{id:"sec-2",name:"body vs area信号"},{id:"sec-3",name:"实战:子弹"},{id:"sec-4",name:"实战:受击框"},{id:"sec-5",name:"实战:感应区"},{id:"sec-6",name:"monitoring"},{id:"sec-7",name:"小结"}]
 
-const bulletCode = `# bullet.gd — Area2D 做子弹 (Blitz 项目)
+const bulletCode = `# bullet.gd — Area2D 做子弹
 extends Area2D
 
 var direction: Vector2 = Vector2.RIGHT
@@ -114,22 +114,27 @@ func _on_hurtbox_body_entered(body: Node2D) -> void:
     if body.has_method("take_damage"):  # 敌人碰到了我
         take_damage(1)`
 
-const sensorCode = `# player.gd — ParryDetector (纯感应,无伤害)
-@onready var parry_detector: Area2D = $ParryDetector
+const sensorCode = `# player.gd — Hurtbox: 只感应"敌人的攻击判定区"
+@onready var hurtbox: Area2D = $Hurtbox
 
 func _ready() -> void:
-    parry_detector.collision_mask = 1 << 5  # 只检测格挡对象(bit5)
-    parry_detector.area_entered.connect(_on_parry_zone_entered)
-    parry_detector.area_exited.connect(_on_parry_zone_exited)
+    hurtbox.collision_layer = 0        # 自己不需要被别人检测
+    hurtbox.collision_mask  = 1 << 3   # 只关心 bit3: 敌人的攻击判定
+    hurtbox.area_entered.connect(_on_hurtbox_area_entered)
 
-# 进入粉色物体范围 → 标记"可以格挡"
-func _on_parry_zone_entered(area: Area2D) -> void:
-    near_parry_object = true
-    _parry_target = area
+    # 受击形状必须是**贴地椭圆**; 离地的屏幕正圆会在地面平面里被压成巨型椭圆
+    var hb: CollisionShape2D = hurtbox.get_node("CollisionShape2D")
+    hb.position = Vector2.ZERO
+    hb.shape = BeltSpace.ground_circle_shape(HURTBOX_RADIUS)
 
-# 离开范围 → 清除标记
-func _on_parry_zone_exited(_area: Area2D) -> void:
-    near_parry_object = false
-
-# 然后在 _process_normal 中: 空中按跳 + near_parry_object → 格挡!`
+# 感应区只负责"告诉我被什么碰了", 伤害/格挡/无敌帧全在受伤方结算
+func _on_hurtbox_area_entered(area: Area2D) -> void:
+    if area is EnemyAttack:
+        var atk: EnemyAttack = area
+        # 高度带: 跳得够高就躲得开。判定点必须在**受伤方** ——
+        # EnemyAttack 是 monitoring = false 的被动伤害标记, 自己什么都不检测,
+        # 而 2D 物理体也表达不了"离地多高"。
+        if atk.attack_shape != null and not atk.attack_shape.hits_height(height):
+            return
+        take_damage(atk.damage, atk.global_position, atk.source)`
 </script>
