@@ -38,26 +38,26 @@
           <!-- 第一层子节点 -->
           <rect x="70" y="130" width="150" height="44" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
           <text x="145" y="150" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">CollisionShape2D</text>
-          <text x="145" y="166" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#cffafe">碰撞形状 r=15</text>
+          <text x="145" y="166" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#cffafe">撞击形状 r=12 (只撞墙)</text>
 
           <rect x="285" y="130" width="150" height="44" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
-          <text x="360" y="150" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">ParryDetector</text>
-          <text x="360" y="166" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#cffafe">Area2D 格挡检测</text>
+          <text x="360" y="150" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">Hurtbox</text>
+          <text x="360" y="166" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#cffafe">Area2D 受击判定</text>
 
           <rect x="500" y="130" width="150" height="44" rx="6" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
-          <text x="575" y="150" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">Hurtbox</text>
-          <text x="575" y="166" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#cffafe">Area2D 受击判定</text>
+          <text x="575" y="150" text-anchor="middle" dominant-baseline="central" font-size="13" font-family="monospace" font-weight="bold" fill="#ffffff">AttackHitbox</text>
+          <text x="575" y="166" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#cffafe">Area2D 运行时生成</text>
 
           <!-- 第二层（Area2D 的子节点） -->
           <rect x="285" y="240" width="150" height="44" rx="6" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" />
           <text x="360" y="260" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#334155">CollisionShape2D</text>
-          <text x="360" y="276" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">形状挂在 Area 下</text>
+          <text x="360" y="276" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">贴地椭圆 shape</text>
 
           <rect x="500" y="240" width="150" height="44" rx="6" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4 3" />
           <text x="575" y="260" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#334155">CollisionShape2D</text>
-          <text x="575" y="276" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">形状挂在 Area 下</text>
+          <text x="575" y="276" text-anchor="middle" dominant-baseline="central" font-size="10" font-family="monospace" fill="#64748b">与预警同源</text>
         </svg>
-        <p class="text-xs text-slate-400 mt-2">📌 实线框 = 有脚本/功能的实体节点；虚线框 = 只承载几何数据的形状节点。子节点位置由父节点决定，父节点移动子节点跟着动。</p>
+        <p class="text-xs text-slate-400 mt-2">📌 实线框 = 有脚本/功能的实体节点；虚线框 = 只承载几何数据的形状节点。子节点位置由父节点决定，父节点移动子节点跟着动。<br/>AttackHitbox 不在 <code>player.tscn</code> 里 —— 它是出招时 <code>add_child</code> 上去的短命节点，同样受这棵树的父子规则约束。</p>
       </section>
 
       <!-- 概述 -->
@@ -196,7 +196,7 @@
         <div class="mb-4"><Code language="gdscript" :code="blitzTreeCode" title="blitz/scripts/player.gd（节选）" /></div>
         <div class="mb-4"><Code language="text" :code="blitzTreeStructure" title="blitz/scenes/player.tscn 对应的节点树" /></div>
         <aside class="bg-purple-50 border-l-4 border-purple-400 rounded-r-xl p-4">
-          <p class="text-sm text-purple-800"><strong>🔗 对照理解：</strong>这份节点树 <code class="bg-purple-100 px-1 rounded text-xs font-mono">player.tscn</code> 就好比一个 <code class="bg-purple-100 px-1 rounded text-xs font-mono">Player.vue</code> 模板：模板里的 <code class="bg-purple-100 px-1 rounded text-xs font-mono">&lt;ParryDetector /&gt;</code> 就是脚本里的 <code class="bg-purple-100 px-1 rounded text-xs font-mono">$ParryDetector</code>。Godot 用 <code class="bg-purple-100 px-1 rounded text-xs font-mono">$路径</code> 访问子节点，Vue 用 <code class="bg-purple-100 px-1 rounded text-xs font-mono">ref</code> / <code class="bg-purple-100 px-1 rounded text-xs font-mono">$refs</code> 访问子组件——都是"模板 + 引用"的组合。</p>
+          <p class="text-sm text-purple-800"><strong>🔗 对照理解：</strong>这份节点树 <code class="bg-purple-100 px-1 rounded text-xs font-mono">player.tscn</code> 就好比一个 <code class="bg-purple-100 px-1 rounded text-xs font-mono">Player.vue</code> 模板：模板里的 <code class="bg-purple-100 px-1 rounded text-xs font-mono">&lt;Hurtbox /&gt;</code> 就是脚本里的 <code class="bg-purple-100 px-1 rounded text-xs font-mono">$Hurtbox</code>。Godot 用 <code class="bg-purple-100 px-1 rounded text-xs font-mono">$路径</code> 访问子节点，Vue 用 <code class="bg-purple-100 px-1 rounded text-xs font-mono">ref</code> / <code class="bg-purple-100 px-1 rounded text-xs font-mono">$refs</code> 访问子组件——都是"模板 + 引用"的组合。</p>
         </aside>
       </section>
 
@@ -290,20 +290,21 @@ func _on_timer_timeout():
 
 const blitzTreeCode = `# apps/game/blitz/scripts/player.gd（节选）
 ## @onready var + $路径：从节点树中取出引用（≈ Vue 的 $refs）
-@onready var parry_detector: Area2D = $ParryDetector
 @onready var hurtbox: Area2D = $Hurtbox
 
 func _ready() -> void:
 	# 拿到子节点后，配置它的碰撞层并连接信号
-	parry_detector.collision_mask = 1 << 5
-	parry_detector.area_entered.connect(_on_parry_zone_entered)
-	hurtbox.collision_mask = 1 << 1
-	hurtbox.body_entered.connect(_on_hurtbox_body_entered)`
+	collision_layer = 1 << 0          # bit0: 我是玩家
+	collision_mask  = 1 << 4          # 只跟墙壁/障碍碰撞
+	hurtbox.collision_layer = 0
+	hurtbox.collision_mask  = 1 << 3  # 只监听敌人的攻击判定区
+	hurtbox.area_entered.connect(_on_hurtbox_area_entered)`
 
 const blitzTreeStructure = `Player (CharacterBody2D)
-├── CollisionShape2D        ← 身体碰撞（圆形 r=15）
-├── ParryDetector (Area2D)  ← 格挡检测区
-│   └── CollisionShape2D    ← 检测形状（圆形 r=42）
+├── CollisionShape2D        ← 身体碰撞 (CircleShape2D r=12, 只用于撞墙)
 └── Hurtbox (Area2D)        ← 受击判定区
-    └── CollisionShape2D    ← 判定形状（圆形 r=17）`
+    └── CollisionShape2D    ← 贴地椭圆 (BeltSpace.ground_circle_shape)
+
+# 注: 出招时的 AttackHitbox 不在这棵树里 ——
+#     它是运行时 add_child 上去的短命节点 (活 0.1~0.4 秒)`
 </script>

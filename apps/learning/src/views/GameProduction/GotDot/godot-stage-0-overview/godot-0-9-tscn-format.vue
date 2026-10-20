@@ -31,10 +31,10 @@
           <text x="225" y="55" text-anchor="middle" font-size="12" font-family="monospace" font-weight="bold" fill="#334155">— player.tscn 文本 —</text>
           <text x="24" y="88" font-size="11" font-family="monospace" fill="#334155">[gd_scene load_steps=5 format=3]</text>
           <text x="24" y="133" font-size="11" font-family="monospace" fill="#334155">[ext_resource player.gd id="1_player"]</text>
-          <text x="24" y="178" font-size="11" font-family="monospace" fill="#334155">[sub_resource CircleShape2D r=15]</text>
+          <text x="24" y="178" font-size="11" font-family="monospace" fill="#334155">[sub_resource CircleShape2D r=12]</text>
           <text x="24" y="223" font-size="11" font-family="monospace" fill="#334155">[node name="Player" CharacterBody2D]</text>
           <text x="24" y="268" font-size="11" font-family="monospace" fill="#334155">[node CollisionShape2D parent="."]</text>
-          <text x="24" y="313" font-size="11" font-family="monospace" fill="#334155">[node ParryDetector parent="."]</text>
+          <text x="24" y="313" font-size="11" font-family="monospace" fill="#334155">[node Hurtbox parent="."]</text>
           <text x="24" y="335" font-size="10" font-family="monospace" fill="#64748b">↑ 文件头：不映射到节点</text>
 
           <!-- 映射箭头：文本行 → 场景节点 -->
@@ -57,7 +57,7 @@
           <text x="615" y="153" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#ffffff">CollisionShape2D</text>
 
           <rect x="510" y="215" width="210" height="46" rx="8" fill="#06b6d4" stroke="#0891b2" stroke-width="1.5" />
-          <text x="615" y="238" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#ffffff">ParryDetector (Area2D)</text>
+          <text x="615" y="238" text-anchor="middle" dominant-baseline="central" font-size="12" font-family="monospace" font-weight="bold" fill="#ffffff">Hurtbox (Area2D)</text>
         </svg>
         <p class="text-xs text-slate-400 mt-2">📌 左：.tscn 文本行（文件顺序）；右：Godot 编辑器里对应的场景树。箭头 = 文本如何映射成节点：ext_resource → 节点的脚本；sub_resource → 碰撞形状；[node parent="."] → 树的父子层级。</p>
       </section>
@@ -120,9 +120,9 @@
               </tr>
             </thead>
             <tbody class="text-slate-600">
-              <tr><td class="px-4 py-2 border font-mono text-xs">player.tscn</td><td class="px-4 py-2 border">CharacterBody2D</td><td class="px-4 py-2 border">CollisionShape2D + ParryDetector(Area2D) + Hurtbox(Area2D)</td><td class="px-4 py-2 border">player.gd</td></tr>
-              <tr><td class="px-4 py-2 border font-mono text-xs">enemy.tscn</td><td class="px-4 py-2 border">CharacterBody2D</td><td class="px-4 py-2 border">CollisionShape2D + Hitbox(Area2D)</td><td class="px-4 py-2 border">enemy.gd</td></tr>
-              <tr><td class="px-4 py-2 border font-mono text-xs">bullet.tscn</td><td class="px-4 py-2 border">Area2D</td><td class="px-4 py-2 border">CollisionShape2D(半径5的圆)</td><td class="px-4 py-2 border">bullet.gd</td></tr>
+              <tr><td class="px-4 py-2 border font-mono text-xs">player.tscn</td><td class="px-4 py-2 border">CharacterBody2D</td><td class="px-4 py-2 border">CollisionShape2D + Hurtbox(Area2D → 自己的 CollisionShape2D)</td><td class="px-4 py-2 border">player.gd</td></tr>
+              <tr><td class="px-4 py-2 border font-mono text-xs">enemy.tscn</td><td class="px-4 py-2 border">CharacterBody2D</td><td class="px-4 py-2 border">CollisionShape2D（攻击判定 EnemyAttack 是运行时生成的）</td><td class="px-4 py-2 border">enemy.gd</td></tr>
+              <tr><td class="px-4 py-2 border font-mono text-xs">attack_hitbox.tscn</td><td class="px-4 py-2 border">Area2D</td><td class="px-4 py-2 border">CollisionShape2D(RectangleShape2D 46×34，之后被 AttackShape 覆盖)</td><td class="px-4 py-2 border">attack_hitbox.gd</td></tr>
               <tr><td class="px-4 py-2 border font-mono text-xs">main.tscn</td><td class="px-4 py-2 border">Node2D</td><td class="px-4 py-2 border">(无——关卡在 main.gd 代码中搭建)</td><td class="px-4 py-2 border">main.gd</td></tr>
             </tbody>
           </table>
@@ -212,55 +212,40 @@ script = ExtResource("1_player")          ; 引用上面的脚本
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("circle1")            ; 引用上面的形状`
 
-const playerTscn = `[gd_scene load_steps=5 format=3 uid="uid://cuphead_player"]
-; ↑ load_steps=5: 需要加载 5 个资源
-;   = 1个 ext_resource(脚本) + 3个 sub_resource(形状) + 场景本身
+const playerTscn = `[gd_scene load_steps=3 format=3 uid="uid://cuphead_player"]
+; ↑ load_steps=3: 需要加载 3 个资源
+;   = 1个 ext_resource(脚本) + 1个 sub_resource(形状) + 场景本身
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_player"]
 ; ↑ 告诉 Godot "等会用到 player.gd，给它编号 1_player"
 
 [sub_resource type="CircleShape2D" id="player_col"]
-radius = 15.0
-; ↑ 定义一个圆形碰撞形状(半径15)，编号 player_col
+radius = 12.0
+; ↑ 定义一个圆形碰撞形状(半径12)，编号 player_col
 ;   （不会创建独立文件，只是 tscn 内部引用）
-
-[sub_resource type="CircleShape2D" id="parry_col"]
-radius = 42.0
-; ↑ 格挡检测区，大很多(r=42) —— 所以更容易触发格挡
-
-[sub_resource type="CircleShape2D" id="hurtbox_col"]
-radius = 17.0
-; ↑ 受击判定区，比身体(r=15)稍大 —— 给玩家一点容错
+;   它是**屏幕空间**的圆, 只用于撞墙 —— 不参与任何伤害判定
 
 ; === 节点树开始 ===
 
 [node name="Player" type="CharacterBody2D"]
-z_index = 10                                ; 渲染层级
 script = ExtResource("1_player")            ; 关联 player.gd
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 ;  ↑ parent="." = 父节点是上一个 [node](即 Player)
 shape = SubResource("player_col")           ; 使用上面定义的圆形
 
-[node name="ParryDetector" type="Area2D" parent="."]
-;  ↑ 父节点仍然是 Player (因为没声明新的顶级 node)
-;  这个 Area2D 负责检测粉色格挡对象
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ParryDetector"]
-;  ↑ parent="ParryDetector": 父节点变为 ParryDetector
-shape = SubResource("parry_col")
-
 [node name="Hurtbox" type="Area2D" parent="."]
-;  ↑ parent=".": 父节点回到 Player (上一个平级节点是 ParryDetector)
-;  看似 parent="." 的父级是 Player，因为 [node ParryDetector] 和这个是平级
+;  ↑ 父节点仍然是 Player (因为没声明新的顶级 node)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
-shape = SubResource("hurtbox_col")
+;  ↑ parent="Hurtbox": 父节点变为 Hurtbox
+;  ⚠️ 它没有 shape = SubResource(...) —— player.gd 在 _ready() 里换成
+;     BeltSpace.ground_circle_shape(HURTBOX_RADIUS)。受击框必须活在地面平面上
+;     (贴地椭圆); 离地的屏幕正圆在地面平面里会被压成「纵深 ±30」的巨椭圆
+
 ; ↑ 编辑器里看到的:
 ;   Player
-;   ├── CollisionShape2D (r=15)
-;   ├── ParryDetector (Area2D)
-;   │   └── CollisionShape2D (r=42)
+;   ├── CollisionShape2D (CircleShape2D r=12)
 ;   └── Hurtbox (Area2D)
-;       └── CollisionShape2D (r=17)`
+;       └── CollisionShape2D (运行时换成贴地椭圆)`
 </script>

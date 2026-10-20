@@ -156,18 +156,21 @@ var name: String = "Hero"
 
 const blitzTypingCode = `# === player.gd — 全文件强类型 ===
 @export var move_speed: float = 320.0
-@export var jump_velocity: float = -520.0
+@export var jump_speed: float = 520.0
 @export var max_health: int = 3
-enum State { NORMAL, ATTACKING, DASHING, HIT, DEAD }
+enum State { NORMAL, BLOCKING, CHARGING, ATTACKING, DASHING, HIT, GUARD_BROKEN, DEAD }
 var state: State = State.NORMAL
 
-@onready var parry_detector: Area2D = $ParryDetector
 @onready var hurtbox: Area2D = $Hurtbox
 
 func _physics_process(delta: float) -> void:
-    var input_dir: float = Input.get_axis("move_left", "move_right")
-    velocity.x = move_toward(velocity.x, input_dir * move_speed, move_accel * delta)
-    move_and_slide()
+    if state == State.DEAD:
+        return
+    match state:                       # 状态机: match 比 if-elif 链更好读
+        State.NORMAL:
+            _process_normal(delta)
+        State.BLOCKING:
+            _process_blocking(delta)
 
 # === enemy.gd — 返回值类型 + 鸭子类型 ===
 func _get_player() -> Node2D:

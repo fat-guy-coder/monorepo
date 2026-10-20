@@ -59,7 +59,7 @@
 
       <section id="sec-blitz" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100 border-l-4 border-l-blue-400">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-blue-100 text-blue-700 rounded-lg flex items-center justify-center text-sm">🎮</span>实战：Blitz 项目中的信号</h2>
-        <p class="text-slate-600 mb-3 leading-relaxed">Blitz (<code class="bg-slate-100 text-blue-700 px-1 rounded text-xs font-mono">apps/game/blitz/</code>) 大量使用 <strong>Godot 内置信号</strong> 而非自定义 signal——这是实战中最常见的信号使用方式。打开 bullet.gd / player.gd 对照看：</p>
+        <p class="text-slate-600 mb-3 leading-relaxed">Blitz (<code class="bg-slate-100 text-blue-700 px-1 rounded text-xs font-mono">apps/game/blitz/</code>) 大量使用 <strong>Godot 内置信号</strong>——这是实战中最常见的信号使用方式。打开 attack_hitbox.gd / player.gd 对照看：</p>
         <div class="mb-4"><Code language="gdscript" :code="blitzSignalsCode" title="Blitz 中的 4 种信号模式" /></div>
         <aside class="bg-purple-50 border-l-4 border-purple-400 rounded-r-xl p-4 mt-4"><p class="text-sm text-purple-800"><strong>🔗 对比自定义 signal vs 内置信号：</strong>自定义 signal 适合"系统间通信"（如 health_changed → UI 更新）。内置信号（body_entered / area_entered / timeout / pressed）适合"引擎与脚本通信"——这占了游戏代码的 80%。<strong>学会读 Godot 文档里每个节点类型的 Signals 列表，比背 API 更重要。</strong></p></aside>
       </section>
@@ -227,44 +227,46 @@ func die() -> void:
 var on_click: Signal = $Button.pressed  # Signal 类型
 on_click.connect(func(): print("clicked"))`
 
-const blitzSignalsCode = `# === 1. body_entered / area_entered: 碰撞检测信号 ===
-# bullet.gd — Area2D 的 body_entered 检测敌人身体 (CharacterBody2D)
-#              area_entered 检测敌人 Hitbox (Area2D)
+const blitzSignalsCode = `# === 1. body_entered: 我的攻击框碰到了谁的"身体" ===
+# attack_hitbox.gd — layer = bit2 (玩家攻击), mask = bit1 (敌人身体)
 
 func _ready() -> void:
-    # Godot 内置信号,不需要用 signal 关键字声明
+    # Godot 内置信号, 不需要用 signal 关键字声明
     body_entered.connect(_on_body_entered)
-    area_entered.connect(_on_area_entered)
 
 func _on_body_entered(body: Node2D) -> void:
-    if _has_hit: return        # 防重复触发 guard
-    _has_hit = true
-    if body.has_method("take_damage"):  # 鸭子类型
-        body.take_damage(damage)
-    queue_free()
+    if not _armed: return              # 还在蓄势, 打不到人
+    _try_hit(body)
 
-# === 2. area_entered / area_exited: 区域检测信号 ===
-# player.gd — ParryDetector(Area2D) 检测粉色格挡对象
+func _try_hit(body: Node2D) -> void:
+    if body in _has_hit: return        # 防同一刀重复打同一个敌人
+    if not body.has_method("take_damage"): return   # 鸭子类型
+    if attack_shape != null and not attack_shape.hits_height(_body_height(body)):
+        return                         # 跳得够高就躲得开
+    _has_hit.append(body)
+    body.take_damage(damage, global_position, breaks_armor)
+
+# === 2. area_entered: 我的受击框被谁的"判定区"碰到了 ===
+# player.gd — Hurtbox 的 mask = bit3 (敌人的攻击判定), 只监听 Area2D
 
 func _ready() -> void:
-    parry_detector.area_entered.connect(_on_parry_zone_entered)
-    parry_detector.area_exited.connect(_on_parry_zone_exited)
+    hurtbox.collision_mask = 1 << 3
+    hurtbox.area_entered.connect(_on_hurtbox_area_entered)
 
-func _on_parry_zone_entered(area: Area2D) -> void:
-    near_parry_object = true       # 标记"可以格挡"
-    _parry_target = area           # 记住格挡对象(后面销毁用)
-
-func _on_parry_zone_exited(_area: Area2D) -> void:
-    near_parry_object = false      # 离开范围,清除标记
+func _on_hurtbox_area_entered(area: Area2D) -> void:
+    if area is EnemyAttack:
+        var atk: EnemyAttack = area
+        if atk.attack_shape != null and not atk.attack_shape.hits_height(height):
+            return                     # 同一个高度带, 换成"我的高度"来问
+        take_damage(atk.damage, atk.global_position, atk.source)
 
 # === 3. timeout: 定时器信号 ===
-# bullet.gd — 3 秒后自动销毁
+# fx/hit_spark.gd — 火花放完自己销毁
 
-var timer: SceneTreeTimer = get_tree().create_timer(3.0)
-timer.timeout.connect(queue_free)   # 3 秒后调用 queue_free
+var t: SceneTreeTimer = get_tree().create_timer(duration)
+t.timeout.connect(queue_free)
 
-# === 4. pressed: 按钮点击信号 ===
-# main.gd — 死亡 UI 的 RESTART 按钮
+# === 4. pressed: 按钮点击信号（通用写法）===
 
 var btn: Button = Button.new()
 btn.pressed.connect(_on_restart_pressed)  # 点击时调用

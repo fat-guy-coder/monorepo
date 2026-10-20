@@ -58,9 +58,9 @@
 
       <section id="sec-6" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100"><h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-blue-100 text-blue-700 rounded-lg flex items-center justify-center text-sm">📋</span>关键属性</h2><div class="overflow-x-auto mb-4"><table class="w-full text-sm border-collapse"><thead><tr class="bg-slate-100 text-left"><th class="px-4 py-2 border font-semibold text-slate-700">方法/属性</th><th class="px-4 py-2 border font-semibold text-slate-700">说明</th></tr></thead><tbody class="text-slate-600"><tr><td class="px-4 py-2 border font-mono text-xs">velocity: Vector2</td><td class="px-4 py-2 border">运动向量——在 _physics_process 中修改，然后调 move_and_slide()</td></tr><tr><td class="px-4 py-2 border font-mono text-xs">move_and_slide()</td><td class="px-4 py-2 border">执行移动+碰撞处理</td></tr><tr><td class="px-4 py-2 border font-mono text-xs">is_on_floor()</td><td class="px-4 py-2 border">是否在地面上（跳跃判断）</td></tr><tr><td class="px-4 py-2 border font-mono text-xs">is_on_wall()</td><td class="px-4 py-2 border">是否碰墙（墙跳）</td></tr><tr><td class="px-4 py-2 border font-mono text-xs">floor_max_angle</td><td class="px-4 py-2 border">最大可行走坡度（弧度，默认45°≈0.785）</td></tr></tbody></table></div></section>
 
-      <section id="sec-7" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100 border-l-4 border-l-blue-400"><h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-blue-100 text-blue-700 rounded-lg flex items-center justify-center text-sm">🕹️</span>实战：Blitz 的 player.gd</h2><p class="text-slate-600 mb-3 leading-relaxed">本文档的所有概念（重力、跳跃缓冲、coyote time、可变跳跃高度、空中加速度）都在 <code class="bg-slate-100 text-blue-700 px-1.5 py-0.5 rounded text-xs font-mono">apps/game/blitz/scripts/player.gd</code> 中有完整实现。核心移动逻辑（精简提取）：</p>
+      <section id="sec-7" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100 border-l-4 border-l-blue-400"><h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-blue-100 text-blue-700 rounded-lg flex items-center justify-center text-sm">🕹️</span>实战：Blitz 的 player.gd</h2><p class="text-slate-600 mb-3 leading-relaxed">上面那套是<strong>平台跳跃</strong>的标准写法（<code class="bg-slate-100 text-blue-700 px-1.5 py-0.5 rounded text-xs font-mono">is_on_floor()</code> + <code class="bg-slate-100 text-blue-700 px-1.5 py-0.5 rounded text-xs font-mono">velocity.y</code> + coyote time）。Blitz v0.4 是 <strong>2.5D 横版（belt-scroll）</strong>——地面是一个 X + 纵深 Z 的平面，没有"脚下的碰撞面"，所以它<strong>没有照抄</strong>这套：<code class="bg-slate-100 text-blue-700 px-1.5 py-0.5 rounded text-xs font-mono">apps/game/blitz/scripts/player.gd</code> 用一个独立的 <code class="bg-slate-100 text-blue-700 px-1.5 py-0.5 rounded text-xs font-mono">height</code> 标量做高度轴，跳跃、重力全在它上面算，一行都不碰 <code class="bg-slate-100 text-blue-700 px-1.5 py-0.5 rounded text-xs font-mono">position.y</code>（那是纵深）。</p>
         <div class="mb-4"><Code language="gdscript" :code="blitzCode" title="player.gd — _process_normal 精简提取" /></div>
-        <ul class="space-y-2 text-slate-600 mb-4"><li class="flex items-start gap-2"><span class="text-blue-500 mt-1">▸</span><span><strong>Phase 1 (本页)</strong> — 重力 + move_and_slide() → 看上面这段</span></li><li class="flex items-start gap-2"><span class="text-blue-500 mt-1">▸</span><span><strong>Phase 2</strong> — 加上跳跃 + coyote time → 看 blitz player.gd:_process_normal()</span></li><li class="flex items-start gap-2"><span class="text-blue-500 mt-1">▸</span><span><strong>Phase 3</strong> — 冲刺无敌帧 + 可变跳跃高度 + 状态机 → 看 blitz player.gd 完整实现</span></li></ul><aside class="bg-blue-50 border-l-4 border-blue-400 rounded-r-xl p-4"><p class="text-sm text-blue-800"><strong>💡 学习建议：</strong>不要在浏览器里读完整个文件。打开 Godot → 开一个变量（如 gravity）→ 看文档理解含义 → 改值 → F5 看效果 → 继续下一个变量。</p></aside></section>
+        <ul class="space-y-2 text-slate-600 mb-4"><li class="flex items-start gap-2"><span class="text-blue-500 mt-1">▸</span><span><strong>保留下来的</strong> — 跳跃缓冲（<code class="bg-slate-100 px-1 rounded text-blue-700 text-xs">jump_buffer_time</code>）和可变跳跃高度（松键砍速度）都是原样抄过来的手感技法，与视角无关</span></li><li class="flex items-start gap-2"><span class="text-blue-500 mt-1">▸</span><span><strong>没有 is_on_floor()</strong> — 地面是一张平面，不是"脚下的碰撞面"。在不在空中只能自己看 <code class="bg-slate-100 px-1 rounded text-blue-700 text-xs">height</code> / <code class="bg-slate-100 px-1 rounded text-blue-700 text-xs">_grounded</code></span></li><li class="flex items-start gap-2"><span class="text-blue-500 mt-1">▸</span><span><strong>没有 coyote time</strong> — 它是给"跳过坑沿"用的补丁；belt-scroll 里没有坑，只有"跳起来"</span></li></ul><aside class="bg-amber-50 border-l-4 border-amber-400 rounded-r-xl p-4 mb-4"><p class="text-sm text-amber-800"><strong>⚠️ 最容易写错的一行：</strong><code class="bg-amber-100 px-1 rounded text-xs font-mono">velocity.y += gravity * delta</code>。在 Blitz 里 <code class="bg-amber-100 px-1 rounded text-xs font-mono">position.y</code> 是<strong>纵深</strong>，这么写角色会一边跳一边往画面深处漂，跳几次就跑到敌人后面去了——不报错、不崩，只是"位置对不上"。</p></aside><aside class="bg-blue-50 border-l-4 border-blue-400 rounded-r-xl p-4"><p class="text-sm text-blue-800"><strong>💡 学习建议：</strong>不要在浏览器里读完整个文件。打开 Godot → 开一个变量（如 gravity）→ 看文档理解含义 → 改值 → F5 看效果 → 继续下一个变量。</p></aside></section>
 
       <section id="sec-8" class="bg-white rounded-2xl shadow-md p-6 border border-slate-100">
         <h2 class="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2"><span class="w-8 h-8 bg-blue-100 text-blue-700 rounded-lg flex items-center justify-center text-sm">📋</span>小结</h2>
@@ -68,7 +68,7 @@
           <li class="flex items-start gap-2"><span class="text-blue-500 mt-1">▸</span><span><strong>CharacterBody2D = 代码控制的物理体</strong>——你改 velocity，引擎负责碰撞与滑动</span></li>
           <li class="flex items-start gap-2"><span class="text-blue-500 mt-1">▸</span><span>标准流程：改 velocity → <code class="bg-slate-100 px-1 rounded text-blue-700 text-xs">move_and_slide()</code> → 再读 <code class="bg-slate-100 px-1 rounded text-blue-700 text-xs">is_on_floor()</code>（顺序不能反）</span></li>
           <li class="flex items-start gap-2"><span class="text-blue-500 mt-1">▸</span><span>水平移动用 <code class="bg-slate-100 px-1 rounded text-blue-700 text-xs">move_toward()</code> 做加减速，有惯性手感更好（Blitz 做法）</span></li>
-          <li class="flex items-start gap-2"><span class="text-blue-500 mt-1">▸</span><span>重力只在<strong>非地面</strong>时施加；跳跃 = 直接把 velocity.y 设为负数</span></li>
+          <li class="flex items-start gap-2"><span class="text-blue-500 mt-1">▸</span><span>重力只在<strong>非地面</strong>时施加；跳跃 = 直接把 velocity.y 设为负数（平台跳跃式写法；Blitz 横版改用独立的 height 轴，见上一节）</span></li>
           <li class="flex items-start gap-2"><span class="text-blue-500 mt-1">▸</span><span>斜坡/抖动问题查 <code class="bg-slate-100 px-1 rounded text-blue-700 text-xs">floor_max_angle</code> 和 CollisionShape2D 是否超出身体</span></li>
         </ul>
       </section>
@@ -131,27 +131,33 @@ const moveAndSlideCode = `func _physics_process(delta: float) -> void:
     # ↑ 调用后，下面这些方法才更新：
     # is_on_floor() / is_on_wall() / is_on_ceiling()
     # get_last_slide_collision() — 最后一次碰撞的详细信息`
-const blitzCode = `# === blitz player.gd — _process_normal() 核心移动（Phase 1 基础）===
-func _process_normal(delta: float) -> void:
-    # ── 水平移动：move_toward 做加减速（有惯性）──
-    var input_dir: float = Input.get_axis("move_left", "move_right")
-    if input_dir != 0.0:
-        facing_right = input_dir > 0.0
-        velocity.x = move_toward(velocity.x, input_dir * move_speed, move_accel * delta)
-    else:
-        velocity.x = move_toward(velocity.x, 0.0, move_decel * delta)
+const blitzCode = `# === blitz player.gd — 横版 (belt-scroll) 里的重力与跳跃 ===
+# 世界 = (x 左右, z 纵深, height 离地高度)
+# 引擎里 position = Vector2(x, -z * 0.5)  —— height **不在 position 里**
 
-    # ── 重力：只有空中才加速下落，且有最大下落速度 ──
-    if not is_on_floor():
-        velocity.y += gravity * delta
-        velocity.y = min(velocity.y, max_fall_speed)
+func _apply_vertical(delta: float) -> void:
+    _jump_buffer_timer = maxf(0.0, _jump_buffer_timer - delta)
 
-    # ── 跳跃：jump buffer + coyote time 组合 ──
-    if _jump_buffer_timer > 0.0 and _coyote_timer > 0.0:
-        velocity.y = jump_velocity
+    # ① 按跳先记时间戳（跳跃缓冲：落地前按的那一下要留着）
+    if _can_jump() and Input.is_action_just_pressed(JUMP_ACTION):
+        _jump_buffer_timer = jump_buffer_time
+
+    # ② 缓冲没过期 且 在地上 → 起跳
+    if _jump_buffer_timer > 0.0 and _grounded:
         _jump_buffer_timer = 0.0
-        _coyote_timer = 0.0
+        _grounded = false
+        _height_vel = jump_speed        # 正数：height 向上为正
 
-    # ── 关键：move_and_slide() 之后 is_on_floor() 才是本帧最新值 ──
-    move_and_slide()`
+    # ③ 可变跳跃高度：松键那一帧砍掉剩余上升速度
+    if Input.is_action_just_released(JUMP_ACTION) and _height_vel > 0.0:
+        _height_vel *= jump_cut_multiplier
+
+    # ④ 重力积分 + 落地判定，只读写 height
+    if not _grounded:
+        _height_vel = maxf(_height_vel - gravity * delta, -max_fall_speed)
+        height += _height_vel * delta
+        if height <= 0.0:
+            height = 0.0
+            _height_vel = 0.0
+            _grounded = true`
 </script>

@@ -337,17 +337,17 @@ const blitzPlayerVarsCode = `# Blitz 玩家属性 — apps/game/blitz/scripts/pl
 extends CharacterBody2D
 
 # ===== 导出属性（Inspector 可调手感）=====
-@export var move_speed: float = 320.0        # 最大移动速度 px/s
+@export var move_speed: float = 320.0        # 最大移动速度 (世界单位/s)
 @export var move_accel: float = 2000.0       # 加速度 px/s²（按方向键时）
-@export var jump_velocity: float = -520.0    # 跳跃初速（负=向上，Y 轴向下！）
+@export var jump_speed: float = 520.0        # 起跳初速 —— v0.4 是**正数**: 高度是独立的 height 变量
 @export var jump_cut_multiplier: float = 0.45 # 松键时保留的速度比例（越小越"飘"）
-@export var gravity: float = 1400.0          # 重力加速度 px/s²
+@export var gravity: float = 1400.0          # 重力加速度 px/s²（只作用在 height 上）
 @export var max_fall_speed: float = 700.0    # 终端速度（最大下落速度）
-@export var coyote_time: float = 0.08        # 离地后仍可跳的时间（秒）
+@export var jump_buffer_time: float = 0.08   # 落地前提前按跳, 落地那一帧自动起跳
 @export var max_health: int = 3              # 最大生命
 
 # ===== 纯运行时状态（不带 @export，编辑器不显示）=====
-var health: int                    # 当前生命，_ready() 里初始化为 max_health
+var health: int = 0                # 当前生命，_ready() 里初始化为 max_health
 var invincible_timer: float = 0.0  # 受击后的无敌倒计时
-var facing_right: bool = true      # 朝向（决定攻击/眼睛方向）`
+var facing: int = 1                # 朝向：恒为 ±1（横版只有左右，不再是 Vector2 或 bool）`
 </script>

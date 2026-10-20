@@ -137,7 +137,9 @@ v0.2 把 Blitz 从横版改成等距，v0.3 在等距上把战斗手感做完了
   - `godot-1-3-operators` 的碰撞层例子、`godot-1-6-functions` 的鸭子类型例子、
     `godot-6-2-area2d-deep` 的 ParryDetector 段落 → 改成现存代码；
   - `godot-2-8-tilemap` 的 Blitz 段落 → v0.4 确实不用 TileMap，补上 `belt_floor.gd`；
-  - **还剩一批**（ParryDetector / coyote / 八向）记录在第六节「已知问题」，建议单开变更处理。
+  - **文档债已全部清完**：ParryDetector / coyote_time / 八向 / 旧 player.tscn 结构散在
+    0-3 / 0-5 / 0-9 / 1-2 / 1-8 / 1-11 / 2-6 七篇，全部换成 v0.4 的真实代码；2-6 另加
+    「横版为什么不用 `is_on_floor()`」的对照段（重力只作用在 `height` 上）。
 
 ---
 
@@ -191,7 +193,7 @@ P="C:/Users/Administrator/Desktop/monorepo/apps/game/blitz"
 | **玩家身体框仍是屏幕空间** | `player.tscn` 的 `CircleShape2D(12) @ (0,-16)` —— 它**只用于撞墙**，不参与任何伤害判定，且和 `main.gd` 的边界墙是**配套调出来的**（自检实测南北猛冲都恰好停在地界内 2px）。单改一边撞墙会整体偏掉一格。真要改就连 `_create_border_walls` 一起重算 |
 | **命中帧闪光画在角色层** | `enemy_attack.gd` 的 `_draw` 故意不贴地：起手预警要看清「我的脚站哪」，命中帧要的是「谁从哪边打的我」。形状同源，衔接看不出接缝 |
 | **`attack_hitbox.gd._draw` 是死代码** | 它被 `show_debug_rect = false` 挡着。屏幕上那片玩家攻击范围预览来自 `debug_overlay`（F1），本就该在最上层 —— 那是调试面板，不是游戏内提示 |
-| **学习站里的 Blitz 示例部分过期** | `godot-2-8-tilemap.vue` 已随 v0.4 修正（v0.4 确实不用 TileMap），5 处指向已删文件（`bullet.gd` / `drawable_rect.gd`）的 EditorLink 已改指现存文件。**但仍有一批文档拿 v0.1–v0.3 的概念当现状**：`ParryDetector`（已删）、`coyote_time`（v0.4 删除）、八向移动（v0.4 改为 ±1）。涉及 0-3 / 0-5 / 0-9 / 1-2 / 1-8 / 1-11 / 2-6，建议单开一次「文档回填」变更，别混在代码重构里 |
+| ~~**学习站里的 Blitz 示例部分过期**~~ 已清 | `godot-2-8-tilemap.vue` 随 v0.4 修正，5 处指向已删文件（`bullet.gd` / `drawable_rect.gd`）的 EditorLink 改指现存文件。**v0.1–v0.3 概念的文档债也已清**：`ParryDetector`（已删）、`coyote_time`（v0.4 删除）、八向移动（v0.4 改为 ±1）、旧 `player.tscn` 结构 —— 0-3 / 0-5 / 0-9 / 1-2 / 1-8 / 1-11 / 2-6 七篇全部换成 v0.4 真实代码；2-6 另加一节「横版为什么不用 `is_on_floor()`」 |
 | **未决** | ① `restart` 是否留在 Enter 键；② `attack_light`/`attack_heavy` 上的鼠标键要不要删；③ HUD 要不要常驻一行「F1 按键」提示 |
 
 ---

@@ -256,33 +256,46 @@ class_name BlitzPlayer
 ## 武侠角色控制器 — 状态机 + 物理 + 近战战斗
 
 # 节点引用 — @onready 在 _ready() 之前初始化
-@onready var parry_detector: Area2D = $ParryDetector
 @onready var hurtbox: Area2D = $Hurtbox
 
 # 移动参数 — @export 可在编辑器中调整手感
-@export var move_speed: float = 320.0    ## 最大移动速度 px/s
+@export var move_speed: float = 320.0    ## 最大移动速度 (世界单位/s)
 @export var move_accel: float = 2000.0   ## 加速度 px/s²（按下时）
 @export var move_decel: float = 1600.0   ## 减速度 px/s²（松键时）
 
+# 跳跃参数 — v0.4 加回来的真高度轴
+@export var jump_speed: float = 520.0
+@export var gravity: float = 1400.0
+
 # 状态机 — 每个状态一个处理函数
-enum State { NORMAL, ATTACKING, DASHING, HIT, DEAD }
+enum State { NORMAL, BLOCKING, CHARGING, ATTACKING, DASHING, HIT, GUARD_BROKEN, DEAD }
 var state: State = State.NORMAL`
 
 const blitzMoveCode = `# blitz/scripts/player.gd — _process_normal（节选）
-# Input.get_axis 与本文档 main.gd 完全一致
+# 横版是 X(左右) + 纵深, 所以输入是两个轴: Input.get_vector 而不是 get_axis
 func _process_normal(delta: float) -> void:
-	var input_dir: float = Input.get_axis("move_left", "move_right")
-	if input_dir != 0.0:
-		facing_right = input_dir > 0.0
-		# move_toward: 向目标值平滑变化，产生"惯性"手感
-		velocity.x = move_toward(velocity.x, input_dir * move_speed, move_accel * delta)
-	else:
-		velocity.x = move_toward(velocity.x, 0.0, move_decel * delta)
+	var input_dir: Vector2 = _input_screen_dir()   # 世界输入 → 屏幕方向(压扁)
+	_apply_move(input_dir, move_accel, move_decel, delta)
+	# 朝向只看水平分量 —— 纵深移动不转身
+	_face(input_dir.x)
 
-	# 重力 — 只有空中才加速下落
-	if not is_on_floor():
-		velocity.y += gravity * delta
-		velocity.y = min(velocity.y, max_fall_speed)`
+	# 格挡优先于一切 —— 它是「防御姿态」, 按下就该立刻生效
+	if Input.is_action_pressed("block"):
+		_enter_blocking()
+
+func _apply_move(input_dir: Vector2, accel: float, decel: float, delta: float) -> void:
+	# 逐轴 move_toward: 向量版会按总长度一次性逼近, 斜着走的手感会变
+	if input_dir.x != 0.0:
+		velocity.x = move_toward(velocity.x, input_dir.x * move_speed, accel * delta)
+	else:
+		velocity.x = move_toward(velocity.x, 0.0, decel * delta)
+
+	if input_dir.y != 0.0:
+		velocity.y = move_toward(velocity.y, input_dir.y * move_speed, accel * delta)
+	else:
+		velocity.y = move_toward(velocity.y, 0.0, decel * delta)
+
+# 重力**不在这里** —— 它只作用在独立的 height 上, 见 _apply_vertical()`
 
 const blitzDrawCode = `# blitz/scripts/player.gd — _draw（节选）
 # 不用任何图片，纯代码画角色
