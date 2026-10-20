@@ -93,6 +93,21 @@ enum AttackPhase {
 ##    (旧版是屏幕单位, 于是「沿纵深追」在世界尺子里快一倍, 攻击距离一改成世界单位就会对不上。)
 @export var move_speed: float = 80.0
 @export var chase_speed_scale: float = 1.35   ## 追踪时的速度倍率
+## 追到离玩家多近就停 (**世界单位**)。默认 30 ≈ 两人身体半径之和 (12 + 11 = 23) 再留 7。
+##
+## 🏗️ 这个数是修「敌人糊在玩家身上疯狂抖动」的**关键**, 而不是可调手感:
+##    v0.4 之前追到 `dist <= 1.0` 才停 —— 也就是几乎追到中心点。可两个人没有互相碰撞,
+##    于是敌人穿过玩家 → 方向瞬间反过来 → 又穿回去, 每帧翻一次, 画面上就是狂抖。
+##    现在: 追击在 stop 距离就刹车, 真叠上了还有 body_separation.gd 兜底。
+##    要调的话必须 **> 身体半径之和**, 否则等于没停。
+@export var chase_stop_distance: float = 30.0
+## 从 stop 距离再往外多少开始全速 —— 最后一段是**线性减速**, 不是硬阈值。
+##
+## ⚠️ 用一个阈值 (到 30 就置零) 会让速度在阈值两侧来回切: 刹停 → 下一帧判定又加速,
+##    表现为原地的轻微抽动。斜坡让「接近」本身就是连续的。
+@export var chase_slowdown_range: float = 26.0
+## 进入 stop 距离后的刹车减速度 (世界单位/s²)
+@export var chase_stop_decel: float = 900.0
 ## 巡逻轴 —— **世界平面**上的方向。默认 +x (屏幕向右)。
 ## 改成 Vector2.DOWN = 世界 +z = 屏幕向下 (朝镜头走)。
 @export var patrol_axis: Vector2 = Vector2.RIGHT
@@ -389,7 +404,7 @@ func _update_ai(delta: float) -> void:
 			# ⚠️ 乘 delta: 旧版这里是一个裸的 600.0, 帧率一变减速就变快慢
 			velocity = velocity.move_toward(Vector2.ZERO, 600.0 * delta)
 		Type.CHASER:
-			_process_chase()
+			_process_chase(delta)
 	_try_start_attack()
 
 
@@ -409,16 +424,28 @@ func _process_patrol() -> void:
 		facing = -1 if axis.x * _patrol_sign < 0.0 else 1
 
 
-func _process_chase() -> void:
+func _process_chase(delta: float) -> void:
 	var target: Node2D = _get_player()
 	if target == null:
 		velocity = velocity.move_toward(Vector2.ZERO, 400.0)
 		return
 	var to_player: Vector2 = _to_world_pt(target.global_position) - _world_pos()
-	if to_player.length() > 1.0:
-		# 世界平面上直线逼近 —— 归一化后再乘速度, 否则斜向会快 √2 倍
-		velocity = _world_velocity(to_player, move_speed * chase_speed_scale)
+	var dist: float = to_player.length()
+
+	# 朝向照样跟到最后一刻 —— 停在你身边也要看着你 (不然站定的敌人会侧着身子出招)
+	if dist > 1.0:
 		_face_toward(target.global_position)
+
+	# 逼近到「身体贴着」就刹车, **不要往玩家身上挤**。
+	# 挤进去也不会有物理响应 (两个人不互撞, 见 body_separation.gd), 只会让
+	# 追击方向每帧翻转 —— 那就是「重合后疯狂抖动」的根因。
+	var ramp: float = clampf((dist - chase_stop_distance) / chase_slowdown_range, 0.0, 1.0)
+	if ramp <= 0.0:
+		velocity = velocity.move_toward(Vector2.ZERO, chase_stop_decel * delta)
+		return
+
+	# 世界平面上直线逼近 —— 归一化后再乘速度, 否则斜向会快 √2 倍
+	velocity = _world_velocity(to_player, move_speed * chase_speed_scale * ramp)
 
 
 ## 朝向只由「玩家在左边还是右边」决定 —— 横版里**纵深不参与朝向**。
@@ -501,6 +528,20 @@ func _to_world_pt(screen_pos: Vector2) -> Vector2:
 ##    屏幕上纵深方向的位移自然只有横向的一半 (这就是 2.5D 地面该有的样子)。
 func _world_velocity(world_dir: Vector2, speed: float) -> Vector2:
 	return BeltSpace.to_screen(world_dir.normalized() * speed)
+
+
+# ============================================================
+# 对外查询 —— 身体体积 (BodySeparation 的契约)
+# ============================================================
+## 身体的世界半径。玩家的 12 + 这里的 11 = 23 世界单位 ≈ 1/3 格,
+## 就是「两个人贴住」该有的距离。见 body_separation.gd。
+func body_radius() -> float:
+	return BODY_RADIUS
+
+
+## 死亡后不参与体积分离 —— 尸体不该挡住玩家, 而且会被死亡特效的击退推来推去。
+func is_separable() -> bool:
+	return not is_dead
 
 
 # ============================================================

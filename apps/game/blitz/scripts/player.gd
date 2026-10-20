@@ -136,6 +136,13 @@ signal guard_broken()
 ##    这不是调手感, 是修一个「明明躲开了却掉血」(见 _ready 里的说明)。
 const HURTBOX_RADIUS: float = 15.0
 
+## 身体的**世界**半径 —— 只给「角色之间不能重合」用 (见 body_separation.gd)。
+##
+## ⚠️ 它和 HURTBOX_RADIUS 是**两个**数, 别合并: 受击框是「被打中」的容差, 本来就该
+##    比身体大方一点; 而这里决定的是「人能站多近」, 大了会显得两个角色互相排斥。
+##    和敌人的 BODY_RADIUS(11) 加起来是 23 —— 约 1/3 格, 正好是两个人贴住该有的距离。
+const BODY_RADIUS: float = 12.0
+
 # ============================================================
 # 移动参数
 # ============================================================
@@ -1216,6 +1223,17 @@ func is_guard_up() -> bool:
 ## 精准窗口是否还开着。给 debug 面板和自检看。
 func is_parry_window_open() -> bool:
 	return _parry_window_timer > 0.0
+
+
+## 身体的世界半径 —— BodySeparation 的契约 (见 body_separation.gd)。
+func body_radius() -> float:
+	return BODY_RADIUS
+
+
+## 能不能被别的角色推开。死亡时不参与 —— 尸体被敌人顶着走很怪,
+## 而且复活是**瞬移**的, 那一下会把敌人一起拽过去。
+func is_separable() -> bool:
+	return state != State.DEAD
 
 
 ## 是否在蓄力中。

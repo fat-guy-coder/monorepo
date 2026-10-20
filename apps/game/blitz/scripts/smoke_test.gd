@@ -443,6 +443,8 @@ func _run_combat(game: Node) -> void:
 	_check_ground_bodies(player, enemies)
 	await _check_enemy_cycle(player, enemies)
 	await _check_contact_damage_removed(player)
+	# 放在最后: 它会摆弄玩家和敌人的位置, 放在前面会干扰那些依赖摆放的断言
+	await _check_body_volume(player, enemies)
 
 
 # ------------------------------------------------------------
@@ -1442,6 +1444,142 @@ func _check_contact_damage_removed(player: BlitzPlayer) -> void:
 		"mask=%d" % player.hurtbox.collision_mask)
 	_ok("玩家 Hurtbox 仍监听敌人攻击 (bit3)", (player.hurtbox.collision_mask & (1 << 3)) != 0,
 		"mask=%d" % player.hurtbox.collision_mask)
+
+
+# ------------------------------------------------------------
+# 身体体积 —— 角色之间不能重合, 也不能顶着顶穿
+# ------------------------------------------------------------
+#
+# 🎮 这一段来自一个真出现过的 bug: 敌人追到玩家身上**完全重合**, 然后疯狂抖动。
+#    根因有两个, 而且它们各自都「不报错」:
+#      ① 两个角色的 collision_mask 都只有墙 (1<<4) —— 角色之间根本没有碰撞;
+#      ② 追击条件是 `dist > 1.0`, 也就是几乎追到中心点才停。
+#    于是敌人每帧穿过去、方向反过来、再穿回来 —— 画面上是高频抖动,
+#    而所有战斗断言照样全绿 (能不能打中、掉不掉血, 与站没站在一起无关)。
+#
+# 🏗️ 修法不是开 layer/mask, 而是 `body_separation.gd` 的世界空间软分离
+#    (为什么不能开物理层, 见那个文件头)。所以这里要验的也正是那个契约:
+#      · 身体半径之和是**最小间距**;
+#      · 完全重合也能在一帧内分开;
+#      · 追击者在贴住之后**不再抖**;
+#      · 玩家顶着敌人走, 顶不穿。
+func _check_body_volume(player: BlitzPlayer, enemies: Array) -> void:
+	print("-- 身体体积 (角色之间不能重合) --")
+	var a: BlitzEnemy = _first_live_enemy(enemies)
+	if a == null:
+		_ok("找到体积测试敌人", false)
+		return
+
+	# 先让「别的敌人」退场: 它们也是真 AI, 会在测量期间自己走过来贴住玩家,
+	# 于是「最小间距」会莫名其妙地小于半径之和 —— 看起来像分离逻辑坏了。
+	var others: Array = []
+	for n: Node in enemies:
+		if n is BlitzEnemy and n != a and not (n as BlitzEnemy).is_dead:
+			(n as BlitzEnemy).set_physics_process(false)
+			others.append(n)
+
+	a.attack_phase = BlitzEnemy.AttackPhase.NONE
+	a._stagger_timer = 0.0
+	a._stun_timer = 0.0
+	a.can_attack = false
+	var type_before: BlitzEnemy.Type = a.enemy_type
+	player.state = BlitzPlayer.State.NORMAL
+	player.invincible_timer = 0.0
+	player.health = player.max_health
+	player.velocity = Vector2.ZERO
+	player.height = 0.0
+
+	var min_d: float = player.body_radius() + a.body_radius()
+	_ok("双方都实现了 body_radius / is_separable 契约", min_d > 0.0 and player.is_separable() and a.is_separable(),
+		"玩家 %.0f + 敌人 %.0f = %.0f 世界单位" % [player.body_radius(), a.body_radius(), min_d])
+
+	# ① 完全重合 —— 最恶劣的输入。两个物理帧后必须已经分开。
+	#    ⚠️ 关掉两边的 _physics_process: 这一条要单独验**分离本身**,
+	#       不能让敌人的移动/玩家的 move_and_slide 混进来。
+	player.set_physics_process(false)
+	a.set_physics_process(false)
+	var center: Vector2 = _game.floor.center_of(Vector2i(20, 9))
+	player.global_position = center
+	a.global_position = center
+	player.velocity = Vector2.ZERO
+	a.velocity = Vector2.ZERO
+	await get_tree().physics_frame
+	await get_tree().physics_frame
+	var gap: float = BeltSpace.to_world(player.global_position).distance_to(BeltSpace.to_world(a.global_position))
+	_ok("完全重合 → 一帧内被分开到身体半径之和", gap >= min_d - 0.5,
+		"世界距离 %.2f  期望 ≥ %.2f" % [gap, min_d])
+
+	# ② 追击者靠近之后**不抖** —— 用户报的那个 bug 的直接回归门。
+	#    判据用「相邻帧位移」而不是「速度方向翻转次数」: 后者对速度归零的写法很敏感,
+	#    而玩家看到的就是位置在跳。
+	#
+	#    ⚠️ 不能按固定帧数采样。追到 stop 距离的最后一段是**线性减速**,
+	#       速度按指数收敛, 固定窗口很容易正好切在减速尾部 —— 那时每帧位移
+	#       还有 1px 以上, 于是把「正常的减速」误判成「抖动」(实测踩到: 1.563)。
+	#       正确做法是先等它**停稳**(连续若干帧几乎不动), 再开始量抖动量。
+	a.enemy_type = BlitzEnemy.Type.CHASER
+	a.set_physics_process(true)
+	a.global_position = player.global_position + BeltSpace.to_screen(Vector2(160.0, 0.0))
+	a.velocity = Vector2.ZERO
+	var min_gap: float = 1e9
+	var settled: bool = false
+	var quiet: int = 0
+	var prev_world: Vector2 = BeltSpace.to_world(a.global_position)
+	for i: int in range(360):    # 上限 6s, 正常 2s 内就停稳
+		await get_tree().physics_frame
+		var pw: Vector2 = BeltSpace.to_world(player.global_position)
+		var ew: Vector2 = BeltSpace.to_world(a.global_position)
+		min_gap = minf(min_gap, pw.distance_to(ew))
+		# 0.05 世界单位/帧 = 3 世界单位/s, 低于它就已经看不出在动了
+		quiet = quiet + 1 if ew.distance_to(prev_world) < 0.05 else 0
+		prev_world = ew
+		if quiet >= 5:
+			settled = true
+			break
+	var biggest_step: float = 0.0
+	for i: int in range(30):    # 停稳之后再量 0.5s 的抖动量
+		await get_tree().physics_frame
+		var pw: Vector2 = BeltSpace.to_world(player.global_position)
+		var ew: Vector2 = BeltSpace.to_world(a.global_position)
+		min_gap = minf(min_gap, pw.distance_to(ew))
+		biggest_step = maxf(biggest_step, ew.distance_to(prev_world))
+		prev_world = ew
+	_ok("追击全程没有重合 (含最后贴住的那一段)", min_gap >= min_d - 0.5,
+		"最小世界距离 %.2f  期望 ≥ %.2f" % [min_gap, min_d])
+	_ok("追击者能自己停稳 (停在了 stop 距离附近, 不是一直在挤)",
+		settled and min_gap < a.chase_stop_distance + 2.0,
+		"停稳=%s  最小距离 %.2f  stop=%.1f" % [settled, min_gap, a.chase_stop_distance])
+	_ok("停稳后不抖 (相邻帧位移 < 0.5 世界单位)",
+		biggest_step < 0.5, "最大帧间位移 %.3f" % biggest_step)
+
+	# ③ 玩家顶着敌人走 —— 顶不穿。
+	#    ⚠️ 敌人关掉物理、速度为零: 分离按「谁在往里挤」分配位移, 此刻挤的是玩家,
+	#       于是退让的**必须**是玩家。反过来的话就是「敌人站着不动也能把人顶穿」。
+	a.set_physics_process(false)
+	a.global_position = player.global_position + BeltSpace.to_screen(Vector2(60.0, 0.0))
+	a.velocity = Vector2.ZERO
+	player.set_physics_process(true)
+	player.state = BlitzPlayer.State.NORMAL
+	player.velocity = Vector2.ZERO
+	Input.action_press("move_right")
+	for i: int in range(90):    # 1.5s 足够从 60 挤到贴住再多走好几步
+		await get_tree().physics_frame
+	Input.action_release("move_right")
+	var pw2: Vector2 = BeltSpace.to_world(player.global_position)
+	var ew2: Vector2 = BeltSpace.to_world(a.global_position)
+	_ok("玩家顶着敌人走也**不会穿过去** (仍在敌人左侧)",
+		pw2.x < ew2.x, "玩家 x=%.1f  敌人 x=%.1f" % [pw2.x, ew2.x])
+	_ok("玩家顶着敌人走时保持最小间距",
+		pw2.distance_to(ew2) >= min_d - 0.5,
+		"世界距离 %.2f  期望 ≥ %.2f" % [pw2.distance_to(ew2), min_d])
+
+	# 收尾 —— 恢复物理与敌人类型, 后面没有断言了, 但别把场景留在半残状态
+	a.enemy_type = type_before
+	a.set_physics_process(true)
+	player.set_physics_process(true)
+	player.velocity = Vector2.ZERO
+	for n: Node in others:
+		(n as BlitzEnemy).set_physics_process(true)
 
 
 # ============================================================

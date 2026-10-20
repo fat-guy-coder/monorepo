@@ -106,6 +106,11 @@ var _respawning: bool = false
 func _ready() -> void:
 	RenderingServer.set_default_clear_color(Color(0.05, 0.05, 0.11))
 
+	# 身体体积结算 (body_separation.gd) 必须跑在**所有**角色的 move_and_slide 之后,
+	# 否则推开的位移会被同一帧的 move_and_slide 覆盖, 只剩一点点效果。
+	# 优先级越大越晚: 子节点默认 0, 这里设 100 就是「本帧最后一个跑」。
+	process_physics_priority = 100
+
 	# 顺序有依赖: 地面 → (世界/障碍/敌人要用地面的坐标桥) → 玩家 → 相机(要用地面的边界)
 	_build_floor()
 	_build_backdrop()
@@ -122,6 +127,15 @@ func _ready() -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("restart"):
 		get_tree().reload_current_scene()
+
+
+## 角色之间的物理体积 —— 每帧一次, 所有角色都走完 move_and_slide 之后。
+##
+## 为什么不放在各自的 _physics_process 里: 一对角色被各推一次 = 推开两倍, 看起来像弹开;
+## 而且「谁让路」要按速度决定 (正在往里挤的那个退), 单边结算看不到对方的速度。
+## 完整理由见 body_separation.gd 的文件头。
+func _physics_process(_delta: float) -> void:
+	BodySeparation.resolve_all(player, get_tree().get_nodes_in_group("enemies"))
 
 
 # ============================================================
