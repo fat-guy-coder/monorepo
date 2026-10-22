@@ -1,8 +1,8 @@
 # 📊 全项目进度面板
 
-> 更新时间: 2026-10-20 | 当前活跃任务: **Blitz v0.4 视角转 2.5D 横版 —— 步骤 1–7 全部完成 ✅，待人工验收（F5）后进入 v0.5。设计见 [`apps/game/blitz/DESIGN.md`](apps/game/blitz/DESIGN.md)，过程档案见 [`V04_PLAN.md`](apps/game/blitz/V04_PLAN.md)**
+> 更新时间: 2026-10-22 | 当前活跃任务: **Blitz v0.4 完成（步骤 1–8，自检 192 项）✅，待人工验收（F5）；美术路线待拍板**（逐帧像素 vs 3D 预渲染，见 [`ART_ROUTE_DECISION.md`](apps/game/blitz/ART_ROUTE_DECISION.md)）。设计见 [`DESIGN.md`](apps/game/blitz/DESIGN.md)，过程档案见 [`V04_PLAN.md`](apps/game/blitz/V04_PLAN.md)，美术操作手册见 [`ART_PIPELINE.md`](apps/game/blitz/ART_PIPELINE.md)。
 
-> 🔸 **本会话结束后要换电脑继续** —— Blitz 的改动**必须 commit + push** 才能带过去（分支 `feat/iso-locomotion`，跟踪 `origin/feat/iso-locomotion`）。
+> 🔸 **本会话结束后要换电脑继续** —— Blitz 的改动**必须 commit + push** 才能带过去（分支 `master`，跟踪 `origin/master`）。
 > 原先的 v0.4 计划文件在会话的 `~/.claude/plans/` 里（**本机文件，换电脑就没了**），已搬到仓库的 `apps/game/blitz/V04_PLAN.md`。
 
 ## 🎯 当前任务（下次 AI 会话继续入口）
@@ -235,13 +235,13 @@
 
 ### 4.2 Blitz 游戏项目
 
-> 路径: `apps/game/blitz/` | 引擎: Godot 4.6.3 | 分支: `feat/iso-locomotion`
+> 路径: `apps/game/blitz/` | 引擎: Godot 4.6.3 | 分支: `master`
 
 包含：`scripts/`（GDScript 源码）、`scenes/`（场景文件）、`DESIGN.md`（设计文档）、**`V04_PLAN.md`（当前权威计划）**。
 
 每个 .gd 脚本顶部有 `## 📚 涉及学习文档:` 注释块关联到 Godot 学习文档，关键代码行用 `# → godot-X-Y-name: 说明` 标注。
 
-#### 🚧 当前里程碑：v0.4 视角转 2.5D 横版（belt-scroll）
+#### ✅ 里程碑：v0.4 视角转 2.5D 横版（belt-scroll）—— 代码与文档完成，待人工验收
 
 v0.2 等距 / v0.3 战斗手感已完成。v0.4 的目标是把地面轴从等距菱形改成 **X（左右）+ Z（纵深）**、朝向 ±1、加真跳跃、敌人攻击改成**每个招式自带形状的范围判定**并画出预警。
 
@@ -289,13 +289,20 @@ v0.2 等距 / v0.3 战斗手感已完成。v0.4 的目标是把地面轴从等�
 
 **关键不变量：** 一招 = **一个 `AttackShape` 实例**，预警 / `CollisionShape2D` / 自检读的都是它 → 漂移在结构上不可能。坐标桥只有 `belt_space.gd` 一处（`to_screen` / `to_world` / `ground_circle_shape`）。
 
+#### 🎨 美术阶段：文档已就绪，路线待拍板（2026-10-22 新增）
+
+- **[`ART_PIPELINE.md`](apps/game/blitz/ART_PIPELINE.md)** —— 操作手册：风格锚（style bible 目录结构）、工具链（Retro Diffusion vs PixelLab；LibreSprite vs Aseprite vs Pixelorama；国内 LiblibAI + RunningHub + TusiArt + 即梦 + 混元 3D/Tripo）、8 步生产流程、帧预算、Godot 导入设置、战斗时序对齐、版权合规。
+- **[`ART_ROUTE_DECISION.md`](apps/game/blitz/ART_ROUTE_DECISION.md)** —— 决策辅助：逐帧像素 vs 3D 预渲染的五维对比（工作量/效果/精美/动画连贯/素材量）、成本估算、混合管线、**两周 A/B 实验协议**、风险与退出条件。**当前推荐「角色 3D 预渲染 + 场景手绘像素」的混合方案，但尚未拍板**；第 10 节留了决策记录表。
+- **关键结论**：Dead Cells 是 3D 模型 + 像素化渲染，不是手绘逐帧。Blitz 的固定侧视 ±1 是 3D 预渲染成本最低的一档；v0.5 的装备系统会放逐帧路线的成本（换一套装备 = 重画主角全部帧）。
+- **接美术前必须先改的数值**：当前轻击总时长 0.15s，24fps 下不足 4 帧；接真动画时要调到 0.28~0.32s（重击 0.45~0.55s），并让**命中帧与 `AttackHitbox` 生成时刻对齐**，改完 F5 复核手感。
+
 ✅ **`DESIGN.md` 已回填成 v0.4**，现在它是唯一权威设计文档（视角选型 / 坐标模型 / 攻击形状 / 代码地图 / 验收清单）。
 `V04_PLAN.md` 降为过程档案（逐步记录 + 踩坑 + 已知问题）。
 
 ⚠️ **v0.4 还差人工验收**（必须 F5 真开窗口）：横向跟地砖对得上吗 / 跳跃读得出吗 / 预警看得见吗 /
 纵深容差合适吗 / 跳得开低扫吗 / 精准格挡有回报吗 / 精力逼出取舍吗 / 破防够痛吗 / 角色互相顶得住吗。
 
-**继续指令：** 「继续 Blitz 的开发。v0.4 已完成，先读 `apps/game/blitz/DESIGN.md` 了解现状；如果人工验收还没做，先陪我过一遍验收清单；通过后再开始 v0.5（装备掉落 + 词条 + 技能槽位）」
+**继续指令：** 「继续 Blitz 的开发。先读 `apps/game/blitz/DESIGN.md` 和 `apps/game/blitz/ART_ROUTE_DECISION.md` —— 美术路线（逐帧像素 vs 3D 预渲染）还没拍板，先陪我定路线或做两周 A/B 实验；v0.4 的人工验收如果还没做，先过验收清单；之后再进 v0.5（装备掉落 + 词条 + 技能槽位）」
 
 ---
 
@@ -364,7 +371,7 @@ API 文档: `apps/backend/API.md` | 快速启动: `docker-compose up -d backend 
 | 继续 Go 文档 | 「继续 Go 学习文档的填充，从阶段 2 开始」 |
 | 继续 Godot 文档 | 「继续 Godot 学习文档的填充」 |
 | 继续后端开发 | 「继续后端 API 开发」 |
-| 继续游戏开发 | 「继续 Blitz 的开发。v0.4 已完成，先读 `apps/game/blitz/DESIGN.md`；人工验收还没做就先过验收清单，通过后开始 v0.5（装备 + 词条 + 技能槽）」 |
+| 继续游戏开发 | 「继续 Blitz 的开发。先读 `apps/game/blitz/DESIGN.md` 和 `apps/game/blitz/ART_ROUTE_DECISION.md`；美术路线还没拍板，先定路线/做 A/B 实验；人工验收没做就先过验收清单，之后开始 v0.5（装备 + 词条 + 技能槽）」 |
 
 > **提示：** 新会话中 AI 首先读取 `README.md` 和 `PROGRESS.md`（本文件），即可了解全局状态和当前任务。
 
