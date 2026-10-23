@@ -1,0 +1,42 @@
+GIMP Palette
+Name: Blitz Core (UI / Characters / VFX)
+Columns: 8
+#
+# 全局核心色：所有地图共用，不随区域换色。
+# UI / 玩家 / 小兵 / Boss / VFX / 描边 / 光照都从这里取。
+  0   0   0	Outline Black
+ 92  58  44	Skin Shadow
+128  84  62	Skin Mid
+168 118  88	Skin Light
+208 162 124	Skin Highlight
+ 72  28  36	Cloth Dark
+112  40  44	Cloth Mid
+152  56  52	Cloth Light
+196  92  72	Cloth Highlight
+ 24  64  64	Jade Dark
+ 32  96  92	Jade Mid
+ 48 136 124	Jade Light
+ 96 184 160	Jade Highlight
+ 96  72  32	Gold Dark
+148 112  40	Gold Mid
+204 164  64	Gold Light
+248 216 120	Gold Highlight
+ 32  96 128	Storm Dark
+ 64 160 200	Storm Mid
+128 224 248	Storm Light
+216 248 255	Storm White
+ 28  56  36	Root Dark
+ 44  88  52	Root Mid
+ 72 128  64	Root Light
+120 176  88	Root Highlight
+120  24  32	HP Dark
+196  40  48	HP Mid
+248  96  88	HP Light
+ 24  48 112	Mana Dark
+ 40  88 184	Mana Mid
+ 88 152 240	Mana Light
+112  96  24	Stamina Dark
+184 160  40	Stamina Mid
+248 224  96	Stamina Light
+196 200 208	White
+128 132 144	Gray

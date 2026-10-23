@@ -1,0 +1,140 @@
+{
+  "schema_version": 1,
+  "character": "player",
+  "pipeline": "3d_prerender",
+  "source": "art/3d/player.blend",
+  "palette": "art/style_bible/palette.gpl",
+  "pixel_density": 1,
+  "camera": {
+    "orthographic": true,
+    "yaw_deg": 0,
+    "pitch_deg": 0,
+    "canvas": [192, 192],
+    "pivot": "bottom_center",
+    "background": "transparent",
+    "antialiasing": false
+  },
+  "sheet_layout": "horizontal",
+  "animations": [
+    {
+      "name": "idle",
+      "frames": 6,
+      "fps": 10,
+      "loop": true,
+      "hit_frame": null,
+      "in_place": true,
+      "frame_size": [192, 192],
+      "file": "art/export/player/idle.png"
+    },
+    {
+      "name": "walk",
+      "frames": 8,
+      "fps": 12,
+      "loop": true,
+      "hit_frame": null,
+      "in_place": true,
+      "frame_size": [192, 192],
+      "file": "art/export/player/walk.png"
+    },
+    {
+      "name": "jump_crouch",
+      "frames": 2,
+      "fps": 24,
+      "loop": false,
+      "hit_frame": null,
+      "in_place": true,
+      "frame_size": [192, 192],
+      "file": "art/export/player/jump_crouch.png"
+    },
+    {
+      "name": "jump_air",
+      "frames": 2,
+      "fps": 12,
+      "loop": true,
+      "hit_frame": null,
+      "in_place": true,
+      "frame_size": [192, 192],
+      "file": "art/export/player/jump_air.png"
+    },
+    {
+      "name": "jump_land",
+      "frames": 2,
+      "fps": 24,
+      "loop": false,
+      "hit_frame": null,
+      "in_place": true,
+      "frame_size": [192, 192],
+      "file": "art/export/player/jump_land.png"
+    },
+    {
+      "name": "slash_horizontal",
+      "frames": 7,
+      "fps": 24,
+      "loop": false,
+      "hit_frame": 3,
+      "in_place": true,
+      "frame_size": [192, 192],
+      "file": "art/export/player/slash_horizontal.png"
+    },
+    {
+      "name": "slash_vertical",
+      "frames": 7,
+      "fps": 24,
+      "loop": false,
+      "hit_frame": 4,
+      "in_place": true,
+      "frame_size": [192, 192],
+      "file": "art/export/player/slash_vertical.png"
+    },
+    {
+      "name": "cast_lightning",
+      "frames": 6,
+      "fps": 24,
+      "loop": false,
+      "hit_frame": 5,
+      "in_place": true,
+      "frame_size": [192, 192],
+      "file": "art/export/player/cast_lightning.png"
+    },
+    {
+      "name": "cast_greatsword",
+      "frames": 9,
+      "fps": 24,
+      "loop": false,
+      "hit_frame": 6,
+      "in_place": true,
+      "frame_size": [192, 192],
+      "file": "art/export/player/cast_greatsword.png"
+    },
+    {
+      "name": "cast_roots",
+      "frames": 6,
+      "fps": 24,
+      "loop": false,
+      "hit_frame": 4,
+      "in_place": true,
+      "frame_size": [192, 192],
+      "file": "art/export/player/cast_roots.png"
+    },
+    {
+      "name": "hurt",
+      "frames": 2,
+      "fps": 24,
+      "loop": false,
+      "hit_frame": null,
+      "in_place": true,
+      "frame_size": [192, 192],
+      "file": "art/export/player/hurt.png"
+    },
+    {
+      "name": "death",
+      "frames": 6,
+      "fps": 12,
+      "loop": false,
+      "hit_frame": null,
+      "in_place": true,
+      "frame_size": [192, 192],
+      "file": "art/export/player/death.png"
+    }
+  ]
+}

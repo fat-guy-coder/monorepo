@@ -1,9 +1,10 @@
 # 📊 全项目进度面板
 
-> 更新时间: 2026-10-22 | 当前活跃任务: **Blitz v0.4 完成（步骤 1–8，自检 192 项）✅，待人工验收（F5）；美术路线待拍板**（逐帧像素 vs 3D 预渲染，见 [`ART_ROUTE_DECISION.md`](apps/game/blitz/ART_ROUTE_DECISION.md)）。设计见 [`DESIGN.md`](apps/game/blitz/DESIGN.md)，过程档案见 [`V04_PLAN.md`](apps/game/blitz/V04_PLAN.md)，美术操作手册见 [`ART_PIPELINE.md`](apps/game/blitz/ART_PIPELINE.md)。
+> 更新时间: 2026-10-23 | 当前活跃任务: **Blitz M0 美术风格锚定** —— 方向 A（冷青夜雨）已定；Retro Diffusion MCP 已接通并出了第 1 张试产图；下一步跑 4–6 张角色候选定锚图。v0.4 代码完成（自检 192 项）✅，仍待人工验收（F5）。美术路线见 [`ART_ROUTE_DECISION.md`](apps/game/blitz/ART_ROUTE_DECISION.md)，第一个盒子计划见 [`SLICE_01_PLAN.md`](apps/game/blitz/SLICE_01_PLAN.md)，美术目录见 [`art/README.md`](apps/game/blitz/art/README.md)。
 
 > 🔸 **本会话结束后要换电脑继续** —— Blitz 的改动**必须 commit + push** 才能带过去（分支 `master`，跟踪 `origin/master`）。
-> 原先的 v0.4 计划文件在会话的 `~/.claude/plans/` 里（**本机文件，换电脑就没了**），已搬到仓库的 `apps/game/blitz/V04_PLAN.md`。
+> ⚠️ 当前 `SLICE_01_PLAN.md` 和整个 `art/` 目录（含 `art/export/probe/` 试产图）**都还是未跟踪文件**，不提交就带不走。
+> MCP 配置在**用户级** `~/.claude.json`，不随仓库走；新电脑要重新执行 [`MCP_SETUP.md`](apps/game/blitz/art/MCP_SETUP.md) 的接入命令。
 
 ## 🎯 当前任务（下次 AI 会话继续入口）
 
@@ -289,12 +290,68 @@ v0.2 等距 / v0.3 战斗手感已完成。v0.4 的目标是把地面轴从等�
 
 **关键不变量：** 一招 = **一个 `AttackShape` 实例**，预警 / `CollisionShape2D` / 自检读的都是它 → 漂移在结构上不可能。坐标桥只有 `belt_space.gd` 一处（`to_screen` / `to_world` / `ground_circle_shape`）。
 
-#### 🎨 美术阶段：文档已就绪，路线待拍板（2026-10-22 新增）
+#### 🎨 美术阶段：方向 A + M0 进行中（2026-10-23 更新）
 
 - **[`ART_PIPELINE.md`](apps/game/blitz/ART_PIPELINE.md)** —— 操作手册：风格锚（style bible 目录结构）、工具链（Retro Diffusion vs PixelLab；LibreSprite vs Aseprite vs Pixelorama；国内 LiblibAI + RunningHub + TusiArt + 即梦 + 混元 3D/Tripo）、8 步生产流程、帧预算、Godot 导入设置、战斗时序对齐、版权合规。
 - **[`ART_ROUTE_DECISION.md`](apps/game/blitz/ART_ROUTE_DECISION.md)** —— 决策辅助：逐帧像素 vs 3D 预渲染的五维对比（工作量/效果/精美/动画连贯/素材量）、成本估算、混合管线、**两周 A/B 实验协议**、风险与退出条件。**当前推荐「角色 3D 预渲染 + 场景手绘像素」的混合方案，但尚未拍板**；第 10 节留了决策记录表。
 - **关键结论**：Dead Cells 是 3D 模型 + 像素化渲染，不是手绘逐帧。Blitz 的固定侧视 ±1 是 3D 预渲染成本最低的一档；v0.5 的装备系统会放逐帧路线的成本（换一套装备 = 重画主角全部帧）。
 - **接美术前必须先改的数值**：当前轻击总时长 0.15s，24fps 下不足 4 帧；接真动画时要调到 0.28~0.32s（重击 0.45~0.55s），并让**命中帧与 `AttackHitbox` 生成时刻对齐**，改完 F5 复核手感。
+
+**M0 已拍的决策：**
+
+| 项 | 决策 |
+|---|---|
+| 风格方向 | **A. 冷青夜雨**（冷灰蓝石 + 玉青 + 鎏金 + 朱砂 + 雷光冷白） |
+| 一致性策略 | **UI / 角色 / VFX 锁死；地图按区域换色**（每图 8–12 色） |
+| 出图路线 | **AI 优先**：3 张锚图（角色 / 环境 / UI），不手收集参考 |
+| 首试模型 | Retro Diffusion hosted MCP（`https://mcp.retrodiffusion.ai/mcp`） |
+
+**M0 新增文件（全部未跟踪）：**
+
+| 文件 | 作用 |
+|---|---|
+| `SLICE_01_PLAN.md` | 第一个盒子的范围 / 全屏方案 / 非矩形房间 / M0–M7 |
+| `art/README.md` | 美术目录结构 + 三条硬规矩 |
+| `art/MCP_SETUP.md` | Retro Diffusion / PixelLab / Comfy Cloud 接入 + 排错 |
+| `art/style_bible/M0_CHECKLIST.md` | 3 天锚定清单（含 §0.5 AI 优先路线） |
+| `art/style_bible/rules.md` | 机位 / 密度 / 描边 / 光照 / **§0 UI 锁死 + 地图换色** |
+| `art/style_bible/prompts.md` | 提示词模板 + §8 锁参数 + §9 后处理 + §10 模型分工 |
+| `art/style_bible/palette_core.gpl` | 核心 36 色（UI / 角色 / VFX） |
+| `art/style_bible/palette_region_01_temple.gpl` | 区域 7 色（夜寺） |
+| `art/style_bible/palette.gpl` | 43 色并集（Aseprite 一次载入） |
+| `art/manifest.example.json` | 动画清单模板 |
+| `art/rooms/room_01.txt` | 80×18 ASCII 可行走掩码（最大纵深 16 格） |
+
+**MCP 状态（2026-10-23）：**
+
+- 已接入 **Retro Diffusion**，用户级配置，`claude mcp list` = ✔ Connected。
+- 余额：**$0.47**（起始 $0.50）。
+- 第 1 张试产：`detailed:rd_flux`，192×192，seed 1000，`remove_bg=true` → `art/export/probe/probe_001_seed1000.png`。
+  - 真像素网格、透明底，深青袍 + 金边 + 直剑，侧视朝右。
+  - **42 色**（要降到 16–24）；角色内容 150×167（要缩到 112 高）。
+- 第 2 张（seed 1001）返回 **500 internal_error**，**未扣费**；另两张被手动中断，未执行。
+- 结论：**不是额度不够**，是服务端偶发错误。余额还够再跑 5–6 张 RD Fast（$0.03/张）。
+
+**下一次继续就做这批（6 张候选，约 $0.18）：**
+
+| 参数 | 值 |
+|---|---|
+| 模型 / 风格 | `rd_fast` + `detailed:rd_flux`（1 张已出）；可加 2 张 `simple:rd_flux` 对比 |
+| 尺寸 | 192×192 |
+| seed | 1001–1005 |
+| 背景 | prompt 写 `on a plain white background` + `remove_bg=true` |
+| 之后 | 挑 1 张 → 量化到 `palette_core.gpl` → 存 `references/characters/anchor_character.png` |
+
+**试产 prompt（Retro Diffusion 专用，不要写 "pixel art"）：**
+
+```text
+a wuxia swordsman in a deep teal robe with gold trim, holding a straight sword,
+standing idle, full body, side view facing right, calm, readable silhouette,
+upper-left light, dark outline, limited palette of 16 colors, on a plain white background
+```
+
+**下一步闸门**：拿选中的锚图再出 `slash_horizontal` 和 `jump` 各 3 张 —— 角色还是同一个人 → 管线成立；
+不是 → 换 PixelLab 或转 Blender 3D 预渲染，别硬调。
 
 ✅ **`DESIGN.md` 已回填成 v0.4**，现在它是唯一权威设计文档（视角选型 / 坐标模型 / 攻击形状 / 代码地图 / 验收清单）。
 `V04_PLAN.md` 降为过程档案（逐步记录 + 踩坑 + 已知问题）。
@@ -302,7 +359,7 @@ v0.2 等距 / v0.3 战斗手感已完成。v0.4 的目标是把地面轴从等�
 ⚠️ **v0.4 还差人工验收**（必须 F5 真开窗口）：横向跟地砖对得上吗 / 跳跃读得出吗 / 预警看得见吗 /
 纵深容差合适吗 / 跳得开低扫吗 / 精准格挡有回报吗 / 精力逼出取舍吗 / 破防够痛吗 / 角色互相顶得住吗。
 
-**继续指令：** 「继续 Blitz 的开发。先读 `apps/game/blitz/DESIGN.md` 和 `apps/game/blitz/ART_ROUTE_DECISION.md` —— 美术路线（逐帧像素 vs 3D 预渲染）还没拍板，先陪我定路线或做两周 A/B 实验；v0.4 的人工验收如果还没做，先过验收清单；之后再进 v0.5（装备掉落 + 词条 + 技能槽位）」
+**继续指令：** 「继续 Blitz 的 M0 美术风格锚定。先读 `apps/game/blitz/SLICE_01_PLAN.md`、`apps/game/blitz/art/README.md`、`apps/game/blitz/art/style_bible/M0_CHECKLIST.md` 和 `apps/game/blitz/art/MCP_SETUP.md`。方向已定 A（冷青夜雨），Retro Diffusion MCP 已接通（余额约 $0.47），第 1 张试产图在 `art/export/probe/probe_001_seed1000.png`。下一步：用 `detailed:rd_flux` 生成 seed 1001–1005 的 4–5 张角色候选，挑 1 张当 `anchor_character.png`，再出 slash/jump 各 3 张做跨动作一致性测试。v0.4 的人工验收如果还没过，穿插着做。」
 
 ---
 
@@ -371,7 +428,7 @@ API 文档: `apps/backend/API.md` | 快速启动: `docker-compose up -d backend 
 | 继续 Go 文档 | 「继续 Go 学习文档的填充，从阶段 2 开始」 |
 | 继续 Godot 文档 | 「继续 Godot 学习文档的填充」 |
 | 继续后端开发 | 「继续后端 API 开发」 |
-| 继续游戏开发 | 「继续 Blitz 的开发。先读 `apps/game/blitz/DESIGN.md` 和 `apps/game/blitz/ART_ROUTE_DECISION.md`；美术路线还没拍板，先定路线/做 A/B 实验；人工验收没做就先过验收清单，之后开始 v0.5（装备 + 词条 + 技能槽）」 |
+| 继续游戏开发 | 「继续 Blitz 的 M0 美术。先读 `apps/game/blitz/SLICE_01_PLAN.md`、`art/README.md`、`art/style_bible/M0_CHECKLIST.md`、`art/MCP_SETUP.md`；方向 A 已定、Retro Diffusion MCP 已接通，先跑 seed 1001–1005 角色候选 → 定锚图 → 跨动作一致性测试」 |
 
 > **提示：** 新会话中 AI 首先读取 `README.md` 和 `PROGRESS.md`（本文件），即可了解全局状态和当前任务。
 

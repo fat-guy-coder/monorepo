@@ -1,0 +1,13 @@
+GIMP Palette
+Name: Blitz Region 01 - Temple Night
+Columns: 7
+#
+# 第一张地图「夜寺」的环境色。只用于地面 / 墙面 / 背景 / 雾。
+# 不放进核心色；第二张地图另建 palette_region_02_*.gpl。
+ 10  10  18	Void
+ 18  18  30	Night
+ 26  28  44	Deep Navy
+ 36  40  58	Shadow Blue
+ 48  54  74	Stone Dark
+ 64  72  94	Stone
+ 84  92 116	Stone Light
