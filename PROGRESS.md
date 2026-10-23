@@ -2,8 +2,8 @@
 
 > 更新时间: 2026-10-23 | 当前活跃任务: **Blitz M0 美术风格锚定** —— 方向 A（冷青夜雨）已定；Retro Diffusion MCP 已接通并出了第 1 张试产图；下一步跑 4–6 张角色候选定锚图。v0.4 代码完成（自检 192 项）✅，仍待人工验收（F5）。美术路线见 [`ART_ROUTE_DECISION.md`](apps/game/blitz/ART_ROUTE_DECISION.md)，第一个盒子计划见 [`SLICE_01_PLAN.md`](apps/game/blitz/SLICE_01_PLAN.md)，美术目录见 [`art/README.md`](apps/game/blitz/art/README.md)。
 
-> 🔸 **本会话结束后要换电脑继续** —— Blitz 的改动**必须 commit + push** 才能带过去（分支 `master`，跟踪 `origin/master`）。
-> ⚠️ 当前 `SLICE_01_PLAN.md` 和整个 `art/` 目录（含 `art/export/probe/` 试产图）**都还是未跟踪文件**，不提交就带不走。
+> 🔸 **换电脑继续** —— 截至 2026-10-23 已提交并推送（`4ab5490`），`master` 与 `origin/master` 同步。
+> ⚠️ `apps/game/blitz/.gitignore` 忽略了 `export/`，`art/export/probe/` 的试产图**不在仓库里**（导出物可重建）；要看图就重新生成或手动拷贝。
 > MCP 配置在**用户级** `~/.claude.json`，不随仓库走；新电脑要重新执行 [`MCP_SETUP.md`](apps/game/blitz/art/MCP_SETUP.md) 的接入命令。
 
 ## 🎯 当前任务（下次 AI 会话继续入口）
