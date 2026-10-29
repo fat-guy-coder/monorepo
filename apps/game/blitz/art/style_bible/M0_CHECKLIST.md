@@ -48,7 +48,8 @@
 
 ### 流程
 
-1. 接 MCP（首选 Retro Diffusion，命令见 [MCP_SETUP.md](../MCP_SETUP.md)）
+1. 接工具：首选 Retro Diffusion MCP；只想先定长相就装**即梦通用创作 CLI**（`dreamina text2image`）。
+   两条路线的安装/登录/分工见 [MCP_SETUP.md](../MCP_SETUP.md)（§1 MCP，§10 即梦 CLI）
 2. 按 [prompts.md §8](prompts.md) 锁参数：模型 / style / seed / 分辨率 / prompt / negative prompt
 3. 每类生成 **6 张候选**，只挑 1 张
 4. 过 [prompts.md §9](prompts.md)：`fix_pixel_art` → 量化到 `palette.gpl` → 1px 描边 → 1× 检查

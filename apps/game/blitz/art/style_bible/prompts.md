@@ -165,6 +165,14 @@ AI 出的图不能直接用，必须过这 5 步：
 **不要用**：通用 DALL·E / Gemini 直接出最终像素资产——它们出的是「像素风插画」，
 像素网格和色数不可控。
 
+### 即梦可以直接在终端里调
+
+即梦官方有 CLI + Skill，装完不用配 MCP：`dreamina text2image` / `image2image` / `image_upscale`。
+两个 CLI 里**先装通用创作 CLI**（`dreamina`），全能画布 CLI 等到要拼 1280×720 锚定合成图时再说。
+安装、登录、和 Retro Diffusion 的分工见 [MCP_SETUP.md §10](../MCP_SETUP.md#10-即梦-cli国内锚图备选)。
+
+一句话分工：**即梦定长相 → Retro Diffusion 定网格 → Aseprite 定调色板**。
+
 ### 模型不认识 .gpl
 
 `palette.gpl` 是给 Aseprite 和后期量化用的，模型读不进去。三种做法：

@@ -131,7 +131,7 @@ Skill 只是**读取约束的包装**，风格本身仍然是那些文件。
 | 风格/角色/场景底图 | **LiblibAI（哩布哩布）** | Flux / SDXL 在线生成 + **在线训练 LoRA** + 模型市场；有大量像素风 LoRA |
 | 批量工作流 / ControlNet | **RunningHub** | 在线 ComfyUI，可导入工作流，跑 OpenPose / 线稿 / 批量出图 |
 | LoRA / 模型补充 | **TusiArt 吐司** | 模型与 LoRA 社区，在线生成 |
-| 概念图 / 氛围探索 | **即梦**（字节） | 出图质量好、上手快，但不适合做一致性生产 |
+| 概念图 / 氛围探索 | **即梦**（字节） | 出图质量好、上手快，但不适合做一致性生产；有官方 CLI（`dreamina`），可在 Claude Code 里直接调，见 [art/MCP_SETUP.md §10](art/MCP_SETUP.md) |
 | 3D 底模（路线 B） | **腾讯混元 3D / Tripo 国内版 / Meshy** | 生成基础模型 → Blender 清理 |
 | 像素手改 | **Aseprite（Steam）/ Pixelorama** | Steam 可直接购买 |
 | 法线贴图（后期动态光） | **Laigter**（免费） | 给像素图生成法线，配合 2D 光照 |

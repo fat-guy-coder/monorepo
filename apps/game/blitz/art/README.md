@@ -9,7 +9,7 @@
 art/
 ├── README.md                 ← 本文件
 ├── manifest.example.json     ← 动画清单模板（3D / 像素共用）
-├── MCP_SETUP.md              ← AI 出图 MCP 接入流程（Retro Diffusion / PixelLab / Comfy）
+├── MCP_SETUP.md              ← AI 出图接入（Retro Diffusion MCP / 即梦 CLI / PixelLab / Comfy）
 ├── rooms/
 │   └── room_01.txt           ← 第一个房间的 ASCII 可行走掩码
 └── style_bible/
@@ -76,5 +76,5 @@ art/rooms/           ← 更多房间的 ASCII 掩码
 - [SLICE_01_PLAN.md](../SLICE_01_PLAN.md) —— 第一个盒子的范围、流程、资产规格
 - [ART_PIPELINE.md](../ART_PIPELINE.md) —— 完整美术生产手册
 - [ART_ROUTE_DECISION.md](../ART_ROUTE_DECISION.md) —— 逐帧像素 vs 三渲二的决策依据
-- [MCP_SETUP.md](MCP_SETUP.md) —— AI 出图 MCP 的 key 申请、接入命令、试产验收、备选分工
+- [MCP_SETUP.md](MCP_SETUP.md) —— AI 出图接入：MCP 的 key 申请 / 接入命令 / 排错，以及即梦 CLI（§10）、试产验收、备选分工
 - [DESIGN.md](../DESIGN.md) —— 玩法与视角

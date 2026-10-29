@@ -1,7 +1,9 @@
 # MCP 接入流程（美术资源生成）
 
 > 目标：先用一个 MCP 直接生成一版「够不够用」的像素资源；够用就继续，不够再按分工换专用模型。
-> 当前 Claude Code：**2.1.281**，本机还没有配置任何 MCP server（`claude mcp list` 为空）。
+>
+> **当前状态（2026-10-29）**：Retro Diffusion 已接在**用户级** `~/.claude.json`，`claude mcp list` = ✔ Connected。
+> 另有一条非 MCP 路线：**即梦 CLI**（见 [§10](#10-即梦-cli国内锚图备选)），用来出风格锚图，按需再装。
 
 ---
 
@@ -307,3 +309,78 @@ claude mcp list        # 必须是 ✔ Connected
 
 key 一旦出现在聊天记录、截图、提交里，**去官网 revoke，重新生成**。
 换 key 后执行 9.1 的两条命令即可，不用改代码。
+
+---
+
+## 10. 即梦 CLI（国内锚图备选）
+
+不是 MCP，是字节官方的**命令行 + Skill**。装完之后 Claude Code 能直接 `dreamina text2image ...`，
+不需要再过一遍 MCP 配置，也不消耗 Retro Diffusion 的余额。
+
+即梦给两个 CLI，**功能不重叠**，别装错：
+
+| | 通用创作 CLI（`dreamina`） | 全能画布 CLI（`dreamina-canvas`） |
+|---|---|---|
+| 一句话 | 一条命令一个生成任务 | 一整个可编辑画布（项目 + 节点图） |
+| 安装 | `curl -s https://jimeng.jianying.com/cli \| bash` | 见下方三条（按 shell 选） |
+| 装到哪 | `~/.dreamina_cli/dreamina/`（二进制 + `SKILL.md`） | 二进制 + skill 包 → `~/.agents/skills/dreamina-canvas-cli/` |
+| 核心命令 | `text2image` / `image2image` / `image_upscale` / `text2video` / `image2video` / `frames2video` / `user_credit` / `session` / `list_task` / `query_result` | `canvas create/ls/use/current`、`model list --type image`、`auth status`、`schema` |
+| 认证 | OAuth Device Flow（`dreamina login`，打印 `verification_uri` + `user_code`） | 同样 Device Flow（`auth status` 查状态） |
+| 上手成本 | 低：`dreamina <子命令> -h` 就是全部文档 | 高：要先建/选画布、拿 Node ID、过积分报价确认 |
+| 适合 | **出锚图、单张迭代、图生图换动作** | 多素材合成、画布式改图、出视频/配音、整张场景拼装 |
+
+### 10.1 先装哪个：**通用创作 CLI**
+
+我们当前这一步是「出 3 张锚图」——文生图 + 图生图 + 放大，正好是通用 CLI 的直接子命令。
+画布 CLI 多出来的项目/节点/报价层，在只出一张角色图时**全是额外负担**，等要做 1280×720 的
+锚定合成图、或者要把角色和场景拼在一张画布上迭代时再装。
+
+```bash
+# 安装（Git Bash / PowerShell 都能用 bash 那条）
+curl -s https://jimeng.jianying.com/cli | bash
+
+# 验证 + 登录（会在终端打印授权链接和验证码，需要本人在浏览器里点确认）
+dreamina -h
+dreamina user_credit
+dreamina login          # 或 relogin；--headless 只打印 device_code，之后 checklogin 收尾
+```
+
+装完的 skill 在 `~/.dreamina_cli/dreamina/SKILL.md`。想让我在新会话里自动认得它，
+把这个目录加到 agent 的 skills 目录（或在该会话里让我读一次 `SKILL.md`）。
+
+### 10.2 全能画布 CLI（需要时再装）
+
+```bash
+# macOS / Linux / Git Bash
+curl -fsSL https://jimeng.jianying.com/canvas-cli/install.sh | bash
+
+# Windows PowerShell
+irm https://jimeng.jianying.com/canvas-cli/install.ps1 | iex
+
+# Windows CMD
+curl.exe -fsSLO https://jimeng.jianying.com/canvas-cli/install.bat && install.bat
+```
+
+安装脚本从字节 CDN 拉二进制 + `skill.tar.gz`，**校验 SHA-256**，解压到
+`~/.agents/skills/dreamina-canvas-cli/`（需要 `tar`）。
+可用 `DREAMINA_CANVAS_INSTALL_DIR` / `DREAMINA_CANVAS_SKILL_DIR` 改路径。
+
+### 10.3 和 Retro Diffusion 怎么分工
+
+| 环节 | 用谁 | 理由 |
+|---|---|---|
+| 锚图（定风格、定角色长相） | **即梦** | 仙侠审美强、角色一致性好、有免费日常额度 |
+| 像素化 / 网格修复 | Retro Diffusion `fix_pixel_art` | 即梦出的是「像素风插画」，网格不可控 |
+| 量产帧 / 动画 | Retro Diffusion 原生尺寸直出 | 真像素网格 + 按帧计费，最便宜 |
+| Retro Diffusion 挂了 / 余额空 | 即梦出图 → 手动量化 | 有兜底，不阻塞 |
+
+> 别拿即梦的图直接进游戏——它给的是**好看的概念图**，不是可用的 112px 精灵。
+> 必须过 [prompts.md §9](style_bible/prompts.md) 的 5 步后处理。
+
+### 10.4 注意
+
+- 生成命令**可能扣积分**，跑之前先 `dreamina user_credit`；异步任务用 `submit_id` + `query_result`，
+  超时**不要重提**（会重复扣）。
+- 下载一律走 `query_result --download_dir=<path>`；输出里的 `image_url` / `video_url` 是预览链接，不是文件。
+- 首次遇到 `AigcComplianceConfirmationRequired` 是即梦网页端的合规确认，去网页点一次再重试。
+- 安装脚本是 `curl | bash`，执行前先落盘看一眼：`curl -s https://jimeng.jianying.com/cli -o /tmp/jimeng_cli.sh`。

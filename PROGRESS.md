@@ -1,6 +1,6 @@
 # 📊 全项目进度面板
 
-> 更新时间: 2026-10-23 | 当前活跃任务: **Blitz M0 美术风格锚定** —— 方向 A（冷青夜雨）已定；Retro Diffusion MCP 已接通并出了第 1 张试产图；下一步跑 4–6 张角色候选定锚图。v0.4 代码完成（自检 192 项）✅，仍待人工验收（F5）。美术路线见 [`ART_ROUTE_DECISION.md`](apps/game/blitz/ART_ROUTE_DECISION.md)，第一个盒子计划见 [`SLICE_01_PLAN.md`](apps/game/blitz/SLICE_01_PLAN.md)，美术目录见 [`art/README.md`](apps/game/blitz/art/README.md)。
+> 更新时间: 2026-10-29 | 当前活跃任务: **Blitz M0 美术风格锚定** —— 方向 A（冷青夜雨）已定；Retro Diffusion MCP 已接通并出了第 1 张试产图 + 6 帧 idle 动画；工具链补上**即梦 CLI**（先装通用创作 CLI 出锚图）。下一步：定锚图 + 跨动作一致性测试。v0.4 代码完成（自检 192 项）✅，仍待人工验收（F5）。美术路线见 [`ART_ROUTE_DECISION.md`](apps/game/blitz/ART_ROUTE_DECISION.md)，第一个盒子计划见 [`SLICE_01_PLAN.md`](apps/game/blitz/SLICE_01_PLAN.md)，美术目录见 [`art/README.md`](apps/game/blitz/art/README.md)。
 
 > 🔸 **换电脑继续** —— 截至 2026-10-23 已提交并推送（`4ab5490`），`master` 与 `origin/master` 同步。
 > ⚠️ `apps/game/blitz/.gitignore` 忽略了 `export/`，`art/export/probe/` 的试产图**不在仓库里**（导出物可重建）；要看图就重新生成或手动拷贝。
@@ -305,6 +305,8 @@ v0.2 等距 / v0.3 战斗手感已完成。v0.4 的目标是把地面轴从等�
 | 一致性策略 | **UI / 角色 / VFX 锁死；地图按区域换色**（每图 8–12 色） |
 | 出图路线 | **AI 优先**：3 张锚图（角色 / 环境 / UI），不手收集参考 |
 | 首试模型 | Retro Diffusion hosted MCP（`https://mcp.retrodiffusion.ai/mcp`） |
+| 补充工具 | **即梦通用创作 CLI**（`dreamina`）：出锚图 / 兜底；全能画布 CLI（`dreamina-canvas`）暂不装 |
+| 工具分工 | 即梦定长相 → Retro Diffusion 定网格 + 量产帧 → Aseprite 定调色板 |
 
 **M0 新增文件（全部未跟踪）：**
 
@@ -330,7 +332,24 @@ v0.2 等距 / v0.3 战斗手感已完成。v0.4 的目标是把地面轴从等�
   - 真像素网格、透明底，深青袍 + 金边 + 直剑，侧视朝右。
   - **42 色**（要降到 16–24）；角色内容 150×167（要缩到 112 高）。
 - 第 2 张（seed 1001）返回 **500 internal_error**，**未扣费**；另两张被手动中断，未执行。
-- 结论：**不是额度不够**，是服务端偶发错误。余额还够再跑 5–6 张 RD Fast（$0.03/张）。
+- **第 1 个动画试产（2026-10-23）**：`rd_advanced_animation__idle`，6 帧，192×192，$0.14 → `art/export/probe/idle_6f.gif`。
+  角色跨帧一致性良好，呼吸/衣摆有小幅动作；**第 5 帧剑身变成金色（坏帧）** → 必须逐帧检查。
+- 余额：**$0.33**。
+- **尺寸问题**：192 画面里角色实际 167px，规格是 112px。缩放会破坏像素网格（`k_centroid_downscale` 还会丢 alpha），
+  结论：**按最终尺寸原生生成**（角色建议 128×128，生成后约 111px），不要后期缩放。
+
+**即梦 CLI（2026-10-29 调研，尚未安装）：**
+
+| CLI | 装到 | 定位 | 结论 |
+|---|---|---|---|
+| 通用创作 `dreamina` | `~/.dreamina_cli/dreamina/`（二进制 + `SKILL.md`） | `text2image` / `image2image` / `image_upscale` / 视频 / `user_credit` / `session` / 异步 `submit_id` | ✅ **先装这个** |
+| 全能画布 `dreamina-canvas` | `~/.agents/skills/dreamina-canvas-cli/`（SHA-256 校验） | 画布项目 + 节点图 + 模型目录 + 音频/视频 + 积分报价确认 | ⏸ 等要拼 1280×720 锚定合成图再装 |
+
+- 安装：`curl -s https://jimeng.jianying.com/cli | bash` —— 从字节 CDN 拉二进制 + 校验 `SKILL.md` MD5。
+- 登录是 OAuth Device Flow，**需要本人在浏览器确认**（`dreamina login` 会一直等到授权完成）。
+- 两个安装脚本都已下载到 `/tmp` 逐行看过（**未执行**）；完整说明见 [`art/MCP_SETUP.md §10`](apps/game/blitz/art/MCP_SETUP.md)。
+- 为什么先装通用 CLI：当前这一步只要「一张好看的角色锚图」，一条 `text2image` 就够；
+  画布 CLI 的项目 / 节点 / 报价层在这个阶段全是额外负担。
 
 **下一次继续就做这批（6 张候选，约 $0.18）：**
 
@@ -359,7 +378,7 @@ upper-left light, dark outline, limited palette of 16 colors, on a plain white b
 ⚠️ **v0.4 还差人工验收**（必须 F5 真开窗口）：横向跟地砖对得上吗 / 跳跃读得出吗 / 预警看得见吗 /
 纵深容差合适吗 / 跳得开低扫吗 / 精准格挡有回报吗 / 精力逼出取舍吗 / 破防够痛吗 / 角色互相顶得住吗。
 
-**继续指令：** 「继续 Blitz 的 M0 美术风格锚定。先读 `apps/game/blitz/SLICE_01_PLAN.md`、`apps/game/blitz/art/README.md`、`apps/game/blitz/art/style_bible/M0_CHECKLIST.md` 和 `apps/game/blitz/art/MCP_SETUP.md`。方向已定 A（冷青夜雨），Retro Diffusion MCP 已接通（余额约 $0.47），第 1 张试产图在 `art/export/probe/probe_001_seed1000.png`。下一步：用 `detailed:rd_flux` 生成 seed 1001–1005 的 4–5 张角色候选，挑 1 张当 `anchor_character.png`，再出 slash/jump 各 3 张做跨动作一致性测试。v0.4 的人工验收如果还没过，穿插着做。」
+**继续指令：** 「继续 Blitz 的 M0 美术风格锚定。先读 `apps/game/blitz/SLICE_01_PLAN.md`、`apps/game/blitz/art/README.md`、`apps/game/blitz/art/style_bible/M0_CHECKLIST.md` 和 `apps/game/blitz/art/MCP_SETUP.md`。方向已定 A（冷青夜雨），Retro Diffusion MCP 已接通（余额约 $0.33），第 1 张试产图在 `art/export/probe/probe_001_seed1000.png`，6 帧 idle 动画在 `art/export/probe/idle_6f.gif`。工具链已定为「即梦定长相 → Retro Diffusion 定网格 → Aseprite 定调色板」；如果即梦 CLI 还没装，先装通用创作 CLI（`curl -s https://jimeng.jianying.com/cli | bash`，登录要我本人授权）。下一步：用即梦出 6 张角色候选定 `anchor_character.png`，再用 Retro Diffusion `detailed:rd_flux` 按 128×128 原生尺寸出 seed 1001–1005 对比，挑定后出 slash/jump 各 3 张做跨动作一致性测试。v0.4 的人工验收如果还没过，穿插着做。」
 
 ---
 
@@ -428,7 +447,7 @@ API 文档: `apps/backend/API.md` | 快速启动: `docker-compose up -d backend 
 | 继续 Go 文档 | 「继续 Go 学习文档的填充，从阶段 2 开始」 |
 | 继续 Godot 文档 | 「继续 Godot 学习文档的填充」 |
 | 继续后端开发 | 「继续后端 API 开发」 |
-| 继续游戏开发 | 「继续 Blitz 的 M0 美术。先读 `apps/game/blitz/SLICE_01_PLAN.md`、`art/README.md`、`art/style_bible/M0_CHECKLIST.md`、`art/MCP_SETUP.md`；方向 A 已定、Retro Diffusion MCP 已接通，先跑 seed 1001–1005 角色候选 → 定锚图 → 跨动作一致性测试」 |
+| 继续游戏开发 | 「继续 Blitz 的 M0 美术。先读 `apps/game/blitz/SLICE_01_PLAN.md`、`art/README.md`、`art/style_bible/M0_CHECKLIST.md`、`art/MCP_SETUP.md`；方向 A 已定、Retro Diffusion MCP 已接通；工具链=即梦定长相 → Retro Diffusion 定网格 → Aseprite 定调色板。先出锚图，再跨动作一致性测试」 |
 
 > **提示：** 新会话中 AI 首先读取 `README.md` 和 `PROGRESS.md`（本文件），即可了解全局状态和当前任务。
 
