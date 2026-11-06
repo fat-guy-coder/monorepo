@@ -181,9 +181,9 @@ const BODY_RADIUS: float = 11.0
 var health: int = 0
 var is_dead: bool = false
 var start_position: Vector2 = Vector2.ZERO
-## 朝向: **只有左右两个值** (+1 朝右 / -1 朝左), 和玩家同一个约定。
-## ⚠️ 它和移动方向**解耦**: 追击时往斜线走, 但只朝左/右看 (见 _face_toward)。
-var facing: int = 1
+## 朝向: **四向单位向量** (Facing.RIGHT / LEFT / UP / DOWN), 和玩家同一个约定。
+## ⚠️ 它和移动方向**解耦**: 追击时走斜线, 朝向吸附到主轴 (见 _face_toward)。
+var facing: Vector2 = Facing.RIGHT
 var attack_phase: AttackPhase = AttackPhase.NONE
 
 var _phase_timer: float = 0.0
@@ -416,12 +416,9 @@ func _process_patrol() -> void:
 	if absf(offset) > patrol_range:
 		_patrol_sign = -signf(offset)
 	velocity = _world_velocity(axis * _patrol_sign, move_speed)
-	# 朝向跟着**行进方向** —— 但只有沿 x 巡逻时它才有意义。
-	# ⚠️ 沿纵深巡逻 (patrol_axis = Vector2.DOWN) 时**不动朝向**: 那个轴在横版里没有
-	#    左右可言, `sign(axis.x)` 会得到 0 —— 而 facing = 0 在所有绘制和判定里
-	#    都表现为「朝右」, 是一个不报错的错误朝向。
-	if absf(axis.x) > 0.01:
-		facing = -1 if axis.x * _patrol_sign < 0.0 else 1
+	# 朝向跟着**行进方向** —— 四向之后纵深巡逻也有朝向可言了 (朝上 = 背面)。
+	# 归一化交给 Facing.choose: 巡逻轴本来就是世界方向, 直接喂。
+	facing = Facing.choose(facing, axis * _patrol_sign)
 
 
 func _process_chase(delta: float) -> void:
@@ -448,21 +445,17 @@ func _process_chase(delta: float) -> void:
 	velocity = _world_velocity(to_player, move_speed * chase_speed_scale * ramp)
 
 
-## 朝向只由「玩家在左边还是右边」决定 —— 横版里**纵深不参与朝向**。
+## 朝玩家所在的方向, 吸附到四向主轴。
 ##
-## 🏗️ 这就是「朝向和移动方向解耦」那件事的落点。
-##   旧代码是 `facing_dir = to_player.normalized()`: 追击方向**就是**朝向,
-##   于是敌人在斜着追的时候「朝向是右下方」, 而它的攻击是一个只往右下伸的方框。
-##   横版里没有「右下」这个朝向 (美术只有左右两张), 一旦攻击改成吃朝向的扇形,
-##   旧写法就会让敌人**朝右下看、却往右侧砍** —— 预警和判定都跟着错。
+## 🏗️ 「朝向和移动方向解耦」仍然成立, 但解耦的对象变了:
+##   追击可以走任意斜线, 朝向只能是四个方向之一。玩家从正上方走下来时,
+##   敌人现在会**转过身 (背面)** 再出招, 而不是一直侧着身子砍。
 ##
-## ⚠️ dx 恰好为 0 (同一列, 只差纵深) 时**保持原朝向**。
-##    写成 `facing = signi(dx)` 的话 dx=0 → facing=0, 而 0 在绘制和判定里
-##    都表现为「朝右」—— 一个静默的错误朝向, 不会有任何报错。
+## ⚠️ 用 Facing.choose 而不是 snap: 玩家在斜 45° 上时, 逐帧的浮点抖动
+##    会让朝向在「右」和「上」之间来回翻, 预警扇形跟着抖 —— 看起来像显示 bug。
 func _face_toward(p_target: Vector2) -> void:
-	var dx: float = _to_world_pt(p_target).x - _world_pos().x
-	if absf(dx) > 0.01:
-		facing = -1 if dx < 0.0 else 1
+	var to_target: Vector2 = _to_world_pt(p_target) - _world_pos()
+	facing = Facing.choose(facing, to_target)
 
 
 ## 满足条件就起手。由 _update_ai 每帧调。
@@ -561,7 +554,7 @@ func take_damage(amount: int = 1, from_position: Vector2 = Vector2.INF, breaks_a
 	# ⚠️ 这里**故意在屏幕空间算** (不换成世界坐标): 击退是一次性的推力, 它的观感
 	#    就是「在画面上被推开」。换成世界空间的话, 纵深方向的击退会变成一半,
 	#    等于把一组调好的手感数字全部改掉 —— 而那跟本轮要做的「攻击形状」无关。
-	var away: Vector2 = Vector2(float(-facing), 0.0)   # 兜底: 往身后推
+	var away: Vector2 = BeltSpace.dir_to_screen(-facing)   # 兜底: 往身后推
 	if from_position.is_finite():
 		var d: Vector2 = global_position - from_position
 		if d.length() > 0.01:
@@ -605,12 +598,9 @@ func on_parried() -> void:
 		var away: Vector2 = global_position - target.global_position
 		if away.length() > 0.01:
 			velocity = away.normalized() * parry_recoil
-			# 转向**面对攻击者** —— 和原来的 `facing_dir = -away.normalized()` 同一个含义
-			# (away 是「从玩家指向自己」, 取反就是朝向玩家), 只是只取左右分量。
-			# ⚠️ 不能照抄 `-away` 整条向量: 从正上方被挡下来时 away ≈ (0, ±1),
-			#    取反得到 (0, ∓1) —— 那在横版里不是一个朝向 (表现为静默地朝右)。
-			if absf(away.x) > 0.01:
-				facing = 1 if away.x < 0.0 else -1
+			# 转向**面对攻击者** —— 直接复用追击那套主轴吸附,
+			# 而不是再写一遍 `sign(away.x)` (纵向时那个符号是 0, 会静默朝右)。
+			_face_toward(target.global_position)
 	parried.emit(global_position + Vector2(0.0, -20.0))
 
 
@@ -675,16 +665,18 @@ func _draw() -> void:
 	draw_line(Vector2(-6.0, -42.0), Vector2(-10.0, -50.0), base.darkened(0.5), 2.5)
 	draw_line(Vector2(6.0, -42.0), Vector2(10.0, -50.0), base.darkened(0.5), 2.5)
 
-	# 眼睛: 朝向来指示当前方向 (只有左右 —— 追击走斜线, 但朝向只有两个值);
+	# 眼睛: 朝向来指示当前方向 —— 四向之后分三种:
+	#   左右 → 两只眼一起往朝向那边偏;  朝下 (正面) → 居中直视;  朝上 (背面) → 不画。
 	# 起手时变红 + 变大
-	var eye_off: Vector2 = Vector2(float(facing) * 4.0, 1.2)
-	var eye_c: Color = Color(1.0, 0.95, 0.4)
-	var eye_r: float = 2.6
-	if attack_phase == AttackPhase.WINDUP:
-		eye_c = WARN_COLOR
-		eye_r = 3.6
-	draw_circle(Vector2(-3.5, -36.0) + eye_off, eye_r, eye_c)
-	draw_circle(Vector2(3.5, -36.0) + eye_off, eye_r, eye_c)
+	if facing.y <= 0.5:
+		var eye_off: Vector2 = Vector2(facing.x * 4.0, 1.2)
+		var eye_c: Color = Color(1.0, 0.95, 0.4)
+		var eye_r: float = 2.6
+		if attack_phase == AttackPhase.WINDUP:
+			eye_c = WARN_COLOR
+			eye_r = 3.6
+		draw_circle(Vector2(-3.5, -36.0) + eye_off, eye_r, eye_c)
+		draw_circle(Vector2(3.5, -36.0) + eye_off, eye_r, eye_c)
 
 	_draw_hp_bar()
 
@@ -758,7 +750,8 @@ func _draw_windup_ground(canvas: CanvasItem) -> void:
 ## 起手时往身后拉 (蓄势), 命中帧甩到身前, 收招时垂下来。
 ## 少了它, 起手预警就只剩一块地面色块, 读起来像「地上有个 UI」而不是「它要砍我了」。
 func _draw_claw(base: Color) -> void:
-	var f: float = float(facing)
+	# 占位美术: 上下朝向先复用侧视轮廓 (f = 1), 真 sprite 接进来时按 facing 选帧。
+	var f: float = facing.x if absf(facing.x) > 0.5 else 1.0
 	# 🏗️ 角度一律在「朝右」的坐标系里算 (swing), 最后把 x 分量按朝向镜像。
 	#    ⚠️ 不能直接对 `d = (f, 0)` 调 rotated(): 旋转是绕圈的, 不认镜面 ——
 	#       于是朝左时「往身后拉」会变成「往身前伸」, 蓄势和挥砍正好反过来。

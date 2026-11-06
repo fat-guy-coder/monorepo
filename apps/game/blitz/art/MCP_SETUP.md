@@ -2,26 +2,32 @@
 
 > 目标：先用一个 MCP 直接生成一版「够不够用」的像素资源；够用就继续，不够再按分工换专用模型。
 >
-> **当前状态（2026-10-29）**：Retro Diffusion 已接在**用户级** `~/.claude.json`，`claude mcp list` = ✔ Connected。
-> 另有一条非 MCP 路线：**即梦 CLI**（见 [§10](#10-即梦-cli国内锚图备选)），用来出风格锚图，按需再装。
+> **⚠️ 2026-10-30 现状：Retro Diffusion 这条路已经走不通了。**
+> 大陆地区支付渠道关闭（支付宝/微信/银联都过不去），剩余余额 `$0.089` 不足以再出一张图，**已放弃**。
+> 本文 §1 的接入步骤保留下来当档案（哪天渠道恢复可以照着重接）。
+> **现在的主力：**
+> - 本地出图（不要钱、速度快、随便试）→ [LOCAL_COMFYUI.md](LOCAL_COMFYUI.md)，家里 RTX 5060 跑
+> - 国内的托管生成 → **LiblibAI**（支付宝/微信，有 2D 像素 LoRA）、**即梦**（免费额度，见 §10）
+> - 角色多方向/多动作 → 不再是 2D 生成问题，走 3D 预渲染，见 [ART_ROUTE_DECISION.md §11](../ART_ROUTE_DECISION.md)
 
 ---
 
 ## 0. 先选哪个
 
-| 顺序 | MCP | 适合 | 先试的理由 |
+| 顺序 | 路线 | 适合 | 说明 |
 |---|---|---|---|
-| **1** | **Retro Diffusion** | 角色 / 精灵 / 动画 / tileset | 官方托管、真像素网格、自带调色板转换和像素修复，最贴合本项目 |
-| 2 | PixelLab | 角色 / 动画 / 8 方向 / tileset / UI 素材 | 动画和方向更全；Retro Diffusion 风格不合适时换它 |
-| 3 | Comfy Cloud | Flux / SDXL / LoRA 工作流 | 想用通用模型 + 自选 LoRA 时用；像素后期要自己做 |
-| 4 | Replicate + Flux | 高质量概念图 | 审美强，但不是像素原生，后期工作多 |
+| **1** | **本地 ComfyUI + SDXL** | 角色单帧 / 场景 / 道具 / 图标 | 零成本、可无限试、结果可重跑。配置见 [LOCAL_COMFYUI.md](LOCAL_COMFYUI.md) |
+| 2 | **LiblibAI** | 定长相、出候选 | 国内直付，社区有 2D Pixel Toolkit / Sprite Sheet 类 LoRA |
+| 3 | **即梦 CLI** | 风格锚图 | 免费额度，审美强，见 [§10](#10-即梦-cli国内锚图备选) |
+| 4 | PixelLab MCP | 8 方向 / 动画 / tileset | 仍是托管 MCP，但付费同样卡境外渠道，先当备选 |
+| 5 | ~~Retro Diffusion~~ | —— | **停用**：支付渠道关闭，余额不足 |
 
-**建议：先接 Retro Diffusion。** 它是官方 hosted MCP，不用本地显卡，免费账号有起步额度，工具里直接有
-`palette_converter`、`color_reducer`、`fix_pixel_art`、`seam_tiling`，正好覆盖本项目的「像素 + 调色板 + 平铺」需求。
+**建议：先按 [LOCAL_COMFYUI.md](LOCAL_COMFYUI.md) 把本地跑通。**
+它是唯一不受「断供」和「余额」影响的路线，也是以后贴图/场景的长期方案。
 
 ---
 
-## 1. Retro Diffusion MCP（首选）
+## 1. Retro Diffusion MCP（已停用，留档）
 
 ### 1.1 申请 key
 
@@ -317,6 +323,11 @@ key 一旦出现在聊天记录、截图、提交里，**去官网 revoke，重�
 不是 MCP，是字节官方的**命令行 + Skill**。装完之后 Claude Code 能直接 `dreamina text2image ...`，
 不需要再过一遍 MCP 配置，也不消耗 Retro Diffusion 的余额。
 
+> ⚠️ **实测门槛（2026-10-29）**：`dreamina` 登录不需要会员，但**生成需要即梦会员**。
+> 非会员账号 `login` / `user_credit` / `list_task` 都正常，一旦生成就返回
+> `当前账号没有 dreamina_cli 使用权限: 仅限会员用户使用`（不扣积分）。
+> 也就是说：**CLI 是会员功能**，免费账号只能用网页版。装之前先确认要不要为这个会员付费。
+
 即梦给两个 CLI，**功能不重叠**，别装错：
 
 | | 通用创作 CLI（`dreamina`） | 全能画布 CLI（`dreamina-canvas`） |
@@ -366,6 +377,9 @@ curl.exe -fsSLO https://jimeng.jianying.com/canvas-cli/install.bat && install.ba
 可用 `DREAMINA_CANVAS_INSTALL_DIR` / `DREAMINA_CANVAS_SKILL_DIR` 改路径。
 
 ### 10.3 和 Retro Diffusion 怎么分工
+
+> 因为有会员门槛，默认路线仍然是 **Retro Diffusion 出锚图 + 量产帧**；
+> 即梦只在「确实需要它的仙侠审美」且已开会员时插进来。网页版不花会员费，但只能手动一张张出。
 
 | 环节 | 用谁 | 理由 |
 |---|---|---|

@@ -45,7 +45,7 @@ const JITTER: float = 26.0
 ## 落点范围内那个圈。**和伤害判定是同一个对象** (见文件头 🏗️)。
 @export var shape: AttackShape = null
 ## 圈的朝向 —— 圆本身不吃朝向, 但圆心偏移吃 (「面朝方向一定距离处」)。
-@export var facing: int = 1
+@export var facing: Vector2 = Vector2(1.0, 0.0)
 ## 落地前的预警时长 (秒)。必须和 AttackHitbox.arm_delay **一致**,
 ## 否则会出现「圈还没亮就劈下来了」或者「雷劈完了圈还在」——
 ## 而后者会让人以为那一圈还有伤害。
@@ -60,7 +60,7 @@ var _total: float = 0.0
 ## 在 `at` 处劈一道雷。⚠️ `at` 是**攻击者脚下**的坐标, **不是**落点 ——
 ## 落点由 shape 自己算 (`collision_offset`), 见文件头那条摆放规则。
 static func spawn(
-	tree: SceneTree, at: Vector2, p_shape: AttackShape, p_facing: int,
+	tree: SceneTree, at: Vector2, p_shape: AttackShape, p_facing: Vector2,
 	p_arm: float, p_flash: float = 0.22
 ) -> LightningBolt:
 	if tree == null:

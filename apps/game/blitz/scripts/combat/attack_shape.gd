@@ -142,23 +142,41 @@ func hits_height(target_height: float) -> bool:
 	return target_height >= height_min and target_height <= height_max
 
 
-## 把世界空间的「相对攻击者的偏移」化到局部朝向系 (x 向前, y 纵深)。
+## 把世界空间的「相对攻击者的偏移」化到局部朝向系 (x 向前, y 朝向右手的那个垂直方向)。
 ##
-## 🏗️ 全部判定都先过这一步, 于是左右朝向只影响这一个乘法 ——
-##    形状本身永远按「朝右」定义, 不用为朝向写两套分支。
-func _to_local(facing: int, world_delta: Vector2) -> Vector2:
-	var f: float = -1.0 if facing < 0 else 1.0
-	return Vector2(world_delta.x * f, world_delta.y)
+## 🏗️ 全部判定都先过这一步, 于是「朝哪边」只影响这一个函数 ——
+##    形状本身永远按「朝右」定义, 不用为四个方向写四套分支。
+##
+## ⚠️ 这是**旋转** (dot 两次), 不是「x 乘 ±1」的镜像。左右两个方向下两者等价,
+##    但上下方向没有镜像可用 —— 用镜像的写法会让朝上/朝下的判定整体歪 90°,
+##    而且因为是纯数学, 画面上不会报任何错。
+func _to_local(facing: Vector2, world_delta: Vector2) -> Vector2:
+	var u: Vector2 = facing if Facing.is_valid(facing) else Facing.RIGHT
+	return Vector2(world_delta.dot(u), world_delta.dot(Facing.perp(u)))
+
+
+## `_to_local` 的**逆变换**: 局部朝向系的偏移 → 世界偏移。
+##
+## ⚠️ 这两个方向必须分开写, 不能图省事把 `_to_local` 再用一遍。
+##    对朝右来说两者是同一个函数 (u=(1,0), perp=(0,1) → 恒等), 对朝左也凑巧等价
+##    (180° 旋转在左右对称的形状上结果相同) —— **于是只有上下会错**,
+##    而且错得整整 90°: 预警框和判定体一起歪到与朝向垂直的方向上。
+##    这就是 v0.5 加四向时踩到的那一脚, 自检里那批「数学/物理不一致」全是它。
+##    (形状本来就定义在局部系里, 往屏幕上摆属于「反向旋转」, 不是再一次投影。)
+func _local_to_world(facing: Vector2, local_delta: Vector2) -> Vector2:
+	var u: Vector2 = facing if Facing.is_valid(facing) else Facing.RIGHT
+	var p: Vector2 = Facing.perp(u)
+	return u * local_delta.x + p * local_delta.y
 
 
 ## 目标是否在范围内。**纯地面判定, 不管高度**。
 ##
 ## `attacker_world` / `target_world` 是 (x, z) 世界坐标;
-## `facing` 只取符号 (+1 / -1)。
+## `facing` 是四向单位向量 (见 Facing)。
 ##
 ## ⚠️ 用 `acos` 而不是 `dot > cos(half)` 直判, 是因为前者能顺带算出角度给人看
 ##    (自检失败时要打印「差了多少度」, 只有余弦值根本读不出来)。
-func contains_ground(attacker_world: Vector2, facing: int, target_world: Vector2) -> bool:
+func contains_ground(attacker_world: Vector2, facing: Vector2, target_world: Vector2) -> bool:
 	var d: Vector2 = _to_local(facing, target_world - attacker_world)
 
 	match kind:
@@ -182,7 +200,7 @@ func contains_ground(attacker_world: Vector2, facing: int, target_world: Vector2
 ## 真正结算伤害走的是 AttackHitbox 的物理体, 两者必须给出同样的答案
 ## (smoke_test 的 `_check_attack_shape` 会逐点比对, 见那份自检的注释)。
 func contains(
-	attacker_world: Vector2, facing: int, target_world: Vector2, target_height: float = 0.0
+	attacker_world: Vector2, facing: Vector2, target_world: Vector2, target_height: float = 0.0
 ) -> bool:
 	return hits_height(target_height) and contains_ground(attacker_world, facing, target_world)
 
@@ -198,17 +216,23 @@ func contains(
 ## ⚠️ 必须传 facing, **不能**靠给 Area2D 设 `scale.x = -1` 来翻转:
 ##    2D 物理对**非均匀/负缩放**的碰撞体支持是有坑的 (Godot 只保证均匀正缩放可靠),
 ##    而且那种失败是「某些角度不判定」, 属于最难查的一类。
-##    朝左就重算一份顶点 —— 反正判定框只活 0.15 秒, 这点开销不存在。
+##    换朝向就重算一份顶点 —— 反正判定框只活 0.15 秒, 这点开销不存在。
 ##
 ## ⚠️ 圆的物理体必须走 `BeltSpace.ground_circle_shape()` 而**不能**用 CircleShape2D:
 ##    CircleShape2D 是屏幕空间的真圆, 画出来却是压扁的椭圆 ——
 ##    「看着躲开了却被打中」会在纵深方向上出现整整一倍。这是第一阶段定下的规则。
-func build_collision_shape(facing: int = 1) -> Shape2D:
+func build_collision_shape(facing: Vector2 = Vector2(1.0, 0.0)) -> Shape2D:
 	match kind:
 		Kind.RECT:
 			var rect: RectangleShape2D = RectangleShape2D.new()
-			# 纵深在屏幕上只占 DEPTH_SCALE 倍 —— 物理体活在屏幕空间, 必须在这里压。
-			rect.size = Vector2(reach, depth * BeltSpace.DEPTH_SCALE)
+			# ⚠️ RectangleShape2D 永远轴对齐, 所以「朝上/朝下」时要把长宽**交换**,
+			#    而不是转一个角度 (碰撞体没有旋转可言)。交换 + 偏移, 两者缺一不可。
+			var u: Vector2 = facing if Facing.is_valid(facing) else Facing.RIGHT
+			if absf(u.x) > 0.5:
+				# 纵深在屏幕上只占 DEPTH_SCALE 倍 —— 物理体活在屏幕空间, 必须在这里压。
+				rect.size = Vector2(reach, depth * BeltSpace.DEPTH_SCALE)
+			else:
+				rect.size = Vector2(depth, reach * BeltSpace.DEPTH_SCALE)
 			return rect
 		Kind.ARC:
 			var poly: ConvexPolygonShape2D = ConvexPolygonShape2D.new()
@@ -233,14 +257,16 @@ func build_collision_shape(facing: int = 1) -> Shape2D:
 ##    表现是预警圈落在离真实伤害 132px 的地方, 而画面上看起来一切正常。
 ##    两条消费者 (AttackHitbox 的 CollisionShape2D、LightningBolt 的落点)
 ##    都只把它当「中心在哪」用, 谁都不自己加第二次。
-func collision_offset(facing: int = 1) -> Vector2:
+func collision_offset(facing: Vector2 = Vector2(1.0, 0.0)) -> Vector2:
 	match kind:
 		Kind.RECT:
-			# ⚠️ 只有 x 偏移, 纵深方向不偏。写成 `to_screen(...)` 会把这一半也算进去,
-			#    于是朝左时矩形纵向错位 —— 因为纵深分量根本不该被朝向翻转。
-			return Vector2(reach * 0.5 * (-1.0 if facing < 0 else 1.0), 0.0)
+			# ⚠️ 统一走 to_screen(facing * reach/2): 朝右 → (reach/2, 0),
+			#    朝上 → 屏幕上向上抬 reach/4 (纵深压扁), 朝下 → 向下。
+			#    写死成「只有 x 偏移」的话, 上下方向的矩形会永远压在脚底不动。
+			var u: Vector2 = facing if Facing.is_valid(facing) else Facing.RIGHT
+			return BeltSpace.to_screen(u * reach * 0.5)
 		Kind.CIRCLE:
-			return BeltSpace.to_screen(_to_local(facing, offset))
+			return BeltSpace.to_screen(_local_to_world(facing, offset))
 	return Vector2.ZERO
 
 
@@ -253,7 +279,7 @@ func collision_offset(facing: int = 1) -> Vector2:
 ## `origin_screen` 是攻击者在**调用方画布坐标系**里的位置。
 ## 世界偏移 → 屏幕偏移这一步是线性的, 所以不管画布自身怎么变换都成立 ——
 ## 挂在攻击者身上画 (传入 Vector2.ZERO) 和挂在世界层画 (传入世界坐标) 结果一致。
-func telegraph_points(origin_screen: Vector2, facing: int) -> PackedVector2Array:
+func telegraph_points(origin_screen: Vector2, facing: Vector2) -> PackedVector2Array:
 	match kind:
 		Kind.RECT:
 			# 矩形按「朝右」摆好四点, 再统一过 _world_deltas_to_screen (它会翻转 + 压扁)。
@@ -289,7 +315,8 @@ func telegraph_points(origin_screen: Vector2, facing: int) -> PackedVector2Array
 ##
 ## ⚠️ 非 ARC 形状返回空数组 (没有「扫过」这回事)。
 func sweep_trail_points(
-	origin_screen: Vector2, facing: int, from_deg: float, to_deg: float, inner_ratio: float = 0.35
+	origin_screen: Vector2, facing: Vector2, from_deg: float, to_deg: float,
+	inner_ratio: float = 0.35
 ) -> PackedVector2Array:
 	if kind != Kind.ARC:
 		return PackedVector2Array()
@@ -317,16 +344,17 @@ func sweep_trail_points(
 ## 判定弧的同一个角度上。在调用方手写一遍 cos/sin + 翻转 + 压扁,
 ## 就等于把这里的几何抄了第二份 —— 而抄错的表现是「预警的刀刃指着一个判定够不到的方向」,
 ## 画面上看起来完全正常。
-func polar_to_screen(angle_deg: float, radius: float, facing: int) -> Vector2:
+func polar_to_screen(angle_deg: float, radius: float, facing: Vector2) -> Vector2:
 	var a: float = deg_to_rad(angle_deg)
-	return BeltSpace.to_screen(_to_local(facing, Vector2(cos(a), sin(a)) * radius))
+	return BeltSpace.to_screen(_local_to_world(facing, Vector2(cos(a), sin(a)) * radius))
 
 
 ## 把形状半透明画在地上 —— 敌人起手的预警、F1 面板的调试框都用这一个函数。
 ##
 ## 🏗️ 这就是整件事的落点: 预警和判定**不可能对不上**, 因为画的和判的是同一个对象。
 func draw_telegraph(
-	canvas: CanvasItem, origin_screen: Vector2, facing: int, fill: Color, line: Color = Color(0, 0, 0, 0)
+	canvas: CanvasItem, origin_screen: Vector2, facing: Vector2, fill: Color,
+	line: Color = Color(0, 0, 0, 0)
 ) -> void:
 	var pts: PackedVector2Array = telegraph_points(origin_screen, facing)
 	if pts.size() < 3:
@@ -342,11 +370,12 @@ func draw_telegraph(
 # 内部几何
 # ------------------------------------------------------------
 
-## 世界偏移 (局部朝向系) → 屏幕偏移。压扁只发生在这里, 且只发生一次。
-func _world_deltas_to_screen(deltas: PackedVector2Array, facing: int) -> PackedVector2Array:
+## 局部朝向系的偏移 → 屏幕偏移。旋转 + 压扁都只发生在这里, 且各只发生一次。
+## ⚠️ 走 `_local_to_world` (逆变换), 不是 `_to_local` —— 见那个函数上的注释。
+func _world_deltas_to_screen(deltas: PackedVector2Array, facing: Vector2) -> PackedVector2Array:
 	var out: PackedVector2Array = PackedVector2Array()
 	for d: Vector2 in deltas:
-		out.append(BeltSpace.to_screen(_to_local(facing, d)))
+		out.append(BeltSpace.to_screen(_local_to_world(facing, d)))
 	return out
 
 

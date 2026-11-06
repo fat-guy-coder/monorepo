@@ -1,0 +1,124 @@
+{
+  "last_node_id": 7,
+  "last_link_id": 9,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "CheckpointLoaderSimple",
+      "pos": [80, 120],
+      "size": [320, 98],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        { "name": "MODEL", "type": "MODEL", "links": [9] },
+        { "name": "CLIP", "type": "CLIP", "links": [1, 2] },
+        { "name": "VAE", "type": "VAE", "links": [6] }
+      ],
+      "properties": { "Node name for S&R": "CheckpointLoaderSimple" },
+      "widgets_values": ["sd_xl_base_1.0.safetensors"]
+    },
+    {
+      "id": 2,
+      "type": "CLIPTextEncode",
+      "pos": [440, 60],
+      "size": [420, 160],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [{ "name": "clip", "type": "CLIP", "link": 1 }],
+      "outputs": [{ "name": "CONDITIONING", "type": "CONDITIONING", "links": [3] }],
+      "properties": { "Node name for S&R": "CLIPTextEncode" },
+      "widgets_values": ["pixel art sprite, side view, full body, chinese wuxia warrior in deep teal robe with gold trim, hair bun, holding a straight sword, dark cold-blue palette, 1px dark outline, flat colors, clean silhouette, transparent background, game asset"]
+    },
+    {
+      "id": 3,
+      "type": "CLIPTextEncode",
+      "pos": [440, 260],
+      "size": [420, 160],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [{ "name": "clip", "type": "CLIP", "link": 2 }],
+      "outputs": [{ "name": "CONDITIONING", "type": "CONDITIONING", "links": [4] }],
+      "properties": { "Node name for S&R": "CLIPTextEncode" },
+      "widgets_values": ["blurry, 3d render, soft shading, gradient, antialiasing, photo, text, watermark, multiple characters, cropped, extra limbs, low contrast"]
+    },
+    {
+      "id": 4,
+      "type": "EmptyLatentImage",
+      "pos": [80, 280],
+      "size": [320, 106],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [{ "name": "LATENT", "type": "LATENT", "links": [5] }],
+      "properties": { "Node name for S&R": "EmptyLatentImage" },
+      "widgets_values": [1024, 1024, 4]
+    },
+    {
+      "id": 5,
+      "type": "KSampler",
+      "pos": [440, 460],
+      "size": [320, 262],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        { "name": "model", "type": "MODEL", "link": 9 },
+        { "name": "positive", "type": "CONDITIONING", "link": 3 },
+        { "name": "negative", "type": "CONDITIONING", "link": 4 },
+        { "name": "latent_image", "type": "LATENT", "link": 5 }
+      ],
+      "outputs": [{ "name": "LATENT", "type": "LATENT", "links": [7] }],
+      "properties": { "Node name for S&R": "KSampler" },
+      "widgets_values": [20261030, "randomize", 30, 6.5, "dpmpp_2m", "karras", 1.0]
+    },
+    {
+      "id": 6,
+      "type": "VAEDecode",
+      "pos": [800, 460],
+      "size": [210, 46],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        { "name": "samples", "type": "LATENT", "link": 7 },
+        { "name": "vae", "type": "VAE", "link": 6 }
+      ],
+      "outputs": [{ "name": "IMAGE", "type": "IMAGE", "links": [8] }],
+      "properties": { "Node name for S&R": "VAEDecode" },
+      "widgets_values": []
+    },
+    {
+      "id": 7,
+      "type": "SaveImage",
+      "pos": [800, 560],
+      "size": [420, 420],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [{ "name": "images", "type": "IMAGE", "link": 8 }],
+      "outputs": [],
+      "properties": { "Node name for S&R": "SaveImage" },
+      "widgets_values": ["blitz_raw"]
+    }
+  ],
+  "links": [
+    [9, 1, 0, 5, 0, "MODEL"],
+    [1, 1, 1, 2, 0, "CLIP"],
+    [2, 1, 1, 3, 0, "CLIP"],
+    [3, 2, 0, 5, 1, "CONDITIONING"],
+    [4, 3, 0, 5, 2, "CONDITIONING"],
+    [5, 4, 0, 5, 3, "LATENT"],
+    [6, 1, 2, 6, 1, "VAE"],
+    [7, 5, 0, 6, 0, "SAMPLES"],
+    [8, 6, 0, 7, 0, "IMAGE"]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {},
+  "version": 0.4
+}

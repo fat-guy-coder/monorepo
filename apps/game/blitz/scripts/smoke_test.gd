@@ -93,7 +93,7 @@ func _run() -> void:
 	if enemies.size() > 0:
 		var enemy: BlitzEnemy = enemies[0]
 		# 横版: 判定框沿 X 偏移 (朝向只有左右)。把敌人摆到**同一纵深、正前方**。
-		player.facing = 1
+		player.facing = Facing.RIGHT
 		enemy.global_position = player.global_position + Vector2(34.0, 0.0)
 		enemy.velocity = Vector2.ZERO
 		var hp_before: int = enemy.health
@@ -274,16 +274,28 @@ func _check_jump(player: BlitzPlayer) -> void:
 		"height=%.2f grounded=%s" % [player.height, player.is_grounded()])
 	Input.action_release("jump")
 
-	# ⑦ 朝向只有 ±1 —— 纵深移动**不转身**。
-	#    写成 sign(input.x) 的话只按上下会把朝向清零, 侧视美术会崩掉。
+	# ⑦ 四向朝向 (v0.5): 纵向输入**现在会转身** —— 往屏幕里走看背面, 往镜头走看正面。
+	#    旧的「纵深不转身」断言在这里被有意翻转, 它守护的失败模式变成了
+	#    「按上却还侧着身子」(当初就该有的行为)。
 	player.state = BlitzPlayer.State.NORMAL
-	player.facing = 1
-	player._face(0.0)
-	_ok("纵深输入 (x 分量为 0) 不改朝向", player.facing == 1, "facing=%d" % player.facing)
-	player._face(-1.0)
-	_ok("往左走转向左", player.facing == -1, "facing=%d" % player.facing)
-	_ok("facing_vec 是单位水平向量",
-		player.facing_vec().is_equal_approx(Vector2.LEFT), "facing_vec=%s" % player.facing_vec())
+	player.facing = Facing.RIGHT
+	player._face(Vector2.ZERO)
+	_ok("无输入不改变朝向", player.facing == Facing.RIGHT, Facing.describe(player.facing))
+	player._face(Vector2(0.0, -1.0))          # 屏幕向上 = 世界纵深 +z
+	_ok("往上走朝上 (背面)", player.facing == Facing.UP, Facing.describe(player.facing))
+	player._face(Vector2(0.0, 1.0))
+	_ok("往下走朝下 (正面)", player.facing == Facing.DOWN, Facing.describe(player.facing))
+	player._face(Vector2(-1.0, 0.0))
+	_ok("往左走立即转身", player.facing == Facing.LEFT, Facing.describe(player.facing))
+	_ok("facing_vec 返回朝向本身",
+		player.facing_vec().is_equal_approx(Facing.LEFT), str(player.facing_vec()))
+
+	# 换轴迟滞: 斜向输入不该让朝向逐帧翻 (方向感会碎成一团)
+	player.facing = Facing.RIGHT
+	player._face(Vector2(0.9, 0.35))          # 偏向水平
+	_ok("斜向输入保持当前轴 (不抖)", player.facing == Facing.RIGHT, Facing.describe(player.facing))
+	player._face(Vector2(0.35, 0.9))          # 明显偏向垂直
+	_ok("垂直分量明显更大时换轴", player.facing == Facing.DOWN, Facing.describe(player.facing))
 
 	player.state = BlitzPlayer.State.NORMAL
 	player.velocity = Vector2.ZERO
@@ -427,7 +439,7 @@ func _run_combat(game: Node) -> void:
 	#    那个状态, 没有旁路可以绕过朝向规则。
 	#    (无头环境下这里不按任何移动键, 所以 _process_blocking 里的 _face(0) 是空操作,
 	#     朝向不会被下一帧改回去 —— 这也是它能直接写的前提。)
-	player.facing = -1
+	player.facing = Facing.LEFT
 	player.velocity = Vector2.ZERO
 
 	await _check_guard(player, enemies)
@@ -482,10 +494,10 @@ func _check_guard(player: BlitzPlayer, enemies: Array) -> void:
 	#       那一套正是本轮删掉的东西, 不该以另一种形式长回来。
 	# ⚠️ 不要在这里清 _parry_window_timer: 下面 ② 正要靠「窗口是开的」来测精准格挡。
 	#    重新进一次格挡不会重开窗口 (parry_cooldown 还没过), 所以这一次调用是无副作用的。
-	var facing_before: int = player.facing
+	var facing_before: Vector2 = player.facing
 	player._enter_blocking()
 	_ok("举盾不改朝向 (没有隐藏的自动转向)", player.facing == facing_before,
-		"facing %d -> %d" % [facing_before, player.facing])
+		"facing %s -> %s" % [Facing.describe(facing_before), Facing.describe(player.facing)])
 
 	# ② 精准格挡: 窗口内被**正面**攻击 → 零伤 + 零耗 + 攻击者硬直
 	# ⚠️ 朝向 = 左 (-1), 所以「正面」在 **-X 方向**。写成上下方向的话判定会
@@ -536,8 +548,10 @@ func _check_guard(player: BlitzPlayer, enemies: Array) -> void:
 	_ok("背后挨打照常掉血 (前后半平面生效, 没写成全方位)", player.health < hp0,
 		"hp %d -> %d" % [hp0, player.health])
 
-	# ⑤ 🏗️ 横版**特有**的一条: 纵深完全不参与格挡判定。
-	#    这正是用户要的效果 —— 「站得比我靠前/靠后一点, 攻击一样得挡得住」。
+	# ⑤ 🏗️ 侧身时的「纵深无所谓」: 面朝左右时, 站在我上下方的攻击照样算正面。
+	#    v0.5 起朝向有四向, 所以准确的说法是「**垂直于朝向**方向的攻击算正面」——
+	#    下面 ⑤b 用面朝上来验同一件事在纵向也成立。
+	#    (用户要的效果: 「站得比我靠前/靠后一点, 攻击一样得挡得住」)
 	#    在等距时代这里测的是「斜前 45° 算不算正面」(要连续算角度);
 	#    换成横版之后, 45° 这个概念消失了, 换来的是「上下无所谓」这一条。
 	#    ⚠️ 它同样能抓出「判定框退化成点对点」之类的错 —— 那种实现下
@@ -567,6 +581,33 @@ func _check_guard(player: BlitzPlayer, enemies: Array) -> void:
 	player.take_damage(1, player.global_position + Vector2(-30.0, 50.0), null)   # 正面 + 大纵深偏移
 	_ok("X 在正面时, 纵深偏得多也算正面 (只有 X 的符号决定前后)",
 		player.health == player.max_health, "hp %d / %d" % [player.health, player.max_health])
+
+	# ⑤b 四向扩展 (v0.5): 上/下朝向时, 前后半平面跟着朝向一起转。
+	#     ⚠️ 这条在「只有左右」的 v0.4 里**写不出来** —— 那会儿纵向根本没有正反可言。
+	#        四向之后它是必测项: 若 _is_in_guard_front 仍写死 X 轴, 面朝上时从
+	#        背后来的攻击也会被挡下, 「转身面对敌人」这个动作就彻底失去意义
+	#        (而游戏不会报任何错, 只是玩起来「怎么都挡得住」)。
+	var saved_facing: Vector2 = player.facing
+	player.facing = Facing.UP          # 世界 +z = 屏幕上方 = 画面里侧
+	player.invincible_timer = 0.0
+	player.health = player.max_health
+	player.stamina.refill()
+	player._enter_blocking()
+	player._parry_window_timer = 0.0
+	player.take_damage(1, player.global_position + Vector2(0.0, -60.0), null)   # 画面上方 = 正前方
+	_ok("面朝上时, 从画面上方来的攻击挡得住 (正面边界跟着朝向转)",
+		player.health == player.max_health, "hp %d / %d" % [player.health, player.max_health])
+
+	player.invincible_timer = 0.0
+	player.health = player.max_health
+	player.stamina.refill()
+	player._enter_blocking()
+	player._parry_window_timer = 0.0
+	hp0 = player.health
+	player.take_damage(1, player.global_position + Vector2(0.0, 60.0), null)    # 画面下方 = 背对
+	_ok("面朝上时, 从画面下方(背后)来的攻击照常掉血 (没退化成全方位)",
+		player.health < hp0, "hp %d -> %d" % [hp0, player.health])
+	player.facing = saved_facing
 
 	# ⑥ 精力耗尽 → 破防 (举盾不是无敌)
 	player.invincible_timer = 0.0
@@ -656,7 +697,7 @@ func _check_heavy(player: BlitzPlayer, enemies: Array) -> void:
 
 	var hp0: int = dummy.health
 	player.state = BlitzPlayer.State.NORMAL
-	player.facing = 1
+	player.facing = Facing.RIGHT
 	player._attack_cooldown_timer = 0.0
 	player._begin_attack(BlitzPlayer.AttackKind.HEAVY, 1.0)
 	await get_tree().physics_frame
@@ -682,7 +723,7 @@ func _check_armor(player: BlitzPlayer, enemies: Array) -> void:
 		_ok("找到霸体测试靶子", false)
 		return
 	_prep_dummy(dummy, player, Vector2(34.0, 0.0))
-	player.facing = 1
+	player.facing = Facing.RIGHT
 	player.stamina.refill()
 	player.health = player.max_health
 	player.invincible_timer = 0.0
@@ -772,26 +813,26 @@ func _check_attack_shape(player: BlitzPlayer) -> void:
 	# ① 矩形: 身前 reach 内、纵深 ±depth/2 内算命中; 背后不算
 	var r: AttackShape = AttackShape.make_rect(100.0, 40.0)
 	var o: Vector2 = Vector2.ZERO
-	_ok("RECT 正前方 50 处命中", r.contains(o, 1, Vector2(50.0, 0.0)))
-	_ok("RECT 纵深偏 19 命中 (在 ±20 内)", r.contains(o, 1, Vector2(50.0, 19.0)))
+	_ok("RECT 正前方 50 处命中", r.contains(o, Facing.RIGHT, Vector2(50.0, 0.0)))
+	_ok("RECT 纵深偏 19 命中 (在 ±20 内)", r.contains(o, Facing.RIGHT, Vector2(50.0, 19.0)))
 	_ok("RECT 纵深偏 21 **不**命中 (超出 depth/2)",
-		not r.contains(o, 1, Vector2(50.0, 21.0)),
+		not r.contains(o, Facing.RIGHT, Vector2(50.0, 21.0)),
 		"⚠️ 这条挂了 = 判定框退化成无限纵深, 站一条线就能通吃")
-	_ok("RECT 背后 50 处**不**命中", not r.contains(o, 1, Vector2(-50.0, 0.0)))
-	_ok("RECT 超出 reach 也不命中", not r.contains(o, 1, Vector2(101.0, 0.0)))
-	_ok("RECT 朝左时打的是左边", r.contains(o, -1, Vector2(-50.0, 0.0)) and not r.contains(o, -1, Vector2(50.0, 0.0)))
+	_ok("RECT 背后 50 处**不**命中", not r.contains(o, Facing.RIGHT, Vector2(-50.0, 0.0)))
+	_ok("RECT 超出 reach 也不命中", not r.contains(o, Facing.RIGHT, Vector2(101.0, 0.0)))
+	_ok("RECT 朝左时打的是左边", r.contains(o, Facing.LEFT, Vector2(-50.0, 0.0)) and not r.contains(o, Facing.LEFT, Vector2(50.0, 0.0)))
 
 	# ② 扇形: 半径内的角度约束。⚠️ 纵深方向**不能**退化成无限
 	var a: AttackShape = AttackShape.make_arc(100.0, 75.0)
-	_ok("ARC 正前方 80 处命中", a.contains(o, 1, Vector2(80.0, 0.0)))
-	_ok("ARC 半径外不命中", not a.contains(o, 1, Vector2(120.0, 0.0)))
+	_ok("ARC 正前方 80 处命中", a.contains(o, Facing.RIGHT, Vector2(80.0, 0.0)))
+	_ok("ARC 半径外不命中", not a.contains(o, Facing.RIGHT, Vector2(120.0, 0.0)))
 	# 正前方偏 45° = (70.7, 70.7), 在 75° 内
-	_ok("ARC 斜前方 45° 命中", a.contains(o, 1, Vector2(70.7, 70.7)))
+	_ok("ARC 斜前方 45° 命中", a.contains(o, Facing.RIGHT, Vector2(70.7, 70.7)))
 	# 张角外的点: (10, 90) → 与朝向夹角 ≈ 83.7°, 超出 75°
 	_ok("ARC 张角外**不**命中 (侧后方)",
-		not a.contains(o, 1, Vector2(10.0, 90.0)),
+		not a.contains(o, Facing.RIGHT, Vector2(10.0, 90.0)),
 		"夹角 %.1f° > 75°" % rad_to_deg(atan2(90.0, 10.0)))
-	_ok("ARC 背后不命中", not a.contains(o, 1, Vector2(-50.0, 0.0)))
+	_ok("ARC 背后不命中", not a.contains(o, Facing.RIGHT, Vector2(-50.0, 0.0)))
 	_ok("ARC 张角超过 90° 会被夹住 (凸多边形上限)",
 		is_equal_approx(AttackShape.make_arc(50.0, 140.0).half_angle_deg, 90.0),
 		"%.0f°" % AttackShape.make_arc(50.0, 140.0).half_angle_deg)
@@ -808,28 +849,28 @@ func _check_attack_shape(player: BlitzPlayer) -> void:
 	#       真要让正上正下也打到, 得把 half_angle 开到 90 (半圆), 那就没有方向了。
 	#       下面两条断言把这两个事实都钉住, 免得以后有人把其中一条当成 bug 去「修」。
 	_ok("ARC 纵深容差: 身前一个身位 (Δx=20) 处纵深 ±60 都扫得到",
-		a.contains(o, 1, Vector2(20.0, 60.0)) and a.contains(o, 1, Vector2(20.0, -60.0)),
+		a.contains(o, Facing.RIGHT, Vector2(20.0, 60.0)) and a.contains(o, Facing.RIGHT, Vector2(20.0, -60.0)),
 		"20 × tan75° = %.0f, 被半径截到 %.0f" % [20.0 * tan(deg_to_rad(75.0)), sqrt(100.0 * 100.0 - 400.0)])
 	_ok("ARC 已知边界: Δx=0 (正上/正下) 扫不到 —— 扇形的方向性所在, 不是 bug",
-		not a.contains(o, 1, Vector2(0.0, 30.0)) and not a.contains(o, 1, Vector2(0.0, -30.0)),
+		not a.contains(o, Facing.RIGHT, Vector2(0.0, 30.0)) and not a.contains(o, Facing.RIGHT, Vector2(0.0, -30.0)),
 		"夹角 90° > 张角 75°")
 
 	# ③ 圆: 半径 + **沿朝向的偏移** (落雷要「在面朝方向一定距离处」)
 	var c: AttackShape = AttackShape.make_circle(30.0, Vector2(90.0, 0.0))
-	_ok("CIRCLE 圆心处命中", c.contains(o, 1, Vector2(90.0, 0.0)))
-	_ok("CIRCLE 圆心外 31 不命中", not c.contains(o, 1, Vector2(121.0, 0.0)))
+	_ok("CIRCLE 圆心处命中", c.contains(o, Facing.RIGHT, Vector2(90.0, 0.0)))
+	_ok("CIRCLE 圆心外 31 不命中", not c.contains(o, Facing.RIGHT, Vector2(121.0, 0.0)))
 	_ok("CIRCLE 对**背后**同样位置不命中 (偏移跟着朝向翻)",
-		not c.contains(o, 1, Vector2(-90.0, 0.0)) and c.contains(o, -1, Vector2(-90.0, 0.0)))
+		not c.contains(o, Facing.RIGHT, Vector2(-90.0, 0.0)) and c.contains(o, Facing.LEFT, Vector2(-90.0, 0.0)))
 
 	# ④ 高度带 —— 默认不限制, 不设置就没有任何行为变化
 	_ok("默认高度带 = 不限制 (老招式一条都不用改)",
 		r.hits_height(0.0) and r.hits_height(999.0) and r.hits_height(-999.0))
 	var low: AttackShape = AttackShape.make_arc(80.0, 80.0).band(0.0, 24.0)
-	_ok("设了高度带: 贴地命中", low.contains(o, 1, Vector2(50.0, 0.0), 0.0))
+	_ok("设了高度带: 贴地命中", low.contains(o, Facing.RIGHT, Vector2(50.0, 0.0), 0.0))
 	_ok("设了高度带: 跳起来躲得掉 (这是加跳跃的主要收益)",
-		not low.contains(o, 1, Vector2(50.0, 0.0), 60.0))
+		not low.contains(o, Facing.RIGHT, Vector2(50.0, 0.0), 60.0))
 	_ok("高度带不影响地面判定 (同一位置只差 height)",
-		low.contains_ground(o, 1, Vector2(50.0, 0.0)))
+		low.contains_ground(o, Facing.RIGHT, Vector2(50.0, 0.0)))
 
 	# ⑤ 物理体和纯函数判定**必须给出同一个答案**
 	#    🏗️ 这是整个重构的核心不变量: 预警画的是 shape, 判定走的是物理体,
@@ -848,92 +889,30 @@ func _check_attack_shape(player: BlitzPlayer) -> void:
 			AttackShape.make_arc(100.0, 75.0),
 			AttackShape.make_arc(90.0, 90.0),
 			AttackShape.make_circle(40.0, Vector2(70.0, 0.0))]
+	# 🏗️ v0.5 四向: **四个朝向全扫**, 而不是「左右扫过、上下同理」。
+	#    纵向走的是另一条代码路径 (矩形要换宽高、圆心偏移要跟着翻 90°),
+	#    「左右全绿、上下判反」是这次重构最可能的翻车方式 —— 而它不会报任何错。
+	var all_facings: Array[Vector2] = [Facing.RIGHT, Facing.LEFT, Facing.UP, Facing.DOWN]
 	for s: AttackShape in shapes:
-		var bad: int = 0
-		var sampled: int = 0
-		var hits: int = 0
-		var worst: String = ""
-		for ix: int in range(-30, 31):
-			for iy: int in range(-30, 31):
-				var d: Vector2 = Vector2(float(ix) * 5.0, float(iy) * 5.0)
-				if d.length() < 1.0:
-					continue
-				sampled += 1
-				var via_math: bool = s.contains_ground(o, 1, d)
-				var via_body: bool = _point_in_hitbox(s, d, 1)
-				if via_math:
-					hits += 1
-				if via_math == via_body:
-					continue
-				# 不一致的点若贴着边界 (内接折线与弧之间的那道薄缝), 属于采样误差;
-				# 用「把它从边界推开 TOL 之后结论是否翻转」来判断它是缝还是真错。
-				var pushed_out: Vector2 = d * ((d.length() + TOL) / d.length())
-				var pushed_in: Vector2 = d * (maxf(0.001, d.length() - TOL) / d.length())
-				var near_edge: bool = s.contains_ground(o, 1, pushed_out) != s.contains_ground(o, 1, pushed_in)
-				if near_edge:
-					continue
-				bad += 1
-				if worst == "":
-					worst = "%s  数学=%s 物理=%s" % [d, via_math, via_body]
-		_ok("物理体和 contains() 逐点一致 —— %s" % s.describe(), bad == 0,
-			"%d/%d 个采样点不一致  %s" % [bad, sampled, worst])
-		# 🏗️ 「自检的自检」: 上面那条断言在**两边都恒为 false** 时也会通过。
-		#    这种情况不是假想 —— 采样网格写错 (比如 d 恒为零)、形状坐标算错, 都会让
-		#    比对变成「空对空」, 而它看起来和「完美一致」一模一样。
-		#
-		# ⚠️ 判据是**绝对数量** (≥50), 不是百分比。第一版写的是「≥10% 落在形状内」,
-		#    结果矩形和圆失败 —— 不是它们错了, 是**比例**这个工具选错了:
-		#    采样框是 ±150 的正方形, 而矩形只有 100×40, 面积占比天然只有 5%。
-		#    细长形状的占比永远很低, 和「有没有在空转」根本不是一回事。
-		#    (实测: 矩形 5.1%、圆 5.3%、两个扇形 14.1% —— 全都正常。)
-		#    要的是「确实有一批点在形状内, 这条比对不是空对空」, 那就直接数个数。
-		_ok("  ↑ 这条比对不是空转的 (%d 个采样点落在形状内)" % hits,
-			hits >= 50,
-			"命中 %d / 采样 %d = %.1f%%  %s" % [hits, sampled, 100.0 * float(hits) / float(sampled), worst])
+		for f: Vector2 in all_facings:
+			_sweep_physics_vs_math(s, f, TOL)
+			_sweep_draw_vs_math(s, f, TOL)
 
-	# ⑤b 画在**地面上**的那个多边形 ⇔ 解析判定
-	#
-	# 🏗️ ⑤ 比的是「物理体 vs 纯函数」, 管的是「打不打得到」;
-	#    这一条比的是「预警多边形 (telegraph_points) vs 纯函数」, 管的是
-	#    「玩家**以为**打不打得到」。两者缺一不可 —— 只验 ⑤ 的话,
-	#    预警完全可以画到别处, 而所有测试照样全绿, 玩家看到的是「圈在这儿、伤害在那边」。
-	#    落雷就是这么漏过去的 (见 lightning_bolt.gd 文件头那次双偏移事故):
-	#    形状对象只有一个、数据也只有一个, 但**两个消费者按不同的规则摆放**。
-	#
-	# ⚠️ origin 传 Vector2.ZERO = 「攻击者脚下」, 这是 telegraph_points 的合同,
-	#    也是所有消费者必须遵守的摆放规则。传别的值就等于自己又加了一遍偏移 ——
-	#    而一个只验 shape 内部几何的测试**看不见**调用方摆在哪。
-	for s: AttackShape in shapes:
-		# 多边形只建一次 —— 塞进 3720 次的内层循环里会白算 3719 遍
-		var poly: PackedVector2Array = s.telegraph_points(Vector2.ZERO, 1)
-		var bad: int = 0
-		var hits: int = 0
-		var worst: String = ""
-		for ix: int in range(-30, 31):
-			for iy: int in range(-30, 31):
-				var d: Vector2 = Vector2(float(ix) * 5.0, float(iy) * 5.0)
-				if d.length() < 1.0:
-					continue
-				var via_math: bool = s.contains_ground(Vector2.ZERO, 1, d)
-				var via_draw: bool = Geometry2D.is_point_in_polygon(BeltSpace.to_screen(d), poly)
-				if via_math:
-					hits += 1
-				if via_math == via_draw:
-					continue
-				# 和 ⑤ 同一套「贴边就是缝不是错」的判据: 预警多边形同样是弧的内接折线,
-				# 弦与弧之间那道薄缝里的点, 结论翻转属于采样误差。
-				var pushed_out: Vector2 = d * ((d.length() + TOL) / d.length())
-				var pushed_in: Vector2 = d * (maxf(0.001, d.length() - TOL) / d.length())
-				if s.contains_ground(Vector2.ZERO, 1, pushed_out) \
-						!= s.contains_ground(Vector2.ZERO, 1, pushed_in):
-					continue
-				bad += 1
-				if worst == "":
-					worst = "%s  数学=%s 画出来=%s" % [d, via_math, via_draw]
-		_ok("预警多边形和 contains() 逐点一致 —— %s" % s.describe(), bad == 0,
-			"%d 个采样点不一致  %s" % [bad, worst])
-		_ok("  ↑ 这条比对不是空转的 (%d 个采样点落在形状内)" % hits, hits >= 50,
-			"命中 %d  %s" % [hits, worst])
+	# ⑤c 方向的**语义** —— ⑤ / ⑤b 都拿 contains() 当基准, 所以 contains() 自己把
+	#    上下写反的话, 它们会「一致地一起错」: 比对全绿, 玩起来是反的。
+	#    这一条钉住 Facing.UP 到底朝哪边: 朝上 = 世界 +z = 屏幕上方 = 画面里侧。
+	var up_rect: AttackShape = AttackShape.make_rect(100.0, 40.0)
+	_ok("朝上时重击打的是**纵深远处** (+z) 的目标",
+		up_rect.contains(o, Facing.UP, Vector2(0.0, 80.0))
+			and not up_rect.contains(o, Facing.UP, Vector2(0.0, -80.0)),
+		"+z 命中 / -z 不中")
+	_ok("朝下时重击打的是**镜头这一侧** (-z) 的目标",
+		up_rect.contains(o, Facing.DOWN, Vector2(0.0, -80.0))
+			and not up_rect.contains(o, Facing.DOWN, Vector2(0.0, 80.0)),
+		"-z 命中 / +z 不中")
+	_ok("朝上时左右两侧**不在**重击范围内 (纵向挥砍不横扫)",
+		not up_rect.contains(o, Facing.UP, Vector2(80.0, 0.0)),
+		"(80, 0) 在垂直于朝向的那条线上")
 
 	# ⑥ 共享资源污染 —— 现在从结构上不可能, 但断言留着
 	#    (第一版是靠 duplicate() 守住的, 未来有人「优化」掉 build 里的 new 就会复发)
@@ -941,8 +920,8 @@ func _check_attack_shape(player: BlitzPlayer) -> void:
 	#    GDScript 里 Object 的 `==` 未必是引用相等 (Resource 可能自己覆写比较语义),
 	#    而 `is_same()` 在 Godot 4 的 Shape2D 上根本不存在 (第一次就踩了, 报
 	#    "Nonexistent function 'is_same'")。instance id 是引擎给的唯一身份, 没有歧义。
-	var s1: Shape2D = r.build_collision_shape(1)
-	var s2: Shape2D = r.build_collision_shape(1)
+	var s1: Shape2D = r.build_collision_shape(Facing.RIGHT)
+	var s2: Shape2D = r.build_collision_shape(Facing.RIGHT)
 	_ok("每次 build_collision_shape 都返回新对象 (共享资源污染不可能发生)",
 		s1.get_instance_id() != s2.get_instance_id(),
 		"id %d vs %d" % [s1.get_instance_id(), s2.get_instance_id()])
@@ -961,7 +940,7 @@ func _check_attack_shape(player: BlitzPlayer) -> void:
 	# ⑧ 出招时生成的判定框真的带上了这两个形状
 	_free_hitboxes(player)
 	player.state = BlitzPlayer.State.NORMAL
-	player.facing = 1
+	player.facing = Facing.RIGHT
 	player._attack_cooldown_timer = 0.0
 	player._state_enter_attack()
 	await get_tree().physics_frame
@@ -971,6 +950,103 @@ func _check_attack_shape(player: BlitzPlayer) -> void:
 		spawned.describe() if spawned != null else "null")
 	_free_hitboxes(player)
 	player.state = BlitzPlayer.State.NORMAL
+
+
+## ⑤ 物理体 ⇔ 纯函数: 在 ±150 的网格上逐点采样比对, 一个朝向出一组断言。
+##
+## 🏗️ 这是整个重构的核心不变量: 预警画的是 shape, 判定走的是物理体,
+##    两者若有一丝不一致, 玩家看到的就是「明明躲开了却被打中」。
+##    逐点采样比对, 是唯一能证明它们同源的办法。
+## ⚠️ 容差是**几何上的必然**, 不是放水: 物理体是圆弧的**内接折线**,
+##    弦永远在弧内侧, 所以物理体比解析判定略小一点 (弓高 = R×(1−cos 半步长))。
+##    attack_shape.gd 里把采样密度定成每 5°, 就是为了把这个差压到 0.01px 级。
+##    真有 bug 的话偏差是**几十个单位**级的 (整个方向判反), 0.25 拦得住。
+func _sweep_physics_vs_math(s: AttackShape, facing: Vector2, tol: float) -> void:
+	var o: Vector2 = Vector2.ZERO
+	var bad: int = 0
+	var sampled: int = 0
+	var hits: int = 0
+	var worst: String = ""
+	for ix: int in range(-30, 31):
+		for iy: int in range(-30, 31):
+			var d: Vector2 = Vector2(float(ix) * 5.0, float(iy) * 5.0)
+			if d.length() < 1.0:
+				continue
+			sampled += 1
+			var via_math: bool = s.contains_ground(o, facing, d)
+			var via_body: bool = _point_in_hitbox(s, d, facing)
+			if via_math:
+				hits += 1
+			if via_math == via_body:
+				continue
+			# 不一致的点若贴着边界 (内接折线与弧之间的那道薄缝), 属于采样误差;
+			# 用「把它从边界推开 tol 之后结论是否翻转」来判断它是缝还是真错。
+			var pushed_out: Vector2 = d * ((d.length() + tol) / d.length())
+			var pushed_in: Vector2 = d * (maxf(0.001, d.length() - tol) / d.length())
+			if s.contains_ground(o, facing, pushed_out) != s.contains_ground(o, facing, pushed_in):
+				continue
+			bad += 1
+			if worst == "":
+				worst = "%s  数学=%s 物理=%s" % [d, via_math, via_body]
+	_ok("物理体和 contains() 逐点一致 —— %s @ %s" % [s.describe(), Facing.describe(facing)],
+		bad == 0, "%d/%d 个采样点不一致  %s" % [bad, sampled, worst])
+	# 🏗️ 「自检的自检」: 上面那条断言在**两边都恒为 false** 时也会通过。
+	#    这种情况不是假想 —— 采样网格写错 (比如 d 恒为零)、形状坐标算错, 都会让
+	#    比对变成「空对空」, 而它看起来和「完美一致」一模一样。
+	#
+	# ⚠️ 判据是**绝对数量** (≥50), 不是百分比。第一版写的是「≥10% 落在形状内」,
+	#    结果矩形和圆失败 —— 不是它们错了, 是**比例**这个工具选错了:
+	#    采样框是 ±150 的正方形, 而矩形只有 100×40, 面积占比天然只有 5%。
+	#    细长形状的占比永远很低, 和「有没有在空转」根本不是一回事。
+	#    (实测: 矩形 5.1%、圆 5.3%、两个扇形 14.1% —— 全都正常。)
+	#    要的是「确实有一批点在形状内, 这条比对不是空对空」, 那就直接数个数。
+	_ok("  ↑ 这条比对不是空转的 (%d 个采样点落在形状内)" % hits, hits >= 50,
+		"命中 %d / 采样 %d = %.1f%%  %s" % [hits, sampled, 100.0 * float(hits) / float(sampled), worst])
+
+
+## ⑤b 画在**地面上**的那个多边形 (telegraph_points) ⇔ 解析判定。
+##
+## 🏗️ ⑤ 比的是「物理体 vs 纯函数」, 管的是「打不打得到」;
+##    这一条比的是「预警多边形 vs 纯函数」, 管的是「玩家**以为**打不打得到」。
+##    两者缺一不可 —— 只验 ⑤ 的话, 预警完全可以画到别处而所有测试照样全绿,
+##    玩家看到的是「圈在这儿、伤害在那边」。落雷就是这么漏过去的
+##    (见 lightning_bolt.gd 文件头那次双偏移事故): 形状对象只有一个、数据也只有一个,
+##    但**两个消费者按不同的规则摆放**。
+##
+## ⚠️ origin 传 Vector2.ZERO = 「攻击者脚下」, 这是 telegraph_points 的合同,
+##    也是所有消费者必须遵守的摆放规则。传别的值就等于自己又加了一遍偏移 ——
+##    而一个只验 shape 内部几何的测试**看不见**调用方摆在哪。
+func _sweep_draw_vs_math(s: AttackShape, facing: Vector2, tol: float) -> void:
+	var o: Vector2 = Vector2.ZERO
+	# 多边形只建一次 —— 塞进 3720 次的内层循环里会白算 3719 遍
+	var poly: PackedVector2Array = s.telegraph_points(o, facing)
+	var bad: int = 0
+	var hits: int = 0
+	var worst: String = ""
+	for ix: int in range(-30, 31):
+		for iy: int in range(-30, 31):
+			var d: Vector2 = Vector2(float(ix) * 5.0, float(iy) * 5.0)
+			if d.length() < 1.0:
+				continue
+			var via_math: bool = s.contains_ground(o, facing, d)
+			var via_draw: bool = Geometry2D.is_point_in_polygon(BeltSpace.to_screen(d), poly)
+			if via_math:
+				hits += 1
+			if via_math == via_draw:
+				continue
+			# 和 ⑤ 同一套「贴边就是缝不是错」的判据: 预警多边形同样是弧的内接折线,
+			# 弦与弧之间那道薄缝里的点, 结论翻转属于采样误差。
+			var pushed_out: Vector2 = d * ((d.length() + tol) / d.length())
+			var pushed_in: Vector2 = d * (maxf(0.001, d.length() - tol) / d.length())
+			if s.contains_ground(o, facing, pushed_out) != s.contains_ground(o, facing, pushed_in):
+				continue
+			bad += 1
+			if worst == "":
+				worst = "%s  数学=%s 画出来=%s" % [d, via_math, via_draw]
+	_ok("预警多边形和 contains() 逐点一致 —— %s @ %s" % [s.describe(), Facing.describe(facing)],
+		bad == 0, "%d 个采样点不一致  %s" % [bad, worst])
+	_ok("  ↑ 这条比对不是空转的 (%d 个采样点落在形状内)" % hits, hits >= 50,
+		"命中 %d  %s" % [hits, worst])
 
 
 ## 目标点是否落在 shape 建出来的**物理体**里。
@@ -983,7 +1059,7 @@ func _check_attack_shape(player: BlitzPlayer) -> void:
 ## ⚠️ 转换链要和 AttackHitbox._ready() 完全一致:
 ##    世界偏移 → BeltSpace.to_screen → 减去 collision_offset。
 ##    这里少减一次偏移, 测试就会报出一堆假的不一致。
-func _point_in_hitbox(s: AttackShape, world_delta: Vector2, facing: int) -> bool:
+func _point_in_hitbox(s: AttackShape, world_delta: Vector2, facing: Vector2) -> bool:
 	var sh: Shape2D = s.build_collision_shape(facing)
 	var local: Vector2 = BeltSpace.to_screen(world_delta) - s.collision_offset(facing)
 	if sh is RectangleShape2D:
@@ -1008,7 +1084,7 @@ func _check_skill(player: BlitzPlayer, enemies: Array) -> void:
 		_ok("找到落雷测试靶子", false)
 		return
 
-	player.facing = 1
+	player.facing = Facing.RIGHT
 	player.stamina.refill()
 	player.invincible_timer = 0.0
 	player.health = player.max_health
@@ -1080,7 +1156,7 @@ func _check_skill(player: BlitzPlayer, enemies: Array) -> void:
 	# ④ 朝左时落点在**左边** —— 圆心偏移跟着朝向翻
 	_free_hitboxes(player)
 	_prep_dummy(dummy, player, Vector2(-player.skill_distance, 0.0))
-	player.facing = -1
+	player.facing = Facing.LEFT
 	player.health = player.max_health
 	player.invincible_timer = 0.0
 	player.stamina.refill()
@@ -1102,7 +1178,7 @@ func _check_skill(player: BlitzPlayer, enemies: Array) -> void:
 	#    (圈本来就亮着), 所以只能靠自检抓。
 	_free_hitboxes(player)
 	_prep_dummy(dummy, player, Vector2(player.skill_distance, 0.0))
-	player.facing = 1
+	player.facing = Facing.RIGHT
 	player.health = player.max_health
 	player.invincible_timer = 0.0
 	player.stamina.refill()
@@ -1157,7 +1233,7 @@ func _check_hitbox_shapes(player: BlitzPlayer) -> void:
 	#    对象分配」把 build 改成返回缓存, 先重后轻才能把这个 bug 测出来。
 	_free_hitboxes(player)
 	player.state = BlitzPlayer.State.NORMAL
-	player.facing = 1
+	player.facing = Facing.RIGHT
 	player._begin_attack(BlitzPlayer.AttackKind.HEAVY, 1.0)
 	var heavy_vec: Vector2 = _first_hitbox_size(player)
 	var heavy_shape: AttackShape = _first_hitbox_shape(player)
@@ -1254,7 +1330,7 @@ func _check_enemy_attack_lands(player: BlitzPlayer, enemies: Array) -> void:
 	striker._attack_cooldown_timer = 0.0
 
 	# ① 正前方 —— 基本盘: bit3/bit2 和玩家 Hurtbox 真的接上了
-	var hit_front: bool = await _drive_enemy_strike(striker, player, Vector2(40.0, 0.0), -1)
+	var hit_front: bool = await _drive_enemy_strike(striker, player, Vector2(40.0, 0.0), Facing.LEFT)
 	_ok("敌人的挥砍打到了正前方的玩家 (判定层和玩家 Hurtbox 都接上了)", hit_front)
 
 	# ② 纵深错开一格 —— 用户对这一招的原始要求:
@@ -1263,7 +1339,7 @@ func _check_enemy_attack_lands(player: BlitzPlayer, enemies: Array) -> void:
 	# 🏗️ 一条是**扇形**最该被验的性质: 纵深容差不是一个常量, 它随「站得多靠前」变化
 	#    (|Δz| ≤ min(Δx·tan 半角, √(R²−Δx²)))。这里取 Δx=30 / Δz=32 —— 刚好一个地格
 	#    的纵深, 夹角 46.8° 在 60° 张角内, 必须打得到。
-	var hit_lane: bool = await _drive_enemy_strike(striker, player, Vector2(30.0, 32.0), -1)
+	var hit_lane: bool = await _drive_enemy_strike(striker, player, Vector2(30.0, 32.0), Facing.LEFT)
 	_ok("纵深错开**一整格**照样挨打 (扇形够宽 —— 这是这一招存在的理由)", hit_lane,
 		"Δx=30 Δz=32 → 夹角 %.1f° < 张角 %.0f°" % [
 			rad_to_deg(atan2(32.0, 30.0)), striker.sweep_half_angle_deg])
@@ -1271,13 +1347,13 @@ func _check_enemy_attack_lands(player: BlitzPlayer, enemies: Array) -> void:
 	# ③ 但纵深错开太多就该躲得掉 —— 否则「离他几根格」会退化成「无限纵深」
 	#    ⚠️ 这条和 ② 是一对, 缺了它的话「扇形」和「一条无限宽的横带」在测试里没区别。
 	#       而后者会让玩家长按上下就走位免疫: 战斗里再没有纵深可言。
-	var hit_far: bool = await _drive_enemy_strike(striker, player, Vector2(10.0, 48.0), -1)
+	var hit_far: bool = await _drive_enemy_strike(striker, player, Vector2(10.0, 48.0), Facing.LEFT)
 	_ok("纵深错开太多**打不到** (扇形是有方向的, 不是一条无限宽的横带)", not hit_far,
 		"Δx=10 Δz=48 → 夹角 %.1f° > 张角 %.0f°" % [
 			rad_to_deg(atan2(48.0, 10.0)), striker.sweep_half_angle_deg])
 
 	# ④ 站在**背后**打不到 —— 朝向真的在起作用 (而不是「只要离得近就中」)
-	var hit_behind: bool = await _drive_enemy_strike(striker, player, Vector2(40.0, 0.0), 1)
+	var hit_behind: bool = await _drive_enemy_strike(striker, player, Vector2(40.0, 0.0), Facing.RIGHT)
 	_ok("站在敌人**背后**打不到 (朝向真的接上了判定)", not hit_behind)
 
 	# ⑤ 高度带 —— 跳跃能躲开这一刀 (v0.4 步骤 5, 加跳跃的主要收益)
@@ -1295,12 +1371,12 @@ func _check_enemy_attack_lands(player: BlitzPlayer, enemies: Array) -> void:
 	# 对照组: 同一位置贴地站 → 这一刀必须真的打得到。
 	# 没有它的话, 「跳过去没掉血」也可能只是因为判定根本没接上, 假绿。
 	var hit_low: bool = await _drive_enemy_strike_at_height(
-		striker, player, Vector2(40.0, 0.0), -1, 0.0)
+		striker, player, Vector2(40.0, 0.0), Facing.LEFT, 0.0)
 	_ok("贴地站在同一位置会被横扫打到 (高度带的对照组)", hit_low)
 
 	var dodge_height: float = band.height_max + 20.0
 	var hit_high: bool = await _drive_enemy_strike_at_height(
-		striker, player, Vector2(40.0, 0.0), -1, dodge_height)
+		striker, player, Vector2(40.0, 0.0), Facing.LEFT, dodge_height)
 	_ok("跳到 height_max 以上**躲开**横扫 (跳跃真的有战术价值)", not hit_high,
 		"height=%.0f > height_max=%.0f" % [dodge_height, band.height_max])
 
@@ -1316,7 +1392,7 @@ func _check_enemy_attack_lands(player: BlitzPlayer, enemies: Array) -> void:
 ##    「纵深差一格」会被算成半格, 测试要么假过要么假失败, 而两种看起来都像判定有 bug。
 ##    (这也是为什么这里没直接用 _prep_dummy: 它的 offset 是屏幕坐标。)
 func _drive_enemy_strike(
-	striker: BlitzEnemy, player: BlitzPlayer, world_offset: Vector2, facing: int
+	striker: BlitzEnemy, player: BlitzPlayer, world_offset: Vector2, facing: Vector2
 ) -> bool:
 	_prep_dummy(striker, player, BeltSpace.to_screen(world_offset))
 	striker.facing = facing
@@ -1345,7 +1421,7 @@ func _drive_enemy_strike(
 ##    (自检里直接写私有字段不是偷懒: 这里要精确控制一个**瞬间状态**,
 ##     走真实输入起跳反而引入了起跳时机这个无关变量。)
 func _drive_enemy_strike_at_height(
-	striker: BlitzEnemy, player: BlitzPlayer, world_offset: Vector2, facing: int, at_height: float
+	striker: BlitzEnemy, player: BlitzPlayer, world_offset: Vector2, facing: Vector2, at_height: float
 ) -> bool:
 	_prep_dummy(striker, player, BeltSpace.to_screen(world_offset))
 	striker.facing = facing

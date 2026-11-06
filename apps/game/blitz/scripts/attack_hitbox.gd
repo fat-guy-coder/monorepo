@@ -67,7 +67,7 @@ signal hit_landed(at: Vector2, direction: Vector2)
 ## ⚠️ 为什么要显式传, 而不是读父节点的 facing:
 ##   父节点是玩家的 Node2D, 结构随时可能变 (加一层容器就静默失效)。
 ##   判定框只活 0.15 秒, 出招那一瞬间的朝向就是唯一的真相 —— 存下来最诚实。
-@export var facing: int = 1
+@export var facing: Vector2 = Vector2(1.0, 0.0)
 
 ## 蓄势时间 (秒)。大过 0 的话, 前 `arm_delay` 秒内**打不到任何人**。
 ##

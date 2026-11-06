@@ -61,7 +61,7 @@ func _run() -> void:
 	# 冻结物理: 否则重力每帧都在改 height, 截到的姿态不可复现
 	p.set_physics_process(false)
 	p.velocity = Vector2.ZERO
-	p.facing = 1
+	p.facing = Facing.RIGHT
 	p.state = BlitzPlayer.State.NORMAL
 
 	# ⚠️ 先搬到一个**没有复活法阵的空地**。出生点正下方压着复活点的同心圆法阵,
@@ -89,9 +89,16 @@ func _run() -> void:
 	p._walk_phase = PI * 0.5
 	await _shot(p, 0.0, "1b_迈步_最大跨幅")
 	p._walk_phase = 0.0
-	p.facing = -1
+	p.facing = Facing.LEFT
 	await _shot(p, 0.0, "2_站立_朝左")
-	p.facing = 1
+	# v0.5 四向: 背面 / 正面。
+	# ⚠️ 这两张**只能靠看** —— 自检能证明判定朝哪边, 证明不了「背面真的画成了背面」
+	#    (没有眼睛、有发髻)。画反了的话, 上下走位时角色会像在倒着滑。
+	p.facing = Facing.UP
+	await _shot(p, 0.0, "2b_站立_朝上_背面")
+	p.facing = Facing.DOWN
+	await _shot(p, 0.0, "2c_站立_朝下_正面")
+	p.facing = Facing.RIGHT
 	# 520²/(2×1400) ≈ 96.6px —— 满跳顶点。三个高度覆盖 起跳/滞空/接近落地
 	await _shot(p, 24.0, "3_起跳_height24")
 	await _shot(p, 70.0, "4_滞空_height70")
@@ -101,6 +108,10 @@ func _run() -> void:
 	p.height = 0.0
 	p.state = BlitzPlayer.State.BLOCKING
 	await _shot(p, 0.0, "6_举盾_正面有边界线")
+	# 四向: 格挡的半平面边界要跟着转 —— 面朝上时那条线该横在**画面上方**。
+	p.facing = Facing.UP
+	await _shot(p, 0.0, "6b_举盾_朝上_边界线在上方")
+	p.facing = Facing.RIGHT
 
 	# ── 压扁 (2:1) 的两条验收 ──
 	# 7~8: 贴地的圆必须是**椭圆**, 而且不能因为压扁而看不见了。
@@ -141,7 +152,7 @@ func _run() -> void:
 	#    (验的是「渲染有没有接上 shape」, 不是「出招逻辑对不对」—— 后者归 smoke_test。)
 	p.height = 0.0
 	p.state = BlitzPlayer.State.NORMAL
-	p.facing = 1
+	p.facing = Facing.RIGHT
 	p.global_position = _main.floor.center_of(Vector2i(20, 9))
 	for i: int in range(40):
 		await get_tree().process_frame
@@ -152,6 +163,22 @@ func _run() -> void:
 	_free_loose_hitboxes(p)
 	_pose_attack(p, BlitzPlayer.AttackKind.HEAVY, 0.5)
 	await _shot(p, 0.0, "11_重劈_矩形范围 (窄而远)")
+
+	# 11b/11c: 四向的判定形状 —— 纵向重劈的矩形该**竖着**铺到画面里侧/外侧,
+	# 而不是还横在身前。这一对是 v0.5 那次 90° 错位 bug 的肉眼闸门
+	# (自检抓得住, 但看一眼确认更快, 也顺手验了「朝向箭头和形状同向」)。
+	_free_loose_hitboxes(p)
+	p.state = BlitzPlayer.State.NORMAL
+	p.facing = Facing.UP
+	_pose_attack(p, BlitzPlayer.AttackKind.HEAVY, 0.5)
+	await _shot(p, 0.0, "11b_重劈_朝上_矩形铺向画面里侧")
+
+	_free_loose_hitboxes(p)
+	p.state = BlitzPlayer.State.NORMAL
+	p.facing = Facing.DOWN
+	_pose_attack(p, BlitzPlayer.AttackKind.HEAVY, 0.5)
+	await _shot(p, 0.0, "11c_重劈_朝下_矩形铺向镜头这侧")
+	p.facing = Facing.RIGHT
 
 	_free_loose_hitboxes(p)
 	p.state = BlitzPlayer.State.NORMAL
@@ -204,7 +231,7 @@ func _run() -> void:
 			await get_tree().process_frame
 		# 站在玩家**身前** (世界 +x), 朝向玩家 —— 和真打起来时的相对位置一致
 		foe.global_position = p.global_position + BeltSpace.to_screen(Vector2(52.0, 6.0))
-		foe.facing = -1
+		foe.facing = Facing.LEFT
 		foe.set_physics_process(false)
 		foe.attack_phase = BlitzEnemy.AttackPhase.WINDUP
 		foe._phase_timer = 0.002          # t → 1.0: 扇形张到最大, 扫过痕铺满

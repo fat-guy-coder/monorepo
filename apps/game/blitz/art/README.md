@@ -9,7 +9,11 @@
 art/
 ├── README.md                 ← 本文件
 ├── manifest.example.json     ← 动画清单模板（3D / 像素共用）
-├── MCP_SETUP.md              ← AI 出图接入（Retro Diffusion MCP / 即梦 CLI / PixelLab / Comfy）
+├── MCP_SETUP.md              ← AI 出图接入（即梦 CLI / LiblibAI / PixelLab / Comfy Cloud）
+├── LOCAL_COMFYUI.md          ← 本地 ComfyUI 出像素（家里 RTX 5060）：下载清单 + 工作流 + 排错
+├── tools/
+│   ├── palette_quantize.py   ← 大图 → 像素图（降采样 + 调色板量化 + 1px 描边）
+│   └── comfy_pixel_sdxl.json ← 可直接导入 ComfyUI 的工作流（只用内置节点）
 ├── rooms/
 │   └── room_01.txt           ← 第一个房间的 ASCII 可行走掩码
 └── style_bible/
@@ -77,4 +81,6 @@ art/rooms/           ← 更多房间的 ASCII 掩码
 - [ART_PIPELINE.md](../ART_PIPELINE.md) —— 完整美术生产手册
 - [ART_ROUTE_DECISION.md](../ART_ROUTE_DECISION.md) —— 逐帧像素 vs 三渲二的决策依据
 - [MCP_SETUP.md](MCP_SETUP.md) —— AI 出图接入：MCP 的 key 申请 / 接入命令 / 排错，以及即梦 CLI（§10）、试产验收、备选分工
+- [LOCAL_COMFYUI.md](LOCAL_COMFYUI.md) —— 本地 ComfyUI 出像素：下载清单、工作流、`palette_quantize.py` 用法、排错
+- [tools/palette_quantize.py](tools/palette_quantize.py) —— 大图 → 像素图（降采样 + 调色板量化 + 1px 描边 + `--check` 自检）
 - [DESIGN.md](../DESIGN.md) —— 玩法与视角

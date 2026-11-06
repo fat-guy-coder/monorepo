@@ -60,10 +60,10 @@ const BOX_SIZE: Vector2 = Vector2(34.0, 34.0)
 ## null = 用兜底的 BOX_SIZE 矩形 (只有手工摆的判定区才会走到)。
 @export var attack_shape: AttackShape = null
 
-## 判定框沿 x 的朝向 (+1 / -1)。**必须在 add_child 之前设** —— `_ready()` 要拿它建形状。
+## 世界空间的朝向 (四向, 见 Facing)。**必须在 add_child 之前设** —— `_ready()` 要拿它建形状。
 ## ⚠️ 显式存下来, 而不是读父节点的 facing: 判定区只活 0.14 秒,
 ##    出招那一瞬间的朝向就是唯一的真相 (和 AttackHitbox 同一条理由)。
-@export var facing: int = 1
+@export var facing: Vector2 = Vector2(1.0, 0.0)
 
 ## 剩余寿命
 var _life: float = 0.0

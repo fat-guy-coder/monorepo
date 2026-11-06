@@ -315,11 +315,15 @@ var _attack_kind: AttackKind = AttackKind.LIGHT
 ## 当前这一刀的**总时长** (判定框 lifetime 和挥刀插值都用它)
 var _attack_total: float = 0.15
 
-## 朝向: +1 = 面朝**右**, -1 = 面朝**左**。不要改回 Vector2 —— 见文件头 ⚠️④。
+## 朝向: **四向单位向量** (Facing.RIGHT / LEFT / UP / DOWN), 世界空间。
 ##
-## 🏗️ 初始值朝右 (而不是「不朝任何方向」): 横版里没有「未定向」这个状态,
-##    角色从第一帧起就必须面向某一边, 否则 _draw 里的侧脸和眼睛没有可用的输入。
-var facing: int = 1
+## 🏗️ v0.5 从 `int ±1` 改成四向 —— 纵向移动时必须能看背面/正面,
+##    否则「往屏幕里走」看起来就是侧着身子滑冰。移动仍是 8 向, 朝向只取 4 向。
+##    见 combat/facing.gd 文件头。
+##
+## ⚠️ 不要为了省事写回 ±1: 判定 (AttackShape 的局部坐标系) 和绘制都读它,
+##    少一个轴不会有任何报错, 只会「朝上攻击打不到人」。
+var facing: Vector2 = Facing.RIGHT
 
 ## ── 跳跃状态 ──
 ## 离地高度 (px, **向上为正**)。恒 >= 0。
@@ -560,7 +564,7 @@ func _process_normal(delta: float) -> void:
 	var input_dir: Vector2 = _input_screen_dir()
 	_apply_move(input_dir, move_accel, move_decel, delta)
 	# 朝向只看水平分量 —— 纵深移动不转身 (见文件头 ④)
-	_face(input_dir.x)
+	_face(input_dir)
 
 	# 格挡优先于一切 —— 它是「防御姿态」, 按下就该立刻生效
 	if Input.is_action_pressed("block"):
@@ -629,23 +633,31 @@ func _input_screen_dir() -> Vector2:
 	return BeltSpace.input_to_screen(iv)
 
 
-## 按水平输入转向。传的是**输入量本身** (带符号即可), 不要求已归一化。
+## 按移动输入转向。传的是**屏幕方向** (和 _apply_move 拿的是同一个输入), 不要求归一化。
 ##
-## 🏗️ 为什么纵深方向 (input.y) 完全不参与朝向 —— 这是 ④ 唯一的落点, 也是最容易
-##    顺手写错的一处: 写成 `if input_dir != Vector2.ZERO: facing = sign(input_dir.x)`
-##    的话, 只按上下时 sign(0) = 0, 朝向会被清零 —— 角色站在那里面朝「0」, 侧视美术
-##    只能画成正面站着, 而玩家下一步往左走时会看到脸**突然**翻过去。
-##    这里显式忽略 x == 0 的情况, 保持上一次的朝向。
-func _face(from_x: float) -> void:
-	if from_x > 0.0:
-		facing = 1
-	elif from_x < 0.0:
-		facing = -1
+## 🏗️ 内部先换回世界空间再吸附 —— 屏幕上的纵轴是压扁过的, 直接拿屏幕 y 去比大小,
+##    斜向输入 (右+下) 会被判成「更偏下」, 朝向就永远吸不到右边。
+##    世界空间里两个轴同一把尺子, 主轴判断才是公平的。
+##
+## 🏗️ 换向规则交给 Facing.choose: 同轴立即转 (明确意图), 换轴要明显压过当前轴 (防抖)。
+##    直接 snap 的话, 斜向走 (0.707, 0.707) 会逐帧在「右」和「下」之间翻。
+func _face(p_screen_dir: Vector2) -> void:
+	facing = Facing.choose(facing, BeltSpace.to_world(p_screen_dir))
 
 
-## 朝向的单位向量 (恒为 ±X)。给判定框偏移 / 绘制 / 自检用。
+## 朝向的单位向量 (四向之一)。给判定框 / 绘制 / 自检用。
 func facing_vec() -> Vector2:
-	return Vector2(float(facing), 0.0)
+	return facing
+
+
+## 侧视绘制用的水平符号 (+1 / -1)。
+##
+## 🏗️ 占位美术阶段, 上下朝向暂时复用「侧视轮廓 + 正面/背面头部」:
+##    面朝上画后脑 (没有五官), 面朝下画正脸 (两只眼), 左右仍然是侧脸。
+##    等真美术接进来之后, 这三套就是三个独立的精灵帧 —— 这里的 if 会被
+##    「按 facing 选动画」取代, 所以别把任何玩法逻辑塞进这个函数。
+func _side_facing() -> float:
+	return facing.x if absf(facing.x) > 0.5 else 1.0
 
 # ============================================================
 # BLOCKING — 举盾。免伤 + 扣精力
@@ -655,7 +667,7 @@ func _process_blocking(delta: float) -> void:
 	_apply_move(input_dir, move_accel * 0.7, move_decel, delta, block_move_scale)
 
 	# 朝向和别的状态一致: 你往哪走就朝哪。**不再跟随鼠标** —— 见文件头「删掉的东西」。
-	_face(input_dir.x)
+	_face(input_dir)
 
 	# 闪避是**万能取消**: 举着盾也能翻滚出去。
 	# 没有它的话, 被围住时玩家只剩「举盾硬扛」和「放盾跑」两个选项,
@@ -683,7 +695,7 @@ func _process_charging(delta: float) -> void:
 	var input_dir: Vector2 = _input_screen_dir()
 	# 蓄力时可以慢走 (用户选定的手感) —— 但朝向仍按移动方向, 和 NORMAL 一致
 	_apply_move(input_dir, move_accel * 0.6, move_decel, delta, charge_move_scale)
-	_face(input_dir.x)
+	_face(input_dir)
 
 	# 闪避取消 —— 蓄力的泄压阀。
 	# 它同时也是「卡在 CHARGING」这条死路的兜底 (见文件头 ⚠️ 与 _apply_damage 里的清零)
@@ -773,26 +785,25 @@ func _enter_blocking() -> void:
 
 ## 攻击是不是从**面朝的那一边**来的。
 ##
-## 🏗️ 横版里这就是「前后半平面」: 只看 X 方向的差, **纵深 (Y) 完全不参与**。
-##    这正好实现了用户要的效果 —— 「站得比我靠前/靠后一点都还算在正面」。
-##    在等距时代这里是个 ±90° 的扇形 (要连续算角度, 还得跟鼠标瞄准对齐), 并且有一个
-##    `block_cone_cos` 旋钮可以把它收窄成 ±45°。横版里那个旋钮**已经删掉**:
-##    朝向只有两个值, 判定没有可以调窄的余地 —— 留一个不起作用的旋钮, 只会让人以为
-##    「调一下就能让格挡更窄」, 而改它什么都不会发生 (静默无效是最坏的一类接口)。
+## 🏗️ 四向朝向之后, 这就是「以朝向为法线的半平面」: 攻击者相对玩家的位置
+##    在朝向那一侧 (点积 > 0) 就挡得住。左右朝向时它退化成只看 X 的旧判定;
+##    朝上/朝下时它自动变成「看纵深」—— 站在背后砍你, 举盾挡不住。
+##
+## ⚠️ 必须在**世界空间**里点积。直接拿屏幕坐标算的话, 纵向分量被压扁了一半,
+##    站在斜后方 45° 的敌人有时算正面、有时算背面 (取决于压扁比),
+##    而画面上看起来只是「格挡有时候不灵」。
 ##
 ## ⚠️ 用的是「玩家 → 攻击者」这个向量, 不是「攻击者 → 玩家」。
-##    写成反的会让正面和背面整个对调 —— 表现是「正面的挡不住、背后的反而挡住了」,
-##    而这两件事在屏幕上看起来都只是「格挡有时候不灵」。
+##    写成反的会让正面和背面整个对调 —— 表现是「正面的挡不住、背后的反而挡住了」。
 func _is_in_guard_front(from_position: Vector2) -> bool:
 	if not from_position.is_finite():
 		# 没有来源信息时按「挡得住」处理: 宁可对玩家有利, 也不要静默变成背刺
 		return true
-	var dx: float = from_position.x - global_position.x
-	# 完全正对 (同一个 x) 时算正面 —— 和旧版「距离太近就算挡住」同样的宽容取向
-	if absf(dx) <= 0.01:
+	var d: Vector2 = BeltSpace.to_world(from_position - global_position)
+	# 完全重合时算正面 —— 和旧版「距离太近就算挡住」同样的宽容取向
+	if d.length_squared() < 0.0001:
 		return true
-	# dx 的符号和 facing 一致 ⇒ 在面朝的那一边
-	return (dx > 0.0) == (facing > 0)
+	return d.dot(facing) >= 0.0
 
 
 
@@ -812,14 +823,14 @@ func _enter_guard_broken(from_position: Vector2) -> void:
 	# 破防后**锁住回复**: 「被打崩」必须比「主动收手」更痛, 否则玩家没有动机去管精力
 	stamina.hold_regen(guard_break_regen_lock)
 
-	var away: Vector2 = -facing_vec()
+	var away: Vector2 = BeltSpace.dir_to_screen(-facing)
 	if from_position.is_finite():
 		var d: Vector2 = global_position - from_position
 		# ⚠️ normalize_world 而不是 normalized(): d 是**屏幕**位移, 屏幕上的单位向量
 		#    换回世界是斜的 (纵深方向会长一倍)。用 normalized() 的话,
 		#    「从纵深方向被打崩」会被推得比「从正面被打崩」远一倍 —— 同样是世界速度上限
 		#    却推出两种距离, 而且只在特定受击方向上才看得出来。
-		away = BeltSpace.normalize_world(d) if d.length() > 0.01 else -facing_vec()
+		away = BeltSpace.normalize_world(d) if d.length() > 0.01 else BeltSpace.dir_to_screen(-facing)
 	velocity = away * guard_break_knockback
 	guard_broken.emit()
 
@@ -1034,8 +1045,8 @@ func _start_dash(input_dir: Vector2) -> void:
 	# ⚠️ 归一化必须走 BeltSpace.normalize_world, 不能写 input_dir.normalized() ——
 	#    屏幕上的单位向量换回世界比 1 长 (斜向是 1.27), 而 dash_speed 是世界速度上限,
 	#    用前者的话「斜着闪避比正着闪避多冲 27%」, 且只有斜着闪才发现。
-	var dir: Vector2 = BeltSpace.normalize_world(input_dir) if input_dir != Vector2.ZERO else facing_vec()
-	_face(dir.x)
+	var dir: Vector2 = BeltSpace.normalize_world(input_dir) if input_dir != Vector2.ZERO else BeltSpace.dir_to_screen(facing)
+	_face(dir)
 	state = State.DASHING
 	_charge_timer = 0.0
 	_parry_window_timer = 0.0
@@ -1131,10 +1142,10 @@ func _apply_damage(amount: int, from_position: Vector2) -> void:
 
 	# 击退方向 = 从伤害来源指向自己 (几何算法, 不依赖朝向)
 	# ⚠️ normalize_world —— 理由同 _enter_guard_broken: 屏幕上的单位向量不是世界单位向量
-	var away: Vector2 = -facing_vec()
+	var away: Vector2 = BeltSpace.dir_to_screen(-facing)
 	if from_position.is_finite():
 		var d: Vector2 = global_position - from_position
-		away = BeltSpace.normalize_world(d) if d.length() > 0.01 else -facing_vec()
+		away = BeltSpace.normalize_world(d) if d.length() > 0.01 else BeltSpace.dir_to_screen(-facing)
 	velocity = away * knockback_speed
 
 
@@ -1447,7 +1458,7 @@ func _draw_foot(at: Vector2, c: Color) -> void:
 	# 脚跟落在 at, 脚跟之上的小腿从袍摆里伸出来
 	draw_line(at + Vector2(0.0, -11.0), at, c, 3.0)
 	# 脚掌: 侧视里脚是有方向的, 脚尖朝朝向那一侧多伸一点
-	var f: float = float(facing)
+	var f: float = _side_facing()
 	var toe: float = 5.0 * f
 	var heel: float = -2.0 * f
 	var x0: float = at.x + minf(toe, heel)
@@ -1461,7 +1472,7 @@ func _draw_foot(at: Vector2, c: Color) -> void:
 ##    侧视看到的是人的**侧面** —— 肩窄、身厚、下摆喇叭, 而且脸的朝向必须靠
 ##    「五官往哪边偏」表达 (没有第二个轴可以用了)。
 func _draw_body(body_color: Color, flash: bool) -> void:
-	var f: float = float(facing)
+	var f: float = _side_facing()
 
 	_draw_legs()
 
@@ -1491,24 +1502,42 @@ func _draw_body(body_color: Color, flash: bool) -> void:
 	var head: Vector2 = Vector2(f * 1.5, -48.0)
 	draw_circle(head, 7.2, SKIN)
 
-	# 头发: 盖住**后脑 + 头顶**那一侧 (朝向的反面往上偏) + 一个发髻拖在更后面。
-	# 这一条是侧视里「他面朝哪」最主要的信号 —— 比眼睛更早被看到。
+	# 头部按**四向**分三种画法 —— 这是玩家读出「我面朝哪」的第一信号。
 	#
-	# ⚠️ 后偏量 (4.0) 和半径 (6.8) 是一对, 不能只改一个:
-	#    脸的可见宽度 ≈ sqrt((后偏+头半径)² + 上偏²) - 发半径。
-	#    第一版用 2.2/7.0 算出只有 3px, 画面上头就是**一颗纯黑的球**,
-	#    朝向完全读不出来 (而这一项正是切换视角要解决的那个痛点)。
-	draw_circle(head + Vector2(-f * 4.0, -3.0), 6.8, HAIR)
-	draw_circle(head + Vector2(-f * 6.4, -4.2), 3.2, HAIR)
+	# ⚠️ 面朝上 (走向纵深) 必须是**后脑**: 整颗头被头发盖住、没有五官。
+	#    如果这里偷懒沿用侧脸, 纵向走位就会变成「侧着身子滑冰」——
+	#    而这正是 v0.5 要解决的那个原始问题。
+	if facing.y > 0.5:
+		# 背面: 头发盖满 + 发髻
+		draw_circle(head + Vector2(0.0, -0.5), 7.0, HAIR)
+		draw_circle(head + Vector2(0.0, -6.4), 3.2, HAIR)
+	elif facing.y < -0.5:
+		# 正面: 刘海压在上半张脸, 两只眼。
+		# ⚠️ 刘海半径和眼睛高度是**一对**: 第一版刘海 r=5.4 压到 y=+1.6, 眼睛又在
+		#    y=2.0 —— 半个眼珠被头发吞掉, 画面上就是「正面那张脸没有五官」,
+		#    和背面的区别只剩「头发少盖了一点」。眼睛必须整颗落在刘海下沿之外。
+		draw_circle(head + Vector2(0.0, -4.2), 5.0, HAIR)
+		draw_circle(head + Vector2(-3.0, 2.6), 1.4, HAIR)
+		draw_circle(head + Vector2(3.0, 2.6), 1.4, HAIR)
+	else:
+		# 侧视: 头发盖住**后脑 + 头顶**那一侧 + 一个发髻拖在更后面。
+		# 这一条是侧视里「他面朝哪」最主要的信号 —— 比眼睛更早被看到。
+		#
+		# ⚠️ 后偏量 (4.0) 和半径 (6.8) 是一对, 不能只改一个:
+		#    脸的可见宽度 ≈ sqrt((后偏+头半径)² + 上偏²) - 发半径。
+		#    第一版用 2.2/7.0 算出只有 3px, 画面上头就是**一颗纯黑的球**,
+		#    朝向完全读不出来 (而这一项正是切换视角要解决的那个痛点)。
+		draw_circle(head + Vector2(-f * 4.0, -3.0), 6.8, HAIR)
+		draw_circle(head + Vector2(-f * 6.4, -4.2), 3.2, HAIR)
 
-	# 五官: 一只眼 + 一个鼻尖, 都压在朝向那一侧
-	draw_circle(head + Vector2(f * 3.4, -0.5), 1.5, HAIR)
-	# 鼻尖: 用小三角表达侧脸 —— 这是让「侧视」读起来不像「正面的圆」的关键一笔
-	draw_colored_polygon(PackedVector2Array([
-		head + Vector2(f * 6.5, -1.0),
-		head + Vector2(f * 10.0, 1.6),
-		head + Vector2(f * 6.5, 2.6),
-	]), SKIN.darkened(0.12))
+		# 五官: 一只眼 + 一个鼻尖, 都压在朝向那一侧
+		draw_circle(head + Vector2(f * 3.4, -0.5), 1.5, HAIR)
+		# 鼻尖: 用小三角表达侧脸 —— 这是让「侧视」读起来不像「正面的圆」的关键一笔
+		draw_colored_polygon(PackedVector2Array([
+			head + Vector2(f * 6.5, -1.0),
+			head + Vector2(f * 10.0, 1.6),
+			head + Vector2(f * 6.5, 2.6),
+		]), SKIN.darkened(0.12))
 
 
 ## 手里的刀 —— 侧视时刀在**竖直平面**里抡: 从身后上方劈到身前下方。
@@ -1524,7 +1553,7 @@ func _draw_body(body_color: Color, flash: bool) -> void:
 ##    忘了镜像的话, 朝左挥刀会朝**身后**挥 —— 而画面上只是「刀的方向有点怪」,
 ##    极难注意到, 但会让玩家觉得判定框在乱打。
 func _draw_sword() -> void:
-	var f: float = float(facing)
+	var f: float = _side_facing()
 	# 枢轴在**肩前**: 侧视时手在身体朝向前方那一侧
 	var pivot: Vector2 = Vector2(f * 5.0, -32.0)
 	## 静止时刀斜垂在身前下方 (≈ +1.1 rad)
@@ -1634,9 +1663,20 @@ func _charge_color(t: float) -> Color:
 ##    横版朝向只有左右, 边界恒好在角色的正中线上 —— 一条永远垂直、永远不动的线,
 ##    画出来只会让人以为「盾牌有角度要调」, 是一个纯误导。
 func _draw_shield() -> void:
-	var f: float = float(facing)
+	var f: float = _side_facing()
 	var parry_ready: bool = is_parry_window_open()
 	var c: Color = PARRY_READY_COLOR if parry_ready else SHIELD_COLOR
+
+	# 四向之后盾牌有三态 (占位美术的读法, 真 sprite 接进来时按 facing 选帧):
+	#   朝下 (正面) → 盾正对镜头, 画成一个挡在身前的椭圆
+	#   朝上 (背面) → 盾在身前、被身体挡住 → 不画
+	#   左右       → 原来的竖弧
+	if facing.y < -0.5:
+		draw_arc(Vector2(0.0, -30.0), 15.0, 0.0, TAU, 24, c, 3.2 if parry_ready else 2.4)
+		draw_circle(Vector2(0.0, -30.0), 15.0, Color(c.r, c.g, c.b, 0.14))
+		return
+	if facing.y > 0.5:
+		return
 
 	# 身前一道竖弧: 从头顶高度挡到膝盖高度。中间鼓出去一点, 像一面盾。
 	var arc: PackedVector2Array = PackedVector2Array()
@@ -1674,7 +1714,7 @@ func _draw_contact_flash() -> void:
 func _draw_dash_trail() -> void:
 	if state != State.DASHING:
 		return
-	var d: Vector2 = velocity.normalized() if velocity.length() > 1.0 else facing_vec()
+	var d: Vector2 = velocity.normalized() if velocity.length() > 1.0 else BeltSpace.dir_to_screen(facing).normalized()
 	for i: int in range(3):
 		var at: Vector2 = -d * float(i + 1) * 11.0
 		var a: float = 0.30 - float(i) * 0.09

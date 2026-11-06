@@ -140,7 +140,7 @@ func _update_text() -> void:
 		"vel = (%.1f, %.1f)   世界 |v| = %.1f  (期望 %.0f)" % [
 			vel.x, vel.y, BeltSpace.screen_speed_to_world(vel), _player.move_speed],
 		"朝向 = %s   离地 height = %.1f px   %s" % [
-			"右 →" if _player.facing > 0 else "← 左", _player.height,
+			Facing.describe(_player.facing), _player.height,
 			"地面" if _player.is_grounded() else "★空中"],
 		"状态 = %s" % BlitzPlayer.State.keys()[_player.state],
 		_attack_line(),
@@ -383,10 +383,12 @@ func _draw() -> void:
 	draw_line(pos + Vector2(-7, 0), pos + Vector2(7, 0), cross_color, 1.5)
 	draw_line(pos + Vector2(0, -7), pos + Vector2(0, 7), cross_color, 1.5)
 
-	# ④ 朝向箭头 —— 横版里它**只可能是水平的**, 因为它只有一个整数在背后。
+	# ④ 朝向箭头 —— 四向里它可以是上下左右任意一个。
+	#    ⚠️ facing 是**世界**方向, 画之前要过 Facing.to_screen_dir (压扁 + 归一化),
+	#       直接拿世界向量画的话, 朝上/朝下的箭头只有一半长。
 	#    ⚠️ 箭头的 y 要跟着 height 抬起来: 它标的是「角色面朝哪」, 不跟着身体走
 	#       就会出现「人跳到空中、箭头留在地上」的错位。
-	var d: Vector2 = _player.facing_vec()
+	var d: Vector2 = Facing.to_screen_dir(_player.facing)
 	var body_at: Vector2 = pos + Vector2(0.0, -_player.height)
 	draw_line(body_at, body_at + d * 30.0, arrow_color, 2.0)
 	# 箭头两侧的翅
@@ -422,7 +424,7 @@ func _draw() -> void:
 func _draw_attack_shapes(at: Vector2) -> void:
 	if not is_instance_valid(_player):
 		return
-	var f: int = _player.facing
+	var f: Vector2 = _player.facing
 
 	# ① 横劈 (轻击) 预览
 	_player.light_shape().draw_telegraph(
@@ -467,35 +469,37 @@ func _draw_depth_lane(cell: Vector2i) -> void:
 
 ## 格挡范围 —— **本面板存在的最大理由**。
 ##
-## 🏗️ 横版里判定的实质是「前后半平面」(见 player._is_in_guard_front):
-##    只看 X 方向的差, **纵深 (Y) 完全不参与**。
-##    所以可视化也从「扇形」变成「一条竖线 + 一侧淡带」—— 而且这一版更有说服力:
-##    竖线就是判定边界本身, 它沿纵深方向无限长, 玩家一眼就能看出
-##    「站在我上边还是下边都无所谓, 站在我左边就是挡不住」。
+## 🏗️ 判定的实质是「以朝向为法线的半平面」(见 player._is_in_guard_front):
+##    攻击者落在朝向那一侧就挡得住。左右朝向时它退化成一条竖线,
+##    上下朝向时退化成一条横线 —— 同一个公式, 四个方向都对。
 ##
 ## ⚠️ 仍然遵守那条不变量: **画出来的边界必须和实际判定用同一个数**。
 ##    这里的方向直接读 player.facing, 绝不自己另算一份 —— 否则就会出现
 ##    「面板说挡住了、实际判定说没挡住」, 一个只会在调试时把自己绕进去的假象。
-##    (v0.3 的扇形版本是同一条纪律, 只是当时的「那个数」是连续的 facing_dir。)
+##
+## ⚠️ 半平面是**世界平面**里的东西, 画到屏幕上必须过 BeltSpace.to_screen:
+##    朝向上下时, 那条「边界线」在屏幕上是横向的, 而且带子会被压扁一半 ——
+##    直接拿世界坐标画会得到一块尺寸不对、还指着斜方向的色块。
 func _draw_guard_plane(at: Vector2) -> void:
 	if not _player.is_guard_up():
 		return
 
-	var f: float = float(_player.facing)
+	var u: Vector2 = _player.facing
+	var p: Vector2 = Facing.perp(u)
 	var c: Color = parry_color if _player.is_parry_window_open() else cone_color
-	# 纵深方向要铺出去多远。140px ≈ 两个多格子, 够表达「上下都算正面」,
+	# 半平面要铺出去多远 (世界单位)。140 ≈ 两个多格子, 够表达「正面是一大片」,
 	# 又不至于把半个屏幕都染上色。
 	var band: float = 140.0
 
 	# ① 前侧半平面的淡带 —— 「这一侧的攻击都挡得住」
 	draw_colored_polygon(PackedVector2Array([
 		at,
-		at + Vector2(f * band, -band),
-		at + Vector2(f * band, band),
+		at + BeltSpace.to_screen(u * band + p * band),
+		at + BeltSpace.to_screen(u * band - p * band),
 	]), Color(c.r, c.g, c.b, 0.10))
 
-	# ② 边界竖线 —— **这一条就是判定线**, 比装饰画得粗、画得亮
-	draw_line(at + Vector2(0.0, -band), at + Vector2(0.0, band),
+	# ② 边界线 —— **这一条就是判定线** (沿垂直方向铺满), 比装饰画得粗、画得亮
+	draw_line(at + BeltSpace.to_screen(-p * band), at + BeltSpace.to_screen(p * band),
 		Color(c.r, c.g, c.b, 0.8), 2.0)
 	# ③ 身前朝向短线: 标出「正面」在哪边
-	draw_line(at, at + Vector2(f * 34.0, 0.0), c, 2.5)
+	draw_line(at, at + BeltSpace.to_screen(u * 34.0), c, 2.5)

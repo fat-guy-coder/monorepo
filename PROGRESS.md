@@ -1,6 +1,6 @@
 # 📊 全项目进度面板
 
-> 更新时间: 2026-10-29 | 当前活跃任务: **Blitz M0 美术风格锚定** —— 方向 A（冷青夜雨）已定；Retro Diffusion MCP 已接通并出了第 1 张试产图 + 6 帧 idle 动画；工具链补上**即梦 CLI**（先装通用创作 CLI 出锚图）。下一步：定锚图 + 跨动作一致性测试。v0.4 代码完成（自检 192 项）✅，仍待人工验收（F5）。美术路线见 [`ART_ROUTE_DECISION.md`](apps/game/blitz/ART_ROUTE_DECISION.md)，第一个盒子计划见 [`SLICE_01_PLAN.md`](apps/game/blitz/SLICE_01_PLAN.md)，美术目录见 [`art/README.md`](apps/game/blitz/art/README.md)。
+> 更新时间: 2026-10-30 | 当前活跃任务: **Blitz M0 美术风格锚定** —— 方向 A（冷青夜雨）已定。**Retro Diffusion 已断供弃用**（大陆支付渠道关闭），路线转向「**角色走 3D 预渲染（B）+ 场景/道具走 2D 像素**」的混合管线（依据 [`ART_ROUTE_DECISION.md §11`](apps/game/blitz/ART_ROUTE_DECISION.md)）；本地出图配置单已写好 [`art/LOCAL_COMFYUI.md`](apps/game/blitz/art/LOCAL_COMFYUI.md)，量化脚本 [`art/tools/palette_quantize.py`](apps/game/blitz/art/tools/palette_quantize.py) 已跑通。下一步：家里 5060 跑通本地出图，或做最小 3D 链路探针。**v0.5 四向朝向代码完成（自检 249 项）✅**，v0.4/v0.5 都待人工验收（F5）。第一个盒子计划见 [`SLICE_01_PLAN.md`](apps/game/blitz/SLICE_01_PLAN.md)，美术目录见 [`art/README.md`](apps/game/blitz/art/README.md)。
 
 > 🔸 **换电脑继续** —— 截至 2026-10-23 已提交并推送（`4ab5490`），`master` 与 `origin/master` 同步。
 > ⚠️ `apps/game/blitz/.gitignore` 忽略了 `export/`，`art/export/probe/` 的试产图**不在仓库里**（导出物可重建）；要看图就重新生成或手动拷贝。
@@ -286,9 +286,68 @@ v0.2 等距 / v0.3 战斗手感已完成。v0.4 的目标是把地面轴从等�
 12+11=23）。自检 185 → **192 项**（完全重合分离 / 追击不重合 / 能停稳 / 停稳不抖 / 顶不穿 / 保持间距）。
 `DESIGN.md` 新增「角色体积：世界空间软分离」一节。
 
-**闸门现状：** 闸门 1（解析）空 · 闸门 2（自检）**192 项检查 0 项失败** · 截图探针 17 张正常。另有第三层截图探针 `--shots`（自检看不见渲染 —— 已靠它逮到过一个「181 条全绿」的 bug）。
+**闸门现状（v0.4 收尾时）：** 闸门 1（解析）空 · 闸门 2（自检）**192 项检查 0 项失败** · 截图探针 17 张正常
+（v0.5 之后是 249 项 / 22 张，见下一节）。另有第三层截图探针 `--shots`（自检看不见渲染 —— 已靠它逮到过一个「181 条全绿」的 bug）。
 
 **关键不变量：** 一招 = **一个 `AttackShape` 实例**，预警 / `CollisionShape2D` / 自检读的都是它 → 漂移在结构上不可能。坐标桥只有 `belt_space.gd` 一处（`to_screen` / `to_world` / `ground_circle_shape`）。
+
+#### ✅ 里程碑：v0.5 四向朝向 —— 代码完成，待人工验收（2026-10-29）
+
+用户实测观感：**纵向移动时角色只有左右朝向很怪** —— 往屏幕里走却还侧着身子。
+已按「8 向移动 + 4 向朝向吸附」把代码改完（占位几何，不含真美术），先验手感、再出 3 视图锚图。
+
+| 项 | 落地情况 |
+|---|---|
+| 朝向模型 | 新增 `scripts/combat/facing.gd`（`class_name Facing`）：`RIGHT / LEFT / UP / DOWN` 四个**世界空间**单位向量。`UP = (0, +1)` = 世界 +z = 屏幕上方 = **背面**；`DOWN = (0, -1)` = 镜头这侧 = **正面** |
+| 换向规则 | `Facing.choose()`：无输入保持当前朝向；同一根轴（含反向）立即转；跨轴要求 `新分量 > 当前分量 × 1.25`（迟滞，防斜向走位时朝向逐帧乱翻）；出招/起手期间锁朝向 |
+| 代码波及 | `player.gd`（`facing: Vector2`、`_face()`、四向头部/盾牌画法、格挡半平面）、`enemy.gd`（巡逻 / 追击 / 被打转向）、`attack_shape.gd`（所有判定参数改 `Vector2`，矩形纵向时换宽高）、`attack_hitbox.gd` / `enemy_attack.gd` / `lightning_bolt.gd`、`debug_overlay.gd`、`smoke_test.gd` / `_shot_probe.gd` |
+| 美术成本 | 每个动作 **3 套唯一图**（侧视镜像 / 背面 / 正面）＝现在的 3 倍；仍比等距八向（8 套）便宜 |
+| 锚图 | M0 锚图要出 3 张视图，不是 1 张侧视 |
+
+**自检抓到的那个 bug（值得记）：** `_world_deltas_to_screen` / `polar_to_screen` /
+`collision_offset(CIRCLE)` 把**已经在局部朝向系里的偏移**又过了一遍 `_to_local`（正向旋转）。
+朝右时它是恒等变换、朝左时 180° 旋转在左右对称的形状上凑巧等价 —— **只有上下会错，而且整整歪 90°**，
+预警和判定体一起歪（画面上看不出「错」，只是打不到站对位置的人）。修法是补 `_local_to_world()`
+做逆变换，并让四个朝向、每个形状都跑一遍「数学 ⇔ 物理体 ⇔ 预警多边形」逐点比对（4 形状 × 4 朝向）。
+
+**闸门现状：** 闸门 1（解析）空 · 闸门 2（自检）**249 项检查 0 项失败**（v0.4 的 192 + 四向朝向 /
+朝上格挡 / 形状方向语义 / 四朝向逐点扫描）· 截图探针新增 `2b/2c`（背面/正面站立）、`6b`（朝上举盾）、
+`11b/11c`（朝上/朝下重劈）。
+
+**顺手修：** 正面视图的眼睛原来被刘海吞掉（刘海 r=5.4 压到 y=+1.6，眼睛在 y=2.0），
+截图里「正面那张脸没有五官」—— 现在眼睛整颗落在刘海下沿之外。
+
+**明确不在这一轮：** 真正的四向美术、攻击时的转身动画、斜向（45°）图。
+
+#### 🔜 v0.5.1 待做：正/背面美术（八向斜向已砍，2026-10-30 决定）
+
+> **决策（2026-10-30）**：**不做斜向（45°）朝向。** 四向就是终点。
+> 原要求是「玩家和敌人都要斜向面向」，复核后推翻 —— 理由见下表。
+
+| 项 | 现状 / 结论 |
+|---|---|
+| 敌人的竖向朝向 | ✅ **代码已通**：`facing` 是 `Vector2`，巡逻 `Facing.choose(axis*sign)`、追击 `_face_toward()` 都会转到上/下 |
+| 敌人的竖向攻击 | ✅ **代码已通**：`EnemyAttack.facing = facing`，`AttackShape` 抛弧按朝向旋转 —— 朝上/朝下出招已经打得到上方/下方的人 |
+| 敌人的正/背面身体 | ⚠️ **占位几何没画**：`enemy.gd` 的竖向朝向暂时复用侧视轮廓（`f = 1`），只有眼睛会跟着挪 —— **这才是 v0.5.1 真正要补的** |
+| 斜向（45°）朝向 | ❌ **不做**（原计划做 8 扇区吸附，本轮取消） |
+| 为什么不做 | 见下面三条 |
+
+**为什么四向就够（这不是省钱，是设计选择）：**
+
+1. **判定层本来就只有 4 个朝向。** 移动是 8 向输入，但 `Facing.choose` 只吸到 4 轴，
+   `AttackShape` 全部从 `facing` 生成 —— 加斜向要改的是吸附表 + 8 个形状朝向 + 测试矩阵，
+   而不加斜向**一行代码都不用改**。
+2. **4 轴玩法更清楚。** 攻击方向一眼可读；格挡是 `(受击方向 · 朝向) >= 0` 的**半平面**，
+   八向会把它变成 90° 锥，「我到底挡没挡住」变模糊。DNF / 怒之铁拳 4 / 龙之皇冠都是 4 向做法。
+3. **美术成本 ×5/3。** 四向已经是 3 套唯一图；八向是 5 套（侧、背、正、斜背 + 镜像、斜前 + 镜像），
+   而斜向在画面里是**瞬时状态**，玩家绝大多数时间在看侧视和正/背面。
+
+**唯一的代价**：斜着走时角色朝最近的轴，会有 45° 的「滑步」观感。
+现在靠两件事压住 —— `Facing.choose` 的 1.25 迟滞（不逐帧翻面）、出招锁朝向（不会边走边转）。
+真觉得别扭再加「斜走时身体轻微倾斜 + 步频 ×1.15」，切片阶段先不做。
+
+**什么条件下重新考虑**：如果走 3D 预渲染路线（B），斜向 = 「相机多转 45° 再渲一遍」，几乎免费；
+那时候也只是**可以**加，不是必须加 —— 换成八向只需替换 `Facing.choose` 的吸附表，`AttackShape` 不用动。
 
 #### 🎨 美术阶段：方向 A + M0 进行中（2026-10-23 更新）
 
@@ -304,9 +363,10 @@ v0.2 等距 / v0.3 战斗手感已完成。v0.4 的目标是把地面轴从等�
 | 风格方向 | **A. 冷青夜雨**（冷灰蓝石 + 玉青 + 鎏金 + 朱砂 + 雷光冷白） |
 | 一致性策略 | **UI / 角色 / VFX 锁死；地图按区域换色**（每图 8–12 色） |
 | 出图路线 | **AI 优先**：3 张锚图（角色 / 环境 / UI），不手收集参考 |
-| 首试模型 | Retro Diffusion hosted MCP（`https://mcp.retrodiffusion.ai/mcp`） |
-| 补充工具 | **即梦通用创作 CLI**（`dreamina`）：出锚图 / 兜底；全能画布 CLI（`dreamina-canvas`）暂不装 |
-| 工具分工 | 即梦定长相 → Retro Diffusion 定网格 + 量产帧 → Aseprite 定调色板 |
+| 首试模型 | ~~Retro Diffusion hosted MCP~~ → **本地 ComfyUI + SDXL**（见 [LOCAL_COMFYUI.md](apps/game/blitz/art/LOCAL_COMFYUI.md)） |
+| 补充工具 | **LiblibAI**（国内直付）/ **即梦**（网页版免费额度；CLI 需会员）/ 混元 3D・Tripo・Meshy（3D 支线） |
+| 工具分工 | 本地/国内出候选 → `palette_quantize.py` 定量化 → Aseprite 定调色板；**角色多方向/多动作走 3D 预渲染** |
+| 角色美术路线 | **3D 预渲染为默认方向（B）**，待 §11.3 最小链路探针验证（2026-10-30 复核） |
 
 **M0 新增文件（全部未跟踪）：**
 
@@ -323,6 +383,9 @@ v0.2 等距 / v0.3 战斗手感已完成。v0.4 的目标是把地面轴从等�
 | `art/style_bible/palette.gpl` | 43 色并集（Aseprite 一次载入） |
 | `art/manifest.example.json` | 动画清单模板 |
 | `art/rooms/room_01.txt` | 80×18 ASCII 可行走掩码（最大纵深 16 格） |
+| `art/LOCAL_COMFYUI.md` | 本地 ComfyUI 出像素配置单（5060 / 8GB 预算、下载清单、工作流、排错） |
+| `art/tools/comfy_pixel_sdxl.json` | 只用内置节点的 ComfyUI 工作流，可直接拖进画布 |
+| `art/tools/palette_quantize.py` | 大图 → 像素图（降采样 + LAB 感知量化 + 1px 描边 + `--check`） |
 
 **MCP 状态（2026-10-23）：**
 
@@ -338,18 +401,71 @@ v0.2 等距 / v0.3 战斗手感已完成。v0.4 的目标是把地面轴从等�
 - **尺寸问题**：192 画面里角色实际 167px，规格是 112px。缩放会破坏像素网格（`k_centroid_downscale` 还会丢 alpha），
   结论：**按最终尺寸原生生成**（角色建议 128×128，生成后约 111px），不要后期缩放。
 
-**即梦 CLI（2026-10-29 调研，尚未安装）：**
+**即梦 CLI（2026-10-29 已装，卡在会员门槛）：**
 
 | CLI | 装到 | 定位 | 结论 |
 |---|---|---|---|
-| 通用创作 `dreamina` | `~/.dreamina_cli/dreamina/`（二进制 + `SKILL.md`） | `text2image` / `image2image` / `image_upscale` / 视频 / `user_credit` / `session` / 异步 `submit_id` | ✅ **先装这个** |
-| 全能画布 `dreamina-canvas` | `~/.agents/skills/dreamina-canvas-cli/`（SHA-256 校验） | 画布项目 + 节点图 + 模型目录 + 音频/视频 + 积分报价确认 | ⏸ 等要拼 1280×720 锚定合成图再装 |
+| 通用创作 `dreamina` | `C:\Users\Administrator\bin\dreamina.exe` + `~/.dreamina_cli/dreamina/SKILL.md` | `text2image` / `image2image` / `image_upscale` / 视频 / `user_credit` / `session` / 异步 `submit_id` | ✅ 已装、已登录；⛔ **生成需即梦会员** |
+| 全能画布 `dreamina-canvas` | `~/.agents/skills/dreamina-canvas-cli/`（SHA-256 校验） | 画布项目 + 节点图 + 模型目录 + 音频/视频 + 积分报价确认 | ⏸ 未装，同样有订阅/积分门槛 |
 
-- 安装：`curl -s https://jimeng.jianying.com/cli | bash` —— 从字节 CDN 拉二进制 + 校验 `SKILL.md` MD5。
-- 登录是 OAuth Device Flow，**需要本人在浏览器确认**（`dreamina login` 会一直等到授权完成）。
-- 两个安装脚本都已下载到 `/tmp` 逐行看过（**未执行**）；完整说明见 [`art/MCP_SETUP.md §10`](apps/game/blitz/art/MCP_SETUP.md)。
-- 为什么先装通用 CLI：当前这一步只要「一张好看的角色锚图」，一条 `text2image` 就够；
-  画布 CLI 的项目 / 节点 / 报价层在这个阶段全是额外负担。
+- 安装：`curl -s https://jimeng.jianying.com/cli | bash` —— 从字节 CDN 拉二进制 + 校验 `SKILL.md` MD5，加用户 PATH（新终端生效）。
+- 登录：OAuth Device Flow，已授权成功（user_id 819593549972308，total_credit 40）。
+- **实测卡点**：`list_task` / `user_credit` 正常，但 `text2image` 返回
+  `当前账号没有 dreamina_cli 使用权限: 仅限会员用户使用`（不扣积分）→ **CLI 是会员功能**。
+- 结论：**暂不订阅**。M0 继续用 Retro Diffusion 出锚图；真要即梦的仙侠审美，先用网页版手动出（免费额度）。
+- 完整说明（含两个 CLI 对比、安装命令、分工）见 [`art/MCP_SETUP.md §10`](apps/game/blitz/art/MCP_SETUP.md)。
+
+**角色锚图试产 1（2026-10-29，$0.24）** —— 目标：先定长相，顺带回答「八向视图怎么出」。
+
+| 文件 | 模型 / 参数 | 结果 |
+|---|---|---|
+| `art/export/probe/anchor_side_2001.png` | `rd_pro__default` 128×128 seed 2001 remove_bg | 长相最好（深青袍 + 鎏金边 + 发髻 + 直剑），但视角是 **3/4 正面**，不是侧视 |
+| `art/export/probe/turnaround_3001_a.png` | `character_turnaround:rd_flux` 256×256 ×2 seed 3001 | **左向侧视 + 背面** + 一把剑 |
+| `art/export/probe/turnaround_3001_b.png` | 同上 | **右向侧视 + 3/4 + 背面** |
+
+**工具链结论（重要）**：
+
+1. `rd_pro` 对「side view facing right」基本不买账，会自己选 3/4 正面 —— 定**长相**用它，
+   定**朝向视图**别用它。
+2. **`character_turnaround:rd_flux` 是出多视图锚图的正确工具**（rd_fast，$0.03/张，比 rd_pro 便宜 6 倍）：
+   一张图里直接给你 侧视 + 背面（有时还有 3/4），正好对上 v0.5 的四向需求。
+   斜向不做（2026-10-30 决定，见 v0.5.1 一节），所以 3/4 视角只当长相参考，不进资产。
+3. 余额：**$0.089**（RD Pro 一张 $0.18 已经付不起，rd_fast 还能出 2 张）。
+
+### ⛔ 2026-10-30 转向：Retro Diffusion 断供，改「本地 ComfyUI + 3D 预渲染」
+
+RD 的大陆支付渠道已关闭，剩下的 $0.089 连一张 rd_fast 都出不了 —— **已放弃，不再充值**。
+同一天复核了美术路线，结论写进了 [`ART_ROUTE_DECISION.md §11`](apps/game/blitz/ART_ROUTE_DECISION.md)：
+
+| 变化 | 影响 |
+|---|---|
+| 朝向从 ±1 → **四向（v0.5）**；八向已砍（2026-10-30） | 2D 每个动作要画 **3 组**；3D 只是多渲两个机位 → **成本乘数倒向 3D** |
+| AI 3D 建模变好（四边面 / 自动绑骨 / 预设动作） | 且它的短板（拓扑、手指、脸）在 **112px 像素化下基本看不见** |
+| 2D 的 AI 主力工具没了 | 本地 ComfyUI + LiblibAI 还没在本项目验证过，2D 路线现在是不对称的劣势方 |
+
+**已落地的新文件：**
+
+| 文件 | 作用 |
+|---|---|
+| [`art/LOCAL_COMFYUI.md`](apps/game/blitz/art/LOCAL_COMFYUI.md) | 本地出像素的完整配置单：下载清单（ComfyUI 便携版 / SDXL / Pixel Art XL / 2D Pixel Toolkit LoRA）、8GB 显存账、启动参数、工作流、排错 |
+| [`art/tools/comfy_pixel_sdxl.json`](apps/game/blitz/art/tools/comfy_pixel_sdxl.json) | 可直接拖进 ComfyUI 的工作流，**只用内置节点**（不装任何自定义节点就能跑） |
+| [`art/tools/palette_quantize.py`](apps/game/blitz/art/tools/palette_quantize.py) | 大图 → 像素图：面积平均降采样 + 中值滤波 + **LAB 感知距离**吸附 `palette.gpl` + 1px 外描边；带 `--check` 自检 |
+
+**玩法定位同期修正（2026-10-30）：技能主导，动作为辅。**
+2D + 四向朝向装不下深动作博弈，深度改由技能构筑承担（`DESIGN.md`「玩法重心」一节）。
+连带结论：美术吃工的大头从「角色动作帧」挪到 **技能 VFX + Boss 技能组**；
+分工表与「AI 序列帧能用到哪」见 [`ART_ROUTE_DECISION.md §12`](apps/game/blitz/ART_ROUTE_DECISION.md)。
+
+**博弈模型也定了**：`DESIGN.md` 新增「博弈从哪来：读招 → 应对 → 代价」——
+博弈不来自连段数量，来自**有代价的选择**；技能主导是决策层，动作是执行层（连招降为表达）。
+配套三条防退化纪律：资源同池 / 位形竞争 / 敌人会破；每个技能必须回答「解决什么招 / 用错损失什么 / 敌人怎么破」。
+
+**下一步（不再依赖 RD）：**
+
+1. 家里 5060 上按 `LOCAL_COMFYUI.md` 跑通 → 单张 ≤40 秒、`--check` 通过（未在本机验证过，第一次跑完回来补实测数字）
+2. **最小 3D 链路探针（2~3 天）**：锚图 → Tripo/Meshy 建模 + 自动绑骨 → Mixamo idle/挥击 →
+   Blender 正交渲 4 机位 → `palette_quantize.py` → 摆进 Godot 看 1× 观感（判定标准见 `ART_ROUTE_DECISION.md §11.3`）
+3. 探针通过 → 走 B 量产；不通过 → 退回 2D，并把体量压到 2~4 个敌人
 
 **下一次继续就做这批（6 张候选，约 $0.18）：**
 
@@ -375,10 +491,12 @@ upper-left light, dark outline, limited palette of 16 colors, on a plain white b
 ✅ **`DESIGN.md` 已回填成 v0.4**，现在它是唯一权威设计文档（视角选型 / 坐标模型 / 攻击形状 / 代码地图 / 验收清单）。
 `V04_PLAN.md` 降为过程档案（逐步记录 + 踩坑 + 已知问题）。
 
-⚠️ **v0.4 还差人工验收**（必须 F5 真开窗口）：横向跟地砖对得上吗 / 跳跃读得出吗 / 预警看得见吗 /
+⚠️ **v0.4 / v0.5 还差人工验收**（必须 F5 真开窗口）：横向跟地砖对得上吗 / 跳跃读得出吗 / 预警看得见吗 /
 纵深容差合适吗 / 跳得开低扫吗 / 精准格挡有回报吗 / 精力逼出取舍吗 / 破防够痛吗 / 角色互相顶得住吗。
+**v0.5 新增要看的**：上下走位时背面/正面读得出来吗 / 斜向走位朝向会不会抖 / 朝上朝下攻击的范围朝向对不对 /
+朝上举盾时边界线在上方吗。截图探针 `--shots` 已经能不进游戏看这几项。
 
-**继续指令：** 「继续 Blitz 的 M0 美术风格锚定。先读 `apps/game/blitz/SLICE_01_PLAN.md`、`apps/game/blitz/art/README.md`、`apps/game/blitz/art/style_bible/M0_CHECKLIST.md` 和 `apps/game/blitz/art/MCP_SETUP.md`。方向已定 A（冷青夜雨），Retro Diffusion MCP 已接通（余额约 $0.33），第 1 张试产图在 `art/export/probe/probe_001_seed1000.png`，6 帧 idle 动画在 `art/export/probe/idle_6f.gif`。工具链已定为「即梦定长相 → Retro Diffusion 定网格 → Aseprite 定调色板」；如果即梦 CLI 还没装，先装通用创作 CLI（`curl -s https://jimeng.jianying.com/cli | bash`，登录要我本人授权）。下一步：用即梦出 6 张角色候选定 `anchor_character.png`，再用 Retro Diffusion `detailed:rd_flux` 按 128×128 原生尺寸出 seed 1001–1005 对比，挑定后出 slash/jump 各 3 张做跨动作一致性测试。v0.4 的人工验收如果还没过，穿插着做。」
+**继续指令：** 「继续 Blitz 的 M0 美术锚定。先读 `apps/game/blitz/art/LOCAL_COMFYUI.md`、`apps/game/blitz/ART_ROUTE_DECISION.md`（重点 §11）、`apps/game/blitz/art/README.md`、`apps/game/blitz/art/style_bible/M0_CHECKLIST.md`。**Retro Diffusion 已断供弃用**（支付渠道关闭，余额 $0.089），路线已转向「角色走 3D 预渲染（B）+ 场景/道具走 2D 像素」的混合管线。下一步二选一：① 在家里 RTX 5060 上按 `LOCAL_COMFYUI.md` 跑通本地出图（ComfyUI 便携版 + SDXL + 工作流 `art/tools/comfy_pixel_sdxl.json` + `art/tools/palette_quantize.py`），第一次跑完把实测速度补进文档 §1；② 做 **最小 3D 链路探针**（拿 `art/export/probe/turnaround_3001_a.png` → Tripo/Meshy 建模+自动绑骨 → Mixamo idle/挥击 → Blender 正交渲 4 机位 → 量化 → 摆进 Godot 看 1× 观感），判定标准见 `ART_ROUTE_DECISION.md §11.3`。⚠️ 锚图要 **3 张视图**（侧视 / 背面 / 正面），v0.5 已把朝向改成四向。v0.4/v0.5 的人工验收如果还没过，穿插着做（`--shots` 能离线看朝向与范围）。」
 
 ---
 
@@ -447,7 +565,7 @@ API 文档: `apps/backend/API.md` | 快速启动: `docker-compose up -d backend 
 | 继续 Go 文档 | 「继续 Go 学习文档的填充，从阶段 2 开始」 |
 | 继续 Godot 文档 | 「继续 Godot 学习文档的填充」 |
 | 继续后端开发 | 「继续后端 API 开发」 |
-| 继续游戏开发 | 「继续 Blitz 的 M0 美术。先读 `apps/game/blitz/SLICE_01_PLAN.md`、`art/README.md`、`art/style_bible/M0_CHECKLIST.md`、`art/MCP_SETUP.md`；方向 A 已定、Retro Diffusion MCP 已接通；工具链=即梦定长相 → Retro Diffusion 定网格 → Aseprite 定调色板。先出锚图，再跨动作一致性测试」 |
+| 继续游戏开发 | 「继续 Blitz 的 M0 美术。先读 `apps/game/blitz/art/LOCAL_COMFYUI.md`、`apps/game/blitz/ART_ROUTE_DECISION.md §11`、`art/README.md`、`art/style_bible/M0_CHECKLIST.md`；RD 已断供弃用，路线=角色走 3D 预渲染（B）+ 场景/道具走 2D 像素；本地出图走 ComfyUI + `art/tools/palette_quantize.py`。下一步：本地跑通，或做最小 3D 链路探针」 |
 
 > **提示：** 新会话中 AI 首先读取 `README.md` 和 `PROGRESS.md`（本文件），即可了解全局状态和当前任务。
 
