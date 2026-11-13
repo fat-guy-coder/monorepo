@@ -123,6 +123,12 @@ signal parried(at: Vector2)
 signal blocked(at: Vector2)
 ## 精力耗尽被打崩
 signal guard_broken()
+## 护体罡气张开 (v0.6 —— 「用输出换容错」的第一个技能)
+signal aura_cast(at: Vector2)
+## 护体罡气吃掉了一次伤害 (罡气随即消失)
+signal aura_absorbed(at: Vector2)
+## 剑阵落成 (v0.7 —— 「布置」类技能, 世界坐标是阵心)
+signal sword_array_cast(at: Vector2)
 
 # ============================================================
 # 节点引用 (player.tscn 里预创建)
@@ -186,6 +192,26 @@ const JUMP_ACTION: String = "jump"
 ##    就按了跳, 那一帧不能起跳, 输入就**丢了**。这不是手感问题, 是输入丢失,
 ##    在平地横版里一样会发生。所以这个留, 那个删。
 @export var jump_buffer_time: float = 0.08
+
+## 落地硬直 (秒) —— **跳跃的代价**。
+##
+## 🏗️ 为什么需要它: 没有落地硬直的时候, 「跳过去」是躲横扫的**零代价**答案
+##    (跳跃高度 96 > 横扫的高度带 40), 玩家根本不需要读招。有了它, 跳 =
+##    「用 0.18 秒的输出窗口换安全」—— 而敌人的收招破绽正好是这个长度。
+##
+## ⚠️ 只锁**进攻** (轻击/重击/技能), **不锁跳跃 / 闪避 / 格挡**:
+##    · 锁跳跃会让「落地」变得黏手, 而且跳跃本身不是进攻手段;
+##    · 闪避是花了 25 精力买来的, 它本来就该能救场;
+##    · 格挡是防御姿态, 落地后第一反应就该是举盾 —— 锁掉它只会让人觉得自己被卡住。
+##    锁进攻就够了: 跳跃真正损失的是**敌人的收招破绽**这个输出窗口。
+@export var landing_lag_time: float = 0.18
+## 触发落地硬直的最小下落速度 (px/s)。低于它 = 小跳/轻微起伏, 不罚。
+##
+## 可变跳跃高度会让「轻点」的落地速度小很多 (截断后约 -234, 满跳约 -520),
+## 所以这个门槛决定「小跳算不算作弊」。150 让两种跳都触发, 只放过真正的细微起伏。
+@export var landing_min_impact: float = 150.0
+## 落地硬直期间保留的移动能力 (倍率)。
+@export var landing_move_scale: float = 0.7
 ## 走路摆动周期的换算系数: _walk_phase 每秒推进 velocity.length() * 这个值。
 ## 调大 = 腿摆得更快 (步子显得更碎)。
 @export var walk_phase_rate: float = 0.055
@@ -243,23 +269,17 @@ const JUMP_ACTION: String = "jump"
 @export var charge_move_scale: float = 0.5        ## 蓄力时可以慢走 (用户选定的手感)
 
 # ============================================================
-# 技能: 落雷 (圆) —— 面朝方向一定距离处, 延迟生效
+# 技能 —— **数值与形状全部在 `scripts/combat/skill_book.gd`** (v0.9)
 # ============================================================
-## 落雷的伤害。比满蓄重击略低、比横劈高得多 —— 它的价值在「远」和「一片全中」,
-## 伤害再给到最高的话, 另外两招就都没有存在理由了。
-@export var skill_damage: int = 3
-## 落点离角色多远 (世界单位)。132 ≈ 两格 —— 刚好是「横劈够不到、走过去又要一步」的距离。
-@export var skill_distance: float = 132.0
-## 落雷圈的半径 (世界单位)。46 ≈ 0.7 格; 在 2:1 压扁下屏幕上是一个 92×46 的椭圆。
-@export var skill_radius: float = 46.0
-## 从天而降需要的时间 (秒)。**这是这一招唯一的代价** —— 见下面 _cast_skill 的 🏗️。
-@export var skill_arm_delay: float = 0.38
-## 出招硬直 (抬手 → 手放下)。这段里不能动也不能防, 放空了就是白挨一下。
-@export var skill_recovery: float = 0.35
-@export var skill_cooldown: float = 0.9
-@export var skill_cost: float = 35.0
-## 0 = 范围内的全中 (落雷就该是这样, 不用像横劈那样限量)
-@export var skill_max_targets: int = 0
+#
+# 为什么搬走: 原来三个技能 = 15 个 @export + 三个专属施放函数。加第四个技能要
+# 同时动状态机 / 冷却 / 动画 / 输入四处 —— 而「技能是什么」本该只是一份数据。
+# 现在这里只剩三件事:
+#   ① 输入 → SkillBook 的哪个 id   (见 _process_normal)
+#   ② 按 family 分派的执行代码      (见 _cast_skill)
+#   ③ 冷却字典 (所有技能共用一份, 不再一人一个计时器变量)
+# 每一招的数值理由 (落雷的延迟代价 / 罡气的互斥 / 剑阵的布置) 随数值一起
+# 搬进了 SkillBook._make_* 的注释里, 没有丢。
 
 # ============================================================
 # 格挡参数
@@ -339,8 +359,14 @@ var _height_vel: float = 0.0
 var _grounded: bool = true
 ## 落地前提前按跳的缓冲计时器
 var _jump_buffer_timer: float = 0.0
-## 走路摆动相位。腿的摆动只跟**位移速度**有关, 站着不动就停住 —— 见 _draw_legs()
+## 走路摆动相位。腿的摆动只跟**位移速度**有关, 站着不动就停住 —— 见 anim_phase()
 var _walk_phase: float = 0.0
+## 纯视觉时钟。**只**用于那些没有对应计时器的姿态 (站立呼吸、格挡时的轻微起伏)。
+##
+## ⚠️ 别拿它去做任何判定相关的事 —— 它的唯一职责是「让静止的角色看起来是活的」。
+##    一旦有判定依赖它, 就出现了第二个时钟, 动画和判定会开始各自漂移
+##    (那个 bug 的表现是「动画早就打完了, 伤害却在半秒后才出现」, 极难定位)。
+var _anim_clock: float = 0.0
 
 var health: int = 0
 var invincible_timer: float = 0.0
@@ -361,7 +387,28 @@ var _parry_cooldown_timer: float = 0.0
 var _parry_flash_timer: float = 0.0
 var _block_flash_timer: float = 0.0
 var _guard_break_timer: float = 0.0
-var _skill_cooldown_timer: float = 0.0
+## 所有技能的冷却, **按 SkillDef.id 索引**。
+##
+## 🏗️ 一份字典而不是三个计时器变量: 前者对「第 N 个技能」天然成立, 后者每加
+##    一个技能就要加一个变量、一行递减、一处复活清理 —— 然后其中一处忘了,
+##    表现是「复活后剑阵还在冷却」或「某个技能永远不会冷却」, 都很难看出。
+## ⚠️ 键是 SkillDef.id (StringName)。技能目录里 id 唯一由 SkillBook.problems() 守着。
+var _cooldowns: Dictionary = {}
+## 当前正在放的技能 id —— 动画选择用 (见 anim_state)。
+var _cast_skill_id: StringName = &""
+## 落地硬直剩余时间 (>0 = 刚落地, 不能进攻)
+var _landing_timer: float = 0.0
+## 护体罡气剩余时间 (>0 = 罡气开着, 能吃伤害, 也不能输出)
+var _aura_timer: float = 0.0
+## 罡气还能吃几次伤害 (SkillDef.absorb_hits, 当前 = 1)
+var _aura_hits: int = 0
+## 罡气被打破时的白光计时 (纯视觉)
+var _aura_flash_timer: float = 0.0
+## 施放硬直。**只锁进攻**, 不锁走位/闪避/格挡 (和落地硬直、罡气同一条理由:
+## 锁一切会读成卡顿, 锁进攻才是「这一下你出不了别的招」)。
+## 单独一个计时器而不是借用 _attack_cooldown_timer: 后者只挡轻击和重击,
+## 挡不住落雷和下一个剑阵 —— 那样「插阵 → 立刻放雷」会变成无硬直连招。
+var _cast_lock_timer: float = 0.0
 
 ## 落雷的特效节点 (挂在 FX 层)。出招被打断时要**主动**收掉它 ——
 ## 它自己只会到点消失 (雷劈完就走), 而「雷还没落就断招」时它必须当场没影,
@@ -477,7 +524,13 @@ func _physics_process(delta: float) -> void:
 func _update_timers(delta: float) -> void:
 	_dash_cooldown_timer = maxf(0.0, _dash_cooldown_timer - delta)
 	_attack_cooldown_timer = maxf(0.0, _attack_cooldown_timer - delta)
-	_skill_cooldown_timer = maxf(0.0, _skill_cooldown_timer - delta)
+	# 所有技能冷却一起走 —— keys() 返回的是副本, 边删边遍历是安全的。
+	for id: StringName in _cooldowns.keys():
+		var left: float = float(_cooldowns[id]) - delta
+		if left <= 0.0:
+			_cooldowns.erase(id)
+		else:
+			_cooldowns[id] = left
 	invincible_timer = maxf(0.0, invincible_timer - delta)
 	_hit_stun_timer = maxf(0.0, _hit_stun_timer - delta)
 	_hit_flash_timer = maxf(0.0, _hit_flash_timer - delta)
@@ -488,6 +541,11 @@ func _update_timers(delta: float) -> void:
 	_parry_flash_timer = maxf(0.0, _parry_flash_timer - delta)
 	_block_flash_timer = maxf(0.0, _block_flash_timer - delta)
 	_guard_break_timer = maxf(0.0, _guard_break_timer - delta)
+	_landing_timer = maxf(0.0, _landing_timer - delta)
+	_aura_timer = maxf(0.0, _aura_timer - delta)
+	_aura_flash_timer = maxf(0.0, _aura_flash_timer - delta)
+	_cast_lock_timer = maxf(0.0, _cast_lock_timer - delta)
+	_anim_clock += delta
 
 
 # ============================================================
@@ -531,9 +589,14 @@ func _apply_vertical(delta: float) -> void:
 		_height_vel = maxf(_height_vel - gravity * delta, -max_fall_speed)
 		height += _height_vel * delta
 		if height <= 0.0:
+			# ⚠️ 落地速度必须在清零**之前**读 —— 清零之后就没法判断「这是真跳还是轻微起伏」了。
+			var impact: float = _height_vel
 			height = 0.0
 			_height_vel = 0.0
 			_grounded = true
+			# 落地硬直 —— 跳跃的代价 (见 landing_lag_time 的 🏗️)
+			if impact <= -landing_min_impact:
+				_landing_timer = landing_lag_time
 
 	# ⑤ 走路相位: 只跟位移速度挂钩, 站着不动就停住。
 	#    ⚠️ 用速度而不是「有没有按键」—— 松键滑行的那一小段腿还在动,
@@ -562,7 +625,9 @@ func is_grounded() -> bool:
 # ============================================================
 func _process_normal(delta: float) -> void:
 	var input_dir: Vector2 = _input_screen_dir()
-	_apply_move(input_dir, move_accel, move_decel, delta)
+	# 落地硬直只让走位变钝, 不让人定住 —— 定住会读成「卡了」, 变钝才是「还没站稳」。
+	var move_scale: float = landing_move_scale if _landing_timer > 0.0 else 1.0
+	_apply_move(input_dir, move_accel, move_decel, delta, move_scale)
 	# 朝向只看水平分量 —— 纵深移动不转身 (见文件头 ④)
 	_face(input_dir)
 
@@ -575,14 +640,30 @@ func _process_normal(delta: float) -> void:
 		_start_dash(input_dir)
 		return
 
+	# 护体罡气排在进攻之前: 它是**防御反应**, 而这时候玩家往往正被逼到墙角。
+	# ⚠️ 它不过 `_can_start_offense` —— 罡气恰恰要在「落地硬直/被逼住」时能开。
+	if Input.is_action_just_pressed("aura") and _can_cast(SkillBook.AURA):
+		_cast_skill(SkillBook.AURA)
+		return
+
+	# 剩下四件都是「进攻」, 统一走一个闸门 (落地硬直 / 罡气期间不能出手)
+	if not _can_start_offense():
+		return
+
+	# 剑阵排在重击之前: 它是「布置」, 不接续任何一次出手 ——
+	# 蓄力中按 O 会被 CHARGING 状态吃掉, 这是对的 (蓄力是按住型输入)。
+	if Input.is_action_just_pressed("sword_array") and _can_cast(SkillBook.SWORD_ARRAY):
+		_cast_skill(SkillBook.SWORD_ARRAY)
+		return
+
 	if Input.is_action_just_pressed("attack_heavy") and _can_start_heavy():
 		_enter_charging()
 		return
 
 	# 技能排在重击**之后**: 蓄力是按住型的, 重击一旦进入 CHARGING 就吃掉后续输入,
 	# 顺序反过来会让「按住 K 的同时碰了一下 U」变成放技能 (玩家想蓄力却放了雷)。
-	if Input.is_action_just_pressed("attack_skill") and _can_cast_skill():
-		_begin_attack(AttackKind.SKILL, 0.0)
+	if Input.is_action_just_pressed("attack_skill") and _can_cast(SkillBook.LIGHTNING):
+		_cast_skill(SkillBook.LIGHTNING)
 		return
 
 	if Input.is_action_just_pressed("attack_light") and _attack_cooldown_timer <= 0.0:
@@ -883,45 +964,113 @@ func _begin_attack(kind: AttackKind, charge: float) -> void:
 			var breaks: bool = charge >= heavy_armor_break_ratio
 			_spawn_attack_hitbox(heavy_shape(), dmg, breaks, heavy_max_targets)
 		AttackKind.SKILL:
-			_cast_skill()
+			# ⚠️ SKILL 只是**测试/兼容**入口 (自检直接用 _begin_attack(..., SKILL) 触发落雷)。
+			#    真实输入走 _cast_skill(SkillBook.X)。落雷不是唯一的技能, 所以这里必须
+			#    显式写 id —— 不能沿用「SKILL 就一定是落雷」的旧假设。
+			_cast_skill(SkillBook.LIGHTNING)
 
 
-## 落雷 —— 这一招唯一有「延迟」的攻击, 所以它单独一个函数。
+## 放一个技能 —— **唯一入口**。按 SkillDef.family 分派到三段执行代码。
 ##
-## 🏗️ 为什么要用 `arm_delay` 而不是「挥完手再生成一个判定框」:
-##   两者看起来一样, 但差在**出招被打断**的时候。挂在同一次出招上的话,
-##   玩家在这 0.38 秒里被敌人打断 → 判定框和特效随出招一起消失, 圈不见了、雷也没了,
-##   玩家看到的是「我按了, 圈亮了一下, 然后什么都没发生, 但我挨了一下」。
-##   这个因果链在屏幕上是**读不出来**的 (玩家不会知道是自己被打断了)。
-##   现在的行为是: 打断就整招取消, 圈**当场消失** —— 至少「圈没了 = 这招废了」是自洽的。
-##   ⚠️ 所以取消出招 (take_damage) 时必须把特效和判定框一起收掉, 见 _cancel_attack_children。
+## 🏗️ 这就是 v0.9 把技能搬进数据表换来的东西: 状态机不再认识「落雷」「罡气」
+##    「剑阵」这些名字, 只认识三种**执行方式**。加第四个技能不需要动这里。
 ##
-## ⚠️ 别在这里算落点。`LightningBolt` 和 `AttackHitbox` 一样, 挂在**玩家脚下**
-##    (传 global_position), 由 shape 自己说出范围在身前哪儿。
-##    第一版在这里加了 `+ sh.collision_offset(facing)`, 而 FX 内部画预警时也按
-##    「origin = 攻击者脚下」的约定又偏了一次 —— 于是圈被推到了离落点 132px 的地方,
-##    也就是「预警说这儿、伤害在那边」。两个消费者遵守同一条摆放规则, 这类双偏移
-##    在结构上才不可能发生。
-func _cast_skill() -> void:
-	if not stamina.spend(skill_cost):
-		# 精力不够 —— 不该走到这里 (_can_cast_skill 已经拦过), 但不能靠上游的检查活着:
-		# 上游改了而这里没跟上, 表现就是「精力没了还能放技能」, 静默且不会报错。
+## ⚠️ 精力不够时不能靠上游的检查活着 (上游改了而这里没跟上, 表现就是
+##    「精力没了还能放技能」, 静默且不报错) —— 所以扣费失败要自己回滚状态。
+func _cast_skill(id: StringName) -> void:
+	var d: SkillDef = SkillBook.get_def(id)
+	if d == null:
+		state = State.NORMAL
+		return
+	if not stamina.spend(d.stamina_cost):
 		state = State.NORMAL
 		return
 
-	_attack_total = skill_recovery
-	_attack_timer = skill_recovery
-	_skill_cooldown_timer = skill_cooldown
+	# 冷却统一记在字典里 —— 三个技能共用一份, 不再一人一个计时器变量。
+	# ⚠️ 键是 def.id 而不是传进来的 id: SkillBook.problems() 会校验两者一致,
+	#    但这里也以 def 为准, 未知 id 不可能写进一个没人递减的键。
+	_cooldowns[d.id] = d.cooldown
+	_cast_skill_id = d.id
 
-	var sh: AttackShape = skill_shape()
-	# 判定: 带 arm_delay, 前 0.38 秒完全不生效
-	_spawn_attack_hitbox(sh, skill_damage, false, skill_max_targets, skill_arm_delay)
-	# 视觉: 和判定同一次出招、同一个 shape
-	var at: Vector2 = global_position
-	var fx: LightningBolt = LightningBolt.spawn(
-		get_tree(), at, sh, facing, skill_arm_delay)
-	if fx != null:
-		_skill_fx = fx
+	match d.family:
+		SkillDef.Family.STRIKE:
+			_cast_strike(d)
+		SkillDef.Family.BUFF:
+			_cast_buff(d)
+		SkillDef.Family.PLACE:
+			_cast_place(d)
+
+
+## STRIKE —— 生成判定框 (+ 可选特效), 进 ATTACKING 播施法姿态。
+##
+## 🏗️ 为什么落雷用 `arm_delay` 而不是「挥完手再生成一个判定框」:
+##   两者看起来一样, 但差在**出招被打断**的时候。挂同一次出招上的话, 玩家在延迟里
+##   被敌人打断 → 判定框和特效随出招一起消失, 圈不见了、雷也没了, 玩家看到的是
+##   「我按了, 圈亮了一下, 然后什么都没发生, 但我挨了一下」。这个因果链在屏幕上
+##   **读不出来**。现在的行为是: 打断就整招取消, 圈**当场消失** —— 至少
+##   「圈没了 = 这招废了」是自洽的 (见 _cancel_pending_attack)。
+##
+## ⚠️ 别在这里算落点。`LightningBolt` 和 `AttackHitbox` 一样, 挂在**玩家脚下**
+##    (传 global_position), 由 shape 自己说出范围在身前哪儿。第一版在这里加了
+##    `+ sh.collision_offset(facing)`, 而 FX 内部又按「origin = 攻击者脚下」偏了一次
+##    —— 圈被推到离落点 132px 的地方, 「预警说这儿、伤害在那边」。
+##    两个消费者遵守同一条摆放规则, 这类双偏移在结构上才不可能发生。
+func _cast_strike(d: SkillDef) -> void:
+	_attack_kind = AttackKind.SKILL
+	state = State.ATTACKING
+	_attack_total = d.recovery
+	_attack_timer = d.recovery
+
+	var sh: AttackShape = d.make_shape()
+	# 判定: 带 arm_delay, 之前完全不生效
+	_spawn_attack_hitbox(sh, d.damage, d.has_tag(SkillDef.TAG_ARMOR_BREAK),
+		d.max_targets, d.arm_delay)
+	_spawn_skill_fx(d, sh)
+
+
+## BUFF —— 给自己挂一个持续计时器 (罡气)。**不进 ATTACKING**。
+##
+## 🏗️ 罡气期间玩家还能走、能闪、能挡; 塞进 ATTACKING 的话得为「出招中怎么移动」
+##    再写一套, 还会被 _cancel_pending_attack / 受击打断这些为攻击准备的分支误伤。
+func _cast_buff(d: SkillDef) -> void:
+	_aura_timer = d.duration
+	_aura_hits = d.absorb_hits
+	aura_cast.emit(global_position + Vector2(0.0, -22.0))
+
+
+## PLACE —— 在世界层丢一个留在原地的阵 (剑阵), 自己只留一小段施放硬直。
+##
+## ⚠️ 阵挂在**玩家父节点** (即 y-sort 的 World) 上, 不是挂在玩家身上, 也不是 FX 层:
+##    · 挂玩家身上 → 玩家一动阵就跟着走, 「布置」直接退化成「光环」;
+##    · 挂 FX 层 (z=40) → 阵会盖在角色脸前面;
+##    · 挂 World → 和敌人、地面同处一个 y-sort 世界, 再用绝对 z=-5 落地。
+##
+## 🏗️ 施放者**死掉**时阵还在: 这是刻意的。阵是场景物件, 不是玩家状态。
+##    玩家被围殴时插一个阵再倒下, 那几秒的持续伤害仍然在帮忙 —— 「先手投资」的味道。
+func _cast_place(d: SkillDef) -> void:
+	_cast_lock_timer = d.recovery
+
+	# 阵心 = 玩家此刻**脚底**的世界坐标。global_position 已经是 (x, -z) 的屏幕表示,
+	# 换回世界才是同一种尺子 —— 不换算的话半径会按屏幕比例被压扁。
+	var at: Vector2 = BeltSpace.to_world(global_position)
+	var host: Node = get_parent()
+	SwordArray.spawn(host, at, d.place_radius, d.duration,
+		d.tick_interval, d.tick_damage)
+
+	sword_array_cast.emit(at)
+
+
+## 技能特效的注册表 —— `SkillDef.fx` 是名字, 这里是「名字 → 怎么生」。
+##
+## ⚠️ 只有**需要专属特效**的技能才必须改到这里 (新增第 ③ 步, 见 skill_book.gd 文件头)。
+##    没有 fx 的技能只出判定和数字 —— 新技能的默认状态。
+func _spawn_skill_fx(d: SkillDef, sh: AttackShape) -> void:
+	match d.fx:
+		&"lightning":
+			var fx: LightningBolt = LightningBolt.spawn(
+				get_tree(), global_position, sh, facing, d.arm_delay)
+			if fx != null:
+				_skill_fx = fx
 
 
 ## 轻击的形状 —— **横劈**: 以自己为圆心、朝向为轴张开的扇形。
@@ -946,8 +1095,25 @@ func heavy_shape() -> AttackShape:
 ## ⚠️ 圆心偏移写在**局部朝向系**里 (x 向前), 所以朝左时它自动落到左边。
 ##    在调用方自己乘 facing 的话, 这里是一个圆、那里是一个乘了 -1 的圆心,
 ##    迟早会有一处漏乘 —— 而漏乘的表现是「朝左放技能, 雷劈在身后」。
+##
+## 🏗️ 几何本身的唯一来源是 SkillDef.make_shape(); 这个函数是给调试面板和自检
+##    用的「落雷专用入口」, 不是第二份公式。
 func skill_shape() -> AttackShape:
-	return AttackShape.make_circle(skill_radius, Vector2(skill_distance, 0.0))
+	return lightning_def().make_shape()
+
+
+## 三个技能的 SkillDef —— 测试 / 截图探针 / 将来的技能栏都通过它们读数值,
+## **不再在 player.gd 里存第二份 @export** (两份能改的数 = 两份会漂移的数)。
+func lightning_def() -> SkillDef:
+	return SkillBook.get_def(SkillBook.LIGHTNING)
+
+
+func aura_def() -> SkillDef:
+	return SkillBook.get_def(SkillBook.AURA)
+
+
+func sword_array_def() -> SkillDef:
+	return SkillBook.get_def(SkillBook.SWORD_ARRAY)
 
 
 ## 把「已经挥出去、但还没开始生效」的东西全部收掉。
@@ -981,13 +1147,46 @@ func active_shape() -> AttackShape:
 	return _active_shape if state == State.ATTACKING else null
 
 
-## 技能能不能放。三个条件缺一不可: 不在冷却、精力够、不在别的动作里。
+## 进攻闸门 —— 落地硬直 / 罡气期间**不能出手**, 但可以走、可以挡、可以闪、可以跳。
 ##
-## 🏗️ 和 `_can_start_heavy` 拆成两个函数 (而不是合成一个带参数的),
-##    是因为将来的技能会越来越多, 每个的成本/冷却/前置条件都不同 ——
-##    合并的话那个 if 会迅速长成一堆 `if kind == X then ... elif kind == Y ...`。
-func _can_cast_skill() -> bool:
-	return _skill_cooldown_timer <= 0.0 and stamina.can_spend(skill_cost)
+## 🏗️ 为什么锁「进攻」而不是锁「一切」:
+##    锁一切 = 被定住, 玩家会读成卡顿; 只锁进攻 = 用**输出窗口**换安全,
+##    这正是这两个机制想在博弈里表达的东西 (见 COMBAT_MATRIX.md §3 ①)。
+##    ⚠️ 闪避 / 跳跃 / 格挡**故意不走这个闸门** —— 它们是「止损」, 一锁就会出现
+##    「被打进硬直又动不了又挡不了」的死亡螺旋。
+func _can_start_offense() -> bool:
+	return _landing_timer <= 0.0 and _aura_timer <= 0.0 and _cast_lock_timer <= 0.0
+
+
+## 技能能不能放 —— **所有技能共用**。三个条件缺一不可: 不在冷却、精力够、不在别的动作里。
+##
+## 🏗️ 参数是 id 而不是「技能种类」: v0.9 之前这里是 `_can_cast_skill()` /
+##    `_can_cast_aura()` / `_can_cast_sword_array()` 三个几乎一样的函数。
+##    第四个技能就要写第四个 —— 现在一个函数读完表就能回答。
+##
+## ⚠️ BUFF 额外要求「自己还没开着」: 冷却通常已经够长, 但这是**状态**不是节奏 ——
+##    冷却调短了就会变成「刷新罩子」, 而罩子是可叠加的话, 罡气就从兜底变无敌。
+func _can_cast(id: StringName) -> bool:
+	var d: SkillDef = SkillBook.get_def(id)
+	if d == null:
+		return false
+	if _cooldown_of(id) > 0.0:
+		return false
+	if not stamina.can_spend(d.stamina_cost):
+		return false
+	if d.family == SkillDef.Family.BUFF and _aura_timer > 0.0:
+		return false
+	return true
+
+
+## 某个技能还剩多少冷却 (0 = 可放)。给输入 / HUD / 自检用。
+func _cooldown_of(id: StringName) -> float:
+	return float(_cooldowns.get(id, 0.0))
+
+
+## 技能冷却剩余 (公开版) —— 将来的技能栏读它画冷却圈。
+func cooldown_remaining(id: StringName) -> float:
+	return _cooldown_of(id)
 
 
 ## 生成攻击判定框 —— 挂在**玩家自己**身上 (而不是 current_scene)。
@@ -1030,6 +1229,16 @@ func _can_dash() -> bool:
 	return _dash_cooldown_timer <= 0.0 and stamina.can_spend(dash_cost)
 
 
+# 护体罡气 / 剑阵的施放代码已并入 _cast_skill 的 family 分派:
+#   · 罡气 = SkillDef.Family.BUFF  → _cast_buff()
+#   · 剑阵 = SkillDef.Family.PLACE → _cast_place()
+# 设计理由 (为什么罡气不进 ATTACKING / 为什么阵挂在 World 上) 随代码一起搬过去了。
+#
+# ⚠️ 罡气**不需要**过 `_can_start_offense`: 它是防御反应, 而「落地硬直里被逼到
+#    墙角」正是最想开它的时刻。输入顺序 (见 _process_normal) 已经把这一条表达出来了 ——
+#    罡气的分支在闸门**之前**。
+
+
 func _can_start_heavy() -> bool:
 	return _attack_cooldown_timer <= 0.0 and stamina.can_spend(heavy_cost)
 
@@ -1063,17 +1272,36 @@ func _start_dash(input_dir: Vector2) -> void:
 
 ## amount: 伤害值。from_position: 伤害来源坐标 (用来算击退方向 **和格挡的前后半平面判定**)。
 ## source: 攻击者节点。只有敌人的攻击判定区会传 —— 精准格挡要靠它把对方打硬直。
+## unblockable: **格挡挡不住这一下** (闪避/跳跃照常有效)。见 EnemyAttack.unblockable。
 ##
 ## ⚠️ 第三个参数和 BlitzEnemy.take_damage 的同位参数含义**不同**
 ##    (那边是 breaks_armor: bool)。两者靠鸭子类型调用, 编译器不会提醒。
 ##    之所以现在没问题: 玩家的攻击判定框 mask 只够得着敌人, 永远打不到玩家自己。
-func take_damage(amount: int = 1, from_position: Vector2 = Vector2.INF, source: Node2D = null) -> void:
+func take_damage(amount: int = 1, from_position: Vector2 = Vector2.INF, source: Node2D = null, unblockable: bool = false) -> void:
 	if state == State.DEAD or invincible_timer > 0.0:
 		return
 
-	# 举着盾 → 走格挡结算 (见下方决策表)。这是本轮唯一新增的受击分支。
+	# 护体罡气 → **排在格挡之前**: 罡气是花精力买来的「一次性免伤」,
+	# 它先吃掉这一下, 玩家的格挡精力就不会被白白扣掉。顺序反过来会出现
+	# 「开着罡气却因为格挡消耗破了防, 罡气还挂着」—— 玩家会以为罡气没用。
+	if _aura_timer > 0.0 and _aura_hits > 0:
+		_aura_hits -= 1
+		# 次数用光才收罩 —— `absorb_hits` 来自 SkillDef, 现在永远是 1。
+		# ⚠️ 别把「吃一次就收」写死在计时器里: 将来「金钟罩」这类多点数的罡气
+		#    只需要改表里的数字, 不需要动这里。
+		if _aura_hits <= 0:
+			_aura_timer = 0.0
+		_aura_flash_timer = 0.25
+		# 和精准格挡同理: 同一帧里第二个判定区不该把罩子刚挡下的这波又打进来
+		invincible_timer = maxf(invincible_timer, 0.25)
+		aura_absorbed.emit(global_position + Vector2(0.0, -22.0))
+		return
+
+	# 举着盾 → 走格挡结算 (见下方决策表)。
+	# ⚠️ 「不可格挡」也走这条分支, 由 _resolve_guard 里的第 ⓪ 条直接放行 ——
+	#    不在这里另开一条路, 是为了让「举着盾挨了什么」只有**一个**入口。
 	if state == State.BLOCKING:
-		_resolve_guard(amount, from_position, source)
+		_resolve_guard(amount, from_position, source, unblockable)
 		return
 
 	_apply_damage(amount, from_position)
@@ -1083,11 +1311,23 @@ func take_damage(amount: int = 1, from_position: Vector2 = Vector2.INF, source: 
 ##
 ##   | 来自 | 精准窗口内 | 精力够 | 结果
 ##   |------|-----------|--------|------------------------------------------
+##   | 不可格挡 | 无所谓 | 无所谓 | **照常掉血** (但闪避/跳跃躲得开)
 ##   | 正面 | 是        | 不计   | 精准格挡: 零伤零耗 + 攻击者长硬直
 ##   | 正面 | 否        | 是     | 格挡: 零伤, 扣精力
 ##   | 正面 | 否        | 否     | 破防: 零伤但进 GUARD_BROKEN + 击退
 ##   | 背后 | 无所谓    | 无所谓 | **照常掉血**
-func _resolve_guard(amount: int, from_position: Vector2, source: Node2D) -> void:
+func _resolve_guard(amount: int, from_position: Vector2, source: Node2D, unblockable: bool = false) -> void:
+	# ⓪ 不可格挡 —— 排在**背后判定之前**: 紫红预警的招式不管站哪都挡不住。
+	#
+	# 🎮 这一条是「读招 → 应对 → 代价」里**换答案**的那一步: 格挡是默认解,
+	#    紫红出现时必须换成闪避/跳跃/拉开。⚠️ 注意它**不经过**精准格挡, 也不扣格挡精力 ——
+	#    举着一个对这个招式无效的盾, 不该让玩家再赔一次精力 (那会读成「挡漏了」,
+	#    而真相是「这招本来就挡不住」)。闪避/跳跃/高度带全都照常有效, 因为
+	#    它们在这条分支之外 (无敌帧、高度过滤)。
+	if unblockable:
+		_apply_damage(amount, from_position)
+		return
+
 	# ① 背后的攻击挡不住 —— 这是格挡的**核心** (横版里就是前后半平面)。
 	#    写成全方位的话玩家永远不会知道自己站错了位置, 只会觉得格挡时灵时不灵。
 	if not _is_in_guard_front(from_position):
@@ -1154,6 +1394,12 @@ func _die() -> void:
 	velocity = Vector2.ZERO
 	_charge_timer = 0.0
 	_parry_window_timer = 0.0
+	# 罡气/落地硬直在死亡期间没有意义, 清掉 —— 否则复活后第一帧还挂着
+	# 一个「看起来开了但挡不住任何东西」的罩子 (阴影已 hide, 只剩逻辑残留)。
+	_landing_timer = 0.0
+	_aura_timer = 0.0
+	_aura_hits = 0
+	_aura_flash_timer = 0.0
 	# 层清 0: 死后不再挡路、不再被判定框找到 (隐身但仍在场景里, 等 main.gd 安排复活)
 	collision_layer = 0
 	hurtbox.collision_mask = 0
@@ -1169,7 +1415,10 @@ func respawn(at: Vector2) -> void:
 	state = State.NORMAL
 	_dash_timer = 0.0
 	_attack_timer = 0.0
-	_skill_cooldown_timer = 0.0
+	# 复活 = 所有技能冷却清零。留在字典里的旧条目会让「重生」带着上一次的亏空,
+	# 而且字典只清一半的话更难发现。
+	_cooldowns.clear()
+	_cast_skill_id = &""
 	_cancel_pending_attack()
 	_active_shape = null
 	_hit_stun_timer = 0.0
@@ -1178,6 +1427,10 @@ func respawn(at: Vector2) -> void:
 	_parry_window_timer = 0.0
 	_parry_flash_timer = 0.0
 	_guard_break_timer = 0.0
+	_landing_timer = 0.0
+	_aura_timer = 0.0
+	_aura_hits = 0
+	_aura_flash_timer = 0.0
 	# ⚠️ 跳跃状态必须一起清 —— 死在空中的话 height 是正数, 不清就**复活在半空中**,
 	#    然后慢慢落下来。看起来像「复活点在天上」, 而复活点明明是画在地上的法阵。
 	height = 0.0
@@ -1213,7 +1466,9 @@ func _on_hurtbox_area_entered(area: Area2D) -> void:
 		# ⚠️ 必须早于 take_damage —— 否则跳过去照样会触发格挡/精准格挡/无敌帧消耗。
 		if atk.attack_shape != null and not atk.attack_shape.hits_height(height):
 			return
-		take_damage(atk.damage, atk.global_position, atk.source)
+		# ⚠️ 不可格挡要一路传到 _resolve_guard —— 判定区背着「这一招是什么」,
+		#    受击方自己不去猜 (和 damage/source 同一条契约)。
+		take_damage(atk.damage, atk.global_position, atk.source, atk.unblockable)
 
 
 func _on_stamina_changed(current: float, maximum: float) -> void:
@@ -1285,6 +1540,109 @@ const CHARGE_READY_COLOR: Color = Color(1.0, 0.8, 0.25) ## 蓄满 (可破霸体)
 const GUARD_BREAK_COLOR: Color = Color(0.9, 0.3, 0.35)  ## 破防
 ## 精准格挡爆闪的时长 (秒)
 const PARRY_FLASH_TIME: float = 0.32
+const AURA_COLOR: Color = Color(0.55, 0.92, 1.0)       ## 护体罡气 (青白)
+## 落地硬直期间身体在 Y 方向压扁的最大比例 (0.07 = 压掉 7%, 读「蹲了一下」)
+const LANDING_SQUASH: float = 0.07
+
+## 骨架实例。复用同一个 (每帧 new 一个 RefCounted 也能跑, 只是没必要)。
+var _rig: PlayerRig = PlayerRig.new()
+
+
+# ============================================================
+# 动画状态 —— **将来接美术资源的接口**
+# ============================================================
+#
+# 🏗️ 这两个函数是 v0.8 唯一新增的「对外契约」:
+#    anim_state() 说出「现在该播哪一段」, anim_phase() 说出「播到几成」。
+#    绘制层拿这两个值去摆骨架; 将来换成美术资源, 它们直接变成
+#    SpriteFrames 的动画名和帧进度 —— **调用方一行都不用改**。
+#
+# ⚠️ 相位一律从**判定那套计时器**算, 不另开时钟。一旦这里有第二个时钟,
+#    动画和判定就会各自漂移, 表现是「刀早就收回来了, 伤害却还没结算」,
+#    而且只在某些帧率下出现。
+
+## 现在该播哪一段。优先级 = 下面的判断顺序 (**先写的赢**)。
+func anim_state() -> int:
+	# 状态机独占的那几个: 它们本身就是「这个人在做什么」的唯一答案
+	match state:
+		State.DASHING:
+			return PlayerRig.Anim.DASH
+		State.HIT:
+			return PlayerRig.Anim.HIT
+		State.GUARD_BROKEN:
+			return PlayerRig.Anim.GUARD_BROKEN
+		State.BLOCKING:
+			return PlayerRig.Anim.BLOCK
+		State.CHARGING:
+			return PlayerRig.Anim.HEAVY_CHARGE
+		State.ATTACKING:
+			match _attack_kind:
+				AttackKind.HEAVY:
+					return PlayerRig.Anim.HEAVY_SWING
+				AttackKind.SKILL:
+					return _cast_anim()
+				_:
+					return PlayerRig.Anim.LIGHT
+
+	# ⚠️ 剑阵这类 PLACE 必须排在这里 —— 它们**不进 ATTACKING** (只锁进攻, 不锁走位),
+	#    所以没法在上面那个 match 里认出来, 只能靠 _cast_lock_timer 兜底。
+	#    它也要排在跑/跳之前: 一边走一边施法时, 该看到的是施法姿态。
+	if _cast_lock_timer > 0.0:
+		return _cast_anim()
+	if not _grounded:
+		return PlayerRig.Anim.JUMP_RISE if _height_vel > 0.0 else PlayerRig.Anim.JUMP_FALL
+	# 落地硬直排在跑之前: 刚落地时速度往往还在, 但玩家该看到的是「他蹲了一下」,
+	# 不是「他立刻开始跑」—— 后者会让落地硬直这件事**看不见**, 读起来像没有代价。
+	if _landing_timer > 0.0:
+		return PlayerRig.Anim.LAND
+	# ⚠️ 用**世界**速度而不是 velocity.length(): 纵深走同样的距离, 屏幕位移只有一半,
+	#    用屏幕速度判「在不在跑」的话, 纵向走位会慢半拍才切到跑动。
+	if BeltSpace.screen_speed_to_world(velocity) > 12.0:
+		return PlayerRig.Anim.RUN
+	return PlayerRig.Anim.IDLE
+
+
+## 当前正在放的技能该用哪个姿势 —— **只查 SkillDef, 不认技能名**。
+## 加第四个技能时这里不用改: 姿势写在表里, 状态机只负责把它念出来。
+func _cast_anim() -> int:
+	if _cast_skill_id == &"":
+		return PlayerRig.Anim.IDLE
+	var d: SkillDef = SkillBook.get_def(_cast_skill_id)
+	return d.cast_anim if d != null else PlayerRig.Anim.IDLE
+
+
+## 当前动作播到几成 (0~1)。循环动作 (IDLE/RUN) 是循环进度, 一次性动作是招式进度。
+func anim_phase() -> float:
+	# 一次性进度一律从**判定那套计时器**算, 但用哪个计时器由「谁锁着这个动作」决定,
+	# 不看动画名 —— 否则新技能换个姿势就会掉进「相位恒为 0」的静默失败。
+	if state == State.ATTACKING:
+		return 1.0 - clampf(_attack_timer / maxf(0.001, _attack_total), 0.0, 1.0)
+	if _cast_lock_timer > 0.0:
+		var def: SkillDef = SkillBook.get_def(_cast_skill_id)
+		var rec: float = def.recovery if def != null else _cast_lock_timer
+		return 1.0 - clampf(_cast_lock_timer / maxf(0.001, rec), 0.0, 1.0)
+	match anim_state():
+		PlayerRig.Anim.RUN:
+			# _walk_phase 是累加的弧度, 转成 0~1 的循环进度
+			return fposmod(_walk_phase / TAU, 1.0)
+		PlayerRig.Anim.IDLE, PlayerRig.Anim.BLOCK, PlayerRig.Anim.GUARD_BROKEN:
+			return fposmod(_anim_clock * 0.9, 1.0)
+		PlayerRig.Anim.HEAVY_CHARGE:
+			return charge_ratio()
+		PlayerRig.Anim.LAND:
+			return 1.0 - clampf(_landing_timer / maxf(0.001, landing_lag_time), 0.0, 1.0)
+		PlayerRig.Anim.HIT:
+			return 1.0 - clampf(_hit_stun_timer / maxf(0.001, hit_stun_duration), 0.0, 1.0)
+	return 0.0
+
+
+## facing → 骨架视角。上下两个方向靠「把 x 压扁」表达前后摆动, 见 PlayerRig 文件头。
+func _rig_view() -> int:
+	if facing.y > 0.5:
+		return PlayerRig.View.BACK
+	if facing.y < -0.5:
+		return PlayerRig.View.FRONT
+	return PlayerRig.View.SIDE
 
 
 func _draw() -> void:
@@ -1315,11 +1673,30 @@ func _draw() -> void:
 	# ══════════════════════════════════════════════════════════
 	# 身体层 —— 整体抬高 height
 	# ══════════════════════════════════════════════════════════
-	# 🏗️ 用 draw_set_transform 整体平移, 而不是给每个 _draw_xxx 传一个 offset 参数:
-	#    抬高是**全局属性**, 传参的写法每新增一个 _draw_xxx 就要记得传一次,
+	# 🏗️ 用 draw_set_transform 整体变换, 而不是给每个 _draw_xxx 传 offset 参数:
+	#    抬高/压扁都是**全局属性**, 传参的写法每新增一个 _draw_xxx 就要记得传一次,
 	#    漏一个就是「跳跃时刀留在原地」—— 看起来像刀脱手飞了, 而且只在跳跃时出现。
-	#    整体平移一次, 这类漏传在结构上不可能发生。
-	draw_set_transform(Vector2(0.0, -height), 0.0, Vector2.ONE)
+	#    整体变换一次, 这类漏传在结构上不可能发生。
+	#
+	# 落地硬直: 身体压扁一点点, 然后弹回。
+	# 🏗️ 用**压扁 (scale.y)** 而不是整体下移 —— 变换以脚底原点为中心缩放,
+	#    所以脚仍在原地、只有上半身沉下去, 读起来是「蹲了一下」而不是「陷进地里」。
+	# ⚠️ 影子不参与这一层, 它是「脚在哪」唯一的锚点。
+	var squash: float = 1.0
+	if _landing_timer > 0.0:
+		squash = 1.0 - LANDING_SQUASH * (_landing_timer / maxf(0.001, landing_lag_time))
+
+	# 🔑 骨架:**先**按状态摆姿态, **再**解算。之后画的全是解出来的关节点。
+	var view: int = _rig_view()
+	_rig.reset()
+	_rig.apply(anim_state(), anim_phase())
+	_rig.solve(view)
+
+	# 🏗️ x 方向乘 f = 镜像。骨架永远只产出一套「朝右」的坐标, 朝左在这里整体翻过来。
+	#    老代码是在每个绘制函数里把方向向量的 x 逐个乘 f —— 漏一处就是「朝左时刀往
+	#    身后挥」, 而画面上只是「方向有点怪」, 不报错。整体镜像让这类漏乘不可能发生。
+	var f: float = _side_facing()
+	draw_set_transform(Vector2(0.0, -height), 0.0, Vector2(f, squash))
 
 	var flash: bool = _hit_flash_timer > 0.0
 	var body_color: Color = ROBE_TOP
@@ -1330,14 +1707,24 @@ func _draw() -> void:
 		body_color = ROBE_TOP.lerp(CHARGE_COLOR, 0.25 * charge_ratio())
 
 	if state == State.DASHING:
-		_draw_body(Color(0.35, 0.95, 1.0), flash)
+		_draw_rig(Color(0.35, 0.95, 1.0), flash, view)
 	else:
-		_draw_body(Color.WHITE if flash else body_color, flash)
-		_draw_sword()
+		# ⚠️ 背/正面时刀画在**身体之前** (被身体挡住) —— 真人从背后看,
+		#    握着刀的手和刀都在身前, 该被自己挡住。侧视则相反, 刀必须压在身上,
+		#    否则玩家最需要看清的那只手会消失。
+		if view != PlayerRig.View.SIDE:
+			_draw_sword()
+		_draw_rig(Color.WHITE if flash else body_color, flash, view)
+		if view == PlayerRig.View.SIDE:
+			_draw_sword()
 		if state == State.BLOCKING:
 			_draw_shield()
 	if state == State.CHARGING:
 		_draw_charge_head_ring()
+	if _aura_timer > 0.0:
+		_draw_aura_bubble()
+	if _aura_flash_timer > 0.0:
+		_draw_aura_flash()
 	_draw_contact_flash()
 
 	# 复位。抬高只该作用于上面这一段 —— 后面若再加绘制, 不该莫名其妙跟着飘起来。
@@ -1380,7 +1767,8 @@ func _draw_attack_ground() -> void:
 			# sweep_trail_points 的返回值前半段就是外缘 (先正着扫外圈, 再倒着扫内圈),
 			# 所以直接取前一半, 不用再算一遍几何。
 			var edge: PackedVector2Array = PackedVector2Array()
-			for i: int in range(pts.size() / 2):
+			var edge_n: int = int(pts.size() / 2.0)   # 前半段 = 外缘
+			for i: int in range(edge_n):
 				edge.append(pts[i])
 			draw_polyline(edge, Color(1.0, 0.98, 0.8, 0.7 * fade), 2.0, true)
 	else:
@@ -1424,187 +1812,210 @@ func _draw_shadow() -> void:
 	draw_colored_polygon(pts, Color(0.0, 0.0, 0.0, 0.62 * fade))
 
 
-## 腿 + 脚 —— **走路读得出来的主要线索**。
+## 把骨架画成一个人。
 ##
-## 🏗️ 为什么值得单独画: 横版里「输入有没有生效」是玩家持续要确认的事,
-##    而被墙挡住、被击退、滑行减速这三种情况在**没有腿**的时候长得一模一样
-##    (都是「人在动但不确定自己有没有在走」)。腿一摆, 这三件事立刻分开:
-##      · 站着不动 → 腿停住
-##      · 被墙顶住 → 速度归零 → 腿停住 (和上面一致, 正确)
-##      · 松键滑行 → 速度还在 → 腿还在摆 (正确)
-func _draw_legs() -> void:
-	var sw: float = sin(_walk_phase)
-	var back: Color = ROBE_BOTTOM.darkened(0.25)
-	var front: Color = ROBE_BOTTOM
-	if not _grounded:
-		# 空中: 两脚并拢往上收 —— 「缩起来」和「站在地上」一眼分得开,
-		# 也是除了影子之外第二个「我在空中」的提示。
-		# ⚠️ 收上去的幅度必须**大于袍摆高度** (-12), 否则脚被袍子吃掉、
-		#    「缩起来」这个姿态根本看不见, 就退化成「和站着一样」了。
-		_draw_foot(Vector2(-3.0, -8.0), back)
-		_draw_foot(Vector2(3.5, -10.0), front)
-		return
-	# 前后各一只脚: 一只往前摆的同时另一只往后摆 (差半周期 = 反向)
-	_draw_foot(Vector2(-sw * 6.0, -maxf(0.0, -sw) * 3.0), back)
-	_draw_foot(Vector2(sw * 6.0, -maxf(0.0, sw) * 3.0), front)
-
-
-## 一只腿 + 脚。at 是脚踝位置 (y=0 就是地面), 所以整条腿画在它**上方**。
+## 🏗️ 绘制顺序**就是**遮挡关系, 顺序错了不会报错, 只会让某些肢体莫名其妙消失:
+##      侧视:   远臂 → 远腿 → 近腿 → 袍身 → 头 → 近臂 → (刀)
+##      背/正面: 远腿 → 近腿 → 袍身 → **远臂** → 头 → 近臂 → (刀)
+##    两条腿都压在袍子**底下** —— 这是道袍不是开衩裙, 跑动时该看到的是
+##    「小腿从下摆里伸出来」, 而不是「两条光腿贴在袍子上」。
 ##
-## ⚠️ 小腿那一截不是装饰 —— 袍摆落在 y=-12, 只画脚掌的话整只脚会待在袍子里面,
-##    走路摆动会**完全看不见** (这个 bug 真出现过: 截图里角色像一块倒扣的布,
-##    按 D 走和站着不动长得一模一样)。
-func _draw_foot(at: Vector2, c: Color) -> void:
-	# 脚跟落在 at, 脚跟之上的小腿从袍摆里伸出来
-	draw_line(at + Vector2(0.0, -11.0), at, c, 3.0)
-	# 脚掌: 侧视里脚是有方向的, 脚尖朝朝向那一侧多伸一点
-	var f: float = _side_facing()
-	var toe: float = 5.0 * f
-	var heel: float = -2.0 * f
-	var x0: float = at.x + minf(toe, heel)
-	draw_rect(Rect2(x0, at.y - 4.0, absf(toe - heel), 4.0), c, true)
-
-
-## 侧视身体。
+## ⚠️ 近臂必须最后画 (刀除外)。它是持剑手, 玩家判断「刀在哪、往哪挥」全靠它;
+##    被自己的袍子挡住的话, 挥砍方向就读不出来了 —— 而那是侧视里唯一的攻击预告。
 ##
-## 🏗️ 和等距版 (正面站着) 的区别在**轮廓**, 不在配色:
-##    等距版是从斜上方看, 看到的是「袍子前后一样宽的梯形」;
-##    侧视看到的是人的**侧面** —— 肩窄、身厚、下摆喇叭, 而且脸的朝向必须靠
-##    「五官往哪边偏」表达 (没有第二个轴可以用了)。
-func _draw_body(body_color: Color, flash: bool) -> void:
-	var f: float = _side_facing()
+## ⚠️ 背/正面时**远臂也要提到袍子之后**。侧视里远臂在身体后面, 该被袍子盖住;
+##    但正面/背面看, 两只手臂都在身体两侧、比躯干更靠近镜头 —— 照侧视的顺序画,
+##    远臂会整条消失, 只剩一只「独臂人」。
+func _draw_rig(body: Color, flash: bool, view: int) -> void:
+	# 远侧整体压暗: 两条腿重叠时, 这是唯一能读出「另一条在后面」的线索
+	var far_c: Color = Color(0.12, 0.17, 0.32)
+	var near_c: Color = Color(0.19, 0.26, 0.45)
+	var far_boot: Color = Color(0.22, 0.14, 0.11)
+	var near_boot: Color = Color(0.33, 0.21, 0.15)
+	# ⚠️ 近侧袖子必须**比袍身暗一点点**, 不能更亮。更亮的袖子和袍子同色系,
+	#    叠在一起就是一大片浅蓝, 读起来不是「一条手臂在身前」而是「胸前有块亮斑」。
+	var sleeve_far: Color = body.darkened(0.35)
+	var sleeve_near: Color = body.darkened(0.18)
+	var skin: Color = SKIN
+	var hair: Color = HAIR
+	if flash:
+		far_c = Color(0.62, 0.62, 0.68)
+		near_c = Color(0.80, 0.80, 0.86)
+		far_boot = Color(0.70, 0.70, 0.74)
+		near_boot = Color(0.88, 0.88, 0.92)
+		sleeve_far = Color(0.74, 0.74, 0.80)
+		sleeve_near = Color.WHITE
+		skin = Color.WHITE
+		hair = Color(0.80, 0.80, 0.86)
 
-	_draw_legs()
-
-	# 袍身: 侧视轮廓 —— 偏窄偏厚, 下摆往后拖出一点 (跑动时袍角向后是这种视角的常识)
-	#
-	# ⚠️ 下摆必须停在 y=-12, **不能落到 0**。落到底就是「角色整个人埋进地里」,
-	#    而且会把腿脚整段盖住 —— 见 _draw_foot 上面那条注释, 这是个踩过的坑。
-	#    留出的这 12px 正好够小腿 + 脚掌露在外面。
-	# ⚠️ 肩宽 (7) 必须 ≥ 头半径 (7.2)。第一版肩只有 6、头却有 7.6 ——
-	#    画出来是「一颗头架在一根棍上」, 侧视剪影完全不像人。
-	var robe: PackedVector2Array = PackedVector2Array([
-		Vector2(-7.0, -40.0), Vector2(7.0, -40.0),
-		Vector2(11.0, -12.0), Vector2(-11.0, -12.0),
-	])
-	draw_colored_polygon(robe, body_color)
-	# 下摆更暗, 做出体积感
-	if not flash:
-		draw_colored_polygon(PackedVector2Array([
-			Vector2(-9.2, -26.0), Vector2(8.6, -26.0),
-			Vector2(11.0, -12.0), Vector2(-11.0, -12.0),
-		]), Color(ROBE_BOTTOM.r, ROBE_BOTTOM.g, ROBE_BOTTOM.b, 0.85))
-
-	# 腰带 —— 侧视时是一小段, 不是横贯的整条
-	draw_line(Vector2(-6.0, -33.0), Vector2(7.0, -33.0), SASH, 3.0)
-
-	# 头。整体往朝向偏一点点 —— 人的头不会正好居中在肩上
-	var head: Vector2 = Vector2(f * 1.5, -48.0)
-	draw_circle(head, 7.2, SKIN)
-
-	# 头部按**四向**分三种画法 —— 这是玩家读出「我面朝哪」的第一信号。
-	#
-	# ⚠️ 面朝上 (走向纵深) 必须是**后脑**: 整颗头被头发盖住、没有五官。
-	#    如果这里偷懒沿用侧脸, 纵向走位就会变成「侧着身子滑冰」——
-	#    而这正是 v0.5 要解决的那个原始问题。
-	if facing.y > 0.5:
-		# 背面: 头发盖满 + 发髻
-		draw_circle(head + Vector2(0.0, -0.5), 7.0, HAIR)
-		draw_circle(head + Vector2(0.0, -6.4), 3.2, HAIR)
-	elif facing.y < -0.5:
-		# 正面: 刘海压在上半张脸, 两只眼。
-		# ⚠️ 刘海半径和眼睛高度是**一对**: 第一版刘海 r=5.4 压到 y=+1.6, 眼睛又在
-		#    y=2.0 —— 半个眼珠被头发吞掉, 画面上就是「正面那张脸没有五官」,
-		#    和背面的区别只剩「头发少盖了一点」。眼睛必须整颗落在刘海下沿之外。
-		draw_circle(head + Vector2(0.0, -4.2), 5.0, HAIR)
-		draw_circle(head + Vector2(-3.0, 2.6), 1.4, HAIR)
-		draw_circle(head + Vector2(3.0, 2.6), 1.4, HAIR)
+	if view == PlayerRig.View.SIDE:
+		_draw_arm(_rig.shoulder_far, _rig.elbow_far, _rig.hand_far, sleeve_far, skin.darkened(0.10))
+		_draw_leg(_rig.hip_far, _rig.knee_far, _rig.ankle_far, far_c, far_boot, view)
+		_draw_leg(_rig.hip_near, _rig.knee_near, _rig.ankle_near, near_c, near_boot, view)
+		_draw_robe(body, flash)
+		_draw_head(view, skin, hair)
+		_draw_arm(_rig.shoulder_near, _rig.elbow_near, _rig.hand_near, sleeve_near, skin)
 	else:
-		# 侧视: 头发盖住**后脑 + 头顶**那一侧 + 一个发髻拖在更后面。
-		# 这一条是侧视里「他面朝哪」最主要的信号 —— 比眼睛更早被看到。
-		#
-		# ⚠️ 后偏量 (4.0) 和半径 (6.8) 是一对, 不能只改一个:
-		#    脸的可见宽度 ≈ sqrt((后偏+头半径)² + 上偏²) - 发半径。
-		#    第一版用 2.2/7.0 算出只有 3px, 画面上头就是**一颗纯黑的球**,
-		#    朝向完全读不出来 (而这一项正是切换视角要解决的那个痛点)。
-		draw_circle(head + Vector2(-f * 4.0, -3.0), 6.8, HAIR)
-		draw_circle(head + Vector2(-f * 6.4, -4.2), 3.2, HAIR)
-
-		# 五官: 一只眼 + 一个鼻尖, 都压在朝向那一侧
-		draw_circle(head + Vector2(f * 3.4, -0.5), 1.5, HAIR)
-		# 鼻尖: 用小三角表达侧脸 —— 这是让「侧视」读起来不像「正面的圆」的关键一笔
-		draw_colored_polygon(PackedVector2Array([
-			head + Vector2(f * 6.5, -1.0),
-			head + Vector2(f * 10.0, 1.6),
-			head + Vector2(f * 6.5, 2.6),
-		]), SKIN.darkened(0.12))
+		_draw_leg(_rig.hip_far, _rig.knee_far, _rig.ankle_far, far_c, far_boot, view)
+		_draw_leg(_rig.hip_near, _rig.knee_near, _rig.ankle_near, near_c, near_boot, view)
+		_draw_robe(body, flash)
+		_draw_arm(_rig.shoulder_far, _rig.elbow_far, _rig.hand_far, sleeve_far, skin.darkened(0.10))
+		_draw_head(view, skin, hair)
+		_draw_arm(_rig.shoulder_near, _rig.elbow_near, _rig.hand_near, sleeve_near, skin)
 
 
-## 手里的刀 —— 侧视时刀在**竖直平面**里抡: 从身后上方劈到身前下方。
+## 一截**有粗细变化**的肢体: 四点梯形 + 两端的关节圆。
 ##
-## 🏗️ 两招的肢体语言**故意分开**, 因为它们的判定形状本来就不同:
-##   · **横劈 (轻击, 扇形)** —— 刀从头一侧横着扫到另一侧, 轨迹偏**水平**,
-##     地面上同时拖出一道扇环 (见 _draw_sweep_trail)。「一片都被扫到了」靠扇环说,
-##     不靠刀本身 —— 侧视里一把刀是画不出「面」的。
-##   · **重劈 (重击, 矩形)** —— 竖直的大劈砍, 从身后上方一路砸到身前下方,
-##     刀更长、幅度更大, 而且盯的是**前方一条线**。
+## 🏗️ 不用 draw_line: 它的粗细是恒定的, 大腿和小腿一样粗, 画出来是一根棒子。
+##    从关节往末端收窄, 才是「这是肢体」而不是「这是棍子」。
+##    两端的圆负责补掉折角处的缺口 (膝/肘), 少了它们关节处会露出一个三角缝隙。
+func _segment(a: Vector2, b: Vector2, w0: float, w1: float, c: Color) -> void:
+	var d: Vector2 = b - a
+	var l: float = d.length()
+	if l < 0.01:
+		return
+	var n: Vector2 = Vector2(-d.y, d.x) / l
+	draw_colored_polygon(PackedVector2Array([
+		a + n * w0 * 0.5, b + n * w1 * 0.5, b - n * w1 * 0.5, a - n * w0 * 0.5,
+	]), c)
+	draw_circle(a, w0 * 0.5, c)
+	draw_circle(b, w1 * 0.5, c)
+
+
+## 一条手臂: 上臂 → 前臂 → 手。袖口比小臂粗 (道袍宽袖), 也让两条手臂在剪影上分得开。
+func _draw_arm(shoulder: Vector2, elbow: Vector2, hand: Vector2, sleeve: Color, skin: Color) -> void:
+	_segment(shoulder, elbow, 4.6, 3.4, sleeve)
+	_segment(elbow, hand, 3.4, 2.4, sleeve)
+	draw_circle(hand, 2.6, skin)
+
+
+## 一条腿: 大腿 → 小腿 → 脚掌。
 ##
-## ⚠️ 角度要按朝向**镜像**: 朝左时把方向向量的 x 取反。
-##    忘了镜像的话, 朝左挥刀会朝**身后**挥 —— 而画面上只是「刀的方向有点怪」,
-##    极难注意到, 但会让玩家觉得判定框在乱打。
+## ⚠️ 脚掌画成**水平**的矩形, 不跟着小腿转。跟着转的话, 抬腿时脚会竖起来,
+##    读起来像「踮着脚尖在跳芭蕾」; 水平脚 + 脚踝离地, 已经是清楚的「抬腿」信号了。
+func _draw_leg(hip: Vector2, knee: Vector2, ankle: Vector2, c: Color, boot: Color, view: int) -> void:
+	_segment(hip, knee, 5.2, 4.2, c)
+	_segment(knee, ankle, 4.2, 3.0, c)
+	# 靴子单独一个颜色: 深蓝的腿和深蓝的袍摆挨在一起时, 脚会「消失」在袍子里
+	if view == PlayerRig.View.SIDE:
+		# 侧视: 脚掌朝前伸 (脚在鞋里是横着放的)
+		draw_rect(Rect2(ankle.x - 1.8, ankle.y, PlayerRig.FOOT_LEN + 2.0, PlayerRig.FOOT_H), boot, true)
+	else:
+		# 背/正面: 看到的是**脚背**, 不朝前伸 —— 照侧视画会变成两只横向的铲子
+		draw_rect(Rect2(ankle.x - 2.8, ankle.y, 5.6, PlayerRig.FOOT_H), boot, true)
+
+
+## 道袍 —— 从胸口到袍摆的一个**跟着脊椎一起弯**的梯形。
+##
+## 🏗️ 袍身必须由骨架的 chest/pelvis 推出来, 不能写死 (-40 → -12)。
+##    写死的话, 躯干一前倾袍子就留在原地, 人看起来像「从袍子里钻出来了」。
+##    (老版本的腰带就写死在 y=-33, 蓄力后仰时它会在身体外面飘。)
+func _draw_robe(body: Color, flash: bool) -> void:
+	var up: Vector2 = PlayerRig.dir_of(_rig.spine)
+	var side: Vector2 = Vector2(-up.y, up.x)
+	# ⚠️ 肩宽必须 ≥ 头半径。第一版肩 6 / 头 7.6, 画出来是「一颗头架在一根棍上」。
+	var shoulder_w: float = PlayerRig.HEAD_R + 0.5
+	# ⚠️ 袍摆高度 = 腿可不可见的**唯一旋钮**。腰在 -30、膝在 -17.5,
+	#    摆停到 -19.5 时膝以下整段露在外面 —— 那正是跑步全部的可读信息。
+	#    第一版停在 -16, 画面上角色就是「一块倒扣的布」, 腿一动都看不见。
+	var hem_w: float = 9.0
+	var hem_y: float = _rig.pelvis.y + 10.5
+
+	draw_colored_polygon(PackedVector2Array([
+		_rig.chest + side * shoulder_w,
+		_rig.chest - side * shoulder_w,
+		Vector2(_rig.pelvis.x - hem_w, hem_y),
+		Vector2(_rig.pelvis.x + hem_w, hem_y),
+	]), body)
+
+	# 下摆压暗 + 腰带: 少了这两笔, 袍子就是一整片纯色梯形, 读不出体积
+	if flash:
+		return
+	var waist: Vector2 = _rig.pelvis.lerp(_rig.chest, 0.42)
+	draw_colored_polygon(PackedVector2Array([
+		waist + side * (hem_w - 1.0),
+		waist - side * (hem_w - 1.0),
+		Vector2(_rig.pelvis.x - hem_w, hem_y),
+		Vector2(_rig.pelvis.x + hem_w, hem_y),
+	]), Color(ROBE_BOTTOM.r, ROBE_BOTTOM.g, ROBE_BOTTOM.b, 0.88))
+	draw_line(waist + side * 7.6, waist - side * 7.6, SASH, 3.0)
+
+
+## 头 + **四向的三套画法** —— 这是玩家读出「我面朝哪」的第一信号。
+##
+## ⚠️ 这里的坐标全部**朝右** (+x = 正前方), 一个 f 都不该出现。
+##    朝左由外层 draw_set_transform 的 x 镜像统一处理 —— 这里再乘一次 f
+##    就是双重镜像, 表现是「朝左时脸朝后」, 而且只在朝左时错。
+##
+## ⚠️ 面朝上 (走向纵深) 必须是**后脑**: 整颗头被头发盖住、没有五官。
+##    偷懒沿用侧脸的话, 纵向走位就会变成「侧着身子滑冰」——
+##    那正是切到横版要解决的原始问题。
+func _draw_head(view: int, skin: Color, hair: Color) -> void:
+	var h: Vector2 = _rig.head_pt
+	var r: float = PlayerRig.HEAD_R
+
+	draw_circle(h, r, skin)
+
+	if view == PlayerRig.View.BACK:
+		# 背面: 头发盖满 + 发髻
+		draw_circle(h + Vector2(0.0, -0.5), r * 0.97, hair)
+		draw_circle(h + Vector2(0.0, -r * 0.94), 3.2, hair)
+		return
+
+	if view == PlayerRig.View.FRONT:
+		# 正面: 刘海压在上半张脸, 两只眼。
+		# ⚠️ 刘海半径和眼睛高度是一对: 第一版眼睛被刘海吞掉半颗, 画面上就是
+		#    「正面那张脸没有五官」, 和背面的区别只剩「头发少盖了一点」。
+		draw_circle(h + Vector2(0.0, -r * 0.62), r * 0.74, hair)
+		draw_circle(h + Vector2(-3.0, 2.6), 1.4, hair)
+		draw_circle(h + Vector2(3.0, 2.6), 1.4, hair)
+		return
+
+	# 侧视: 头发盖住后脑 + 头顶, 发髻拖在更后面。这是「他面朝哪」最主要的信号。
+	# ⚠️ 后偏量和发半径是一对: 第一版算出脸只剩 3px 可见, 头就是一颗纯黑的球。
+	draw_circle(h + Vector2(-r * 0.59, -r * 0.44), r * 0.97, hair)
+	draw_circle(h + Vector2(-r * 0.94, -r * 0.62), 3.2, hair)
+
+	# 五官: 一只眼 + 一个鼻尖。鼻尖是让「侧视」不像「正面一个圆」的关键一笔
+	draw_circle(h + Vector2(r * 0.50, -r * 0.07), 1.5, hair)
+	draw_colored_polygon(PackedVector2Array([
+		h + Vector2(r * 0.96, -r * 0.15),
+		h + Vector2(r * 1.47, r * 0.24),
+		h + Vector2(r * 0.96, r * 0.38),
+	]), skin.darkened(0.12))
+
+
+## 手里的刀 —— 绑在**持剑手的手心**上, 由骨架解出来, 不再自己算枢轴。
+##
+## 🏗️ 这一笔是整个 v0.8 的核心。老版本的枢轴写死在 (f*5, -32): 手臂没有关节,
+##    所以刀永远是「从肩膀附近伸出来的一根棍」, 手从来没有真的握住过它。
+##    现在 grip = hand_near, 刀跟着手走 —— 于是「举刀 / 挥刀 / 插地」这些动作,
+##    身体一动刀就跟着动, 不可能漂移。
+##
+## 🏗️ 两招的肢体语言仍然**故意分开**, 因为它们的判定形状本来就不同:
+##   · **横劈 (轻击, 扇形)** —— 轨迹偏水平, 地面上拖出一道扇环 (见 _draw_attack_ground)。
+##     「一片都被扫到了」靠扇环说, 不靠刀本身 —— 侧视里一把刀画不出「面」。
+##   · **重劈 (重击, 矩形)** —— 竖直的大劈砍, 从身后上方砸到身前下方, 刀更长。
 func _draw_sword() -> void:
-	var f: float = _side_facing()
-	# 枢轴在**肩前**: 侧视时手在身体朝向前方那一侧
-	var pivot: Vector2 = Vector2(f * 5.0, -32.0)
-	## 静止时刀斜垂在身前下方 (≈ +1.1 rad)
-	var swing: float = 1.1
-	var reach: float = 26.0
+	var d: Vector2 = PlayerRig.dir_of(_rig.sword_angle)
+	var tip: Vector2 = _rig.tip
 
-	if state == State.ATTACKING:
-		var total: float = maxf(0.001, _attack_total)
-		var t: float = 1.0 - clampf(_attack_timer / total, 0.0, 1.0)
-		match _attack_kind:
-			AttackKind.HEAVY:
-				# 重击: 从身后上方一路劈到身前下方, 而且刀更长 ——
-				# 「这一下很重」必须在动作上就看得出来, 不能只靠伤害数字
-				swing = lerpf(-2.5, 0.9, t)
-				reach = 34.0
-			AttackKind.SKILL:
-				# 落雷: 刀**竖举向天**并且一直举着 —— 这一招的动势是「引雷」,
-				# 不是砍。举起的刀也是给玩家的一个提示: 现在在施法, 不能动。
-				# ⚠️ 举到头侧接近竖直 (-PI/2 ≈ 向上), 而不是举到正上方 ——
-				#    正上方会和蓄力那一下的姿势撞脸, 两个「举刀」看起来一样就白分了。
-				swing = lerpf(1.1, -1.5, clampf(t * 3.0, 0.0, 1.0))
-				reach = 30.0
-			_:
-				# 横劈: 起手抬到身后偏上, 收在身前偏下 —— 全程贴近水平,
-				# 和重劈那道夸张的竖直大劈在**剪影上**就能一眼分开
-				swing = lerpf(-1.35, 0.75, t)
-	elif state == State.CHARGING:
-		# 蓄力: 把刀往**身后上方**拉, 越满拉得越靠后
-		# (和敌人起手是同一套肢体语言 —— 玩家不用学第二遍)
-		var ct: float = charge_ratio()
-		swing = lerpf(1.1, -2.6, ct)
-		reach = lerpf(26.0, 32.0, ct)
-
-	# 屏幕坐标系里角度 0 = 向右, +PI/2 = 向下。朝左时镜像 x。
-	var blade_dir: Vector2 = Vector2(cos(swing), sin(swing)) * Vector2(f, 1.0)
-	var tip: Vector2 = pivot + blade_dir * reach
-
-	# 出刀时的残留刀光: 沿扫描方向往回拖三条渐隐的弧
-	if state == State.ATTACKING:
+	# 出刀时的残留刀光: 沿刚扫过的方向往回拖三条渐隐的弧。
+	# ⚠️ 只画**三招里会挥的那两招**; 施法/站立时刀不动, 拖尾会变成一团固定的白雾。
+	if state == State.ATTACKING and _attack_kind != AttackKind.SKILL:
 		for i: int in range(3):
-			var a: float = swing - float(i + 1) * 0.22
-			var d2: Vector2 = Vector2(cos(a), sin(a)) * Vector2(f, 1.0)
-			draw_line(pivot, pivot + d2 * reach,
-				Color(1.0, 1.0, 1.0, 0.45 - float(i) * 0.13), 3.0)
+			var a: float = _rig.sword_angle - float(i + 1) * 0.20
+			draw_line(_rig.grip, _rig.grip + PlayerRig.dir_of(a) * _rig.sword_len,
+				Color(1.0, 1.0, 1.0, 0.42 - float(i) * 0.12), 3.0)
 
-	# 刀身 + 刀柄。蓄满时刀身发金光 —— 「可以破霸体了」的第二个提示
+	# 刀身 + 护手 + 刀柄。蓄满时刀身发金光 —— 「可以破霸体了」的第二个提示
 	var blade_color: Color = BLADE
 	if state == State.CHARGING and charge_ratio() >= heavy_armor_break_ratio:
 		blade_color = CHARGE_READY_COLOR
-	draw_line(pivot, tip, blade_color, 2.6)
-	draw_line(pivot, pivot - blade_dir * 5.0, Color(0.25, 0.18, 0.12), 3.4)
+	var n: Vector2 = Vector2(-d.y, d.x)
+	draw_line(_rig.grip, tip, blade_color, 3.0)
+	draw_line(_rig.grip + n * 3.2, _rig.grip - n * 3.2, Color(0.55, 0.45, 0.30), 2.0)
+	draw_line(_rig.grip, _rig.grip - d * 4.5, Color(0.25, 0.18, 0.12), 2.8)
 
 
 ## 蓄力地面光环 —— **不随跳跃抬高** (它贴在地上, 是人相对地面的参照)。
@@ -1663,7 +2074,6 @@ func _charge_color(t: float) -> Color:
 ##    横版朝向只有左右, 边界恒好在角色的正中线上 —— 一条永远垂直、永远不动的线,
 ##    画出来只会让人以为「盾牌有角度要调」, 是一个纯误导。
 func _draw_shield() -> void:
-	var f: float = _side_facing()
 	var parry_ready: bool = is_parry_window_open()
 	var c: Color = PARRY_READY_COLOR if parry_ready else SHIELD_COLOR
 
@@ -1679,19 +2089,53 @@ func _draw_shield() -> void:
 		return
 
 	# 身前一道竖弧: 从头顶高度挡到膝盖高度。中间鼓出去一点, 像一面盾。
+	# ⚠️ 坐标一律取**正 x** (身前那侧)。朝左时由外层的 x 镜像翻过去 ——
+	#    这里再乘一次 f 就是双重镜像, 盾会跑到背后, 而那不是报错。
 	var arc: PackedVector2Array = PackedVector2Array()
 	var steps: int = 12
 	for i: int in range(steps + 1):
 		var t: float = float(i) / float(steps)
-		var y: float = lerpf(-52.0, -6.0, t)
+		var y: float = lerpf(-46.0, -10.0, t)
 		var bulge: float = sin(t * PI) * 4.0
-		arc.append(Vector2(f * (18.0 + bulge), y))
+		arc.append(Vector2(18.0 + bulge, y))
 	draw_polyline(arc, c, 3.2 if parry_ready else 2.4)
 
 	# 内侧淡填充: 补一圈回到身体, 表达「这是一面挡在身前的盾」
 	var fan: PackedVector2Array = arc.duplicate()
-	fan.append(Vector2(f * 6.0, -30.0))
+	fan.append(Vector2(6.0, -30.0))
 	draw_colored_polygon(fan, Color(c.r, c.g, c.b, 0.16))
+
+
+## 护体罡气罩 —— 罩着整个人身的一层椭圆。
+##
+## 🏗️ 画成**竖椭圆**而不是地面上的压扁圆: 罡气是「包住人」的, 压扁会读成又一层地面预警圈,
+##    和敌人的 telegraph 撞车。竖椭圆才能一眼读出「我在壳里」。
+## ⚠️ 快到期时开始闪 —— 不闪的话, 玩家会把「罩子没了」读成「开了但没生效」,
+##    而罡气恰恰是**只挡一次**的技能, 失效时机必须看得见。
+func _draw_aura_bubble() -> void:
+	if _aura_timer < 0.4 and fmod(_aura_timer * 16.0, 2.0) >= 1.0:
+		return
+	var left_k: float = clampf(_aura_timer / 0.4, 0.0, 1.0)
+	var pulse: float = 1.0 + 0.05 * sin(_aura_timer * 16.0)
+	var center: Vector2 = Vector2(0.0, -26.0)
+	var rx: float = 22.0 * pulse
+	var ry: float = 36.0 * pulse
+	var steps: int = 28
+	var pts: PackedVector2Array = PackedVector2Array()
+	for i: int in range(steps):
+		var a: float = TAU * float(i) / float(steps)
+		pts.append(center + Vector2(cos(a) * rx, sin(a) * ry))
+	var alpha: float = 0.30 * (0.55 + 0.45 * left_k)
+	draw_colored_polygon(pts, Color(AURA_COLOR.r, AURA_COLOR.g, AURA_COLOR.b, alpha * 0.35))
+	pts.append(pts[0])
+	draw_polyline(pts, Color(AURA_COLOR.r, AURA_COLOR.g, AURA_COLOR.b, alpha + 0.25), 2.2, true)
+
+
+## 罡气吃掉一次伤害时的爆散 —— 读作「壳碎了, 那一下被它挡了」
+func _draw_aura_flash() -> void:
+	var r: float = 1.0 - clampf(_aura_flash_timer / 0.25, 0.0, 1.0)
+	draw_arc(Vector2(0.0, -26.0), lerpf(20.0, 56.0, r), 0.0, TAU, 30,
+		Color(AURA_COLOR.r, AURA_COLOR.g, AURA_COLOR.b, (1.0 - r) * 0.9), 3.0)
 
 
 ## 精准格挡 / 普通格挡的即时反馈

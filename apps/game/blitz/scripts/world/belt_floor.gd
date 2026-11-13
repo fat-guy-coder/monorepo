@@ -148,7 +148,7 @@ func _ensure_tile_set() -> void:
 	#    算出矩形再跟贴图边界校验, texture 为空时边界未定义, 会报 !room_for_tile。
 	src.texture = atlas_tex
 	# 列数从**图宽推导**, 不要写 VARIANT_COUNT —— 差一格就越界报 !room_for_tile
-	var cols: int = atlas_img.get_width() / CELL_W
+	var cols: int = int(atlas_img.get_width() / float(CELL_W))   # 显式浮点除, 避开「整数除法」告警
 	for x: int in range(cols):
 		src.create_tile(Vector2i(x, 0))
 	ts.add_source(src)  # 返回的 source_id 恒为 0 (第一个 source)

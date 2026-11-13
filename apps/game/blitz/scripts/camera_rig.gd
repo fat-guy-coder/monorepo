@@ -78,10 +78,10 @@ func shake(amount_px: float = 4.0, duration: float = 0.2) -> void:
 ##   ① 地图比视口大 → limits 就是地图边界 (常规情况)
 ##   ② 地图比视口小 → limits 会互相矛盾 (left > right) 导致相机卡在奇怪位置,
 ##      此时改为把相机**锁死在地图中心**, 左右/上下 limit 各留半个视口。
-func fit_to_floor(floor: BeltFloor, viewport_size: Vector2) -> void:
-	if floor == null:
+func fit_to_floor(belt_floor: BeltFloor, viewport_size: Vector2) -> void:
+	if belt_floor == null:
 		return
-	var b: Rect2 = floor.bounds_global()
+	var b: Rect2 = belt_floor.bounds_global()
 	if b.size == Vector2.ZERO:
 		return
 	_fit_axis(true, b.position.x, b.size.x, viewport_size.x)

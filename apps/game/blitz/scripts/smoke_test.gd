@@ -46,7 +46,7 @@ func _run() -> void:
 	print("=== Blitz v0.4 (2.5D 横版) 集成自检 ===")
 
 	var player: BlitzPlayer = _game.player
-	var floor_layer: BeltFloor = _game.floor
+	var floor_layer: BeltFloor = _game.floor_layer
 	var world: Node2D = _game.world
 	var camera: CameraRig = _game.camera
 	var hud: Hud = _game.hud
@@ -151,7 +151,7 @@ func _run() -> void:
 	player.velocity = Vector2.ZERO
 
 	print("-- 输入映射 --")
-	for action: String in ["move_up", "move_down", "attack_light", "attack_heavy", "dash", "block", "jump", "debug_toggle"]:
+	for action: String in ["move_up", "move_down", "attack_light", "attack_heavy", "attack_skill", "aura", "sword_array", "dash", "block", "jump", "debug_toggle"]:
 		_ok("已注册 %s" % action, InputMap.has_action(action))
 	for action: String in ["shoot"]:
 		_ok("已删除旧键 %s" % action, not InputMap.has_action(action))
@@ -187,6 +187,25 @@ func _run() -> void:
 	# ⚠️ 放在这一段的理由: 它紧跟在「走位 / 坐标桥」之后, 此时玩家状态干净
 	#    (没有格挡、没有蓄力), 而战斗那段会大幅改动状态。
 	await _check_jump(player)
+
+	# 跳跃测试的收尾 —— 回到干净的地面站立态, 再进后面的断言
+	player.state = BlitzPlayer.State.NORMAL
+	player.velocity = Vector2.ZERO
+	player.height = 0.0
+	player._grounded = true
+
+	await _check_aura(player)
+
+	# v0.4 压扁坐标模型
+	await _check_belt_space(player)
+
+	# v0.8 玩家骨架 —— 纯数学, 不进场景树, 不会碰玩家的战斗状态
+	_check_rig(player)
+
+	# v0.3 战斗手感 (单独放在最后: 它会大幅改动玩家状态, 不能影响上面的走位断言)
+	await _run_combat(_game)
+
+	print("=== 自检结束: %d 项检查, %d 项失败 ===" % [_checks, _fails])
 
 
 # ============================================================
@@ -253,16 +272,38 @@ func _check_jump(player: BlitzPlayer) -> void:
 		is_equal_approx(player.global_position.y, pos_before.y),
 		"y=%.4f 期望=%.4f" % [player.global_position.y, pos_before.y])
 
+	# ④.5 落地硬直 (v0.6)。它守护的失败模式是**退化答案**:
+	#      跳跃零代价 → 看到横扫就跳, 不再读招。硬直让「跳」= 用输出窗口换安全。
+	_ok("落地触发硬直 (跳跃不再零代价)", player._landing_timer > 0.0,
+		"_landing_timer=%.3f" % player._landing_timer)
+	_ok("落地硬直期间不能出手 (进攻闸门关着)", not player._can_start_offense(),
+		"_landing_timer=%.3f" % player._landing_timer)
+
 	# ⑤ 落地之后还能再跳 (第 ④ 条那个「再也跳不起来」的直接对照)
+	# ⚠️ 这一跳发生在硬直**期间** —— 它同时守护「硬直只锁进攻, 不锁止损」:
+	#    锁了跳跃的话这里会红, 而那正是最容易被手滑写成 `if _landing_timer > 0: return`
+	#    的地方 (写在 _process 顶部一拦, 连闪避和格挡都没了)。
 	Input.action_press("jump")
 	await get_tree().physics_frame
 	await get_tree().physics_frame
-	_ok("落地后能再次起跳 (高度状态机没卡住)", player.height > 0.0, "height=%.1f" % player.height)
+	_ok("落地硬直期间仍能起跳 (锁的是进攻, 不是一切)", player.height > 0.0,
+		"height=%.1f" % player.height)
 	Input.action_release("jump")
 	for i: int in range(120):
 		await get_tree().physics_frame
 		if player.is_grounded():
 			break
+
+	# ⑤.5 硬直会自己结束 —— 不清的话玩家**永久**不能出手, 而且只在跳过之后出现,
+	#      表现是「跳了一次以后攻击按不出来」, 像个间歇性按键失灵。
+	var lag_cleared: bool = false
+	for i: int in range(60):
+		await get_tree().physics_frame
+		if player._can_start_offense():
+			lag_cleared = true
+			break
+	_ok("落地硬直会自行结束 (进攻闸门重新打开)", lag_cleared,
+		"_landing_timer=%.3f" % player._landing_timer)
 
 	# ⑥ 硬直里不接受起跳输入 —— 否则被打飞的过程中按一下跳, 硬直结束会自动弹起来。
 	#    症状是「受击后莫名其妙跳一下」, 因为缓冲只有 0.08s, 极难复现。
@@ -297,18 +338,71 @@ func _check_jump(player: BlitzPlayer) -> void:
 	player._face(Vector2(0.35, 0.9))          # 明显偏向垂直
 	_ok("垂直分量明显更大时换轴", player.facing == Facing.DOWN, Facing.describe(player.facing))
 
+
+# ============================================================
+# v0.6 护体罡气
+# ============================================================
+#
+# 🎮 罡气的失败模式全是「看起来生效了, 其实没有」:
+#    · 罩子挡住伤害但**没消耗** → 无敌了, 玩家永远不用管它
+#    · 罩子挡住了但仍走 `_apply_damage` → 掉血了却闪了一下罩子 (最容易写错的分支顺序)
+#    · 罩子挡完还锁着进攻 → 玩家以为卡住了, 而且只在开罩之后按攻击才复现
+#    下面每条都对准其中一个。
+func _check_aura(player: BlitzPlayer) -> void:
+	print("-- 护体罡气 --")
+
 	player.state = BlitzPlayer.State.NORMAL
 	player.velocity = Vector2.ZERO
 	player.height = 0.0
 	player._grounded = true
+	player.invincible_timer = 0.0
+	player._hit_stun_timer = 0.0
+	player._aura_timer = 0.0
+	# v0.9: 冷却统一收进 _cooldowns 字典, 键 = SkillDef.id
+	player._cooldowns.erase(SkillBook.AURA)
+	player.health = player.max_health
+	player.stamina.refill()
 
-	# v0.4 压扁坐标模型
-	await _check_belt_space(player)
+	# ① 走完整输入路径张开
+	var st0: float = player.stamina.current
+	Input.action_press("aura")
+	await get_tree().physics_frame
+	await get_tree().physics_frame
+	Input.action_release("aura")
+	_ok("按 I 能张开罡气", player._aura_timer > 0.0, "_aura_timer=%.3f" % player._aura_timer)
+	_ok("罡气压精力 (容错不是免费的)", player.stamina.current < st0,
+		"精力 %.1f -> %.1f" % [st0, player.stamina.current])
+	_ok("罡气期间不能出手 (用输出换容错)", not player._can_start_offense())
 
-	# v0.3 战斗手感 (单独放在最后: 它会大幅改动玩家状态, 不能影响上面的走位断言)
-	await _run_combat(_game)
+	# ② 吃掉一次伤害 —— **血不能掉**, 而且罩子要没
+	var hp0: int = player.health
+	player.take_damage(1, Vector2.INF, null)
+	_ok("罡气吃掉一次伤害 (不掉血)", player.health == hp0,
+		"hp %d -> %d" % [hp0, player.health])
+	_ok("罡气挡完就消失 (只挡一次)", is_zero_approx(player._aura_timer),
+		"_aura_timer=%.3f" % player._aura_timer)
+	_ok("罡气消失后重新可以出手", player._can_start_offense())
+	_ok("罡气挡伤不进硬直 (罩子替人吃下这一下)", player.state == BlitzPlayer.State.NORMAL,
+		BlitzPlayer.State.keys()[player.state])
 
-	print("=== 自检结束: %d 项检查, %d 项失败 ===" % [_checks, _fails])
+	# ③ 第二下正常掉血 —— 证明上一条不是「伤害根本没生效」
+	player.invincible_timer = 0.0
+	player.state = BlitzPlayer.State.NORMAL
+	player.take_damage(1, Vector2.INF, null)
+	_ok("罩子没了, 第二下正常掉血", player.health == hp0 - 1,
+		"hp %d -> %d" % [hp0, player.health])
+
+	# 清理, 别把这套状态漏给后面的战斗断言
+	player.invincible_timer = 0.0
+	player._hit_stun_timer = 0.0
+	player.state = BlitzPlayer.State.NORMAL
+	# ③ 那一下走了 _apply_damage, 会带上击退速度 —— 不清的话后面测「速度上限」会读到它
+	player.velocity = Vector2.ZERO
+	player.health = player.max_health
+	player.stamina.refill()
+	player._aura_timer = 0.0
+	player._cooldowns.erase(SkillBook.AURA)
+	player.health_changed.emit(player.health, player.max_health)
 
 
 # ============================================================
@@ -347,7 +441,7 @@ func _check_belt_space(player: BlitzPlayer) -> void:
 	#    漏掉压扁的写法 (_apply_move 直接用 Input.get_vector 的原始 y) 会让
 	#    「按上」的世界速度变成 640 = 两倍, 而屏幕上看起来**完全正常**,
 	#    只是「上下走特别快、斜着走是歪的」。没有任何别的断言能抓到它。
-	player.global_position = _game.floor.center_of(Vector2i(20, 9))
+	player.global_position = _game.floor_layer.center_of(Vector2i(20, 9))
 	player.state = BlitzPlayer.State.NORMAL
 	for probe: Vector2 in [Vector2.RIGHT, Vector2.UP, Vector2.DOWN, Vector2.LEFT,
 			Vector2(1.0, -1.0).normalized(), Vector2(-1.0, 1.0).normalized()]:
@@ -451,12 +545,18 @@ func _run_combat(game: Node) -> void:
 	await _check_attack_shape(player)
 	await _check_hitbox_shapes(player)
 	await _check_skill(player, enemies)
+	# 这两段不推进帧 (纯同步断言), 所以不 await
+	_check_skill_book(player)
+	_check_unblockable(player, enemies)
+	await _check_sword_array(player)
 	await _check_enemy_attack_lands(player, enemies)
 	_check_ground_bodies(player, enemies)
 	await _check_enemy_cycle(player, enemies)
 	await _check_contact_damage_removed(player)
 	# 放在最后: 它会摆弄玩家和敌人的位置, 放在前面会干扰那些依赖摆放的断言
 	await _check_body_volume(player, enemies)
+	# 敌人的骨架是纯数据, 不依赖位置 —— 放在最后, 不打扰上面那些依赖摆放的断言
+	_check_enemy_rig(enemies)
 
 
 # ------------------------------------------------------------
@@ -1089,22 +1189,26 @@ func _check_skill(player: BlitzPlayer, enemies: Array) -> void:
 	player.invincible_timer = 0.0
 	player.health = player.max_health
 
+	# v0.9: 数值从 SkillDef 读 —— 自检读的和游戏读的是**同一份表**,
+	# 不然「表改了测试还绿」这种事会悄悄发生
+	var ld: SkillDef = player.lightning_def()
+
 	var sh: AttackShape = player.skill_shape()
 	_ok("落雷是**圆**, 而且圆心在身前 (不是脚下)",
 		sh.kind == AttackShape.Kind.CIRCLE and sh.offset.x > 0.0,
 		sh.describe())
-	# 圆心在身前 skill_distance 处 —— 这正是「闪电从空中落下然后在区域内造成伤害」的落点
-	_ok("落点 = 面朝方向 skill_distance 处",
-		is_equal_approx(sh.offset.x, player.skill_distance),
-		"offset.x = %.1f  期望 %.1f" % [sh.offset.x, player.skill_distance])
+	# 圆心在身前 offset_forward 处 —— 这正是「闪电从空中落下然后在区域内造成伤害」的落点
+	_ok("落点 = 面朝方向 offset_forward 处",
+		is_equal_approx(sh.offset.x, ld.offset_forward),
+		"offset.x = %.1f  期望 %.1f" % [sh.offset.x, ld.offset_forward])
 
 	# ① 站在**落点**上的敌人会中; 站在**身后**同样距离的不会中
 	#    ⚠️ 这两条要一起验: 只验前者的话, 一个「圆心偏移忘了乘 facing」的实现
 	#       (圆永远落在右边) 也能通过 —— 而那个 bug 的表现是朝左放技能劈在身后。
 	_free_hitboxes(player)
-	_prep_dummy(dummy, player, Vector2(player.skill_distance, 0.0))
+	_prep_dummy(dummy, player, Vector2(ld.offset_forward, 0.0))
 	player.state = BlitzPlayer.State.NORMAL
-	player._skill_cooldown_timer = 0.0
+	player._cooldowns.erase(SkillBook.LIGHTNING)
 	player.stamina.refill()
 	player.invincible_timer = 0.0
 	var hp0: int = dummy.health
@@ -1114,8 +1218,8 @@ func _check_skill(player: BlitzPlayer, enemies: Array) -> void:
 	# 判定框的寿命必须**包含**蓄势时间, 否则雷落地前它就自毁了 (表现: 雷劈了但没人掉血)
 	var hb: AttackHitbox = _first_hitbox(player)
 	_ok("判定框寿命含蓄势时间 (否则雷还没落就自毁了)",
-		hb != null and hb.lifetime > player.skill_arm_delay,
-		"lifetime=%.2fs  arm_delay=%.2fs" % [hb.lifetime if hb != null else -1.0, player.skill_arm_delay])
+		hb != null and hb.lifetime > ld.arm_delay,
+		"lifetime=%.2fs  arm_delay=%.2fs" % [hb.lifetime if hb != null else -1.0, ld.arm_delay])
 
 	# ①c 摆放规则 —— 预警圈必须以**真正挨打的那个点**为圆心
 	#
@@ -1150,17 +1254,17 @@ func _check_skill(player: BlitzPlayer, enemies: Array) -> void:
 			break
 	_ok("蓄势走完后劈中圈里的敌人", dummy.health < hp0, "hp %d -> %d" % [hp0, dummy.health])
 	_ok("落雷伤害高于横劈 (它的代价是延迟)",
-		hp0 - dummy.health >= player.skill_damage,
-		"掉血 %d  期望 >= %d" % [hp0 - dummy.health, player.skill_damage])
+		hp0 - dummy.health >= ld.damage,
+		"掉血 %d  期望 >= %d" % [hp0 - dummy.health, ld.damage])
 
 	# ④ 朝左时落点在**左边** —— 圆心偏移跟着朝向翻
 	_free_hitboxes(player)
-	_prep_dummy(dummy, player, Vector2(-player.skill_distance, 0.0))
+	_prep_dummy(dummy, player, Vector2(-ld.offset_forward, 0.0))
 	player.facing = Facing.LEFT
 	player.health = player.max_health
 	player.invincible_timer = 0.0
 	player.stamina.refill()
-	player._skill_cooldown_timer = 0.0
+	player._cooldowns.erase(SkillBook.LIGHTNING)
 	hp0 = dummy.health
 	player._begin_attack(BlitzPlayer.AttackKind.SKILL, 0.0)
 	for i: int in range(60):
@@ -1177,12 +1281,12 @@ func _check_skill(player: BlitzPlayer, enemies: Array) -> void:
 	#    玩法上等于「已经被打断了, 输出照样出去」; 画面上**看不出任何异常**
 	#    (圈本来就亮着), 所以只能靠自检抓。
 	_free_hitboxes(player)
-	_prep_dummy(dummy, player, Vector2(player.skill_distance, 0.0))
+	_prep_dummy(dummy, player, Vector2(ld.offset_forward, 0.0))
 	player.facing = Facing.RIGHT
 	player.health = player.max_health
 	player.invincible_timer = 0.0
 	player.stamina.refill()
-	player._skill_cooldown_timer = 0.0
+	player._cooldowns.erase(SkillBook.LIGHTNING)
 	hp0 = dummy.health
 	player._begin_attack(BlitzPlayer.AttackKind.SKILL, 0.0)
 	await get_tree().physics_frame
@@ -1206,6 +1310,171 @@ func _check_skill(player: BlitzPlayer, enemies: Array) -> void:
 	player.health = player.max_health
 	player.state = BlitzPlayer.State.NORMAL
 	_free_hitboxes(player)
+
+
+# ------------------------------------------------------------
+# v0.9 技能表: 表就是游戏用的那一份
+# ------------------------------------------------------------
+#
+# 🎮 这一段验的是**结构**, 不是手感: 「技能表」和「游戏里真正读的那份数据」
+#    是不是同一份。表错了不会崩、不会闪 —— 只会让「改了数值却没生效」这种事
+#    在很久以后、在完全无关的地方才被发现 (玩家只会觉得这一招手感怪)。
+func _check_skill_book(player: BlitzPlayer) -> void:
+	print("-- 技能表 (SkillDef / SkillBook) --")
+
+	var issues: PackedStringArray = SkillBook.problems()
+	_ok("技能表自洽 (id 对得上 / 代价和冷却为正 / 范围字段齐全)", issues.is_empty(),
+		" / ".join(issues))
+
+	var all_ok: bool = not SkillBook.ORDER.is_empty()
+	for id: StringName in SkillBook.ORDER:
+		if SkillBook.get_def(id) == null:
+			all_ok = false
+	_ok("目录里每个 id 都解析得到 (HUD/技能栏不会读到空)", all_ok,
+		"%d 个技能" % SkillBook.ORDER.size())
+
+	# ① 判定和表同源 —— 玩家拿到的 shape 必须**就是** def 造出来的那个。
+	#    ⚠️ 这条只能比字段, 不能比对象: make_shape() 故意每次 new 一份
+	#    (共享实例会被任何一处「临时改半径试试手感」污染, 见 SkillDef 的 🏗️)。
+	var ld: SkillDef = player.lightning_def()
+	var book_shape: AttackShape = ld.make_shape()
+	var game_shape: AttackShape = player.skill_shape()
+	_ok("落雷的判定 == 表里 make_shape() (两处写法不可能漂移)",
+		game_shape.kind == book_shape.kind
+			and is_equal_approx(game_shape.reach, book_shape.reach)
+			and game_shape.offset.is_equal_approx(book_shape.offset)
+			and is_equal_approx(game_shape.height_min, book_shape.height_min)
+			and is_equal_approx(game_shape.height_max, book_shape.height_max),
+		"表 %s  vs  游戏 %s" % [book_shape.describe(), game_shape.describe()])
+
+	# ② 冷却记在 def.id 上 —— 换一个键名就会变成「冷却永远查不到 = 永远能放」,
+	#    而画面上完全正常 (只是这一招突然没有代价了)。
+	player._cooldowns.clear()
+	player._cooldowns[SkillBook.LIGHTNING] = 0.5
+	_ok("冷却按 def.id 记账 (别的技能不受影响)",
+		is_equal_approx(player.cooldown_remaining(SkillBook.LIGHTNING), 0.5)
+			and is_zero_approx(player.cooldown_remaining(SkillBook.AURA)),
+		"落雷 %.2f  罡气 %.2f" % [
+			player.cooldown_remaining(SkillBook.LIGHTNING),
+			player.cooldown_remaining(SkillBook.AURA)])
+	_ok("冷却中 _can_cast 为假 (否则可以无视 CD 连放)", not player._can_cast(SkillBook.LIGHTNING))
+	player._cooldowns.clear()
+	player.stamina.refill()
+
+
+# ------------------------------------------------------------
+# 「不可格挡」标签 (COMBAT_MATRIX §3 ②)
+# ------------------------------------------------------------
+#
+# 🎮 这条标签改变的是**读招博弈的答案空间**: 格挡从「万能解」变回「多数情况下
+#    的解」。它的失败模式全是「玩家按了格挡, 但结果和预期不一样」:
+#      · 标记没传到判定区 → 紫红预警只是一层皮肤, 挡得住 (玩家白学)
+#      · 挡住了但仍扣精力 → 读成「挡漏了」, 而真相是「这招本来就挡不住」
+#      · 顺手把闪避/跳跃/罡气也废了 → 不可格挡退化成「必中」
+#    下面每条对准其中一个。
+func _check_unblockable(player: BlitzPlayer, enemies: Array) -> void:
+	print("-- 不可格挡 (COMBAT_MATRIX §3 ②) --")
+
+	var dummy: BlitzEnemy = _first_live_enemy(enemies)
+	if dummy == null:
+		_ok("找到不可格挡测试靶子", false)
+		return
+	_prep_dummy(dummy, player, Vector2(-40.0, 0.0))
+	player.facing = Facing.LEFT                 # 正面 = -X (和 _check_guard 同一约定)
+	player.state = BlitzPlayer.State.NORMAL
+	player.velocity = Vector2.ZERO
+	player.height = 0.0
+	player._grounded = true
+	player.invincible_timer = 0.0
+	player.health = player.max_health
+	player.stamina.refill()
+	var frontal: Vector2 = player.global_position + Vector2(-40.0, 0.0)
+
+	# ① 敌人身上的标记真的要走到判定区上 —— 否则后面的断言全在空转
+	dummy.attack_unblockable = true
+	dummy._cancel_attack()
+	dummy._enter_strike()
+	var atk: EnemyAttack = dummy._attack_area
+	_ok("不可格挡标记传到了判定区", atk != null and atk.unblockable,
+		"atk.unblockable=%s" % ("(null)" if atk == null else str(atk.unblockable)))
+	dummy._cancel_attack()                      # 立刻收掉, 别让它真打进来
+
+	# 颜色是玩法信息: 两种预警必须**分得开**, 否则玩家学不到这个信号
+	_ok("紫红预警和橙红预警是不同的颜色",
+		EnemyAttack.warn_color_for(true) != EnemyAttack.warn_color_for(false),
+		"%s vs %s" % [EnemyAttack.warn_color_for(true), EnemyAttack.warn_color_for(false)])
+
+	# ② 举着盾挨不可格挡 → 照常掉血 + 盾被打掉
+	player._enter_blocking()
+	player._parry_window_timer = 0.0
+	var hp0: int = player.health
+	var st0: float = player.stamina.current
+	player.take_damage(1, frontal, dummy, true)
+	_ok("举着盾挨不可格挡 → 照常掉血", player.health == hp0 - 1,
+		"hp %d -> %d" % [hp0, player.health])
+	_ok("不可格挡**不扣**格挡精力 (举着一个无效的盾不该再赔一次)",
+		is_equal_approx(player.stamina.current, st0),
+		"精力 %.1f -> %.1f" % [st0, player.stamina.current])
+	_ok("挨了不可格挡会掉出格挡 (盾被打掉, 不是继续举着)",
+		player.state == BlitzPlayer.State.HIT, BlitzPlayer.State.keys()[player.state])
+
+	# ③ A/B 对照: 同一个人、同一位置, 只把 unblockable 换成 false → 挡住了。
+	#    ⚠️ 没有这一条, ② 在「玩家其实站在背后」时也会绿 —— 那样测到的是朝向,
+	#    不是标签。
+	player.invincible_timer = 0.0
+	player.health = player.max_health
+	player.stamina.refill()
+	player._enter_blocking()
+	player._parry_window_timer = 0.0
+	hp0 = player.health
+	player.take_damage(1, frontal, dummy, false)
+	_ok("对照: 同一位置的普通招式 → 零伤 (证明 ② 掉血是因为标签, 不是站错边)",
+		player.health == hp0, "hp %d -> %d" % [hp0, player.health])
+
+	# ④ 罡气照样吃掉不可格挡 —— 它是「免伤」, 不是「格挡」, 不在这一招的豁免里。
+	#    这条也是「不可格挡 ≠ 必中」的一半: 还有另一条路能完全化解。
+	player.invincible_timer = 0.0
+	player.state = BlitzPlayer.State.NORMAL
+	player.health = player.max_health
+	player.stamina.refill()
+	player._aura_timer = 1.0
+	player._aura_hits = 1
+	hp0 = player.health
+	player.take_damage(1, frontal, dummy, true)
+	_ok("罡气仍能吃掉不可格挡 (免伤 ≠ 格挡)",
+		player.health == hp0 and is_zero_approx(player._aura_timer),
+		"hp %d -> %d  _aura_timer=%.2f" % [hp0, player.health, player._aura_timer])
+
+	# ⑤ 高度带照常生效 —— 不可格挡 ≠ 不可躲。跳得够高就打不到, 判据仍然在
+	#    **受击方**这里 (见 _on_hurtbox_area_entered)。
+	player._aura_timer = 0.0
+	player._aura_hits = 0
+	player.invincible_timer = 0.0
+	player.state = BlitzPlayer.State.NORMAL
+	player.health = player.max_health
+	player.height = 999.0
+	var probe: EnemyAttack = EnemyAttack.new()
+	probe.damage = 1
+	probe.unblockable = true
+	probe.attack_shape = dummy.attack_shape()
+	probe.facing = dummy.facing
+	probe.position = frontal
+	hp0 = player.health
+	player._on_hurtbox_area_entered(probe)
+	_ok("跳起来照样躲得开不可格挡 (解法是闪避/跳跃, 不是「必中」)",
+		player.health == hp0, "hp %d -> %d (height=999)" % [hp0, player.health])
+	probe.free()
+
+	# 清理 —— 别把 HIT / 高度 / 罡气漏给后面的段落
+	player.height = 0.0
+	player._height_vel = 0.0
+	player.state = BlitzPlayer.State.NORMAL
+	player.velocity = Vector2.ZERO
+	player.invincible_timer = 0.0
+	player._hit_stun_timer = 0.0
+	player.health = player.max_health
+	player.stamina.refill()
+	dummy.attack_unblockable = false
 
 
 func _first_hitbox(player: BlitzPlayer) -> AttackHitbox:
@@ -1313,6 +1582,226 @@ func _check_ground_bodies(player: BlitzPlayer, enemies: Array) -> void:
 			absf(ratio - BeltSpace.DEPTH_SCALE) < 0.02,
 			"屏幕包围盒 %.1f×%.1f → 比 %.3f, 期望 %.3f" % [
 				bb.size.x, bb.size.y, ratio, BeltSpace.DEPTH_SCALE])
+
+
+# ------------------------------------------------------------
+# v0.7 剑阵 —— 第一个「布置」类技能
+# ------------------------------------------------------------
+#
+# 🎮 剑阵的失败模式几乎全是「伤害照样有, 但那个『选择』没了」:
+#    · 阵跟着玩家走        → 退化成光环, 走位没有空间收益
+#    · DoT 走 take_damage  → 每 0.5 秒硬直 + 击退, 剑阵自己把敌人赶出去,
+#                            而且敌人被永久控制 → 读招机制被架空
+#    · 敌人无脑避开        → 玩家站进自己的阵里就是零代价安全区
+#    · 不扣精力 / 无冷却    → 站桩刷阵, 整场博弈消失
+#    下面每条对准其中一个。前三条都**不会报错**, 只会让这一招变得没有意义。
+## 场上**还活着**的剑阵数 —— 排除已在删除队列里的。
+##
+## 🏗️ queue_free() 是延迟释放: 被 free 的节点这一帧仍在场景树里、仍在组里。
+##    「按 O 前后数一数」这类断言如果直接数组大小, 会把「一个旧阵正在被释放」
+##    也算成基线, 于是施放成功时数量差仍是 0 —— 一次纯口径错误导致的假红。
+func _live_sword_arrays() -> int:
+	var n: int = 0
+	for a: Node in get_tree().get_nodes_in_group("sword_arrays"):
+		if not a.is_queued_for_deletion():
+			n += 1
+	return n
+
+
+func _check_sword_array(player: BlitzPlayer) -> void:
+	print("-- 剑阵 --")
+
+	player.state = BlitzPlayer.State.NORMAL
+	player.velocity = Vector2.ZERO
+	player.height = 0.0
+	player._grounded = true
+	player.invincible_timer = 0.0
+	player._hit_stun_timer = 0.0
+	player._landing_timer = 0.0
+	player._aura_timer = 0.0
+	player._cast_lock_timer = 0.0
+	player._cooldowns.erase(SkillBook.SWORD_ARRAY)
+	player.health = player.max_health
+	player.stamina.refill()
+
+	var world: Node = player.get_parent()
+
+	# ⚠️ 用**现造的一具靶子**, 不借场上的敌人:
+	#    场上的敌人被 AI / 体积分离推着走, 而这一段要断言「站在阵里不动会掉血」
+	#    —— 靶子自己走开的话断言就变成了在测 AI。
+	var probe: BlitzEnemy = preload("res://scenes/enemy.tscn").instantiate()
+	probe.enemy_type = BlitzEnemy.Type.STATIONARY
+	probe.max_health = 999            # ⚠️ 必须在 add_child 之前设: _ready 里会 health = max_health
+	probe.can_attack = false
+	world.add_child(probe)
+	probe.set_physics_process(false)  # 钉死不动; ⚠️ 它仍会参与体积分离, 所以摆远一点
+	probe.velocity = Vector2.ZERO
+
+	# 阵心摆在**地图之外**的空位上 —— 这样道上任何一个真敌人都不可能站进圈里。
+	# ⚠️ 这不是洁癖: _tick() 扫的是 "enemies" 组, 阵心放在地图内的话, 这一段会
+	#    偷偷削掉某只真敌人的血 (甚至打死它), 后面依赖「有几只活敌人」的断言会莫名变红。
+	var center: Vector2 = Vector2(-2000.0, -2000.0)
+	var sa: SwordArray = SwordArray.spawn(world, center, 76.0, 3.0, 0.5, 1)
+	_ok("能落一座剑阵", sa != null and is_instance_valid(sa))
+	if sa == null:
+		probe.queue_free()
+		return
+
+	# ① 判定和绘制同源 —— 阵的半径只有一个来源
+	_ok("阵的形状半径 == 阵半径 (判定和画出来的圈是同一个数)",
+		is_equal_approx(sa.shape.reach, sa.radius), "reach=%.1f radius=%.1f" % [sa.shape.reach, sa.radius])
+	_ok("阵是**世界物件**, 不是玩家的子节点", sa.get_parent() != player,
+		"父节点 = %s" % str(sa.get_parent()))
+	# 贴地层: 画在角色**脚下**而不是脸上 —— 挂 FX 层 (z=40) 会盖住玩家的脚,
+	# 而「我的脚在不在阵里」正是玩家唯一要读的信息。
+	_ok("阵在贴地层且退出 y-sort (z_as_relative = false)",
+		sa.z_as_relative == false and sa.z_index == GroundTelegraph.GROUND_Z,
+		"z_index=%d z_as_relative=%s" % [sa.z_index, str(sa.z_as_relative)])
+
+	# ② 布置 = 留在原地。玩家走了, 阵心不能跟着走
+	var before: Vector2 = sa.world_center
+	player.global_position = _game.floor_layer.center_of(Vector2i(6, 15))
+	await get_tree().physics_frame
+	await get_tree().physics_frame
+	_ok("玩家走开之后阵心不动 (这是「布置」和「光环」的分界线)",
+		sa.world_center.is_equal_approx(before), "%s vs %s" % [sa.world_center, before])
+
+	# ③ 踩在阵里 → 掉血, 但**不硬直、不击退**
+	var hp0: int = probe.health
+	probe.global_position = BeltSpace.to_screen(center + Vector2(30.0, 0.0))
+	sa._tick()
+	_ok("阵里的敌人吃到持续伤害", probe.health == hp0 - 1, "hp %d -> %d" % [hp0, probe.health])
+	# ⚠️ 这两条是「剑阵是布置技, 不是控制技」的全部保障
+	_ok("DoT 不给硬直 (否则剑阵 = 全场永久打断)", is_zero_approx(probe._stun_timer),
+		"_stun_timer=%.3f" % probe._stun_timer)
+	_ok("DoT 不给击退 (否则剑阵自己把敌人赶出去, 那个「选择」就没了)",
+		probe.velocity.length() < 0.01, "|v|=%.2f" % probe.velocity.length())
+
+	# ③.5 霸体中的敌人照吃跳伤, 但**招式不被打断** —— 「剑阵逼位, 不逼失误」的另一半
+	probe.attack_phase = BlitzEnemy.AttackPhase.WINDUP
+	probe._stagger_timer = 0.0
+	var hp_armor: int = probe.health
+	sa._tick()
+	_ok("霸体(WINDUP)中的敌人照吃跳伤", probe.health == hp_armor - 1,
+		"hp %d -> %d" % [hp_armor, probe.health])
+	_ok("跳伤不打断出招 (phase 仍是 WINDUP, 没有硬直)",
+		probe.attack_phase == BlitzEnemy.AttackPhase.WINDUP and is_zero_approx(probe._stagger_timer),
+		"phase=%d stagger=%.3f" % [probe.attack_phase, probe._stagger_timer])
+	probe.attack_phase = BlitzEnemy.AttackPhase.NONE
+
+	# ③.6 阵不伤玩家 —— 只扫 "enemies" 组。这条现在只写在注释里的话,
+	#      哪天有人把玩家加进那个组 (或者改成扫 "damageables"), 玩家会被自己的阵烧死。
+	var player_hp0: int = player.health
+	player.global_position = BeltSpace.to_screen(center)
+	sa._tick()
+	_ok("玩家站在自己的阵里不掉血 (阵只打 enemies 组)", player.health == player_hp0,
+		"hp %d -> %d" % [player_hp0, player.health])
+
+	# ④ 阵外安全 —— 圈画到哪儿, 判定就停在哪儿
+	var hp_out: int = probe.health
+	probe.global_position = BeltSpace.to_screen(center + Vector2(160.0, 0.0))
+	sa._tick()
+	_ok("阵外的敌人不掉血 (圈就是边界)", probe.health == hp_out,
+		"hp %d -> %d" % [hp_out, probe.health])
+
+	# ⑤ 追击型会绕 —— 这是「走位有空间收益」的唯一证据
+	# ⚠️ 直接驱动 _process_chase 并自己积分位置: 不走物理帧就不会被体积分离和墙推来推去,
+	#    每帧的位移完全由 AI 决定, 断言才是确定性的。
+	var dt: float = 1.0 / 60.0
+	probe.enemy_type = BlitzEnemy.Type.CHASER
+	probe.global_position = BeltSpace.to_screen(center + Vector2(-140.0, 0.0))
+	# 玩家站在阵的**另一侧外面** → 直线追击会穿过阵心, 正是要避开的情形
+	player.global_position = BeltSpace.to_screen(center + Vector2(150.0, 0.0))
+	var start_pos: Vector2 = probe.global_position
+	# ⚠️ 断言的是**整条路径上的最近距离**, 不是终点距离:
+	#    硬闯过去的敌人最后也会停在玩家旁边 (离阵心很远), 只看终点的话
+	#    「穿过去了」和「绕开了」长得一模一样 —— 这条断言就会永远绿。
+	var min_dist: float = INF
+	for i: int in range(90):
+		probe._process_chase(dt)
+		probe.global_position += probe.velocity * dt
+		min_dist = minf(min_dist, BeltSpace.to_world(probe.global_position).distance_to(center))
+	_ok("追击型确实动起来了 (否则下面那条是空测)",
+		probe.global_position.distance_to(start_pos) > 20.0,
+		"位移 %.1fpx" % probe.global_position.distance_to(start_pos))
+	_ok("追击型整条路径都没进过剑阵 (绕开了, 不是硬闯)",
+		min_dist >= sa.radius - 2.0, "路径最近处 %.1f, 阵半径 %.1f" % [min_dist, sa.radius])
+
+	# ⑥ 但**玩家站在阵里时不躲** —— 否则圈内就是零代价安全区。
+	#    先做 A/B 对照: 同一个位置, 只把玩家从「阵外」挪到「阵心」, 回避必须从
+	#    「有方向」变成「零」。只测后者的话, 「离得太远所以不躲」也会让它假绿。
+	probe.global_position = BeltSpace.to_screen(center + Vector2(-90.0, 0.0))
+	player.global_position = BeltSpace.to_screen(center + Vector2(150.0, 0.0))
+	var to_player: Vector2 = BeltSpace.to_world(player.global_position) - BeltSpace.to_world(probe.global_position)
+	var avoid_out: Vector2 = probe._sword_avoid(player, to_player)
+	_ok("玩家在阵外且直线会穿过阵 → 敌人回避", avoid_out != Vector2.ZERO, "回避方向 = %s" % avoid_out)
+
+	player.global_position = BeltSpace.to_screen(center)
+	var to_player_in: Vector2 = BeltSpace.to_world(player.global_position) - BeltSpace.to_world(probe.global_position)
+	var avoid_in: Vector2 = probe._sword_avoid(player, to_player_in)
+	_ok("玩家在阵里 → 敌人不再回避 (站自己阵里是要付代价的陷阱)",
+		avoid_in == Vector2.ZERO, "回避方向 = %s" % avoid_in)
+
+	# ⑥.5 会自己到期 —— 漏了 _t 累加的话阵会永久留在场上刷伤害。
+	#      用**一次大步长**手动推进, 不真等 3 秒物理帧 (那是 180 帧, 白白拖慢自检)。
+	var short: SwordArray = SwordArray.spawn(world, center, 76.0, 1.0, 0.5, 0)
+	short._physics_process(1.1)
+	_ok("超过持续时间后阵自己销毁 (不会永久留在场上)",
+		short.is_queued_for_deletion(), "duration=1.0, 推进 1.1s")
+
+	# ⑥.6 冷却必须长于持续时间 —— 否则两个阵可以无缝叠满, 而这招的代价就没了
+	var sd: SkillDef = player.sword_array_def()
+	_ok("冷却 > 持续时间 (不允许无缝叠阵)",
+		sd.cooldown > sd.duration,
+		"冷却 %.1f vs 持续 %.1f" % [sd.cooldown, sd.duration])
+
+	# ⑦ 走完整输入路径施放 —— 精力、冷却、硬直, 一个都不能少
+	# ⚠️ remove_child + queue_free 一起做: 只 queue_free 的话它这一帧还在组里,
+	#    下面「阵数变多了」的断言就会因为「新旧一进一出」而变成假的。
+	world.remove_child(sa)
+	sa.queue_free()
+	player.global_position = _game.floor_layer.center_of(Vector2i(20, 15))
+	player.velocity = Vector2.ZERO
+	player.state = BlitzPlayer.State.NORMAL
+	player.stamina.refill()
+	player._cooldowns.erase(SkillBook.SWORD_ARRAY)
+	player._cast_lock_timer = 0.0
+	player._landing_timer = 0.0
+	player._aura_timer = 0.0
+	# ⚠️ 用「前后数量差」而不是「场上有没有阵」: 上面 sa.queue_free() 是**延迟**释放,
+	#    这一帧它还在组里 —— 直接数存在与否会让 ⑦ 在「按键根本没生效」时照样是绿的。
+	# ⚠️ 而且**基线只能数没进删除队列的**: ⑥.5 的 short 同样还在组里等着释放,
+	#    不排除它的话基线被虚增 1, 按 O 之后「它释放 + 新阵补上」正好抵消 ——
+	#    计数 1 → 1, 断言会在施放**成功**的情况下报红 (这一条真发生过)。
+	var arrays_before: int = _live_sword_arrays()
+	var st0: float = player.stamina.current
+	Input.action_press("sword_array")
+	await get_tree().physics_frame
+	await get_tree().physics_frame
+	Input.action_release("sword_array")
+	var arrays_after: int = _live_sword_arrays()
+	_ok("按 O 能落阵", arrays_after > arrays_before,
+		"场上阵数 %d -> %d" % [arrays_before, arrays_after])
+	_ok("剑阵扣精力 (布置不是免费的)", player.stamina.current < st0,
+		"精力 %.1f -> %.1f" % [st0, player.stamina.current])
+	_ok("剑阵进冷却 (否则可以站桩刷阵)", player.cooldown_remaining(SkillBook.SWORD_ARRAY) > 0.0,
+		"冷却 = %.2f" % player.cooldown_remaining(SkillBook.SWORD_ARRAY))
+	_ok("刚放完不能立刻再放", not player._can_cast(SkillBook.SWORD_ARRAY))
+	_ok("施放有硬直 (锁进攻, 不锁走位)", player._cast_lock_timer > 0.0,
+		"_cast_lock_timer=%.2f" % player._cast_lock_timer)
+
+	# 清理 —— 阵和靶子都要收干净: 漏一座阵, 后面的敌人会在剩余寿命里被它跳伤
+	for n: Node in get_tree().get_nodes_in_group("sword_arrays"):
+		n.queue_free()
+	probe.queue_free()
+	player._cast_lock_timer = 0.0
+	player._cooldowns.erase(SkillBook.SWORD_ARRAY)
+	player._landing_timer = 0.0
+	player._aura_timer = 0.0
+	player.state = BlitzPlayer.State.NORMAL
+	player.velocity = Vector2.ZERO
+	player.global_position = _game.floor_layer.center_of(Vector2i(20, 9))
+	player.stamina.refill()
 
 
 # ------------------------------------------------------------
@@ -1551,8 +2040,17 @@ func _check_body_volume(player: BlitzPlayer, enemies: Array) -> void:
 	var others: Array = []
 	for n: Node in enemies:
 		if n is BlitzEnemy and n != a and not (n as BlitzEnemy).is_dead:
-			(n as BlitzEnemy).set_physics_process(false)
-			others.append(n)
+			var other: BlitzEnemy = n
+			other.set_physics_process(false)
+			other.velocity = Vector2.ZERO
+			# ⚠️ 只关 _physics_process **不够**: 体积分离是 main 每帧统一结算的
+			#    (`BodySeparation.resolve_all`), 跟各自的 _physics_process 无关。
+			#    留在原地的敌人照样会把玩家推歪 —— 「正对着顶过去」于是变成
+			#    「被侧面挤着绕过去」, 断言就红在一个和被测机制无关的原因上
+			#    (实测踩到: 玩家被别的敌人推着从目标敌人身侧滑过去了)。
+			#    所以连**位置**一起挪开, 收尾再挪回来。
+			others.append([other, other.global_position])
+			other.global_position = player.global_position + BeltSpace.to_screen(Vector2(-3000.0, 300.0))
 
 	a.attack_phase = BlitzEnemy.AttackPhase.NONE
 	a._stagger_timer = 0.0
@@ -1574,7 +2072,7 @@ func _check_body_volume(player: BlitzPlayer, enemies: Array) -> void:
 	#       不能让敌人的移动/玩家的 move_and_slide 混进来。
 	player.set_physics_process(false)
 	a.set_physics_process(false)
-	var center: Vector2 = _game.floor.center_of(Vector2i(20, 9))
+	var center: Vector2 = _game.floor_layer.center_of(Vector2i(20, 9))
 	player.global_position = center
 	a.global_position = center
 	player.velocity = Vector2.ZERO
@@ -1654,8 +2152,10 @@ func _check_body_volume(player: BlitzPlayer, enemies: Array) -> void:
 	a.set_physics_process(true)
 	player.set_physics_process(true)
 	player.velocity = Vector2.ZERO
-	for n: Node in others:
-		(n as BlitzEnemy).set_physics_process(true)
+	for entry: Array in others:
+		var other: BlitzEnemy = entry[0]
+		other.global_position = entry[1]     # 挪回原来的位置 (见上面「只关物理不够」)
+		other.set_physics_process(true)
 
 
 # ============================================================
@@ -1743,3 +2243,415 @@ func _first_hitbox_shape2d(player: BlitzPlayer) -> Shape2D:
 			if g is CollisionShape2D:
 				return (g as CollisionShape2D).shape
 	return null
+
+
+# ============================================================
+# v0.8 玩家骨架 (scripts/visual/player_rig.gd)
+# ============================================================
+#
+# 🎮 这一组断言的共同主题: 骨架是**纯数学**, 所以「画出来怪」可以不用眼睛、
+#    直接在 headless 里量出来。挑的全是「不报错、只是看起来不对」的失败模式:
+#    骨长漂移、IK 脚浮空、刀脱手、纵深视图把手臂压进躯干、两个动作长得一样。
+#
+# ⚠️ 两个真实事故, 现在各有一条断言守着:
+#    ① 腿角写死 → 跨步最大时脚必然离开地面 (IK 就是为它加的)
+#    ② 纵深压扁乘到了「站位」上 → 背/正面两只手臂缩进躯干中线 (只剩一颗头)
+func _check_rig(player: BlitzPlayer) -> void:
+	print("-- 玩家骨架 / 动作 --")
+	var rig: PlayerRig = PlayerRig.new()
+	var anims: Array[int] = [
+		PlayerRig.Anim.IDLE, PlayerRig.Anim.RUN, PlayerRig.Anim.JUMP_RISE, PlayerRig.Anim.JUMP_FALL,
+		PlayerRig.Anim.LAND, PlayerRig.Anim.LIGHT, PlayerRig.Anim.HEAVY_CHARGE, PlayerRig.Anim.HEAVY_SWING,
+		PlayerRig.Anim.CAST_LIGHTNING, PlayerRig.Anim.CAST_SWORD_ARRAY, PlayerRig.Anim.BLOCK,
+		PlayerRig.Anim.HIT, PlayerRig.Anim.DASH, PlayerRig.Anim.GUARD_BROKEN,
+	]
+	var phases: Array[float] = [0.0, 0.2, 0.45, 0.7, 0.95]
+	var views: Array[int] = [PlayerRig.View.SIDE, PlayerRig.View.BACK, PlayerRig.View.FRONT]
+
+	# ① 有限数。一个 NaN 进了 draw_colored_polygon → 这一笔**静默不画**,
+	#    表现是「角色偶尔整个消失」, 而控制台一个字都没有。
+	var bad: int = 0
+	for a: int in anims:
+		for t: float in phases:
+			rig.apply(a, t)
+			for v: int in views:
+				rig.solve(v)
+				for p: Vector2 in _rig_points(rig):
+					if not (is_finite(p.x) and is_finite(p.y)):
+						bad += 1
+	_ok("14 动作 × 5 相位 × 3 视图: 关节点全是有限数", bad == 0, "坏点=%d" % bad)
+
+	# ② 骨长恒定。FK 是「角度 × 常量」, 长度变了只可能是某个分支把长度写死了,
+	#    或者 IK 直接把关节摆到了够不到的目标上 (那会把腿拉长成橡皮筋)。
+	var len_bad: int = 0
+	for a: int in anims:
+		for t: float in phases:
+			rig.apply(a, t)
+			rig.solve(PlayerRig.View.SIDE)
+			if absf(rig.knee_near.distance_to(rig.ankle_near) - PlayerRig.SHIN) > 0.02:
+				len_bad += 1
+			if absf(rig.hip_near.distance_to(rig.knee_near) - PlayerRig.THIGH) > 0.02:
+				len_bad += 1
+			if absf(rig.elbow_near.distance_to(rig.hand_near) - PlayerRig.FOREARM) > 0.02:
+				len_bad += 1
+			if absf(rig.shoulder_near.distance_to(rig.elbow_near) - PlayerRig.UPPER_ARM) > 0.02:
+				len_bad += 1
+	_ok("骨长在所有动作里恒定", len_bad == 0, "异常帧=%d" % len_bad)
+
+	# ③ 刀 = 手的一部分。grip 一旦不等于 hand_near, 画面上就是「刀在飘」——
+	#    它不报错, 而且只有动起来才看得出来。
+	var grip_drift: float = 0.0
+	var sword_bad: int = 0
+	for a: int in anims:
+		for t: float in phases:
+			rig.apply(a, t)
+			rig.solve(PlayerRig.View.SIDE)
+			grip_drift = maxf(grip_drift, rig.grip.distance_to(rig.hand_near))
+			if absf(rig.tip.distance_to(rig.grip) - rig.sword_len) > 0.02:
+				sword_bad += 1
+	_ok("刀柄始终 = 持剑手手心", grip_drift < 0.001, "最大偏差=%.4f" % grip_drift)
+	_ok("刀长每一帧都等于 sword_len", sword_bad == 0, "异常帧=%d" % sword_bad)
+
+	# ④ 纵深视图的「站位 vs 摆动」分离 —— 这一条专治手臂塌进躯干。
+	#    横向站位必须**原样保留** (不压扁), 左右还必须严格对称。
+	var lat_min: float = 999.0
+	var sym_max: float = 0.0
+	var hip_gap: float = 0.0
+	for a: int in anims:
+		for t: float in phases:
+			rig.apply(a, t)
+			for v: int in [PlayerRig.View.BACK, PlayerRig.View.FRONT]:
+				rig.solve(v)
+				var nl: float = absf(rig.shoulder_near.x - rig.chest.x)
+				lat_min = minf(lat_min, nl)
+				sym_max = maxf(sym_max, absf((rig.shoulder_near.x - rig.chest.x) + (rig.shoulder_far.x - rig.chest.x)))
+				hip_gap = maxf(hip_gap, absf(rig.hip_near.x - rig.hip_far.x))
+	_ok("背/正面: 双肩横向站位没被压扁 (≥5.5, 大于袍身半宽)", lat_min >= 5.5, "最小=%.2f" % lat_min)
+	_ok("背/正面: 双肩左右对称", sym_max < 0.01, "误差=%.3f" % sym_max)
+	_ok("背/正面: 双髋横向分开 (两条腿不是一根柱子)", hip_gap > 5.0, "间距=%.2f" % hip_gap)
+
+	# ⑤ 跑步的 IK 落点。支撑脚必须**正好**落在落点上 —— 差一点点就是浮空/陷地,
+	#    而且因为每帧都差一点点, 看起来是「脚在地上滑」而不是「脚没落地」。
+	rig.apply(PlayerRig.Anim.RUN, 0.0)
+	rig.solve(PlayerRig.View.SIDE)
+	var err_n: float = rig.ankle_near.distance_to(rig.leg_near_foot)
+	var err_f: float = rig.ankle_far.distance_to(rig.leg_far_foot)
+	_ok("跑步: 支撑帧两只脚都落在落点上", err_n < 0.3 and err_f < 0.3,
+		"近脚差=%.2f 远脚差=%.2f" % [err_n, err_f])
+	_ok("跑步: 支撑脚贴地 (脚踝在脚底高度附近)", rig.ankle_near.y > -6.0, "ankle.y=%.2f" % rig.ankle_near.y)
+	_ok("跑步: 前后脚确实分开 (不是原地踏步)", absf(rig.ankle_near.x - rig.ankle_far.x) > 8.0,
+		"间距=%.2f" % absf(rig.ankle_near.x - rig.ankle_far.x))
+
+	# 摆动期必须抬脚。抬不起来的话, 整套跑步就是「两脚擦地前后蹭」。
+	# ⚠️ 摆动期是 sin<0 的那半圈 (th ∈ (π,2π)), 不是 0.25。0.25 是单脚支撑期,
+	#    支撑脚本来就该贴地 —— 相位选错的话, 这条断言会咒死一个正确的实现。
+	rig.apply(PlayerRig.Anim.RUN, 0.75)
+	rig.solve(PlayerRig.View.SIDE)
+	_ok("跑步: 摆动期脚离地", rig.ankle_near.y < -7.0, "ankle.y=%.2f" % rig.ankle_near.y)
+
+	# ⑥ 循环首尾相接。相位从 0.999 跳到 0.0 时若姿态不连续, 跑步每圈会「顿一下」。
+	rig.apply(PlayerRig.Anim.RUN, 0.999)
+	rig.solve(PlayerRig.View.SIDE)
+	var wrap_from: Vector2 = rig.ankle_near
+	rig.apply(PlayerRig.Anim.RUN, 0.0)
+	rig.solve(PlayerRig.View.SIDE)
+	_ok("跑步: 相位 1.0 与 0.0 姿态接得上", wrap_from.distance_to(rig.ankle_near) < 1.0,
+		"差=%.2f" % wrap_from.distance_to(rig.ankle_near))
+
+	# ⑦ 招式之间**必须长得不一样** —— 这是这一轮改动的全部目的:
+	#    轻击/重击/落雷/剑阵 的手和刀要各自可辨认, 否则玩家读不出自己在放什么。
+	rig.apply(PlayerRig.Anim.LIGHT, 0.5)
+	rig.solve(PlayerRig.View.SIDE)
+	var light_hand: Vector2 = rig.hand_near
+	rig.apply(PlayerRig.Anim.HEAVY_SWING, 0.5)
+	rig.solve(PlayerRig.View.SIDE)
+	_ok("轻击与重击的手部姿态不同", light_hand.distance_to(rig.hand_near) > 2.0,
+		"手位差=%.2f" % light_hand.distance_to(rig.hand_near))
+
+	rig.apply(PlayerRig.Anim.CAST_LIGHTNING, 0.4)
+	rig.solve(PlayerRig.View.SIDE)
+	_ok("落雷: 剑指向上方 (举剑引雷)", PlayerRig.dir_of(rig.sword_angle).y < -0.7,
+		"刀向=%s" % PlayerRig.dir_of(rig.sword_angle))
+
+	rig.apply(PlayerRig.Anim.CAST_SWORD_ARRAY, 0.5)
+	rig.solve(PlayerRig.View.SIDE)
+	_ok("剑阵: 剑尖朝下 (插进地里)", PlayerRig.dir_of(rig.sword_angle).y > 0.7,
+		"刀向=%s" % PlayerRig.dir_of(rig.sword_angle))
+
+	rig.apply(PlayerRig.Anim.JUMP_RISE, 0.0)
+	rig.solve(PlayerRig.View.SIDE)
+	var rise_ankle: Vector2 = rig.ankle_near
+	rig.apply(PlayerRig.Anim.JUMP_FALL, 0.0)
+	rig.solve(PlayerRig.View.SIDE)
+	_ok("起跳收腿与下落伸腿不同 (玩家分得清还能不能跳)", rise_ankle.distance_to(rig.ankle_near) > 3.0,
+		"脚位差=%.2f" % rise_ankle.distance_to(rig.ankle_near))
+
+	# ⑧ 重心不跑出合理带。pelvis 写错一个符号, 人就蹲到地底或者飘到胸口。
+	var stray: int = 0
+	for a: int in anims:
+		for t: float in phases:
+			rig.apply(a, t)
+			if rig.pelvis.y < -34.0 or rig.pelvis.y > -20.0:
+				stray += 1
+	_ok("所有动作的重心都在 [-34,-20] 内", stray == 0, "越界帧=%d" % stray)
+
+	# ⑨ 游戏状态 → 骨骼动作的接缝。这一层错了, 表现是「按了重击却做出轻击动作」,
+	#    而代码里两条路各自的逻辑都完全正确。
+	var st0: int = player.state
+	var kind0: int = player._attack_kind
+	var grounded0: bool = player._grounded
+	var vel0: float = player._height_vel
+	var cast0: float = player._cast_lock_timer
+	var land0: float = player._landing_timer
+	var cast_id0: StringName = player._cast_skill_id
+	player._cast_lock_timer = 0.0
+	player._landing_timer = 0.0
+	# v0.9: 施法姿态从 SkillDef 读, 所以这里要同时摆 id —— 只摆 _attack_kind 的话
+	#       anim_state() 找不到技能名, 会退回 IDLE (这条断言正是抓这个的)
+	player._cast_skill_id = SkillBook.LIGHTNING
+
+	player.state = BlitzPlayer.State.CHARGING
+	_ok("蓄力 → 重击蓄力姿态", player.anim_state() == PlayerRig.Anim.HEAVY_CHARGE)
+	player.state = BlitzPlayer.State.ATTACKING
+	player._attack_kind = BlitzPlayer.AttackKind.LIGHT
+	_ok("轻击 → 轻击姿态", player.anim_state() == PlayerRig.Anim.LIGHT)
+	player._attack_kind = BlitzPlayer.AttackKind.HEAVY
+	_ok("重击 → 重击姿态", player.anim_state() == PlayerRig.Anim.HEAVY_SWING)
+	player._attack_kind = BlitzPlayer.AttackKind.SKILL
+	_ok("技能 → 施法姿态", player.anim_state() == PlayerRig.Anim.CAST_LIGHTNING)
+	player.state = BlitzPlayer.State.NORMAL
+	# 布置技 (剑阵) 不进 ATTACKING, 靠 _cast_lock_timer + 表里的 cast_anim 认出来
+	player._cast_skill_id = SkillBook.SWORD_ARRAY
+	player._cast_lock_timer = 0.1
+	_ok("布置技 → 表里的施法姿态 (不是写死的技能名)",
+		player.anim_state() == PlayerRig.Anim.CAST_SWORD_ARRAY)
+	player._cast_lock_timer = 0.0
+	player._grounded = false
+	player._height_vel = 100.0
+	_ok("离地上升 → 起跳姿态", player.anim_state() == PlayerRig.Anim.JUMP_RISE)
+	player._height_vel = -100.0
+	_ok("离地下落 → 下落姿态", player.anim_state() == PlayerRig.Anim.JUMP_FALL)
+	player._grounded = true
+	player._height_vel = 0.0
+	player._landing_timer = 0.1
+	_ok("落地硬直 → 落地姿态", player.anim_state() == PlayerRig.Anim.LAND)
+
+	player.state = st0
+	player._attack_kind = kind0
+	player._grounded = grounded0
+	player._height_vel = vel0
+	player._cast_lock_timer = cast0
+	player._landing_timer = land0
+	player._cast_skill_id = cast_id0
+
+
+## 骨架解出来的全部关节点 —— 给「有限数」断言遍历用。
+func _rig_points(rig: PlayerRig) -> Array[Vector2]:
+	return [
+		rig.pelvis, rig.chest, rig.neck_pt, rig.head_pt,
+		rig.shoulder_near, rig.shoulder_far, rig.elbow_near, rig.elbow_far,
+		rig.hand_near, rig.hand_far, rig.hip_near, rig.hip_far,
+		rig.knee_near, rig.knee_far, rig.ankle_near, rig.ankle_far,
+		rig.grip, rig.tip,
+	]
+
+
+# ============================================================
+# 敌人骨架 —— 和玩家 _check_rig 同一套纪律
+# ============================================================
+#
+# 敌人的骨架有几处**只属于它自己**的失败模式:
+#   · 逆关节腿写反 → 膝盖朝前, 妖兽立刻变成「矮人」, 不报错;
+#   · 起手和命中帧的爪位置差得太小 → 玩家看不出「它要挥了」, 读招机制失效;
+#   · 长硬直和短硬直长得一样 → 玩家分不清「挨了一下」和「反击窗口」。
+# 这三条在这里各有一条断言。
+func _check_enemy_rig(enemies: Array) -> void:
+	print("-- 敌人骨架 / 动作 --")
+	var foe: BlitzEnemy = _first_live_enemy(enemies)
+	var made_one: bool = false
+	if foe == null:
+		# 走到这里时前面的战斗测试可能把敌人全杀了。骨架本身不需要场景树,
+		# 但「状态 → 动画」的映射需要真实节点, 所以临时造一个 (用完 free)。
+		foe = BlitzEnemy.new()
+		made_one = true
+
+	var rig: EnemyRig = EnemyRig.new()
+	var anims: Array[int] = [
+		EnemyRig.Anim.IDLE, EnemyRig.Anim.MOVE, EnemyRig.Anim.WINDUP,
+		EnemyRig.Anim.STRIKE, EnemyRig.Anim.RECOVER, EnemyRig.Anim.STUN,
+		EnemyRig.Anim.STAGGER,
+	]
+	var phases: Array[float] = [0.0, 0.2, 0.45, 0.7, 0.95]
+	var views: Array[int] = [EnemyRig.View.SIDE, EnemyRig.View.BACK, EnemyRig.View.FRONT]
+
+	# ① 有限数。NaN 进 draw_colored_polygon → 这一笔**静默不画**, 角色少一条腿。
+	var bad: int = 0
+	for a: int in anims:
+		for t: float in phases:
+			rig.apply(a, t)
+			for v: int in views:
+				rig.solve(v)
+				for p: Vector2 in _enemy_rig_points(rig):
+					if not (is_finite(p.x) and is_finite(p.y)):
+						bad += 1
+	_ok("敌人 7 动作 × 5 相位 × 3 视图: 关节点全是有限数", bad == 0, "坏点=%d" % bad)
+
+	# ② 骨长恒定 —— IK 够不到目标时把腿拉长, 是「橡皮筋腿」的唯一来源。
+	var len_bad: int = 0
+	for a: int in anims:
+		for t: float in phases:
+			rig.apply(a, t)
+			rig.solve(EnemyRig.View.SIDE)
+			if absf(rig.knee_near.distance_to(rig.ankle_near) - EnemyRig.SHIN) > 0.02:
+				len_bad += 1
+			if absf(rig.hip_near.distance_to(rig.knee_near) - EnemyRig.THIGH) > 0.02:
+				len_bad += 1
+			if absf(rig.elbow_near.distance_to(rig.hand_near) - EnemyRig.FOREARM) > 0.02:
+				len_bad += 1
+			if absf(rig.shoulder_near.distance_to(rig.elbow_near) - EnemyRig.UPPER_ARM) > 0.02:
+				len_bad += 1
+			if absf(rig.tail_mid.distance_to(rig.tail_base) - EnemyRig.TAIL_LEN1) > 0.02:
+				len_bad += 1
+			if absf(rig.tail_tip.distance_to(rig.tail_mid) - EnemyRig.TAIL_LEN2) > 0.02:
+				len_bad += 1
+	_ok("敌人骨长在所有动作里恒定", len_bad == 0, "异常帧=%d" % len_bad)
+
+	# ③ 逆关节腿: 膝盖必须比髋-踝连线更**靠后** (-x)。写反了膝盖朝前,
+	#    妖兽立刻变成「蹲着的人」—— 画面上只是「腿有点怪」, 不报错。
+	rig.apply(EnemyRig.Anim.IDLE, 0.0)
+	rig.solve(EnemyRig.View.SIDE)
+	var mid: float = (_rig_lerp_x(rig.hip_near, rig.ankle_near))
+	_ok("敌人腿是逆关节 (膝盖朝后, 不朝前)", rig.knee_near.x < mid,
+		"膝 x=%.2f 髋踝中点 x=%.2f" % [rig.knee_near.x, mid])
+
+	# ④ 纵深视图的「站位 vs 摆动」分离 —— 与玩家同一条 (手臂不许塌进躯干)。
+	var lat_min: float = 999.0
+	var sym_max: float = 0.0
+	var hip_gap: float = 0.0
+	for a: int in anims:
+		for t: float in phases:
+			rig.apply(a, t)
+			for v: int in [EnemyRig.View.BACK, EnemyRig.View.FRONT]:
+				rig.solve(v)
+				var nl: float = absf(rig.shoulder_near.x - rig.chest.x)
+				lat_min = minf(lat_min, nl)
+				sym_max = maxf(sym_max,
+					absf((rig.shoulder_near.x - rig.chest.x) + (rig.shoulder_far.x - rig.chest.x)))
+				hip_gap = maxf(hip_gap, absf(rig.hip_near.x - rig.hip_far.x))
+	_ok("敌人背/正面: 双肩横向站位没被压扁 (≥4.5)", lat_min >= 4.5, "最小=%.2f" % lat_min)
+	_ok("敌人背/正面: 双肩左右对称", sym_max < 0.01, "误差=%.3f" % sym_max)
+	_ok("敌人背/正面: 双髋横向分开", hip_gap > 4.0, "间距=%.2f" % hip_gap)
+
+	# ⑤ 步态 IK: 支撑脚落在落点上、贴地、前后分开; 摆动期抬脚。
+	rig.apply(EnemyRig.Anim.MOVE, 0.0)
+	rig.solve(EnemyRig.View.SIDE)
+	var err_n: float = rig.ankle_near.distance_to(rig.leg_near_foot)
+	var err_f: float = rig.ankle_far.distance_to(rig.leg_far_foot)
+	_ok("敌人步态: 支撑帧两只脚都落在落点上", err_n < 0.3 and err_f < 0.3,
+		"近脚差=%.2f 远脚差=%.2f" % [err_n, err_f])
+	_ok("敌人步态: 支撑脚贴地", rig.ankle_near.y > -6.0, "ankle.y=%.2f" % rig.ankle_near.y)
+	_ok("敌人步态: 前后脚分开", absf(rig.ankle_near.x - rig.ankle_far.x) > 6.0,
+		"间距=%.2f" % absf(rig.ankle_near.x - rig.ankle_far.x))
+	rig.apply(EnemyRig.Anim.MOVE, 0.75)
+	rig.solve(EnemyRig.View.SIDE)
+	_ok("敌人步态: 摆动期脚离地", rig.ankle_near.y < -5.0, "ankle.y=%.2f" % rig.ankle_near.y)
+
+	# ⑥ 循环首尾相接 —— 不接的话跑动每圈顿一下。
+	rig.apply(EnemyRig.Anim.MOVE, 0.999)
+	rig.solve(EnemyRig.View.SIDE)
+	var wrap_from: Vector2 = rig.ankle_near
+	rig.apply(EnemyRig.Anim.MOVE, 0.0)
+	rig.solve(EnemyRig.View.SIDE)
+	_ok("敌人步态: 相位 1.0 与 0.0 接得上", wrap_from.distance_to(rig.ankle_near) < 1.0,
+		"差=%.2f" % wrap_from.distance_to(rig.ankle_near))
+
+	# ⑦ 起手 → 命中的爪必须真正甩出去。
+	#    靠得太近的话, 玩家看到的就只是一块地面预警, 读招退化成背时间表。
+	rig.apply(EnemyRig.Anim.WINDUP, 0.9)
+	rig.solve(EnemyRig.View.SIDE)
+	var wind_claw: Vector2 = rig.claw_near
+	var wind_chest_x: float = rig.chest.x
+	rig.apply(EnemyRig.Anim.STRIKE, 0.9)
+	rig.solve(EnemyRig.View.SIDE)
+	_ok("起手: 出招爪拉到身后 (比胸口更靠后)", wind_claw.x < wind_chest_x,
+		"爪 x=%.2f 胸口 x=%.2f" % [wind_claw.x, wind_chest_x])
+	_ok("命中: 爪甩到身前远处", rig.claw_near.x > rig.chest.x + 8.0,
+		"爪 x=%.2f 胸口 x=%.2f" % [rig.claw_near.x, rig.chest.x])
+	_ok("起手与命中帧的爪位差足够大 (挥砍可读)", rig.claw_near.x - wind_claw.x > 12.0,
+		"差=%.2f" % (rig.claw_near.x - wind_claw.x))
+
+	# ⑧ 长硬直必须比短硬直趴得更低 —— 两者长得一样的话,
+	#    玩家分不清「挨了一下」和「这是反击窗口」。
+	rig.apply(EnemyRig.Anim.STUN, 0.0)
+	rig.solve(EnemyRig.View.SIDE)
+	var stun_pelvis: float = rig.pelvis.y
+	rig.apply(EnemyRig.Anim.STAGGER, 0.0)
+	rig.solve(EnemyRig.View.SIDE)
+	_ok("长硬直比短硬直蹲得更低", rig.pelvis.y > stun_pelvis + 3.0,
+		"长硬直=%.2f 短硬直=%.2f" % [rig.pelvis.y, stun_pelvis])
+
+	# ⑨ 重心不跑出合理带。
+	var stray: int = 0
+	for a: int in anims:
+		for t: float in phases:
+			rig.apply(a, t)
+			if rig.pelvis.y < -25.0 or rig.pelvis.y > -15.0:
+				stray += 1
+	_ok("敌人所有动作的重心都在 [-25,-15] 内", stray == 0, "越界帧=%d" % stray)
+
+	# ⑩ 游戏状态 → 骨架动作的接缝 (和玩家那条同一个目的)。
+	var phase0: int = foe.attack_phase
+	var stun0: float = foe._stun_timer
+	var stag0: float = foe._stagger_timer
+	var stag_tot0: float = foe._stagger_total
+	var vel0: Vector2 = foe.velocity
+
+	foe._stagger_timer = 0.0
+	foe._stagger_total = 0.0
+	foe._stun_timer = 0.0
+	foe.velocity = Vector2.ZERO
+	foe.attack_phase = BlitzEnemy.AttackPhase.WINDUP
+	_ok("起手 → WINDUP 姿态", foe.anim_state() == EnemyRig.Anim.WINDUP)
+	foe._phase_timer = foe.windup_duration * 0.5
+	_ok("起手相位 = 1 - 计时器/时长", absf(foe.anim_phase() - 0.5) < 0.01,
+		"phase=%.3f" % foe.anim_phase())
+	foe.attack_phase = BlitzEnemy.AttackPhase.STRIKE
+	_ok("命中 → STRIKE 姿态", foe.anim_state() == EnemyRig.Anim.STRIKE)
+	foe.attack_phase = BlitzEnemy.AttackPhase.RECOVER
+	_ok("收招 → RECOVER 姿态", foe.anim_state() == EnemyRig.Anim.RECOVER)
+	foe.attack_phase = BlitzEnemy.AttackPhase.NONE
+	foe._stun_timer = foe.hit_stun_duration
+	_ok("短硬直 → STUN 姿态", foe.anim_state() == EnemyRig.Anim.STUN)
+	foe._stun_timer = 0.0
+	foe.velocity = Vector2(120.0, 0.0)
+	_ok("在移动 → MOVE 姿态", foe.anim_state() == EnemyRig.Anim.MOVE)
+	foe.velocity = Vector2.ZERO
+	_ok("站着 → IDLE 姿态", foe.anim_state() == EnemyRig.Anim.IDLE)
+	foe._stagger_timer = 1.0
+	foe._stagger_total = 1.2
+	foe.attack_phase = BlitzEnemy.AttackPhase.WINDUP
+	_ok("长硬直压过出招 (优先级链一致)", foe.anim_state() == EnemyRig.Anim.STAGGER)
+
+	foe.attack_phase = phase0
+	foe._stun_timer = stun0
+	foe._stagger_timer = stag0
+	foe._stagger_total = stag_tot0
+	foe.velocity = vel0
+	if made_one:
+		foe.free()
+
+
+## 髋-踝连线在膝盖高度上的 x —— 用来判「膝盖在腿的哪一侧」。
+func _rig_lerp_x(a: Vector2, b: Vector2) -> float:
+	return lerpf(a.x, b.x, 0.5)
+
+
+## 敌人骨架解出来的全部关节点。
+func _enemy_rig_points(rig: EnemyRig) -> Array[Vector2]:
+	return [
+		rig.pelvis, rig.chest, rig.neck_pt, rig.head_pt,
+		rig.shoulder_near, rig.shoulder_far, rig.elbow_near, rig.elbow_far,
+		rig.hand_near, rig.hand_far, rig.hip_near, rig.hip_far,
+		rig.knee_near, rig.knee_far, rig.ankle_near, rig.ankle_far,
+		rig.tail_base, rig.tail_mid, rig.tail_tip, rig.claw_near, rig.claw_far,
+	]

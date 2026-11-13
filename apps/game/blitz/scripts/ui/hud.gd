@@ -54,6 +54,8 @@ var _hearts: HeartBar = null
 var _stamina: StaminaBar = null
 var _score_label: Label = null
 var _hint_label: Label = null
+## 读招颜色表 —— 和 _hint_label 分开, 因为它解释的是**规则**, 不是按键
+var _rule_label: Label = null
 
 
 func _ready() -> void:
@@ -81,7 +83,16 @@ func _ready() -> void:
 	# 提示行贴屏幕**底部** —— 用锚点而非硬编码 y, 换分辨率不会跑偏
 	_hint_label.set_anchors_preset(Control.PRESET_BOTTOM_LEFT)
 	_hint_label.position = Vector2(16.0, -30.0)
-	_hint_label.text = "WASD/方向键 走位   Space 闪避   J/左键 轻击   K/右键 重击   Shift/L 格挡   F1 调试   R 重开"
+	# ⚠️ 所有已实装的技能都要在这里 —— 少写一个, 玩家（和录屏）就根本不知道那招存在。
+	_hint_label.text = "WASD 走位  Space 闪避  C 跳  J 轻击  K 重击  Shift/L 格挡  U 落雷  I 罡气  O 剑阵  F1 调试  R 重开"
+
+	# 读招颜色表 (v0.9)。**颜色是玩法信息**, 而「紫红是什么意思」在画面上没有
+	# 自解释的能力 —— 不给这一行的话, 玩家挨了不可格挡的一下只会以为格挡坏了。
+	_rule_label = _make_label(Vector2(16.0, -48.0), 12, Color(0.78, 0.72, 0.88))
+	_rule_label.set_anchors_preset(Control.PRESET_BOTTOM_LEFT)
+	_rule_label.position = Vector2(16.0, -48.0)
+	_rule_label.text = "起手：橙红 = 可格挡 · 紫红 = 挡不住（闪避 / 跳跃 / 拉开）"
+	add_child(_rule_label)
 
 	set_score(0)
 	# 绑定玩家之前不跑 _process —— 没玩家可读的时候不该每帧空转

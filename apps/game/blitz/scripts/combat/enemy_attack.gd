@@ -44,6 +44,23 @@ class_name EnemyAttack
 ##    兜底这条留着是因为「手工在编辑器里摆一个」这条路还得能跑。
 const BOX_SIZE: Vector2 = Vector2(34.0, 34.0)
 
+# ── 预警配色 ──
+#
+# 🎮 **颜色是玩法信息, 不是美术选择**:
+#     橙红 = 挡得住 (格挡 / 精准格挡都行)
+#     紫红 = **挡不住** (必须闪避 / 跳跃 / 拉开距离)
+# 所以这两个常量是**唯一来源** —— 贴地扇形 (enemy.gd)、敌人身体和眼睛的起手着色、
+# 命中帧闪过的这一下, 全部读这里。任何一处自己写死一个红, 玩家就会在两套配色之间
+# 学到矛盾的信息 (而那正是「格挡时灵时不灵」这种抱怨的来源)。
+const WARN_COLOR: Color = Color(1.0, 0.22, 0.18)
+const UNBLOCKABLE_COLOR: Color = Color(0.82, 0.26, 1.0)
+
+
+## 起手/命中该用哪个警示色。**静态** —— 敌人自己也要在还没有 EnemyAttack 的时候
+## (起手阶段) 用同一个判断上色, 所以不能做成实例方法。
+static func warn_color_for(pierces_guard: bool) -> Color:
+	return UNBLOCKABLE_COLOR if pierces_guard else WARN_COLOR
+
 
 ## 伤害值
 @export var damage: int = 1
@@ -53,8 +70,14 @@ const BOX_SIZE: Vector2 = Vector2(34.0, 34.0)
 @export var lifetime: float = 0.14
 ## 挥出这一下的敌人。精准格挡靠它把攻击者打硬直 (见文件头 🏗️)。
 @export var source: Node2D = null
-## 能不能被精准格挡。将来会有「红光不可格挡」的招式, 先留出口。
-@export var parryable: bool = true
+## **格挡挡不住** (闪避/跳跃照常有效)。
+##
+## 🎮 COMBAT_MATRIX §3 ② —— 「不可格挡」是读招博弈的第三个答案:
+##    如果格挡对所有招式都有效, 最优解就永远是「看到起手就按格挡」,
+##    招式之间的差别被抹平了。这一招逼玩家在 0.55 秒里换一个应对方式。
+##
+## ⚠️ 只影响**格挡**。背后的攻击不用这个字段也照样挡不住 —— 那是朝向问题, 不是招式属性。
+@export var unblockable: bool = false
 
 ## 这一招的范围。由 enemy.gd 的 `attack_shape()` 生成 —— 和它画预警时**同一个来源**。
 ## null = 用兜底的 BOX_SIZE 矩形 (只有手工摆的判定区才会走到)。
@@ -117,21 +140,22 @@ func _draw() -> void:
 	var r: float = clampf(1.0 - _life / maxf(0.001, lifetime), 0.0, 1.0)
 	var fade: float = 1.0 - r * r      # 前段亮、后段快速消失
 
+	var c: Color = warn_color_for(unblockable)
 	if attack_shape != null:
 		# ⚠️ origin = 自己脚下 (本节点挂在敌人身上, 不沿朝向偏移) —— 见文件头
 		attack_shape.draw_telegraph(
 			self, Vector2.ZERO, facing,
-			Color(1.0, 0.72, 0.55, 0.26 * fade),
-			Color(1.0, 0.5, 0.35, 0.85 * fade))
+			Color(c.r, c.g, c.b, 0.26 * fade),
+			Color(c.lightened(0.25), 0.85 * fade))
 		return
 
 	# 兜底: 没有 shape 时画那个老矩形 (手工摆的判定区)
 	var half: Vector2 = BOX_SIZE * 0.5
-	draw_rect(Rect2(-half, BOX_SIZE), Color(1.0, 0.72, 0.55, 0.20 * fade))
+	draw_rect(Rect2(-half, BOX_SIZE), Color(c.r, c.g, c.b, 0.20 * fade))
 	for i: int in range(3):
 		var o: float = float(i - 1) * 7.0
 		draw_line(
 			Vector2(-half.x, o - 6.0), Vector2(half.x, o + 6.0),
-			Color(1.0, 0.95, 0.85, (0.85 - float(i) * 0.22) * fade), 2.5
+			Color(c.lightened(0.55), (0.85 - float(i) * 0.22) * fade), 2.5
 		)
-	draw_rect(Rect2(-half, BOX_SIZE), Color(1.0, 0.5, 0.35, 0.75 * fade), false, 1.5)
+	draw_rect(Rect2(-half, BOX_SIZE), Color(c.lightened(0.15), 0.75 * fade), false, 1.5)

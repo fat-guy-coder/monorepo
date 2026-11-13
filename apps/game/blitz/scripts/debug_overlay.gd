@@ -94,8 +94,8 @@ func set_shown(on: bool) -> void:
 
 
 ## 由 main.gd 在关卡搭好后调用
-func setup(floor: BeltFloor, player: BlitzPlayer) -> void:
-	_floor = floor
+func setup(belt_floor: BeltFloor, player: BlitzPlayer) -> void:
+	_floor = belt_floor
 	_player = player
 
 
@@ -232,7 +232,8 @@ func _key_guide() -> Array[String]:
 	var rows: Array = [
 		["移动", _move_keys(), "轻击", "%s  (横劈: 扇形, 扫一片)" % _keys_of("attack_light")],
 		["跳", _keys_of("jump"), "重击", "%s  (按住蓄力, 满蓄破霸体)" % _keys_of("attack_heavy")],
-		["闪避", _keys_of("dash"), "技能", "%s  (落雷: 身前一格半, 延迟 0.4 秒)" % _keys_of("attack_skill")],
+		["闪避", _keys_of("dash"), "技能", "%s  (落雷: 身前一格半, 延迟 0.38 秒)" % _keys_of("attack_skill")],
+		["罡气", _keys_of("aura"), "剑阵", "%s  (插脚下: 3s, 敌人绕开或吃跳伤)" % _keys_of("sword_array")],
 		["格挡", _keys_of("block"), "面板", _keys_of(TOGGLE_ACTION)],
 		["重开", _keys_of("restart"), "", ""],
 	]
@@ -351,7 +352,8 @@ func _mouse_label(button: int) -> String:
 func _live_input() -> String:
 	var out: Array[String] = []
 	for n: String in ["move_left", "move_right", "move_up", "move_down",
-			"jump", "dash", "attack_light", "attack_heavy", "block"]:
+			"jump", "dash", "attack_light", "attack_heavy", "attack_skill",
+			"aura", "sword_array", "block"]:
 		if InputMap.has_action(n) and Input.is_action_pressed(n):
 			out.append(n)
 	return " ".join(out) if not out.is_empty() else "(无)"
@@ -372,11 +374,11 @@ func _draw() -> void:
 
 	# ① 高亮格: 精确套在脚下那一格
 	var tl: Vector2 = center + Vector2(-_hw, -_hd)
-	var tr: Vector2 = center + Vector2(_hw, -_hd)
+	var t_right: Vector2 = center + Vector2(_hw, -_hd)   # 别叫 tr: 会遮蔽 Object.tr()
 	var br: Vector2 = center + Vector2(_hw, _hd)
 	var bl: Vector2 = center + Vector2(-_hw, _hd)
-	draw_polyline(PackedVector2Array([tl, tr, br, bl, tl]), cell_color, 2.0)
-	draw_colored_polygon(PackedVector2Array([tl, tr, br, bl]),
+	draw_polyline(PackedVector2Array([tl, t_right, br, bl, tl]), cell_color, 2.0)
+	draw_colored_polygon(PackedVector2Array([tl, t_right, br, bl]),
 		Color(cell_color.r, cell_color.g, cell_color.b, 0.12))
 
 	# ③ 十字准星: 玩家真实坐标。和高亮格中心重合 = 原点在脚底且在格中心

@@ -85,7 +85,7 @@ const WALL_MARGIN: float = 10.0
 # ============================================================
 # 节点引用
 # ============================================================
-var floor: BeltFloor = null
+var floor_layer: BeltFloor = null
 var world: Node2D = null
 var fx: Node2D = null
 var player: BlitzPlayer = null
@@ -142,24 +142,24 @@ func _physics_process(_delta: float) -> void:
 # 地面
 # ============================================================
 func _build_floor() -> void:
-	floor = BeltFloor.new()
-	floor.name = "Floor"
-	floor.position = FLOOR_ORIGIN
-	floor.z_index = -10
-	add_child(floor)
-	floor.fill_rect(Rect2i(Vector2i.ZERO, FLOOR_CELLS))
+	floor_layer = BeltFloor.new()
+	floor_layer.name = "Floor"
+	floor_layer.position = FLOOR_ORIGIN
+	floor_layer.z_index = -10
+	add_child(floor_layer)
+	floor_layer.fill_rect(Rect2i(Vector2i.ZERO, FLOOR_CELLS))
 	# 坐标约定自检: 换算是否可逆 + 轴向是否与横版设计一致 + 深度明暗分布。
 	# 这不是「调试残留」—— 它是**回归门**。把 +j 的方向弄反 (让画面上方变成「近」),
 	# 整个游戏会上下颠倒却**不报任何错**, 只是「玩起来怪怪的」——
 	# 正是那种截图看不出来、只能靠断言抓的错误。
-	floor.debug_print_grid()
+	floor_layer.debug_print_grid()
 
 
 func _build_backdrop() -> void:
 	var bd: Backdrop = Backdrop.new()
 	bd.name = "Backdrop"
 	# 星空范围跟着地面走并外扩 —— 写死矩形的话, 地图一改尺寸就会露出空背景
-	bd.area = floor.bounds_global().grow(700.0)
+	bd.area = floor_layer.bounds_global().grow(700.0)
 	add_child(bd)
 
 
@@ -187,7 +187,7 @@ func _build_world() -> void:
 ##   去补 90° 拐角处两块有限厚矩形留下的楔形缺口。
 ##   横版地面就是个**矩形**, 四道墙正着摆即可, 拐角天然闭合。
 func _create_border_walls() -> void:
-	var b: Rect2 = floor.bounds_global()
+	var b: Rect2 = floor_layer.bounds_global()
 	var cx: float = b.position.x + b.size.x * 0.5
 	var cy: float = b.position.y + b.size.y * 0.5
 	var off: float = WALL_MARGIN + WALL_THICKNESS * 0.5
@@ -261,14 +261,14 @@ func _create_obstacles() -> void:
 		ob.name = "Obstacle_%d_%d" % [cell.x, cell.y]
 		# ⚠️ 位置必须用 center_of_span (多格区域的重心), 不能用 center_of:
 		#    后者返回**起点那一格**的菱形中心, 2×1 的方块会整体偏半格。
-		ob.position = floor.center_of_span(cell, cells)
+		ob.position = floor_layer.center_of_span(cell, cells)
 		ob.configure(cells, item.height)
 		world.add_child(ob)
 
 
 func _create_respawn_points() -> void:
 	# 出生点直接就是初始复活点 (不靠「列表里第一个碰巧是它」这种隐式约定)
-	_current_spawn = floor.center_of(START_CELL)
+	_current_spawn = floor_layer.center_of(START_CELL)
 
 	# 沿关卡横向一字排开 —— 横版是「一条走廊」, 复活点也该是沿路分布的补给点
 	var cells: Array[Vector2i] = [
@@ -280,7 +280,7 @@ func _create_respawn_points() -> void:
 	for cell: Vector2i in cells:
 		var rp: RespawnPoint = RespawnPoint.new()
 		rp.name = "RespawnPoint_%d_%d" % [cell.x, cell.y]
-		rp.position = floor.center_of(cell)
+		rp.position = floor_layer.center_of(cell)
 		rp.activated.connect(_on_respawn_activated)
 		world.add_child(rp)
 		if cell == START_CELL:
@@ -310,8 +310,14 @@ func _create_enemies() -> void:
 	_create_enemy(Vector2i(9, 8), BlitzEnemy.Type.PATROL, Vector2.RIGHT, 70.0)
 	_create_enemy(Vector2i(16, 10), BlitzEnemy.Type.PATROL, Vector2.DOWN, 85.0)
 	_create_enemy(Vector2i(21, 6), BlitzEnemy.Type.STATIONARY, Vector2.DOWN, 0.0, 10, false)
-	_create_enemy(Vector2i(28, 4), BlitzEnemy.Type.CHASER, Vector2.DOWN, 95.0)
-	_create_enemy(Vector2i(34, 10), BlitzEnemy.Type.CHASER, Vector2.DOWN, 80.0)
+	# 地图**深处**的这一只带「不可格挡」(v0.9)。放在最里面是有意的:
+	# 玩家先在前面几只橙红身上把「起手 → 格挡」学会, 走到这里才第一次遇到
+	# 一个格挡无效的招式 (紫红预警) —— 那一刻才是这套机制真正开始说话的时候。
+	_create_enemy(Vector2i(28, 4), BlitzEnemy.Type.CHASER, Vector2.DOWN, 95.0, 4, true, true)
+	# 第二只追兵放在**出生点附近** (v0.7): 剑阵的核心是「敌人绕开」, 而巡逻/站桩型
+	# 根本不追人 —— 不把一只追兵放在能很快遇到的地方, 新手玩家第一个技能放下去
+	# 看到的就是「它照旧站在原地」, 会以为剑阵没有效果。
+	_create_enemy(Vector2i(19, 12), BlitzEnemy.Type.CHASER, Vector2.DOWN, 80.0)
 
 
 func _create_enemy(
@@ -320,16 +326,18 @@ func _create_enemy(
 	axis: Vector2,
 	speed: float,
 	hp: int = 4,
-	can_attack: bool = true
+	can_attack: bool = true,
+	unblockable: bool = false
 ) -> void:
 	var e: BlitzEnemy = ENEMY_SCENE.instantiate()
 	e.name = "Enemy_%d_%d" % [cell.x, cell.y]
-	e.position = floor.center_of(cell)
+	e.position = floor_layer.center_of(cell)
 	e.enemy_type = type
 	e.patrol_axis = axis
 	e.max_health = hp
 	e.health = hp
 	e.can_attack = can_attack
+	e.attack_unblockable = unblockable
 	if speed > 0.0:
 		e.move_speed = speed
 	e.died.connect(_on_enemy_died)
@@ -363,7 +371,7 @@ func _create_camera() -> void:
 	# ⚠️ v0.1 横版恰好就是栽在写死上: 它把 limit_left=-50 / limit_right=3250 直接
 	#    塞在 main.gd 里, 只对「那一个 3200px 宽的关卡」成立。地图一改尺寸就废。
 	#    现在走 fit_to_floor(), 关卡尺寸改了边界自动跟着变 —— 见 CameraRig 文件头。
-	camera.fit_to_floor(floor, _viewport_size())
+	camera.fit_to_floor(floor_layer, _viewport_size())
 	camera.make_current()
 
 
@@ -389,7 +397,7 @@ func _create_debug_overlay() -> void:
 	debug_overlay = DebugOverlay.new()
 	debug_overlay.name = "DebugOverlay"
 	add_child(debug_overlay)
-	debug_overlay.setup(floor, player)
+	debug_overlay.setup(floor_layer, player)
 
 
 ## 视口尺寸从**项目设置**读, 不读 get_viewport_rect():
