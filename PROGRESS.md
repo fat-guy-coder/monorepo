@@ -4,7 +4,7 @@
 
 > 📌 美术路线背景（2026-10-30 定）: **Blitz M0 美术风格锚定** —— 方向 A（冷青夜雨）已定。**Retro Diffusion 已断供弃用**（大陆支付渠道关闭），路线转向「**角色走 3D 预渲染（B）+ 场景/道具走 2D 像素**」的混合管线（依据 [`ART_ROUTE_DECISION.md §11`](apps/game/blitz/ART_ROUTE_DECISION.md)）；本地出图配置单已写好 [`art/LOCAL_COMFYUI.md`](apps/game/blitz/art/LOCAL_COMFYUI.md)，量化脚本 [`art/tools/palette_quantize.py`](apps/game/blitz/art/tools/palette_quantize.py) 已跑通。下一步：家里 5060 跑通本地出图，或做最小 3D 链路探针。**v0.5 四向朝向代码完成（自检 249 项）✅**，v0.4/v0.5 都待人工验收（F5）。第一个盒子计划见 [`SLICE_01_PLAN.md`](apps/game/blitz/SLICE_01_PLAN.md)，美术目录见 [`art/README.md`](apps/game/blitz/art/README.md)。
 
-> 🔸 **换电脑继续** —— 截至 2026-11-13 已提交并推送（`9f562f5`，v0.8 骨架 + v0.9 技能表 / 不可格挡一并入库），`master` 与 `origin/master` 同步；拉到最新后直接 F5 手测，两道闸门应仍是自检 348 项 0 失败、截图 50 张。
+> 🔸 **换电脑继续** —— 截至 2026-11-13 已提交并推送（`b4c073e`，v0.8 骨架 + v0.9 技能表 / 不可格挡一并入库），`master` 与 `origin/master` 同步；拉到最新后直接 F5 手测，两道闸门应仍是自检 348 项 0 失败、截图 50 张。
 > ⚠️ `apps/game/blitz/.gitignore` 忽略了 `export/`，`art/export/probe/` 的试产图**不在仓库里**（导出物可重建）；要看图就重新生成或手动拷贝。
 > MCP 配置在**用户级** `~/.claude.json`，不随仓库走；新电脑要重新执行 [`MCP_SETUP.md`](apps/game/blitz/art/MCP_SETUP.md) 的接入命令。
 
